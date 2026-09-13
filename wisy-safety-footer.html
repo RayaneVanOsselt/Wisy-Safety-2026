@@ -178,7 +178,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 
 /* --- Responsive --- */
 @media (max-width:1080px){
-  .f-grid{grid-template-columns:1.4fr 1fr;row-gap:2.75rem}
+  .f-grid{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));row-gap:2.75rem}.f-grid>*:first-child{grid-column:1/-1;max-width:520px}
 }
 @media (max-width:620px){
   .f-grid{grid-template-columns:1fr}

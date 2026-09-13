@@ -131,17 +131,29 @@ ul{margin:0;padding:0;list-style:none}button{font-family:inherit;cursor:pointer;
 .scroll-cue svg{width:22px;height:22px;animation:cue 2.2s var(--ease) infinite}
 @keyframes cue{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(5px);opacity:1}}
 
-/* ==================== PARTENAIRES (marquee) ==================== */
-.partners{padding:clamp(2.5rem,5vw,3.5rem) 0;background:var(--creme);border-bottom:1px solid var(--granit-12)}
-.partners__label{text-align:center;font-family:var(--font-titre);font-size:var(--fs-micro);font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--granit);margin-bottom:1.75rem}
-.marquee{position:relative;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.marquee__track{display:flex;width:max-content;gap:clamp(2.5rem,6vw,5rem);align-items:center;animation:marquee 34s linear infinite;will-change:transform}
-.marquee:hover .marquee__track{animation-play-state:paused}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.marquee__item{flex:0 0 auto;display:grid;place-items:center;height:52px}
-.marquee__item img{max-height:52px;width:auto;object-fit:contain;filter:grayscale(1);opacity:.7;transition:filter var(--t-fast) var(--ease),opacity var(--t-fast) var(--ease),transform var(--t-fast) var(--ease-out)}
-.marquee__item:hover img{filter:grayscale(0);opacity:1;transform:scale(1.05)}
-
+/* ==================== PARTENAIRES (ruche hexagonale) ==================== */
+.hive-sec{padding:clamp(3.5rem,8vw,6rem) 0;background:var(--creme);position:relative;overflow:hidden;text-align:center;border-bottom:1px solid var(--granit-12)}
+.hive-sec .eyebrow{justify-content:center}
+.hive{--hex-w:clamp(56px,10vw,116px);display:flex;flex-direction:column;align-items:center;margin:1.5rem auto 0}
+.hive-row{display:flex;justify-content:center}
+.hive-row+.hive-row{margin-top:calc(var(--hex-w) * -0.24)}
+.hex{width:var(--hex-w);height:calc(var(--hex-w) * 1.1547);margin:0 4px;position:relative;
+  filter:drop-shadow(6px 6px 12px rgba(27,45,40,.12)) drop-shadow(-6px -6px 12px rgba(255,255,255,.92))}
+.hex__face{position:absolute;inset:0;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  background:linear-gradient(145deg,#ffffff,#e6eeec);display:grid;place-items:center}
+.hex img{width:56%;height:56%;object-fit:contain}
+.hex--logo img{mix-blend-mode:multiply}
+.hex--logo{transition:transform var(--t-fast) var(--ease-out),filter var(--t-fast) var(--ease);cursor:pointer}
+.hex--logo:hover{transform:translateY(-5px);filter:drop-shadow(4px 12px 18px rgba(27,45,40,.18)) drop-shadow(-4px -4px 10px rgba(255,255,255,.9))}
+.hex--hub{filter:drop-shadow(0 10px 24px var(--turquoise-glow)) drop-shadow(-4px -4px 10px rgba(255,255,255,.9))}
+.hex--hub .hex__face{background:linear-gradient(145deg,#ffffff,#e3f7f3)}
+.hex--hub img{mix-blend-mode:normal;width:62%;height:62%}
+.hive-badge{display:inline-flex;align-items:center;gap:.65rem;margin:2.25rem auto 1rem;padding:.8rem 2.1rem;border-radius:var(--radius-pill);
+  background:linear-gradient(135deg,var(--epinette),var(--sarcelle));color:var(--creme);
+  font-family:var(--font-titre);font-weight:700;font-size:clamp(1.25rem,2.6vw,1.7rem);box-shadow:0 16px 32px rgba(31,111,100,.28)}
+.hive-badge .dot{width:12px;height:12px;border-radius:50%;background:var(--turquoise);box-shadow:0 0 0 4px var(--turquoise-glow);flex-shrink:0}
+.hive-sub{color:var(--granit);font-size:var(--fs-lead);max-width:48ch;margin:0 auto}
+@media (prefers-reduced-motion:reduce){.hex--logo:hover{transform:none}}
 /* ==================== SECTIONS ==================== */
 .section{padding:clamp(3.5rem,8vw,6rem) 0}
 .section--alt{background:linear-gradient(160deg,#eef6f5 0%,var(--creme) 60%)}
@@ -335,27 +347,43 @@ a.f-c-value:hover{color:var(--turquoise)}
     <span class="scroll-cue" aria-hidden="true">Découvrir<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
   </section>
 
-  <!-- ==================== PARTENAIRES ==================== -->
-  <section class="partners" aria-label="Nos partenaires">
+  <!-- ==================== PARTENAIRES (ruche) ==================== -->
+  <section class="hive-sec" aria-label="Nos partenaires">
     <div class="container">
-      <p class="partners__label">Ils nous font confiance</p>
-      <div class="marquee">
-        <div class="marquee__track">
-          <!-- /* LOGO PARTENAIRE 1-6 */ (dupliqués pour la boucle infinie) -->
-          <div class="marquee__item"><img src="assets/images/partenaires/Orange_logo.svg.png" alt="Orange" loading="lazy"></div>
-          <div class="marquee__item"><img src="assets/images/partenaires/proximus-.webp" alt="Proximus" loading="lazy"></div>
-          <div class="marquee__item"><img src="assets/images/partenaires/telenet_logo.webp" alt="Telenet" loading="lazy"></div>
-          <div class="marquee__item"><img src="assets/images/partenaires/VOO_logo.svg.png" alt="VOO" loading="lazy"></div>
-          <div class="marquee__item"><img src="assets/images/partenaires/constructel-.jpeg" alt="Constructel" loading="lazy"></div>
-          <div class="marquee__item"><img src="assets/images/partenaires/uni-fivber-.png" alt="Unifiber" loading="lazy"></div>
-          <div class="marquee__item" aria-hidden="true"><img src="assets/images/partenaires/Orange_logo.svg.png" alt="" loading="lazy"></div>
-          <div class="marquee__item" aria-hidden="true"><img src="assets/images/partenaires/proximus-.webp" alt="" loading="lazy"></div>
-          <div class="marquee__item" aria-hidden="true"><img src="assets/images/partenaires/telenet_logo.webp" alt="" loading="lazy"></div>
-          <div class="marquee__item" aria-hidden="true"><img src="assets/images/partenaires/VOO_logo.svg.png" alt="" loading="lazy"></div>
-          <div class="marquee__item" aria-hidden="true"><img src="assets/images/partenaires/constructel-.jpeg" alt="" loading="lazy"></div>
-          <div class="marquee__item" aria-hidden="true"><img src="assets/images/partenaires/uni-fivber-.png" alt="" loading="lazy"></div>
+      <p class="eyebrow">Nos partenaires</p>
+      <div class="hive reveal" role="img" aria-label="Wisy Safety au centre de son réseau de 6 partenaires : Orange, Proximus, Telenet, Constructel, VOO, Unifiber">
+        <div class="hive-row">
+          <div class="hex hex--empty"><div class="hex__face"></div></div>
+          <div class="hex hex--empty"><div class="hex__face"></div></div>
+          <div class="hex hex--empty"><div class="hex__face"></div></div>
+        </div>
+        <div class="hive-row">
+          <div class="hex hex--empty"><div class="hex__face"></div></div>
+          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/Orange_logo.svg.png" alt="Orange" loading="lazy"></div></div>
+          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/proximus-.webp" alt="Proximus" loading="lazy"></div></div>
+          <div class="hex hex--empty"><div class="hex__face"></div></div>
+        </div>
+        <div class="hive-row">
+          <div class="hex hex--empty"><div class="hex__face"></div></div>
+          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/telenet_logo.webp" alt="Telenet" loading="lazy"></div></div>
+          <div class="hex hex--hub"><div class="hex__face"><img src="assets/logo.png" alt="Wisy Safety"></div></div>
+          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/constructel-.jpeg" alt="Constructel" loading="lazy"></div></div>
+          <div class="hex hex--empty"><div class="hex__face"></div></div>
+        </div>
+        <div class="hive-row">
+          <div class="hex hex--empty"><div class="hex__face"></div></div>
+          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/VOO_logo.svg.png" alt="VOO" loading="lazy"></div></div>
+          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/uni-fivber-.png" alt="Unifiber" loading="lazy"></div></div>
+          <div class="hex hex--empty"><div class="hex__face"></div></div>
+        </div>
+        <div class="hive-row">
+          <div class="hex hex--empty"><div class="hex__face"></div></div>
+          <div class="hex hex--empty"><div class="hex__face"></div></div>
+          <div class="hex hex--empty"><div class="hex__face"></div></div>
         </div>
       </div>
+      <div class="hive-badge reveal"><span class="dot" aria-hidden="true"></span>6 partenaires de confiance</div>
+      <p class="hive-sub reveal">Des acteurs majeurs des télécoms et de la construction forment et certifient leurs équipes avec Wisy Safety.</p>
     </div>
   </section>
 

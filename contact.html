@@ -388,48 +388,68 @@ a.c-val:hover{color:var(--brume)}
 @media(prefers-reduced-motion:reduce){.tcard:hover{transform:none}.tcard:hover .tcard__avatar{transform:translateX(-50%)}}
 
 
-/* ===== HERO CONTACT (sous le header) ===== */
-.chero{position:relative;overflow:hidden;padding:clamp(2.25rem,5vw,4.25rem) 0 clamp(3rem,7vw,5.5rem);background:
-  radial-gradient(circle at 82% 26%,rgba(72,214,194,.12),transparent 46%),
-  radial-gradient(circle at 8% 82%,rgba(47,125,140,.08),transparent 42%),
-  linear-gradient(180deg,#edf5f4 0%,var(--creme) 68%)}
-.chero__grid{position:relative;z-index:3;display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:center}
-.chero__eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--font-titre);font-size:var(--fs-micro);font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--epinette);margin-bottom:1.1rem}
-.chero__eyebrow .stars{color:var(--turquoise);letter-spacing:.08em}
-.chero__title{font-size:clamp(2.1rem,5vw,3.5rem);line-height:1.08;margin:0 0 1.2rem;max-width:15ch;color:var(--noir-jais)}
+/* ===== HERO CONTACT — premium ===== */
+.chero{position:relative;overflow:hidden;padding:clamp(2.5rem,5vw,4.5rem) 0 clamp(3.5rem,7vw,6rem);background:
+  radial-gradient(1100px 520px at 88% 6%,rgba(47,125,140,.10),transparent 60%),
+  radial-gradient(900px 500px at 0% 100%,rgba(72,214,194,.10),transparent 55%),
+  linear-gradient(180deg,#eaf3f2 0%,var(--creme) 62%)}
+.chero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,var(--granit-20),transparent)}
+.chero__grid{position:relative;z-index:3;display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:center}
+.chero__pill{display:inline-flex;align-items:center;gap:.55rem;background:rgba(255,255,255,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--granit-12);border-radius:var(--radius-pill);padding:.4rem .95rem .4rem .5rem;box-shadow:var(--shadow-sm);font-family:var(--font-titre);font-weight:600;font-size:.78rem;color:var(--noir-jais);margin-bottom:1.3rem}
+.chero__pill .ic{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,var(--epinette),var(--sarcelle));color:var(--creme)}
+.chero__pill .ic svg{width:15px;height:15px}
+.chero__title{font-size:clamp(2.15rem,5.2vw,3.7rem);line-height:1.06;margin:0 0 1.15rem;max-width:15ch;color:var(--noir-jais);letter-spacing:-.02em}
 .chero__title .mark{position:relative;color:var(--epinette);white-space:nowrap;z-index:0}
-.chero__title .mark::before{content:"";position:absolute;left:-3px;right:-3px;bottom:.06em;height:.36em;background:var(--turquoise);opacity:.42;border-radius:4px;z-index:-1}
-.chero__sep{width:120px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--epinette),var(--turquoise));margin:0 0 1.5rem}
-.chero__desc{color:var(--granit);font-size:var(--fs-lead);max-width:52ch;margin:0 0 2rem;line-height:1.6}
-.chero__actions{display:flex;flex-wrap:wrap;align-items:center;gap:1.1rem 1.5rem}
-.chero__link{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-titre);font-weight:600;color:var(--epinette);transition:gap var(--t-fast) var(--ease-out),color var(--t-fast) var(--ease)}
-.chero__link:hover{color:var(--brume);gap:.6rem}
+.chero__title .mark::before{content:"";position:absolute;left:-2px;right:-2px;bottom:.05em;height:.34em;background:var(--turquoise);opacity:.4;border-radius:4px;z-index:-1}
+.chero__sep{display:flex;align-items:center;gap:.7rem;margin:0 0 1.4rem}
+.chero__sep::before{content:"";width:56px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--epinette),var(--turquoise))}
+.chero__sep::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--turquoise)}
+.chero__desc{color:var(--granit);font-size:var(--fs-lead);max-width:50ch;margin:0 0 1.8rem;line-height:1.62}
+.chero__actions{display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.4rem;margin-bottom:2rem}
+.chero__actions .btn svg{width:17px;height:17px}
+.chero__link{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--font-titre);font-weight:600;color:var(--epinette);transition:gap var(--t-fast) var(--ease-out),color var(--t-fast) var(--ease)}
+.chero__link:hover{color:var(--brume);gap:.65rem}
+.chero__trust{display:flex;align-items:center;gap:clamp(.9rem,2.4vw,1.9rem);flex-wrap:wrap}
+.chero__tstat{display:flex;flex-direction:column;line-height:1.05}
+.chero__tstat b{font-family:var(--font-titre);font-size:1.35rem;color:var(--epinette)}
+.chero__tstat b .u{color:var(--brume)}
+.chero__tstat span{font-size:.76rem;color:var(--granit)}
+.chero__tdiv{width:1px;height:34px;background:var(--granit-20)}
 .chero__visual{position:relative}
-.chero__stage{position:relative;max-width:440px;margin-inline:auto}
-.chero__blob{position:absolute;z-index:1;top:50%;left:50%;transform:translate(-50%,-50%);width:104%;height:0;padding-bottom:104%;border-radius:44% 56% 52% 48%/54% 44% 56% 46%;background:linear-gradient(155deg,var(--sarcelle),var(--epinette));opacity:.15;animation:cblob 11s var(--ease) infinite alternate}
-@keyframes cblob{from{border-radius:44% 56% 52% 48%/54% 44% 56% 46%}to{border-radius:57% 43% 46% 54%/44% 57% 43% 56%}}
-.chero__ring{position:absolute;z-index:1;top:50%;left:50%;transform:translate(-50%,-50%);width:92%;height:0;padding-bottom:92%;border-radius:50%;border:2px dashed rgba(63,166,155,.38)}
-.chero__photo{position:relative;z-index:2;display:block;width:100%;filter:drop-shadow(0 22px 26px rgba(27,45,40,.22));animation:cfloat 6s var(--ease) infinite alternate}
+.chero__stage{position:relative;max-width:450px;margin-inline:auto}
+.chero__shape{position:absolute;z-index:1;top:52%;left:50%;transform:translate(-50%,-50%);width:98%;height:0;padding-bottom:98%;border-radius:47% 53% 48% 52%/50% 50% 50% 50%;background:linear-gradient(155deg,#e4f5f1 0%,#cfeee6 55%,#bde6db 100%);box-shadow:inset 0 0 0 1px rgba(63,166,155,.18);animation:cblob 12s var(--ease) infinite alternate}
+@keyframes cblob{from{border-radius:47% 53% 48% 52%/50% 50% 50% 50%}to{border-radius:53% 47% 52% 48%/47% 52% 48% 53%}}
+.chero__ring{position:absolute;z-index:1;top:50%;left:50%;transform:translate(-50%,-50%);width:112%;height:0;padding-bottom:112%;border-radius:50%;border:1.5px dashed rgba(63,166,155,.3)}
+.chero__orbit{position:absolute;z-index:1;top:7%;right:11%;width:14px;height:14px;border-radius:50%;background:var(--turquoise);box-shadow:0 0 0 5px var(--turquoise-glow)}
+.chero__photo{position:relative;z-index:2;display:block;width:100%;filter:drop-shadow(0 26px 30px rgba(27,45,40,.26));animation:cfloat 6.5s var(--ease) infinite alternate}
 @keyframes cfloat{from{transform:translateY(0)}to{transform:translateY(-12px)}}
-.chero__badge{position:absolute;z-index:4;left:-8px;bottom:8%;display:flex;align-items:center;gap:.7rem;background:#fff;border:1px solid var(--granit-12);border-radius:16px;padding:.7rem .95rem;box-shadow:var(--shadow-md);animation:cfloat2 5s var(--ease) infinite alternate}
+.gcard{position:absolute;z-index:4;background:rgba(255,255,255,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.65);box-shadow:0 20px 40px rgba(27,45,40,.16)}
+.gcard--badge{left:-10px;bottom:9%;display:flex;align-items:center;gap:.7rem;border-radius:16px;padding:.7rem .95rem;animation:cfloat2 5.5s var(--ease) infinite alternate}
 @keyframes cfloat2{from{transform:translateY(0)}to{transform:translateY(-9px)}}
-.chero__badge-num{width:46px;height:46px;border-radius:12px;flex-shrink:0;display:grid;place-items:center;background:linear-gradient(145deg,var(--epinette),var(--sarcelle));color:var(--creme);font-family:var(--font-titre);font-weight:700;font-size:1.4rem}
-.chero__badge b{font-family:var(--font-titre);font-size:.92rem;color:var(--noir-jais);display:block;line-height:1.15}
-.chero__badge .bstars{color:var(--turquoise);font-size:.74rem;letter-spacing:.06em}
-.chero__dots{position:absolute;z-index:1;width:120px;height:80px;opacity:.45;background-image:radial-gradient(var(--brume) 1.6px,transparent 1.6px);background-size:16px 16px}
-.chero__dots--1{top:16%;left:2%}
-.chero__dots--2{bottom:14%;right:3%}
-.chero__spark{position:absolute;z-index:1;color:var(--turquoise);opacity:.6;font-size:1.05rem}
+.gcard--badge .num{width:46px;height:46px;border-radius:12px;flex-shrink:0;display:grid;place-items:center;background:linear-gradient(145deg,var(--epinette),var(--sarcelle));color:var(--creme);font-family:var(--font-titre);font-weight:700;font-size:1.4rem}
+.gcard--badge b{font-family:var(--font-titre);font-size:.92rem;color:var(--noir-jais);display:block;line-height:1.15}
+.gcard--badge .bstars{color:var(--turquoise);font-size:.74rem;letter-spacing:.06em}
+.gcard--cert{right:-6px;top:13%;display:flex;align-items:center;gap:.6rem;border-radius:14px;padding:.6rem .85rem;animation:cfloat3 6s var(--ease) infinite alternate}
+@keyframes cfloat3{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+.gcard--cert .cic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--brume-14);color:var(--epinette)}
+.gcard--cert .cic svg{width:19px;height:19px}
+.gcard--cert b{font-family:var(--font-titre);font-size:.82rem;color:var(--noir-jais);display:block;line-height:1.1}
+.gcard--cert span{font-size:.7rem;color:var(--granit)}
+.chero__dots{position:absolute;z-index:1;width:118px;height:78px;opacity:.4;background-image:radial-gradient(var(--brume) 1.5px,transparent 1.5px);background-size:15px 15px}
+.chero__dots--1{top:15%;left:1%}
+.chero__dots--2{bottom:12%;right:2%}
 .chero-anim{opacity:0;transform:translateY(22px);animation:cheroIn .7s var(--ease-out) forwards}
-.chero-anim.d1{animation-delay:.05s}.chero-anim.d2{animation-delay:.13s}.chero-anim.d3{animation-delay:.22s}.chero-anim.d4{animation-delay:.31s}.chero-anim.d5{animation-delay:.4s}
+.chero-anim.d1{animation-delay:.05s}.chero-anim.d2{animation-delay:.13s}.chero-anim.d3{animation-delay:.21s}.chero-anim.d4{animation-delay:.29s}.chero-anim.d5{animation-delay:.37s}.chero-anim.d6{animation-delay:.45s}
 @keyframes cheroIn{to{opacity:1;transform:none}}
-.chero__visual.chero-anim{transform:translateX(28px)}
+.chero__visual.chero-anim{transform:translateX(30px) scale(.98)}
 @media(max-width:860px){
-  .chero__grid{grid-template-columns:1fr;text-align:center;gap:2rem}
-  .chero__title{max-width:none;margin-inline:auto}.chero__sep{margin-inline:auto}.chero__desc{margin-inline:auto}.chero__actions{justify-content:center}
+  .chero__grid{grid-template-columns:1fr;text-align:center;gap:2.25rem}
+  .chero__title{max-width:none;margin-inline:auto}.chero__sep{justify-content:center}.chero__desc{margin-inline:auto}
+  .chero__actions{justify-content:center}.chero__trust{justify-content:center}.chero__pill{margin-inline:auto}
   .chero__visual{order:-1}.chero__stage{max-width:330px}.chero__visual.chero-anim{transform:translateY(22px)}
 }
-@media(prefers-reduced-motion:reduce){.chero-anim{opacity:1;transform:none;animation:none}.chero__photo,.chero__badge,.chero__blob{animation:none}}
+@media(max-width:420px){.gcard--cert{right:-2px;top:7%}}
+@media(prefers-reduced-motion:reduce){.chero-anim{opacity:1;transform:none;animation:none}.chero__photo,.gcard,.chero__shape{animation:none}}
 
 </style>
 </head>
@@ -490,34 +510,42 @@ a.c-val:hover{color:var(--brume)}
   <section class="chero" aria-labelledby="chero-title">
     <span class="chero__dots chero__dots--1" aria-hidden="true"></span>
     <span class="chero__dots chero__dots--2" aria-hidden="true"></span>
-    <span class="chero__spark" style="top:12%;left:45%" aria-hidden="true">&#10022;</span>
-    <span class="chero__spark" style="top:68%;left:7%;font-size:.8rem" aria-hidden="true">&#10022;</span>
-    <span class="chero__spark" style="top:24%;right:9%" aria-hidden="true">&#10022;</span>
     <div class="container chero__grid">
       <div class="chero__content">
-        <span class="chero__eyebrow chero-anim d1"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> Équipe certifiée &middot; Bruxelles</span>
+        <span class="chero__pill chero-anim d1"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span>Expertise sécurité certifiée</span>
         <h1 class="chero__title chero-anim d2" id="chero-title">Besoin d'expertise en <span class="mark">sécurité</span> ?</h1>
         <div class="chero__sep chero-anim d3" aria-hidden="true"></div>
         <p class="chero__desc chero-anim d4">Notre équipe de professionnels est à votre écoute pour discuter de vos besoins spécifiques en formation et conseil en sécurité.</p>
         <div class="chero__actions chero-anim d5">
-          <a class="btn btn--cta" href="mailto:info@wisysafety.be">Nous contacter</a>
+          <a class="btn btn--cta" href="mailto:info@wisysafety.be"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> Nous contacter</a>
           <a class="chero__link" href="#coord-title">Voir nos coordonnées <span aria-hidden="true">&#8595;</span></a>
+        </div>
+        <div class="chero__trust chero-anim d6">
+          <div class="chero__tstat"><b><span data-count="10">0</span><span class="u">+</span></b><span>ans d'expérience</span></div>
+          <span class="chero__tdiv" aria-hidden="true"></span>
+          <div class="chero__tstat"><b><span data-count="500">0</span><span class="u">+</span></b><span>stagiaires formés</span></div>
+          <span class="chero__tdiv" aria-hidden="true"></span>
+          <div class="chero__tstat"><b><span data-count="100">0</span><span class="u">%</span></b><span>de satisfaction</span></div>
         </div>
       </div>
       <div class="chero__visual chero-anim d3">
         <div class="chero__stage">
-          <span class="chero__blob" aria-hidden="true"></span>
+          <span class="chero__shape" aria-hidden="true"></span>
           <span class="chero__ring" aria-hidden="true"></span>
+          <span class="chero__orbit" aria-hidden="true"></span>
           <img class="chero__photo" src="assets/images/page-principale/hero-contact.png" alt="Expert Wisy Safety en tenue de sécurité haute visibilité tenant un casque de chantier" width="577" height="433">
-          <div class="chero__badge">
-            <span class="chero__badge-num">10</span>
+          <div class="gcard gcard--badge">
+            <span class="num">10</span>
             <div><b>Ans d'expérience</b><span class="bstars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+          </div>
+          <div class="gcard gcard--cert">
+            <span class="cic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span>
+            <div><b>Conseillers habilités</b><span>N1 &middot; N2 &middot; PEB &middot; VCA</span></div>
           </div>
         </div>
       </div>
     </div>
   </section>
-
 
   <!-- ============ SECTION 1 — COORDONNÉES ============ -->
   <section class="coord" aria-labelledby="coord-title">

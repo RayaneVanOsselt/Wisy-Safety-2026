@@ -451,6 +451,61 @@ a.c-val:hover{color:var(--brume)}
 @media(max-width:420px){.gcard--cert{right:-2px;top:7%}}
 @media(prefers-reduced-motion:reduce){.chero-anim{opacity:1;transform:none;animation:none}.chero__photo,.gcard,.chero__shape{animation:none}}
 
+/* ==================== FORMULAIRE DE CONTACT ==================== */
+.wform{position:relative;padding:clamp(3.5rem,8vw,6rem) 0;background:linear-gradient(180deg,var(--creme) 0%,#eef6f5 100%)}
+.wform__card{position:relative;display:grid;grid-template-columns:.92fr 1.35fr;gap:0;max-width:1080px;margin:0 auto;background:#fff;border:1px solid var(--granit-12);border-radius:var(--radius-lg);box-shadow:var(--shadow-card);overflow:hidden}
+
+/* --- Panneau latéral (marque) --- */
+.wform__aside{position:relative;padding:clamp(2rem,4vw,3rem);background:linear-gradient(155deg,var(--epinette) 0%,var(--sarcelle) 100%);color:var(--creme);overflow:hidden}
+.wform__aside::after{content:"";position:absolute;width:300px;height:300px;right:-100px;bottom:-100px;border-radius:50%;background:radial-gradient(circle,var(--turquoise),transparent 62%);opacity:.35;filter:blur(6px);pointer-events:none}
+.wform__aside > *{position:relative;z-index:1}
+.wform__aside h3{color:var(--creme);font-size:var(--fs-h3);margin-bottom:.6rem}
+.wform__intro{color:rgba(244,250,249,.85);font-size:.96rem;margin-bottom:1.9rem;line-height:1.55}
+.wform__points{display:flex;flex-direction:column;gap:1.15rem;margin-bottom:1.9rem}
+.wform__pt{display:flex;align-items:flex-start;gap:.85rem}
+.wform__pt-ic{flex-shrink:0;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(244,250,249,.12);color:var(--turquoise)}
+.wform__pt-ic svg{width:20px;height:20px}
+.wform__pt-label{font-size:var(--fs-micro);letter-spacing:.1em;text-transform:uppercase;color:rgba(244,250,249,.7)}
+.wform__pt-val{display:block;font-size:.98rem;color:var(--creme);font-weight:500}
+a.wform__pt-val{transition:color var(--t-fast) var(--ease)}
+a.wform__pt-val:hover{color:var(--turquoise)}
+.wform__chip{display:inline-flex;align-items:center;gap:.55rem;padding:.55rem 1rem;border-radius:var(--radius-pill);background:rgba(244,250,249,.1);font-size:var(--fs-small);font-weight:600;color:var(--creme)}
+.wform__chip .dot{width:9px;height:9px;border-radius:50%;background:var(--turquoise);box-shadow:0 0 0 4px var(--turquoise-glow)}
+
+/* --- Formulaire --- */
+.wform__form{padding:clamp(2rem,4vw,3rem)}
+.wf-row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+.wf-field{margin-bottom:1.1rem;display:flex;flex-direction:column}
+.wf-field label{font-family:var(--font-titre);font-weight:500;font-size:.9rem;color:var(--noir-jais);margin-bottom:.45rem}
+.wf-req{color:var(--brume);font-weight:700}
+.wf-field input,.wf-field select,.wf-field textarea{width:100%;font-family:var(--font-texte);font-size:1rem;color:var(--noir-jais);background:var(--creme);border:1.5px solid var(--granit-20);border-radius:var(--radius-sm);padding:.8rem .95rem;transition:border-color var(--t-fast) var(--ease),box-shadow var(--t-fast) var(--ease),background var(--t-fast) var(--ease)}
+.wf-field textarea{resize:vertical;min-height:132px;line-height:1.6}
+.wf-field input::placeholder,.wf-field textarea::placeholder{color:var(--granit-clair)}
+.wf-field input:focus,.wf-field select:focus,.wf-field textarea:focus{outline:none;border-color:var(--brume);background:#fff;box-shadow:0 0 0 3px var(--brume-14)}
+.wf-field input:user-invalid,.wf-field select:user-invalid,.wf-field textarea:user-invalid{border-color:#c23b4b}
+.wf-field select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235E6D6A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .95rem center;background-size:16px;padding-right:2.5rem;cursor:pointer}
+
+/* --- Consentement RGPD --- */
+.wf-consent{display:flex;align-items:flex-start;gap:.6rem;font-size:var(--fs-small);color:var(--granit);line-height:1.5;margin:.25rem 0 1.5rem;cursor:pointer}
+.wf-consent input{flex-shrink:0;width:18px;height:18px;margin-top:.15rem;accent-color:var(--epinette)}
+.wf-consent a{color:var(--epinette);text-decoration:underline}
+
+/* --- Honeypot anti-spam (invisible) --- */
+.wf-hp{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+
+/* --- Actions & message de statut --- */
+.wf-actions{display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.25rem}
+.wf-submit{padding:.9rem 1.9rem}
+.wf-submit svg{width:18px;height:18px}
+.wf-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+.wf-status{margin:0;font-size:var(--fs-small);font-weight:500;line-height:1.5;max-width:42ch}
+.wf-status.is-ok{color:var(--epinette)}
+.wf-status.is-err{color:#c23b4b}
+
+/* --- Responsive formulaire --- */
+@media(max-width:820px){.wform__card{grid-template-columns:1fr}.wform__aside{order:-1}}
+@media(max-width:520px){.wf-row{grid-template-columns:1fr;gap:0}}
+
 </style>
 </head>
 <body>
@@ -584,6 +639,101 @@ a.c-val:hover{color:var(--brume)}
           <p class="c-desc">Écrivez-nous, nous répondons rapidement.</p>
           <a class="c-val" href="mailto:info@wisysafety.be">info@wisysafety.be</a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION — FORMULAIRE DE CONTACT ============ -->
+  <section class="wform" id="contact-form" aria-labelledby="wform-title">
+    <div class="container">
+      <div class="sec-head reveal">
+        <h2 id="wform-title">Envoyez-nous un message</h2>
+        <div class="deco-line"></div>
+        <p>Devis, inscription ou simple question : décrivez votre besoin, notre équipe vous répond sous 24 h ouvrées.</p>
+      </div>
+
+      <div class="wform__card reveal">
+        <!-- Panneau latéral marque -->
+        <aside class="wform__aside">
+          <h3>Parlons de votre projet</h3>
+          <p class="wform__intro">Une équipe de conseillers certifiés (Prévention N1/N2, Coordination sécurité-santé, PEB, VCA) à votre écoute pour construire la solution adaptée.</p>
+          <ul class="wform__points">
+            <li class="wform__pt">
+              <span class="wform__pt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg></span>
+              <span><span class="wform__pt-label">Téléphone</span><a class="wform__pt-val" href="tel:+3223188659">+32 2 318 86 59</a></span>
+            </li>
+            <li class="wform__pt">
+              <span class="wform__pt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg></span>
+              <span><span class="wform__pt-label">E-mail</span><a class="wform__pt-val" href="mailto:info@wisysafety.be">info@wisysafety.be</a></span>
+            </li>
+            <li class="wform__pt">
+              <span class="wform__pt-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+              <span><span class="wform__pt-label">Adresse</span><span class="wform__pt-val">Avenue d'Itterbeek 378, 1070 Anderlecht</span></span>
+            </li>
+          </ul>
+          <span class="wform__chip"><span class="dot"></span>Réponse sous 24 h ouvrées</span>
+        </aside>
+
+        <!-- Formulaire -->
+        <form class="wform__form" id="wisy-contact-form" novalidate>
+          <div class="wf-row">
+            <div class="wf-field">
+              <label for="wf-name">Nom complet <span class="wf-req" aria-hidden="true">*</span></label>
+              <input id="wf-name" name="user_name" type="text" required autocomplete="name" placeholder="Jean Dupont">
+            </div>
+            <div class="wf-field">
+              <label for="wf-email">E-mail <span class="wf-req" aria-hidden="true">*</span></label>
+              <input id="wf-email" name="user_email" type="email" required autocomplete="email" placeholder="jean.dupont@exemple.be">
+            </div>
+          </div>
+
+          <div class="wf-row">
+            <div class="wf-field">
+              <label for="wf-phone">Téléphone</label>
+              <input id="wf-phone" name="user_phone" type="tel" autocomplete="tel" placeholder="+32 4XX XX XX XX">
+            </div>
+            <div class="wf-field">
+              <label for="wf-company">Société</label>
+              <input id="wf-company" name="user_company" type="text" autocomplete="organization" placeholder="Nom de votre société">
+            </div>
+          </div>
+
+          <div class="wf-field">
+            <label for="wf-subject">Sujet <span class="wf-req" aria-hidden="true">*</span></label>
+            <select id="wf-subject" name="subject" required>
+              <option value="" disabled selected>Choisissez un sujet…</option>
+              <option>Demande de devis</option>
+              <option>Inscription à une formation</option>
+              <option>Conseil &amp; accompagnement sécurité</option>
+              <option>Coordination sécurité-santé</option>
+              <option>Certification PEB</option>
+              <option>Autre question</option>
+            </select>
+          </div>
+
+          <div class="wf-field">
+            <label for="wf-message">Message <span class="wf-req" aria-hidden="true">*</span></label>
+            <textarea id="wf-message" name="message" rows="5" required placeholder="Décrivez votre besoin, le nombre de personnes concernées, vos délais…"></textarea>
+          </div>
+
+          <!-- Champ piège anti-spam : laissé vide par les humains, rempli par les robots -->
+          <div class="wf-hp" aria-hidden="true">
+            <label>Ne remplissez pas ce champ<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+          </div>
+
+          <label class="wf-consent">
+            <input type="checkbox" id="wf-consent" required>
+            <span>J'accepte que Wisy Safety utilise mes données pour traiter ma demande, conformément à la <a href="#">politique de confidentialité</a>. <span class="wf-req" aria-hidden="true">*</span></span>
+          </label>
+
+          <div class="wf-actions">
+            <button type="submit" class="btn btn--cta wf-submit">
+              <span class="wf-submit__label">Envoyer le message</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+            </button>
+            <p class="wf-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
       </div>
     </div>
   </section>
@@ -788,6 +938,95 @@ a.c-val:hover{color:var(--brume)}
   var bg=document.querySelector(".status-badge");
   if(bg){var r=SCH[day],o=!!r&&mn>=r[0]&&mn<r[1];bg.classList.toggle("is-open",o);bg.querySelector(".status-text").textContent=o?"ACTUELLEMENT OUVERT":"ACTUELLEMENT FERMÉ";}
   var yy=document.querySelector("[data-year]");if(yy)yy.textContent=String(Math.max(2026,now.getFullYear()));
+})();
+</script>
+
+<!-- ==================== EMAILJS — ENVOI DU FORMULAIRE ==================== -->
+<!-- SDK officiel EmailJS (v4) -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+(function(){
+  /* ----------------------------------------------------------------------
+     1) CONFIGURATION — À REMPLACER par vos identifiants EmailJS
+        (tableau de bord EmailJS → voir les instructions fournies)
+     ---------------------------------------------------------------------- */
+  var EMAILJS_PUBLIC_KEY = "k2JkXtD2RO8TkoO77";    // Account → General → Public Key
+  var EMAILJS_SERVICE_ID = "service_k348qw9";      // Email Services → Service ID
+  var EMAILJS_TEMPLATE_ID = "template_0p9dah6";    // Email Templates → Template ID
+
+  var form = document.getElementById("wisy-contact-form");
+  if (!form) return;
+
+  var statusEl = form.querySelector(".wf-status");
+  var btn      = form.querySelector(".wf-submit");
+  var btnLabel = form.querySelector(".wf-submit__label");
+
+  function setStatus(msg, type){
+    statusEl.textContent = msg;
+    statusEl.className = "wf-status" + (type ? " is-" + type : "");
+  }
+  function setLoading(on){
+    btn.disabled = on;
+    btnLabel.textContent = on ? "Envoi en cours…" : "Envoyer le message";
+  }
+
+  var configured = EMAILJS_PUBLIC_KEY.indexOf("VOTRE_") !== 0
+                 && EMAILJS_SERVICE_ID.indexOf("VOTRE_") !== 0
+                 && EMAILJS_TEMPLATE_ID.indexOf("VOTRE_") !== 0;
+
+  if (window.emailjs && configured) {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    /* Anti-spam : si le champ piège est rempli, c'est un robot → on ignore
+       silencieusement (on affiche quand même un succès pour ne rien révéler). */
+    if (form.website && form.website.value.trim() !== "") {
+      setStatus("Merci ! Votre message a bien été envoyé.", "ok");
+      form.reset();
+      return;
+    }
+
+    /* Validation native du navigateur (champs requis, format e-mail, RGPD). */
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    /* Garde-fou : identifiants non configurés ou SDK non chargé. */
+    if (!window.emailjs || !configured) {
+      setStatus("Le service d'envoi n'est pas encore configuré. Écrivez-nous directement à info@wisysafety.be.", "err");
+      return;
+    }
+
+    setLoading(true);
+    setStatus("", "");
+
+    var params = {
+      user_name:    form.user_name.value.trim(),
+      user_email:   form.user_email.value.trim(),
+      user_phone:   form.user_phone.value.trim() || "Non renseigné",
+      user_company: form.user_company.value.trim() || "Non renseignée",
+      subject:      form.subject.value,
+      message:      form.message.value.trim(),
+      time:         new Date().toLocaleString("fr-BE", { dateStyle: "long", timeStyle: "short" })
+    };
+
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+      .then(function(){
+        setStatus("Merci ! Votre message a bien été envoyé. Notre équipe vous répond sous 24 h ouvrées.", "ok");
+        form.reset();
+      })
+      .catch(function(err){
+        console.error("Erreur EmailJS :", err);
+        setStatus("Oups, l'envoi a échoué. Réessayez ou contactez-nous à info@wisysafety.be.", "err");
+      })
+      .finally(function(){
+        setLoading(false);
+      });
+  });
 })();
 </script>
 </body>

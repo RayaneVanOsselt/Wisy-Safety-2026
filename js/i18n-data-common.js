@@ -1,0 +1,319 @@
+/* =========================================================================
+   WISY SAFETY — Traductions COMMUNES (header · navigation · footer)
+   Chargé sur toutes les pages. Fusionne dans window.I18N.
+   Pour corriger une phrase : modifiez la valeur correspondante ci-dessous.
+   Les noms propres (VCA, BEPS, PEB, CACES, REACH, PEMP, Wisy Safety),
+   l'adresse, le téléphone et l'e-mail ne sont pas traduits.
+   ========================================================================= */
+(function () {
+  var I = window.I18N || (window.I18N = {});
+  function m(lang, obj) { I[lang] = Object.assign(I[lang] || {}, obj); }
+
+  // Noms des langues (dans leur propre écriture) — pour le sélecteur
+  I.__names__ = Object.assign(I.__names__ || {}, {
+    fr: "Français", en: "English", nl: "Nederlands", af: "Afrikaans",
+    ar: "العربية", bg: "Български", de: "Deutsch", ro: "Română",
+    it: "Italiano", sl: "Slovenščina"
+  });
+
+  /* ---------------- FRANÇAIS (langue source) ---------------- */
+  m("fr", {
+    "util.badge": "Organisme de formation agréé · Anderlecht, Belgique",
+    "nav.formations": "Formations",
+    "nav.all_formations": "Voir toutes les formations",
+    "nav.all_formations_desc": "Notre catalogue complet certifié",
+    "dd.vca_base": "VCA de base", "dd.vca_base_desc": "Les fondamentaux de la sécurité chantier",
+    "dd.vca_hier": "VCA ligne hiérarchique", "dd.vca_hier_desc": "Pour l'encadrement et les responsables",
+    "dd.nacelle": "Nacelle élévatrice", "dd.nacelle_desc": "Conduite en sécurité des PEMP",
+    "dd.fibre": "Fibre optique", "dd.fibre_desc": "Installation et raccordement",
+    "dd.beps": "BEPS — Premier secours", "dd.beps_desc": "Les gestes qui sauvent",
+    "dd.diiso": "Diisocyanates & substances dangereuses", "dd.diiso_desc": "Manipulation conforme à la réglementation",
+    "nav.vca_entreprise": "VCA Entreprise", "nav.peb": "PEB Wallonie & Bruxelles",
+    "nav.coordination": "Coordination", "nav.certificat": "Certificat", "nav.agenda": "Agenda",
+    "header.contact": "Contact", "header.register": "S'inscrire",
+    "aria.open_menu": "Ouvrir le menu", "aria.close_menu": "Fermer le menu", "aria.choose_lang": "Choisir la langue",
+    "footer.cta_eyebrow": "On commence quand vous voulez",
+    "footer.cta_title": "Prêt à <span class=\"hl\">sécuriser vos équipes</span> ?",
+    "footer.cta_text": "Réservez une session ou demandez un devis sur mesure — réponse rapide, sans engagement.",
+    "footer.cta_btn": "S'inscrire à une formation",
+    "footer.loc": "Anderlecht · Belgique", "footer.tagline": "Sécurité & certifications VCA",
+    "footer.pitch": "La sécurité de vos équipes commence par la <span class=\"hl\">bonne formation.</span>",
+    "footer.col_services": "Nos services", "footer.label_phone": "Téléphone", "footer.label_email": "E-mail",
+    "footer.label_address": "Adresse", "footer.col_hours": "Heures d'ouverture",
+    "footer.mon": "Lundi", "footer.tue": "Mardi", "footer.wed": "Mercredi", "footer.thu": "Jeudi",
+    "footer.fri": "Vendredi", "footer.sat": "Samedi", "footer.sun": "Dimanche", "footer.closed": "Fermé",
+    "footer.status_open": "ACTUELLEMENT OUVERT", "footer.status_closed": "ACTUELLEMENT FERMÉ",
+    "footer.legal_mentions": "Mentions légales", "footer.legal_privacy": "Politique de confidentialité",
+    "footer.legal_terms": "Conditions générales", "footer.rights": "Tous droits réservés."
+  });
+
+  /* ---------------- ENGLISH ---------------- */
+  m("en", {
+    "util.badge": "Accredited training centre · Anderlecht, Belgium",
+    "nav.formations": "Training",
+    "nav.all_formations": "View all courses", "nav.all_formations_desc": "Our full certified catalogue",
+    "dd.vca_base": "VCA Basic", "dd.vca_base_desc": "The fundamentals of site safety",
+    "dd.vca_hier": "VCA for Supervisors", "dd.vca_hier_desc": "For managers and supervisors",
+    "dd.nacelle": "Aerial work platform", "dd.nacelle_desc": "Safe operation of MEWPs",
+    "dd.fibre": "Optical fibre", "dd.fibre_desc": "Installation and splicing",
+    "dd.beps": "BEPS — First aid", "dd.beps_desc": "The gestures that save lives",
+    "dd.diiso": "Diisocyanates & hazardous substances", "dd.diiso_desc": "Handling in line with regulations",
+    "nav.vca_entreprise": "VCA for Companies", "nav.peb": "PEB Wallonia & Brussels",
+    "nav.coordination": "Coordination", "nav.certificat": "Certificate", "nav.agenda": "Schedule",
+    "header.contact": "Contact", "header.register": "Register",
+    "aria.open_menu": "Open menu", "aria.close_menu": "Close menu", "aria.choose_lang": "Choose language",
+    "footer.cta_eyebrow": "We start whenever you're ready",
+    "footer.cta_title": "Ready to <span class=\"hl\">keep your teams safe</span>?",
+    "footer.cta_text": "Book a session or request a tailored quote — quick reply, no commitment.",
+    "footer.cta_btn": "Enrol in a course",
+    "footer.loc": "Anderlecht · Belgium", "footer.tagline": "Safety & VCA certifications",
+    "footer.pitch": "Your teams' safety starts with the <span class=\"hl\">right training.</span>",
+    "footer.col_services": "Our services", "footer.label_phone": "Phone", "footer.label_email": "E-mail",
+    "footer.label_address": "Address", "footer.col_hours": "Opening hours",
+    "footer.mon": "Monday", "footer.tue": "Tuesday", "footer.wed": "Wednesday", "footer.thu": "Thursday",
+    "footer.fri": "Friday", "footer.sat": "Saturday", "footer.sun": "Sunday", "footer.closed": "Closed",
+    "footer.status_open": "CURRENTLY OPEN", "footer.status_closed": "CURRENTLY CLOSED",
+    "footer.legal_mentions": "Legal notice", "footer.legal_privacy": "Privacy policy",
+    "footer.legal_terms": "Terms & conditions", "footer.rights": "All rights reserved."
+  });
+
+  /* ---------------- NEDERLANDS ---------------- */
+  m("nl", {
+    "util.badge": "Erkend opleidingscentrum · Anderlecht, België",
+    "nav.formations": "Opleidingen",
+    "nav.all_formations": "Alle opleidingen bekijken", "nav.all_formations_desc": "Onze volledige gecertificeerde catalogus",
+    "dd.vca_base": "VCA Basis", "dd.vca_base_desc": "De basis van de veiligheid op de werf",
+    "dd.vca_hier": "VCA voor Leidinggevenden", "dd.vca_hier_desc": "Voor kaderleden en leidinggevenden",
+    "dd.nacelle": "Hoogwerker", "dd.nacelle_desc": "Veilig bedienen van hoogwerkers",
+    "dd.fibre": "Glasvezel", "dd.fibre_desc": "Installatie en aansluiting",
+    "dd.beps": "BEPS — Eerste hulp", "dd.beps_desc": "De handelingen die levens redden",
+    "dd.diiso": "Di-isocyanaten & gevaarlijke stoffen", "dd.diiso_desc": "Hantering conform de regelgeving",
+    "nav.vca_entreprise": "VCA Bedrijven", "nav.peb": "PEB Wallonië & Brussel",
+    "nav.coordination": "Coördinatie", "nav.certificat": "Certificaat", "nav.agenda": "Agenda",
+    "header.contact": "Contact", "header.register": "Inschrijven",
+    "aria.open_menu": "Menu openen", "aria.close_menu": "Menu sluiten", "aria.choose_lang": "Kies taal",
+    "footer.cta_eyebrow": "We beginnen wanneer u wilt",
+    "footer.cta_title": "Klaar om <span class=\"hl\">uw teams te beveiligen</span>?",
+    "footer.cta_text": "Boek een sessie of vraag een offerte op maat — snel antwoord, vrijblijvend.",
+    "footer.cta_btn": "Inschrijven voor een opleiding",
+    "footer.loc": "Anderlecht · België", "footer.tagline": "Veiligheid & VCA-certificeringen",
+    "footer.pitch": "De veiligheid van uw teams begint met de <span class=\"hl\">juiste opleiding.</span>",
+    "footer.col_services": "Onze diensten", "footer.label_phone": "Telefoon", "footer.label_email": "E-mail",
+    "footer.label_address": "Adres", "footer.col_hours": "Openingsuren",
+    "footer.mon": "Maandag", "footer.tue": "Dinsdag", "footer.wed": "Woensdag", "footer.thu": "Donderdag",
+    "footer.fri": "Vrijdag", "footer.sat": "Zaterdag", "footer.sun": "Zondag", "footer.closed": "Gesloten",
+    "footer.status_open": "NU GEOPEND", "footer.status_closed": "NU GESLOTEN",
+    "footer.legal_mentions": "Wettelijke vermeldingen", "footer.legal_privacy": "Privacybeleid",
+    "footer.legal_terms": "Algemene voorwaarden", "footer.rights": "Alle rechten voorbehouden."
+  });
+
+  /* ---------------- AFRIKAANS ---------------- */
+  m("af", {
+    "util.badge": "Geakkrediteerde opleidingsentrum · Anderlecht, België",
+    "nav.formations": "Opleidings",
+    "nav.all_formations": "Bekyk alle opleidings", "nav.all_formations_desc": "Ons volledige gesertifiseerde katalogus",
+    "dd.vca_base": "VCA Basis", "dd.vca_base_desc": "Die grondbeginsels van terreinveiligheid",
+    "dd.vca_hier": "VCA vir Toesighouers", "dd.vca_hier_desc": "Vir bestuur en toesighouers",
+    "dd.nacelle": "Hoogwerker", "dd.nacelle_desc": "Veilige bediening van hoogwerkers",
+    "dd.fibre": "Optiese vesel", "dd.fibre_desc": "Installasie en aansluiting",
+    "dd.beps": "BEPS — Noodhulp", "dd.beps_desc": "Die handelinge wat lewens red",
+    "dd.diiso": "Di-isosianate & gevaarlike stowwe", "dd.diiso_desc": "Hantering volgens die regulasies",
+    "nav.vca_entreprise": "VCA vir Maatskappye", "nav.peb": "PEB Wallonië & Brussel",
+    "nav.coordination": "Koördinasie", "nav.certificat": "Sertifikaat", "nav.agenda": "Agenda",
+    "header.contact": "Kontak", "header.register": "Registreer",
+    "aria.open_menu": "Maak kieslys oop", "aria.close_menu": "Sluit kieslys", "aria.choose_lang": "Kies taal",
+    "footer.cta_eyebrow": "Ons begin wanneer u gereed is",
+    "footer.cta_title": "Gereed om <span class=\"hl\">u spanne veilig te hou</span>?",
+    "footer.cta_text": "Bespreek 'n sessie of vra 'n pasgemaakte kwotasie — vinnige antwoord, geen verpligting.",
+    "footer.cta_btn": "Skryf in vir 'n opleiding",
+    "footer.loc": "Anderlecht · België", "footer.tagline": "Veiligheid & VCA-sertifisering",
+    "footer.pitch": "U spanne se veiligheid begin met die <span class=\"hl\">regte opleiding.</span>",
+    "footer.col_services": "Ons dienste", "footer.label_phone": "Telefoon", "footer.label_email": "E-pos",
+    "footer.label_address": "Adres", "footer.col_hours": "Openingsure",
+    "footer.mon": "Maandag", "footer.tue": "Dinsdag", "footer.wed": "Woensdag", "footer.thu": "Donderdag",
+    "footer.fri": "Vrydag", "footer.sat": "Saterdag", "footer.sun": "Sondag", "footer.closed": "Gesluit",
+    "footer.status_open": "TANS OOP", "footer.status_closed": "TANS GESLUIT",
+    "footer.legal_mentions": "Regskennisgewing", "footer.legal_privacy": "Privaatheidsbeleid",
+    "footer.legal_terms": "Algemene voorwaardes", "footer.rights": "Alle regte voorbehou."
+  });
+
+  /* ---------------- العربية (RTL) ---------------- */
+  m("ar", {
+    "util.badge": "مركز تدريب معتمد · أندرلخت، بلجيكا",
+    "nav.formations": "الدورات",
+    "nav.all_formations": "عرض جميع الدورات", "nav.all_formations_desc": "كامل الكتالوج المعتمد لدينا",
+    "dd.vca_base": "VCA الأساسي", "dd.vca_base_desc": "أساسيات السلامة في موقع العمل",
+    "dd.vca_hier": "VCA للمشرفين", "dd.vca_hier_desc": "للإدارة والمسؤولين",
+    "dd.nacelle": "منصة العمل المرتفعة", "dd.nacelle_desc": "التشغيل الآمن لمنصات العمل المرتفعة",
+    "dd.fibre": "الألياف الضوئية", "dd.fibre_desc": "التركيب والتوصيل",
+    "dd.beps": "BEPS — الإسعافات الأولية", "dd.beps_desc": "الإجراءات التي تنقذ الحياة",
+    "dd.diiso": "ثنائي الأيزوسيانات والمواد الخطرة", "dd.diiso_desc": "التعامل وفقًا للوائح",
+    "nav.vca_entreprise": "VCA للشركات", "nav.peb": "PEB والونيا وبروكسل",
+    "nav.coordination": "التنسيق", "nav.certificat": "الشهادة", "nav.agenda": "المواعيد",
+    "header.contact": "اتصل بنا", "header.register": "سجّل الآن",
+    "aria.open_menu": "افتح القائمة", "aria.close_menu": "أغلق القائمة", "aria.choose_lang": "اختر اللغة",
+    "footer.cta_eyebrow": "نبدأ متى شئت",
+    "footer.cta_title": "هل أنت مستعد <span class=\"hl\">لحماية فرقك</span>؟",
+    "footer.cta_text": "احجز جلسة أو اطلب عرض سعر مخصص — رد سريع، دون أي التزام.",
+    "footer.cta_btn": "سجّل في دورة تدريبية",
+    "footer.loc": "أندرلخت · بلجيكا", "footer.tagline": "السلامة وشهادات VCA",
+    "footer.pitch": "تبدأ سلامة فرقك من <span class=\"hl\">التدريب الصحيح.</span>",
+    "footer.col_services": "خدماتنا", "footer.label_phone": "الهاتف", "footer.label_email": "البريد الإلكتروني",
+    "footer.label_address": "العنوان", "footer.col_hours": "ساعات العمل",
+    "footer.mon": "الإثنين", "footer.tue": "الثلاثاء", "footer.wed": "الأربعاء", "footer.thu": "الخميس",
+    "footer.fri": "الجمعة", "footer.sat": "السبت", "footer.sun": "الأحد", "footer.closed": "مغلق",
+    "footer.status_open": "مفتوح الآن", "footer.status_closed": "مغلق الآن",
+    "footer.legal_mentions": "الإشعارات القانونية", "footer.legal_privacy": "سياسة الخصوصية",
+    "footer.legal_terms": "الشروط والأحكام", "footer.rights": "جميع الحقوق محفوظة."
+  });
+
+  /* ---------------- БЪЛГАРСКИ ---------------- */
+  m("bg", {
+    "util.badge": "Акредитиран учебен център · Андерлехт, Белгия",
+    "nav.formations": "Обучения",
+    "nav.all_formations": "Вижте всички обучения", "nav.all_formations_desc": "Нашият пълен сертифициран каталог",
+    "dd.vca_base": "VCA основи", "dd.vca_base_desc": "Основите на безопасността на обекта",
+    "dd.vca_hier": "VCA за ръководители", "dd.vca_hier_desc": "За ръководния персонал",
+    "dd.nacelle": "Автовишка", "dd.nacelle_desc": "Безопасно управление на подвижни платформи",
+    "dd.fibre": "Оптични влакна", "dd.fibre_desc": "Монтаж и свързване",
+    "dd.beps": "BEPS — Първа помощ", "dd.beps_desc": "Действията, които спасяват живот",
+    "dd.diiso": "Диизоцианати и опасни вещества", "dd.diiso_desc": "Работа в съответствие с нормативите",
+    "nav.vca_entreprise": "VCA за фирми", "nav.peb": "PEB Валония и Брюксел",
+    "nav.coordination": "Координация", "nav.certificat": "Сертификат", "nav.agenda": "График",
+    "header.contact": "Контакт", "header.register": "Записване",
+    "aria.open_menu": "Отвори менюто", "aria.close_menu": "Затвори менюто", "aria.choose_lang": "Изберете език",
+    "footer.cta_eyebrow": "Започваме, когато пожелаете",
+    "footer.cta_title": "Готови ли сте да <span class=\"hl\">осигурите безопасността на екипите си</span>?",
+    "footer.cta_text": "Резервирайте сесия или поискайте персонална оферта — бърз отговор, без ангажимент.",
+    "footer.cta_btn": "Запишете се за обучение",
+    "footer.loc": "Андерлехт · Белгия", "footer.tagline": "Безопасност и VCA сертификати",
+    "footer.pitch": "Безопасността на екипите ви започва с <span class=\"hl\">правилното обучение.</span>",
+    "footer.col_services": "Нашите услуги", "footer.label_phone": "Телефон", "footer.label_email": "Имейл",
+    "footer.label_address": "Адрес", "footer.col_hours": "Работно време",
+    "footer.mon": "Понеделник", "footer.tue": "Вторник", "footer.wed": "Сряда", "footer.thu": "Четвъртък",
+    "footer.fri": "Петък", "footer.sat": "Събота", "footer.sun": "Неделя", "footer.closed": "Затворено",
+    "footer.status_open": "В МОМЕНТА ОТВОРЕНО", "footer.status_closed": "В МОМЕНТА ЗАТВОРЕНО",
+    "footer.legal_mentions": "Правна информация", "footer.legal_privacy": "Политика за поверителност",
+    "footer.legal_terms": "Общи условия", "footer.rights": "Всички права запазени."
+  });
+
+  /* ---------------- DEUTSCH ---------------- */
+  m("de", {
+    "util.badge": "Anerkanntes Ausbildungszentrum · Anderlecht, Belgien",
+    "nav.formations": "Schulungen",
+    "nav.all_formations": "Alle Schulungen ansehen", "nav.all_formations_desc": "Unser vollständiger zertifizierter Katalog",
+    "dd.vca_base": "VCA Grundlagen", "dd.vca_base_desc": "Die Grundlagen der Baustellensicherheit",
+    "dd.vca_hier": "VCA für Führungskräfte", "dd.vca_hier_desc": "Für Führungs- und Aufsichtspersonen",
+    "dd.nacelle": "Hubarbeitsbühne", "dd.nacelle_desc": "Sicheres Bedienen von Hubarbeitsbühnen",
+    "dd.fibre": "Glasfaser", "dd.fibre_desc": "Installation und Anschluss",
+    "dd.beps": "BEPS — Erste Hilfe", "dd.beps_desc": "Handgriffe, die Leben retten",
+    "dd.diiso": "Diisocyanate & Gefahrstoffe", "dd.diiso_desc": "Handhabung gemäß den Vorschriften",
+    "nav.vca_entreprise": "VCA für Unternehmen", "nav.peb": "PEB Wallonien & Brüssel",
+    "nav.coordination": "Koordination", "nav.certificat": "Zertifikat", "nav.agenda": "Termine",
+    "header.contact": "Kontakt", "header.register": "Anmelden",
+    "aria.open_menu": "Menü öffnen", "aria.close_menu": "Menü schließen", "aria.choose_lang": "Sprache wählen",
+    "footer.cta_eyebrow": "Wir beginnen, wann Sie wollen",
+    "footer.cta_title": "Bereit, <span class=\"hl\">Ihre Teams abzusichern</span>?",
+    "footer.cta_text": "Buchen Sie eine Session oder fordern Sie ein individuelles Angebot an — schnelle Antwort, unverbindlich.",
+    "footer.cta_btn": "Für eine Schulung anmelden",
+    "footer.loc": "Anderlecht · Belgien", "footer.tagline": "Sicherheit & VCA-Zertifizierungen",
+    "footer.pitch": "Die Sicherheit Ihrer Teams beginnt mit der <span class=\"hl\">richtigen Schulung.</span>",
+    "footer.col_services": "Unsere Leistungen", "footer.label_phone": "Telefon", "footer.label_email": "E-Mail",
+    "footer.label_address": "Adresse", "footer.col_hours": "Öffnungszeiten",
+    "footer.mon": "Montag", "footer.tue": "Dienstag", "footer.wed": "Mittwoch", "footer.thu": "Donnerstag",
+    "footer.fri": "Freitag", "footer.sat": "Samstag", "footer.sun": "Sonntag", "footer.closed": "Geschlossen",
+    "footer.status_open": "JETZT GEÖFFNET", "footer.status_closed": "JETZT GESCHLOSSEN",
+    "footer.legal_mentions": "Impressum", "footer.legal_privacy": "Datenschutzerklärung",
+    "footer.legal_terms": "AGB", "footer.rights": "Alle Rechte vorbehalten."
+  });
+
+  /* ---------------- ROMÂNĂ ---------------- */
+  m("ro", {
+    "util.badge": "Centru de formare acreditat · Anderlecht, Belgia",
+    "nav.formations": "Cursuri",
+    "nav.all_formations": "Vezi toate cursurile", "nav.all_formations_desc": "Catalogul nostru complet certificat",
+    "dd.vca_base": "VCA de bază", "dd.vca_base_desc": "Fundamentele securității pe șantier",
+    "dd.vca_hier": "VCA pentru personalul de conducere", "dd.vca_hier_desc": "Pentru conducere și responsabili",
+    "dd.nacelle": "Nacelă elevatoare", "dd.nacelle_desc": "Operarea în siguranță a PLE",
+    "dd.fibre": "Fibră optică", "dd.fibre_desc": "Instalare și racordare",
+    "dd.beps": "BEPS — Prim ajutor", "dd.beps_desc": "Gesturile care salvează vieți",
+    "dd.diiso": "Diizocianați & substanțe periculoase", "dd.diiso_desc": "Manipulare conform reglementărilor",
+    "nav.vca_entreprise": "VCA pentru companii", "nav.peb": "PEB Valonia & Bruxelles",
+    "nav.coordination": "Coordonare", "nav.certificat": "Certificat", "nav.agenda": "Program",
+    "header.contact": "Contact", "header.register": "Înscriere",
+    "aria.open_menu": "Deschide meniul", "aria.close_menu": "Închide meniul", "aria.choose_lang": "Alege limba",
+    "footer.cta_eyebrow": "Începem când doriți",
+    "footer.cta_title": "Gata să <span class=\"hl\">vă protejați echipele</span>?",
+    "footer.cta_text": "Rezervați o sesiune sau cereți o ofertă personalizată — răspuns rapid, fără angajament.",
+    "footer.cta_btn": "Înscrieți-vă la un curs",
+    "footer.loc": "Anderlecht · Belgia", "footer.tagline": "Securitate & certificări VCA",
+    "footer.pitch": "Siguranța echipelor dvs. începe cu <span class=\"hl\">formarea potrivită.</span>",
+    "footer.col_services": "Serviciile noastre", "footer.label_phone": "Telefon", "footer.label_email": "E-mail",
+    "footer.label_address": "Adresă", "footer.col_hours": "Program de lucru",
+    "footer.mon": "Luni", "footer.tue": "Marți", "footer.wed": "Miercuri", "footer.thu": "Joi",
+    "footer.fri": "Vineri", "footer.sat": "Sâmbătă", "footer.sun": "Duminică", "footer.closed": "Închis",
+    "footer.status_open": "DESCHIS ACUM", "footer.status_closed": "ÎNCHIS ACUM",
+    "footer.legal_mentions": "Mențiuni legale", "footer.legal_privacy": "Politica de confidențialitate",
+    "footer.legal_terms": "Termeni și condiții", "footer.rights": "Toate drepturile rezervate."
+  });
+
+  /* ---------------- ITALIANO ---------------- */
+  m("it", {
+    "util.badge": "Centro di formazione accreditato · Anderlecht, Belgio",
+    "nav.formations": "Corsi",
+    "nav.all_formations": "Vedi tutti i corsi", "nav.all_formations_desc": "Il nostro catalogo completo certificato",
+    "dd.vca_base": "VCA base", "dd.vca_base_desc": "I fondamentali della sicurezza in cantiere",
+    "dd.vca_hier": "VCA per responsabili", "dd.vca_hier_desc": "Per dirigenti e responsabili",
+    "dd.nacelle": "Piattaforma elevatrice", "dd.nacelle_desc": "Guida in sicurezza delle PLE",
+    "dd.fibre": "Fibra ottica", "dd.fibre_desc": "Installazione e giunzione",
+    "dd.beps": "BEPS — Primo soccorso", "dd.beps_desc": "I gesti che salvano la vita",
+    "dd.diiso": "Diisocianati & sostanze pericolose", "dd.diiso_desc": "Manipolazione conforme alle normative",
+    "nav.vca_entreprise": "VCA aziende", "nav.peb": "PEB Vallonia & Bruxelles",
+    "nav.coordination": "Coordinamento", "nav.certificat": "Certificato", "nav.agenda": "Calendario",
+    "header.contact": "Contatti", "header.register": "Iscriviti",
+    "aria.open_menu": "Apri il menu", "aria.close_menu": "Chiudi il menu", "aria.choose_lang": "Scegli la lingua",
+    "footer.cta_eyebrow": "Si comincia quando vuoi",
+    "footer.cta_title": "Pronto a <span class=\"hl\">proteggere i tuoi team</span>?",
+    "footer.cta_text": "Prenota una sessione o richiedi un preventivo su misura — risposta rapida, senza impegno.",
+    "footer.cta_btn": "Iscriviti a un corso",
+    "footer.loc": "Anderlecht · Belgio", "footer.tagline": "Sicurezza & certificazioni VCA",
+    "footer.pitch": "La sicurezza dei tuoi team parte dalla <span class=\"hl\">formazione giusta.</span>",
+    "footer.col_services": "I nostri servizi", "footer.label_phone": "Telefono", "footer.label_email": "E-mail",
+    "footer.label_address": "Indirizzo", "footer.col_hours": "Orari di apertura",
+    "footer.mon": "Lunedì", "footer.tue": "Martedì", "footer.wed": "Mercoledì", "footer.thu": "Giovedì",
+    "footer.fri": "Venerdì", "footer.sat": "Sabato", "footer.sun": "Domenica", "footer.closed": "Chiuso",
+    "footer.status_open": "ATTUALMENTE APERTO", "footer.status_closed": "ATTUALMENTE CHIUSO",
+    "footer.legal_mentions": "Note legali", "footer.legal_privacy": "Informativa sulla privacy",
+    "footer.legal_terms": "Termini e condizioni", "footer.rights": "Tutti i diritti riservati."
+  });
+
+  /* ---------------- SLOVENŠČINA ---------------- */
+  m("sl", {
+    "util.badge": "Akreditirani center za usposabljanje · Anderlecht, Belgija",
+    "nav.formations": "Usposabljanja",
+    "nav.all_formations": "Oglejte si vsa usposabljanja", "nav.all_formations_desc": "Naš celoten certificiran katalog",
+    "dd.vca_base": "VCA osnovni", "dd.vca_base_desc": "Osnove varnosti na gradbišču",
+    "dd.vca_hier": "VCA za vodstvo", "dd.vca_hier_desc": "Za vodstvo in odgovorne osebe",
+    "dd.nacelle": "Dvižna ploščad", "dd.nacelle_desc": "Varno upravljanje dvižnih ploščadi",
+    "dd.fibre": "Optična vlakna", "dd.fibre_desc": "Namestitev in priključitev",
+    "dd.beps": "BEPS — Prva pomoč", "dd.beps_desc": "Ukrepi, ki rešujejo življenja",
+    "dd.diiso": "Diizocianati in nevarne snovi", "dd.diiso_desc": "Ravnanje v skladu s predpisi",
+    "nav.vca_entreprise": "VCA za podjetja", "nav.peb": "PEB Valonija in Bruselj",
+    "nav.coordination": "Koordinacija", "nav.certificat": "Certifikat", "nav.agenda": "Urnik",
+    "header.contact": "Kontakt", "header.register": "Prijava",
+    "aria.open_menu": "Odpri meni", "aria.close_menu": "Zapri meni", "aria.choose_lang": "Izberite jezik",
+    "footer.cta_eyebrow": "Začnemo, kadar želite",
+    "footer.cta_title": "Ste pripravljeni <span class=\"hl\">poskrbeti za varnost ekip</span>?",
+    "footer.cta_text": "Rezervirajte termin ali zahtevajte prilagojeno ponudbo — hiter odgovor, brez obveznosti.",
+    "footer.cta_btn": "Prijavite se na usposabljanje",
+    "footer.loc": "Anderlecht · Belgija", "footer.tagline": "Varnost in certifikati VCA",
+    "footer.pitch": "Varnost vaših ekip se začne s <span class=\"hl\">pravim usposabljanjem.</span>",
+    "footer.col_services": "Naše storitve", "footer.label_phone": "Telefon", "footer.label_email": "E-pošta",
+    "footer.label_address": "Naslov", "footer.col_hours": "Delovni čas",
+    "footer.mon": "Ponedeljek", "footer.tue": "Torek", "footer.wed": "Sreda", "footer.thu": "Četrtek",
+    "footer.fri": "Petek", "footer.sat": "Sobota", "footer.sun": "Nedelja", "footer.closed": "Zaprto",
+    "footer.status_open": "TRENUTNO ODPRTO", "footer.status_closed": "TRENUTNO ZAPRTO",
+    "footer.legal_mentions": "Pravno obvestilo", "footer.legal_privacy": "Politika zasebnosti",
+    "footer.legal_terms": "Splošni pogoji", "footer.rights": "Vse pravice pridržane."
+  });
+})();

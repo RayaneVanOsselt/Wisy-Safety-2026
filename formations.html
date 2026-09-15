@@ -584,7 +584,7 @@ a.f-c-value:hover{color:var(--turquoise)}
     function sc(){clearTimeout(ct);ct=setTimeout(cl,250);}
     wrap.addEventListener("mouseenter",op);wrap.addEventListener("mouseleave",sc);
     wrap.addEventListener("mousemove",function(){if(wrap.classList.contains("is-open"))clearTimeout(ct);});
-    trig.addEventListener("click",function(e){if(window.matchMedia("(max-width:1080px)").matches)return;e.preventDefault();wrap.classList.contains("is-open")?cl():op();});
+    trig.addEventListener("click",function(e){if(matchMedia("(hover:none)").matches){e.preventDefault();wrap.classList.contains("is-open")?cl():op();}});
     wrap.addEventListener("keydown",function(e){if(e.key==="Escape"){cl();trig.focus();}});
     wrap.addEventListener("focusout",function(e){if(!wrap.contains(e.relatedTarget))cl();});
     document.addEventListener("click",function(e){if(!wrap.contains(e.target))cl();});}

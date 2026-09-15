@@ -154,11 +154,12 @@ ul{margin:0;padding:0;list-style:none}button{font-family:inherit;cursor:pointer;
 /* Repli par défaut (mobile/tablette + vues filtrées) : cartes égales, aucune colonne vide */
 .fo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(1.1rem,2vw,1.6rem)}
 .fo-card{position:relative;overflow:hidden;border-radius:var(--radius-lg);min-height:452px;display:flex;isolation:isolate;box-shadow:var(--shadow-card);color:var(--creme);grid-column:auto}
-/* Desktop, catalogue complet : mosaïque magazine 6 colonnes en zigzag (grande 4 / normale 2) */
+/* Desktop, catalogue complet : mosaïque magazine 4 colonnes en moulinet
+   (2 cartes larges en diagonale : 1re en haut-gauche, dernière en bas-droite) */
 @media(min-width:981px){
-  .fo-grid:not(.is-filtered){grid-template-columns:repeat(6,1fr)}
-  .fo-grid:not(.is-filtered) .fo-card{grid-column:span 2}
-  .fo-grid:not(.is-filtered) .fo-card--wide{grid-column:span 4}
+  .fo-grid:not(.is-filtered){grid-template-columns:repeat(4,1fr)}
+  .fo-grid:not(.is-filtered) .fo-card{grid-column:span 1}
+  .fo-grid:not(.is-filtered) .fo-card--wide{grid-column:span 2}
 }
 .fo-card__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform var(--t-med) var(--ease-out)}
 .fo-card:hover .fo-card__img{transform:scale(1.06)}
@@ -285,6 +286,7 @@ a.f-c-value:hover{color:var(--turquoise)}
           <a class="nav-link" href="formations.html" aria-current="page" aria-haspopup="true" aria-expanded="false" aria-controls="dd-formations">Formations
             <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></a>
           <div class="dropdown" id="dd-formations"><div class="dropdown__inner" role="menu">
+            <a class="dropdown__item" role="menuitem" href="formations.html"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span><span class="dropdown__tt">Voir toutes les formations</span><span class="dropdown__ds">Notre catalogue complet certifié</span></span></a>
             <a class="dropdown__item" role="menuitem" href="formations.html#vca-base"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/></svg></span><span><span class="dropdown__tt">VCA de base</span><span class="dropdown__ds">Les fondamentaux de la sécurité chantier</span></span></a>
             <a class="dropdown__item" role="menuitem" href="formations.html#vca-hierarchique"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v6M6 21v-6M18 21v-6M6 15a6 6 0 0 1 12 0"/><circle cx="12" cy="9" r="1.4"/></svg></span><span><span class="dropdown__tt">VCA ligne hiérarchique</span><span class="dropdown__ds">Pour l'encadrement et les responsables</span></span></a>
             <a class="dropdown__item" role="menuitem" href="formations.html#nacelle"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21h6v-4H4zM7 17V4l12 3v6"/><path d="M14 13h5"/></svg></span><span><span class="dropdown__tt">Nacelle élévatrice</span><span class="dropdown__ds">Conduite en sécurité des PEMP</span></span></a>
@@ -310,6 +312,7 @@ a.f-c-value:hover{color:var(--turquoise)}
   <ul class="m-nav">
     <li><button class="m-acc__trigger" aria-expanded="false">Formations <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
       <div class="m-acc__panel"><div><ul class="m-acc__list">
+        <li><a href="formations.html">Voir toutes les formations</a></li>
         <li><a href="formations.html#vca-base">VCA de base</a></li><li><a href="formations.html#vca-hierarchique">VCA ligne hiérarchique</a></li><li><a href="formations.html#nacelle">Nacelle élévatrice</a></li>
         <li><a href="formations.html#fibre-optique">Fibre optique</a></li><li><a href="formations.html#beps">BEPS — Premier secours</a></li><li><a href="formations.html#diisocyanates">Diisocyanates &amp; substances dangereuses</a></li>
       </ul></div></div></li>
@@ -407,7 +410,7 @@ a.f-c-value:hover{color:var(--turquoise)}
         </article>
 
         <!-- Formation 3 — Diisocyanates -->
-        <article class="fo-card fo-card--wide fo-card--securite reveal" id="diisocyanates" data-category="securite">
+        <article class="fo-card fo-card--securite reveal" id="diisocyanates" data-category="securite">
           <img class="fo-card__img" src="assets/images/Diisocyanates%20et%20substances%20dangereuses.jpg" alt="Formation diisocyanates et substances dangereuses — manipulation de produits chimiques" loading="lazy" width="500" height="333">
           <span class="fo-card__scrim" aria-hidden="true"></span>
           <a class="fo-card__overlay" href="contact.html" aria-label="Découvrir la formation Diisocyanates et substances dangereuses"></a>
@@ -459,7 +462,7 @@ a.f-c-value:hover{color:var(--turquoise)}
         </article>
 
         <!-- Formation 5 — Fibre optique -->
-        <article class="fo-card fo-card--wide fo-card--technique reveal" id="fibre-optique" data-category="technique">
+        <article class="fo-card fo-card--technique reveal" id="fibre-optique" data-category="technique">
           <img class="fo-card__img" src="assets/images/fibre%20optique%20.jpg" alt="Formation fibre optique — soudure et installation professionnelle" loading="lazy" width="1000" height="600">
           <span class="fo-card__scrim" aria-hidden="true"></span>
           <a class="fo-card__overlay" href="contact.html" aria-label="Découvrir la formation Fibre optique"></a>
@@ -485,7 +488,7 @@ a.f-c-value:hover{color:var(--turquoise)}
         </article>
 
         <!-- Formation 6 — BEPS Premier secours -->
-        <article class="fo-card fo-card--secours reveal" id="beps" data-category="secours">
+        <article class="fo-card fo-card--wide fo-card--secours reveal" id="beps" data-category="secours">
           <img class="fo-card__img" src="assets/images/beps.jpg" alt="Formation BEPS — brevet européen de premiers secours, les gestes qui sauvent" loading="lazy" width="1024" height="684">
           <span class="fo-card__scrim" aria-hidden="true"></span>
           <a class="fo-card__overlay" href="contact.html" aria-label="Découvrir la formation BEPS — Premier secours"></a>
@@ -584,7 +587,8 @@ a.f-c-value:hover{color:var(--turquoise)}
     function sc(){clearTimeout(ct);ct=setTimeout(cl,250);}
     wrap.addEventListener("mouseenter",op);wrap.addEventListener("mouseleave",sc);
     wrap.addEventListener("mousemove",function(){if(wrap.classList.contains("is-open"))clearTimeout(ct);});
-    trig.addEventListener("click",function(e){if(matchMedia("(hover:none)").matches){e.preventDefault();wrap.classList.contains("is-open")?cl():op();}});
+    // Clic : ouvre toujours le menu (le survol l'ouvre déjà ; un clic ne doit pas le refermer aussitôt)
+    trig.addEventListener("click",function(e){e.preventDefault();op();});
     wrap.addEventListener("keydown",function(e){if(e.key==="Escape"){cl();trig.focus();}});
     wrap.addEventListener("focusout",function(e){if(!wrap.contains(e.relatedTarget))cl();});
     document.addEventListener("click",function(e){if(!wrap.contains(e.target))cl();});}

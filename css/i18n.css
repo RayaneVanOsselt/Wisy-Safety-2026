@@ -1,0 +1,75 @@
+/* =========================================================================
+   WISY SAFETY — Sélecteur de langue + adaptations RTL (arabe)
+   Utilise les tokens de la charte (var(--epinette)…) définis dans chaque page.
+   Chargé sur toutes les pages via <link rel="stylesheet" href="css/i18n.css">.
+   ========================================================================= */
+
+/* ---------- Sélecteur de langue (desktop) ---------- */
+.lang-switch { position: relative; }
+.lang-btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-family: var(--font-titre); font-weight: 600; font-size: .9rem;
+  color: var(--noir-jais); background: transparent;
+  border: 1.5px solid var(--granit-20); border-radius: var(--radius-pill);
+  padding: .5rem .85rem; cursor: pointer;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease),
+              background-color var(--t-fast) var(--ease);
+}
+.lang-btn:hover, .lang-btn:focus-visible {
+  color: var(--epinette); border-color: var(--brume); background: var(--brume-08);
+}
+.lang-btn__globe { width: 17px; height: 17px; flex-shrink: 0; }
+.lang-caret { width: .6em; height: .6em; transition: transform var(--t-fast) var(--ease); }
+.lang-switch.is-open .lang-caret { transform: rotate(180deg); }
+
+.lang-menu {
+  position: absolute; top: calc(100% + .5rem); right: 0; min-width: 200px;
+  background: var(--creme); border: 1px solid var(--granit-20);
+  border-radius: var(--radius); box-shadow: var(--shadow-drop); padding: .4rem;
+  opacity: 0; visibility: hidden; transform: translateY(6px);
+  transition: opacity var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out),
+              visibility var(--t-fast);
+  z-index: 1002; max-height: min(70vh, 440px); overflow: auto;
+}
+.lang-switch.is-open .lang-menu { opacity: 1; visibility: visible; transform: none; }
+.lang-menu a {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .55rem .75rem; border-radius: var(--radius-sm);
+  font-family: var(--font-titre); font-weight: 500; font-size: .92rem; color: var(--noir-jais);
+  transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.lang-menu a:hover, .lang-menu a:focus-visible { background: var(--brume-14); color: var(--epinette); }
+.lang-menu a[aria-current="true"] { background: var(--epinette); color: var(--creme); }
+.lang-menu a .lc {
+  margin-inline-start: auto; font-size: .72rem; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--granit);
+}
+.lang-menu a[aria-current="true"] .lc { color: rgba(244, 250, 249, .85); }
+
+/* ---------- Sélecteur dans le panneau mobile ---------- */
+.m-lang { margin-top: .75rem; border-top: 1px solid var(--granit-20); padding-top: 1rem; }
+.m-lang .lang-switch { width: 100%; }
+.m-lang .lang-btn { width: 100%; justify-content: space-between; }
+.m-lang .lang-menu {
+  position: static; opacity: 1; visibility: visible; transform: none;
+  box-shadow: none; border: none; background: transparent; padding: .5rem 0 0; max-height: none;
+}
+.m-lang .lang-menu a { padding: .7rem .5rem; }
+
+/* ---------- RTL (arabe) ---------- */
+[dir="rtl"] .util-contacts { margin-left: 0; margin-right: auto; }
+[dir="rtl"] .lang-menu { right: auto; left: 0; }
+[dir="rtl"] .fo-hero::before { right: auto; left: -150px; }
+[dir="rtl"] .fo-hero::after { left: auto; right: -140px; }
+[dir="rtl"] .site-footer::before { left: auto; right: -120px; }
+[dir="rtl"] .site-footer::after { right: auto; left: -80px; }
+[dir="rtl"] .f-cta::before { left: auto; right: 0; }
+[dir="rtl"] .f-col__title::after { left: auto; right: 0; }
+[dir="rtl"] .m-panel { right: auto; left: 0; transform: translateX(-100%); }
+[dir="rtl"] .m-panel.is-open { transform: translateX(0); }
+/* Flèches directionnelles : miroir horizontal */
+[dir="rtl"] .fo-card__cta svg,
+[dir="rtl"] .btn__arrow,
+[dir="rtl"] .chero__link svg,
+[dir="rtl"] .map-link span,
+[dir="rtl"] .gt-card__btn span { display: inline-block; transform: scaleX(-1); }

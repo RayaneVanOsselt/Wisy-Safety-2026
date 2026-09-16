@@ -97,6 +97,9 @@
     document.querySelectorAll("[data-lang-current]").forEach(function (el) {
       el.textContent = langName(lang);
     });
+    document.querySelectorAll("[data-lang-current-code]").forEach(function (el) {
+      el.textContent = lang.toUpperCase();
+    });
     document.querySelectorAll("[data-lang-option]").forEach(function (el) {
       var on = el.getAttribute("data-lang-option") === lang;
       el.setAttribute("aria-current", on ? "true" : "false");

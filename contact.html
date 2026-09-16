@@ -9,6 +9,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" href="assets/logo.png" type="image/png">
+<link rel="stylesheet" href="css/i18n.css">
+<link rel="alternate" hreflang="fr" href="contact.html?lang=fr">
+<link rel="alternate" hreflang="en" href="contact.html?lang=en">
+<link rel="alternate" hreflang="nl" href="contact.html?lang=nl">
+<link rel="alternate" hreflang="af" href="contact.html?lang=af">
+<link rel="alternate" hreflang="ar" href="contact.html?lang=ar">
+<link rel="alternate" hreflang="bg" href="contact.html?lang=bg">
+<link rel="alternate" hreflang="de" href="contact.html?lang=de">
+<link rel="alternate" hreflang="ro" href="contact.html?lang=ro">
+<link rel="alternate" hreflang="it" href="contact.html?lang=it">
+<link rel="alternate" hreflang="sl" href="contact.html?lang=sl">
+<link rel="alternate" hreflang="x-default" href="contact.html">
 <style>
 /* ==================== TOKENS ==================== */
 :root{
@@ -559,7 +571,7 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
 <!-- ==================== HEADER ==================== -->
 <header class="site-header" id="top">
   <div class="util-bar"><div class="util-inner">
-    <span class="util-tag"><span class="dot"></span>Organisme de formation agréé · Anderlecht, Belgique</span>
+    <span class="util-tag"><span class="dot"></span><span data-i18n="util.badge">Organisme de formation agréé · Anderlecht, Belgique</span></span>
     <div class="util-contacts">
       <a href="tel:+3223188659"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>+32 2 318 86 59</a>
       <a href="mailto:info@wisysafety.be"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>info@wisysafety.be</a>
@@ -570,42 +582,78 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
     <nav class="main-nav" aria-label="Navigation principale">
       <ul class="nav-list">
         <li class="has-dropdown">
-          <a class="nav-link" href="formations.html" aria-haspopup="true" aria-expanded="false" aria-controls="dd-formations">Formations
+          <a class="nav-link" href="formations.html" aria-haspopup="true" aria-expanded="false" aria-controls="dd-formations"><span data-i18n="nav.formations">Formations</span>
             <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></a>
           <div class="dropdown" id="dd-formations"><div class="dropdown__inner" role="menu">
-            <a class="dropdown__item" role="menuitem" href="formations.html"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span><span class="dropdown__tt">Voir toutes les formations</span><span class="dropdown__ds">Notre catalogue complet certifié</span></span></a>
-            <a class="dropdown__item" role="menuitem" href="formations.html#vca-base"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/></svg></span><span><span class="dropdown__tt">VCA de base</span><span class="dropdown__ds">Les fondamentaux de la sécurité chantier</span></span></a>
-            <a class="dropdown__item" role="menuitem" href="formations.html#vca-hierarchique"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v6M6 21v-6M18 21v-6M6 15a6 6 0 0 1 12 0"/><circle cx="12" cy="9" r="1.4"/></svg></span><span><span class="dropdown__tt">VCA ligne hiérarchique</span><span class="dropdown__ds">Pour l'encadrement et les responsables</span></span></a>
-            <a class="dropdown__item" role="menuitem" href="formations.html#nacelle"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21h6v-4H4zM7 17V4l12 3v6"/><path d="M14 13h5"/></svg></span><span><span class="dropdown__tt">Nacelle élévatrice</span><span class="dropdown__ds">Conduite en sécurité des PEMP</span></span></a>
-            <a class="dropdown__item" role="menuitem" href="formations.html#fibre-optique"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12c4-6 12-6 16 0M7 12c2.5-3.5 7.5-3.5 10 0"/><circle cx="12" cy="12" r="2"/></svg></span><span><span class="dropdown__tt">Fibre optique</span><span class="dropdown__ds">Installation et raccordement</span></span></a>
-            <a class="dropdown__item" role="menuitem" href="formations.html#beps"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c-4-2.5-7-6-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 4-3 7.5-7 10z"/><path d="M12 9v4M10 11h4"/></svg></span><span><span class="dropdown__tt">BEPS — Premier secours</span><span class="dropdown__ds">Les gestes qui sauvent</span></span></a>
-            <a class="dropdown__item" role="menuitem" href="formations.html#diisocyanates"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v5l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 17l-5-9V3"/><path d="M7.5 14h9"/></svg></span><span><span class="dropdown__tt">Diisocyanates &amp; substances dangereuses</span><span class="dropdown__ds">Manipulation conforme à la réglementation</span></span></a>
+            <a class="dropdown__item" role="menuitem" href="formations.html"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span><span class="dropdown__tt" data-i18n="nav.all_formations">Voir toutes les formations</span><span class="dropdown__ds" data-i18n="nav.all_formations_desc">Notre catalogue complet certifié</span></span></a>
+            <a class="dropdown__item" role="menuitem" href="formations.html#vca-base"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/></svg></span><span><span class="dropdown__tt" data-i18n="dd.vca_base">VCA de base</span><span class="dropdown__ds" data-i18n="dd.vca_base_desc">Les fondamentaux de la sécurité chantier</span></span></a>
+            <a class="dropdown__item" role="menuitem" href="formations.html#vca-hierarchique"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v6M6 21v-6M18 21v-6M6 15a6 6 0 0 1 12 0"/><circle cx="12" cy="9" r="1.4"/></svg></span><span><span class="dropdown__tt" data-i18n="dd.vca_hier">VCA ligne hiérarchique</span><span class="dropdown__ds" data-i18n="dd.vca_hier_desc">Pour l'encadrement et les responsables</span></span></a>
+            <a class="dropdown__item" role="menuitem" href="formations.html#nacelle"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21h6v-4H4zM7 17V4l12 3v6"/><path d="M14 13h5"/></svg></span><span><span class="dropdown__tt" data-i18n="dd.nacelle">Nacelle élévatrice</span><span class="dropdown__ds" data-i18n="dd.nacelle_desc">Conduite en sécurité des PEMP</span></span></a>
+            <a class="dropdown__item" role="menuitem" href="formations.html#fibre-optique"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12c4-6 12-6 16 0M7 12c2.5-3.5 7.5-3.5 10 0"/><circle cx="12" cy="12" r="2"/></svg></span><span><span class="dropdown__tt" data-i18n="dd.fibre">Fibre optique</span><span class="dropdown__ds" data-i18n="dd.fibre_desc">Installation et raccordement</span></span></a>
+            <a class="dropdown__item" role="menuitem" href="formations.html#beps"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c-4-2.5-7-6-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 4-3 7.5-7 10z"/><path d="M12 9v4M10 11h4"/></svg></span><span><span class="dropdown__tt" data-i18n="dd.beps">BEPS — Premier secours</span><span class="dropdown__ds" data-i18n="dd.beps_desc">Les gestes qui sauvent</span></span></a>
+            <a class="dropdown__item" role="menuitem" href="formations.html#diisocyanates"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v5l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 17l-5-9V3"/><path d="M7.5 14h9"/></svg></span><span><span class="dropdown__tt" data-i18n="dd.diiso">Diisocyanates &amp; substances dangereuses</span><span class="dropdown__ds" data-i18n="dd.diiso_desc">Manipulation conforme à la réglementation</span></span></a>
           </div></div>
         </li>
-        <li><a class="nav-link" href="#">VCA Entreprise</a></li>
-        <li><a class="nav-link" href="#">PEB Wallonie &amp; Bruxelles</a></li>
-        <li><a class="nav-link" href="#">Coordination</a></li>
-        <li><a class="nav-link" href="#">Certificat</a></li>
-        <li><a class="nav-link" href="#">Agenda</a></li>
+        <li><a class="nav-link" href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li>
+        <li><a class="nav-link" href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li>
+        <li><a class="nav-link" href="#" data-i18n="nav.coordination">Coordination</a></li>
+        <li><a class="nav-link" href="#" data-i18n="nav.certificat">Certificat</a></li>
+        <li><a class="nav-link" href="#" data-i18n="nav.agenda">Agenda</a></li>
       </ul>
     </nav>
-    <div class="header-actions"><a class="btn btn--outline" href="contact.html">Contact</a><a class="btn btn--cta" href="contact.html">S'inscrire</a></div>
-    <button class="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="m-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div class="lang-switch">
+      <button class="lang-btn" data-lang-toggle aria-haspopup="true" aria-expanded="false" data-i18n-attr="aria-label:aria.choose_lang" aria-label="Choisir la langue">
+        <svg class="lang-btn__globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.8 2.6 15.2 0 18M12 3c-2.6 2.8-2.6 15.2 0 18"/></svg>
+        <span class="lang-btn__name" data-lang-current>Français</span>
+        <span class="lang-code" data-lang-current-code>FR</span>
+        <svg class="lang-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="lang-menu" role="menu">
+        <a href="?lang=en" data-lang-option="en" role="menuitem">English<span class="lc">EN</span></a>
+        <a href="?lang=fr" data-lang-option="fr" role="menuitem">Français<span class="lc">FR</span></a>
+        <a href="?lang=nl" data-lang-option="nl" role="menuitem">Nederlands<span class="lc">NL</span></a>
+        <a href="?lang=af" data-lang-option="af" role="menuitem">Afrikaans<span class="lc">AF</span></a>
+        <a href="?lang=ar" data-lang-option="ar" role="menuitem">العربية<span class="lc">AR</span></a>
+        <a href="?lang=bg" data-lang-option="bg" role="menuitem">Български<span class="lc">BG</span></a>
+        <a href="?lang=de" data-lang-option="de" role="menuitem">Deutsch<span class="lc">DE</span></a>
+        <a href="?lang=ro" data-lang-option="ro" role="menuitem">Română<span class="lc">RO</span></a>
+        <a href="?lang=it" data-lang-option="it" role="menuitem">Italiano<span class="lc">IT</span></a>
+        <a href="?lang=sl" data-lang-option="sl" role="menuitem">Slovenščina<span class="lc">SL</span></a>
+      </div>
+    </div>
+    <div class="header-actions"><a class="btn btn--outline" href="contact.html" data-i18n="header.contact">Contact</a><a class="btn btn--cta" href="contact.html" data-i18n="header.register">S'inscrire</a></div>
+    <button class="nav-toggle" data-i18n-attr="aria-label:aria.open_menu" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="m-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div></div>
 </header>
 <div class="m-scrim" aria-hidden="true"></div>
 <aside class="m-panel" id="m-panel" aria-label="Menu mobile">
-  <div class="m-head"><img class="logo__img" src="assets/logo.png" alt="Wisy Safety" width="40" height="44" style="height:44px"><button class="m-close" aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="m-head"><img class="logo__img" src="assets/logo.png" alt="Wisy Safety" width="40" height="44" style="height:44px"><button class="m-close" data-i18n-attr="aria-label:aria.close_menu" aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <ul class="m-nav">
-    <li><button class="m-acc__trigger" aria-expanded="false">Formations <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
+    <li><button class="m-acc__trigger" aria-expanded="false"><span data-i18n="nav.formations">Formations</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
       <div class="m-acc__panel"><div><ul class="m-acc__list">
-        <li><a href="formations.html">Voir toutes les formations</a></li>
-        <li><a href="formations.html#vca-base">VCA de base</a></li><li><a href="formations.html#vca-hierarchique">VCA ligne hiérarchique</a></li><li><a href="formations.html#nacelle">Nacelle élévatrice</a></li>
-        <li><a href="formations.html#fibre-optique">Fibre optique</a></li><li><a href="formations.html#beps">BEPS — Premier secours</a></li><li><a href="formations.html#diisocyanates">Diisocyanates &amp; substances dangereuses</a></li>
+        <li><a href="formations.html" data-i18n="nav.all_formations">Voir toutes les formations</a></li>
+        <li><a href="formations.html#vca-base" data-i18n="dd.vca_base">VCA de base</a></li><li><a href="formations.html#vca-hierarchique" data-i18n="dd.vca_hier">VCA ligne hiérarchique</a></li><li><a href="formations.html#nacelle" data-i18n="dd.nacelle">Nacelle élévatrice</a></li>
+        <li><a href="formations.html#fibre-optique" data-i18n="dd.fibre">Fibre optique</a></li><li><a href="formations.html#beps" data-i18n="dd.beps">BEPS — Premier secours</a></li><li><a href="formations.html#diisocyanates" data-i18n="dd.diiso">Diisocyanates &amp; substances dangereuses</a></li>
       </ul></div></div></li>
-    <li><a href="#">VCA Entreprise</a></li><li><a href="#">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#">Coordination</a></li><li><a href="#">Certificat</a></li><li><a href="#">Agenda</a></li>
+    <li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="#" data-i18n="nav.agenda">Agenda</a></li>
   </ul>
-  <div class="m-actions"><a class="btn btn--outline" href="contact.html">Contact</a><a class="btn btn--cta" href="contact.html">S'inscrire</a></div>
+  <div class="m-actions"><a class="btn btn--outline" href="contact.html" data-i18n="header.contact">Contact</a><a class="btn btn--cta" href="contact.html" data-i18n="header.register">S'inscrire</a></div>
+  <div class="m-lang">
+    <div class="lang-switch">
+      <div class="lang-menu" role="menu">
+        <a href="?lang=en" data-lang-option="en" role="menuitem">English<span class="lc">EN</span></a>
+        <a href="?lang=fr" data-lang-option="fr" role="menuitem">Français<span class="lc">FR</span></a>
+        <a href="?lang=nl" data-lang-option="nl" role="menuitem">Nederlands<span class="lc">NL</span></a>
+        <a href="?lang=af" data-lang-option="af" role="menuitem">Afrikaans<span class="lc">AF</span></a>
+        <a href="?lang=ar" data-lang-option="ar" role="menuitem">العربية<span class="lc">AR</span></a>
+        <a href="?lang=bg" data-lang-option="bg" role="menuitem">Български<span class="lc">BG</span></a>
+        <a href="?lang=de" data-lang-option="de" role="menuitem">Deutsch<span class="lc">DE</span></a>
+        <a href="?lang=ro" data-lang-option="ro" role="menuitem">Română<span class="lc">RO</span></a>
+        <a href="?lang=it" data-lang-option="it" role="menuitem">Italiano<span class="lc">IT</span></a>
+        <a href="?lang=sl" data-lang-option="sl" role="menuitem">Slovenščina<span class="lc">SL</span></a>
+      </div>
+    </div>
+  </div>
 </aside>
 
 <main>
@@ -615,20 +663,20 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
     <span class="chero__dots chero__dots--2" aria-hidden="true"></span>
     <div class="container chero__grid">
       <div class="chero__content">
-        <span class="chero__pill chero-anim d1"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span>Expertise sécurité certifiée</span>
-        <h1 class="chero__title chero-anim d2" id="chero-title">Besoin d'expertise en <span class="mark">sécurité</span> ?</h1>
+        <span class="chero__pill chero-anim d1"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span><span data-i18n="ct.chero_pill">Expertise sécurité certifiée</span></span>
+        <h1 class="chero__title chero-anim d2" id="chero-title" data-i18n-html="ct.chero_title">Besoin d'expertise en <span class="mark">sécurité</span> ?</h1>
         <div class="chero__sep chero-anim d3" aria-hidden="true"></div>
-        <p class="chero__desc chero-anim d4">Notre équipe de professionnels est à votre écoute pour discuter de vos besoins spécifiques en formation et conseil en sécurité.</p>
+        <p class="chero__desc chero-anim d4" data-i18n="ct.chero_desc">Notre équipe de professionnels est à votre écoute pour discuter de vos besoins spécifiques en formation et conseil en sécurité.</p>
         <div class="chero__actions chero-anim d5">
-          <a class="btn btn--cta" href="mailto:info@wisysafety.be"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> Nous contacter</a>
-          <a class="chero__link" href="#contact">Voir nos coordonnées <span aria-hidden="true">&#8595;</span></a>
+          <a class="btn btn--cta" href="mailto:info@wisysafety.be"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> <span data-i18n="ct.chero_cta">Nous contacter</span></a>
+          <a class="chero__link" href="#contact"><span data-i18n="ct.chero_link">Voir nos coordonnées</span> <span aria-hidden="true">&#8595;</span></a>
         </div>
         <div class="chero__trust chero-anim d6">
-          <div class="chero__tstat"><b><span data-count="10">0</span><span class="u">+</span></b><span>ans d'expérience</span></div>
+          <div class="chero__tstat"><b><span data-count="10">0</span><span class="u">+</span></b><span data-i18n="ct.trust_years">ans d'expérience</span></div>
           <span class="chero__tdiv" aria-hidden="true"></span>
-          <div class="chero__tstat"><b><span data-count="500">0</span><span class="u">+</span></b><span>stagiaires formés</span></div>
+          <div class="chero__tstat"><b><span data-count="500">0</span><span class="u">+</span></b><span data-i18n="ct.trust_trained">stagiaires formés</span></div>
           <span class="chero__tdiv" aria-hidden="true"></span>
-          <div class="chero__tstat"><b><span data-count="100">0</span><span class="u">%</span></b><span>de satisfaction</span></div>
+          <div class="chero__tstat"><b><span data-count="100">0</span><span class="u">%</span></b><span data-i18n="ct.trust_sat">de satisfaction</span></div>
         </div>
       </div>
       <div class="chero__visual chero-anim d3">
@@ -639,11 +687,11 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
           <img class="chero__photo" src="assets/images/page-principale/hero-contact.png" alt="Expert Wisy Safety en tenue de sécurité haute visibilité tenant un casque de chantier" width="577" height="433">
           <div class="gcard gcard--badge">
             <span class="num">10</span>
-            <div><b>Ans d'expérience</b><span class="bstars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+            <div><b data-i18n="ct.gcard_years">Ans d'expérience</b><span class="bstars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
           </div>
           <div class="gcard gcard--cert">
             <span class="cic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span>
-            <div><b>Conseillers habilités</b><span>N1 &middot; N2 &middot; PEB &middot; VCA</span></div>
+            <div><b data-i18n="ct.gcard_advisors">Conseillers habilités</b><span>N1 &middot; N2 &middot; PEB &middot; VCA</span></div>
           </div>
         </div>
       </div>
@@ -658,21 +706,21 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
       <div class="gt__top">
         <!-- Colonne intro + coordonnées -->
         <div class="gt__intro">
-          <span class="gt__eyebrow reveal"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg></span>Contact</span>
-          <h2 class="gt__title reveal" id="gt-title" style="--d:.05s">Entrons en <span class="mark">contact</span></h2>
-          <p class="gt__lead reveal" style="--d:.1s">Devis, inscription ou conseil : notre équipe de conseillers certifiés vous répond sous 24 h ouvrées.</p>
+          <span class="gt__eyebrow reveal"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg></span><span data-i18n="header.contact">Contact</span></span>
+          <h2 class="gt__title reveal" id="gt-title" style="--d:.05s" data-i18n-html="ct.gt_title">Entrons en <span class="mark">contact</span></h2>
+          <p class="gt__lead reveal" style="--d:.1s" data-i18n="ct.gt_lead">Devis, inscription ou conseil : notre équipe de conseillers certifiés vous répond sous 24 h ouvrées.</p>
           <ul class="gt__info">
             <li class="gt__info-item reveal" style="--d:.16s">
               <span class="gt__info-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-              <span class="gt__info-txt"><span class="gt__info-label">Horaires</span><span class="gt__info-val">Lun – Jeu · 9h – 17h</span></span>
+              <span class="gt__info-txt"><span class="gt__info-label" data-i18n="ct.info_hours">Horaires</span><span class="gt__info-val" data-i18n="ct.info_hours_val">Lun – Jeu · 9h – 17h</span></span>
             </li>
             <li class="gt__info-item reveal" style="--d:.22s">
               <span class="gt__info-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg></span>
-              <span class="gt__info-txt"><span class="gt__info-label">Téléphone</span><a class="gt__info-val" href="tel:+3223188659">+32 2 318 86 59</a></span>
+              <span class="gt__info-txt"><span class="gt__info-label" data-i18n="footer.label_phone">Téléphone</span><a class="gt__info-val" href="tel:+3223188659">+32 2 318 86 59</a></span>
             </li>
             <li class="gt__info-item reveal" style="--d:.28s">
               <span class="gt__info-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
-              <span class="gt__info-txt"><span class="gt__info-label">Adresse</span><span class="gt__info-val">Av. d'Itterbeek 378, 1070 Anderlecht</span></span>
+              <span class="gt__info-txt"><span class="gt__info-label" data-i18n="footer.label_address">Adresse</span><span class="gt__info-val">Av. d'Itterbeek 378, 1070 Anderlecht</span></span>
             </li>
           </ul>
         </div>
@@ -682,33 +730,33 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
           <form class="gt__form" id="wisy-contact-form" novalidate>
             <div class="gt__field">
               <input class="gt__fld" id="wf-name" name="user_name" type="text" required autocomplete="name" placeholder=" ">
-              <label for="wf-name">Votre nom complet <span class="wf-req" aria-hidden="true">*</span></label>
+              <label for="wf-name"><span data-i18n="ct.f_name">Votre nom complet</span> <span class="wf-req" aria-hidden="true">*</span></label>
             </div>
             <div class="gt__row">
               <div class="gt__field">
                 <input class="gt__fld" id="wf-phone" name="user_phone" type="tel" autocomplete="tel" placeholder=" ">
-                <label for="wf-phone">Téléphone</label>
+                <label for="wf-phone" data-i18n="ct.f_phone">Téléphone</label>
               </div>
               <div class="gt__field">
                 <input class="gt__fld" id="wf-email" name="user_email" type="email" required autocomplete="email" placeholder=" ">
-                <label for="wf-email">Votre e-mail <span class="wf-req" aria-hidden="true">*</span></label>
+                <label for="wf-email"><span data-i18n="ct.f_email">Votre e-mail</span> <span class="wf-req" aria-hidden="true">*</span></label>
               </div>
             </div>
             <div class="gt__field gt__field--select">
               <select class="gt__fld" id="wf-subject" name="subject" required>
-                <option value="" disabled selected>Choisissez un sujet</option>
-                <option>Demande de devis</option>
-                <option>Inscription à une formation</option>
-                <option>Conseil &amp; accompagnement sécurité</option>
-                <option>Coordination sécurité-santé</option>
-                <option>Certification PEB</option>
-                <option>Autre question</option>
+                <option value="" disabled selected data-i18n="ct.f_subject_ph">Choisissez un sujet</option>
+                <option data-i18n="ct.f_opt1">Demande de devis</option>
+                <option data-i18n="ct.f_opt2">Inscription à une formation</option>
+                <option data-i18n="ct.f_opt3">Conseil &amp; accompagnement sécurité</option>
+                <option data-i18n="ct.f_opt4">Coordination sécurité-santé</option>
+                <option data-i18n="ct.f_opt5">Certification PEB</option>
+                <option data-i18n="ct.f_opt6">Autre question</option>
               </select>
-              <label for="wf-subject">Sujet de votre demande <span class="wf-req" aria-hidden="true">*</span></label>
+              <label for="wf-subject"><span data-i18n="ct.f_subject">Sujet de votre demande</span> <span class="wf-req" aria-hidden="true">*</span></label>
             </div>
             <div class="gt__field">
               <textarea class="gt__fld" id="wf-message" name="message" rows="5" required placeholder=" "></textarea>
-              <label for="wf-message">Votre message <span class="wf-req" aria-hidden="true">*</span></label>
+              <label for="wf-message"><span data-i18n="ct.f_message">Votre message</span> <span class="wf-req" aria-hidden="true">*</span></label>
             </div>
 
             <!-- Champ piège anti-spam : laissé vide par les humains, rempli par les robots -->
@@ -718,12 +766,12 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
 
             <label class="gt__consent">
               <input type="checkbox" id="wf-consent" required>
-              <span>J'accepte que Wisy Safety utilise mes données pour traiter ma demande, conformément à la <a href="#">politique de confidentialité</a>. <span class="wf-req" aria-hidden="true">*</span></span>
+              <span><span data-i18n-html="ct.f_consent">J'accepte que Wisy Safety utilise mes données pour traiter ma demande, conformément à la <a href="#">politique de confidentialité</a>.</span> <span class="wf-req" aria-hidden="true">*</span></span>
             </label>
 
             <div class="gt__actions">
               <button type="submit" class="wf-submit">
-                <span class="wf-submit__label">Envoyer le message</span>
+                <span class="wf-submit__label" data-i18n="ct.f_submit">Envoyer le message</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
               </button>
               <p class="wf-status" role="status" aria-live="polite"></p>
@@ -736,21 +784,21 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
       <div class="gt__cards">
         <article class="gt-card gt-card--primary reveal" style="--d:0s">
           <span class="gt-card__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg></span>
-          <h3 class="gt-card__title">Support &amp; devis</h3>
-          <p class="gt-card__text">Une question ou un besoin de devis sur mesure ? Écrivez-nous, réponse sous 24 h ouvrées.</p>
-          <a class="gt-card__btn" href="mailto:info@wisysafety.be">Nous écrire <span aria-hidden="true">↗</span></a>
+          <h3 class="gt-card__title" data-i18n="ct.card1_title">Support &amp; devis</h3>
+          <p class="gt-card__text" data-i18n="ct.card1_text">Une question ou un besoin de devis sur mesure ? Écrivez-nous, réponse sous 24 h ouvrées.</p>
+          <a class="gt-card__btn" href="mailto:info@wisysafety.be"><span data-i18n="ct.card1_btn">Nous écrire</span> <span aria-hidden="true">↗</span></a>
         </article>
         <article class="gt-card reveal" style="--d:.1s">
           <span class="gt-card__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg></span>
-          <h3 class="gt-card__title">Ligne directe</h3>
-          <p class="gt-card__text">Parlez immédiatement à un conseiller certifié pour un premier échange, sans engagement.</p>
-          <a class="gt-card__btn" href="tel:+3223188659">Appeler <span aria-hidden="true">↗</span></a>
+          <h3 class="gt-card__title" data-i18n="ct.card2_title">Ligne directe</h3>
+          <p class="gt-card__text" data-i18n="ct.card2_text">Parlez immédiatement à un conseiller certifié pour un premier échange, sans engagement.</p>
+          <a class="gt-card__btn" href="tel:+3223188659"><span data-i18n="ct.card2_btn">Appeler</span> <span aria-hidden="true">↗</span></a>
         </article>
         <article class="gt-card reveal" style="--d:.2s">
           <span class="gt-card__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
-          <h3 class="gt-card__title">Formations &amp; inscriptions</h3>
-          <p class="gt-card__text">Consultez le calendrier des sessions et inscrivez vos équipes en quelques clics.</p>
-          <a class="gt-card__btn" href="formations.html">Voir les formations <span aria-hidden="true">↗</span></a>
+          <h3 class="gt-card__title" data-i18n="ct.card3_title">Formations &amp; inscriptions</h3>
+          <p class="gt-card__text" data-i18n="ct.card3_text">Consultez le calendrier des sessions et inscrivez vos équipes en quelques clics.</p>
+          <a class="gt-card__btn" href="formations.html"><span data-i18n="ct.card3_btn">Voir les formations</span> <span aria-hidden="true">↗</span></a>
         </article>
       </div>
     </div>
@@ -760,14 +808,14 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
   <section class="section section--alt" aria-labelledby="team-title">
     <div class="container">
       <div class="team-head reveal">
-        <span class="team-eyebrow"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>Équipe accréditée</span>
-        <h2 id="team-title">Une équipe <span class="mark">d'experts certifiés</span></h2>
-        <p>Conseillers en prévention, coordinateurs sécurité-santé et certificateurs PEB : chaque formation est encadrée par des professionnels habilités.</p>
+        <span class="team-eyebrow"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg><span data-i18n="ct.team_eyebrow">Équipe accréditée</span></span>
+        <h2 id="team-title" data-i18n-html="ct.team_title">Une équipe <span class="mark">d'experts certifiés</span></h2>
+        <p data-i18n="ct.team_lead">Conseillers en prévention, coordinateurs sécurité-santé et certificateurs PEB : chaque formation est encadrée par des professionnels habilités.</p>
         <div class="badges">
-          <span class="badge reveal" style="--d:0s">Prévention N1 &amp; N2</span>
-          <span class="badge reveal" style="--d:.06s">Coord. sécurité-santé A &amp; B</span>
-          <span class="badge reveal" style="--d:.12s">PEB Wallonie &amp; Bruxelles</span>
-          <span class="badge reveal" style="--d:.18s">Audit VCA</span>
+          <span class="badge reveal" style="--d:0s" data-i18n="ct.team_badge1">Prévention N1 &amp; N2</span>
+          <span class="badge reveal" style="--d:.06s" data-i18n="ct.team_badge2">Coord. sécurité-santé A &amp; B</span>
+          <span class="badge reveal" style="--d:.12s" data-i18n="ct.team_badge3">PEB Wallonie &amp; Bruxelles</span>
+          <span class="badge reveal" style="--d:.18s" data-i18n="ct.team_badge4">Audit VCA</span>
         </div>
       </div>
 
@@ -781,7 +829,7 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
             <ul class="tcard__hab"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Coordination des formations</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Gestion de projet &amp; ressources</span></li></ul>
             <div class="tcard__foot">
               <span class="tcard__acc">ACCRÉDITÉ · Réf. WS-001</span>
-              <a class="tcard__btn" href="mailto:info@wisysafety.be?subject=Contact%20WS-001" aria-label="Contacter Van Osselt Rayane par email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> Contacter</a>
+              <a class="tcard__btn" href="mailto:info@wisysafety.be?subject=Contact%20WS-001" aria-label="Contacter Van Osselt Rayane par email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> <span data-i18n="ct.team_contact">Contacter</span></a>
             </div>
           </div>
         </article>
@@ -794,7 +842,7 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
             <ul class="tcard__hab"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Gestion administrative</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Développement RH</span></li></ul>
             <div class="tcard__foot">
               <span class="tcard__acc">ACCRÉDITÉ · Réf. WS-002</span>
-              <a class="tcard__btn" href="mailto:info@wisysafety.be?subject=Contact%20WS-002" aria-label="Contacter Tarfi Rayan par email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> Contacter</a>
+              <a class="tcard__btn" href="mailto:info@wisysafety.be?subject=Contact%20WS-002" aria-label="Contacter Tarfi Rayan par email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> <span data-i18n="ct.team_contact">Contacter</span></a>
             </div>
           </div>
         </article>
@@ -807,7 +855,7 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
             <ul class="tcard__hab"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Conseiller en prévention N1</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Coordinateur sécurité-santé A</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Certificateur PEB Wallonie</span></li></ul>
             <div class="tcard__foot">
               <span class="tcard__acc">ACCRÉDITÉ · Réf. WS-003</span>
-              <a class="tcard__btn" href="mailto:info@wisysafety.be?subject=Contact%20WS-003" aria-label="Contacter Erkart Fethi par email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> Contacter</a>
+              <a class="tcard__btn" href="mailto:info@wisysafety.be?subject=Contact%20WS-003" aria-label="Contacter Erkart Fethi par email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> <span data-i18n="ct.team_contact">Contacter</span></a>
             </div>
           </div>
         </article>
@@ -820,7 +868,7 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
             <ul class="tcard__hab"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Conseiller en prévention N2</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Coordinateur sécurité-santé B</span></li></ul>
             <div class="tcard__foot">
               <span class="tcard__acc">ACCRÉDITÉ · Réf. WS-004</span>
-              <a class="tcard__btn" href="mailto:info@wisysafety.be?subject=Contact%20WS-004" aria-label="Contacter El Boujadani Souleimen par email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> Contacter</a>
+              <a class="tcard__btn" href="mailto:info@wisysafety.be?subject=Contact%20WS-004" aria-label="Contacter El Boujadani Souleimen par email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> <span data-i18n="ct.team_contact">Contacter</span></a>
             </div>
           </div>
         </article>
@@ -833,7 +881,7 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
             <ul class="tcard__hab"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Conseiller en prévention N1</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Coordinateur sécurité-santé A</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Auditeur VCA</span></li></ul>
             <div class="tcard__foot">
               <span class="tcard__acc">ACCRÉDITÉ · Réf. WS-005</span>
-              <a class="tcard__btn" href="mailto:info@wisysafety.be?subject=Contact%20WS-005" aria-label="Contacter Alaoui Saleyman par email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> Contacter</a>
+              <a class="tcard__btn" href="mailto:info@wisysafety.be?subject=Contact%20WS-005" aria-label="Contacter Alaoui Saleyman par email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> <span data-i18n="ct.team_contact">Contacter</span></a>
             </div>
           </div>
         </article>
@@ -846,7 +894,7 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
             <ul class="tcard__hab"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Ingénieur stabilité</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg><span>Certificateur PEB Bruxelles</span></li></ul>
             <div class="tcard__foot">
               <span class="tcard__acc">ACCRÉDITÉ · Réf. WS-006</span>
-              <a class="tcard__btn" href="mailto:info@wisysafety.be?subject=Contact%20WS-006" aria-label="Contacter Marzouk Hamza par email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> Contacter</a>
+              <a class="tcard__btn" href="mailto:info@wisysafety.be?subject=Contact%20WS-006" aria-label="Contacter Marzouk Hamza par email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg> <span data-i18n="ct.team_contact">Contacter</span></a>
             </div>
           </div>
         </article>
@@ -859,46 +907,50 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
 <footer class="site-footer">
   <div class="footer-wrap">
     <section class="f-cta reveal">
-      <div class="f-cta__txt"><span class="f-cta__eyebrow">On commence quand vous voulez</span><h2>Prêt à <span class="hl">sécuriser vos équipes</span> ?</h2><p>Réservez une session ou demandez un devis sur mesure — réponse rapide, sans engagement.</p></div>
-      <a class="btn btn--cta" href="contact.html">S'inscrire à une formation <span class="btn__arrow" aria-hidden="true">↗</span></a>
+      <div class="f-cta__txt"><span class="f-cta__eyebrow" data-i18n="footer.cta_eyebrow">On commence quand vous voulez</span><h2 data-i18n-html="footer.cta_title">Prêt à <span class="hl">sécuriser vos équipes</span> ?</h2><p data-i18n="footer.cta_text">Réservez une session ou demandez un devis sur mesure — réponse rapide, sans engagement.</p></div>
+      <a class="btn btn--cta" href="contact.html"><span data-i18n="footer.cta_btn">S'inscrire à une formation</span> <span class="btn__arrow" aria-hidden="true">↗</span></a>
     </section>
     <div class="f-grid">
       <div class="f-col reveal" style="--d:0s">
-        <span class="f-loc">Anderlecht · Belgique</span>
+        <span class="f-loc" data-i18n="footer.loc">Anderlecht · Belgique</span>
         <img class="f-brand__logo" src="assets/logo.png" alt="Wisy Safety" width="102" height="112" loading="lazy">
-        <p class="f-tagline">Sécurité &amp; certifications VCA</p>
-        <p class="f-pitch">La sécurité de vos équipes commence par la <span class="hl">bonne formation.</span></p>
-        <div class="f-brand__actions"><a class="btn btn--cta" href="contact.html">S'inscrire <span class="btn__arrow" aria-hidden="true">↗</span></a><a class="btn btn--ghost" href="contact.html">Contact <span class="btn__arrow" aria-hidden="true">↗</span></a></div>
+        <p class="f-tagline" data-i18n="footer.tagline">Sécurité &amp; certifications VCA</p>
+        <p class="f-pitch" data-i18n-html="footer.pitch">La sécurité de vos équipes commence par la <span class="hl">bonne formation.</span></p>
+        <div class="f-brand__actions"><a class="btn btn--cta" href="contact.html"><span data-i18n="header.register">S'inscrire</span> <span class="btn__arrow" aria-hidden="true">↗</span></a><a class="btn btn--ghost" href="contact.html"><span data-i18n="header.contact">Contact</span> <span class="btn__arrow" aria-hidden="true">↗</span></a></div>
       </div>
       <nav class="f-col reveal" style="--d:.08s" aria-labelledby="fs-serv">
-        <h2 class="f-col__title" id="fs-serv">Nos services</h2>
-        <ul class="f-links"><li><a href="formations.html">Formations</a></li><li><a href="#">VCA Entreprise</a></li><li><a href="#">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#">Coordination</a></li><li><a href="#">Certificat</a></li><li><a href="#">Agenda</a></li></ul>
+        <h2 class="f-col__title" id="fs-serv" data-i18n="footer.col_services">Nos services</h2>
+        <ul class="f-links"><li><a href="formations.html" data-i18n="nav.formations">Formations</a></li><li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="#" data-i18n="nav.agenda">Agenda</a></li></ul>
       </nav>
       <div class="f-col reveal" style="--d:.16s">
-        <h2 class="f-col__title">Contact</h2>
-        <div class="f-contact-item"><span class="f-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg></span><div><div class="f-c-label">Téléphone</div><a class="f-c-value" href="tel:+3223188659">+32 2 318 86 59</a></div></div>
-        <div class="f-contact-item"><span class="f-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg></span><div><div class="f-c-label">E-mail</div><a class="f-c-value" href="mailto:info@wisysafety.be">info@wisysafety.be</a></div></div>
-        <div class="f-contact-item"><span class="f-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span><div><div class="f-c-label">Adresse</div><span class="f-c-value">Avenue d'Itterbeek 378, 1070 Anderlecht</span></div></div>
+        <h2 class="f-col__title" data-i18n="header.contact">Contact</h2>
+        <div class="f-contact-item"><span class="f-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg></span><div><div class="f-c-label" data-i18n="footer.label_phone">Téléphone</div><a class="f-c-value" href="tel:+3223188659">+32 2 318 86 59</a></div></div>
+        <div class="f-contact-item"><span class="f-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg></span><div><div class="f-c-label" data-i18n="footer.label_email">E-mail</div><a class="f-c-value" href="mailto:info@wisysafety.be">info@wisysafety.be</a></div></div>
+        <div class="f-contact-item"><span class="f-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span><div><div class="f-c-label" data-i18n="footer.label_address">Adresse</div><span class="f-c-value">Avenue d'Itterbeek 378, 1070 Anderlecht</span></div></div>
       </div>
       <div class="f-col reveal" style="--d:.24s">
-        <h2 class="f-col__title">Heures d'ouverture</h2>
+        <h2 class="f-col__title" data-i18n="footer.col_hours">Heures d'ouverture</h2>
         <ul class="f-hours">
-          <li data-day="1"><span>Lundi</span><span>10:00 – 16:00</span></li><li data-day="2"><span>Mardi</span><span>10:00 – 16:00</span></li>
-          <li data-day="3"><span>Mercredi</span><span>10:00 – 16:00</span></li><li data-day="4"><span>Jeudi</span><span>10:00 – 16:00</span></li>
-          <li data-day="5"><span>Vendredi</span><span class="closed">Fermé</span></li><li data-day="6"><span>Samedi</span><span class="closed">Fermé</span></li>
-          <li data-day="0"><span>Dimanche</span><span class="closed">Fermé</span></li>
+          <li data-day="1"><span data-i18n="footer.mon">Lundi</span><span>10:00 – 16:00</span></li><li data-day="2"><span data-i18n="footer.tue">Mardi</span><span>10:00 – 16:00</span></li>
+          <li data-day="3"><span data-i18n="footer.wed">Mercredi</span><span>10:00 – 16:00</span></li><li data-day="4"><span data-i18n="footer.thu">Jeudi</span><span>10:00 – 16:00</span></li>
+          <li data-day="5"><span data-i18n="footer.fri">Vendredi</span><span class="closed" data-i18n="footer.closed">Fermé</span></li><li data-day="6"><span data-i18n="footer.sat">Samedi</span><span class="closed" data-i18n="footer.closed">Fermé</span></li>
+          <li data-day="0"><span data-i18n="footer.sun">Dimanche</span><span class="closed" data-i18n="footer.closed">Fermé</span></li>
         </ul>
-        <span class="status-badge" role="status" aria-live="polite"><span class="status-dot" aria-hidden="true"></span><span class="status-text">ACTUELLEMENT FERMÉ</span></span>
+        <span class="status-badge" role="status" aria-live="polite"><span class="status-dot" aria-hidden="true"></span><span class="status-text" data-i18n="footer.status_closed">ACTUELLEMENT FERMÉ</span></span>
       </div>
     </div>
     <div class="f-legal">
       <span class="f-legal__vat">TVA BE0XXX.XXX.XXX</span>
-      <nav class="f-legal__links" aria-label="Liens légaux"><a href="#">Mentions légales</a><a href="#">Politique de confidentialité</a><a href="#">Conditions générales</a></nav>
-      <span>© <span data-year>2026</span> Wisy Safety. Tous droits réservés.</span>
+      <nav class="f-legal__links" aria-label="Liens légaux"><a href="#" data-i18n="footer.legal_mentions">Mentions légales</a><a href="#" data-i18n="footer.legal_privacy">Politique de confidentialité</a><a href="#" data-i18n="footer.legal_terms">Conditions générales</a></nav>
+      <span>© <span data-year>2026</span> Wisy Safety · <span data-i18n="footer.rights">Tous droits réservés.</span></span>
     </div>
   </div>
 </footer>
 
+<!-- Système multilingue (i18n) -->
+<script src="js/i18n-data-common.js"></script>
+<script src="js/i18n-data-contact.js"></script>
+<script src="js/i18n.js"></script>
 <script>
 (function(){
   var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -950,12 +1002,20 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
   if(!("IntersectionObserver" in window)){cs.forEach(cnt);}
   else{var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){cnt(e.target);cio.unobserve(e.target);}});},{threshold:.6});cs.forEach(function(e){cio.observe(e);});}
 
-  /* Horaires + statut temps réel */
+  /* Horaires + statut temps réel (traduit, re-calculé au changement de langue) */
   var SCH={1:[600,960],2:[600,960],3:[600,960],4:[600,960],5:null,6:null,0:null};
-  var now=new Date(),day=now.getDay(),mn=now.getHours()*60+now.getMinutes();
+  var now=new Date(),day=now.getDay();
   var tr=document.querySelector('.f-hours li[data-day="'+day+'"]');if(tr)tr.classList.add("is-today");
-  var bg=document.querySelector(".status-badge");
-  if(bg){var r=SCH[day],o=!!r&&mn>=r[0]&&mn<r[1];bg.classList.toggle("is-open",o);bg.querySelector(".status-text").textContent=o?"ACTUELLEMENT OUVERT":"ACTUELLEMENT FERMÉ";}
+  function refreshStatus(){
+    var bg=document.querySelector(".status-badge");if(!bg)return;
+    var n=new Date(),d=n.getDay(),mn=n.getHours()*60+n.getMinutes(),r=SCH[d],o=!!r&&mn>=r[0]&&mn<r[1];
+    var lang=(window.WisyI18N&&WisyI18N.current())||"fr";
+    var t=function(k,fb){var v=window.WisyI18N&&WisyI18N.get(lang,k);return v!=null?v:fb;};
+    bg.classList.toggle("is-open",o);
+    bg.querySelector(".status-text").textContent=o?t("footer.status_open","ACTUELLEMENT OUVERT"):t("footer.status_closed","ACTUELLEMENT FERMÉ");
+  }
+  refreshStatus();
+  document.addEventListener("i18n:changed",refreshStatus);
   var yy=document.querySelector("[data-year]");if(yy)yy.textContent=String(Math.max(2026,now.getFullYear()));
 })();
 </script>
@@ -979,6 +1039,7 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
   var statusEl = form.querySelector(".wf-status");
   var btn      = form.querySelector(".wf-submit");
   var btnLabel = form.querySelector(".wf-submit__label");
+  function T(k, fb){ var l=(window.WisyI18N&&WisyI18N.current())||"fr"; var v=window.WisyI18N&&WisyI18N.get(l,k); return v!=null?v:fb; }
 
   function setStatus(msg, type){
     statusEl.textContent = msg;
@@ -986,7 +1047,7 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
   }
   function setLoading(on){
     btn.disabled = on;
-    btnLabel.textContent = on ? "Envoi en cours…" : "Envoyer le message";
+    btnLabel.textContent = on ? T("ct.f_sending","Envoi en cours…") : T("ct.f_submit","Envoyer le message");
   }
 
   var configured = EMAILJS_PUBLIC_KEY.indexOf("VOTRE_") !== 0
@@ -1003,7 +1064,7 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
     /* Anti-spam : si le champ piège est rempli, c'est un robot → on ignore
        silencieusement (on affiche quand même un succès pour ne rien révéler). */
     if (form.website && form.website.value.trim() !== "") {
-      setStatus("Merci ! Votre message a bien été envoyé.", "ok");
+      setStatus(T("ct.f_ok","Merci ! Votre message a bien été envoyé."), "ok");
       form.reset();
       return;
     }
@@ -1016,7 +1077,7 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
 
     /* Garde-fou : identifiants non configurés ou SDK non chargé. */
     if (!window.emailjs || !configured) {
-      setStatus("Le service d'envoi n'est pas encore configuré. Écrivez-nous directement à info@wisysafety.be.", "err");
+      setStatus(T("ct.f_notconfigured","Le service d'envoi n'est pas encore configuré. Écrivez-nous directement à info@wisysafety.be."), "err");
       return;
     }
 
@@ -1034,12 +1095,12 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
 
     emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
       .then(function(){
-        setStatus("Merci ! Votre message a bien été envoyé. Notre équipe vous répond sous 24 h ouvrées.", "ok");
+        setStatus(T("ct.f_ok","Merci ! Votre message a bien été envoyé. Notre équipe vous répond sous 24 h ouvrées."), "ok");
         form.reset();
       })
       .catch(function(err){
         console.error("Erreur EmailJS :", err);
-        setStatus("Oups, l'envoi a échoué. Réessayez ou contactez-nous à info@wisysafety.be.", "err");
+        setStatus(T("ct.f_error","Oups, l'envoi a échoué. Réessayez ou contactez-nous à info@wisysafety.be."), "err");
       })
       .finally(function(){
         setLoading(false);

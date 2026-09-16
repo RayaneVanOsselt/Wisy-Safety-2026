@@ -7,18 +7,27 @@
 /* ---------- Sélecteur de langue (desktop) ---------- */
 .lang-switch { position: relative; }
 .lang-btn {
-  display: inline-flex; align-items: center; gap: .4rem;
+  display: inline-flex; align-items: center; gap: .45rem;
   font-family: var(--font-titre); font-weight: 600; font-size: .9rem;
-  color: var(--noir-jais); background: transparent;
-  border: 1.5px solid var(--granit-20); border-radius: var(--radius-pill);
-  padding: .5rem .85rem; cursor: pointer;
+  color: var(--epinette); background: #fff;
+  border: 1.5px solid var(--brume); border-radius: var(--radius-pill);
+  padding: .5rem .9rem; cursor: pointer; box-shadow: var(--shadow-sm);
   transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease),
-              background-color var(--t-fast) var(--ease);
+              background-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease-out);
 }
 .lang-btn:hover, .lang-btn:focus-visible {
-  color: var(--epinette); border-color: var(--brume); background: var(--brume-08);
+  color: var(--creme); border-color: var(--epinette); background: var(--epinette); box-shadow: var(--shadow-md);
 }
-.lang-btn__globe { width: 17px; height: 17px; flex-shrink: 0; }
+.lang-btn__globe { width: 18px; height: 18px; flex-shrink: 0; }
+.lang-btn__name { white-space: nowrap; }
+.lang-code { display: none; font-weight: 700; letter-spacing: .04em; }
+
+/* Bouton toujours visible dans le header — version compacte (globe + code) sous 1080px */
+@media (max-width: 1080px) {
+  .lang-switch { margin-inline-start: auto; margin-inline-end: .25rem; }
+  .lang-btn__name { display: none; }
+  .lang-code { display: inline; }
+}
 .lang-caret { width: .6em; height: .6em; transition: transform var(--t-fast) var(--ease); }
 .lang-switch.is-open .lang-caret { transform: rotate(180deg); }
 

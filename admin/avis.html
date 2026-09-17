@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Wisy Safety — Modération des avis</title>
+<link rel="icon" href="../assets/logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --epinette:#1F6F64;--sarcelle:#2F7D8C;--turquoise:#48D6C2;--brume:#3FA69B;
+  --creme:#F4FAF9;--granit:#5E6D6A;--noir-jais:#1B2D28;--granit-clair:#9AA8A4;
+  --granit-12:rgba(94,109,106,.12);--granit-20:rgba(94,109,106,.20);--brume-08:rgba(63,166,155,.08);--brume-14:rgba(63,166,155,.14);
+  --star:#F5A524;--danger:#c23b4b;--ok:#1F6F64;--warn:#B8860B;
+  --font-titre:"Poppins",system-ui,sans-serif;--font-texte:"Inter",system-ui,sans-serif;
+  --radius:16px;--radius-sm:10px;--radius-pill:999px;--shadow:0 18px 44px rgba(27,45,40,.12);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:var(--font-texte);color:var(--noir-jais);background:linear-gradient(180deg,#eef6f5,#F4FAF9);min-height:100vh}
+h1,h2,h3{font-family:var(--font-titre);margin:0}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+:focus-visible{outline:3px solid var(--brume);outline-offset:2px;border-radius:4px}
+.wrap{max-width:960px;margin-inline:auto;padding:2rem clamp(1rem,4vw,2rem)}
+
+/* Barre */
+.top{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.75rem}
+.brand img{height:42px;width:auto}
+.brand b{font-family:var(--font-titre);font-weight:700;font-size:1.05rem}
+.brand span{display:block;font-size:.8rem;color:var(--granit)}
+.signout{font-family:var(--font-titre);font-weight:600;font-size:.9rem;color:var(--epinette);border:1.5px solid var(--epinette);border-radius:var(--radius-pill);padding:.5rem 1.1rem;transition:background .2s,color .2s}
+.signout:hover{background:var(--epinette);color:var(--creme)}
+
+/* Connexion */
+.login{max-width:400px;margin:6vh auto 0;background:#fff;border:1px solid var(--granit-12);border-radius:var(--radius);box-shadow:var(--shadow);padding:2rem}
+.login h1{font-size:1.4rem;margin-bottom:.4rem}
+.login p{color:var(--granit);font-size:.9rem;margin:0 0 1.5rem}
+.field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem}
+.field label{font-family:var(--font-titre);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}
+.field input{font-family:inherit;font-size:1rem;padding:.8rem 1rem;border:1.5px solid var(--granit-20);border-radius:var(--radius-sm);background:#fff;transition:border-color .2s,box-shadow .2s}
+.field input:focus{outline:none;border-color:var(--brume);box-shadow:0 0 0 3px var(--brume-14)}
+.btn-primary{width:100%;font-family:var(--font-titre);font-weight:600;font-size:1rem;color:var(--creme);background:linear-gradient(135deg,var(--epinette),var(--sarcelle));border-radius:var(--radius-pill);padding:.9rem;box-shadow:0 10px 24px rgba(31,111,100,.26);transition:transform .2s,box-shadow .2s}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-primary:disabled{opacity:.6;cursor:progress;transform:none}
+.msg{font-size:.88rem;margin-top:.9rem;min-height:1.2em}
+.msg.err{color:var(--danger)}
+.msg.ok{color:var(--ok)}
+
+/* Onglets */
+.tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--font-titre);font-weight:600;font-size:.92rem;color:var(--granit);background:#fff;border:1px solid var(--granit-20);border-radius:var(--radius-pill);padding:.55rem 1.1rem;transition:all .2s}
+.tab.is-active{background:var(--epinette);color:var(--creme);border-color:var(--epinette)}
+.tab .count{font-size:.78rem;background:var(--brume-14);color:var(--epinette);border-radius:var(--radius-pill);padding:.05rem .5rem;font-variant-numeric:tabular-nums}
+.tab.is-active .count{background:rgba(244,250,249,.25);color:var(--creme)}
+
+/* Liste */
+.state{text-align:center;color:var(--granit);padding:3rem 1rem;font-size:1rem}
+.grid{display:grid;gap:1rem}
+.card{background:#fff;border:1px solid var(--granit-12);border-radius:var(--radius);box-shadow:0 6px 20px rgba(27,45,40,.07);padding:1.3rem 1.4rem}
+.card__top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.card__who b{font-family:var(--font-titre);font-size:1.02rem}
+.card__who small{display:block;color:var(--granit);font-size:.85rem}
+.card__mail{font-size:.82rem;color:var(--sarcelle);word-break:break-all}
+.stars{color:var(--star);letter-spacing:2px;font-size:1rem}
+.stars .off{color:var(--granit-20)}
+.card__title{font-family:var(--font-titre);font-weight:600;margin:.8rem 0 .3rem}
+.card__text{color:var(--granit);line-height:1.55;margin:0;white-space:pre-wrap}
+.card__meta{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.9rem;font-size:.8rem;color:var(--granit-clair)}
+.pill{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:.2rem .6rem;border-radius:var(--radius-pill)}
+.pill.pending{background:#fff5e0;color:var(--warn)}
+.pill.approved{background:var(--brume-14);color:var(--epinette)}
+.pill.rejected{background:#fbe4e7;color:var(--danger)}
+.actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--granit-12)}
+.act{font-family:var(--font-titre);font-weight:600;font-size:.85rem;border-radius:var(--radius-pill);padding:.5rem 1rem;border:1.5px solid transparent;transition:all .18s}
+.act--approve{color:var(--ok);border-color:var(--ok)}
+.act--approve:hover{background:var(--ok);color:#fff}
+.act--reject{color:var(--warn);border-color:var(--warn)}
+.act--reject:hover{background:var(--warn);color:#fff}
+.act--delete{color:var(--danger);border-color:var(--danger)}
+.act--delete:hover{background:var(--danger);color:#fff}
+.act:disabled{opacity:.5;cursor:progress}
+[hidden]{display:none!important}
+.config-warn{background:#fff5e0;border:1px solid var(--warn);color:#7a5b00;border-radius:var(--radius-sm);padding:1rem 1.2rem;font-size:.9rem;margin-bottom:1.5rem}
+</style>
+</head>
+<body>
+
+<!-- ===== Connexion ===== -->
+<section class="login" id="login">
+  <h1>Modération des avis</h1>
+  <p>Réservé à l'équipe Wisy Safety. Connectez-vous avec votre compte administrateur.</p>
+  <div class="config-warn" id="cfg-warn" hidden>
+    Supabase n'est pas configuré : renseignez <code>js/supabase-config.js</code> puis rechargez cette page.
+  </div>
+  <form id="login-form">
+    <div class="field">
+      <label for="l-email">E-mail</label>
+      <input id="l-email" type="email" autocomplete="username" required>
+    </div>
+    <div class="field">
+      <label for="l-pass">Mot de passe</label>
+      <input id="l-pass" type="password" autocomplete="current-password" required>
+    </div>
+    <button class="btn-primary" id="l-btn" type="submit">Se connecter</button>
+    <p class="msg" id="l-msg" role="status" aria-live="polite"></p>
+  </form>
+</section>
+
+<!-- ===== Tableau de bord ===== -->
+<main class="wrap" id="dash" hidden>
+  <div class="top">
+    <div class="brand">
+      <img src="../assets/logo.png" alt="Wisy Safety">
+      <span><b>Modération des avis</b><span id="who"></span></span>
+    </div>
+    <button class="signout" id="signout">Se déconnecter</button>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab is-active" data-status="pending" role="tab">En attente <span class="count" data-count="pending">0</span></button>
+    <button class="tab" data-status="approved" role="tab">Approuvés <span class="count" data-count="approved">0</span></button>
+    <button class="tab" data-status="rejected" role="tab">Refusés <span class="count" data-count="rejected">0</span></button>
+  </div>
+
+  <p class="state" id="d-state" hidden></p>
+  <div class="grid" id="d-list"></div>
+</main>
+
+<script src="../js/supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function () {
+  "use strict";
+  var CFG = window.WISY_CONFIG || {};
+  var configured = CFG.SUPABASE_URL && CFG.SUPABASE_URL.indexOf("VOTRE-PROJET") === -1 &&
+                   CFG.SUPABASE_ANON_KEY && CFG.SUPABASE_ANON_KEY.indexOf("VOTRE_CLE") === -1 &&
+                   window.supabase;
+  var sb = configured ? window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY) : null;
+
+  var login = document.getElementById("login"),
+      dash = document.getElementById("dash"),
+      loginForm = document.getElementById("login-form"),
+      lMsg = document.getElementById("l-msg"),
+      lBtn = document.getElementById("l-btn"),
+      state = document.getElementById("d-state"),
+      list = document.getElementById("d-list"),
+      who = document.getElementById("who");
+  var currentStatus = "pending";
+
+  if (!configured) { document.getElementById("cfg-warn").hidden = false; lBtn.disabled = true; return; }
+
+  function esc(s) { var d = document.createElement("div"); d.textContent = s == null ? "" : s; return d.innerHTML; }
+  function stars(n) { var s = ""; for (var i = 1; i <= 5; i++) s += i <= n ? "★" : '<span class="off">★</span>'; return s; }
+  function fmt(iso) { try { return new Date(iso).toLocaleString("fr-BE", { dateStyle: "medium", timeStyle: "short" }); } catch (e) { return ""; } }
+
+  /* ---- Session ---- */
+  sb.auth.getSession().then(function (r) { if (r.data.session) showDash(r.data.session); });
+  sb.auth.onAuthStateChange(function (_e, session) { if (session) showDash(session); else showLogin(); });
+
+  loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    lMsg.textContent = ""; lMsg.className = "msg"; lBtn.disabled = true;
+    sb.auth.signInWithPassword({
+      email: document.getElementById("l-email").value.trim(),
+      password: document.getElementById("l-pass").value
+    }).then(function (r) {
+      if (r.error) { lMsg.textContent = "Identifiants incorrects."; lMsg.className = "msg err"; }
+    }).catch(function () { lMsg.textContent = "Connexion impossible."; lMsg.className = "msg err"; })
+      .then(function () { lBtn.disabled = false; });
+  });
+
+  document.getElementById("signout").addEventListener("click", function () { sb.auth.signOut(); });
+
+  function showLogin() { dash.hidden = true; login.hidden = false; }
+  function showDash(session) {
+    login.hidden = true; dash.hidden = false;
+    who.textContent = session.user && session.user.email ? session.user.email : "";
+    refreshCounts(); loadList();
+  }
+
+  /* ---- Onglets ---- */
+  document.querySelectorAll(".tab").forEach(function (t) {
+    t.addEventListener("click", function () {
+      document.querySelectorAll(".tab").forEach(function (x) { x.classList.remove("is-active"); });
+      t.classList.add("is-active");
+      currentStatus = t.getAttribute("data-status");
+      loadList();
+    });
+  });
+
+  function refreshCounts() {
+    ["pending", "approved", "rejected"].forEach(function (st) {
+      sb.from("reviews").select("id", { count: "exact", head: true }).eq("status", st)
+        .then(function (r) { var b = document.querySelector('[data-count="' + st + '"]'); if (b) b.textContent = r.count || 0; });
+    });
+  }
+
+  function loadList() {
+    state.hidden = false; state.textContent = "Chargement…"; list.innerHTML = "";
+    sb.from("reviews").select("*").eq("status", currentStatus).order("created_at", { ascending: false })
+      .then(function (r) {
+        if (r.error) throw r.error;
+        var rows = r.data || [];
+        if (!rows.length) { state.hidden = false; state.textContent = "Aucun avis dans cette catégorie."; return; }
+        state.hidden = true;
+        list.innerHTML = rows.map(cardHTML).join("");
+        bindActions();
+      })
+      .catch(function (err) { state.hidden = false; state.textContent = "Erreur de chargement."; console.warn(err); });
+  }
+
+  function cardHTML(r) {
+    var name = esc(r.first_name) + (r.last_name ? " " + esc(r.last_name) : "");
+    var acts = "";
+    if (r.status !== "approved") acts += '<button class="act act--approve" data-do="approve" data-id="' + r.id + '">Approuver</button>';
+    if (r.status !== "rejected") acts += '<button class="act act--reject" data-do="reject" data-id="' + r.id + '">Refuser</button>';
+    acts += '<button class="act act--delete" data-do="delete" data-id="' + r.id + '">Supprimer</button>';
+    return '<article class="card">' +
+      '<div class="card__top"><div class="card__who"><b>' + name + '</b>' +
+        (r.company ? '<small>' + esc(r.company) + '</small>' : '') +
+        '<span class="card__mail">' + esc(r.email) + '</span></div>' +
+        '<div class="stars" aria-label="' + r.rating + '/5">' + stars(r.rating) + '</div></div>' +
+      (r.title ? '<p class="card__title">' + esc(r.title) + '</p>' : '') +
+      '<p class="card__text">' + esc(r.comment) + '</p>' +
+      '<div class="card__meta"><span class="pill ' + r.status + '">' + r.status + '</span>' +
+        '<span>Reçu le ' + fmt(r.created_at) + '</span>' +
+        (r.approved_at ? '<span>· Approuvé le ' + fmt(r.approved_at) + '</span>' : '') + '</div>' +
+      '<div class="actions">' + acts + '</div></article>';
+  }
+
+  function bindActions() {
+    list.querySelectorAll("[data-do]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-id"), op = b.getAttribute("data-do");
+        if (op === "delete" && !confirm("Supprimer définitivement cet avis ?")) return;
+        list.querySelectorAll("[data-id='" + id + "']").forEach(function (x) { x.disabled = true; });
+        var q = op === "delete"
+          ? sb.from("reviews").delete().eq("id", id)
+          : sb.from("reviews").update({ status: op === "approve" ? "approved" : "rejected" }).eq("id", id);
+        q.then(function (r) { if (r.error) throw r.error; refreshCounts(); loadList(); })
+         .catch(function (err) { alert("Action impossible. " + (err && err.message || "")); loadList(); });
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

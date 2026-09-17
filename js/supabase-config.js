@@ -18,8 +18,8 @@
    ========================================================================= */
 window.WISY_CONFIG = {
   /* ---- Supabase (obligatoire pour enregistrer/afficher les avis) -------- */
-  SUPABASE_URL:      "https://VOTRE-PROJET.supabase.co",
-  SUPABASE_ANON_KEY: "VOTRE_CLE_ANON_PUBLIQUE",
+  SUPABASE_URL:      "https://frylezdzcuegyqqmxris.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_-aXXgnr5Mn9DEbBv0EeR9g_KFQd4jei",
 
   /* ---- EmailJS (facultatif : notification admin d'un nouvel avis) ------- */
   /* Réutilise le compte EmailJS déjà configuré pour le formulaire contact.  */

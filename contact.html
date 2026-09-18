@@ -11,6 +11,7 @@
 <link rel="icon" href="assets/logo.png" type="image/png">
 <link rel="stylesheet" href="css/i18n.css">
 <link rel="stylesheet" href="css/search.css">
+<link rel="stylesheet" href="css/assistant.css">
 <link rel="alternate" hreflang="fr" href="contact.html?lang=fr">
 <link rel="alternate" hreflang="en" href="contact.html?lang=en">
 <link rel="alternate" hreflang="nl" href="contact.html?lang=nl">
@@ -952,10 +953,19 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
 <!-- Système multilingue (i18n) -->
 <script src="js/i18n-data-common.js"></script>
 <script src="js/i18n-data-search.js"></script>
+<script src="js/i18n-data-assistant.js"></script>
 <script src="js/i18n-data-contact.js"></script>
 <script src="js/i18n.js"></script>
 <!-- Recherche globale -->
 <script src="js/search.js"></script>
+
+<!-- Assistant Wisy (mascotte + assistant conversationnel) -->
+<script defer src="js/assistant/knowledge.js"></script>
+<script defer src="js/assistant/retrieval.js"></script>
+<script defer src="js/assistant/validation.js"></script>
+<script defer src="js/assistant/responder.js"></script>
+<script defer src="js/assistant/mascot.js"></script>
+<script defer src="js/assistant/assistant.js"></script>
 <script>
 (function(){
   var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;

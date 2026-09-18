@@ -340,7 +340,7 @@
         return itemHTML({
           icon: IC["cat_" + c.id],
           title: highlight(t(c.labelKey), res.terms),
-          sub: c.count + " " + t("search.formations_word"),
+          sub: c.count + " " + t(c.count === 1 ? "search.formation_word" : "search.formations_word"),
           href: "formations.html?cat=" + c.filter
         });
       }).join(""));
@@ -416,11 +416,19 @@
   /* -----------------------------------------------------------------------
      Sélection / navigation vers un résultat
      ----------------------------------------------------------------------- */
+  // Défilement vers un élément avec décalage LIVE sous le header sticky (dont la
+  // hauteur varie selon l'état). Le CSS (scroll-margin-top) couvre le scroll natif.
   function scrollToEl(el, instant) {
     var header = document.querySelector(".site-header");
-    var offset = (header ? header.offsetHeight : 0) + 14;
+    var offset = (header ? header.offsetHeight : 0) + 24;
     var top = el.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({ top: Math.max(0, top), behavior: (instant || reduceMotion) ? "auto" : "smooth" });
+  }
+  // Atterrissage en deux temps : 1er scroll → la util-bar se replie (~450ms) →
+  // 2e scroll une fois le header stabilisé, pour un décalage exact et déterministe.
+  function landOn(el) {
+    scrollToEl(el, true);
+    setTimeout(function () { scrollToEl(el, true); }, 560);
   }
   function applyCategory(filter, scroll) {
     var btn = document.querySelector('.fo-filter[data-filter="' + filter + '"]');
@@ -453,6 +461,7 @@
         close(); input.blur();
         try { history.replaceState(null, "", a.hash); } catch (e) {}
         scrollToEl(target);
+        setTimeout(function () { scrollToEl(target, true); }, 560); // recale après repli util-bar
         return;
       }
     }
@@ -466,7 +475,11 @@
   function selectByEl(el) {
     if (!el) return;
     var recent = el.getAttribute("data-recent");
-    if (recent != null) { input.value = recent; render(recent); input.focus(); return; }
+    if (recent != null) {
+      input.value = recent;
+      root.classList.toggle("has-text", recent.trim().length > 0);
+      render(recent); input.focus(); return;
+    }
     var href = el.getAttribute("href");
     if (href) go(href);
   }
@@ -572,10 +585,11 @@
     var cat;
     try { cat = new URLSearchParams(location.search).get("cat"); } catch (e) { return; }
     if (!cat) return;
-    // Les écouteurs de filtre sont posés à l'analyse du script inline : on agit au load.
+    // Les écouteurs de filtre sont posés à l'analyse du script inline (fin de body),
+    // donc déjà prêts au DOMContentLoaded : on agit vite, avec un filet au load.
     var run = function () { applyCategory(cat, true); };
-    if (document.readyState === "complete") run();
-    else window.addEventListener("load", run, { once: true });
+    requestAnimationFrame(run);
+    if (document.readyState !== "complete") window.addEventListener("load", run, { once: true });
   }
 
   // Atterrissage précis sur une ancre de formation (corrige le scroll natif
@@ -591,17 +605,11 @@
         id === "formations" || FORMATIONS.some(function (f) { return f.id === id; });
       if (!isFormation) return;
       if (el.classList && el.classList.contains("is-hidden")) applyCategory("all", false);
-      // Neutralise le scroll-behavior:smooth du site et devance le scroll natif
-      // vers l'ancre (faussé par les images lazy) en corrigeant sur quelques frames.
-      var html = document.documentElement, prev = html.style.scrollBehavior;
-      html.style.scrollBehavior = "auto";
-      var doIt = function () { scrollToEl(el, true); };
-      doIt();
-      requestAnimationFrame(function () { doIt(); requestAnimationFrame(doIt); });
-      setTimeout(function () { doIt(); html.style.scrollBehavior = prev; }, 280);
+      landOn(el); // atterrissage en deux temps (gère le repli de la util-bar)
     };
-    if (document.readyState === "complete") landing();
-    else window.addEventListener("load", landing, { once: true });
+    // Rapide (DOM prêt, cartes à hauteur fixe) + filet après chargement complet.
+    requestAnimationFrame(landing);
+    if (document.readyState !== "complete") window.addEventListener("load", landing, { once: true });
   }
 
   /* ----------------------------------------------------------------------- */

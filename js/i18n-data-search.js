@@ -358,4 +358,16 @@
     "search.page_inscription_t": "Prijava",
     "search.page_inscription_d": "Prijava na usposabljanje"
   });
+
+  /* ---- Forme au singulier (compteur = 1), pour « 1 formation » vs « 2 formations » ---- */
+  m("fr", { "search.formation_word": "formation" });
+  m("en", { "search.formation_word": "training" });
+  m("nl", { "search.formation_word": "opleiding" });
+  m("af", { "search.formation_word": "opleiding" });
+  m("ar", { "search.formation_word": "دورة" });
+  m("bg", { "search.formation_word": "обучение" });
+  m("de", { "search.formation_word": "Schulung" });
+  m("ro", { "search.formation_word": "formare" });
+  m("it", { "search.formation_word": "corso" });
+  m("sl", { "search.formation_word": "usposabljanje" });
 })();

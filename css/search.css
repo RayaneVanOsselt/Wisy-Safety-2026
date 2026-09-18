@@ -351,6 +351,18 @@
 }
 
 /* --------------------------------------------------------------------------
+   5b. ATTERRISSAGE DES ANCRES — les résultats « formation » pointent vers
+   formations.html#id. On décale sous le header sticky : valeur généreuse pour
+   le scroll natif (chargement de page), puis JS recale précisément (landOn).
+   -------------------------------------------------------------------------- */
+.fo-card,
+#formations { scroll-margin-top: 200px; }
+@media (min-width: 861px) {
+  .fo-card,
+  #formations { scroll-margin-top: 310px; }
+}
+
+/* --------------------------------------------------------------------------
    6. RESPONSIVE / TACTILE
    -------------------------------------------------------------------------- */
 @media (max-width: 860px) {

@@ -251,33 +251,48 @@
 .reg-catalogue { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.15rem; }
 @media (min-width: 1280px) { .reg-catalogue { grid-template-columns: repeat(2, 1fr); } }
 
-/* --- Module de formation (fiche technique) --- */
+/* --- Module de formation (fiche + visuel) --- */
 .reg-module {
-  position: relative; display: flex; flex-direction: column; gap: .85rem;
-  padding: 1.3rem 1.35rem; background: var(--reg-surface);
-  border: 1.5px solid var(--reg-hair); border-radius: var(--reg-radius);
+  position: relative; display: flex; flex-direction: column; background: var(--reg-surface);
+  border: 1.5px solid var(--reg-hair); border-radius: var(--reg-radius); overflow: hidden;
   box-shadow: var(--shadow-sm);
-  transition: transform .28s var(--ease-out), box-shadow .28s var(--ease-out), border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
-  transform-style: preserve-3d;
+  transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out), border-color var(--t-fast) var(--ease);
 }
-.reg-module__top { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding-bottom: .7rem; border-bottom: 1px dashed var(--reg-hair); }
-.reg-module__ref { font-family: var(--reg-mono); font-size: .72rem; font-weight: 700; letter-spacing: .06em; color: var(--epinette); }
-.reg-module__ref .sep { color: var(--granit-clair); margin: 0 .35rem; }
-.reg-module__cat { font-family: var(--reg-mono); font-size: .66rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--granit); }
-.reg-module__head { display: flex; align-items: flex-start; gap: .85rem; }
-.reg-module__ic {
-  flex-shrink: 0; width: 48px; height: 48px; border-radius: 10px; display: grid; place-items: center;
-  background: var(--brume-14); color: var(--epinette);
-  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+/* Visuel de la formation */
+.reg-module__media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: linear-gradient(140deg, var(--epinette), var(--sarcelle)); }
+.reg-module__img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .55s var(--ease-out); }
+.reg-module:hover .reg-module__img { transform: scale(1.05); }
+.reg-module__media::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(27,45,40,0) 44%, rgba(27,45,40,.44)); }
+.reg-module__imgph { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(244,250,249,.92); }
+.reg-module__imgph svg { width: 46px; height: 46px; }
+/* Badge catégorie (overlay) */
+.reg-module__cat {
+  position: absolute; z-index: 2; top: .8rem; left: .8rem;
+  font-family: var(--reg-mono); font-size: .64rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--noir-jais); background: rgba(255,255,255,.92);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  padding: .34rem .62rem; border-radius: 5px;
 }
-.reg-module__ic svg { width: 25px; height: 25px; }
-.reg-module__name { font-family: var(--font-titre); font-weight: 600; font-size: 1.1rem; color: var(--noir-jais); line-height: 1.2; margin: 0; }
+/* Stamp « AJOUTÉE » (overlay) */
+.reg-module__badge {
+  position: absolute; z-index: 2; top: .8rem; right: .8rem; display: none; align-items: center; gap: .3rem;
+  font-family: var(--reg-mono); font-weight: 700; font-size: .64rem; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--noir-jais); background: var(--turquoise); padding: .34rem .55rem; border-radius: 5px; box-shadow: var(--shadow-sm);
+}
+.reg-module__badge svg { width: 13px; height: 13px; }
+.reg-module.is-selected .reg-module__badge { display: inline-flex; }
+/* Contenu */
+.reg-module__content { display: flex; flex-direction: column; gap: .55rem; padding: 1.05rem 1.2rem 1.2rem; flex: 1; }
+.reg-module__top { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.reg-module__ref { font-family: var(--reg-mono); font-size: .7rem; font-weight: 700; letter-spacing: .05em; color: var(--granit); white-space: nowrap; }
+.reg-module__ref .sep { color: var(--granit-clair); }
+.reg-module__price { display: inline-flex; align-items: baseline; gap: .3rem; }
+.reg-module__amount { font-family: var(--reg-mono); font-weight: 700; font-size: 1.22rem; color: var(--epinette); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.reg-module__amount.is-quote { font-size: .92rem; color: var(--brume); text-transform: uppercase; letter-spacing: .05em; }
+.reg-module__unit { font-family: var(--reg-mono); font-size: .72rem; color: var(--granit); }
+.reg-module__name { font-family: var(--font-titre); font-weight: 600; font-size: 1.14rem; color: var(--noir-jais); line-height: 1.2; margin: 0; }
 .reg-module__desc { font-size: var(--fs-small); color: var(--granit); margin: 0; flex: 1; }
-/* Ligne de spécification / cote */
-.reg-module__spec { display: flex; align-items: baseline; gap: .5rem; padding-top: .7rem; border-top: 1px dashed var(--reg-hair); }
-.reg-module__amount { font-family: var(--reg-mono); font-weight: 700; font-size: 1.3rem; color: var(--epinette); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
-.reg-module__unit { font-family: var(--reg-mono); font-size: .74rem; color: var(--granit); }
-.reg-module__foot { display: flex; align-items: center; gap: .75rem; }
+.reg-module__foot { display: flex; align-items: center; gap: .7rem; margin-top: .35rem; }
 
 .reg-add {
   flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: var(--reg-tap);
@@ -288,20 +303,9 @@
 .reg-add svg { width: 18px; height: 18px; }
 .reg-add:hover, .reg-add:focus-visible { transform: translateY(-2px); box-shadow: 0 10px 24px var(--turquoise-glow); background: var(--brume); color: var(--creme); }
 
-/* État SÉLECTIONNÉ — « module intégré au plan » */
-.reg-module.is-selected { border-color: var(--epinette); border-style: solid; background: linear-gradient(180deg, var(--brume-08), var(--reg-surface) 40%); box-shadow: 0 0 0 1px var(--epinette), var(--shadow-card); }
-.reg-module.is-selected .reg-module__ic { background: var(--epinette); color: var(--creme); }
+/* État SÉLECTIONNÉ */
+.reg-module.is-selected { border-color: var(--epinette); box-shadow: 0 0 0 1.5px var(--epinette), var(--shadow-card); }
 .reg-module.is-selected .reg-module__ref { color: var(--epinette); }
-.reg-module.is-selected::before, .reg-module.is-selected::after { border-color: var(--epinette); }
-.reg-module:hover::before, .reg-module:hover::after { border-color: var(--brume); }
-.reg-module__badge {
-  position: absolute; top: 0; right: 1.35rem; transform: translateY(-50%); z-index: 2;
-  display: none; align-items: center; gap: .35rem;
-  font-family: var(--reg-mono); font-weight: 700; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--noir-jais); background: var(--turquoise); padding: .3rem .6rem; border-radius: 4px;
-}
-.reg-module__badge svg { width: 13px; height: 13px; }
-.reg-module.is-selected .reg-module__badge { display: inline-flex; }
 
 .reg-module__selected { display: none; align-items: center; gap: .75rem; width: 100%; }
 .reg-module.is-selected .reg-module__selected { display: flex; }
@@ -372,6 +376,9 @@
 .reg-cartouche__row--total dd { color: var(--creme); font-size: 1.3rem; font-weight: 700; }
 .reg-total-flash { animation: regFlash .5s var(--ease); }
 @keyframes regFlash { 0% { color: var(--turquoise); } 100% {} }
+
+.reg-quote-note { display: flex; align-items: flex-start; gap: .5rem; margin: .85rem 0 0; padding: .7rem .85rem; background: var(--brume-08); border: 1px solid var(--brume-14); border-radius: 8px; font-size: var(--fs-small); color: var(--granit); line-height: 1.4; }
+.reg-quote-note svg { width: 16px; height: 16px; color: var(--epinette); flex-shrink: 0; margin-top: 1px; }
 
 .reg-summary__cta { margin-top: 1.15rem; }
 .reg-cta {

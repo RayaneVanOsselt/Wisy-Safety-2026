@@ -69,6 +69,7 @@
     trainer: '<circle cx="9" cy="8" r="3"/><path d="M4 20a5 5 0 0 1 10 0"/><path d="M17 4l3 1.5L17 7M17 4v6"/>',
     draft: '<path d="M12 3v18M3 12h18" opacity=".35"/><path d="M6 6l4 4-4 4M18 6l-4 4 4 4"/>',
     signal: '<path d="M4 16a10 10 0 0 1 16 0M7 16a6 6 0 0 1 10 0"/><circle cx="12" cy="16" r="2"/>',
+    aid: '<path d="M12 21c-4-2.5-7-6-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 4-3 7.5-7 10z"/><path d="M12 9.3v4M10 11.3h4"/>',
     /* interface */
     plus: '<path d="M12 5v14M5 12h14"/>',
     minus: '<path d="M5 12h14"/>',
@@ -199,12 +200,16 @@
       .map(function (x) { return x.id; })
       .filter(function (id) { return !!state.trainings[id]; });
   }
+  function isPriced(item) { return !!item && item.priceCents != null; }
   function lineTotalCents(id) {
     var tr = DATA.getTraining(id);
-    return tr ? tr.priceCents * (state.trainings[id] || 0) : 0;
+    return isPriced(tr) ? tr.priceCents * (state.trainings[id] || 0) : 0;
   }
   function calculateSubtotal() {
     return selectedIds().reduce(function (sum, id) { return sum + lineTotalCents(id); }, 0);
+  }
+  function hasQuoteItems() {
+    return selectedIds().some(function (id) { return !isPriced(DATA.getTraining(id)); });
   }
   function participantsCount() {
     return selectedIds().reduce(function (s, id) { return s + (state.trainings[id] || 0); }, 0);
@@ -217,7 +222,15 @@
       vat = Math.round(subtotal * CONFIG.vatRate);
       total = subtotal + vat;
     }
-    return { subtotalCents: subtotal, vatCents: vat, totalCents: total };
+    return { subtotalCents: subtotal, vatCents: vat, totalCents: total, hasQuote: hasQuoteItems() };
+  }
+  /* Libellé de prix unitaire (ou « Sur devis ») */
+  function priceLabel(item) { return isPriced(item) ? money(item.priceCents) : t("reg.on_quote", "Sur devis"); }
+  /* Libellé du total général : montant, ou « Sur devis » si aucun item tarifé */
+  function grandTotalLabel(totals) {
+    if (totals.subtotalCents > 0) return money(totals.totalCents);
+    if (totals.hasQuote) return t("reg.on_quote", "Sur devis");
+    return money(0);
   }
   function clearRegistration() {
     state = emptyState();
@@ -376,24 +389,31 @@
   function moduleHtml(item) {
     var selected = !!state.trainings[item.id];
     var qty = state.trainings[item.id] || 1;
+    var priced = isPriced(item);
+    var media = item.image
+      ? '<img class="reg-module__img" src="' + escapeAttr(item.image) + '" alt="' + escapeAttr(loc(item.name)) + '" loading="lazy" decoding="async">'
+      : '<span class="reg-module__imgph">' + icon(item.icon) + "</span>";
     return '' +
-      '<article class="reg-module reg-tech' + (selected ? " is-selected" : "") + '" data-module="' + item.id + '">' +
-      '<span class="reg-module__badge">' + icon("check") + t("reg.added_badge", "Ajoutée") + "</span>" +
-      '<div class="reg-module__top">' +
-        '<span class="reg-module__ref">' + t("reg.ref", "RÉF") + ' <span class="sep">·</span>' + escapeHtml(item.code || "") + "</span>" +
+      '<article class="reg-module' + (selected ? " is-selected" : "") + '" data-module="' + item.id + '">' +
+      '<div class="reg-module__media">' + media +
         '<span class="reg-module__cat">' + escapeHtml(catLabel(item.category)) + "</span>" +
+        '<span class="reg-module__badge">' + icon("check") + t("reg.added_badge", "Ajoutée") + "</span>" +
       "</div>" +
-      '<div class="reg-module__head">' +
-        '<span class="reg-module__ic">' + icon(item.icon) + "</span>" +
+      '<div class="reg-module__content">' +
+        '<div class="reg-module__top">' +
+          '<span class="reg-module__ref">' + t("reg.ref", "RÉF") + ' <span class="sep">·</span> ' + escapeHtml(item.code || "") + "</span>" +
+          '<span class="reg-module__price">' +
+            '<span class="reg-module__amount' + (priced ? "" : " is-quote") + '">' + priceLabel(item) + "</span>" +
+            (priced ? '<span class="reg-module__unit">/ ' + t("reg.unit_participant", "participant") + "</span>" : "") +
+          "</span>" +
+        "</div>" +
         '<h3 class="reg-module__name">' + escapeHtml(loc(item.name)) + "</h3>" +
-      "</div>" +
-      '<p class="reg-module__desc">' + escapeHtml(loc(item.description)) + "</p>" +
-      '<div class="reg-module__spec"><span class="reg-module__amount">' + money(item.priceCents) + "</span>" +
-        '<span class="reg-module__unit">/ ' + t("reg.unit_participant", "participant") + "</span></div>" +
-      '<div class="reg-module__foot">' +
-        '<button type="button" class="reg-add" data-add="' + item.id + '">' + icon("plus") + t("reg.add", "Ajouter à mon inscription") + "</button>" +
-        '<div class="reg-module__selected">' + qtyHtml(item.id, qty, "module") +
-          '<button type="button" class="reg-remove" data-remove="' + item.id + '" aria-label="' + t("reg.remove", "Retirer") + " — " + escapeHtml(loc(item.name)) + '">' + icon("trash") + "</button>" +
+        '<p class="reg-module__desc">' + escapeHtml(loc(item.description)) + "</p>" +
+        '<div class="reg-module__foot">' +
+          '<button type="button" class="reg-add" data-add="' + item.id + '">' + icon("plus") + t("reg.add", "Ajouter à mon inscription") + "</button>" +
+          '<div class="reg-module__selected">' + qtyHtml(item.id, qty, "module") +
+            '<button type="button" class="reg-remove" data-remove="' + item.id + '" aria-label="' + t("reg.remove", "Retirer") + " — " + escapeHtml(loc(item.name)) + '">' + icon("trash") + "</button>" +
+          "</div>" +
         "</div>" +
       "</div>" +
     "</article>";
@@ -453,13 +473,14 @@
     var lines = ids.map(function (id) {
       var tr = DATA.getTraining(id);
       var qty = state.trainings[id];
+      var priced = isPriced(tr);
       return '<div class="reg-line" data-line="' + id + '">' +
         '<span class="reg-line__node">' + icon(tr.icon) + "</span>" +
         '<span class="reg-line__ref">' + escapeHtml(tr.code || "") + "</span>" +
         '<span class="reg-line__name">' + escapeHtml(loc(tr.name)) + "</span>" +
         '<span class="reg-line__meta">' +
-          '<span class="reg-line__calc">' + money(tr.priceCents) + " × " + qty + "</span>" +
-          '<span class="reg-line__total">' + money(lineTotalCents(id)) + "</span>" +
+          '<span class="reg-line__calc">' + (priced ? money(tr.priceCents) + " × " + qty : qty + " × " + t("reg.on_quote", "Sur devis")) + "</span>" +
+          '<span class="reg-line__total">' + (priced ? money(lineTotalCents(id)) : t("reg.on_quote", "Sur devis")) + "</span>" +
         "</span>" +
         '<span class="reg-line__actions">' +
           '<span class="reg-line__qty">' +
@@ -473,12 +494,13 @@
     }).join("");
 
     var totals = computeTotals();
+    var quoteNote = totals.hasQuote ? '<p class="reg-quote-note">' + icon("info") + t("reg.quote_note", "Formation « sur devis » : le tarif vous sera communiqué séparément.") + "</p>" : "";
     var cartouche = '<dl class="reg-cartouche">' +
       '<div class="reg-cartouche__row"><dt>' + t("reg.subtotal", "Sous-total formations") + '</dt><dd>' + money(totals.subtotalCents) + "</dd></div>" +
       '<div class="reg-cartouche__row reg-cartouche__row--vat"><dt>' + t("reg.vat", "TVA") + "</dt><dd>" +
         (totals.vatCents == null ? t("reg.vat_tbd", "À déterminer") : money(totals.vatCents)) + "</dd></div>" +
-      '<div class="reg-cartouche__row reg-cartouche__row--total"><dt>' + t("reg.total", "Total") + '</dt><dd data-grandtotal>' + money(totals.totalCents) + "</dd></div>" +
-    "</dl>";
+      '<div class="reg-cartouche__row reg-cartouche__row--total"><dt>' + t("reg.total", "Total") + '</dt><dd data-grandtotal>' + grandTotalLabel(totals) + "</dd></div>" +
+    "</dl>" + quoteNote;
 
     var cta = compact ? "" : (
       '<div class="reg-summary__cta">' +
@@ -520,7 +542,7 @@
     if (bar) {
       bar.querySelector("[data-bar-count]").textContent = count + " " + (count > 1 ? t("reg.formations", "formations") : t("reg.formation", "formation")) +
         " · " + pcount + " " + participantsWord(pcount);
-      bar.querySelector("[data-bar-total]").textContent = money(totals.totalCents);
+      bar.querySelector("[data-bar-total]").textContent = grandTotalLabel(totals);
       bar.querySelector("[data-bar-cta-label]").textContent = state.step === 3 ? t("reg.cta_pay", "Aller au paiement") : t("reg.cta_next_short", "Continuer");
       bar.classList.toggle("is-shown", showBar);
     }
@@ -619,7 +641,7 @@
     if (host) host.innerHTML = summaryInnerHtml(true);
     var totals = computeTotals();
     var tv = document.getElementById("reg-final-total");
-    if (tv) tv.innerHTML = money(totals.totalCents) + (totals.vatCents == null ? ' <small>' + t("reg.vat_excluded", "hors TVA à déterminer") + "</small>" : "");
+    if (tv) tv.innerHTML = grandTotalLabel(totals) + (totals.vatCents == null ? ' <small>' + t("reg.vat_excluded", "hors TVA à déterminer") + "</small>" : "");
     /* État du prestataire de paiement */
     var st = document.getElementById("reg-pay-status");
     if (st) {

@@ -87,7 +87,7 @@ ul{margin:0;padding:0;list-style:none}button{font-family:inherit;cursor:pointer;
 .logo:hover .logo__img{transform:scale(1.04)}
 .site-header.is-scrolled .logo__img{height:48px}
 .main-nav{margin-inline:auto}
-.nav-list{display:flex;align-items:center;gap:clamp(1rem,1.8vw,1.75rem)}
+.nav-list{display:flex;align-items:center;gap:clamp(0.55rem,1.1vw,1.4rem)}
 .nav-link{position:relative;display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-titre);font-weight:500;font-size:var(--fs-menu);color:var(--noir-jais);padding:.7rem .55rem;border-radius:var(--radius-sm);transition:color var(--t-fast) var(--ease)}
 .nav-link::after{content:"";position:absolute;left:.55rem;right:.55rem;bottom:.45rem;height:2px;background:var(--brume);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform var(--t-fast) var(--ease-out)}
 .nav-link:hover,.nav-link:focus-visible,.nav-link[aria-expanded="true"]{color:var(--brume)}
@@ -106,6 +106,9 @@ ul{margin:0;padding:0;list-style:none}button{font-family:inherit;cursor:pointer;
 .dropdown__tt{font-family:var(--font-titre);font-weight:600;font-size:.95rem;color:var(--noir-jais);line-height:1.2}
 .dropdown__ds{font-size:var(--fs-small);color:var(--granit);margin-top:.15rem;line-height:1.35;display:block}
 .header-actions{display:flex;align-items:center;gap:1rem;flex-shrink:0}
+.header-help{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;color:var(--epinette);flex-shrink:0;transition:background-color var(--t-fast) var(--ease),color var(--t-fast) var(--ease)}
+.header-help:hover,.header-help:focus-visible{background:var(--brume-14);color:var(--brume)}
+.header-help svg{width:24px;height:24px}
 .nav-toggle{display:none;width:46px;height:46px;border-radius:var(--radius-sm);align-items:center;justify-content:center;color:var(--epinette)}
 .nav-toggle svg{width:28px;height:28px}
 .m-scrim{position:fixed;inset:0;background:var(--jais-60);opacity:0;visibility:hidden;transition:opacity var(--t-fast) var(--ease);z-index:1100}
@@ -626,7 +629,7 @@ textarea.gt__fld{min-height:134px;resize:vertical;line-height:1.5}
         <a href="?lang=sl" data-lang-option="sl" role="menuitem">Slovenščina<span class="lc">SL</span></a>
       </div>
     </div>
-    <div class="header-actions"><a class="btn btn--outline" href="contact.html" data-i18n="header.contact">Contact</a><a class="btn btn--cta" href="inscription.html" data-i18n="header.register">S'inscrire</a></div>
+    <div class="header-actions"><a class="header-help" href="faq.html" data-i18n-attr="aria-label:footer.faq,title:footer.faq" aria-label="Centre d'aide" title="Centre d'aide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></a><a class="btn btn--outline" href="contact.html" data-i18n="header.contact">Contact</a><a class="btn btn--cta" href="inscription.html" data-i18n="header.register">S'inscrire</a></div>
     <button class="nav-toggle" data-i18n-attr="aria-label:aria.open_menu" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="m-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div></div>
 </header>

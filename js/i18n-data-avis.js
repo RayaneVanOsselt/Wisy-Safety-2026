@@ -752,4 +752,16 @@
     "av.play": "Nadaljuj vrtiljak",
     "av.rating_aria": "Ocena: {n} od 5"
   });
+
+  /* --- Formulaire premium : en-tête + badges de confiance (redesign) --- */
+  m("fr", { "av.f_head_sub": "Partagez votre expérience — 2 minutes suffisent.", "av.trust_email": "E-mail confidentiel", "av.trust_valid": "Publié après validation", "av.trust_time": "2 minutes" });
+  m("en", { "av.f_head_sub": "Share your experience — it only takes 2 minutes.", "av.trust_email": "Email kept private", "av.trust_valid": "Published after review", "av.trust_time": "2 minutes" });
+  m("nl", { "av.f_head_sub": "Deel uw ervaring — 2 minuten volstaan.", "av.trust_email": "E-mail vertrouwelijk", "av.trust_valid": "Na validatie gepubliceerd", "av.trust_time": "2 minuten" });
+  m("af", { "av.f_head_sub": "Deel jou ervaring — 2 minute is genoeg.", "av.trust_email": "E-pos vertroulik", "av.trust_valid": "Ná keuring gepubliseer", "av.trust_time": "2 minute" });
+  m("ar", { "av.f_head_sub": "شارك تجربتك — دقيقتان تكفيان.", "av.trust_email": "بريد إلكتروني سري", "av.trust_valid": "يُنشر بعد المراجعة", "av.trust_time": "دقيقتان" });
+  m("bg", { "av.f_head_sub": "Споделете опита си — 2 минути стигат.", "av.trust_email": "Поверителен имейл", "av.trust_valid": "Публикува се след проверка", "av.trust_time": "2 минути" });
+  m("de", { "av.f_head_sub": "Teilen Sie Ihre Erfahrung — 2 Minuten genügen.", "av.trust_email": "E-Mail vertraulich", "av.trust_valid": "Nach Prüfung veröffentlicht", "av.trust_time": "2 Minuten" });
+  m("ro", { "av.f_head_sub": "Împărtășește experiența ta — 2 minute sunt de ajuns.", "av.trust_email": "E-mail confidențial", "av.trust_valid": "Publicat după validare", "av.trust_time": "2 minute" });
+  m("it", { "av.f_head_sub": "Condividi la tua esperienza — bastano 2 minuti.", "av.trust_email": "E-mail riservata", "av.trust_valid": "Pubblicato dopo verifica", "av.trust_time": "2 minuti" });
+  m("sl", { "av.f_head_sub": "Delite svojo izkušnjo — dovolj sta 2 minuti.", "av.trust_email": "E-pošta zaupna", "av.trust_valid": "Objavljeno po pregledu", "av.trust_time": "2 minuti" });
 })();

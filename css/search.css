@@ -9,10 +9,26 @@
    1. BANDE — sous la navigation, dans le header sticky
    -------------------------------------------------------------------------- */
 .wsy-search {
+  /* Empilement : la bande de recherche est un frère inséré APRÈS .main-bar
+     dans .site-header. .main-bar crée un contexte d'empilement (backdrop-filter)
+     qui « piège » les menus déroulants du header (leur z-index élevé n'a alors
+     plus d'effet vers l'extérieur). On ordonne donc explicitement les deux
+     bandes sœurs : la recherche en dessous (1), la nav au-dessus (2, ci-dessous). */
+  position: relative;
+  z-index: 1;
   border-top: 1px solid var(--granit-12, rgba(94, 109, 106, .12));
   background: rgba(244, 250, 249, .92);
   -webkit-backdrop-filter: saturate(1.4) blur(12px);
   backdrop-filter: saturate(1.4) blur(12px);
+}
+
+/* La barre de navigation principale (et ses menus déroulants Formations / langue,
+   piégés dans son contexte d'empilement) doit se peindre PAR-DESSUS la bande de
+   recherche. Sélecteur plus spécifique que le `.main-bar` inline des pages
+   (0,2,0 > 0,1,0) → priorité garantie quel que soit l'ordre des feuilles. */
+.site-header .main-bar {
+  position: relative;
+  z-index: 2;
 }
 .wsy-search__wrap {
   max-width: var(--maxw, 1560px);

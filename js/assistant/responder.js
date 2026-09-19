@@ -6,6 +6,12 @@
    invention : prix, dates et modalités absents du site déclenchent une
    redirection vers le contact humain.
 
+   FAQ : les réponses aux questions générales (inscription, tarifs, durée,
+   attestations, contact…) proviennent de la SOURCE UNIQUE du Centre d'aide
+   (js/faq-data.js) via son moteur de recherche partagé (js/faq-search.js) :
+   l'assistant ne peut pas contredire la page FAQ. Quand aucune réponse fiable
+   n'existe, il le dit et oriente vers l'équipe — il n'invente jamais.
+
    Ce moteur fonctionne 100 % côté client, sans réseau ni clé API : le site
    dispose donc d'un assistant réellement utile même sans service externe.
    La route serveur optionnelle (/api/chat) ne fait que l'enrichir en
@@ -16,7 +22,7 @@
      cards?:      Array<{ type:"training"|"navigation"|"contact", ... }>,
      suggestions?: string[],
      sources?:    Array<{ title:string, url:string }>,
-     meta?:       { intent, state? }
+     meta?:       { intent, state?, faqId?, confidence? }
    }
 
    Module « dual-mode » : navigateur + Node (tests).
@@ -34,6 +40,8 @@
   "use strict";
 
   var C = Knowledge.CONTACT;
+  /* Moteur FAQ partagé (absent si js/faq-*.js ne sont pas chargés : on dégrade proprement). */
+  var Faq = (Knowledge.Faq && Knowledge.Faq.search) ? Knowledge.Faq : null;
 
   /* --------------------------------------------------------------------- */
   /* Fabriques de cartes                                                    */
@@ -68,6 +76,69 @@
       hours: C.hours,
       url: C.contactUrl
     };
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* FAQ : réponse, actions et questions liées (source unique)              */
+  /* --------------------------------------------------------------------- */
+  /* Réponses FAQ pour lesquelles l'assistant a une réponse plus riche (cartes) — voir respond(). */
+  var RICH_INTENT_FAQ = { "faq-choisir-catalogue": true };
+
+  /* Texte d'une réponse FAQ (puces « • »), ou `fallback` si la FAQ est absente. */
+  function faqText(id, fallback) {
+    var it = Faq && Faq.get(id);
+    return it ? Faq.plainAnswer(it) : fallback;
+  }
+  /* Questions liées → suggestions cliquables (chacune est comprise telle quelle). */
+  function relatedQuestions(id, n) {
+    return Faq ? Faq.related(id, n || 3).map(function (r) { return r.question; }) : [];
+  }
+  /* Questions à proposer quand on ne sait pas répondre. */
+  function starterQuestions(n) {
+    return Faq ? Faq.featured().slice(0, n || 3).map(function (r) { return r.question; }) : [];
+  }
+  /* Prochaine étape utile déclarée par l'entrée FAQ → carte (routes réelles uniquement). */
+  function actionCards(it) {
+    var a = it && it.action, p;
+    if (!a || a === "assistant") return undefined;
+    if (a === "contact") return [contactCard()];
+    if (a === "nacelle") { var n = Knowledge.byId("nacelle"); return n ? [trainingCard(n)] : undefined; }
+    p = Knowledge.byId(a === "formations" ? "page-formations" : a === "inscription" ? "page-inscription" : "");
+    return p ? [navigationCard(p)] : undefined;
+  }
+  function faqResponse(it, res) {
+    return {
+      message: Faq.plainAnswer(it),
+      cards: actionCards(it),
+      suggestions: relatedQuestions(it.id, 3),
+      sources: [{ title: it.question, url: "faq.html#" + it.id }],
+      meta: { intent: "faq", faqId: it.id, confidence: res ? res.confidence : "exact" }
+    };
+  }
+  /* Réponse FAQ fiable pour ce message ? Jamais une correspondance faible.
+     strict = seulement « exacte » ou « forte » (le cas moyen ne doit pas voler la vedette aux
+     pages / formations trouvées ailleurs : « Formations techniques » reste une navigation). */
+  function faqLookup(rawMessage, strict) {
+    if (!Faq) return null;
+    var res = Faq.search(rawMessage, { limit: 3 });
+    if (!res.top) return null;
+    var ok = res.confidence === "exact" || res.confidence === "high" || (!strict && res.confidence === "medium");
+    return ok ? res : null;
+  }
+  /* Le nom de l'organisme ne désigne aucune formation (« Contacter Wisy Safety » ≠ VCA / « safety »). */
+  function withoutBrand(s) { return String(s).replace(/wisy[\s-]*safety/ig, " "); }
+  /* Source « Centre d'aide » + questions liées, pour les réponses à intention fixe. */
+  function faqExtras(id, n) {
+    var it = Faq && Faq.get(id);
+    return it ? { sources: [{ title: it.question, url: "faq.html#" + id }], related: relatedQuestions(id, n || 3) } : { sources: [], related: [] };
+  }
+
+  /* Réponse FAQ plus PRÉCISE que celle que l'intention détectée donnerait par défaut
+     (« Puis-je annuler mon inscription ? » contient « inscription », mais n'est pas
+     « Comment s'inscrire ? »). Renvoie null si la FAQ n'a rien de plus spécifique. */
+  function specificFaq(rawMessage, defaultId, strict) {
+    var hit = faqLookup(rawMessage, strict);
+    return (hit && hit.top.item.id !== defaultId) ? hit : null;
   }
 
   /* --------------------------------------------------------------------- */
@@ -171,6 +242,11 @@
       suggestions = ["Formations sécurité", "Formations techniques", "Premiers secours", "Voir toutes les formations"];
     } else if (ctx.page === "contact") {
       suggestions = ["Voir les formations disponibles", "Comment se déroule une formation ?", "Vos horaires", "Trouver une formation"];
+    } else if (ctx.page === "faq") {
+      /* Centre d'aide : l'assistant s'appuie sur les MÊMES réponses que la page. */
+      intro = "Bonjour 👋\nJe suis l’assistant Wisy Safety. Je réponds à partir des mêmes informations que le Centre d’aide : posez votre question ou choisissez une suggestion.";
+      var starters = starterQuestions(4);
+      if (starters.length) suggestions = starters;
     }
 
     return {
@@ -213,8 +289,18 @@
       };
     }
 
+    /* 2a) Question du Centre d'aide reprise TELLE QUELLE (suggestion cliquable, copier-coller) :
+       réponse canonique de la FAQ — la même que sur la page, avec ses questions liées — quelle que
+       soit l'intention détectée ensuite. Égalité stricte du libellé : « Combien de temps dure la
+       formation ? » posé sur une fiche formation reste, lui, la question de CETTE formation.
+       Exception : le catalogue, dont la réponse « cartes de formations » est plus riche (étape 6). */
+    if (Faq) {
+      var verbatim = Faq.exact(rawMessage);
+      if (verbatim && !RICH_INTENT_FAQ[verbatim.id]) return faqResponse(verbatim, null);
+    }
+
     /* Formation évoquée dans le message (ou contexte de page) */
-    var mentioned = Retrieval.bestFormation(rawMessage);
+    var mentioned = Retrieval.bestFormation(withoutBrand(rawMessage));
     if (!mentioned && opts.context && opts.context.formationId) mentioned = Knowledge.byId(opts.context.formationId);
 
     /* 2b) CACES / certification / agrément : jamais affirmés sans confirmation.
@@ -244,31 +330,43 @@
 
     /* 3) Prix / tarif — NON présent pour cette formation → honnêteté + contact */
     if (isPrice(q)) {
+      var priceFaq = !mentioned && specificFaq(rawMessage, "faq-tarifs-prix");   // TVA, paiement, financement, devis…
+      if (priceFaq) return faqResponse(priceFaq.top.item, priceFaq);
+      var px = faqExtras("faq-tarifs-prix");
       return {
-        message: "Les tarifs ne sont pas indiqués sur le site : ils dépendent de la formation et du contexte (individuel ou entreprise). Le mieux est de nous contacter pour recevoir un tarif adapté" + (mentioned ? " pour la formation « " + mentioned.title + " »." : ".") ,
+        message: (mentioned ? "À propos de la formation « " + mentioned.title + " » :\n" : "") +
+          faqText("faq-tarifs-prix", "Les tarifs dépendent de la formation. Contactez-nous pour recevoir un tarif adapté à votre besoin."),
         cards: [contactCard()],
-        suggestions: ["Voir les formations disponibles", "Comment s’inscrire ?"],
-        sources: [{ title: "Contact", url: C.contactUrl }],
-        meta: { intent: "price_unavailable" }
+        suggestions: px.related.length ? px.related : ["Voir les formations disponibles", "Comment s’inscrire ?"],
+        sources: px.sources.length ? px.sources : [{ title: "Contact", url: C.contactUrl }],
+        meta: { intent: "price_unavailable", faqId: px.sources.length ? "faq-tarifs-prix" : undefined }
       };
     }
 
     /* 4) Dates / sessions — NON présent sur le site → contact */
     if (isSchedule(q) && !isDuration(q)) {
+      var schedFaq = !mentioned && specificFaq(rawMessage, "faq-inscription-dates");   // ex. « vos horaires » = ouverture
+      if (schedFaq) return faqResponse(schedFaq.top.item, schedFaq);
+      var sx = faqExtras("faq-inscription-dates");
       return {
-        message: "Les dates précises des prochaines sessions ne sont pas publiées sur le site. Contactez-nous et nous vous indiquerons les disponibilités" + (mentioned ? " pour la formation « " + mentioned.title + " »." : ".") + " Nos horaires : " + C.hours + ".",
+        message: (mentioned ? "À propos de la formation « " + mentioned.title + " » :\n" : "") +
+          faqText("faq-inscription-dates", "Les dates des sessions ne sont pas encore publiées en ligne. Contactez-nous pour connaître les prochaines disponibilités."),
         cards: [contactCard()],
-        suggestions: ["Voir les formations disponibles", "Comment m’inscrire ?"],
-        meta: { intent: "schedule_unavailable" }
+        suggestions: sx.related.length ? sx.related : ["Voir les formations disponibles", "Comment m’inscrire ?"],
+        sources: sx.sources,
+        meta: { intent: "schedule_unavailable", faqId: sx.sources.length ? "faq-inscription-dates" : undefined }
       };
     }
 
     /* 5) Demande explicite de contact humain */
     if (isContactWanted(q) && !mentioned) {
+      var contactFaq = specificFaq(rawMessage, "faq-contact-contact");   // ex. « votre adresse » = lieu
+      if (contactFaq) return faqResponse(contactFaq.top.item, contactFaq);
+      var cx = faqExtras("faq-contact-contact");
       return {
         message: "Bien sûr. Vous pouvez joindre l’équipe Wisy Safety directement :",
         cards: [contactCard()],
-        suggestions: ["Voir les formations disponibles", "Comment se déroule une formation ?"],
+        suggestions: cx.related.length ? cx.related : ["Voir les formations disponibles", "Comment se déroule une formation ?"],
         sources: [{ title: "Contact", url: C.contactUrl }],
         meta: { intent: "contact" }
       };
@@ -305,6 +403,8 @@
 
     /* 6) Lister les formations */
     if (isListFormations(q) && !mentioned) {
+      var listFaq = specificFaq(rawMessage, "faq-choisir-catalogue", true);
+      if (listFaq) return faqResponse(listFaq.top.item, listFaq);
       var cat = Retrieval.detectCategory(Retrieval.tokenize(rawMessage));
       var list = cat ? Knowledge.formationsByCategory(cat) : Knowledge.formations();
       var cards = list.slice(0, cat ? 4 : 3).map(trainingCard);
@@ -398,39 +498,37 @@
 
     /* 8) Comment se déroule une formation (FAQ générique) */
     if (isHowItWorks(q)) {
-      var faqD = Knowledge.byId("faq-deroulement");
       return {
-        message: faqD.answer,
-        suggestions: ["Voir les formations disponibles", "Comment m’inscrire ?", "Contacter Wisy Safety"],
-        sources: [{ title: "Nos formations", url: "formations.html" }],
-        meta: { intent: "how_it_works" }
+        message: faqText("faq-deroulement-comment", "Nos formations durent de 1 à 3 jours selon le programme. Pour les dates précises et l’organisation, le mieux est de nous contacter."),
+        suggestions: relatedQuestions("faq-deroulement-comment", 3).concat(["Contacter Wisy Safety"]).slice(0, 4),
+        sources: [{ title: "Comment se déroule une formation ?", url: "faq.html#faq-deroulement-comment" }],
+        meta: { intent: "how_it_works", faqId: "faq-deroulement-comment" }
       };
     }
 
     /* 9) Inscription générique (sans formation précise) */
     if (isSignup(q)) {
+      var signupFaq = specificFaq(rawMessage, "faq-inscription-comment");   // annulation, participants, confirmation…
+      if (signupFaq) return faqResponse(signupFaq.top.item, signupFaq);
       return {
-        message: "Vous pouvez vous inscrire directement en ligne depuis la page Inscription. Dites-moi la formation qui vous intéresse et je vous guide.",
+        message: faqText("faq-inscription-comment", "Vous pouvez vous inscrire directement en ligne depuis la page Inscription, ou nous contacter si vous préférez être accompagné dans votre choix."),
         cards: [navigationCard(Knowledge.byId("page-inscription"))],
-        suggestions: ["Voir les formations disponibles", "Trouver une formation"],
-        sources: [{ title: "Inscription", url: "inscription.html" }],
-        meta: { intent: "signup" }
+        suggestions: relatedQuestions("faq-inscription-comment", 2).concat(["Voir les formations disponibles"]).slice(0, 3),
+        sources: faqExtras("faq-inscription-comment").sources.concat([{ title: "Inscription", url: "inscription.html" }]),
+        meta: { intent: "signup", faqId: "faq-inscription-comment" }
       };
     }
 
+    /* 9b) Question générale couverte par le Centre d'aide (moteur partagé, seuil de confiance) */
+    if (!mentioned) {
+      var hit = faqLookup(rawMessage, true);
+      if (hit) return faqResponse(hit.top.item, hit);
+    }
+
     /* 10) Recherche générale dans la base (pages, FAQ, contact…) */
-    var results = Retrieval.search(rawMessage, { limit: 3 });
+    var results = Retrieval.search(rawMessage, { limit: 3, types: ["formation", "page", "contact"] });
     if (results.length) {
       var top = results[0].entry;
-      if (top.type === "faq") {
-        return {
-          message: top.answer,
-          cards: top.unavailableOnSite ? [contactCard()] : undefined,
-          suggestions: ["Voir les formations disponibles", "Contacter Wisy Safety"],
-          sources: [{ title: top.title, url: top.url }],
-          meta: { intent: "faq" }
-        };
-      }
       if (top.type === "contact") {
         return {
           message: "Voici comment joindre Wisy Safety :",
@@ -459,11 +557,17 @@
       }
     }
 
+    /* 10b) Dernière chance avant d'avouer : correspondance FAQ de confiance moyenne */
+    if (!mentioned) {
+      var soft = faqLookup(rawMessage, false);
+      if (soft) return faqResponse(soft.top.item, soft);
+    }
+
     /* 11) Aucune information trouvée — honnêteté + contact + pistes */
     return {
-      message: "Je n’ai pas trouvé cette information sur le site. Je peux vous orienter vers nos formations, ou vous pouvez contacter directement l’équipe Wisy Safety qui répondra précisément.",
+      message: "Je n’ai pas encore suffisamment d’informations pour répondre précisément à cette question. Vous pouvez contacter l’équipe Wisy Safety pour obtenir une réponse personnalisée.",
       cards: [contactCard()],
-      suggestions: ["Voir les formations disponibles", "Comment se déroule une formation ?"],
+      suggestions: starterQuestions(3).length ? starterQuestions(3) : ["Voir les formations disponibles", "Comment se déroule une formation ?"],
       meta: { intent: "not_found" }
     };
   }

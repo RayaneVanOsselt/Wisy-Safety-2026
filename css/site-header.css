@@ -1,0 +1,214 @@
+/* =========================================================================
+   WISY SAFETY — En-tête partagé : accès « Centre d'aide » + sticky affiné
+   -------------------------------------------------------------------------
+   Chargé sur TOUTES les pages, juste après css/i18n.css. Complète le bloc
+   d'en-tête inliné dans chaque page (aucune règle existante n'est cassée).
+
+   Le problème corrigé
+   • Avant : l'icône « ? » vivait DANS `.header-actions`, que le breakpoint
+     mobile (≤ 1080 px) masque en entier avec `display:none` → sur téléphone et
+     tablette, aucun accès visible au Centre d'aide (et le menu mobile n'avait
+     pas le lien). Sur desktop, l'icône était un simple cercle sans contour,
+     sans libellé ni état actif.
+   • Maintenant : l'entrée est un lien AUTONOME de `.main-inner` (jamais masqué),
+     un vrai contrôle (contour + fond, 44 × 44 px), avec info-bulle, état actif
+     (`aria-current="page"`) ; un lien libellé « Centre d'aide » apparaît dans la
+     barre utilitaire (desktop) et une rangée dédiée dans le menu mobile.
+
+   Palette stricte : épinette (contour, icône, état actif), crème (fond),
+   brume en simple teinte de fond. Le turquoise reste réservé aux CTA.
+   Spécificité : sélecteurs préfixés `.site-header` / `html` pour l'emporter sur
+   le CSS inliné des pages quel que soit l'ordre de chargement.
+   ========================================================================= */
+
+/* ---------- 1. Entrée « Centre d'aide » (bouton icône, tous écrans) ---------- */
+.site-header .main-inner .header-help {
+  position: relative;
+  order: 1;                       /* juste avant Contact / S'inscrire (desktop) */
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--epinette);
+  background: var(--brume-08);
+  border: 1.5px solid rgba(31, 111, 100, .75);   /* ≥ 3:1 sur crème : le contour identifie le contrôle */
+  transition:
+    background-color .32s var(--ease),
+    color .32s var(--ease),
+    border-color .32s var(--ease),
+    box-shadow .32s var(--ease);
+}
+.site-header .header-help svg { width: 23px; height: 23px; display: block; flex: none; }
+.site-header .header-help:hover {
+  background: rgba(31, 111, 100, .14);
+  border-color: var(--epinette);
+}
+/* Focus visible : épinette (≥ 3:1 sur le fond crème), jamais la seule couleur brume */
+.site-header .header-help:focus-visible {
+  outline: 3px solid var(--epinette);
+  outline-offset: 3px;
+}
+/* État actif — forme + remplissage (jamais la couleur seule) : on est dans le Centre d'aide */
+.site-header .header-help[aria-current="page"] {
+  background: var(--epinette);
+  border-color: var(--epinette);
+  color: var(--creme);
+  box-shadow: 0 0 0 3px var(--creme), 0 0 0 4.5px rgba(31, 111, 100, .55);
+}
+
+/* Info-bulle (desktop) : le libellé est visible au survol ET au focus clavier */
+@media (min-width: 1081px) {
+  .site-header .header-help::after {
+    content: attr(data-tip);
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 50%;
+    transform: translate(-50%, -4px);
+    padding: .42rem .75rem;
+    border-radius: 8px;
+    background: var(--noir-jais);
+    color: var(--creme);
+    font: 500 .8rem/1.2 var(--font-titre);
+    letter-spacing: .01em;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 8px 22px rgba(27, 45, 40, .22);
+    transition: opacity .2s var(--ease), transform .2s var(--ease-out);
+    z-index: 5;
+  }
+  .site-header .header-help:hover::after,
+  .site-header .header-help:focus-visible::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* ---------- 2. Lien libellé dans la barre utilitaire (desktop, haut de page) ---------- */
+.site-header .util-contacts .util-help {
+  position: relative;
+  font-weight: 500;
+}
+.site-header .util-contacts .util-help::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: -.9rem;
+  top: 18%;
+  height: 64%;
+  width: 1px;
+  background: rgba(244, 250, 249, .2);
+}
+.site-header .util-contacts .util-help[aria-current="page"] {
+  color: var(--turquoise);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+}
+.site-header .util-contacts .util-help:focus-visible { outline: 2px solid var(--creme); outline-offset: 4px; border-radius: 4px; }
+/* Sur mobile la barre utilitaire ne garde que téléphone + e-mail : le Centre d'aide
+   passe dans l'en-tête (icône 44 px) et dans le menu (libellé complet). */
+@media (max-width: 920px) {
+  .site-header .util-contacts .util-help { display: none; }
+}
+
+/* ---------- 3. Densité : une seule ligne propre, sinon menu hamburger ----------
+   Avant : la navigation (7 entrées + langue + 2 boutons) ne tenait pas sous ~1540 px et
+   se cassait sur 3–4 lignes (« PEB / Wallonie / & / Bruxelles »), en-tête de plus de 260 px.
+   Mesuré dans les 10 langues : elle tient sur UNE ligne dès 1360 px (l'allemand, le plus
+   long, est le facteur limitant). Au-dessus : tailles fluides, jamais de retour à la ligne.
+   En dessous : menu hamburger (le lien « Centre d'aide » reste visible dans l'en-tête). */
+@media (min-width: 1360px) {
+  .site-header .main-inner { gap: clamp(.55rem, 1vw, 1.25rem); }
+  .site-header .nav-list { gap: clamp(.05rem, .35vw, .75rem); }
+  .site-header .nav-link {
+    white-space: nowrap;
+    font-size: clamp(.8rem, .5rem + .4vw, .98rem);
+    padding-inline: clamp(.3rem, .45vw, .55rem);
+  }
+  .site-header .nav-link::after { left: clamp(.3rem, .45vw, .55rem); right: clamp(.3rem, .45vw, .55rem); }
+  .site-header .header-actions { gap: clamp(.4rem, .6vw, .8rem); }
+  .site-header .header-actions .btn {
+    padding: .7rem clamp(.8rem, 1vw, 1.4rem);
+    font-size: clamp(.84rem, .55rem + .3vw, .96rem);
+    min-height: 44px;
+  }
+}
+@media (max-width: 1359px) {
+  .site-header .main-nav,
+  .site-header .header-actions { display: none; }
+  .site-header .nav-toggle { display: inline-flex; }
+  .site-header .main-inner { justify-content: space-between; gap: .5rem; }
+  /* ordre visuel = ordre du DOM (et du clavier) : langue · aide · menu */
+  .site-header .main-inner .lang-switch { order: 2; margin-inline-start: auto; margin-inline-end: .25rem; }
+  .site-header .main-inner .header-help { order: 3; }
+  .site-header .main-inner .nav-toggle  { order: 4; }
+  .site-header .lang-btn { min-height: 44px; }
+}
+
+/* ---------- 4. Téléphone : en-tête compact, aucune collision (320 px et plus) ---------- */
+@media (max-width: 640px) {
+  .site-header .main-inner { padding-block: .75rem; }
+  .site-header .logo__img { height: 46px; }
+  html .site-header.is-scrolled .main-inner { padding-block: .55rem; }
+  html .site-header.is-scrolled .logo__img { height: 42px; }
+}
+
+/* ---------- 5. Sticky : transition légère, fond plus opaque, ombre très discrète ---------- */
+.site-header .main-bar {
+  transition: background-color .32s var(--ease), box-shadow .32s var(--ease);
+}
+html .site-header.is-scrolled .main-bar {
+  background: rgba(244, 250, 249, .96);
+  box-shadow: 0 1px 0 rgba(27, 45, 40, .07), 0 12px 26px -22px rgba(27, 45, 40, .38);
+}
+
+/* ---------- 6. Menu mobile : rangée « Centre d'aide » bien visible ---------- */
+.m-panel .m-help {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  margin-top: .85rem;
+  padding: .7rem .8rem;
+  min-height: 60px;
+  border: 1.5px solid rgba(31, 111, 100, .75);
+  border-radius: var(--radius);
+  background: var(--brume-08);
+  color: var(--noir-jais);
+  font-family: var(--font-titre);
+  font-weight: 600;
+  font-size: 1.04rem;
+  line-height: 1.2;
+  transition: background-color .32s var(--ease), border-color .32s var(--ease), color .32s var(--ease);
+}
+.m-panel .m-help__ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--creme);
+  border: 1.5px solid rgba(31, 111, 100, .75);
+  color: var(--epinette);
+  transition: background-color .32s var(--ease), color .32s var(--ease), border-color .32s var(--ease);
+}
+.m-panel .m-help__ic svg { width: 22px; height: 22px; }
+.m-panel .m-help__arrow { margin-inline-start: auto; width: 18px; height: 18px; flex: none; opacity: .7; }
+[dir="rtl"] .m-panel .m-help__arrow { transform: scaleX(-1); }
+.m-panel .m-help:hover { background: rgba(31, 111, 100, .12); border-color: var(--epinette); }
+.m-panel .m-help:focus-visible { outline: 3px solid var(--epinette); outline-offset: 3px; }
+.m-panel .m-help[aria-current="page"] { background: var(--epinette); border-color: var(--epinette); color: var(--creme); }
+.m-panel .m-help[aria-current="page"] .m-help__ic { background: transparent; border-color: rgba(244, 250, 249, .7); color: var(--creme); }
+
+/* ---------- 7. Réduction du mouvement ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .site-header .header-help,
+  .site-header .header-help::after,
+  .site-header .main-bar,
+  .m-panel .m-help,
+  .m-panel .m-help__ic { transition-duration: .001ms !important; }
+}

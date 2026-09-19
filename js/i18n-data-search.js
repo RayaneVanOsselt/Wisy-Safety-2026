@@ -41,7 +41,9 @@
     "search.page_contact_t": "Contact",
     "search.page_contact_d": "Coordonnées et formulaire de contact",
     "search.page_inscription_t": "Inscription",
-    "search.page_inscription_d": "S'inscrire à une formation"
+    "search.page_inscription_d": "S'inscrire à une formation",
+    "search.page_faq_t": "Centre d'aide",
+    "search.page_faq_d": "Questions fréquentes et assistant"
   });
 
   /* ---------------- ENGLISH ---------------- */
@@ -76,7 +78,9 @@
     "search.page_contact_t": "Contact",
     "search.page_contact_d": "Contact details and form",
     "search.page_inscription_t": "Registration",
-    "search.page_inscription_d": "Register for a training"
+    "search.page_inscription_d": "Register for a training",
+    "search.page_faq_t": "Help centre",
+    "search.page_faq_d": "FAQ and assistant"
   });
 
   /* ---------------- NEDERLANDS ---------------- */
@@ -111,7 +115,9 @@
     "search.page_contact_t": "Contact",
     "search.page_contact_d": "Contactgegevens en formulier",
     "search.page_inscription_t": "Inschrijving",
-    "search.page_inscription_d": "Inschrijven voor een opleiding"
+    "search.page_inscription_d": "Inschrijven voor een opleiding",
+    "search.page_faq_t": "Helpcentrum",
+    "search.page_faq_d": "Veelgestelde vragen en assistent"
   });
 
   /* ---------------- AFRIKAANS ---------------- */
@@ -146,7 +152,9 @@
     "search.page_contact_t": "Kontak",
     "search.page_contact_d": "Kontakbesonderhede en vorm",
     "search.page_inscription_t": "Inskrywing",
-    "search.page_inscription_d": "Skryf in vir 'n opleiding"
+    "search.page_inscription_d": "Skryf in vir 'n opleiding",
+    "search.page_faq_t": "Hulpsentrum",
+    "search.page_faq_d": "Gereelde vrae en assistent"
   });
 
   /* ---------------- العربية (RTL) ---------------- */
@@ -181,7 +189,9 @@
     "search.page_contact_t": "اتصل بنا",
     "search.page_contact_d": "بيانات الاتصال والنموذج",
     "search.page_inscription_t": "التسجيل",
-    "search.page_inscription_d": "التسجيل في دورة"
+    "search.page_inscription_d": "التسجيل في دورة",
+    "search.page_faq_t": "مركز المساعدة",
+    "search.page_faq_d": "الأسئلة الشائعة والمساعد"
   });
 
   /* ---------------- БЪЛГАРСКИ ---------------- */
@@ -216,7 +226,9 @@
     "search.page_contact_t": "Контакт",
     "search.page_contact_d": "Данни за контакт и формуляр",
     "search.page_inscription_t": "Записване",
-    "search.page_inscription_d": "Записване за обучение"
+    "search.page_inscription_d": "Записване за обучение",
+    "search.page_faq_t": "Помощен център",
+    "search.page_faq_d": "Често задавани въпроси и асистент"
   });
 
   /* ---------------- DEUTSCH ---------------- */
@@ -251,7 +263,9 @@
     "search.page_contact_t": "Kontakt",
     "search.page_contact_d": "Kontaktdaten und Formular",
     "search.page_inscription_t": "Anmeldung",
-    "search.page_inscription_d": "Für eine Schulung anmelden"
+    "search.page_inscription_d": "Für eine Schulung anmelden",
+    "search.page_faq_t": "Hilfe-Center",
+    "search.page_faq_d": "Häufige Fragen und Assistent"
   });
 
   /* ---------------- ROMÂNĂ ---------------- */
@@ -286,7 +300,9 @@
     "search.page_contact_t": "Contact",
     "search.page_contact_d": "Date de contact și formular",
     "search.page_inscription_t": "Înscriere",
-    "search.page_inscription_d": "Înscrie-te la o formare"
+    "search.page_inscription_d": "Înscrie-te la o formare",
+    "search.page_faq_t": "Centru de ajutor",
+    "search.page_faq_d": "Întrebări frecvente și asistent"
   });
 
   /* ---------------- ITALIANO ---------------- */
@@ -321,7 +337,9 @@
     "search.page_contact_t": "Contatto",
     "search.page_contact_d": "Recapiti e modulo di contatto",
     "search.page_inscription_t": "Iscrizione",
-    "search.page_inscription_d": "Iscriviti a un corso"
+    "search.page_inscription_d": "Iscriviti a un corso",
+    "search.page_faq_t": "Centro assistenza",
+    "search.page_faq_d": "Domande frequenti e assistente"
   });
 
   /* ---------------- SLOVENŠČINA ---------------- */
@@ -356,7 +374,9 @@
     "search.page_contact_t": "Stik",
     "search.page_contact_d": "Kontaktni podatki in obrazec",
     "search.page_inscription_t": "Prijava",
-    "search.page_inscription_d": "Prijava na usposabljanje"
+    "search.page_inscription_d": "Prijava na usposabljanje",
+    "search.page_faq_t": "Center za pomoč",
+    "search.page_faq_d": "Pogosta vprašanja in asistent"
   });
 
   /* ---- Forme au singulier (compteur = 1), pour « 1 formation » vs « 2 formations » ---- */

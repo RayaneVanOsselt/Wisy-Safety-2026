@@ -56,7 +56,8 @@
     { id: "formations",  url: "formations.html",  titleKey: "search.page_formations_t",  descKey: "search.page_formations_d",  kw: ["formations", "catalogue", "courses", "cours", "opleidingen", "schulungen", "corsi"] },
     { id: "avis",        url: "avis.html",        titleKey: "search.page_avis_t",        descKey: "search.page_avis_d",        kw: ["avis", "reviews", "temoignages", "feedback", "opinions", "bewertungen", "recensioni"] },
     { id: "contact",     url: "contact.html",     titleKey: "search.page_contact_t",     descKey: "search.page_contact_d",     kw: ["contact", "adresse", "telephone", "email", "coordonnees", "kontakt"] },
-    { id: "inscription", url: "inscription.html", titleKey: "search.page_inscription_t", descKey: "search.page_inscription_d", kw: ["inscription", "inscrire", "register", "registration", "enroll", "signup", "anmeldung", "iscrizione"] }
+    { id: "inscription", url: "inscription.html", titleKey: "search.page_inscription_t", descKey: "search.page_inscription_d", kw: ["inscription", "inscrire", "register", "registration", "enroll", "signup", "anmeldung", "iscrizione"] },
+    { id: "faq",         url: "faq.html",         titleKey: "search.page_faq_t",         descKey: "search.page_faq_d",         kw: ["aide", "centre", "faq", "questions", "help", "helpcentrum", "hulp", "hilfe", "aiuto", "ajutor", "assistance", "support"] }
   ];
 
   var FEATURED = ["vca-base", "beps", "nacelle", "fibre-optique"]; // suggestions (état vide)
@@ -85,7 +86,8 @@
     page_formations:  '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
     page_avis:        '<path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.2l1-5.8L3.5 9.2l5.9-.9L12 3z"/>',
     page_contact:     '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>',
-    page_inscription: '<path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="3"/><path d="M19 8v6M22 11h-6"/>'
+    page_inscription: '<path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="3"/><path d="M19 8v6M22 11h-6"/>',
+    page_faq:         '<circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>'
   };
   function svg(inner) {
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + "</svg>";

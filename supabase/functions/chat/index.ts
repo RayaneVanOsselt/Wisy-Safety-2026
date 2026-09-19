@@ -133,7 +133,8 @@ RÈGLES ABSOLUES
 - N'invente JAMAIS : prix, dates, certifications, disponibilités, durées, modalités, obligations légales, coordonnées, ni aucune caractéristique de formation absente de <knowledge>.
 - Un prix n'est donné que s'il figure dans le champ tarif="…" de la formation concernée (jamais pour une autre formation).
 - N'affirme JAMAIS qu'une formation est certifiante, agréée, reconnue officiellement, obligatoire ou qu'elle délivre un CACES (dont R486) : ces informations ne sont pas confirmées. Réponds alors : « Cette information doit être confirmée auprès de l'équipe Wisy Safety. »
-- Si une information n'est pas disponible, dis-le clairement, puis propose une page pertinente ou le contact Wisy Safety.
+- Si une information n'est pas disponible dans <knowledge>, réponds : « Je n'ai pas encore suffisamment d'informations pour répondre précisément à cette question. Vous pouvez contacter l'équipe Wisy Safety pour obtenir une réponse personnalisée. » puis propose le contact Wisy Safety ou une page pertinente.
+- Quand une entrée type=faq répond à la question, reprends sa réponse fidèlement (sans rien ajouter) et cite son url (faq.html#…) dans "sources".
 - Ne prétends jamais être un humain, ni qu'une personne est disponible en direct.
 - Ton : professionnel, rassurant, clair, concis, humain, jamais agressif commercialement. 1 à 3 courts paragraphes maximum.
 - Pour toute question hors sujet, recentre poliment vers Wisy Safety, les formations ou les informations du site.
@@ -234,7 +235,7 @@ Deno.serve(async (req: Request) => {
       try { parsed = JSON.parse(text.slice(first, last + 1)); } catch { parsed = null; }
     }
     const clean = parsed ? validateResponse(parsed) : { message: text.slice(0, 4000) };
-    if (!clean.message) clean.message = "Je n'ai pas trouvé cette information sur le site. Vous pouvez contacter Wisy Safety qui vous répondra précisément.";
+    if (!clean.message) clean.message = "Je n'ai pas encore suffisamment d'informations pour répondre précisément à cette question. Vous pouvez contacter l'équipe Wisy Safety pour obtenir une réponse personnalisée.";
     return json(clean, 200, origin);
   } catch (e) {
     clearTimeout(timer);

@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" href="assets/logo.png" type="image/png">
 <link rel="stylesheet" href="css/i18n.css">
+<link rel="stylesheet" href="css/site-header.css">
 <link rel="stylesheet" href="css/search.css">
 <link rel="stylesheet" href="css/assistant.css">
 <link rel="alternate" hreflang="fr" href="formations.html?lang=fr">
@@ -106,9 +107,6 @@ ul{margin:0;padding:0;list-style:none}button{font-family:inherit;cursor:pointer;
 .dropdown__tt{font-family:var(--font-titre);font-weight:600;font-size:.95rem;color:var(--noir-jais);line-height:1.2}
 .dropdown__ds{font-size:var(--fs-small);color:var(--granit);margin-top:.15rem;line-height:1.35;display:block}
 .header-actions{display:flex;align-items:center;gap:1rem;flex-shrink:0}
-.header-help{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;color:var(--epinette);flex-shrink:0;transition:background-color var(--t-fast) var(--ease),color var(--t-fast) var(--ease)}
-.header-help:hover,.header-help:focus-visible{background:var(--brume-14);color:var(--brume)}
-.header-help svg{width:24px;height:24px}
 .nav-toggle{display:none;width:46px;height:46px;border-radius:var(--radius-sm);align-items:center;justify-content:center;color:var(--epinette)}
 .nav-toggle svg{width:28px;height:28px}
 .m-scrim{position:fixed;inset:0;background:var(--jais-60);opacity:0;visibility:hidden;transition:opacity var(--t-fast) var(--ease);z-index:1100}
@@ -294,6 +292,7 @@ a.f-c-value:hover{color:var(--turquoise)}
   <div class="util-bar"><div class="util-inner">
     <span class="util-tag"><span class="dot"></span><span data-i18n="util.badge">Organisme de formation agréé · Anderlecht, Belgique</span></span>
     <div class="util-contacts">
+      <a class="util-help" href="faq.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg><span data-i18n="footer.faq">Centre d'aide</span></a>
       <a href="tel:+3223188659"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>+32 2 318 86 59</a>
       <a href="mailto:info@wisysafety.be"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>info@wisysafety.be</a>
     </div>
@@ -343,7 +342,8 @@ a.f-c-value:hover{color:var(--turquoise)}
         <a href="?lang=sl" data-lang-option="sl" role="menuitem">Slovenščina<span class="lc">SL</span></a>
       </div>
     </div>
-    <div class="header-actions"><a class="header-help" href="faq.html" data-i18n-attr="aria-label:footer.faq,title:footer.faq" aria-label="Centre d'aide" title="Centre d'aide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></a><a class="btn btn--outline" href="contact.html" data-i18n="header.contact">Contact</a><a class="btn btn--cta" href="inscription.html" data-i18n="header.register">S'inscrire</a></div>
+    <a class="header-help" href="faq.html" data-i18n-attr="aria-label:footer.faq,data-tip:footer.faq" aria-label="Centre d'aide" data-tip="Centre d'aide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></a>
+    <div class="header-actions"><a class="btn btn--outline" href="contact.html" data-i18n="header.contact">Contact</a><a class="btn btn--cta" href="inscription.html" data-i18n="header.register">S'inscrire</a></div>
     <button class="nav-toggle" data-i18n-attr="aria-label:aria.open_menu" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="m-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div></div>
 </header>
@@ -359,6 +359,7 @@ a.f-c-value:hover{color:var(--turquoise)}
       </ul></div></div></li>
     <li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="#" data-i18n="nav.agenda">Agenda</a></li><li><a href="avis.html" data-i18n="nav.avis">Avis</a></li>
   </ul>
+  <a class="m-help" href="faq.html"><span class="m-help__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span data-i18n="footer.faq">Centre d'aide</span><svg class="m-help__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
   <div class="m-actions"><a class="btn btn--outline" href="contact.html" data-i18n="header.contact">Contact</a><a class="btn btn--cta" href="inscription.html" data-i18n="header.register">S'inscrire</a></div>
   <div class="m-lang">
     <div class="lang-switch">
@@ -638,6 +639,8 @@ a.f-c-value:hover{color:var(--turquoise)}
 <script src="js/search.js"></script>
 
 <!-- Assistant Wisy (mascotte + assistant conversationnel) -->
+<script defer src="js/faq-data.js"></script>
+<script defer src="js/faq-search.js"></script>
 <script defer src="js/assistant/knowledge.js"></script>
 <script defer src="js/assistant/retrieval.js"></script>
 <script defer src="js/assistant/validation.js"></script>

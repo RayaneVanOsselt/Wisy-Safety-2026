@@ -17,10 +17,17 @@
    central js/trainings-data.js — une seule définition, partagée avec la
    recherche et le parcours d'inscription.
 
+   FAQ — la FAQ de l'assistant n'est PLUS définie ici : elle est DÉRIVÉE de la
+   source unique du Centre d'aide (js/faq-data.js + moteur js/faq-search.js).
+   La page faq.html et l'assistant ne peuvent donc pas se contredire. Coordonnées
+   de contact : même principe (FAQ.CONTACT), avec un repli minimal si le fichier
+   n'est pas chargé (un test vérifie que les deux ne dérivent pas).
+
    Module « dual-mode » : s'expose comme `window.WisyAssistant.Knowledge`
    dans le navigateur ET comme `module.exports` sous Node (pour les tests),
-   sans build. Dépend de `window.WisyTrainings` (js/trainings-data.js, à
-   charger AVANT ce fichier).
+   sans build. Dépend de `window.WisyTrainings` (js/trainings-data.js) et de
+   `window.WisyFAQ` (js/faq-data.js puis js/faq-search.js), à charger AVANT ce
+   fichier. Sans FAQ chargée, l'assistant reste fonctionnel (sans réponses FAQ).
 
    Mise à jour : les URLs, ancres et clés i18n reflètent les fichiers du
    dépôt. Pour ajouter une formation, dupliquer une entrée `formation` et
@@ -29,14 +36,14 @@
    ========================================================================= */
 (function (root, factory) {
   "use strict";
-  var Trainings = (typeof module === "object" && module.exports)
-    ? require("../trainings-data.js")
-    : root.WisyTrainings;
-  var api = factory(Trainings);
-  if (typeof module === "object" && module.exports) module.exports = api;
+  var isNode = (typeof module === "object" && module.exports);
+  var Trainings = isNode ? require("../trainings-data.js") : root.WisyTrainings;
+  var Faq = isNode ? require("../faq-search.js") : root.WisyFAQ;
+  var api = factory(Trainings, Faq);
+  if (isNode) module.exports = api;
   root.WisyAssistant = root.WisyAssistant || {};
   root.WisyAssistant.Knowledge = api;
-})(typeof self !== "undefined" ? self : this, function (Trainings) {
+})(typeof self !== "undefined" ? self : this, function (Trainings, Faq) {
   "use strict";
 
   /* Date de dernière vérification du contenu face au site (ISO, statique
@@ -46,7 +53,8 @@
   /* --------------------------------------------------------------------- */
   /* Coordonnées réelles (contact.html, en-tête, pied de page)             */
   /* --------------------------------------------------------------------- */
-  var CONTACT = {
+  var CONTACT = (Faq && Faq.CONTACT) ? Object.assign({}, Faq.CONTACT) : {
+    /* Repli minimal — utilisé UNIQUEMENT si js/faq-data.js n'est pas chargé. */
     company: "Wisy Safety",
     email: "info@wisysafety.be",
     phone: "+32 2 318 86 59",
@@ -54,8 +62,6 @@
     city: "Anderlecht",
     postalCode: "1070",
     region: "Bruxelles",
-    /* Horaires dérivés de la logique « statut temps réel » du pied de page
-       (SCH : lundi→jeudi 10:00–16:00, vendredi/week-end fermé). */
     hours: "Du lundi au jeudi, de 10h00 à 16h00",
     contactUrl: "contact.html"
   };
@@ -227,6 +233,12 @@
       titleKey: "search.page_inscription_t", descKey: "search.page_inscription_d",
       content: "Formulaire d'inscription en ligne aux formations Wisy Safety.",
       keywords: ["inscription", "inscrire", "register", "enroll", "signup", "s'inscrire", "reserver"]
+    },
+    {
+      id: "page-faq", type: "page", title: "Centre d'aide", url: "faq.html",
+      titleKey: "footer.faq",
+      content: "Centre d'aide Wisy Safety : questions fréquentes sur les formations, l'inscription, les tarifs et les attestations.",
+      keywords: ["aide", "faq", "questions", "centre d'aide", "assistance", "support", "help", "helpcentrum"]
     }
   ];
 
@@ -246,65 +258,27 @@
   };
 
   /* --------------------------------------------------------------------- */
-  /* FAQ — UNIQUEMENT des faits présents sur le site.                       */
-  /* Les questions dont la réponse n'est pas sur le site (prix, dates,      */
-  /* modalités précises) sont volontairement absentes : l'assistant renvoie */
-  /* alors vers le contact plutôt que d'inventer.                           */
+  /* FAQ — DÉRIVÉE de la source unique du Centre d'aide (js/faq-data.js).   */
+  /* Aucune réponse n'est écrite ici : modifier js/faq-data.js suffit.      */
   /* --------------------------------------------------------------------- */
-  var FAQ = [
-    {
-      id: "faq-deroulement",
-      type: "faq",
-      title: "Comment se déroule une formation ?",
-      url: "formations.html",
-      question: "Comment se déroule une formation ?",
-      answer: "Nos formations durent de 1 à 3 jours selon le programme, sont animées par des formateurs experts et alternent théorie et pratique. La plupart débouchent sur une certification reconnue. Pour les dates précises et l'organisation, le mieux est de nous contacter.",
-      content: "Déroulement d'une formation : durée de 1 à 3 jours, formateurs experts, théorie et pratique, certification reconnue, organisation déroulement comment ça se passe.",
-      keywords: ["deroulement", "déroule", "passe", "comment", "organisation", "duree", "durée", "jours", "pratique", "theorie", "certification", "format"]
-    },
-    {
-      id: "faq-inscription",
-      type: "faq",
-      title: "Comment s'inscrire à une formation ?",
-      url: "inscription.html",
-      question: "Comment s'inscrire à une formation ?",
-      answer: "Vous pouvez vous inscrire directement en ligne depuis la page Inscription, ou nous contacter si vous préférez être accompagné dans votre choix.",
-      content: "Inscription : formulaire en ligne sur la page inscription, ou par contact. S'inscrire réserver une place.",
-      keywords: ["inscription", "inscrire", "s'inscrire", "reserver", "réserver", "place", "reservation", "enroll", "formulaire"]
-    },
-    {
-      id: "faq-lieu",
-      type: "faq",
-      title: "Où se situe Wisy Safety ?",
-      url: "contact.html",
-      question: "Où se situe le centre de formation ?",
-      answer: "Wisy Safety est un centre de formation à la sécurité situé à Anderlecht (1070), à Bruxelles. Pour l'organisation d'une formation ou une intervention sur site, contactez-nous.",
-      content: "Localisation : Anderlecht 1070 Bruxelles. Où se trouve le centre lieu adresse situé.",
-      keywords: ["lieu", "ou", "où", "adresse", "situe", "située", "anderlecht", "bruxelles", "localisation", "centre", "endroit"]
-    },
-    {
-      id: "faq-tarifs",
-      type: "faq",
-      title: "Quels sont les tarifs ?",
-      url: "contact.html",
-      question: "Quels sont les tarifs des formations ?",
-      /* Le site n'affiche PAS de prix : réponse honnête + renvoi contact. */
-      answer: "Les tarifs ne sont pas indiqués sur le site : ils dépendent de la formation et du contexte (individuel ou entreprise). Contactez-nous et nous vous transmettrons un tarif adapté à votre besoin.",
-      content: "Tarifs prix coût combien devis budget : information non disponible sur le site, contacter Wisy Safety.",
-      keywords: ["tarif", "tarifs", "prix", "cout", "coût", "combien", "devis", "budget", "euro", "euros", "cher", "gratuit", "financement"],
-      unavailableOnSite: true
-    },
-    {
-      id: "faq-contact",
-      type: "faq",
-      title: "Comment contacter Wisy Safety ?",
-      url: "contact.html",
-      question: "Comment vous contacter ?",
-      answer: "Vous pouvez nous joindre par téléphone au " + CONTACT.phone + ", par e-mail à " + CONTACT.email + ", ou via le formulaire de la page Contact. " + CONTACT.hours + ".",
-      content: "Contact téléphone email formulaire horaires. " + CONTACT.hours + ". Joindre appeler écrire.",
-      keywords: ["contact", "contacter", "joindre", "telephone", "téléphone", "appeler", "email", "mail", "ecrire", "horaires", "ouvert", "disponible"]
-    }
-  ];
+  function faqEntries() {
+    if (!Faq || !Faq.items) return [];
+    return Faq.items().map(function (it) {
+      return {
+        id: it.id,
+        type: "faq",
+        title: it.question,
+        url: "faq.html#" + it.id,
+        question: it.question,
+        answer: Faq.plainAnswer(it),
+        content: it.question + " " + String(it.answer).replace(/\s+/g, " "),
+        keywords: (it.keywords || []).concat(it.synonyms || []),
+        action: it.action || null,
+        relatedQuestions: (it.relatedQuestions || []).slice(),
+        provisional: it.provisional === true
+      };
+    });
+  }
 
   /* --------------------------------------------------------------------- */
   /* Index unifié + helpers                                                 */
@@ -337,7 +311,7 @@
       .concat(FORMATIONS)
       .concat(PAGES)
       .concat([CONTACT_ENTRY])
-      .concat(FAQ);
+      .concat(faqEntries());
     return list.map(function (e) {
       var copy = Object.assign({}, e);
       if (!copy.updatedAt) copy.updatedAt = VERIFIED_AT;
@@ -348,7 +322,7 @@
 
   function formations() { return FORMATIONS.slice(); }
   function pages() { return PAGES.slice(); }
-  function faq() { return FAQ.slice(); }
+  function faq() { return faqEntries(); }
 
   function byId(id) {
     var found = null;
@@ -364,6 +338,7 @@
     VERIFIED_AT: VERIFIED_AT,
     CONTACT: CONTACT,
     CATEGORIES: CATEGORIES,
+    Faq: Faq,
     all: all,
     formations: formations,
     pages: pages,

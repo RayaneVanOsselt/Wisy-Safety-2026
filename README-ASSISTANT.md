@@ -64,7 +64,7 @@ README-ASSISTANT.md                   Ce document
 
 ## 4. Base de connaissances — génération & mise à jour
 
-- Éditer **`js/assistant/knowledge.js`** (formations, pages, FAQ, contact).
+- Éditer **`js/assistant/knowledge.js`** (formations, pages). La **FAQ** et les **coordonnées** ne s'y éditent plus : voir §4 ter.
   Chaque entrée suit le schéma `{ id, title, url, type, content, updatedAt, … }`.
   Les formations réutilisent les **clés i18n existantes** (`dd.*`, `fo.*`) pour
   l'affichage multilingue ; les URLs pointent vers les **routes réelles**
@@ -72,8 +72,9 @@ README-ASSISTANT.md                   Ce document
 - Pour ajouter une formation : dupliquer une entrée `formation`, renseigner
   ses champs. L'assistant et sa recherche la prennent en compte
   automatiquement.
-- Si l'Edge Function IA est utilisée, répercuter la même donnée dans
-  **`supabase/functions/chat/knowledge.ts`** (miroir).
+- Si l'Edge Function IA est utilisée, répercuter les formations/pages dans
+  **`supabase/functions/chat/knowledge.ts`** (miroir). La FAQ, elle, est
+  **générée automatiquement** (§4 ter).
 
 ### 4 bis. Formations à page dédiée — registre central
 
@@ -95,6 +96,32 @@ doit être chargé **avant** `knowledge.js` (déjà fait sur les 6 pages).
   restent « non indiqué » (aucun chiffre inventé).
 - Le miroir serveur (`knowledge.ts`) reste une copie : `tests/trainings.test.js`
   échoue si elle diverge du registre.
+
+### 4 ter. FAQ — UNE SEULE source de vérité (Centre d'aide ⇄ assistant)
+
+Avant, la FAQ existait **trois fois** (page `faq.html`, mini-FAQ de `knowledge.js`,
+copie de l'Edge Function) et les réponses **se contredisaient** (ex. « les tarifs ne
+sont pas indiqués sur le site » vs « une partie des tarifs est indiquée à
+l'inscription »). Désormais :
+
+| Fichier | Rôle |
+|---------|------|
+| `js/faq-data.js` | **La** source : catégories, questions/réponses, mots-clés, synonymes, questions liées, actions, coordonnées. |
+| `js/faq-search.js` | Moteur de recherche **partagé** (normalisation, synonymes, score, confiance, surlignage). |
+| `js/assistant/knowledge.js` | Dérive sa FAQ et ses coordonnées de la source unique (aucune copie). |
+| `js/assistant/responder.js` | Réponse FAQ + **questions liées** (chips) + **action** (carte) + lien « Voir dans le Centre d'aide ». |
+| `supabase/functions/chat/faq.generated.ts` | Copie **générée** pour l'IA : `node scripts/sync-faq-edge.js`. |
+
+- `faq-data.js` puis `faq-search.js` sont chargés en `defer` **avant** `knowledge.js`
+  sur les 7 pages.
+- Quand aucune réponse **fiable** n'existe (confiance faible), l'assistant répond :
+  « Je n'ai pas encore suffisamment d'informations pour répondre précisément à cette
+  question. Vous pouvez contacter l'équipe Wisy Safety pour obtenir une réponse
+  personnalisée. » — jamais d'invention.
+- API de la page : `WisyAssistant.controller.ask("…")` ouvre l'assistant **et** envoie
+  la question (utilisé par le Centre d'aide : bloc « Posez votre question », état
+  « aucun résultat », rangée « Poser ma question »).
+- Détails, édition du contenu et garde-fous : **`README-FAQ.md`**.
 
 ---
 
@@ -137,7 +164,10 @@ durée réelle, contact, **anti prompt-injection**, formation inexistante,
 contexte de page), validation (allow-list d'URLs, structure) et — pour la
 formation Nacelles — tarif, langues, format, public, types, **refus d'affirmer
 CACES/certification**, cohérence page ↔ registre ↔ miroir serveur ↔ inscription
-↔ recherche, et intégrité i18n (`tests/trainings.test.js`).
+↔ recherche, et intégrité i18n (`tests/trainings.test.js`). Le Centre d'aide ajoute
+`faq.test.js` (intégrité + véracité), `faq-search.test.js` (moteur),
+`assistant-faq.test.js` (**parité FAQ ⇄ assistant**, refus honnête),
+`header.test.js` (accès « Centre d'aide » sur les 7 pages) et `edge-sync.test.js`.
 
 **Test manuel** — ouvrir le panneau et essayer :
 « Quelles formations proposez-vous ? », « Je cherche une formation sur la fibre

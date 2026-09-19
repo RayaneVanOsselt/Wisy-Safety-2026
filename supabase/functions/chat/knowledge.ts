@@ -7,7 +7,14 @@
 // Les faits de la formation « Nacelles élévatrices » proviennent du registre
 // js/trainings-data.js ; tests/trainings.test.js vérifie que cette copie ne dérive pas.
 // Ces données sont la SEULE source factuelle : le modèle ne doit rien ajouter.
+//
+// FAQ : PLUS de copie manuelle. Les questions/réponses viennent de la SOURCE UNIQUE du
+// Centre d'aide (js/faq-data.js) via `faq.generated.ts`, régénéré par
+// `node scripts/sync-faq-edge.js` (tests/edge-sync.test.js échoue s'il dérive) :
+// le site, l'assistant local et l'assistant IA disent donc exactement la même chose.
 // =========================================================================
+
+import { FAQ_ITEMS } from "./faq.generated.ts";
 
 export interface Entry {
   id: string;
@@ -90,6 +97,9 @@ export const PAGES: Entry[] = [
   { id: "page-avis", type: "page", title: "Avis clients", url: "avis.html",
     content: "Avis et témoignages des participants aux formations.",
     keywords: ["avis", "temoignages", "reviews", "retours"] },
+  { id: "page-faq", type: "page", title: "Centre d'aide", url: "faq.html",
+    content: "Centre d'aide Wisy Safety : questions fréquentes sur les formations, l'inscription, les tarifs et les attestations.",
+    keywords: ["aide", "faq", "questions", "assistance", "support"] },
 ];
 
 export const CONTACT_ENTRY: Entry = {
@@ -98,23 +108,21 @@ export const CONTACT_ENTRY: Entry = {
   keywords: ["contact", "telephone", "appeler", "email", "adresse", "horaires", "humain", "conseiller"],
 };
 
-export const FAQ: Entry[] = [
-  { id: "faq-deroulement", type: "faq", title: "Comment se déroule une formation ?", url: "formations.html",
-    content: "Les formations durent de 1 à 3 jours, sont animées par des formateurs experts, alternent théorie et pratique et débouchent le plus souvent sur une certification reconnue. Pour les dates précises, contacter Wisy Safety.",
-    keywords: ["deroulement", "deroule", "passe", "organisation", "duree", "pratique"] },
-  { id: "faq-tarifs", type: "faq", title: "Tarifs", url: "contact.html",
-    content: "Seul le tarif de la formation Nacelles élévatrices est confirmé : 350 € HT (hors TVA). Pour toutes les AUTRES formations, le tarif n'est PAS confirmé ici : inviter à contacter Wisy Safety pour un tarif adapté. NE JAMAIS inventer de prix.",
-    keywords: ["tarif", "prix", "cout", "combien", "devis", "budget"] },
-  { id: "faq-lieu", type: "faq", title: "Localisation", url: "contact.html",
-    content: "Centre de formation à la sécurité situé à Anderlecht (1070), Bruxelles.",
-    keywords: ["lieu", "ou", "adresse", "anderlecht", "bruxelles", "situe"] },
-];
+// FAQ — dérivée de la source unique (voir en-tête). Aucune réponse n'est écrite ici.
+export const FAQ: Entry[] = FAQ_ITEMS.map((f) => ({
+  id: f.id,
+  type: "faq" as const,
+  title: f.question,
+  url: `faq.html#${f.id}`,
+  content: f.answer.replace(/\s+/g, " "),
+  keywords: [...f.keywords, ...f.synonyms],
+}));
 
 export const ALL: Entry[] = [...FORMATIONS, ...PAGES, CONTACT_ENTRY, ...FAQ];
 
 // Toutes les URLs légitimes (allow-list pour la validation des réponses).
 export const ALLOWED_URLS = new Set<string>([
-  "index.html", "formations.html", "contact.html", "avis.html", "inscription.html",
+  "index.html", "formations.html", "contact.html", "avis.html", "inscription.html", "faq.html",
   ...FORMATIONS.map((f) => f.url),
   ...FORMATIONS.map((f) => f.signupUrl!).filter(Boolean),
   `mailto:${CONTACT.email}`, CONTACT.phoneHref,

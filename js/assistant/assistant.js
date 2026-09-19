@@ -10,6 +10,10 @@
      window.WISY_ASSISTANT_CONFIG.apiUrl (ou WISY_CONFIG.ASSISTANT_API_URL)
      est défini. En cas d'échec/timeout → repli automatique sur le cœur local.
 
+   API publique (window.WisyAssistant.controller) : open, close, submit, ask(texte)
+   — `ask` ouvre l'assistant ET envoie la question (utilisé par le Centre d'aide) —,
+   newConversation, isOpen.
+
    Accessibilité : launcher = vrai <button> nommé ; panneau role="dialog"
    NON modal (n'enferme pas la page) ; Escape ferme ; focus géré et restauré ;
    annonces polies via aria-live. Respect de prefers-reduced-motion (CSS).
@@ -72,7 +76,9 @@
     mail:     '<rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3 6 9 6 9-6"/>',
     pin:      '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6"/>',
     training: '<path d="M22 9 12 4 2 9l10 5 10-5z"/><path d="M6 11.5V16c0 1.4 2.7 3 6 3s6-1.6 6-3v-4.5"/>',
-    page:     '<path d="M6 2h8l4 4v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M14 2v5h5"/>'
+    page:     '<path d="M6 2h8l4 4v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M14 2v5h5"/>',
+    info:     '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6h.01"/>',
+    book:     '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 5.5v16M8.5 8h7"/>'
   };
 
   /* ------------------------------------------------------------------ */
@@ -130,6 +136,7 @@
     else if (path === "contact.html") page = "contact";
     else if (path === "inscription.html") page = "inscription";
     else if (path === "avis.html") page = "avis";
+    else if (path === "faq.html") page = "faq";
 
     var fid = null;
     var hash = (location.hash || "").replace(/^#/, "");
@@ -193,6 +200,7 @@
 
   /* --- Micro-bulle d'accueil (première visite uniquement) ----------- */
   function maybeShowNudge() {
+    if (detectContext().page === "faq") return; // le Centre d'aide présente déjà l'assistant
     var seen;
     try { seen = localStorage.getItem(NUDGE_KEY); } catch (e) { seen = "1"; /* si bloqué, ne pas insister */ }
     if (seen) return;
@@ -236,14 +244,13 @@
     var header = el("div", { class: "wa-header" }, [
       el("span", { class: "wa-header__badge", "aria-hidden": "true" }, el("span", { html: Mascot.svg({ id: "header" }) })),
       el("div", { class: "wa-header__titles" }, [
-        el("p", { class: "wa-header__title", id: titleId, text: t("assistant.header_title", "Assistant Wisy") }),
+        el("p", { class: "wa-header__title", id: titleId, text: t("assistant.header_title", "Assistant Wisy Safety") }),
         el("p", { class: "wa-header__subtitle" }, [
           el("span", { class: "wa-status-dot", "aria-hidden": "true" }),
-          el("span", { text: t("assistant.header_subtitle", "Votre guide formation") + " · " + t("assistant.status", "Assistant disponible") })
+          el("span", { text: t("assistant.status", "Assistant disponible") })
         ])
       ]),
       el("div", { class: "wa-header__actions" }, [
-        el("button", { type: "button", class: "wa-iconbtn wa-min", "aria-label": t("assistant.minimize", "Réduire l’assistant"), html: icon(IC.minimize) }),
         el("button", { type: "button", class: "wa-iconbtn wa-close", "aria-label": t("assistant.close", "Fermer l’assistant"), html: icon(IC.close) })
       ])
     ]);
@@ -271,14 +278,13 @@
     ]);
 
     App.panel = el("div", {
-      class: "wa-panel", role: "dialog", "aria-labelledby": titleId, "aria-label": t("assistant.header_title", "Assistant Wisy"), tabindex: "-1"
+      class: "wa-panel", role: "dialog", "aria-labelledby": titleId, tabindex: "-1"
     }, [header, App.body, composer]);
 
     App.root.appendChild(App.panel);
 
     // Événements
     header.querySelector(".wa-close").addEventListener("click", close);
-    header.querySelector(".wa-min").addEventListener("click", close);
     composer.querySelector(".wa-newchat").addEventListener("click", newConversation);
     App.sendBtn.addEventListener("click", onSend);
     App.input.addEventListener("input", onInput);
@@ -312,6 +318,7 @@
     }, reduceMotion ? 0 : 120);
 
     scrollToEnd();
+    watchViewport(true);
     track("chat_opened", { page: App.context.page });
   }
 
@@ -321,6 +328,7 @@
     App.root.classList.remove("is-open");
     App.launcher.setAttribute("aria-expanded", "false");
     document.removeEventListener("keydown", onDocKeydown, true);
+    watchViewport(false);
     scheduleCompact();
     // Restaure le focus vers le launcher
     var target = App.launcher;
@@ -341,7 +349,8 @@
   function renderWelcome() {
     var w = Responder.welcome(App.context || detectContext());
     var wrap = el("div", { class: "wa-welcome" }, [
-      el("p", { class: "wa-welcome__hi", text: w.message })
+      el("p", { class: "wa-welcome__hi", text: w.message }),
+      el("p", { class: "wa-note" }, [iconSpan("info", 15), el("span", { text: t("assistant.role_note", "Je réponds à partir des informations publiées sur ce site. Pour une situation particulière, notre équipe vous répond directement.") })])
     ]);
     if (w.suggestions && w.suggestions.length) {
       wrap.appendChild(el("div", { class: "wa-chips" }, w.suggestions.map(makeChip)));
@@ -377,9 +386,15 @@
       resp.cards.forEach(function (c) { var node = renderCard(c); if (node) cards.appendChild(node); });
       if (cards.childNodes.length) turn.appendChild(cards);
     }
+    /* Réponse issue du Centre d'aide : lien vers la même réponse sur la page (source unique). */
+    var faqSrc = resp.meta && resp.meta.faqId && resp.sources && resp.sources[0];
+    if (faqSrc && /^faq\.html#/.test(faqSrc.url)) {
+      turn.appendChild(el("a", { class: "wa-source", href: faqSrc.url }, [iconSpan("book", 14), el("span", { text: t("assistant.see_help_center", "Voir dans le Centre d’aide") })]));
+    }
     if (resp.suggestions && resp.suggestions.length) {
+      var related = !!(resp.meta && resp.meta.faqId);
       var fu = el("div", { class: "wa-followups" }, [
-        el("span", { class: "wa-followups__label", text: t("assistant.followups_label", "Vous pouvez aussi demander :") }),
+        el("span", { class: "wa-followups__label", text: related ? t("assistant.related_label", "Questions associées\u00a0:") : t("assistant.followups_label", "Vous pouvez aussi demander\u00a0:") }),
         el("div", { class: "wa-chips" }, resp.suggestions.map(makeChip))
       ]);
       turn.appendChild(fu);
@@ -468,7 +483,7 @@
 
   function showError(retryText) {
     var box = el("div", { class: "wa-error", role: "alert" });
-    box.appendChild(el("strong", { text: t("assistant.header_title", "Assistant Wisy") + " — " }));
+    box.appendChild(el("strong", { text: t("assistant.header_title", "Assistant Wisy Safety") + " — " }));
     box.appendChild(document.createTextNode(t("assistant.error", "Une difficulté technique empêche momentanément l’assistant de répondre. Vous pouvez réessayer ou contacter directement Wisy Safety.")));
     var actions = el("div", { class: "wa-chips", style: "margin-top:8px" }, [
       (function () { var b = el("button", { type: "button", class: "wa-chip", text: t("assistant.retry", "Réessayer") }); b.addEventListener("click", function () { submit(retryText); }); return b; })()
@@ -578,6 +593,47 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* ask(texte) : ouvre l'assistant ET envoie la question (Centre d'aide) */
+  /* ------------------------------------------------------------------ */
+  function ask(text) {
+    var msg = String(text == null ? "" : text).trim();
+    open();
+    if (!msg) return;
+    if (App.busy) return; // une réponse est déjà en cours : on n'empile pas
+    // laisse le panneau finir d'apparaître avant d'ajouter la question
+    setTimeout(function () { submit(msg); }, reduceMotion ? 0 : 140);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Mobile : suit le clavier virtuel (visualViewport) pour que la zone   */
+  /* de saisie ne soit jamais masquée ni hors de l'écran.                */
+  /* ------------------------------------------------------------------ */
+  var vvHandler = null;
+  function watchViewport(on) {
+    var vv = window.visualViewport;
+    if (!vv || !App.panel) return;
+    if (!on) {
+      if (vvHandler) { vv.removeEventListener("resize", vvHandler); vv.removeEventListener("scroll", vvHandler); vvHandler = null; }
+      App.panel.style.removeProperty("--wa-kb");
+      App.panel.style.removeProperty("--wa-vvh");
+      return;
+    }
+    if (vvHandler) return;
+    vvHandler = function () {
+      if (!App.isOpen) return;
+      if (!window.matchMedia("(max-width: 560px)").matches) {
+        App.panel.style.removeProperty("--wa-kb"); App.panel.style.removeProperty("--wa-vvh"); return;
+      }
+      var kb = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
+      App.panel.style.setProperty("--wa-kb", kb + "px");
+      App.panel.style.setProperty("--wa-vvh", Math.round(vv.height) + "px");
+    };
+    vv.addEventListener("resize", vvHandler);
+    vv.addEventListener("scroll", vvHandler);
+    vvHandler();
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Nouvelle conversation                                               */
   /* ------------------------------------------------------------------ */
   function newConversation() {
@@ -609,7 +665,7 @@
     // Le panneau se retraduit à la prochaine ouverture / nouvelle conversation.
     if (App.panelBuilt && App.isOpen) {
       // rafraîchit les libellés statiques visibles
-      var title = App.panel.querySelector(".wa-header__title"); if (title) title.textContent = t("assistant.header_title", "Assistant Wisy");
+      var title = App.panel.querySelector(".wa-header__title"); if (title) title.textContent = t("assistant.header_title", "Assistant Wisy Safety");
       if (App.input) App.input.setAttribute("placeholder", t("assistant.placeholder", "Posez votre question…"));
     }
   }
@@ -620,6 +676,7 @@
   function init() {
     if (document.getElementById("wisy-assistant")) return;
     buildRoot();
+    document.body.classList.add("has-wisy-assistant"); // laisse la place au launcher (pied de page)
     document.addEventListener("i18n:changed", relabel);
     // Préconstruit le panneau à l'inactivité (perf : n'impacte pas le 1er rendu)
     var pre = function () { try { buildPanel(); } catch (e) {} };
@@ -628,7 +685,7 @@
 
     // API de test / intégration
     NS.controller = {
-      open: open, close: close, submit: submit, newConversation: newConversation,
+      open: open, close: close, submit: submit, ask: ask, newConversation: newConversation,
       isOpen: function () { return App.isOpen; }
     };
   }

@@ -22,11 +22,12 @@ test("« Je cherche une formation sur la fibre optique » → carte fibre-optiqu
   assert.equal(r.cards[0].id, "fibre-optique");
 });
 
-test("« Combien coûte cette formation ? » → PRIX NON INVENTÉ + contact", () => {
+test("« Combien coûte cette formation ? » → PRIX NON INVENTÉ + contact (texte de la FAQ)", () => {
   const r = Responder.respond("Combien coûte la formation VCA de base ?");
   assert.equal(r.meta.intent, "price_unavailable");
   assert.ok(hasCardType(r, "contact"));
-  assert.match(r.message.toLowerCase(), /ne sont pas indiqu/);
+  assert.match(r.message.toLowerCase(), /les tarifs varient selon la formation/);
+  assert.match(r.message.toLowerCase(), /contactez-nous/);
   assert.ok(!/\d+\s?€/.test(r.message), "aucun prix chiffré inventé");
 });
 

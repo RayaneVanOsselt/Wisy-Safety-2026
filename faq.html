@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wisy Safety — Accueil</title>
-<meta name="description" content="Wisy Safety, centre de formation à la sécurité à Anderlecht : VCA, PEB, coordination, premiers secours. La sécurité comme une référence.">
+<title>Wisy Safety — Centre d'aide &amp; FAQ</title>
+<meta name="description" content="Centre d'aide Wisy Safety : trouvez en quelques secondes une réponse sur le choix d'une formation, l'inscription, les prérequis, le déroulement, les attestations et l'organisation en entreprise.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -12,19 +12,19 @@
 <link rel="stylesheet" href="css/i18n.css">
 <link rel="stylesheet" href="css/search.css">
 <link rel="stylesheet" href="css/assistant.css">
-<link rel="alternate" hreflang="fr" href="index.html?lang=fr">
-<link rel="alternate" hreflang="en" href="index.html?lang=en">
-<link rel="alternate" hreflang="nl" href="index.html?lang=nl">
-<link rel="alternate" hreflang="af" href="index.html?lang=af">
-<link rel="alternate" hreflang="ar" href="index.html?lang=ar">
-<link rel="alternate" hreflang="bg" href="index.html?lang=bg">
-<link rel="alternate" hreflang="de" href="index.html?lang=de">
-<link rel="alternate" hreflang="ro" href="index.html?lang=ro">
-<link rel="alternate" hreflang="it" href="index.html?lang=it">
-<link rel="alternate" hreflang="sl" href="index.html?lang=sl">
-<link rel="alternate" hreflang="x-default" href="index.html">
+<link rel="alternate" hreflang="fr" href="faq.html?lang=fr">
+<link rel="alternate" hreflang="en" href="faq.html?lang=en">
+<link rel="alternate" hreflang="nl" href="faq.html?lang=nl">
+<link rel="alternate" hreflang="af" href="faq.html?lang=af">
+<link rel="alternate" hreflang="ar" href="faq.html?lang=ar">
+<link rel="alternate" hreflang="bg" href="faq.html?lang=bg">
+<link rel="alternate" hreflang="de" href="faq.html?lang=de">
+<link rel="alternate" hreflang="ro" href="faq.html?lang=ro">
+<link rel="alternate" hreflang="it" href="faq.html?lang=it">
+<link rel="alternate" hreflang="sl" href="faq.html?lang=sl">
+<link rel="alternate" hreflang="x-default" href="faq.html">
 <style>
-/* ==================== TOKENS ==================== */
+/* ==================== TOKENS (partagés — cohérence avec tout le site) ==================== */
 :root{
   --epinette:#1F6F64;--sarcelle:#2F7D8C;--turquoise:#48D6C2;--brume:#3FA69B;
   --creme:#F4FAF9;--granit:#5E6D6A;--noir-jais:#1B2D28;--granit-clair:#9AA8A4;
@@ -52,6 +52,7 @@ p{margin:0 0 1rem}a{color:inherit;text-decoration:none}img{max-width:100%;displa
 ul{margin:0;padding:0;list-style:none}button{font-family:inherit;cursor:pointer;border:none;background:none}
 :focus-visible{outline:3px solid var(--brume);outline-offset:2px;border-radius:4px}
 .container{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad-x)}
+.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
 /* ==================== BOUTONS ==================== */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:48px;font-family:var(--font-titre);font-weight:600;font-size:.98rem;line-height:1.2;padding:.875rem 1.5rem;border-radius:var(--radius-btn);white-space:nowrap;
@@ -67,7 +68,7 @@ ul{margin:0;padding:0;list-style:none}button{font-family:inherit;cursor:pointer;
 .btn__arrow{display:inline-block;font-size:1.05em;line-height:1;transition:transform var(--motion-base) var(--ease-premium)}
 .btn:hover .btn__arrow,.btn:focus-visible .btn__arrow{transform:translateX(4px)}
 
-/* ==================== HEADER (validé) ==================== */
+/* ==================== HEADER (validé — identique aux autres pages) ==================== */
 .site-header{position:sticky;top:0;z-index:1000}
 .util-bar{background:var(--noir-jais);color:var(--granit-clair);font-size:var(--fs-small);max-height:52px;overflow:hidden;transition:max-height var(--t-med) var(--ease),opacity var(--t-fast) var(--ease)}
 .util-inner{max-width:var(--maxw);margin-inline:auto;padding:.65rem var(--pad-x);display:flex;align-items:center;justify-content:space-between;gap:1rem}
@@ -128,142 +129,15 @@ ul{margin:0;padding:0;list-style:none}button{font-family:inherit;cursor:pointer;
 .m-actions{margin-top:auto;padding-top:1.5rem;display:flex;flex-direction:column;gap:.75rem}
 .m-actions .btn{width:100%}
 
-/* ==================== HERO VIDÉO ==================== */
-.hero{position:relative;min-height:min(88vh,760px);display:flex;align-items:center;overflow:hidden;background:var(--noir-jais)}
-.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-/* Overlay dégradé charte (Épinette -> Noir de jais), pas d'animation coûteuse */
-.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(140deg,rgba(31,111,100,.62) 0%,rgba(27,45,40,.72) 100%)}
-.hero-inner{position:relative;z-index:2;width:100%;max-width:var(--maxw);margin-inline:auto;padding:clamp(3rem,8vh,6rem) var(--pad-x)}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--font-titre);font-size:var(--fs-micro);font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--turquoise);margin-bottom:1.1rem}
-.hero-eyebrow::before{content:"";width:26px;height:2px;background:var(--turquoise);border-radius:2px}
-.hero-title{font-size:clamp(2.4rem,6vw,4.6rem);color:var(--creme);max-width:16ch;margin:0 0 1.5rem;line-height:1.05}
-.hero-sub{color:rgba(244,250,249,.9);font-size:var(--fs-lead);max-width:52ch;margin:0 0 2.2rem}
-.hero-actions{display:flex;flex-wrap:wrap;gap:1rem}
-/* Entrée au chargement (transform/opacity uniquement) */
-.hero-anim{opacity:0;transform:translateY(20px);animation:heroIn .6s var(--ease-out) forwards}
-.hero-anim.d1{animation-delay:.05s}.hero-anim.d2{animation-delay:.15s}.hero-anim.d3{animation-delay:.25s}.hero-anim.d4{animation-delay:.35s}
-@keyframes heroIn{to{opacity:1;transform:none}}
-.scroll-cue{position:absolute;left:50%;bottom:22px;z-index:2;transform:translateX(-50%);color:rgba(244,250,249,.7);display:grid;place-items:center;gap:.35rem;font-size:var(--fs-micro);letter-spacing:.14em;text-transform:uppercase}
-.scroll-cue svg{width:22px;height:22px;animation:cue 2.2s var(--ease) infinite}
-@keyframes cue{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(5px);opacity:1}}
-
-/* ==================== PARTENAIRES (ruche hexagonale) ==================== */
-.hive-sec{padding:clamp(3.5rem,8vw,6rem) 0;background:var(--creme);position:relative;overflow:hidden;text-align:center;border-bottom:1px solid var(--granit-12)}
-.hive-sec .eyebrow{justify-content:center}
-.hive{--hex-w:clamp(56px,10vw,116px);display:flex;flex-direction:column;align-items:center;margin:1.5rem auto 0}
-.hive-row{display:flex;justify-content:center}
-.hive-row+.hive-row{margin-top:calc(var(--hex-w) * -0.24)}
-.hex{width:var(--hex-w);height:calc(var(--hex-w) * 1.1547);margin:0 4px;position:relative;
-  filter:drop-shadow(6px 6px 12px rgba(27,45,40,.12)) drop-shadow(-6px -6px 12px rgba(255,255,255,.92))}
-.hex__face{position:absolute;inset:0;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
-  background:linear-gradient(145deg,#ffffff,#e6eeec);display:grid;place-items:center}
-.hex img{width:56%;height:56%;object-fit:contain}
-.hex--logo img{mix-blend-mode:multiply}
-.hex--logo{transition:transform var(--t-fast) var(--ease-out),filter var(--t-fast) var(--ease);cursor:pointer}
-.hex--logo:hover{transform:translateY(-5px);filter:drop-shadow(4px 12px 18px rgba(27,45,40,.18)) drop-shadow(-4px -4px 10px rgba(255,255,255,.9))}
-.hex--hub{filter:drop-shadow(0 10px 24px var(--turquoise-glow)) drop-shadow(-4px -4px 10px rgba(255,255,255,.9))}
-.hex--hub .hex__face{background:linear-gradient(145deg,#ffffff,#e3f7f3)}
-.hex--hub img{mix-blend-mode:normal;width:62%;height:62%}
-.hive-badge{display:inline-flex;align-items:center;gap:.65rem;margin:2.25rem auto 1rem;padding:.8rem 2.1rem;border-radius:var(--radius-pill);
-  background:linear-gradient(135deg,var(--epinette),var(--sarcelle));color:var(--creme);
-  font-family:var(--font-titre);font-weight:700;font-size:clamp(1.25rem,2.6vw,1.7rem);box-shadow:0 16px 32px rgba(31,111,100,.28)}
-.hive-badge .dot{width:12px;height:12px;border-radius:50%;background:var(--turquoise);box-shadow:0 0 0 4px var(--turquoise-glow);flex-shrink:0}
-.hive-sub{color:var(--granit);font-size:var(--fs-lead);max-width:48ch;margin:0 auto}
-@media (prefers-reduced-motion:reduce){.hex--logo:hover{transform:none}}
-/* ==================== SECTIONS ==================== */
+/* ==================== SECTIONS GÉNÉRIQUES ==================== */
 .section{padding:clamp(3.5rem,8vw,6rem) 0}
-.section--alt{background:linear-gradient(160deg,#eef6f5 0%,var(--creme) 60%)}
 .eyebrow{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--font-titre);font-size:var(--fs-micro);font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--turquoise);margin-bottom:1rem}
 .eyebrow::before{content:"";width:26px;height:2px;background:var(--turquoise);border-radius:2px}
 .section__head{max-width:64ch;margin-bottom:2.5rem}
-.section__title{font-size:var(--fs-h2);max-width:22ch}
+.section__title{font-size:var(--fs-h2);max-width:24ch}
 .section__lead{font-size:var(--fs-lead);color:var(--granit)}
 
-/* ===== BENTO — présentation des chiffres (façon dashboard) ===== */
-.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem;grid-auto-rows:minmax(110px,auto);margin-top:2.5rem}
-.b-card{border-radius:var(--radius-lg);padding:1.5rem;position:relative;overflow:hidden;display:flex;flex-direction:column;transition:transform var(--t-fast) var(--ease-out),box-shadow var(--t-fast) var(--ease-out)}
-.b-card:hover{transform:translateY(-4px)}
-.b-white{background:#fff;border:1px solid var(--granit-12);box-shadow:var(--shadow-sm)}
-.b-white:hover{box-shadow:var(--shadow-card)}
-.b-dark{background:var(--epinette);color:var(--creme)}
-.b-dark2{background:var(--noir-jais);color:var(--creme)}
-.b-mint{background:linear-gradient(150deg,#d3f0e1,#c3ead6);color:var(--noir-jais)}
-.b-stats{grid-column:span 7;grid-row:span 2}
-.b-hero{grid-column:span 5;grid-row:span 2}
-.b-cert{grid-column:span 4}
-.b-prog{grid-column:span 4}
-.b-exp{grid-column:span 4}
-.b-list{grid-column:span 5;grid-row:span 2}
-.b-up{grid-column:span 3;grid-row:span 2}
-.b-act{grid-column:span 4;grid-row:span 2}
-.b-masked{font-family:var(--font-titre);letter-spacing:.15em;font-size:.8rem;opacity:.7}
-.b-circle{position:absolute;top:1.25rem;right:1.25rem;width:34px;height:34px;border-radius:50%;display:grid;place-items:center}
-.b-mint .b-circle{background:rgba(27,45,40,.1);color:var(--epinette)}
-.b-dark .b-circle,.b-dark2 .b-circle{background:rgba(244,250,249,.16);color:var(--creme)}
-.b-circle svg{width:18px;height:18px}
-.b-num{font-family:var(--font-titre);font-weight:700;font-size:clamp(2rem,4vw,3rem);line-height:1}
-.b-dark .b-num,.b-dark2 .b-num{color:var(--turquoise)}
-.b-label{font-size:var(--fs-small);color:var(--granit)}
-.b-dark .b-label,.b-dark2 .b-label{color:rgba(244,250,249,.75)}
-.b-mint .b-label{color:rgba(27,45,40,.6)}
-.b-title{font-family:var(--font-titre);font-weight:600;font-size:var(--fs-h3)}
-.b-stats__head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
-.b-legends{display:flex;gap:2.5rem;margin-top:1.25rem}
-.b-legend .k{display:inline-flex;align-items:center;gap:.5rem;font-size:var(--fs-small);color:var(--granit)}
-.b-legend .k::before{content:"";width:9px;height:9px;border-radius:50%}
-.b-legend.dark .k::before{background:var(--epinette)}
-.b-legend.mint .k::before{background:#7fd6b4}
-.b-legend .v{font-family:var(--font-titre);font-weight:700;font-size:1.5rem;color:var(--noir-jais);margin-top:.15rem}
-.b-bars{display:flex;align-items:flex-end;gap:8px;height:118px;flex:1}
-.b-bars .bar{flex:1;min-width:8px;border-radius:var(--radius-pill);background:var(--epinette);display:flex;flex-direction:column;justify-content:flex-start}
-.b-bars .bar>span{display:block;width:100%;background:#a9e3c9;border-radius:var(--radius-pill)}
-.b-pill{display:inline-flex;align-items:center;gap:.35rem;align-self:flex-start;background:rgba(27,45,40,.1);color:var(--noir-jais);font-family:var(--font-titre);font-weight:600;font-size:.8rem;padding:.35rem .8rem;border-radius:var(--radius-pill);margin-top:.85rem}
-.b-cert{padding:0}
-.b-cert__top{padding:1.35rem 1.5rem;flex:1;display:flex;flex-direction:column;gap:.4rem}
-.b-cert__foot{background:var(--epinette);color:var(--creme);padding:1rem 1.5rem}
-.b-cert__foot .b-num{color:var(--turquoise);font-size:1.9rem}
-.b-track{height:10px;border-radius:var(--radius-pill);background:rgba(244,250,249,.18);overflow:hidden;margin-top:.75rem}
-.b-track>span{display:block;height:100%;border-radius:var(--radius-pill);background:linear-gradient(90deg,#a9e3c9,var(--turquoise))}
-.b-row{display:flex;align-items:center;gap:.85rem;padding:.8rem 0;border-bottom:1px solid var(--granit-12)}
-.b-row:last-child{border-bottom:none}
-.b-row__ic{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;background:var(--brume-14);color:var(--epinette)}
-.b-row__ic svg{width:18px;height:18px}
-.b-row__t{font-family:var(--font-titre);font-weight:600;font-size:.95rem}
-.b-row__s{font-size:var(--fs-small);color:var(--granit)}
-.b-row__tag{margin-left:auto;font-family:var(--font-titre);font-weight:600;font-size:.75rem;color:var(--epinette);background:var(--brume-14);padding:.25rem .6rem;border-radius:var(--radius-pill)}
-.b-act{gap:.85rem;background:transparent;padding:0;box-shadow:none}
-.b-act:hover{transform:none}
-.b-btn{flex:1;display:flex;align-items:center;justify-content:space-between;gap:.5rem;font-family:var(--font-titre);font-weight:700;padding:1.1rem 1.35rem;border-radius:var(--radius);transition:transform var(--t-fast) var(--ease-out),box-shadow var(--t-fast) var(--ease-out)}
-.b-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
-.b-btn--mint{background:linear-gradient(150deg,#d3f0e1,#c3ead6);color:var(--noir-jais)}
-.b-btn--dark{background:var(--epinette);color:var(--creme)}
-.b-btn__ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:rgba(27,45,40,.12)}
-.b-btn--dark .b-btn__ic{background:rgba(244,250,249,.18)}
-.b-btn__ic svg{width:18px;height:18px}
-@media(max-width:980px){.bento{grid-template-columns:repeat(6,1fr)}.b-stats,.b-hero,.b-list{grid-column:span 6;grid-row:span 2}.b-cert,.b-prog,.b-exp{grid-column:span 3}.b-up,.b-act{grid-column:span 3;grid-row:span 2}}
-@media(max-width:600px){.bento{grid-template-columns:1fr;grid-auto-rows:auto}.bento>.b-card{grid-column:1/-1;grid-row:auto}.b-bars{height:88px}}
-
-/* Fiche établissement */
-.fiche-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,3.5rem);align-items:start;margin-top:2.5rem}
-.badge-loc{display:inline-flex;align-items:center;gap:.5rem;background:#e3eeec;color:var(--epinette);font-family:var(--font-titre);font-weight:600;font-size:var(--fs-small);padding:.4rem .9rem;border-radius:var(--radius-pill);margin-bottom:1rem}
-.badge-loc svg{width:16px;height:16px}
-.info-list{display:flex;flex-direction:column;gap:1.25rem}
-.info-item{display:flex;align-items:flex-start;gap:1rem}
-.info-item__ic{flex-shrink:0;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--brume-14);color:var(--epinette)}
-.info-item__ic svg{width:22px;height:22px}
-.info-item__label{font-size:var(--fs-micro);letter-spacing:.1em;text-transform:uppercase;color:var(--granit);margin-bottom:.15rem}
-.info-item__value{font-family:var(--font-titre);font-weight:600;color:var(--noir-jais)}
-.info-item__value span{display:block;font-family:var(--font-texte);font-weight:400;color:var(--granit);font-size:.92rem}
-.capacity{display:flex;align-items:center;gap:1rem;background:var(--noir-jais);color:var(--creme);border-radius:var(--radius);padding:1.1rem 1.4rem;margin-top:.5rem}
-.capacity__num{font-family:var(--font-titre);font-weight:700;font-size:2rem;color:var(--turquoise);line-height:1}
-.capacity__txt strong{display:block;font-family:var(--font-titre)}
-.capacity__txt span{font-size:var(--fs-small);color:var(--granit-clair)}
-.map-wrapper{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;border-radius:var(--radius);border:1px solid var(--granit-12);box-shadow:var(--shadow-sm)}
-.map-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
-.map-link{display:inline-flex;align-items:center;gap:.4rem;margin-top:1rem;font-family:var(--font-titre);font-weight:600;font-size:.92rem;color:var(--epinette);transition:gap var(--t-fast) var(--ease-out),color var(--t-fast) var(--ease)}
-.map-link:hover{color:var(--brume);gap:.65rem}
-
-/* ==================== FOOTER (validé) ==================== */
+/* ==================== FOOTER (validé — identique aux autres pages) ==================== */
 .site-footer{position:relative;overflow:hidden;background:var(--noir-jais);color:var(--creme);isolation:isolate}
 .site-footer::before,.site-footer::after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none}
 .site-footer::before{width:520px;height:520px;top:-160px;left:-120px;background:radial-gradient(circle,var(--epinette),transparent 68%)}
@@ -315,19 +189,183 @@ a.f-c-value:hover{color:var(--turquoise)}
 .reveal{opacity:0;transform:translateY(20px);transition:opacity var(--t-reveal) var(--ease-out),transform var(--t-reveal) var(--ease-out);transition-delay:var(--d,0s);will-change:opacity,transform}
 .reveal.in{opacity:1;transform:none}
 
-/* RESPONSIVE */
+/* =========================================================================
+   CENTRE D'AIDE (FAQ) — styles propres à la page
+   ========================================================================= */
+.faqc-skip{position:absolute;left:-9999px;top:0;z-index:2000;background:var(--epinette);color:var(--creme);padding:.7rem 1.1rem;border-radius:var(--radius-sm);font-family:var(--font-titre);font-weight:600}
+.faqc-skip:focus{left:1rem;top:1rem}
+.faqc-wrap{max-width:1120px;margin-inline:auto;padding-inline:var(--pad-x)}
+
+/* ---- HERO ---- */
+.faqc-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--epinette) 0%,var(--sarcelle) 100%);color:var(--creme);padding:clamp(2.75rem,6vw,4.5rem) 0 clamp(3rem,7vw,5rem)}
+.faqc-hero__inner{position:relative;z-index:2;max-width:760px;margin-inline:auto;text-align:center;padding-inline:var(--pad-x)}
+.faqc-hero .eyebrow{color:var(--turquoise);justify-content:center}
+.faqc-hero .eyebrow::before{background:var(--turquoise)}
+.faqc-hero__title{font-size:clamp(2rem,4.4vw,3.15rem);color:var(--creme);margin:0 0 1rem;line-height:1.08}
+.faqc-hero__lead{font-size:var(--fs-lead);color:rgba(244,250,249,.87);max-width:56ch;margin:0 auto 2rem}
+.faqc-hero__shape{position:absolute;border-radius:46% 54% 62% 38%/45% 51% 49% 55%;filter:blur(8px);opacity:.15;z-index:1;background:radial-gradient(circle at 30% 30%,var(--turquoise),transparent 60%),radial-gradient(circle at 70% 65%,var(--creme),transparent 62%);pointer-events:none;animation:faqc-morph 11s var(--ease) infinite alternate}
+.faqc-hero__shape--1{width:360px;height:360px;top:-130px;right:-90px}
+.faqc-hero__shape--2{width:250px;height:250px;bottom:-130px;left:-70px;opacity:.11;animation-duration:13s;animation-direction:alternate-reverse}
+@keyframes faqc-morph{0%{border-radius:46% 54% 62% 38%/45% 51% 49% 55%;transform:translate(0,0)}100%{border-radius:60% 40% 42% 58%/58% 42% 58% 42%;transform:translate(14px,-12px) scale(1.05)}}
+
+/* ---- SEARCH ---- */
+.faqc-search{position:relative;z-index:2;max-width:600px;margin-inline:auto}
+.faqc-search__box{display:flex;align-items:center;gap:.4rem;background:var(--creme);border-radius:var(--radius-pill);padding:.4rem .4rem .4rem 1.1rem;box-shadow:0 18px 44px rgba(27,45,40,.22);border:1px solid rgba(244,250,249,.5)}
+.faqc-search__icon{flex-shrink:0;width:22px;height:22px;color:var(--granit)}
+.faqc-search__input{flex:1;min-width:0;border:none;background:none;font-family:var(--font-texte);font-size:1.05rem;color:var(--noir-jais);padding:.6rem .4rem;min-height:44px}
+.faqc-search__input::placeholder{color:var(--granit)}
+.faqc-search__input:focus{outline:none}
+.faqc-search__input::-webkit-search-cancel-button,.faqc-search__input::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
+.faqc-search__clear{display:none;flex-shrink:0;width:36px;height:36px;border-radius:50%;color:var(--granit);align-items:center;justify-content:center;transition:background-color var(--t-fast) var(--ease),color var(--t-fast)}
+.faqc-search__clear.is-visible{display:inline-flex}
+.faqc-search__clear:hover{background:var(--granit-12);color:var(--noir-jais)}
+.faqc-search__clear svg{width:18px;height:18px}
+.faqc-search__submit{flex-shrink:0;min-height:44px;padding:.6rem 1.35rem;border-radius:var(--radius-pill);background:var(--turquoise);color:var(--noir-jais);font-family:var(--font-titre);font-weight:600;font-size:.95rem;transition:background-color var(--t-fast) var(--ease),transform var(--t-fast) var(--ease-out)}
+.faqc-search__submit:hover,.faqc-search__submit:focus-visible{background:var(--brume);transform:translateY(-1px)}
+.faqc-examples{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.5rem;margin-top:1.15rem}
+.faqc-examples__label{font-size:var(--fs-small);color:rgba(244,250,249,.72)}
+.faqc-chip{font-family:var(--font-texte);font-size:.85rem;color:var(--creme);background:rgba(244,250,249,.1);border:1px solid rgba(244,250,249,.28);border-radius:var(--radius-pill);padding:.35rem .85rem;min-height:34px;transition:background-color var(--t-fast) var(--ease),border-color var(--t-fast)}
+.faqc-chip:hover,.faqc-chip:focus-visible{background:rgba(244,250,249,.2);border-color:rgba(244,250,249,.6)}
+
+/* ---- CATEGORY NAV ---- */
+.faqc-cats-sec{padding:clamp(2.5rem,5vw,3.5rem) 0 clamp(1rem,2vw,1.5rem)}
+.faqc-cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:1rem;margin-top:1.75rem}
+.faqc-cat{display:flex;align-items:center;gap:.85rem;text-align:left;width:100%;background:var(--creme);border:1px solid var(--granit-12);border-radius:var(--radius);padding:1rem 1.1rem;transition:transform var(--t-fast) var(--ease-out),border-color var(--t-fast) var(--ease),box-shadow var(--t-fast) var(--ease-out),background-color var(--t-fast) var(--ease)}
+.faqc-cat:hover{transform:translateY(-2px);border-color:var(--brume);box-shadow:var(--shadow-sm)}
+.faqc-cat[aria-pressed="true"]{border-color:var(--epinette);background:var(--brume-08);box-shadow:inset 0 0 0 1px var(--epinette)}
+.faqc-cat__ic{flex-shrink:0;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--brume-14);color:var(--epinette);transition:background-color var(--t-fast),color var(--t-fast)}
+.faqc-cat[aria-pressed="true"] .faqc-cat__ic{background:var(--epinette);color:var(--creme)}
+.faqc-cat__ic svg{width:22px;height:22px}
+.faqc-cat__body{min-width:0}
+.faqc-cat__name{display:block;font-family:var(--font-titre);font-weight:600;font-size:.98rem;color:var(--noir-jais);line-height:1.2}
+.faqc-cat__meta{display:block;font-size:var(--fs-small);color:var(--granit);margin-top:.15rem}
+
+/* ---- POPULAR ---- */
+.faqc-pop-sec{padding:clamp(1rem,2vw,1.5rem) 0}
+.faqc-pop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-top:1.6rem}
+.faqc-pop{position:relative;display:flex;flex-direction:column;gap:.6rem;text-align:left;width:100%;background:linear-gradient(160deg,#eef6f5,var(--creme));border:1px solid var(--granit-12);border-radius:var(--radius);padding:1.35rem;transition:transform var(--t-fast) var(--ease-out),box-shadow var(--t-fast) var(--ease-out),border-color var(--t-fast) var(--ease)}
+.faqc-pop:hover{transform:translateY(-3px);box-shadow:var(--shadow-card);border-color:var(--brume-14)}
+.faqc-pop__tag{font-size:var(--fs-micro);letter-spacing:.1em;text-transform:uppercase;color:var(--epinette);font-weight:600}
+.faqc-pop__q{font-family:var(--font-titre);font-weight:600;font-size:1.05rem;color:var(--noir-jais);line-height:1.32}
+.faqc-pop__go{margin-top:auto;display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-titre);font-weight:600;font-size:.88rem;color:var(--epinette);transition:gap var(--t-fast) var(--ease-out),color var(--t-fast)}
+.faqc-pop__go svg{width:16px;height:16px}
+.faqc-pop:hover .faqc-pop__go{gap:.65rem;color:var(--brume)}
+
+/* ---- MAIN LIST + signature rail ---- */
+.faqc-main{padding:clamp(2rem,4vw,3rem) 0 clamp(3rem,6vw,4.5rem)}
+.faqc-layout{display:grid;grid-template-columns:1fr;gap:2rem}
+.faqc-rail{display:none}
+.faqc-content{min-width:0}
+@media(min-width:1024px){
+  .faqc-layout{grid-template-columns:190px minmax(0,1fr);gap:3rem}
+  .faqc-rail{display:block;position:sticky;top:118px;align-self:start}
+}
+.faqc-rail__title{font-size:var(--fs-micro);letter-spacing:.16em;text-transform:uppercase;color:var(--granit);margin-bottom:1.25rem}
+.faqc-rail__line{position:relative}
+.faqc-rail__line::before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--epinette),var(--sarcelle));border-radius:2px}
+.faqc-step{position:relative;padding:0 0 1.6rem 1.8rem}
+.faqc-step:last-child{padding-bottom:0}
+.faqc-step::before{content:"";position:absolute;left:0;top:1px;width:14px;height:14px;border-radius:50%;background:var(--creme);border:2px solid var(--epinette);box-sizing:border-box}
+.faqc-step:nth-child(even)::before{border-color:var(--sarcelle)}
+.faqc-step__k{display:block;font-family:var(--font-titre);font-size:var(--fs-micro);letter-spacing:.12em;text-transform:uppercase;color:var(--granit)}
+.faqc-step__t{display:block;font-family:var(--font-titre);font-size:.92rem;font-weight:600;color:var(--noir-jais);margin-top:.1rem}
+
+.faqc-toolbar{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.4rem 1rem;margin-bottom:1.4rem}
+.faqc-toolbar__title{font-family:var(--font-titre);font-weight:600;font-size:1.08rem;color:var(--noir-jais);margin:0}
+.faqc-toolbar__count{font-size:var(--fs-small);color:var(--granit)}
+.faqc-toolbar__count b{color:var(--epinette);font-variant-numeric:tabular-nums}
+
+.faqc-list{display:flex;flex-direction:column;gap:.75rem}
+.faqc-item{background:var(--creme);border:1px solid var(--granit-12);border-radius:var(--radius);box-shadow:var(--shadow-sm);transition:border-color var(--t-fast) var(--ease),transform var(--t-fast) var(--ease-out),box-shadow var(--t-fast) var(--ease-out)}
+.faqc-item:hover{border-color:var(--brume);transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.faqc-item.is-open{border-color:var(--epinette)}
+.faqc-item[hidden]{display:none}
+.faqc-q{margin:0;font-size:1rem}
+.faqc-trigger{display:flex;align-items:flex-start;gap:1rem;width:100%;text-align:left;padding:1.15rem 1.35rem;min-height:44px}
+.faqc-num{flex-shrink:0;font-family:var(--font-titre);font-size:.8rem;font-weight:600;color:var(--granit);font-variant-numeric:tabular-nums;padding-top:.2rem;min-width:1.7em}
+.faqc-item.is-open .faqc-num{color:var(--epinette)}
+.faqc-qmain{flex:1;min-width:0}
+.faqc-qtext{font-family:var(--font-titre);font-weight:600;font-size:1.06rem;line-height:1.35;color:var(--noir-jais)}
+.faqc-item.is-open .faqc-qtext{color:var(--epinette)}
+.faqc-tag{display:inline-block;margin-top:.5rem;font-size:var(--fs-micro);letter-spacing:.07em;text-transform:uppercase;font-weight:600;color:var(--epinette);background:var(--brume-14);border-radius:var(--radius-pill);padding:.22rem .7rem}
+.faqc-plus{flex-shrink:0;position:relative;width:24px;height:24px;margin-top:.35rem}
+.faqc-plus::before,.faqc-plus::after{content:"";position:absolute;left:50%;top:50%;background:var(--granit);border-radius:2px;transition:transform var(--t-fast) var(--ease),background-color var(--t-fast) var(--ease)}
+.faqc-plus::before{width:14px;height:2px;transform:translate(-50%,-50%)}
+.faqc-plus::after{width:2px;height:14px;transform:translate(-50%,-50%)}
+.faqc-item.is-open .faqc-plus::before,.faqc-item.is-open .faqc-plus::after{background:var(--epinette)}
+.faqc-item.is-open .faqc-plus::after{transform:translate(-50%,-50%) scaleY(0)}
+.faqc-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--t-med) var(--ease-out)}
+.faqc-item.is-open .faqc-panel{grid-template-rows:1fr}
+.faqc-panel>div{overflow:hidden}
+.faqc-answer{padding:.25rem 1.35rem 1.3rem;color:var(--granit);font-size:1rem;line-height:1.7}
+.faqc-answer p{margin:0}
+.faqc-hl{background:var(--turquoise-glow);color:inherit;border-radius:3px;padding:0 .1em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+
+/* feedback (discret, secondaire) */
+.faqc-fb{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin-top:1.1rem;padding-top:.95rem;border-top:1px solid var(--granit-12)}
+.faqc-fb__q{font-size:var(--fs-small);color:var(--granit)}
+.faqc-fb__btn{font-family:var(--font-titre);font-size:.82rem;font-weight:600;color:var(--epinette);border:1px solid var(--granit-20);border-radius:var(--radius-pill);padding:.35rem .9rem;min-height:34px;transition:background-color var(--t-fast) var(--ease),border-color var(--t-fast),color var(--t-fast)}
+.faqc-fb__btn:hover,.faqc-fb__btn:focus-visible{background:var(--brume-14);border-color:var(--brume)}
+.faqc-fb__done{font-size:var(--fs-small);color:var(--epinette);font-weight:600}
+.faqc-fb__link{font-family:var(--font-titre);font-size:.85rem;font-weight:600;color:var(--epinette);text-decoration:underline;text-underline-offset:3px;min-height:34px;display:inline-flex;align-items:center}
+.faqc-fb__link:hover{color:var(--brume)}
+
+/* empty state */
+.faqc-empty{display:none;text-align:center;padding:clamp(2.25rem,5vw,3.25rem) 1.5rem;border:1px dashed var(--granit-20);border-radius:var(--radius);background:var(--creme)}
+.faqc-empty.is-visible{display:block}
+.faqc-empty__t{font-family:var(--font-titre);font-weight:700;font-size:1.2rem;color:var(--noir-jais);margin-bottom:.5rem}
+.faqc-empty__p{color:var(--granit);max-width:48ch;margin:0 auto 1.4rem}
+.faqc-empty__q{color:var(--epinette);font-weight:600}
+
+/* ---- CONTEXTUAL ADVICE CTA ---- */
+.faqc-advice{padding:clamp(1.5rem,3vw,2.5rem) 0}
+.faqc-advice__card{position:relative;overflow:hidden;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem;background:linear-gradient(135deg,#e7f3f1,var(--creme));border:1px solid var(--granit-12);border-radius:var(--radius-lg);padding:clamp(1.75rem,3vw,2.5rem)}
+.faqc-advice__card::before{content:"";position:absolute;top:0;left:0;width:56px;height:3px;background:var(--turquoise);border-radius:3px}
+.faqc-advice__txt{max-width:48ch}
+.faqc-advice__t{font-family:var(--font-titre);font-weight:700;font-size:clamp(1.3rem,2.2vw,1.7rem);color:var(--noir-jais);margin:0 0 .4rem}
+.faqc-advice__p{color:var(--granit);margin:0}
+
+/* ---- FINAL DARK SECTION ---- */
+.faqc-final{position:relative;overflow:hidden;background:var(--noir-jais);color:var(--creme);padding:clamp(3rem,6vw,4.5rem) 0}
+.faqc-final__glow{position:absolute;width:460px;height:460px;top:-160px;right:-120px;border-radius:50%;background:radial-gradient(circle,var(--sarcelle),transparent 65%);opacity:.4;filter:blur(12px);pointer-events:none}
+.faqc-final__inner{position:relative;z-index:2;text-align:center;max-width:640px;margin-inline:auto;padding-inline:var(--pad-x)}
+.faqc-final__t{color:var(--creme);font-size:var(--fs-h2);margin:0 0 .8rem}
+.faqc-final__t .accent{color:var(--turquoise)}
+.faqc-final__p{color:rgba(244,250,249,.78);font-size:var(--fs-lead);margin:0 auto 2rem;max-width:52ch}
+.faqc-final__actions{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center}
+
+/* ==================== RESPONSIVE (chrome + FAQ) ==================== */
 @media (max-width:1080px){.main-nav,.header-actions{display:none}.nav-toggle{display:inline-flex}.main-inner{justify-content:space-between}.f-grid{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));row-gap:2.75rem}.f-grid>*:first-child{grid-column:1/-1;max-width:520px}}
-@media (max-width:820px){.fiche-grid{grid-template-columns:1fr}}
-@media (max-width:920px){.util-tag{display:none}.util-contacts{margin-inline:auto}}@media (max-width:640px){.util-bar{font-size:.8rem}.util-contacts{gap:1.1rem}.util-contacts svg{width:14px;height:14px}}@media (max-width:380px){.util-contacts{gap:.7rem;font-size:.72rem}}
-@media (max-width:620px){.f-grid{grid-template-columns:1fr}.f-cta{flex-direction:column;align-items:flex-start}.f-legal{flex-direction:column;text-align:center;justify-content:center}.f-legal__links{justify-content:center}.impact-main{flex-direction:column;align-items:flex-start;text-align:left}}
+@media (max-width:920px){.util-tag{display:none}.util-contacts{margin-inline:auto}}
+@media (max-width:640px){.util-bar{font-size:.8rem}.util-contacts{gap:1.1rem}.util-contacts svg{width:14px;height:14px}}
+@media (max-width:380px){.util-contacts{gap:.7rem;font-size:.72rem}}
+@media (max-width:620px){.f-grid{grid-template-columns:1fr}.f-cta{flex-direction:column;align-items:flex-start}.f-legal{flex-direction:column;text-align:center;justify-content:center}.f-legal__links{justify-content:center}}
+@media (max-width:640px){
+  .faqc-cats{grid-template-columns:1fr 1fr;gap:.7rem}
+  .faqc-cat{flex-direction:column;align-items:flex-start;gap:.6rem;padding:.9rem}
+  .faqc-search__box{padding-left:.9rem}
+  .faqc-search__submit{padding:.6rem 1rem}
+  .faqc-trigger{padding:1rem 1.05rem;gap:.7rem}
+  .faqc-answer{padding-left:1.05rem;padding-right:1.05rem}
+  .faqc-advice__card{flex-direction:column;align-items:flex-start;text-align:left}
+  .faqc-advice__card .btn{width:100%}
+}
+@media (max-width:400px){
+  .faqc-search__submit .faqc-search__submit-tx{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  .faqc-search__submit::after{content:"";width:18px;height:18px;background:currentColor;-webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'><circle cx='11' cy='11' r='7'/><path d='m20 20-3.5-3.5'/></svg>") center/contain no-repeat;mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'><circle cx='11' cy='11' r='7'/><path d='m20 20-3.5-3.5'/></svg>") center/contain no-repeat}
+}
+
+/* ==================== RÉDUCTION DU MOUVEMENT ==================== */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
-  .reveal{opacity:1;transform:none}.hero-anim{opacity:1;transform:none}
-  .marquee__track{animation:none}.scroll-cue svg{animation:none}
+  .reveal{opacity:1;transform:none}
+  .faqc-hero__shape,.faqc-final__glow,.status-badge.is-open .status-dot{animation:none}
 }
 </style>
 </head>
 <body>
+
+<a class="faqc-skip" href="#faqc-answers">Aller aux réponses</a>
 
 <!-- ==================== HEADER ==================== -->
 <header class="site-header" id="top">
@@ -397,196 +435,122 @@ a.f-c-value:hover{color:var(--turquoise)}
         <li><a href="formations.html#vca-base" data-i18n="dd.vca_base">VCA de base</a></li><li><a href="formations.html#vca-hierarchique" data-i18n="dd.vca_hier">VCA ligne hiérarchique</a></li><li><a href="formation-nacelles-elevatrices.html" data-i18n="dd.nacelle">Nacelles élévatrices</a></li>
         <li><a href="formations.html#fibre-optique" data-i18n="dd.fibre">Fibre optique</a></li><li><a href="formations.html#beps" data-i18n="dd.beps">BEPS — Premier secours</a></li><li><a href="formations.html#diisocyanates" data-i18n="dd.diiso">Diisocyanates &amp; substances dangereuses</a></li>
       </ul></div></div></li>
-    <li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="#" data-i18n="nav.agenda">Agenda</a></li><li><a href="avis.html" data-i18n="nav.avis">Avis</a></li>
+    <li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="#" data-i18n="nav.agenda">Agenda</a></li><li><a href="avis.html" data-i18n="nav.avis">Avis</a></li><li><a href="faq.html" aria-current="page" data-i18n="footer.faq">Centre d'aide</a></li>
   </ul>
   <div class="m-actions"><a class="btn btn--outline" href="contact.html" data-i18n="header.contact">Contact</a><a class="btn btn--cta" href="inscription.html" data-i18n="header.register">S'inscrire</a></div>
-  <div class="m-lang">
-    <div class="lang-switch">
-      <div class="lang-menu" role="menu">
-        <a href="?lang=en" data-lang-option="en" role="menuitem">English<span class="lc">EN</span></a>
-        <a href="?lang=fr" data-lang-option="fr" role="menuitem">Français<span class="lc">FR</span></a>
-        <a href="?lang=nl" data-lang-option="nl" role="menuitem">Nederlands<span class="lc">NL</span></a>
-        <a href="?lang=af" data-lang-option="af" role="menuitem">Afrikaans<span class="lc">AF</span></a>
-        <a href="?lang=ar" data-lang-option="ar" role="menuitem">العربية<span class="lc">AR</span></a>
-        <a href="?lang=bg" data-lang-option="bg" role="menuitem">Български<span class="lc">BG</span></a>
-        <a href="?lang=de" data-lang-option="de" role="menuitem">Deutsch<span class="lc">DE</span></a>
-        <a href="?lang=ro" data-lang-option="ro" role="menuitem">Română<span class="lc">RO</span></a>
-        <a href="?lang=it" data-lang-option="it" role="menuitem">Italiano<span class="lc">IT</span></a>
-        <a href="?lang=sl" data-lang-option="sl" role="menuitem">Slovenščina<span class="lc">SL</span></a>
-      </div>
-    </div>
-  </div>
 </aside>
 
-<main>
-  <!-- ==================== HERO VIDÉO ==================== -->
-  <section class="hero" aria-labelledby="hero-title">
-    <!-- /* VIDEO À INSÉRER : sources injectées ci-dessous selon l'écran (desktop 1080p / mobile 720p) */ -->
-    <video id="heroVideo" class="hero-video" autoplay muted loop playsinline preload="auto"
-           poster="assets/videos/Accueil/poster.jpg" aria-hidden="true" tabindex="-1"></video>
-    <script>
-    (function(){
-      var v=document.getElementById('heroVideo'),base='assets/videos/Accueil/';
-      function add(s,t){var e=document.createElement('source');e.src=base+s;e.type=t;v.appendChild(e);}
-      if(matchMedia('(max-width:768px)').matches){add('hero-720.mp4','video/mp4');}
-      else{add('hero-1080.webm','video/webm');add('hero-1080.mp4','video/mp4');}
-      v.load();
-    })();
-    </script>
-    <div class="hero-overlay" aria-hidden="true"></div>
-    <div class="hero-inner">
-      <p class="hero-eyebrow hero-anim d1" data-i18n="home.hero_eyebrow">Centre de formation · Anderlecht</p>
-      <h1 class="hero-title hero-anim d2" id="hero-title" data-i18n="home.hero_title">La sécurité comme une référence</h1>
-      <p class="hero-sub hero-anim d3" data-i18n="home.hero_sub">Formez et certifiez vos équipes avec des experts du terrain — VCA, PEB, coordination, premiers secours.</p>
-      <div class="hero-actions hero-anim d4">
-        <a class="btn btn--cta" href="formations.html" data-i18n="home.hero_cta1">Consulter les formations</a>
-        <a class="btn btn--light" href="contact.html" data-i18n="home.hero_cta2">Nous contacter</a>
-      </div>
-    </div>
-    <span class="scroll-cue" aria-hidden="true"><span data-i18n="home.scroll">Découvrir</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
-  </section>
+<!-- FAQ content is currently French-only; force LTR so it stays readable even when the
+     shared chrome switches to an RTL language (e.g. Arabic). Remove when translated. -->
+<main id="main" class="faqc" dir="ltr">
 
-  <!-- ==================== PARTENAIRES (ruche) ==================== -->
-  <section class="hive-sec" aria-label="Nos partenaires">
-    <div class="container">
-      <p class="eyebrow" data-i18n="home.partners_eyebrow">Nos partenaires</p>
-      <div class="hive reveal" role="img" aria-label="Wisy Safety au centre de son réseau de 6 partenaires : Orange, Proximus, Telenet, Constructel, VOO, Unifiber">
-        <div class="hive-row">
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
+  <!-- ============ HERO ============ -->
+  <section class="faqc-hero" aria-labelledby="faqc-hero-title">
+    <span class="faqc-hero__shape faqc-hero__shape--1" aria-hidden="true"></span>
+    <span class="faqc-hero__shape faqc-hero__shape--2" aria-hidden="true"></span>
+    <div class="faqc-hero__inner reveal">
+      <span class="eyebrow">Centre d'aide Wisy Safety</span>
+      <h1 class="faqc-hero__title" id="faqc-hero-title">Une question ? Trouvez votre réponse simplement.</h1>
+      <p class="faqc-hero__lead">Formation, inscription, organisation ou accompagnement : retrouvez rapidement les informations essentielles avant de démarrer votre parcours avec Wisy Safety.</p>
+
+      <form class="faqc-search" role="search" id="faqc-search-form" aria-label="Rechercher une question">
+        <label class="visually-hidden" for="faqc-q">Rechercher une question dans le centre d'aide</label>
+        <div class="faqc-search__box">
+          <svg class="faqc-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input class="faqc-search__input" id="faqc-q" name="q" type="search" autocomplete="off" placeholder="Rechercher une question…" aria-describedby="faqc-live">
+          <button class="faqc-search__clear" type="button" id="faqc-clear" aria-label="Effacer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+          <button class="faqc-search__submit" type="submit"><span class="faqc-search__submit-tx">Rechercher</span></button>
         </div>
-        <div class="hive-row">
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/Orange_logo.svg.png" alt="Orange" loading="lazy"></div></div>
-          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/proximus-.webp" alt="Proximus" loading="lazy"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
+        <div class="faqc-examples">
+          <span class="faqc-examples__label">Essayez&nbsp;:</span>
+          <button class="faqc-chip" type="button" data-example="prérequis">prérequis</button>
+          <button class="faqc-chip" type="button" data-example="inscription">inscription</button>
+          <button class="faqc-chip" type="button" data-example="attestation">attestation</button>
+          <button class="faqc-chip" type="button" data-example="entreprise">entreprise</button>
+          <button class="faqc-chip" type="button" data-example="durée">durée</button>
         </div>
-        <div class="hive-row">
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/telenet_logo.webp" alt="Telenet" loading="lazy"></div></div>
-          <div class="hex hex--hub"><div class="hex__face"><img src="assets/logo.png" alt="Wisy Safety"></div></div>
-          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/constructel-.jpeg" alt="Constructel" loading="lazy"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-        </div>
-        <div class="hive-row">
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/VOO_logo.svg.png" alt="VOO" loading="lazy"></div></div>
-          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/uni-fivber-.png" alt="Unifiber" loading="lazy"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-        </div>
-        <div class="hive-row">
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-        </div>
-      </div>
-      <div class="hive-badge reveal"><span class="dot" aria-hidden="true"></span><span data-i18n="home.partners_badge">6 partenaires de confiance</span></div>
-      <p class="hive-sub reveal" data-i18n="home.partners_sub">Des acteurs majeurs des télécoms et de la construction forment et certifient leurs équipes avec Wisy Safety.</p>
+      </form>
+      <p class="visually-hidden" id="faqc-live" role="status" aria-live="polite"></p>
     </div>
   </section>
 
-  <!-- ==================== IMPACT & ÉTABLISSEMENT ==================== -->
-  <section class="section" id="formations" aria-labelledby="impact-title">
-    <div class="container">
-      <div class="section__head reveal">
-        <p class="eyebrow" data-i18n="home.impact_eyebrow">Impact &amp; Établissement</p>
-        <h2 class="section__title" id="impact-title" data-i18n="home.impact_title">Dix ans d'expertise, en chiffres et en détail</h2>
-        <p class="section__lead" data-i18n="home.impact_lead">Des résultats concrets et un centre de formation entièrement équipé à Anderlecht, pour accompagner vos équipes vers l'excellence en matière de sécurité au travail.</p>
+  <!-- ============ NAVIGATION PAR INTENTION ============ -->
+  <section class="faqc-cats-sec" aria-labelledby="faqc-cats-title">
+    <div class="faqc-wrap">
+      <div class="section__head reveal" style="margin-bottom:0">
+        <span class="eyebrow" style="color:var(--epinette)">Explorer par thème</span>
+        <h2 class="section__title" id="faqc-cats-title">Par où souhaitez-vous commencer ?</h2>
       </div>
-
-      <div class="bento">
-
-        <div class="b-card b-white b-stats reveal">
-          <div class="b-stats__head"><h3 class="b-title" data-i18n="home.b_stats">Statistiques</h3></div>
-          <div class="b-bars" aria-hidden="true"><div class="bar" style="height:58%"><span style="height:45%"></span></div><div class="bar" style="height:82%"><span style="height:32%"></span></div><div class="bar" style="height:42%"><span style="height:60%"></span></div><div class="bar" style="height:96%"><span style="height:26%"></span></div><div class="bar" style="height:66%"><span style="height:42%"></span></div><div class="bar" style="height:50%"><span style="height:55%"></span></div><div class="bar" style="height:88%"><span style="height:34%"></span></div><div class="bar" style="height:72%"><span style="height:46%"></span></div></div>
-          <div class="b-legends">
-            <div class="b-legend dark"><span class="k" data-i18n="home.b_specialists">Spécialistes</span><div class="v"><span data-count="5">0</span>+</div></div>
-            <div class="b-legend mint"><span class="k" data-i18n="home.b_nationalities">Nationalités formées</span><div class="v"><span data-count="15">0</span></div></div>
-          </div>
-        </div>
-
-        <div class="b-card b-mint b-hero reveal">
-          <span class="b-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18"/></svg></span>
-          <span class="b-masked">**** 2016</span>
-          <div style="margin-top:auto">
-            <div class="b-label" data-i18n="home.b_pros">Professionnels formés</div>
-            <div class="b-num"><span data-count="500">0</span>+</div>
-          </div>
-          <span class="b-pill" data-i18n="home.b_sat_pill">★ 100% de satisfaction</span>
-        </div>
-
-        <div class="b-card b-white b-cert reveal">
-          <div class="b-cert__top"><div class="b-title" data-i18n="home.b_certifications">Certifications</div><span class="b-masked">**** 2016</span></div>
-          <div class="b-cert__foot"><div class="b-label" style="color:rgba(244,250,249,.75)" data-i18n="home.b_delivered">Délivrées</div><div class="b-num"><span data-count="250">0</span>+</div></div>
-        </div>
-
-        <div class="b-card b-dark b-prog reveal">
-          <div class="b-title" style="color:var(--creme)" data-i18n="home.b_client_sat">Satisfaction clients</div>
-          <div style="margin-top:auto">
-            <div class="b-num"><span data-count="100">0</span>%</div>
-            <div class="b-track"><span style="width:100%"></span></div>
-            <div class="b-label" style="margin-top:.55rem" data-i18n="home.b_goal">Objectif atteint</div>
-          </div>
-        </div>
-
-        <div class="b-card b-dark2 b-exp reveal">
-          <span class="b-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18"/></svg></span>
-          <span class="b-masked">**** 2016</span>
-          <div style="margin-top:auto"><div class="b-label" data-i18n="home.b_experience">Années d'expérience</div><div class="b-num"><span data-count="10">0</span></div></div>
-        </div>
-
-        <div class="b-card b-white b-list reveal">
-          <div class="b-title" style="margin-bottom:.35rem" data-i18n="home.b_flagship">Formations phares</div>
-          <div class="b-row"><span class="b-row__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/></svg></span><div><div class="b-row__t" data-i18n="dd.vca_base">VCA de base</div><div class="b-row__s" data-i18n="home.b_site_safety">Sécurité chantier</div></div><span class="b-row__tag" data-i18n="home.b_certifying">Certifiant</span></div>
-          <div class="b-row"><span class="b-row__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21h6v-4H4zM7 17V4l12 3v6"/></svg></span><div><div class="b-row__t" data-i18n="dd.nacelle">Nacelles élévatrices</div><div class="b-row__s" data-i18n="home.b_pemp">Conduite PEMP</div></div><span class="b-row__tag" data-i18n="home.b_certifying">Certifiant</span></div>
-          <div class="b-row"><span class="b-row__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c-4-2.5-7-6-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 4-3 7.5-7 10z"/><path d="M12 9v4M10 11h4"/></svg></span><div><div class="b-row__t" data-i18n="dd.beps">BEPS — Premier secours</div><div class="b-row__s" data-i18n="home.b_firstaid">Secourisme</div></div><span class="b-row__tag" data-i18n="home.b_certifying">Certifiant</span></div>
-        </div>
-
-        <div class="b-card b-white b-up reveal">
-          <div class="b-label" data-i18n="home.b_partners">Partenaires</div>
-          <div class="b-num" style="color:var(--epinette);margin:.5rem 0"><span data-count="6">0</span></div>
-          <div class="b-row__s" data-i18n="home.b_partners_desc">Acteurs majeurs des télécoms &amp; de la construction.</div>
-        </div>
-
-        <div class="b-card b-act reveal">
-          <a class="b-btn b-btn--mint" href="inscription.html"><span data-i18n="header.register">S'inscrire</span> <span class="b-btn__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
-          <a class="b-btn b-btn--dark" href="contact.html"><span data-i18n="home.hero_cta2">Nous contacter</span> <span class="b-btn__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
-        </div>
-
-      </div>
-
+      <div class="faqc-cats reveal" id="faqc-cats" role="group" aria-label="Filtrer les questions par catégorie"><!-- généré depuis js/faq-data.js --></div>
     </div>
   </section>
 
-  <!-- ==================== FICHE DE L'ÉTABLISSEMENT ==================== -->
-  <section class="section section--alt" id="contact" aria-labelledby="fiche-title">
-    <div class="container">
-      <div class="section__head reveal">
-        <span class="badge-loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg><span data-i18n="home.fiche_badge">Centre Anderlecht</span></span>
-        <p class="eyebrow" style="color:var(--epinette)" data-i18n="home.fiche_eyebrow">Fiche de l'établissement</p>
-        <h2 class="section__title" id="fiche-title" data-i18n="home.fiche_title">Formez-vous à la sécurité</h2>
-        <p class="section__lead" data-i18n="home.fiche_lead">Un établissement de formation professionnel aux installations modernes et entièrement équipées, dédié à l'excellence en matière de sécurité au travail.</p>
+  <!-- ============ QUESTIONS POPULAIRES ============ -->
+  <section class="faqc-pop-sec" aria-labelledby="faqc-pop-title">
+    <div class="faqc-wrap">
+      <div class="section__head reveal" style="margin-bottom:0">
+        <span class="eyebrow" style="color:var(--epinette)">Les plus consultées</span>
+        <h2 class="section__title" id="faqc-pop-title">Les réponses les plus recherchées</h2>
       </div>
+      <div class="faqc-pop-grid reveal" id="faqc-pop"><!-- généré depuis js/faq-data.js --></div>
+    </div>
+  </section>
 
-      <div class="fiche-grid">
-        <div class="reveal">
-          <div class="info-list">
-            <div class="info-item"><span class="info-item__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span><div><div class="info-item__label" data-i18n="footer.label_address">Adresse</div><div class="info-item__value">Avenue d'Itterbeek 378<span>1070 Anderlecht, Belgique</span></div></div></div>
-            <div class="info-item"><span class="info-item__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16M8 3v4M16 3v4M7 19l-2 2M17 19l2 2"/><circle cx="8.5" cy="15" r="1"/><circle cx="15.5" cy="15" r="1"/></svg></span><div><div class="info-item__label" data-i18n="home.info_access">Accessibilité</div><div class="info-item__value"><span data-i18n="home.info_access_val">Transports en commun</span><span data-i18n="home.info_access_sub">Accessible en bus &amp; en train</span></div></div></div>
-            <div class="info-item"><span class="info-item__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><div class="info-item__label" data-i18n="footer.col_hours">Horaires d'ouverture</div><div class="info-item__value"><span data-i18n="home.info_hours_val">Lundi → Jeudi : 10h00 – 16h00</span><span data-i18n="home.info_hours_sub">Vendredi → Dimanche : Fermé</span></div></div></div>
-          </div>
-          <div class="capacity"><span class="capacity__num">15</span><div class="capacity__txt"><strong data-i18n="home.capacity_txt">participants</strong><span data-i18n="home.capacity_sub">Capacité maximale par session</span></div></div>
+  <!-- ============ CTA CONTEXTUEL (placé au cœur du parcours, à distance du CTA final) ============ -->
+  <section class="faqc-advice" aria-labelledby="faqc-advice-title">
+    <div class="faqc-wrap">
+      <div class="faqc-advice__card reveal">
+        <div class="faqc-advice__txt">
+          <h2 class="faqc-advice__t" id="faqc-advice-title">Vous hésitez entre plusieurs formations ?</h2>
+          <p class="faqc-advice__p">Expliquez-nous votre besoin et nous vous aiderons à identifier la formation adaptée à votre situation.</p>
         </div>
+        <a class="btn btn--cta" href="contact.html">Être conseillé <span class="btn__arrow" aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
 
-        <div class="reveal">
-          <div class="map-wrapper">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2519.793116555751!2d4.276270977152576!3d50.834995871668056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c3c6c0d4b22ebf%3A0xc34a5df237b263cf!2sAv.%20d'Itterbeek%20378%2C%201070%20Anderlecht!5e0!3m2!1sfr!2sbe!4v1789299970751!5m2!1sfr!2sbe"
-              allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-              title="Localisation du centre de formation Wisy Safety, Avenue d'Itterbeek 378, 1070 Anderlecht"></iframe>
+  <!-- ============ LISTE COMPLÈTE (accordéons) ============ -->
+  <section class="faqc-main" id="faqc-answers" aria-labelledby="faqc-list-title">
+    <div class="faqc-wrap">
+      <div class="faqc-layout">
+        <!-- Signature visuelle : parcours orientation → formation → maîtrise → certification -->
+        <aside class="faqc-rail" aria-hidden="true">
+          <p class="faqc-rail__title">Votre parcours</p>
+          <div class="faqc-rail__line">
+            <div class="faqc-step"><span class="faqc-step__k">Étape 1</span><span class="faqc-step__t">Orientation</span></div>
+            <div class="faqc-step"><span class="faqc-step__k">Étape 2</span><span class="faqc-step__t">Formation</span></div>
+            <div class="faqc-step"><span class="faqc-step__k">Étape 3</span><span class="faqc-step__t">Maîtrise</span></div>
+            <div class="faqc-step"><span class="faqc-step__k">Étape 4</span><span class="faqc-step__t">Reconnaissance</span></div>
           </div>
-          <a class="map-link" href="https://maps.google.com/?q=Avenue+d'Itterbeek+378,+1070+Anderlecht" target="_blank" rel="noopener"><span data-i18n="home.map_link">Voir sur Google Maps</span> <span aria-hidden="true">↗</span></a>
+        </aside>
+
+        <div class="faqc-content">
+          <div class="faqc-toolbar">
+            <h2 class="faqc-toolbar__title" id="faqc-list-title" data-all-label="Toutes les réponses">Toutes les réponses</h2>
+            <p class="faqc-toolbar__count" id="faqc-count" aria-hidden="true"></p>
+          </div>
+          <div class="faqc-list" id="faqc-list"><!-- généré depuis js/faq-data.js --></div>
+
+          <!-- État « aucun résultat » -->
+          <div class="faqc-empty" id="faqc-empty" role="status">
+            <p class="faqc-empty__t">Aucune réponse trouvée</p>
+            <p class="faqc-empty__p">Nous n'avons pas trouvé de réponse correspondant à <span class="faqc-empty__q" id="faqc-empty-q"></span>. Notre équipe peut vous renseigner directement.</p>
+            <a class="btn btn--outline" href="contact.html">Poser ma question</a>
+          </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION FINALE (sombre) ============ -->
+  <section class="faqc-final" aria-labelledby="faqc-final-title">
+    <span class="faqc-final__glow" aria-hidden="true"></span>
+    <div class="faqc-final__inner reveal">
+      <h2 class="faqc-final__t" id="faqc-final-title">Vous n'avez pas trouvé <span class="accent">votre réponse</span> ?</h2>
+      <p class="faqc-final__p">Notre équipe est disponible pour vous orienter et répondre aux questions liées à votre formation.</p>
+      <div class="faqc-final__actions">
+        <a class="btn btn--cta" href="contact.html">Nous contacter <span class="btn__arrow" aria-hidden="true">↗</span></a>
+        <a class="btn btn--light" href="formations.html">Voir les formations</a>
       </div>
     </div>
   </section>
@@ -640,7 +604,6 @@ a.f-c-value:hover{color:var(--turquoise)}
 <script src="js/i18n-data-common.js"></script>
 <script src="js/i18n-data-search.js"></script>
 <script src="js/i18n-data-assistant.js"></script>
-<script src="js/i18n-data-home.js"></script>
 <script src="js/i18n.js"></script>
 <!-- Recherche globale -->
 <script src="js/trainings-data.js"></script>
@@ -653,6 +616,8 @@ a.f-c-value:hover{color:var(--turquoise)}
 <script defer src="js/assistant/responder.js"></script>
 <script defer src="js/assistant/mascot.js"></script>
 <script defer src="js/assistant/assistant.js"></script>
+
+<!-- Comportements partagés (en-tête, menu, sous-menu, reveal, horaires) — identiques aux autres pages -->
 <script>
 (function(){
   var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -670,7 +635,6 @@ a.f-c-value:hover{color:var(--turquoise)}
     function sc(){clearTimeout(ct);ct=setTimeout(cl,250);}
     wrap.addEventListener("mouseenter",op);wrap.addEventListener("mouseleave",sc);
     wrap.addEventListener("mousemove",function(){if(wrap.classList.contains("is-open"))clearTimeout(ct);});
-    // Clic : ouvre toujours le menu (le survol l'ouvre déjà ; un clic ne doit pas le refermer aussitôt)
     trig.addEventListener("click",function(e){e.preventDefault();op();});
     wrap.addEventListener("keydown",function(e){if(e.key==="Escape"){cl();trig.focus();}});
     wrap.addEventListener("focusout",function(e){if(!wrap.contains(e.relatedTarget))cl();});
@@ -683,26 +647,10 @@ a.f-c-value:hover{color:var(--turquoise)}
   if(tg){tg.addEventListener("click",oM);cb.addEventListener("click",cM);sr.addEventListener("click",cM);addEventListener("keydown",function(e){if(e.key==="Escape"&&pn.classList.contains("is-open"))cM();});}
   document.querySelectorAll(".m-acc__trigger").forEach(function(b){var p=b.nextElementSibling;b.addEventListener("click",function(){var o=b.getAttribute("aria-expanded")==="true";b.setAttribute("aria-expanded",String(!o));p.classList.toggle("is-open",!o);});});
 
-  /* Hero vidéo : pause hors viewport (économie de ressources) */
-  var hv=document.getElementById("heroVideo");
-  if(hv&&"IntersectionObserver" in window){
-    var vio=new IntersectionObserver(function(es){es.forEach(function(e){
-      if(e.isIntersecting){var p=hv.play();if(p&&p.catch)p.catch(function(){});}else{hv.pause();}
-    });},{threshold:.15});
-    vio.observe(hv);
-  }
-
   /* Reveal au scroll */
   var rv=document.querySelectorAll(".reveal");
   if(reduce||!("IntersectionObserver" in window)){rv.forEach(function(e){e.classList.add("in");});}
   else{var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:.12,rootMargin:"0px 0px -6% 0px"});rv.forEach(function(e){io.observe(e);});}
-
-  /* Compteurs animés (une seule fois) */
-  function cnt(el){var t=parseFloat(el.getAttribute("data-count"));if(reduce){el.textContent=t.toLocaleString("fr-BE");return;}
-    var d=1600,s=null;function st(ts){if(!s)s=ts;var p=Math.min((ts-s)/d,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(t*e).toLocaleString("fr-BE");if(p<1)requestAnimationFrame(st);}requestAnimationFrame(st);}
-  var cs=document.querySelectorAll("[data-count]");
-  if(!("IntersectionObserver" in window)){cs.forEach(cnt);}
-  else{var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){cnt(e.target);cio.unobserve(e.target);}});},{threshold:.6});cs.forEach(function(e){cio.observe(e);});}
 
   /* Horaires + statut temps réel (traduit, re-calculé au changement de langue) */
   var SCH={1:[600,960],2:[600,960],3:[600,960],4:[600,960],5:null,6:null,0:null};
@@ -719,6 +667,282 @@ a.f-c-value:hover{color:var(--turquoise)}
   refreshStatus();
   document.addEventListener("i18n:changed",refreshStatus);
   var yy=document.querySelector("[data-year]");if(yy)yy.textContent=String(Math.max(2026,now.getFullYear()));
+})();
+</script>
+
+<!-- Données de la FAQ (source unique) -->
+<script src="js/faq-data.js"></script>
+
+<!-- Centre d'aide — génération, recherche, filtres, accordéons, feedback -->
+<script>
+(function(){
+  var F=window.WisyFAQ;
+  if(!F){return;}
+  var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var scrollBehavior=reduce?"auto":"smooth";
+
+  /* Icônes linéaires maison (24×24, décoratives) */
+  var ICONS={
+    all:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+    compass:'<circle cx="12" cy="12" r="9"/><path d="m15.6 8.4-2.1 5.1-5.1 2.1 2.1-5.1z"/>',
+    clipboard:'<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9.5 4V3h5v1"/><path d="M9 10h6M9 13.5h6M9 17h4"/>',
+    steps:'<path d="M5.5 6h5a3 3 0 0 1 0 6H8a3 3 0 0 0 0 6h10.5"/><circle cx="5.5" cy="6" r="1.7"/><circle cx="18.5" cy="18" r="1.7"/>',
+    award:'<circle cx="12" cy="9" r="6"/><path d="m8.5 13.5-1.5 7L12 18l5 2.5-1.5-7"/>',
+    team:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 3.6a3 3 0 0 1 0 5.8M21.5 20c0-2.6-1.6-4.9-4-5.7"/>',
+    info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6h.01"/>',
+    arrow:'<path d="M5 12h13M12 6l6 6-6 6"/>'
+  };
+  function svg(key){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[key]||"")+'</svg>';}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
+  function fold(s){return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");}
+  function pad2(n){return (n<10?"0":"")+n;}
+  function highlight(text,q){
+    if(!q) return esc(text);
+    var out="",low=text.toLowerCase(),ql=q.toLowerCase(),i=0,idx;
+    while((idx=low.indexOf(ql,i))>=0){
+      out+=esc(text.slice(i,idx))+'<mark class="faqc-hl">'+esc(text.slice(idx,idx+ql.length))+'</mark>';
+      i=idx+ql.length;
+    }
+    return out+esc(text.slice(i));
+  }
+
+  var cats=F.categories(), items=F.items(), counts=F.counts();
+  var catMap={}; cats.forEach(function(c){catMap[c.id]=c;});
+
+  /* ---------- Données structurées FAQPage (même source que la page) ---------- */
+  try{
+    var ld=document.createElement("script");
+    ld.type="application/ld+json";
+    ld.textContent=JSON.stringify(F.toStructuredData());
+    document.head.appendChild(ld);
+  }catch(e){}
+
+  /* ---------- Navigation par catégorie ---------- */
+  var catWrap=document.getElementById("faqc-cats");
+  function catButton(id,name,meta,icon,pressed){
+    var b=document.createElement("button");
+    b.type="button";
+    b.className="faqc-cat";
+    b.setAttribute("data-cat",id);
+    b.setAttribute("aria-pressed",pressed?"true":"false");
+    b.innerHTML='<span class="faqc-cat__ic">'+svg(icon)+'</span>'+
+      '<span class="faqc-cat__body"><span class="faqc-cat__name">'+esc(name)+'</span><span class="faqc-cat__meta">'+esc(meta)+'</span></span>';
+    return b;
+  }
+  if(catWrap){
+    var total=items.length;
+    catWrap.appendChild(catButton("all","Toutes les questions",total+" réponses","all",true));
+    cats.forEach(function(c){
+      var n=counts[c.id]||0;
+      catWrap.appendChild(catButton(c.id,c.label,n+" réponse"+(n>1?"s":""),c.icon,false));
+    });
+  }
+
+  /* ---------- Questions populaires ---------- */
+  var popWrap=document.getElementById("faqc-pop");
+  if(popWrap){
+    F.featured().forEach(function(it){
+      var cat=catMap[it.category];
+      var b=document.createElement("button");
+      b.type="button";
+      b.className="faqc-pop";
+      b.setAttribute("data-goto",it.id);
+      b.innerHTML='<span class="faqc-pop__tag">'+esc(cat?cat.label:"")+'</span>'+
+        '<span class="faqc-pop__q">'+esc(it.question)+'</span>'+
+        '<span class="faqc-pop__go">Lire la réponse '+svg("arrow")+'</span>';
+      popWrap.appendChild(b);
+    });
+  }
+
+  /* ---------- Liste complète (accordéons) ---------- */
+  var listWrap=document.getElementById("faqc-list");
+  var records={}; /* id -> {root,panel,qtext,answer,rawQ,rawA} */
+  items.forEach(function(it,i){
+    var cat=catMap[it.category];
+    var panelId="faqc-panel-"+it.id;
+    var btnId="faqc-btn-"+it.id;
+
+    var art=document.createElement("article");
+    art.className="faqc-item";
+    art.setAttribute("data-cat",it.category);
+    art.setAttribute("data-id",it.id);
+
+    var h3=document.createElement("h3");
+    h3.className="faqc-q";
+
+    var btn=document.createElement("button");
+    btn.type="button";
+    btn.className="faqc-trigger";
+    btn.id=btnId;
+    btn.setAttribute("aria-expanded","false");
+    btn.setAttribute("aria-controls",panelId);
+    btn.innerHTML='<span class="faqc-num" aria-hidden="true">'+pad2(i+1)+'</span>'+
+      '<span class="faqc-qmain"><span class="faqc-qtext">'+esc(it.question)+'</span>'+
+      (cat?'<span class="faqc-tag">'+esc(cat.label)+'</span>':'')+'</span>'+
+      '<span class="faqc-plus" aria-hidden="true"></span>';
+    h3.appendChild(btn);
+
+    var panel=document.createElement("div");
+    panel.className="faqc-panel";
+    panel.id=panelId;
+    panel.setAttribute("role","region");
+    panel.setAttribute("aria-labelledby",btnId);
+    var inner=document.createElement("div");
+    var ans=document.createElement("div");
+    ans.className="faqc-answer";
+    ans.innerHTML='<p class="faqc-atext">'+esc(it.answer)+'</p>';
+
+    /* Micro-interaction : « Cette réponse vous a-t-elle aidé ? » (discrète) */
+    var fb=document.createElement("div");
+    fb.className="faqc-fb";
+    fb.setAttribute("aria-live","polite");
+    fb.innerHTML='<span class="faqc-fb__q">Cette réponse vous a-t-elle aidé&nbsp;?</span>'+
+      '<button type="button" class="faqc-fb__btn" data-fb="yes">Oui</button>'+
+      '<button type="button" class="faqc-fb__btn" data-fb="no">Pas tout à fait</button>';
+    ans.appendChild(fb);
+
+    inner.appendChild(ans);
+    panel.appendChild(inner);
+    art.appendChild(h3);
+    art.appendChild(panel);
+    listWrap.appendChild(art);
+
+    records[it.id]={root:art,panel:panel,btn:btn,qtext:btn.querySelector(".faqc-qtext"),answer:ans.querySelector(".faqc-atext"),rawQ:it.question,rawA:it.answer};
+
+    /* accordéon */
+    btn.addEventListener("click",function(){
+      var open=art.classList.toggle("is-open");
+      btn.setAttribute("aria-expanded",open?"true":"false");
+    });
+
+    /* feedback */
+    fb.addEventListener("click",function(e){
+      var t=e.target.closest("[data-fb]"); if(!t) return;
+      if(t.getAttribute("data-fb")==="yes"){
+        fb.innerHTML='<span class="faqc-fb__done">Merci pour votre retour.</span>';
+      }else{
+        fb.innerHTML='<span class="faqc-fb__q">Nous pouvons vous aider davantage&nbsp;:</span>'+
+          '<a class="faqc-fb__link" href="contact.html">Poser la question à notre équipe</a>';
+      }
+    });
+  });
+
+  /* ---------- État + filtrage ---------- */
+  var input=document.getElementById("faqc-q");
+  var clearBtn=document.getElementById("faqc-clear");
+  var live=document.getElementById("faqc-live");
+  var countEl=document.getElementById("faqc-count");
+  var emptyEl=document.getElementById("faqc-empty");
+  var emptyQ=document.getElementById("faqc-empty-q");
+  var titleEl=document.getElementById("faqc-list-title");
+  var allLabel=titleEl?titleEl.getAttribute("data-all-label"):"Toutes les réponses";
+  var activeCat="all", query="";
+
+  function setPressed(cat){
+    if(!catWrap) return;
+    catWrap.querySelectorAll(".faqc-cat").forEach(function(b){
+      b.setAttribute("aria-pressed",b.getAttribute("data-cat")===cat?"true":"false");
+    });
+  }
+
+  function apply(){
+    var q=query.trim(), fq=fold(q), visible=0;
+    items.forEach(function(it){
+      var r=records[it.id];
+      var matchCat=(activeCat==="all"||it.category===activeCat);
+      var catLabel=catMap[it.category]?catMap[it.category].label:"";
+      var matchQ=(!fq||fold(it.question+" "+it.answer+" "+catLabel).indexOf(fq)>=0);
+      var show=matchCat&&matchQ;
+      r.root.hidden=!show;
+      if(show){
+        visible++;
+        r.qtext.innerHTML=highlight(r.rawQ,q);
+        r.answer.innerHTML=highlight(r.rawA,q);
+      }else{
+        r.qtext.textContent=r.rawQ;
+        r.answer.textContent=r.rawA;
+      }
+    });
+
+    /* titre + compteur */
+    if(titleEl){
+      titleEl.textContent = q ? "Résultats de recherche"
+        : (activeCat==="all" ? allLabel : (catMap[activeCat]?catMap[activeCat].label:allLabel));
+    }
+    var word=visible>1?"réponses":"réponse";
+    if(countEl) countEl.innerHTML='<b>'+visible+'</b> '+word;
+    if(emptyEl) emptyEl.classList.toggle("is-visible",visible===0);
+    if(emptyQ) emptyQ.textContent=q?('« '+q+' »'):"votre recherche";
+
+    /* annonce accessible */
+    if(live){
+      live.textContent = visible===0
+        ? "Aucune réponse trouvée."
+        : (visible+" "+word+(q?(" pour « "+q+" »"):"")+".");
+    }
+  }
+
+  function scrollToAnswers(){
+    var sec=document.getElementById("faqc-answers"); if(!sec) return;
+    var y=sec.getBoundingClientRect().top+window.pageYOffset-90;
+    window.scrollTo({top:y<0?0:y,behavior:scrollBehavior});
+  }
+
+  /* recherche : span toutes catégories */
+  function runSearch(v){
+    query=v;
+    activeCat="all";
+    setPressed("all");
+    if(clearBtn) clearBtn.classList.toggle("is-visible",!!v.trim());
+    apply();
+  }
+  if(input){
+    input.addEventListener("input",function(){runSearch(input.value);});
+  }
+  var form=document.getElementById("faqc-search-form");
+  if(form){form.addEventListener("submit",function(e){e.preventDefault();runSearch(input.value);scrollToAnswers();});}
+  if(clearBtn){clearBtn.addEventListener("click",function(){input.value="";runSearch("");input.focus();});}
+
+  /* exemples */
+  document.querySelectorAll(".faqc-chip").forEach(function(chip){
+    chip.addEventListener("click",function(){
+      var term=chip.getAttribute("data-example")||"";
+      input.value=term; runSearch(term); scrollToAnswers();
+    });
+  });
+
+  /* catégories : clic → filtre + scroll */
+  if(catWrap){
+    catWrap.addEventListener("click",function(e){
+      var b=e.target.closest(".faqc-cat"); if(!b) return;
+      var cat=b.getAttribute("data-cat");
+      activeCat=cat; query=""; if(input) input.value="";
+      if(clearBtn) clearBtn.classList.remove("is-visible");
+      setPressed(cat);
+      apply();
+      scrollToAnswers();
+    });
+  }
+
+  /* questions populaires : ouvrir la question ciblée */
+  if(popWrap){
+    popWrap.addEventListener("click",function(e){
+      var b=e.target.closest(".faqc-pop"); if(!b) return;
+      var id=b.getAttribute("data-goto"); var r=records[id]; if(!r) return;
+      activeCat="all"; query=""; if(input) input.value="";
+      if(clearBtn) clearBtn.classList.remove("is-visible");
+      setPressed("all"); apply();
+      r.root.hidden=false;
+      r.root.classList.add("is-open");
+      r.btn.setAttribute("aria-expanded","true");
+      var y=r.root.getBoundingClientRect().top+window.pageYOffset-100;
+      window.scrollTo({top:y<0?0:y,behavior:scrollBehavior});
+      try{r.btn.focus({preventScroll:true});}catch(err){r.btn.focus();}
+    });
+  }
+
+  /* initial */
+  apply();
 })();
 </script>
 </body>

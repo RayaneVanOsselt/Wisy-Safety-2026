@@ -346,4 +346,16 @@
     "footer.legal_mentions": "Pravno obvestilo", "footer.legal_privacy": "Politika zasebnosti",
     "footer.legal_terms": "Splošni pogoji", "footer.rights": "Vse pravice pridržane."
   });
+
+  /* Centre d'aide (FAQ) — libellé du lien vers faq.html (pied de page + menu mobile). */
+  m("fr", { "footer.faq": "Centre d'aide" });
+  m("en", { "footer.faq": "Help centre" });
+  m("nl", { "footer.faq": "Helpcentrum" });
+  m("af", { "footer.faq": "Hulpsentrum" });
+  m("ar", { "footer.faq": "مركز المساعدة" });
+  m("bg", { "footer.faq": "Помощен център" });
+  m("de", { "footer.faq": "Hilfe-Center" });
+  m("ro", { "footer.faq": "Centru de ajutor" });
+  m("it", { "footer.faq": "Centro assistenza" });
+  m("sl", { "footer.faq": "Center za pomoč" });
 })();

@@ -9,12 +9,18 @@
    Les données proviennent EXCLUSIVEMENT du site réel (formations.html,
    contact.html, en-tête/pied de page, système de recherche existant).
    Aucune donnée n'est inventée : prix, dates et modalités précises ne
-   figurent pas sur le site → elles ne figurent pas ici et l'assistant
+   figurent pas ici tant qu'elles ne sont pas confirmées → l'assistant
    redirige alors vers le contact humain.
+
+   Formations à page dédiée (aujourd'hui : « Nacelles élévatrices ») : leurs
+   faits (prix, durée, langues, format, public, route) viennent du registre
+   central js/trainings-data.js — une seule définition, partagée avec la
+   recherche et le parcours d'inscription.
 
    Module « dual-mode » : s'expose comme `window.WisyAssistant.Knowledge`
    dans le navigateur ET comme `module.exports` sous Node (pour les tests),
-   sans aucune dépendance ni étape de build.
+   sans build. Dépend de `window.WisyTrainings` (js/trainings-data.js, à
+   charger AVANT ce fichier).
 
    Mise à jour : les URLs, ancres et clés i18n reflètent les fichiers du
    dépôt. Pour ajouter une formation, dupliquer une entrée `formation` et
@@ -23,11 +29,14 @@
    ========================================================================= */
 (function (root, factory) {
   "use strict";
-  var api = factory();
+  var Trainings = (typeof module === "object" && module.exports)
+    ? require("../trainings-data.js")
+    : root.WisyTrainings;
+  var api = factory(Trainings);
   if (typeof module === "object" && module.exports) module.exports = api;
   root.WisyAssistant = root.WisyAssistant || {};
   root.WisyAssistant.Knowledge = api;
-})(typeof self !== "undefined" ? self : this, function () {
+})(typeof self !== "undefined" ? self : this, function (Trainings) {
   "use strict";
 
   /* Date de dernière vérification du contenu face au site (ISO, statique
@@ -62,8 +71,47 @@
   };
 
   /* --------------------------------------------------------------------- */
+  /* Formation à page dédiée — construite depuis le registre central       */
+  /* (js/trainings-data.js). Aucun fait n'est recopié ici.                 */
+  /* --------------------------------------------------------------------- */
+  /* Mots trop génériques pour discriminer UNE formation : les garder dans
+     `keywords` ferait matcher « une formation » sur la nacelle et écraserait
+     le contexte de page (voir retrieval.bestFormation). */
+  var GENERIC_KEYWORD = /\b(formations?|securite)\b/;
+
+  function fromRegistry(T) {
+    return {
+      id: T.id,
+      type: "formation",
+      title: T.title,
+      fullTitle: T.fullTitle,
+      titleKey: T.titleKey,
+      category: T.category,
+      url: T.url,
+      signupUrl: T.signupUrl,
+      duration: Trainings.formatDuration(T.durationDays),
+      level: "Spécialisée",
+      description: T.summary,
+      descKey: T.summaryKey,
+      objective: T.objective,
+      price: T.price,
+      priceLabel: Trainings.formatPrice(T.price),
+      format: T.formatLabel,
+      languages: T.languageLabels.slice(),
+      audience: T.audience.slice(),
+      subtypes: T.types.map(function (t) { return t.name; }),
+      /* Affirmations réglementaires NON confirmées : l'assistant ne doit jamais
+         les avancer (voir responder.js → certification non confirmée). */
+      unconfirmed: T.unconfirmed.slice(),
+      features: [T.formatLabel, "Approche orientée sécurité", T.languageLabels.join(", ")],
+      keywords: T.keywords.filter(function (k) { return !GENERIC_KEYWORD.test(k); })
+    };
+  }
+  var NACELLE = (Trainings && Trainings.nacelles) ? fromRegistry(Trainings.nacelles) : null;
+
+  /* --------------------------------------------------------------------- */
   /* Formations — contenu réel de formations.html                          */
-  /* url        : fiche (ancre sur la page catalogue)                       */
+  /* url        : fiche (ancre sur la page catalogue, ou page dédiée)       */
   /* signupUrl  : pré-remplissage du formulaire d'inscription              */
   /* titleKey/descKey : clés i18n existantes (traduction multilingue live) */
   /* --------------------------------------------------------------------- */
@@ -113,21 +161,7 @@
       features: ["Produits chimiques", "Normes REACH", "Équipements adaptés"],
       keywords: ["diisocyanate", "diisocyanates", "isocyanate", "reach", "chimique", "chimiques", "substances", "dangereuses", "produits", "chemical", "gevaarlijke"]
     },
-    {
-      id: "nacelle",
-      type: "formation",
-      title: "Nacelle élévatrice",
-      titleKey: "dd.nacelle",
-      category: "technique",
-      url: "formations.html#nacelle",
-      signupUrl: "inscription.html?formation=nacelle",
-      duration: "1 jour",
-      level: "Spécialisée",
-      description: "Utilisation sécurisée des plateformes élévatrices mobiles (PEMP). Formation pratique sur machine.",
-      descKey: "fo.f4_desc",
-      features: ["Pratique sur machine", "Normes de sécurité", "Certification CACES"],
-      keywords: ["nacelle", "pemp", "caces", "elevatrice", "élévatrice", "plateforme", "hauteur", "lift", "aerial", "hoogwerker"]
-    },
+    NACELLE,
     {
       id: "fibre-optique",
       type: "formation",
@@ -158,7 +192,7 @@
       features: ["Gestes qui sauvent", "Brevet reconnu", "Pratique sur mannequin"],
       keywords: ["beps", "secours", "secourisme", "premiers", "brevet", "reanimation", "réanimation", "sauvetage", "first aid", "ehbo", "cpr", "defibrillateur"]
     }
-  ];
+  ].filter(Boolean);
 
   /* --------------------------------------------------------------------- */
   /* Pages principales (miroir de search.js PAGES)                          */
@@ -285,6 +319,11 @@
       entry.content,
       entry.level,
       entry.duration,
+      entry.format,
+      entry.objective,
+      (entry.languages || []).join(" "),
+      (entry.audience || []).join(" "),
+      (entry.subtypes || []).join(" "),
       (entry.features || []).join(" "),
       (entry.keywords || []).join(" ")
     ];

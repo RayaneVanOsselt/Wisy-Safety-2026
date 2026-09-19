@@ -45,3 +45,32 @@ test("filtre par type", () => {
   const r = Retrieval.search("contact téléphone", { types: ["contact"] });
   assert.ok(r.every((x) => x.entry.type === "contact"));
 });
+
+test("recherche : PEMP, « travail en hauteur » et « nacelles » remontent la nacelle en tête", () => {
+  ["PEMP", "travail en hauteur", "nacelles élévatrices", "nacelle ciseaux"].forEach((q) => {
+    const r = Retrieval.search(q);
+    assert.ok(r.length > 0, q);
+    assert.equal(r[0].entry.id, "nacelle", q);
+  });
+});
+
+test("le mot « CACES » n'associe plus la nacelle à une certification", () => {
+  const r = Retrieval.bestFormation("caces");
+  assert.equal(r, null);
+});
+
+test("un jeton ne matche jamais au MILIEU d'un mot (« dure » ≠ « soudure »)", () => {
+  /* Régression : « Combien de temps dure la formation ? » désignait « Fibre optique » (sou-dure). */
+  assert.equal(Retrieval.bestFormation("Combien de temps dure la formation ?"), null);
+  const soudure = Retrieval.search("dure", { types: ["formation"], minScore: 1 });
+  assert.ok(soudure.every((r) => r.entry.id !== "fibre-optique"), "« dure » ne doit pas trouver la fibre");
+});
+
+test("une correspondance dans le CORPS de texte seul (« jours », « formation ») ne désigne aucune formation", () => {
+  ["Combien de jours dure la formation ?", "Durée de cette formation en jours", "une formation de 3 jours"].forEach((q) => {
+    assert.equal(Retrieval.bestFormation(q), null, q);
+  });
+  /* … mais un mot du titre ou des mots-clés reste discriminant */
+  assert.equal(Retrieval.bestFormation("formation de 3 jours sur la fibre").id, "fibre-optique");
+  assert.equal(Retrieval.bestFormation("formation nacelle de 1 jour").id, "nacelle");
+});

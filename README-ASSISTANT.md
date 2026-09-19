@@ -25,9 +25,11 @@ back-end limité à Supabase pour les avis). L'assistant est donc conçu en
 > automatiquement sur le cœur local** — l'assistant reste utile en production.
 
 La base de connaissances (`js/assistant/knowledge.js`) est la **seule source
-factuelle**. Elle ne contient **aucune donnée inventée** : le site n'affichant
-pas de prix ni de dates précises, l'assistant répond honnêtement « information
-non disponible » puis oriente vers le contact.
+factuelle**. Elle ne contient **aucune donnée inventée** : tant qu'un prix ou une
+date n'est pas confirmé, l'assistant répond honnêtement « information non
+disponible » puis oriente vers le contact. Seuls les faits **confirmés** par Wisy
+Safety sont connus (aujourd'hui : le tarif, la durée, les langues, le format et le
+public de la formation Nacelles élévatrices — voir §4 bis).
 
 ---
 
@@ -73,6 +75,27 @@ README-ASSISTANT.md                   Ce document
 - Si l'Edge Function IA est utilisée, répercuter la même donnée dans
   **`supabase/functions/chat/knowledge.ts`** (miroir).
 
+### 4 bis. Formations à page dédiée — registre central
+
+La formation **Nacelles élévatrices** n'est plus saisie à la main dans
+`knowledge.js` : elle est **construite depuis `js/trainings-data.js`**, la source
+unique de ses faits (route, prix HT, durée, langues, format, public, types,
+mots-clés, visuels), partagée avec la recherche globale, le parcours
+d'inscription et la page `formation-nacelles-elevatrices.html`. `trainings-data.js`
+doit être chargé **avant** `knowledge.js` (déjà fait sur les 6 pages).
+
+- L'allow-list d'URLs (`validation.js`) et la détection du contexte de page
+  (`assistant.js`) se **déduisent** de la base : ajouter une formation à page
+  dédiée n'exige aucune liste supplémentaire.
+- **Véracité** : le registre déclare `unconfirmed` (CACES, certification,
+  agrément, reconnaissance, caractère obligatoire). Toute question à ce sujet
+  reçoit « Cette information doit être confirmée auprès de l'équipe Wisy Safety »
+  (`meta.intent = certification_unconfirmed`) — jamais une affirmation.
+- Un prix n'est donné **que** pour une formation qui en a un confirmé ; les autres
+  restent « non indiqué » (aucun chiffre inventé).
+- Le miroir serveur (`knowledge.ts`) reste une copie : `tests/trainings.test.js`
+  échoue si elle diverge du registre.
+
 ---
 
 ## 5. Variables d'environnement
@@ -111,7 +134,10 @@ node --test tests/*.test.js
 
 Couvre : chargement de la base, recherche, moteur de réponse (prix non inventé,
 durée réelle, contact, **anti prompt-injection**, formation inexistante,
-contexte de page) et validation (allow-list d'URLs, structure).
+contexte de page), validation (allow-list d'URLs, structure) et — pour la
+formation Nacelles — tarif, langues, format, public, types, **refus d'affirmer
+CACES/certification**, cohérence page ↔ registre ↔ miroir serveur ↔ inscription
+↔ recherche, et intégrité i18n (`tests/trainings.test.js`).
 
 **Test manuel** — ouvrir le panneau et essayer :
 « Quelles formations proposez-vous ? », « Je cherche une formation sur la fibre

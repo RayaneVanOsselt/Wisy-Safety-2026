@@ -4,6 +4,8 @@
 // Miroir TypeScript de js/assistant/knowledge.js. Gardez les deux SYNCHRONISÉS
 // (mêmes formations, durées, URLs). Runtime Deno (Supabase Edge Functions) :
 // pas de partage direct avec le bundle navigateur, d'où cette copie compacte.
+// Les faits de la formation « Nacelles élévatrices » proviennent du registre
+// js/trainings-data.js ; tests/trainings.test.js vérifie que cette copie ne dérive pas.
 // Ces données sont la SEULE source factuelle : le modèle ne doit rien ajouter.
 // =========================================================================
 
@@ -16,6 +18,11 @@ export interface Entry {
   level?: string;
   category?: string;
   signupUrl?: string;
+  priceLabel?: string;     // uniquement si le tarif est CONFIRMÉ
+  format?: string;
+  languages?: string[];
+  audience?: string[];
+  subtypes?: string[];
   content: string;
   keywords: string[];
 }
@@ -47,11 +54,17 @@ export const FORMATIONS: Entry[] = [
     duration: "1 jour", level: "Spécialisée",
     content: "Manipulation sécurisée des produits chimiques en entreprise. Conforme aux normes européennes en vigueur.",
     keywords: ["diisocyanate", "isocyanate", "reach", "chimique", "substances", "dangereuses"] },
-  { id: "nacelle", type: "formation", title: "Nacelle élévatrice", category: "technique",
-    url: "formations.html#nacelle", signupUrl: "inscription.html?formation=nacelle",
+  { id: "nacelle", type: "formation", title: "Nacelles élévatrices", category: "technique",
+    url: "formation-nacelles-elevatrices.html", signupUrl: "inscription.html?formation=nacelle",
     duration: "1 jour", level: "Spécialisée",
-    content: "Utilisation sécurisée des plateformes élévatrices mobiles (PEMP). Formation pratique sur machine.",
-    keywords: ["nacelle", "pemp", "caces", "elevatrice", "plateforme", "hauteur"] },
+    priceLabel: "350 € HT", format: "Théorie + pratique",
+    languages: ["Français", "Néerlandais", "Anglais"],
+    audience: ["opérateurs", "techniciens de maintenance", "personnel d'entretien",
+      "toute personne amenée à utiliser une nacelle dans le cadre de son activité professionnelle"],
+    subtypes: ["Nacelle ciseaux", "Nacelle araignée", "Nacelle télescopique", "Nacelle articulée",
+      "Nacelle sur camion", "Nacelle verticale", "Nacelle automotrice"],
+    content: "Développez les compétences nécessaires pour utiliser les nacelles élévatrices de manière sûre, efficace et responsable dans un environnement professionnel. Objectif : utiliser les nacelles élévatrices de manière sûre et identifier les risques associés. AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer.",
+    keywords: ["nacelle", "nacelles", "pemp", "mewp", "travail en hauteur", "plateforme elevatrice", "elevatrice", "ciseaux", "araignee", "telescopique", "articulee", "camion", "verticale", "automotrice", "hoogwerker"] },
   { id: "fibre-optique", type: "formation", title: "Fibre optique", category: "technique",
     url: "formations.html#fibre-optique", signupUrl: "inscription.html?formation=fibre-optique",
     duration: "3 jours", level: "Technique",
@@ -90,7 +103,7 @@ export const FAQ: Entry[] = [
     content: "Les formations durent de 1 à 3 jours, sont animées par des formateurs experts, alternent théorie et pratique et débouchent le plus souvent sur une certification reconnue. Pour les dates précises, contacter Wisy Safety.",
     keywords: ["deroulement", "deroule", "passe", "organisation", "duree", "pratique"] },
   { id: "faq-tarifs", type: "faq", title: "Tarifs", url: "contact.html",
-    content: "Les tarifs ne sont PAS indiqués sur le site : ils dépendent de la formation et du contexte. Inviter à contacter Wisy Safety pour un tarif adapté. NE JAMAIS inventer de prix.",
+    content: "Seul le tarif de la formation Nacelles élévatrices est confirmé : 350 € HT (hors TVA). Pour toutes les AUTRES formations, le tarif n'est PAS confirmé ici : inviter à contacter Wisy Safety pour un tarif adapté. NE JAMAIS inventer de prix.",
     keywords: ["tarif", "prix", "cout", "combien", "devis", "budget"] },
   { id: "faq-lieu", type: "faq", title: "Localisation", url: "contact.html",
     content: "Centre de formation à la sécurité situé à Anderlecht (1070), Bruxelles.",
@@ -117,10 +130,12 @@ export function normalize(s: string): string {
     .replace(/[^a-z0-9\s'-]/g, " ").replace(/\s+/g, " ").trim();
 }
 function tokenize(s: string): string[] {
-  return normalize(s).split(" ").filter((w) => w.length >= 2 && !STOP.has(w));
+  return normalize(s).split(" ").filter((w) => w.length >= 3 && !STOP.has(w)); // ≥ 3 : voir js/assistant/retrieval.js
 }
 function text(e: Entry): string {
-  return normalize([e.title, e.content, e.level, e.duration, e.category, e.keywords.join(" ")].filter(Boolean).join(" "));
+  return normalize([e.title, e.content, e.level, e.duration, e.format, e.category,
+    (e.languages ?? []).join(" "), (e.audience ?? []).join(" "), (e.subtypes ?? []).join(" "),
+    e.keywords.join(" ")].filter(Boolean).join(" "));
 }
 
 export function contextFor(query: string, limit = 5): Entry[] {

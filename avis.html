@@ -37,11 +37,12 @@
   --fs-h2:clamp(1.9rem,3.4vw,2.8rem);--fs-h3:clamp(1.2rem,1.8vw,1.5rem);
   --fs-lead:clamp(1.05rem,1.4vw,1.22rem);--fs-menu:1.02rem;--fs-small:.875rem;--fs-micro:.75rem;
   --maxw:1560px;--pad-x:clamp(1.25rem,4vw,3rem);
-  --radius-sm:8px;--radius:16px;--radius-lg:22px;--radius-pill:999px;
+  --radius-sm:8px;--radius:16px;--radius-lg:22px;--radius-pill:999px;--radius-btn:12px;
   --shadow-sm:0 2px 10px rgba(27,45,40,.06);--shadow-md:0 10px 30px rgba(27,45,40,.10);
   --shadow-card:0 18px 44px rgba(27,45,40,.14);--shadow-drop:0 22px 50px rgba(27,45,40,.16);
-  --ease-out:cubic-bezier(.16,1,.3,1);--ease:cubic-bezier(.4,0,.2,1);
-  --t-fast:.3s;--t-med:.45s;--t-reveal:.55s;
+  --motion-fast:220ms;--motion-base:320ms;--motion-slow:560ms;--ease-premium:cubic-bezier(.22,1,.36,1);
+  --ease-out:var(--ease-premium);--ease:cubic-bezier(.4,0,.2,1);
+  --t-fast:var(--motion-base);--t-med:.45s;--t-reveal:var(--motion-slow);
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -53,17 +54,18 @@ ul{margin:0;padding:0;list-style:none}button{font-family:inherit;cursor:pointer;
 .container{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad-x)}
 
 /* ==================== BOUTONS ==================== */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-family:var(--font-titre);font-weight:600;font-size:.98rem;padding:.85rem 1.7rem;border-radius:var(--radius-pill);white-space:nowrap;
-  transition:transform var(--t-fast) var(--ease-out),box-shadow var(--t-fast) var(--ease-out),background-color var(--t-fast) var(--ease),border-color var(--t-fast) var(--ease),color var(--t-fast) var(--ease)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:48px;font-family:var(--font-titre);font-weight:600;font-size:.98rem;line-height:1.2;padding:.875rem 1.5rem;border-radius:var(--radius-btn);white-space:nowrap;
+  transition:transform var(--motion-base) var(--ease-premium),box-shadow var(--motion-base) var(--ease-premium),background-color var(--motion-base) var(--ease),border-color var(--motion-base) var(--ease),color var(--motion-base) var(--ease)}
 .btn--cta{background:var(--turquoise);color:var(--noir-jais)}
-.btn--cta:hover,.btn--cta:focus-visible{transform:translateY(-2px);box-shadow:0 12px 30px var(--turquoise-glow)}
+.btn--cta:hover,.btn--cta:focus-visible{background:var(--brume);transform:translateY(-1px);box-shadow:0 6px 16px rgba(27,45,40,.14)}
 .btn--outline{background:transparent;color:var(--epinette);border:1.5px solid var(--epinette)}
 .btn--outline:hover,.btn--outline:focus-visible{background:var(--brume-14);border-color:var(--brume)}
 .btn--ghost{background:transparent;color:var(--creme);border:1.5px solid var(--line-strong)}
 .btn--ghost:hover,.btn--ghost:focus-visible{background:rgba(244,250,249,.07);border-color:rgba(244,250,249,.5)}
 .btn--light{background:transparent;color:var(--creme);border:1.5px solid rgba(244,250,249,.75)}
 .btn--light:hover,.btn--light:focus-visible{background:rgba(244,250,249,.12);border-color:var(--creme)}
-.btn__arrow{font-size:1.05em;line-height:1}
+.btn__arrow{display:inline-block;font-size:1.05em;line-height:1;transition:transform var(--motion-base) var(--ease-premium)}
+.btn:hover .btn__arrow,.btn:focus-visible .btn__arrow{transform:translateX(4px)}
 
 /* ==================== HEADER (validé) ==================== */
 .site-header{position:sticky;top:0;z-index:1000}
@@ -925,7 +927,7 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
             <a class="dropdown__item" role="menuitem" href="formations.html"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span><span class="dropdown__tt" data-i18n="nav.all_formations">Voir toutes les formations</span><span class="dropdown__ds" data-i18n="nav.all_formations_desc">Notre catalogue complet certifié</span></span></a>
             <a class="dropdown__item" role="menuitem" href="formations.html#vca-base"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/></svg></span><span><span class="dropdown__tt" data-i18n="dd.vca_base">VCA de base</span><span class="dropdown__ds" data-i18n="dd.vca_base_desc">Les fondamentaux de la sécurité chantier</span></span></a>
             <a class="dropdown__item" role="menuitem" href="formations.html#vca-hierarchique"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v6M6 21v-6M18 21v-6M6 15a6 6 0 0 1 12 0"/><circle cx="12" cy="9" r="1.4"/></svg></span><span><span class="dropdown__tt" data-i18n="dd.vca_hier">VCA ligne hiérarchique</span><span class="dropdown__ds" data-i18n="dd.vca_hier_desc">Pour l'encadrement et les responsables</span></span></a>
-            <a class="dropdown__item" role="menuitem" href="formations.html#nacelle"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21h6v-4H4zM7 17V4l12 3v6"/><path d="M14 13h5"/></svg></span><span><span class="dropdown__tt" data-i18n="dd.nacelle">Nacelle élévatrice</span><span class="dropdown__ds" data-i18n="dd.nacelle_desc">Conduite en sécurité des PEMP</span></span></a>
+            <a class="dropdown__item" role="menuitem" href="formation-nacelles-elevatrices.html"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21h6v-4H4zM7 17V4l12 3v6"/><path d="M14 13h5"/></svg></span><span><span class="dropdown__tt" data-i18n="dd.nacelle">Nacelles élévatrices</span><span class="dropdown__ds" data-i18n="dd.nacelle_desc">Conduite en sécurité des PEMP</span></span></a>
             <a class="dropdown__item" role="menuitem" href="formations.html#fibre-optique"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12c4-6 12-6 16 0M7 12c2.5-3.5 7.5-3.5 10 0"/><circle cx="12" cy="12" r="2"/></svg></span><span><span class="dropdown__tt" data-i18n="dd.fibre">Fibre optique</span><span class="dropdown__ds" data-i18n="dd.fibre_desc">Installation et raccordement</span></span></a>
             <a class="dropdown__item" role="menuitem" href="formations.html#beps"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c-4-2.5-7-6-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 4-3 7.5-7 10z"/><path d="M12 9v4M10 11h4"/></svg></span><span><span class="dropdown__tt" data-i18n="dd.beps">BEPS — Premier secours</span><span class="dropdown__ds" data-i18n="dd.beps_desc">Les gestes qui sauvent</span></span></a>
             <a class="dropdown__item" role="menuitem" href="formations.html#diisocyanates"><span class="dropdown__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v5l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 17l-5-9V3"/><path d="M7.5 14h9"/></svg></span><span><span class="dropdown__tt" data-i18n="dd.diiso">Diisocyanates &amp; substances dangereuses</span><span class="dropdown__ds" data-i18n="dd.diiso_desc">Manipulation conforme à la réglementation</span></span></a>
@@ -970,7 +972,7 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
     <li><button class="m-acc__trigger" aria-expanded="false"><span data-i18n="nav.formations">Formations</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
       <div class="m-acc__panel"><div><ul class="m-acc__list">
         <li><a href="formations.html" data-i18n="nav.all_formations">Voir toutes les formations</a></li>
-        <li><a href="formations.html#vca-base" data-i18n="dd.vca_base">VCA de base</a></li><li><a href="formations.html#vca-hierarchique" data-i18n="dd.vca_hier">VCA ligne hiérarchique</a></li><li><a href="formations.html#nacelle" data-i18n="dd.nacelle">Nacelle élévatrice</a></li>
+        <li><a href="formations.html#vca-base" data-i18n="dd.vca_base">VCA de base</a></li><li><a href="formations.html#vca-hierarchique" data-i18n="dd.vca_hier">VCA ligne hiérarchique</a></li><li><a href="formation-nacelles-elevatrices.html" data-i18n="dd.nacelle">Nacelles élévatrices</a></li>
         <li><a href="formations.html#fibre-optique" data-i18n="dd.fibre">Fibre optique</a></li><li><a href="formations.html#beps" data-i18n="dd.beps">BEPS — Premier secours</a></li><li><a href="formations.html#diisocyanates" data-i18n="dd.diiso">Diisocyanates &amp; substances dangereuses</a></li>
       </ul></div></div></li>
     <li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="#" data-i18n="nav.agenda">Agenda</a></li><li><a href="avis.html" data-i18n="nav.avis">Avis</a></li>
@@ -1257,6 +1259,7 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
 <script src="js/i18n-data-avis.js"></script>
 <script src="js/i18n.js"></script>
 <!-- Recherche globale -->
+<script src="js/trainings-data.js"></script>
 <script src="js/search.js"></script>
 
 <!-- Assistant Wisy (mascotte + assistant conversationnel) -->

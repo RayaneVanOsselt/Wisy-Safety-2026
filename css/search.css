@@ -256,6 +256,36 @@
 }
 .wsy-search__ds mark { font-weight: 600; }
 
+/* Résultat « riche » (fiche avec page dédiée) : miniature, description sur 2 lignes,
+   faits clés (durée · format · langues). Même langage visuel que les autres résultats. */
+.wsy-search__item--rich { align-items: flex-start; padding-block: .7rem; }
+.wsy-search__ic--thumb {
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  background: var(--granit-12, rgba(94, 109, 106, .12));
+}
+.wsy-search__ic--thumb img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; display: block; }
+.wsy-search__item:hover .wsy-search__ic--thumb,
+.wsy-search__item.is-active .wsy-search__ic--thumb { background: var(--granit-12, rgba(94, 109, 106, .12)); }
+.wsy-search__ds--wrap {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-top: .15rem;
+}
+.wsy-search__facts {
+  display: block;
+  margin-top: .3rem;
+  font-family: var(--font-titre, "Poppins", system-ui, sans-serif);
+  font-size: var(--fs-micro, .75rem);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: .01em;
+  color: var(--epinette, #1F6F64);
+}
+
 /* Puce méta (catégorie / durée) à droite */
 .wsy-search__meta {
   flex-shrink: 0;

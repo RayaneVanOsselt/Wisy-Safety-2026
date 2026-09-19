@@ -49,6 +49,7 @@
       duration: f.duration,
       level: f.level,
       category: f.category,
+      priceLabel: f.priceLabel,   /* uniquement si le tarif est confirmé */
       url: f.url,
       signupUrl: f.signupUrl
     };
@@ -91,7 +92,11 @@
       "clé", "secret", "token", "jailbreak", "dan mode", "developer mode"
     ]) && has(q, ["prompt", "instruction", "instructions", "regle", "regles", "consigne", "consignes", "secret", "systeme", "api", "environnement", "ignore", "ignorez", "oublie"]);
   }
-  function isPrice(q) { return has(q, ["prix", "tarif", "tarifs", "cout", "combien", "coute", "coutent", "devis", "budget", "euro", "euros", "gratuit"]); }
+  function isPrice(q) {
+    // « combien de temps / de jours / d'heures » = une question de DURÉE, pas de prix
+    if (/combien (de|d'?) ?(temps|jour|jours|heure|heures)/.test(q)) return false;
+    return has(q, ["prix", "tarif", "tarifs", "cout", "combien", "coute", "coutent", "devis", "budget", "euro", "euros", "gratuit"]);
+  }
   function isContactWanted(q) {
     return has(q, ["contacter", "contact", "conseiller", "humain", "quelqu'un", "quelquun", "parler", "appeler", "telephone", "telephoner", "joindre", "rappel", "rappeler", "email", "mail", "coordonnees", "adresse"]);
   }
@@ -103,6 +108,44 @@
   function isSchedule(q) { return has(q, ["date", "dates", "quand", "prochaine", "session", "sessions", "calendrier", "planning", "horaire", "horaires"]); }
   function isHowItWorks(q) { return has(q, ["deroule", "deroulement", "passe", "fonctionne", "organise", "organisation", "comment ca", "comment se"]); }
   function isSignup(q) { return has(q, ["inscrire", "inscription", "inscris", "reserver", "reservation", "s'inscrire", "sinscrire", "reserve"]); }
+  /* Détecteurs « fiche formation » (langues, format, public, types, lieu, réglementaire) */
+  function isLanguage(q) { return has(q, ["langue", "langues", "neerlandais", "anglais", "flamand", "nederlands", "english", "dutch"]); }
+  /* « format » en mot ENTIER : has() teste un préfixe et « format » préfixerait « formation ». */
+  function isPractice(q) { return has(q, ["pratique", "pratiques", "theorie", "theorique", "theoriques", "sur machine", "exercice", "exercices", "mise en situation"]) || /(^|\s)format(\s|$)/.test(q); }
+  function isAudience(q) { return has(q, ["pour moi", "public", "s'adresse", "adresse a", "destinee", "destine", "convient", "concerne", "concernee", "a qui", "qui peut", "technicien", "techniciens", "maintenance", "operateur", "operateurs", "entretien", "je travaille", "je suis"]); }
+  function isTypes(q) { return has(q, ["type", "types", "sorte", "sortes", "modele", "modeles", "ciseaux", "araignee", "telescopique", "articulee", "camion", "verticale", "automotrice"]); }
+  function isWhere(q) { return has(q, ["ou trouver", "ou puis", "ou voir", "ou est", "ou se", "lien", "fiche", "detail", "details", "page"]); }
+  function isCertification(q) { return has(q, ["caces", "r486", "certifi", "agree", "agrement", "reconnu", "reconnue", "reconnaissance", "obligatoire", "attestation", "diplome", "homologu"]); }
+
+  /* « a, b et c » */
+  function joinList(items) {
+    if (items.length <= 1) return items.join("");
+    return items.slice(0, -1).join(", ") + " et " + items[items.length - 1];
+  }
+  function lower(s) { return String(s).charAt(0).toLowerCase() + String(s).slice(1); }
+
+  /* Formation dont le public visé recoupe le message (« je travaille dans la maintenance… »). */
+  function audienceMatch(rawMessage) {
+    var tokens = Retrieval.tokenize(rawMessage);
+    var found = null;
+    Knowledge.formations().forEach(function (f) {
+      if (found || !f.audience) return;
+      var hay = " " + Retrieval.normalize(f.audience.join(" ")) + " ";
+      for (var i = 0; i < tokens.length; i++) {
+        if (tokens[i].length >= 5 && hay.indexOf(" " + tokens[i]) !== -1) { found = f; return; }
+      }
+    });
+    return found;
+  }
+
+  /* Faits complémentaires d'une fiche (uniquement ceux qui existent). */
+  function extraFacts(f) {
+    var out = [];
+    if (f.format) out.push("Format : " + lower(f.format) + ".");
+    if (f.priceLabel) out.push("Tarif : " + f.priceLabel + ".");
+    if (f.languages) out.push("Langues : " + f.languages.map(lower).join(", ") + ".");
+    return out.length ? " " + out.join(" ") : "";
+  }
 
   /* --------------------------------------------------------------------- */
   /* Écran d'accueil (contextuel)                                           */
@@ -118,6 +161,10 @@
       if (f) {
         intro = "Une question sur la formation « " + f.title + " » ? Je peux vous en résumer les points clés ou vous aider à vous inscrire.";
         suggestions = ["Durée de cette formation", "Comment m’inscrire ?", "Voir d’autres formations", "Contacter Wisy Safety"];
+        if (f.priceLabel && f.subtypes) {
+          /* fiche riche (tarif + types de nacelles connus) : questions les plus utiles d'abord */
+          suggestions = ["Quel est le tarif ?", "Durée de cette formation", "Quels types de nacelles ?", "Comment m’inscrire ?"];
+        }
       }
     } else if (ctx.page === "formations") {
       intro = "Bonjour 👋\nJe peux vous aider à trouver la formation adaptée à votre besoin. Dites-moi votre secteur ou votre objectif.";
@@ -170,7 +217,32 @@
     var mentioned = Retrieval.bestFormation(rawMessage);
     if (!mentioned && opts.context && opts.context.formationId) mentioned = Knowledge.byId(opts.context.formationId);
 
-    /* 3) Prix / tarif — NON présent sur le site → honnêteté + contact */
+    /* 2b) CACES / certification / agrément : jamais affirmés sans confirmation.
+       Concerne les formations qui déclarent des affirmations `unconfirmed`
+       (la nacelle) — ou toute mention explicite de CACES / R486. */
+    if (isCertification(q) && ((mentioned && mentioned.unconfirmed) || has(q, ["caces", "r486"]))) {
+      var certTarget = (mentioned && mentioned.unconfirmed) ? mentioned : Knowledge.byId("nacelle");
+      return {
+        message: "Cette information doit être confirmée auprès de l’équipe Wisy Safety : je ne peux pas affirmer qu’une certification, un CACES, un agrément ou une reconnaissance officielle est associé à cette formation sans confirmation. Contactez-nous pour une réponse précise.",
+        cards: (certTarget ? [trainingCard(certTarget)] : []).concat([contactCard()]),
+        suggestions: ["Voir les formations disponibles", "Comment m’inscrire ?"],
+        sources: [{ title: "Contact", url: C.contactUrl }],
+        meta: { intent: "certification_unconfirmed" }
+      };
+    }
+
+    /* 3a) Prix CONNU pour cette formation (confirmé par Wisy Safety) */
+    if (isPrice(q) && mentioned && mentioned.priceLabel) {
+      return {
+        message: "La formation « " + mentioned.title + " » est proposée à " + mentioned.priceLabel + " (hors TVA). Pour toute question sur les modalités (dates, groupe, entreprise), contactez l’équipe Wisy Safety.",
+        cards: [trainingCard(mentioned), contactCard()],
+        suggestions: ["Comment m’inscrire ?", "Durée de cette formation", "Voir d’autres formations"],
+        sources: [{ title: mentioned.title, url: mentioned.url }],
+        meta: { intent: "formation_price" }
+      };
+    }
+
+    /* 3) Prix / tarif — NON présent pour cette formation → honnêteté + contact */
     if (isPrice(q)) {
       return {
         message: "Les tarifs ne sont pas indiqués sur le site : ils dépendent de la formation et du contexte (individuel ou entreprise). Le mieux est de nous contacter pour recevoir un tarif adapté" + (mentioned ? " pour la formation « " + mentioned.title + " »." : ".") ,
@@ -200,6 +272,35 @@
         sources: [{ title: "Contact", url: C.contactUrl }],
         meta: { intent: "contact" }
       };
+    }
+
+    /* 5b) Langues — aucune formation nommée : on répond avec les faits connus */
+    if (isLanguage(q) && !mentioned) {
+      var withLang = Knowledge.formations().filter(function (f) { return f.languages; });
+      if (withLang.length) {
+        var lf = withLang[0];
+        return {
+          message: "La formation « " + lf.title + " » est disponible en " + joinList(lf.languages.map(lower)) + ". Pour les autres formations, la langue n’est pas indiquée sur le site : contactez l’équipe Wisy Safety.",
+          cards: [trainingCard(lf), contactCard()],
+          suggestions: ["Voir les formations disponibles", "Comment m’inscrire ?"],
+          sources: [{ title: lf.title, url: lf.url }],
+          meta: { intent: "formation_languages" }
+        };
+      }
+    }
+
+    /* 5c) Public visé — « je travaille dans la maintenance, est-ce pour moi ? » */
+    if (isAudience(q) && !mentioned) {
+      var aud = audienceMatch(rawMessage);
+      if (aud) {
+        return {
+          message: "Cela peut vous concerner : la formation « " + aud.title + " » s’adresse aux " + joinList(aud.audience.map(lower)) + ".",
+          cards: [trainingCard(aud)],
+          suggestions: ["Comment m’inscrire ?", "Quel est le tarif ?", "Voir d’autres formations"],
+          sources: [{ title: aud.title, url: aud.url }],
+          meta: { intent: "formation_audience" }
+        };
+      }
     }
 
     /* 6) Lister les formations */
@@ -239,9 +340,55 @@
           meta: { intent: "formation_signup" }
         };
       }
+      /* Fiche riche (faits confirmés dans le registre) : réponses ciblées */
+      if (mentioned.languages && isLanguage(q)) {
+        return {
+          message: "La formation « " + mentioned.title + " » est disponible en " + joinList(mentioned.languages.map(lower)) + ".",
+          cards: [trainingCard(mentioned)],
+          suggestions: ["Comment m’inscrire ?", "Quel est le tarif ?"],
+          sources: [{ title: mentioned.title, url: mentioned.url }],
+          meta: { intent: "formation_languages" }
+        };
+      }
+      if (mentioned.subtypes && isTypes(q)) {
+        return {
+          message: "La page de la formation « " + mentioned.title + " » présente " + mentioned.subtypes.length + " types de nacelles : " + joinList(mentioned.subtypes.map(lower)) + ". Chaque type est détaillé (principe de fonctionnement, usages, avantages et limites).",
+          cards: [trainingCard(mentioned)],
+          suggestions: ["Quel est le tarif ?", "Comment m’inscrire ?"],
+          sources: [{ title: mentioned.title, url: mentioned.url }],
+          meta: { intent: "formation_types" }
+        };
+      }
+      if (mentioned.audience && isAudience(q)) {
+        return {
+          message: "La formation « " + mentioned.title + " » s’adresse aux " + joinList(mentioned.audience.map(lower)) + ".",
+          cards: [trainingCard(mentioned)],
+          suggestions: ["Comment m’inscrire ?", "Quel est le tarif ?"],
+          sources: [{ title: mentioned.title, url: mentioned.url }],
+          meta: { intent: "formation_audience" }
+        };
+      }
+      if (mentioned.format && isPractice(q)) {
+        return {
+          message: "Oui : le format de la formation « " + mentioned.title + " » est « " + lower(mentioned.format) + " ». Elle associe donc des notions théoriques et une mise en pratique.",
+          cards: [trainingCard(mentioned)],
+          suggestions: ["Durée de cette formation", "Comment m’inscrire ?"],
+          sources: [{ title: mentioned.title, url: mentioned.url }],
+          meta: { intent: "formation_format" }
+        };
+      }
+      if (isWhere(q) && mentioned.url !== "formations.html#" + mentioned.id) {
+        return {
+          message: "Vous trouverez la formation « " + mentioned.title + " » sur sa page dédiée (programme, types de nacelles, FAQ) ainsi que dans le catalogue des formations.",
+          cards: [trainingCard(mentioned)],
+          suggestions: ["Quel est le tarif ?", "Comment m’inscrire ?"],
+          sources: [{ title: mentioned.title, url: mentioned.url }, { title: "Toutes les formations", url: "formations.html" }],
+          meta: { intent: "formation_location" }
+        };
+      }
       // Fiche générale de la formation
       return {
-        message: "Voici la formation « " + mentioned.title + " » : " + mentioned.description + " Durée : " + mentioned.duration + ".",
+        message: "Voici la formation « " + mentioned.title + " » : " + mentioned.description + " Durée : " + mentioned.duration + "." + extraFacts(mentioned),
         cards: [trainingCard(mentioned)],
         suggestions: ["Comment m’inscrire ?", "Voir d’autres formations", "Contacter Wisy Safety"],
         sources: [{ title: mentioned.title, url: mentioned.url }],

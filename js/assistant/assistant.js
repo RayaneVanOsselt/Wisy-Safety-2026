@@ -67,6 +67,7 @@
     arrow:    '<path d="M5 12h14M13 6l6 6-6 6"/>',
     clock:    '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     level:    '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+    price:    '<path d="M18 7a6 6 0 0 0-5-3 6 6 0 0 0 0 16 6 6 0 0 0 5-3M4 10h9M4 14h9"/>',
     phone:    '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2z"/>',
     mail:     '<rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3 6 9 6 9-6"/>',
     pin:      '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6"/>',
@@ -137,6 +138,14 @@
     if (cand && NS.Knowledge && NS.Knowledge.byId(cand) && NS.Knowledge.byId(cand).type === "formation") {
       fid = cand;
       if (page === "formations" || page === "inscription") page = "formation";
+    }
+    /* Page dédiée d'une formation (ex. formation-nacelles-elevatrices.html) :
+       déduite de la base de connaissances, sans liste de pages à maintenir ici. */
+    if (NS.Knowledge && page === "generic") {
+      var own = NS.Knowledge.formations().filter(function (f) {
+        return String(f.url).split("#")[0].split("?")[0].toLowerCase() === path;
+      })[0];
+      if (own) { page = "formation"; fid = own.id; }
     }
     return { page: page, formationId: fid, path: path };
   }
@@ -396,6 +405,7 @@
       var meta = el("div", { class: "wa-card__meta" });
       if (card.duration) meta.appendChild(el("span", { class: "wa-tag" }, [iconSpan("clock", 12), el("span", { text: card.duration })]));
       if (card.level) meta.appendChild(el("span", { class: "wa-tag" }, [iconSpan("level", 12), el("span", { text: card.level })]));
+      if (card.priceLabel) meta.appendChild(el("span", { class: "wa-tag" }, [iconSpan("price", 12), el("span", { text: card.priceLabel })]));
 
       var a = el("a", {
         class: "wa-card wa-card--training", href: card.url,

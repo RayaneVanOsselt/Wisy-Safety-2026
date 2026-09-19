@@ -19,9 +19,14 @@ test("chaque entrée respecte le schéma { id, title, url, type, updatedAt }", (
   });
 });
 
-test("formations : url = fiche, signupUrl = inscription, durée présente", () => {
+test("formations : url = fiche (ancre catalogue OU page dédiée existante), signupUrl = inscription, durée présente", () => {
+  const fs = require("node:fs");
+  const path = require("node:path");
   Knowledge.formations().forEach((f) => {
-    assert.match(f.url, /^formations\.html#/, "url " + f.id);
+    assert.match(f.url, /^(formations\.html#[a-z-]+|formation-[a-z0-9-]+\.html)$/, "url " + f.id);
+    if (/^formation-/.test(f.url)) {
+      assert.ok(fs.existsSync(path.join(__dirname, "..", f.url)), "la page dédiée existe : " + f.url);
+    }
     assert.match(f.signupUrl, /^inscription\.html\?formation=/, "signup " + f.id);
     assert.ok(f.duration && /jour/.test(f.duration), "durée " + f.id);
   });
@@ -34,10 +39,40 @@ test("byId + formationsByCategory", () => {
   assert.deepEqual(secu, ["diisocyanates", "vca-base"]);
 });
 
-test("HONNÊTETÉ : aucune formation ne contient de prix inventé", () => {
+test("HONNÊTETÉ : seul un prix CONFIRMÉ peut figurer sur une formation (registre central)", () => {
+  /* Prix confirmés par Wisy Safety, en centimes HT. Toute autre formation reste sans prix. */
+  const CONFIRMED = { nacelle: 35000 };
   Knowledge.formations().forEach((f) => {
-    assert.ok(!("price" in f) && !("prix" in f), "pas de prix sur " + f.id);
+    assert.ok(!("prix" in f), "pas de champ « prix » sur " + f.id);
+    if (CONFIRMED[f.id]) {
+      assert.equal(f.price.amountCents, CONFIRMED[f.id], "prix confirmé " + f.id);
+      assert.equal(f.priceLabel, "350 € HT", "libellé " + f.id);
+    } else {
+      assert.ok(!("price" in f) && !f.priceLabel, "pas de prix inventé sur " + f.id);
+    }
   });
+});
+
+test("HONNÊTETÉ : aucune affirmation CACES / certification / agrément non confirmée", () => {
+  const banned = /CACES|R486|certifi|agr[ée]{1,2}|reconnu/i;
+  const nacelle = Knowledge.byId("nacelle");
+  ["title", "description", "objective", "format", "level"].forEach((k) => {
+    assert.doesNotMatch(String(nacelle[k]), banned, "champ « " + k + " » de la nacelle");
+  });
+  assert.doesNotMatch((nacelle.features || []).join(" "), banned, "features");
+  assert.doesNotMatch((nacelle.keywords || []).join(" "), /caces|r486/i, "mots-clés");
+  assert.ok(nacelle.unconfirmed.indexOf("CACES") !== -1, "la nacelle déclare CACES comme non confirmé");
+});
+
+test("registre central : les faits de la nacelle viennent d'une seule source", () => {
+  const T = require("../js/trainings-data.js").nacelles;
+  const n = Knowledge.byId("nacelle");
+  assert.equal(n.url, T.url);
+  assert.equal(n.signupUrl, T.signupUrl);
+  assert.equal(n.duration, "1 jour");
+  assert.deepEqual(n.languages, ["Français", "Néerlandais", "Anglais"]);
+  assert.equal(n.format, "Théorie + pratique");
+  assert.equal(n.subtypes.length, 7);
 });
 
 test("coordonnées de contact réelles", () => {

@@ -49,27 +49,30 @@
       .trim();
   }
 
-  /* Découpe en tokens signifiants (>1 caractère, hors mots vides). */
+  /* Découpe en tokens signifiants (≥ 3 caractères, hors mots vides).
+     Les jetons de 2 lettres sont du bruit : l'apostrophe typographique de
+     « qu’il » produit un « qu » parasite qui, avec un mot courant, suffisait à
+     faire passer une AUTRE formation devant celle du contexte de page. */
   function tokenize(s) {
     var raw = normalize(s).split(" ");
     var out = [];
     for (var i = 0; i < raw.length; i++) {
       var w = raw[i];
-      if (!w || w.length < 2) continue;
+      if (!w || w.length < 3) continue;
       if (STOP[w]) continue;
       out.push(w);
     }
     return out;
   }
 
-  /* Un token matche-t-il un mot de l'index ? (égalité ou préfixe ≥ 4). */
+  /* Un token matche-t-il un mot de l'index ? Égalité ou PRÉFIXE de mot
+     (« formation » ~ « formations »), jamais une sous-chaîne au milieu d'un
+     mot : « dure » ne doit pas matcher « sou-dure » (ce repli faisait répondre
+     « Fibre optique » à « Combien de temps dure la formation ? »). */
   function tokenMatches(token, hay) {
     if (hay.indexOf(token) === -1) return false;
-    // Vérifie une correspondance sur frontière de mot pour éviter le bruit.
     var re = new RegExp("(^|[^a-z0-9])" + token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-    if (re.test(hay)) return true;
-    // Préfixe long toléré (ex: "formation" ~ "formations").
-    return token.length >= 4 && hay.indexOf(token) !== -1;
+    return re.test(hay);
   }
 
   /* Score une entrée face aux tokens de la requête. */
@@ -79,12 +82,13 @@
     var body = normalize(entry._text || Knowledge.searchableText(entry));
     var score = 0;
     var hits = 0;
+    var strong = 0;   // correspondances discriminantes : titre ou mot-clé (pas le corps de texte)
 
     for (var i = 0; i < tokens.length; i++) {
       var tk = tokens[i];
       var matched = false;
-      if (title.indexOf(tk) !== -1 && tokenMatches(tk, title)) { score += 6; matched = true; }
-      if (tokenMatches(tk, keywords)) { score += 4; matched = true; }
+      if (title.indexOf(tk) !== -1 && tokenMatches(tk, title)) { score += 6; matched = true; strong++; }
+      if (tokenMatches(tk, keywords)) { score += 4; matched = true; strong++; }
       if (!matched && tokenMatches(tk, body)) { score += 2; matched = true; }
       if (matched) hits++;
     }
@@ -94,7 +98,7 @@
     // Léger avantage aux formations (cœur de métier de l'assistant).
     if (entry.type === "formation" && score > 0) score += 1;
 
-    return { score: score, hits: hits };
+    return { score: score, hits: hits, strong: strong };
   }
 
   /* Détecte une catégorie explicitement nommée dans la requête. */
@@ -138,7 +142,7 @@
       var e = entries[i];
       if (options.types && options.types.indexOf(e.type) === -1) continue;
       var sc = scoreEntry(e, tokens);
-      if (sc.score >= minScore) results.push({ entry: e, score: sc.score, hits: sc.hits });
+      if (sc.score >= minScore) results.push({ entry: e, score: sc.score, hits: sc.hits, strong: sc.strong });
     }
 
     results.sort(function (a, b) {
@@ -156,8 +160,11 @@
    *  (titre ou mot-clé), sinon un mot générique comme « formation » suffirait
    *  à renvoyer une formation au hasard — et écraserait le contexte de page. */
   function bestFormation(query, minScore) {
-    var r = search(query, { types: ["formation"], limit: 1, minScore: minScore == null ? 5 : minScore });
-    return r.length ? r[0].entry : null;
+    var r = search(query, { types: ["formation"], limit: 10, minScore: minScore == null ? 5 : minScore });
+    // Une seule correspondance dans le CORPS de texte (« jours », « formation »…) ne désigne pas une formation :
+    // il faut au moins un mot du titre ou des mots-clés.
+    for (var i = 0; i < r.length; i++) if (r[i].strong > 0) return r[i].entry;
+    return null;
   }
 
   /** Contexte compact destiné au prompt serveur (jamais tout le site). */

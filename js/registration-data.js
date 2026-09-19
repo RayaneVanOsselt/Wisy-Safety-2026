@@ -39,6 +39,12 @@
     }
   };
 
+  /* Formation « Nacelles élévatrices » : ses faits (prix HT…) viennent du registre
+     central js/trainings-data.js (chargé AVANT ce fichier) — une seule définition
+     partagée avec la page dédiée, la recherche et l'assistant. Sans registre :
+     « Sur devis » (jamais de prix inventé). */
+  var NACELLE = (window.WisyTrainings && window.WisyTrainings.nacelles) || null;
+
   /* Catégories — clé stable => libellé i18n (résolu dans registration.js) */
   var CATEGORIES = [
     { id: "certification", i18n: "reg.cat_certification" },
@@ -85,12 +91,13 @@
     {
       id: "nacelle-elevatrice",
       code: "NAC",
-      priceCents: 24500,
+      priceCents: NACELLE ? NACELLE.price.amountCents : null,   /* 350 € HT — registre central */
+      onQuote: !NACELLE,
       unit: "participant",
       category: "engins",
       icon: "lift",
       image: "assets/images/reg/nacelle-elevatrice.jpg",
-      name: { fr: "Nacelle élévatrice", en: "Aerial work platform", nl: "Hoogwerker" },
+      name: { fr: "Nacelles élévatrices", en: "Aerial work platform", nl: "Hoogwerker" },
       description: {
         fr: "Conduite en sécurité — théorie + pratique",
         en: "Safe operation — theory + practice",

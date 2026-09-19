@@ -24,6 +24,11 @@
     management: { filter: "management", labelKey: "search.cat_management", count: 1 }
   };
 
+  /* Registre central (js/trainings-data.js, chargé AVANT ce script) : source
+     unique des faits de la formation « Nacelles élévatrices » (route, mots-clés,
+     visuel, durée, format, langues). Repli sur la page catalogue si absent. */
+  var TRAINING_NACELLE = window.WisyTrainings && window.WisyTrainings.nacelles;
+
   var FORMATIONS = [
     { id: "vca-base",         cat: "securite",   titleKey: "dd.vca_base",  descKey: "dd.vca_base_desc",
       kw: ["vca", "base", "b-vca", "securite", "chantier", "fondamentaux", "certification", "safety", "veiligheid", "sicherheit"] },
@@ -31,8 +36,15 @@
       kw: ["vca", "hierarchique", "vol-vca", "ligne", "encadrement", "responsable", "management", "supervisor", "leidinggevende"] },
     { id: "diisocyanates",    cat: "securite",   titleKey: "dd.diiso",     descKey: "dd.diiso_desc",
       kw: ["diisocyanate", "diisocyanates", "isocyanate", "reach", "chimique", "chimiques", "substances", "dangereuses", "produits", "chemical", "gevaarlijke"] },
-    { id: "nacelle",          cat: "technique",  titleKey: "dd.nacelle",   descKey: "dd.nacelle_desc",
-      kw: ["nacelle", "pemp", "caces", "elevatrice", "plateforme", "hauteur", "lift", "aerial", "hoogwerker"] },
+    TRAINING_NACELLE ? {
+      /* Résultat riche : titre complet, description courte, faits clés, miniature, page dédiée */
+      id: TRAINING_NACELLE.id, cat: TRAINING_NACELLE.category,
+      titleKey: TRAINING_NACELLE.fullTitleKey, descKey: TRAINING_NACELLE.summaryKey,
+      kw: TRAINING_NACELLE.keywords,
+      url: TRAINING_NACELLE.url, thumb: TRAINING_NACELLE.images.thumb,
+      factKeys: ["dd.nacelle_dur", "dd.nacelle_fmt", "dd.nacelle_langs"]
+    } : { id: "nacelle", cat: "technique", titleKey: "dd.nacelle", descKey: "dd.nacelle_desc",
+      kw: ["nacelle", "nacelles", "pemp", "elevatrice", "plateforme", "hauteur", "lift", "aerial", "hoogwerker"] },
     { id: "fibre-optique",    cat: "technique",  titleKey: "dd.fibre",     descKey: "dd.fibre_desc",
       kw: ["fibre", "fiber", "optique", "optic", "soudure", "raccordement", "telecom", "installation", "ftth"] },
     { id: "beps",             cat: "secours",    titleKey: "dd.beps",      descKey: "dd.beps_desc",
@@ -125,12 +137,19 @@
   /* -----------------------------------------------------------------------
      Index de recherche (haystack mis en cache par langue)
      ----------------------------------------------------------------------- */
+  /* Mots génériques : toute entrée « formation » en est une (« formation nacelle »,
+     « formation vca »…). Ils servent à ne pas exclure l'entrée, mais ne donnent
+     AUCUN bonus de pertinence (sinon un titre commençant par « Formation »
+     passerait devant les autres pour la requête « formation »). */
+  var GENERIC_TERMS = { formation: 1, formations: 1, training: 1, trainings: 1, opleiding: 1, opleidingen: 1, schulung: 1, schulungen: 1, course: 1, courses: 1 };
+  var GENERIC_HAY = Object.keys(GENERIC_TERMS).join(" ");
+
   function hayOf(e, lg) {
     e._hay = e._hay || {};
     if (!e._hay[lg]) {
       var parts = [t(e.titleKey)];
       if (e.descKey) parts.push(t(e.descKey));
-      if (e.cat) parts.push(t(CATEGORIES[e.cat].labelKey));
+      if (e.cat) { parts.push(t(CATEGORIES[e.cat].labelKey)); parts.push(GENERIC_HAY); }
       if (e.kw) parts.push(e.kw.join(" "));
       e._hay[lg] = fold(parts.join(" "));
     }
@@ -141,6 +160,7 @@
     for (var i = 0; i < terms.length; i++) if (hay.indexOf(terms[i]) === -1) return -1;
     var title = fold(t(e.titleKey)), s = 0;
     terms.forEach(function (term) {
+      if (GENERIC_TERMS[term]) return;
       if (title.indexOf(term) === 0) s += 6;
       else if (title.indexOf(term) !== -1) s += 3;
       var kw = e.kw || [];
@@ -150,6 +170,13 @@
         if (k.indexOf(term) === 0) { s += 2; break; }
       }
     });
+    /* Requête multi-mots : la PHRASE exacte dans le titre ou dans les mots-clés
+       (« formation nacelle », « nacelles élévatrices ») remonte le résultat le plus précis. */
+    if (terms.length > 1) {
+      var phrase = terms.join(" ");
+      if (title.indexOf(phrase) !== -1) s += 10;
+      if ((e.kw || []).some(function (k) { return fold(k) === phrase; })) s += 8;
+    }
     return s;
   }
   function runSearch(query) {
@@ -248,18 +275,23 @@
      Rendu
      ----------------------------------------------------------------------- */
   function itemHTML(opts) {
-    // opts: {id, icon, title, sub, meta, href, recent}
+    // opts: {id, icon, title, sub, meta, href, recent, thumb, facts}
     optSeq++;
     var id = "wsy-opt-" + optSeq;
     var meta = opts.meta ? '<span class="wsy-search__meta">' + esc(opts.meta) + "</span>" : "";
-    var attrs = 'id="' + id + '" role="option" aria-selected="false" class="wsy-search__item"';
+    var attrs = 'id="' + id + '" role="option" aria-selected="false" class="wsy-search__item' + (opts.facts ? " wsy-search__item--rich" : "") + '"';
     var data = opts.recent ? ' data-recent="' + esc(opts.recent) + '"' : ' href="' + esc(opts.href) + '"';
     var tag = opts.recent ? "div" : "a";
+    // Résultat riche : miniature (décorative : le titre porte le sens) à la place du pictogramme
+    var lead = opts.thumb
+      ? '<span class="wsy-search__ic wsy-search__ic--thumb"><img src="' + esc(opts.thumb) + '" alt="" width="48" height="48" loading="lazy" decoding="async"></span>'
+      : '<span class="wsy-search__ic">' + svg(opts.icon) + "</span>";
     return "<" + tag + " " + attrs + data + ' tabindex="-1">' +
-      '<span class="wsy-search__ic">' + svg(opts.icon) + "</span>" +
+      lead +
       '<span class="wsy-search__body">' +
         '<span class="wsy-search__tt">' + opts.title + "</span>" +
-        (opts.sub ? '<span class="wsy-search__ds">' + opts.sub + "</span>" : "") +
+        (opts.sub ? '<span class="wsy-search__ds' + (opts.facts ? " wsy-search__ds--wrap" : "") + '">' + opts.sub + "</span>" : "") +
+        (opts.facts ? '<span class="wsy-search__facts">' + opts.facts + "</span>" : "") +
       "</span>" + meta +
     "</" + tag + ">";
   }
@@ -268,7 +300,8 @@
       '<div class="wsy-search__grouphd">' + esc(titleText) + (extraHeadHTML || "") + "</div>" +
       itemsHTML + "</div>";
   }
-  function fUrl(id) { return "formations.html#" + id; }
+  // Page dédiée si la formation en a une (registre central), sinon ancre du catalogue
+  function fUrl(f) { return f.url || "formations.html#" + f.id; }
 
   function renderFormationItems(list, terms) {
     return list.map(function (f) {
@@ -277,7 +310,10 @@
         title: highlight(t(f.titleKey), terms),
         sub: highlight(t(f.descKey), terms),
         meta: t(CATEGORIES[f.cat].labelKey),
-        href: fUrl(f.id)
+        href: fUrl(f),
+        thumb: f.thumb,
+        // faits clés (durée · format · langues) — uniquement pour les fiches qui en ont
+        facts: f.factKeys ? f.factKeys.map(function (k) { return esc(t(k)); }).join(" · ") : ""
       });
     }).join("");
   }

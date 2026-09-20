@@ -12,7 +12,8 @@ et sans rien à installer pour le mettre en ligne.
 |---|---|
 | `index.html`, `formations.html`, `formation-nacelles-elevatrices.html`, `inscription.html`, `contact.html`, `avis.html`, `faq.html`, `agenda.html`, `404.html` | Les pages du site. **Elles restent à la racine** : leurs adresses (`/formations.html`…) en dépendent, les déplacer changerait les URL et le référencement. |
 | `sitemap.xml`, `robots.txt`, `favicon.ico` | Fichiers que les moteurs de recherche et les navigateurs cherchent à la racine (les deux premiers sont **générés**, voir plus bas). |
-| `css/`, `js/`, `assets/` | Styles, scripts, polices, images, icônes et vidéo. |
+| `css/`, `js/` | Styles et scripts. |
+| `assets/` | Polices, images, icônes, vidéo et `originaux/` (photos d'origine). Rangement expliqué dans [assets/README.md](assets/README.md). |
 | `admin/` | Page de modération des avis (non indexée par Google). |
 | `supabase/` | Base des avis (`schema.sql`, `harden-admin.sql`) et fonction optionnelle de l'assistant IA. |
 | `scripts/` | Petits outils qui génèrent le sitemap, les balises SEO, la copie de l'assistant et les images optimisées. |

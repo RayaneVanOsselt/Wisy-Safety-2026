@@ -14,10 +14,10 @@ Technologie du site inchangée : HTML/CSS/JS vanilla, aucun build.
 | Scènes automatiques 5 s (module **réutilisable**) | `js/scenes.js` |
 | Traductions de la page (fr = miroir du HTML, en, nl) | `js/i18n-data-nacelles.js` |
 | Titre complet / résumé / durée / format / langues (10 langues, servent partout) | `js/i18n-data-common.js` (`dd.nacelle_*`) |
-| Visuels web calibrés | `assets/images/nacelles/` (originaux intacts dans `assets/images/Nacelle élévatrice /`) |
+| Visuels web calibrés | `assets/images/nacelles/` (photos d'origine intactes dans `assets/originaux/nacelles/`) |
 
 Le registre alimente : la page (SEO/JSON-LD), la **recherche** (résultat riche : miniature,
-faits clés), l'**assistant** (`knowledge.js` + miroir serveur `knowledge.ts`) et le
+faits clés), l'**assistant** (`knowledge.js` + copie serveur générée `site.generated.ts`) et le
 **parcours d'inscription** (`registration-data.js` lit le prix dans le registre).
 `tests/trainings.test.js` échoue si l'un d'eux diverge.
 
@@ -42,15 +42,15 @@ pas confirmés (`unconfirmed` dans le registre). Les afficher exige d'abord leur
 
 ## Images — association et calibrage
 
-| Type | Fichier source (dossier d'origine) | Dérivés |
+| Type | Photo d'origine (`assets/originaux/nacelles/`) | Dérivés (`assets/images/nacelles/`) |
 |---|---|---|
-| Ciseaux | `Nacelle cisaaux .jpg` (photo, 3:2) | `nacelle-ciseaux-{640,960,1440}.webp` |
-| Araignée | `nacelle araignée .webp` | `nacelle-araignee-{640,960}.webp` |
-| Télescopique | `Nacelle téléscopique.png` | `nacelle-telescopique-…` |
-| Articulée | `Nacelle articulée.jpg` | `nacelle-articulee-…` |
-| Sur camion | `Nacelle sur camion .jpg` (fond dégradé → blanc) | `nacelle-camion-…` |
-| Verticale | `Nacelle verticale .webp` | `nacelle-verticale-…` |
-| Automotrice | `Nacelle automotrice.webp` | `nacelle-automotrice-…` |
+| Ciseaux | `nacelle-ciseaux.jpg` (photo, 3:2) | `nacelle-ciseaux-{640,960,1440}.webp` |
+| Araignée | `nacelle-araignee.webp` | `nacelle-araignee-{640,960}.webp` |
+| Télescopique | `nacelle-telescopique.png` | `nacelle-telescopique-…` |
+| Articulée | `nacelle-articulee.jpg` | `nacelle-articulee-…` |
+| Sur camion | `nacelle-camion.jpg` (fond dégradé → blanc) | `nacelle-camion-…` |
+| Verticale | `nacelle-verticale.webp` | `nacelle-verticale-…` |
+| Automotrice | `nacelle-automotrice.webp` | `nacelle-automotrice-…` |
 
 Chaque machine détourée est cadrée dans un canevas 4:3 blanc (960×720) avec la **même zone de
 sécurité** (80 %) : aucune machine coupée, échelle visuelle homogène. Le hero, la carte du

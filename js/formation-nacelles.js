@@ -31,7 +31,7 @@
 
   /* =======================================================================
      DONNÉES DU MODAL — français = source ; images = dérivés de
-     assets/images/Nacelle élévatrice /  (voir assets/images/nacelles/)
+     assets/originaux/nacelles/  (voir assets/images/nacelles/)
      ======================================================================= */
   const IMG = "assets/images/nacelles/";
   const nacelles = {

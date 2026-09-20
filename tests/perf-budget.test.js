@@ -80,9 +80,9 @@ test("image LCP des pages : jamais en lazy (nacelles) ; index : affiche vidéo W
   assert.doesNotMatch(hero, /loading="lazy"/, "l'image principale n'est pas différée");
   assert.match(hero, /fetchpriority="high"/);
   const idx = read("index.html");
-  assert.match(idx, /<link rel="preload" href="assets\/videos\/Accueil\/poster\.webp" as="image" type="image\/webp" fetchpriority="high">/);
-  assert.match(idx, /poster="assets\/videos\/Accueil\/poster\.webp"/);
-  assert.ok(size("assets/videos/Accueil/poster.webp") < 100 * KB, "affiche < 100 Ko");
+  assert.match(idx, /<link rel="preload" href="assets\/videos\/accueil\/poster\.webp" as="image" type="image\/webp" fetchpriority="high">/);
+  assert.match(idx, /poster="assets\/videos\/accueil\/poster\.webp"/);
+  assert.ok(size("assets/videos/accueil/poster.webp") < 100 * KB, "affiche < 100 Ko");
 });
 
 test("vidéo d'accueil : sources injectées APRÈS le chargement, jamais en mouvement réduit / économie de données", () => {

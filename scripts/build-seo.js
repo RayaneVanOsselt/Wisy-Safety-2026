@@ -38,7 +38,7 @@ const HEAD_END = "<!-- seo:end -->";
 
 /* Carte de partage par défaut (générée par scripts/optimize-images.py --og). */
 const OG_DEFAULT = {
-  file: "assets/images/og/wisy-safety-og-1200x630.jpg", width: 1200, height: 630,
+  file: "assets/images/partage/wisy-safety-1200x630.jpg", width: 1200, height: 630,
   alt: "Wisy Safety — La sécurité comme une référence. Formations sécurité à Anderlecht, Bruxelles"
 };
 const N = Trainings.nacelles;
@@ -92,7 +92,7 @@ function organization() {
     "@id": ORG_ID,
     name: C.company,
     url: ORIGIN + "/",
-    logo: ORIGIN + "/assets/logo.png",
+    logo: ORIGIN + "/assets/images/logo/logo.png",
     image: ORIGIN + "/" + OG_DEFAULT.file,
     email: C.email,
     telephone: C.phone.replace(/\s+/g, ""),

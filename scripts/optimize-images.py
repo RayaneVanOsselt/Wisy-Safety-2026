@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 """
-WISY SAFETY — Génère les images optimisées du site à partir des ORIGINAUX (masters).
+WISY SAFETY — Génère les images optimisées du site à partir des ORIGINAUX.
 
     python3 scripts/optimize-images.py            # génère tout ce qui manque ou a changé
     python3 scripts/optimize-images.py --force    # régénère tout
 
 Pourquoi : les originaux pèsent jusqu'à 800 Ko (JPEG CMYK, PNG de 1 400 px pour un logo affiché à
-65 px…). Le site charge désormais des WebP dimensionnés pour leur usage réel ; les originaux restent
-dans assets/ comme sources (ils ne sont plus chargés par les pages).
+65 px…). Le site charge des WebP dimensionnés pour leur usage réel ; les originaux sont rangés dans
+assets/originaux/ (les pages ne les chargent jamais). Pour changer une photo : remplacez son
+original dans assets/originaux/, relancez ce script, vérifiez le rendu.
 
 Dépendances : Pillow (WebP). Aucune autre. Sortie déterministe (mêmes options à chaque exécution).
 
-  logo            assets/logo.png                       → assets/images/logo/logo-102.webp · logo-204.webp
-  icônes          assets/logo.png                       → assets/icons/* · favicon.ico
-  formations      assets/images/*.jpg|webp (masters)    → assets/images/formations/<id>.webp
-  partenaires     assets/images/partenaires/*           → assets/images/partenaires/<nom>-240.webp
-  contact         assets/images/page-principale/…       → hero-contact.webp
-  affiche vidéo   assets/videos/Accueil/poster.jpg      → poster.webp
-  carte de partage (Open Graph) : `--og <dossier de polices Poppins .ttf>` → assets/images/og/…jpg
+  logo            assets/images/logo/logo.png             → assets/images/logo/logo-102.webp · logo-204.webp
+  icônes          assets/images/logo/logo.png             → assets/icons/* · favicon.ico
+  formations      assets/originaux/formations/<id>.jpg    → assets/images/formations/<id>.webp
+                  (vca-base : n'a pas d'original à part — le WebP servi EST l'original)
+  partenaires     assets/originaux/partenaires/<nom>.*    → assets/images/partenaires/<nom>-240.webp
+  contact         assets/originaux/contact/hero-contact.png → assets/images/contact/hero-contact.webp
+  affiche vidéo   assets/originaux/accueil/poster.jpg     → assets/videos/accueil/poster.webp
+  carte de partage (Open Graph) : `--og <dossier de polices Poppins .ttf>` → assets/images/partage/wisy-safety-1200x630.jpg
 """
 import os
 import sys
@@ -62,7 +64,7 @@ def need(dst, src):
 
 # --------------------------------------------------------------------------- logo + icônes
 def logo():
-    src = "assets/logo.png"
+    src = "assets/images/logo/logo.png"
     im = Image.open(src).convert("RGBA")
     for w in (102, 204):                                         # 51 px @2x · pied de page 102 px @2x
         dst = f"assets/images/logo/logo-{w}.webp"
@@ -96,12 +98,12 @@ def logo():
 # --------------------------------------------------------------------------- formations
 FORMATIONS = {
     # id : (master, largeur max)
-    "vca-base":           ("assets/images/vca de base.webp", 720),
-    "vca-hierarchique":   ("assets/images/vca ligne hier..jpg", 1000),
-    "diisocyanates":      ("assets/images/Diisocyanates et substances dangereuses.jpg", 500),
-    "nacelle-elevatrice": ("assets/images/Nacelle élévatrice.jpg", 640),
-    "fibre-optique":      ("assets/images/fibre optique .jpg", 1000),
-    "beps":               ("assets/images/beps.jpg", 1024),
+    "vca-hierarchique":   ("assets/originaux/formations/vca-hierarchique.jpg", 1000),
+    "diisocyanates":      ("assets/originaux/formations/diisocyanates.jpg", 500),
+    "nacelle-elevatrice": ("assets/originaux/formations/nacelle-elevatrice.jpg", 640),
+    "fibre-optique":      ("assets/originaux/formations/fibre-optique.jpg", 1000),
+    "beps":               ("assets/originaux/formations/beps.jpg", 1024),
+    # « vca-base » (720×540) n'a pas d'original séparé : assets/images/formations/vca-base.webp est déjà optimisé.
 }
 
 
@@ -110,12 +112,6 @@ def formations():
         dst = f"assets/images/formations/{fid}.webp"
         if not need(dst, src):
             continue
-        if src.endswith(".webp"):                                  # déjà optimisé : on le reprend tel quel
-            os.makedirs(os.path.dirname(dst), exist_ok=True)
-            with open(src, "rb") as a, open(dst, "wb") as b:
-                b.write(a.read())
-            report(fid + " (copie)", src, os.path.getsize(dst), "inchangé")
-            continue
         im = fit_width(to_rgb(Image.open(src)), max_w)
         size = save_webp(im, dst, quality=78)
         report(fid, src, size, f"{im.width}×{im.height}")
@@ -123,14 +119,14 @@ def formations():
 
 # --------------------------------------------------------------------------- partenaires (affichés ≤ 75 px)
 PARTNERS = {
-    "orange": "Orange_logo.svg.png", "proximus": "proximus-.webp", "telenet": "telenet_logo.webp",
-    "constructel": "constructel-.jpeg", "voo": "VOO_logo.svg.png", "unifiber": "uni-fivber-.png",
+    "orange": "orange.png", "proximus": "proximus.webp", "telenet": "telenet.webp",
+    "constructel": "constructel.jpeg", "voo": "voo.png", "unifiber": "unifiber.png",
 }
 
 
 def partners():
     for name, f in PARTNERS.items():
-        src = f"assets/images/partenaires/{f}"
+        src = f"assets/originaux/partenaires/{f}"
         dst = f"assets/images/partenaires/{name}-240.webp"
         if not need(dst, src):
             continue
@@ -141,12 +137,12 @@ def partners():
 
 # --------------------------------------------------------------------------- contact + affiche vidéo
 def misc():
-    src, dst = "assets/images/page-principale/hero-contact.png", "assets/images/page-principale/hero-contact.webp"
+    src, dst = "assets/originaux/contact/hero-contact.png", "assets/images/contact/hero-contact.webp"
     if need(dst, src):
         im = Image.open(src).convert("RGBA")
         size = save_webp(im, dst, quality=82, alpha_quality=100)
         report("hero contact", src, size, f"{im.width}×{im.height}")
-    src, dst = "assets/videos/Accueil/poster.jpg", "assets/videos/Accueil/poster.webp"
+    src, dst = "assets/originaux/accueil/poster.jpg", "assets/videos/accueil/poster.webp"
     if need(dst, src):
         im = Image.open(src).convert("RGB")
         size = save_webp(im, dst, quality=66)
@@ -157,7 +153,7 @@ def misc():
 def og(font_dir):
     """Carte Open Graph de marque (charte : crème, épinette, jais). Texte = celui du site (aucune promesse)."""
     W, H = 1200, 630
-    dst = "assets/images/og/wisy-safety-og-1200x630.jpg"
+    dst = "assets/images/partage/wisy-safety-1200x630.jpg"
     if not FORCE and os.path.exists(dst):
         return
     bg = Image.new("RGB", (W, H), PALETTE["creme"])
@@ -170,7 +166,7 @@ def og(font_dir):
     bd.ellipse([900, 300, 1300, 700], fill=(31, 111, 100, 30))       # épinette, très faible opacité
     bg = Image.alpha_composite(bg.convert("RGBA"), blob).convert("RGB")
     d = ImageDraw.Draw(bg)
-    logo_im = Image.open("assets/logo.png").convert("RGBA")
+    logo_im = Image.open("assets/images/logo/logo.png").convert("RGBA")
     k = 190 / logo_im.height
     logo_im = logo_im.resize((round(logo_im.width * k), 190), Image.LANCZOS)
     bg.paste(logo_im, (96, 92), logo_im)

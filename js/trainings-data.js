@@ -89,12 +89,12 @@
       "camion", "verticale", "automotrice", "lift", "aerial", "hoogwerker"
     ],
 
-    /* Visuels (dérivés WebP de assets/images/Nacelle élévatrice /) */
+    /* Visuels : dérivés WebP des photos d'origine de assets/originaux/nacelles/ */
     images: {
       hero:  IMG + "nacelles-hero-1200.webp",
       card:  IMG + "nacelles-hero-800.webp",
       thumb: IMG + "nacelles-thumb-192.webp",
-      og:    IMG + "nacelles-og-1200x630.jpg"
+      og:    "assets/images/partage/formation-nacelles-1200x630.jpg"
     },
     imageAlt: "Nacelle ciseaux bleue déployée en position haute sur un chantier",
 

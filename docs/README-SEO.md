@@ -52,7 +52,7 @@ Données structurées (chacune reprend un fait **déjà affiché** sur la page ;
 
 - **Polices auto-hébergées** (`css/fonts.css`, `assets/fonts/`) : plus de CSS Google Fonts bloquant, plus de connexion
   à un tiers (RGPD), 3 fichiers critiques préchargés, `font-display: swap`.
-- **Images** (`python3 scripts/optimize-images.py`) : les originaux (jusqu'à 800 Ko, JPEG CMYK) restent dans `assets/`
+- **Images** (`python3 scripts/optimize-images.py`) : les originaux (jusqu'à 800 Ko, JPEG CMYK) sont rangés dans `assets/originaux/`
   comme sources ; les pages chargent des WebP dimensionnés. `width`/`height` partout (pas de décalage).
 - **CLS** : la barre de recherche injectée par JS a son espace réservé en CSS (`css/search.css`).
 - **Vidéo d'accueil** : l'affiche WebP est préchargée ; les sources vidéo ne se téléchargent qu'*après* le chargement de la

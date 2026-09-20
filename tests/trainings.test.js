@@ -79,8 +79,9 @@ test("page : SEO (title, description, canonical, Open Graph) et image OG existan
   assert.match(html, /<title>Formation Nacelles Élévatrices \| Wisy Safety<\/title>/);
   assert.match(html, /<meta name="description" content="Découvrez la formation Nacelles Élévatrices de Wisy Safety : théorie et pratique/);
   assert.match(html, /<link rel="canonical" href="https:\/\/www\.wisysafety\.be\/formation-nacelles-elevatrices\.html">/);
-  assert.match(html, /<meta property="og:image" content="https:\/\/www\.wisysafety\.be\/assets\/images\/nacelles\/nacelles-og-1200x630\.jpg">/);
-  assert.ok(exists("assets/images/nacelles/nacelles-og-1200x630.jpg"));
+  assert.ok(html.includes('<meta property="og:image" content="https://www.wisysafety.be/' + N.images.og + '">'), "og:image = image de partage du registre");
+  assert.equal(N.images.og, "assets/images/partage/formation-nacelles-1200x630.jpg");
+  assert.ok(exists(N.images.og), "l'image de partage existe");
 });
 
 test("VÉRACITÉ : le contenu de la page (main + modal) n'affirme aucune certification / CACES / agrément", () => {

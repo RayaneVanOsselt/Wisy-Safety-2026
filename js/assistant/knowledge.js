@@ -239,6 +239,12 @@
       titleKey: "footer.faq",
       content: "Centre d'aide Wisy Safety : questions fréquentes sur les formations, l'inscription, les tarifs et les attestations.",
       keywords: ["aide", "faq", "questions", "centre d'aide", "assistance", "support", "help", "helpcentrum"]
+    },
+    {
+      id: "page-agenda", type: "page", title: "Agenda des formations", url: "agenda.html",
+      titleKey: "search.page_agenda_t", descKey: "search.page_agenda_d",
+      content: "Agenda des formations Wisy Safety : la page qui accueillera les prochaines sessions, leurs horaires et leurs disponibilités. L'agenda en ligne arrive prochainement : aucune date n'y est publiée pour le moment.",
+      keywords: ["agenda", "calendrier", "dates", "date", "sessions", "session", "prochaines", "prochaine", "horaires", "planning", "quand", "disponibilites", "calendar", "schedule", "termine", "kalender"]
     }
   ];
 

@@ -1,8 +1,9 @@
-# Assistant Wisy — mascotte flottante & assistant conversationnel
+# Assistant Wisy — launcher à mascotte & assistant conversationnel
 
 Assistant conversationnel propre à Wisy Safety, intégré au site statique existant.
-Il comprend une **mascotte SVG propriétaire** (launcher flottant) et un **panneau
-de conversation premium** réellement alimenté par les données du site.
+Il comprend un **launcher à mascotte** (le petit robot blanc du site, détouré et cadré
+sur la tête, avec bulle d'invitation — voir §4 quater) et un **panneau de conversation
+premium** réellement alimenté par les données du site.
 
 ---
 
@@ -36,28 +37,34 @@ public de la formation Nacelles élévatrices — voir §4 bis).
 ## 2. Fichiers créés
 
 ```
-css/assistant.css                     Styles (launcher, panneau, cartes, états, responsive, reduced-motion)
+css/assistant.css                     LAUNCHER (chemin critique, < 16 Ko) : jetons, mascotte, bulle, états, mobile, reduced-motion
+css/assistant-panel.css               PANNEAU (chargé à la demande) : en-tête, fil, cartes, composer, feuille mobile
 js/i18n-data-assistant.js             Libellés d'interface FR / EN / NL (fusionnés dans window.I18N)
+assets/images/assistant/              Mascotte : wisy-assistant-144|216.avif|webp (tête détourée, carré transparent)
+scripts/build-assistant-avatar.py     Régénère ces 4 images depuis l'image d'origine (Pillow)
 js/assistant/
-  mascot.js                           Mascotte SVG propriétaire (états pilotés par classes)
+  launcher.js                         AIChatLauncher — SEUL script chargé d'emblée : bouton, bulle, cycle d'apparition, moteur à la demande
   knowledge.js                        Base de connaissances structurée (source de vérité)
   retrieval.js                        Recherche full-text locale pondérée (fournisseur de contexte)
   responder.js                        Moteur de réponse déterministe → ChatResponse structurée
   validation.js                       Garde-fous : taille, allow-list d'URLs, validation de structure
-  assistant.js                        Contrôleur d'interface (auto-injection, états, a11y, analytics)
+  assistant.js                        Panneau : rendu, focus/modal mobile, défilement, erreurs (chargé à la demande)
 supabase/functions/chat/
   index.ts                            Edge Function OPTIONNELLE (/api/chat) : CORS, rate-limit, prompt, appel Claude
   knowledge.ts                        Miroir TypeScript de la base (à garder synchronisé)
 tests/
-  knowledge.test.js  retrieval.test.js  responder.test.js  validation.test.js
+  knowledge.test.js  retrieval.test.js  responder.test.js  validation.test.js  launcher.test.js
 README-ASSISTANT.md                   Ce document
 ```
 
 ## 3. Fichiers modifiés
 
-- `index.html`, `formations.html`, `contact.html`, `avis.html`, `inscription.html`
-  → ajout de `css/assistant.css`, `js/i18n-data-assistant.js` et des 6 scripts
-  `js/assistant/*.js` (en `defer`). **Aucune** logique existante modifiée.
+- Les 7 pages (`index`, `formations`, `contact`, `avis`, `inscription`,
+  `formation-nacelles-elevatrices`, `faq`) → `css/assistant.css`, `js/i18n-data-assistant.js`
+  et **un seul** script d'assistant : `js/assistant/launcher.js` (`defer`). Le moteur de
+  réponses et le panneau se chargent **à la demande** (voir §4 quater). **Aucune** logique
+  existante modifiée. Le Centre d'aide (`faq.html`) garde `faq-data.js` / `faq-search.js`,
+  qu'il utilise lui-même et que le launcher ne recharge pas.
 - `.env.example` → section « Assistant Wisy » (variables de la fonction optionnelle).
 
 ---
@@ -125,6 +132,73 @@ l'inscription »). Désormais :
 
 ---
 
+## 4 quater. Launcher (AIChatLauncher) — mascotte, bulle, chargement à la demande
+
+**Ce que voit le visiteur** — en bas à droite : la mascotte (72 px desktop, 58 px mobile)
+dans un disque crème, filet granit, anneau épinette, pastille « IA » (épinette) et point de
+disponibilité (turquoise = **l'unique accent** du composant ; il indique seulement que
+l'assistant est accessible, pas qu'une personne est en ligne). Une bulle « Besoin d'aide ? /
+Demandez à l'Assistant Wisy » s'y ajoute :
+
+| Moment | Comportement |
+|---|---|
+| Chargement | Le launcher n'apparaît qu'une fois la page stable (`load` + inactivité), en fondu + 10 px, ~550 ms, sans rebond. |
+| 1re visite de la **session** | Bulle 3 s après l'apparition, visible ~9 s, **une seule fois** (`sessionStorage`, clé `wisyAssistantIntroSeen`). Jamais sur le Centre d'aide. Le chat ne s'ouvre **jamais** tout seul. |
+| Appels de présence | Au plus **une** micro-animation à la fois (mascotte −3 px sur 5 s **ou** halo), toutes les 16–24 s, **3 fois maximum par session** (compteur `wisyAssistantCues`). Arrêtés dès le survol / focus / clic, page masquée, saisie en cours, mouvement réduit. |
+| Survol / focus clavier | La bulle se révèle (elle se rapproche de 3 px), mascotte −2 px et ×1.02, filet → brume ; `:active` ×0.98. Survol réservé aux pointeurs précis. |
+| Assistant ouvert | Le panneau s'ouvre **au-dessus** du launcher (opacité + 12 px + ×0.98, ~380 ms, origine bas-droite) ; le launcher reste, anneau plein + pastille de fermeture, nom « Fermer l'Assistant Wisy ». Sur mobile (≤ 560 px) : feuille quasi plein écran, le launcher s'efface. |
+
+**Modifier les textes** — tout est dans `js/i18n-data-assistant.js` (fr/en/nl ; les autres
+langues retombent sur le français) : `assistant.launcher_title` (« Besoin d'aide ? »),
+`assistant.launcher_text` (« Demandez à l'Assistant Wisy »), `assistant.launcher_open` /
+`launcher_close` (noms accessibles), `assistant.launcher_desc`, `assistant.badge_ai` (« IA »),
+`assistant.header_title` / `header_subtitle` (en-tête du panneau).
+
+**Modifier les réglages** — constantes `CONFIG` en tête de `launcher.js` (délai et durée de la
+bulle, cadence et nombre d'appels, délai de pré-téléchargement…), surchargeables sans toucher
+au fichier : `window.WISY_ASSISTANT_CONFIG = { launcher: { cueCount: 0 } }` supprime les appels
+de présence. Taille / distance aux bords : variables `--wa-size`, `--wa-offset` (css/assistant.css).
+Un composant collant peut faire monter le launcher : `--wa-lift` (ex. barre d'inscription mobile,
+`css/registration.css`).
+
+**Performance** — seuls `launcher.js` (27 Ko non minifié, 9 Ko gzip, en grande partie des
+commentaires) et `css/assistant.css` (16 Ko, 5 Ko gzip) sont chargés d'emblée, contre ~162 Ko de JS
++ 25 Ko de CSS avant ; le moteur (`faq-data`, `faq-search`, `knowledge`, `retrieval`, `validation`,
+`responder`, `assistant`) et `css/assistant-panel.css` (180 Ko non minifiés, ~55 Ko gzip) arrivent :
+① en **pré-téléchargement** à basse priorité 3 s après le chargement (`<link rel="prefetch">`,
+sans exécution ; sur Safari, qui l'ignore, chargement anticipé au même moment ; rien en économie de données / 2G) ; ② à l'**intention** (1er survol, focus,
+toucher) ; ③ au **clic** — si le moteur n'est pas prêt, le launcher passe en état « chargement »
+puis ouvre (jamais de clic perdu) ; en cas d'échec réseau, une bulle « Assistant momentanément
+indisponible » propose la page contact. Animations : `transform` + `opacity` uniquement (aucune
+animation de layout).
+
+**Mascotte** — `assets/images/assistant/wisy-assistant-{144,216}.{avif,webp}` (≈ 4 à 10 Ko
+chacun) : l'image d'origine (525 × 350, fond studio gris) a été **détourée** (contour tracé sur la
+tête puis accroché au vrai bord par programmation dynamique le long des normales), cadrée en carré
+transparent de 280 px centré sur le regard, avec une ombre de contact très douce, puis exportée en
+144 px (2×) et 216 px (3×). Chargée via `<picture>` AVIF → WebP, `width`/`height` explicites (aucun
+CLS). Si l'image échoue : glyphe « assistant » (jamais un cercle cassé). Pour changer le cadrage
+(fenêtre, tailles, ombre), modifier les constantes de `scripts/build-assistant-avatar.py` et relancer
+`python3 scripts/build-assistant-avatar.py <image-d'origine.png>` (Python 3 + Pillow ≥ 11.3 ; l'image
+d'origine n'est pas dans le dépôt) : les 4 fichiers sont régénérés à l'identique (mêmes noms).
+
+**Accessibilité** — `<button type="button">` nommé, `aria-expanded`, `aria-controls`, description
+(assistant virtuel, réponses automatiques) ; focus visible en double anneau jais + turquoise (lisible
+sur fonds clairs **et** sombres, visible aussi en contraste forcé) ; bulle fermable (×, zone 44 px,
+Échap) ; panneau `role="dialog"` **non modal sur desktop**, **modal sur mobile** (arrière-plan inerte,
+Tab bouclé, défilement de la page bloqué puis restauré exactement) ; focus rendu au launcher ;
+fil qui ne suit les nouveaux messages que si le lecteur est déjà en bas (sinon « Nouveaux messages ↓ ») ;
+`prefers-reduced-motion` : plus d'idle, de halo ni de micro-mouvement, transitions minimales.
+
+**Événements analytics** (CustomEvent `wisy:analytics`, jamais de contenu) : `assistant_launcher_viewed`,
+`assistant_intro_shown`, `assistant_launcher_clicked`, `assistant_opened`, `assistant_closed`,
+`assistant_question_sent` (longueur seulement), `assistant_suggestion_clicked`,
+`assistant_new_conversation`, `assistant_error`, `assistant_training_card_clicked`,
+`assistant_contact_requested`. Le site n'a aujourd'hui aucun outil analytics ni bannière cookies :
+rien n'est envoyé ; à relayer plus tard **avec** le consentement.
+
+---
+
 ## 5. Variables d'environnement
 
 L'assistant **local ne nécessite aucune variable**. Pour l'IA optionnelle
@@ -148,7 +222,7 @@ Site statique : servir le dossier avec n'importe quel serveur HTTP, p.ex.
 npx serve .        # ou : python3 -m http.server 8080
 ```
 
-puis ouvrir `http://localhost:8080/index.html`. La mascotte apparaît en bas à
+puis ouvrir `http://localhost:8080/index.html`. Le launcher apparaît en bas à
 droite ; l'assistant fonctionne immédiatement (cœur local).
 
 ## 7. Tester
@@ -203,9 +277,10 @@ cœur local.
   les liens uniquement à partir d'URLs **validées par allow-list**
   (`validation.js`) — côté client **et** côté serveur.
 - **Entrées bornées** (taille), **rate-limiting** par IP sur la fonction.
-- **Analytics respectueux** : événements anonymisés émis en `CustomEvent`
+- **Analytics respectueux** : événements anonymisés `assistant_*` émis en `CustomEvent`
   (`wisy:analytics`), **sans contenu de conversation** ; à relayer par le site
-  selon son propre consentement.
-- **Accessibilité** : launcher = vrai `<button>` nommé, panneau `role="dialog"`
-  (non modal), `Escape` ferme, focus géré et restauré, `aria-live="polite"`,
-  respect de `prefers-reduced-motion`.
+  selon son propre consentement. Seul un drapeau d'interface (« bulle déjà vue ») est
+  mémorisé, en `sessionStorage`.
+- **Accessibilité** : launcher = vrai `<button>` nommé (§4 quater), panneau `role="dialog"`
+  (non modal sur desktop, modal sur mobile), `Escape` ferme, focus géré et restauré,
+  `aria-live="polite"`, respect de `prefers-reduced-motion`.

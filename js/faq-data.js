@@ -91,6 +91,7 @@
     formations:  { label: "Voir les formations",             href: "formations.html" },
     inscription: { label: "Accéder à l'inscription",         href: "inscription.html" },
     contact:     { label: "Contacter l'équipe",              href: "contact.html" },
+    agenda:      { label: "Consulter l'agenda",              href: "agenda.html" },
     nacelle:     { label: "Découvrir la formation Nacelles", href: "formation-nacelles-elevatrices.html" },
     assistant:   { label: "Poser la question à l'assistant", href: null }
   };
@@ -240,11 +241,11 @@
       id: "faq-inscription-dates",
       category: "inscription",
       question: "Puis-je choisir la date de ma formation ?",
-      answer: "Les dates et horaires des sessions ne sont pas encore publiés en ligne. Contactez-nous pour connaître les prochaines disponibilités.",
-      keywords: ["dates", "session", "sessions", "calendrier", "planning", "quand", "prochaine", "disponibilités", "délai"],
+      answer: "Les dates et horaires des sessions ne sont pas encore publiés en ligne : la page Agenda les accueillera prochainement. En attendant, contactez-nous pour connaître les prochaines disponibilités.",
+      keywords: ["dates", "session", "sessions", "calendrier", "agenda", "planning", "quand", "prochaine", "disponibilités", "délai"],
       synonyms: ["prochaines dates", "agenda", "horaires de la formation", "à quelle date", "délais", "date de début", "jour de la formation", "urgent", "rapidement"],
       relatedQuestions: ["faq-inscription-confirmation", "faq-deroulement-duree", "faq-contact-horaires"],
-      action: "contact"
+      action: "agenda"
     },
     {
       id: "faq-inscription-confirmation",

@@ -654,15 +654,6 @@
   }
   window.addEventListener("hashchange", function () { fromUrl(false); });
 
-  /* mascotte de l'assistant dans la carte (les scripts de l'assistant sont chargés en différé) */
-  function injectMascot() {
-    var M = window.WisyAssistant && window.WisyAssistant.Mascot, host = $("faqc-mascot");
-    if (M && host) host.innerHTML = M.svg({ id: "faq" }); // SVG interne de confiance (js/assistant/mascot.js)
-  }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", injectMascot);
-  else injectMascot();
-  window.addEventListener("load", injectMascot);
-
   /* ---------------------------------------------------------------------
      Données structurées FAQPage — uniquement les questions AFFICHÉES ci-dessus
      --------------------------------------------------------------------- */

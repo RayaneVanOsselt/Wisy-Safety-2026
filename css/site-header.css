@@ -149,6 +149,14 @@
   .site-header .lang-btn { min-height: 44px; }
 }
 
+/* ---------- 3 bis. Page courante dans la navigation (discret, accessible) ----------
+   Posé par la page elle-même via `aria-current="page"` (ex. Agenda). Trois signaux redondants,
+   jamais la couleur seule : texte épinette (5,7:1 sur crème), soulignement plein, graisse. */
+.site-header .nav-link[aria-current="page"] { color: var(--epinette); }
+.site-header .nav-link[aria-current="page"]::after { transform: scaleX(1); background: var(--epinette); }
+.m-panel .m-nav > li > a[aria-current="page"] { color: var(--epinette); font-weight: 600; background: var(--brume-08); }
+.site-footer .f-links a[aria-current="page"] { color: var(--turquoise); font-weight: 600; }
+
 /* ---------- 4. Téléphone : en-tête compact, aucune collision (320 px et plus) ---------- */
 @media (max-width: 640px) {
   .site-header .main-inner { padding-block: .75rem; }

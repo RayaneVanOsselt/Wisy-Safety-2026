@@ -27,7 +27,7 @@ node --test tests/*.test.js  # échoue si une copie générée est obsolète
 - Dans le `<head>` de chaque page, entre `<!-- seo:start -->` et `<!-- seo:end -->` : canonical, Open Graph, Twitter,
   `theme-color`, données structurées JSON-LD. **Ne pas éditer ce bloc à la main.** Le `<title>` et la meta
   description restent écrits dans chaque page (ils sont traduits par l'i18n).
-- Pages techniques (`404.html`, `admin/avis.html`, maquettes `wisy-safety-header/footer.html`) : `noindex`, hors sitemap.
+- Pages techniques (`404.html`, `admin/avis.html`, maquettes `docs/maquettes/wisy-safety-header/footer.html`) : `noindex`, hors sitemap.
 
 Données structurées (chacune reprend un fait **déjà affiché** sur la page ; `tests/seo.test.js` le vérifie) :
 `EducationalOrganization`+`LocalBusiness` (adresse, téléphone, horaires, position), `WebSite` (accueil),

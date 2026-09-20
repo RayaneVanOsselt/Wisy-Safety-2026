@@ -26,7 +26,7 @@ dans `js/i18n-data-common.js`. Rien d'autre n'a été touché.
 
 1. Créez un projet sur [supabase.com](https://supabase.com) (offre gratuite suffisante).
 2. Ouvrez **SQL Editor → New query**, collez **tout** le contenu de
-   [`supabase/schema.sql`](supabase/schema.sql), puis **Run**.
+   [`supabase/schema.sql`](../supabase/schema.sql), puis **Run**.
    → Cela crée la table `reviews`, la vue publique `approved_reviews` (sans e-mail),
    les politiques RLS et les protections anti-spam.
 3. Ouvrez **Project Settings → API** et copiez :
@@ -35,7 +35,7 @@ dans `js/i18n-data-common.js`. Rien d'autre n'a été touché.
 
 ## 2. Brancher le site
 
-Ouvrez [`js/supabase-config.js`](js/supabase-config.js) et remplacez :
+Ouvrez [`js/supabase-config.js`](../js/supabase-config.js) et remplacez :
 
 ```js
 SUPABASE_URL:      "https://VOTRE-PROJET.supabase.co",

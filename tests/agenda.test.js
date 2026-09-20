@@ -26,7 +26,7 @@ const FAQ = require("../js/faq-search.js");
 
 /* ------------------------------------------------------------------ fichiers & SEO */
 test("fichiers de la page Agenda présents, scripts liés, feuille propre à la page", () => {
-  ["agenda.html", "css/agenda.css", "js/agenda-calendar.js", "js/agenda.js", "README-AGENDA.md"].forEach((f) => assert.ok(exists(f), f));
+  ["agenda.html", "css/agenda.css", "js/agenda-calendar.js", "js/agenda.js", "docs/README-AGENDA.md"].forEach((f) => assert.ok(exists(f), f));
   assert.match(HTML, /<link rel="stylesheet" href="css\/agenda\.css">/);
   assert.match(HTML, /<script defer src="js\/agenda-calendar\.js"><\/script>/);
   assert.match(HTML, /<script defer src="js\/agenda\.js"><\/script>/);

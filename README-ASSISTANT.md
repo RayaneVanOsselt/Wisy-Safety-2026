@@ -51,7 +51,8 @@ js/assistant/
   assistant.js                        Panneau : rendu, focus/modal mobile, défilement, erreurs (chargé à la demande)
 supabase/functions/chat/
   index.ts                            Edge Function OPTIONNELLE (/api/chat) : CORS, rate-limit, prompt, appel Claude
-  knowledge.ts                        Miroir TypeScript de la base (à garder synchronisé)
+  knowledge.ts                        Base côté serveur : DÉRIVE des fichiers générés (site.generated.ts, faq.generated.ts)
+  site.generated.ts                   GÉNÉRÉ (node scripts/sync-edge.js) : formations, pages, coordonnées, routes autorisées
 tests/
   knowledge.test.js  retrieval.test.js  responder.test.js  validation.test.js  launcher.test.js
 README-ASSISTANT.md                   Ce document
@@ -76,12 +77,12 @@ README-ASSISTANT.md                   Ce document
   Les formations réutilisent les **clés i18n existantes** (`dd.*`, `fo.*`) pour
   l'affichage multilingue ; les URLs pointent vers les **routes réelles**
   (`formations.html#<id>`, `inscription.html?formation=<id>`).
-- Pour ajouter une formation : dupliquer une entrée `formation`, renseigner
-  ses champs. L'assistant et sa recherche la prennent en compte
-  automatiquement.
-- Si l'Edge Function IA est utilisée, répercuter les formations/pages dans
-  **`supabase/functions/chat/knowledge.ts`** (miroir). La FAQ, elle, est
-  **générée automatiquement** (§4 ter).
+- Pour ajouter une formation ou une page : éditer **`js/site-content.js`** (registre commun
+  des pages, catégories et formations — voir `README-SEO.md`). L'assistant, la recherche du
+  site et le sitemap la prennent en compte ensemble.
+- Si l'Edge Function IA est utilisée : `node scripts/sync-edge.js` régénère
+  `supabase/functions/chat/site.generated.ts` **et** `faq.generated.ts` ; `knowledge.ts` n'a
+  plus aucune donnée recopiée à la main (§4 ter).
 
 ### 4 bis. Formations à page dédiée — registre central
 
@@ -101,8 +102,8 @@ doit être chargé **avant** `knowledge.js` (déjà fait sur les 6 pages).
   (`meta.intent = certification_unconfirmed`) — jamais une affirmation.
 - Un prix n'est donné **que** pour une formation qui en a un confirmé ; les autres
   restent « non indiqué » (aucun chiffre inventé).
-- Le miroir serveur (`knowledge.ts`) reste une copie : `tests/trainings.test.js`
-  échoue si elle diverge du registre.
+- La copie serveur est **générée** (`node scripts/sync-edge.js`) : `tests/edge-sync.test.js`
+  et `tests/trainings.test.js` échouent si elle diverge du registre.
 
 ### 4 ter. FAQ — UNE SEULE source de vérité (Centre d'aide ⇄ assistant)
 

@@ -7,7 +7,7 @@
   function m(lang, obj) { I[lang] = Object.assign(I[lang] || {}, obj); }
 
   m("fr", {
-    "meta.title": "Wisy Safety — Accueil",
+    "meta.title": "Wisy Safety | Formations sécurité à Bruxelles (Anderlecht)",
     "home.hero_eyebrow": "Centre de formation · Anderlecht",
     "home.hero_title": "La sécurité comme une référence",
     "home.hero_sub": "Formez et certifiez vos équipes avec des experts du terrain — VCA, PEB, coordination, premiers secours.",
@@ -33,7 +33,7 @@
   });
 
   m("en", {
-    "meta.title": "Wisy Safety — Home",
+    "meta.title": "Wisy Safety | Safety training in Brussels (Anderlecht)",
     "home.hero_eyebrow": "Training centre · Anderlecht",
     "home.hero_title": "Safety, set as the standard",
     "home.hero_sub": "Train and certify your teams with field experts — VCA, PEB, coordination, first aid.",
@@ -59,7 +59,7 @@
   });
 
   m("nl", {
-    "meta.title": "Wisy Safety — Home",
+    "meta.title": "Wisy Safety | Veiligheidsopleidingen in Brussel (Anderlecht)",
     "home.hero_eyebrow": "Opleidingscentrum · Anderlecht",
     "home.hero_title": "Veiligheid als referentie",
     "home.hero_sub": "Leid uw teams op en certificeer ze met experts uit het veld — VCA, PEB, coördinatie, eerste hulp.",
@@ -85,7 +85,7 @@
   });
 
   m("af", {
-    "meta.title": "Wisy Safety — Tuis",
+    "meta.title": "Wisy Safety | Veiligheidsopleiding in Brussel (Anderlecht)",
     "home.hero_eyebrow": "Opleidingsentrum · Anderlecht",
     "home.hero_title": "Veiligheid as die maatstaf",
     "home.hero_sub": "Lei jou spanne op en sertifiseer hulle met kundiges uit die veld — VCA, PEB, koördinasie, noodhulp.",
@@ -111,7 +111,7 @@
   });
 
   m("ar", {
-    "meta.title": "Wisy Safety — الرئيسية",
+    "meta.title": "Wisy Safety | تدريب على السلامة في بروكسل (أندرلخت)",
     "home.hero_eyebrow": "مركز تدريب · أندرلخت",
     "home.hero_title": "السلامة كمعيار مرجعي",
     "home.hero_sub": "درّب فرقك واحصل على الشهادات مع خبراء ميدانيين — VCA وPEB والتنسيق والإسعافات الأولية.",
@@ -137,7 +137,7 @@
   });
 
   m("bg", {
-    "meta.title": "Wisy Safety — Начало",
+    "meta.title": "Wisy Safety | Обучения по безопасност в Брюксел (Андерлехт)",
     "home.hero_eyebrow": "Учебен център · Андерлехт",
     "home.hero_title": "Безопасността като еталон",
     "home.hero_sub": "Обучавайте и сертифицирайте екипите си с експерти от практиката — VCA, PEB, координация, първа помощ.",
@@ -163,7 +163,7 @@
   });
 
   m("de", {
-    "meta.title": "Wisy Safety — Startseite",
+    "meta.title": "Wisy Safety | Sicherheitsschulungen in Brüssel (Anderlecht)",
     "home.hero_eyebrow": "Ausbildungszentrum · Anderlecht",
     "home.hero_title": "Sicherheit als Maßstab",
     "home.hero_sub": "Schulen und zertifizieren Sie Ihre Teams mit Praxisexperten — VCA, PEB, Koordination, Erste Hilfe.",
@@ -189,7 +189,7 @@
   });
 
   m("ro", {
-    "meta.title": "Wisy Safety — Acasă",
+    "meta.title": "Wisy Safety | Formări în securitate la Bruxelles (Anderlecht)",
     "home.hero_eyebrow": "Centru de formare · Anderlecht",
     "home.hero_title": "Securitatea ca punct de referință",
     "home.hero_sub": "Formați și certificați-vă echipele cu experți din teren — VCA, PEB, coordonare, prim ajutor.",
@@ -215,7 +215,7 @@
   });
 
   m("it", {
-    "meta.title": "Wisy Safety — Home",
+    "meta.title": "Wisy Safety | Formazione sulla sicurezza a Bruxelles (Anderlecht)",
     "home.hero_eyebrow": "Centro di formazione · Anderlecht",
     "home.hero_title": "La sicurezza come punto di riferimento",
     "home.hero_sub": "Forma e certifica i tuoi team con esperti sul campo — VCA, PEB, coordinamento, primo soccorso.",
@@ -241,7 +241,7 @@
   });
 
   m("sl", {
-    "meta.title": "Wisy Safety — Domov",
+    "meta.title": "Wisy Safety | Usposabljanje za varnost v Bruslju (Anderlecht)",
     "home.hero_eyebrow": "Center za usposabljanje · Anderlecht",
     "home.hero_title": "Varnost kot merilo",
     "home.hero_sub": "Usposobite in certificirajte svoje ekipe s strokovnjaki iz prakse — VCA, PEB, koordinacija, prva pomoč.",

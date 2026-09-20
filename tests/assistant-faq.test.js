@@ -172,7 +172,7 @@ test("accueil sur la page Centre d'aide : suggestions = questions RÉELLES de la
 test("les pages « Centre d'aide » sont connues de la base (navigation)", () => {
   const p = Knowledge.byId("page-faq");
   assert.equal(p.url, "faq.html");
-  assert.equal(p.titleKey, "footer.faq");
+  assert.equal(p.titleKey, "search.page_faq_t", "titre issu du registre js/site-content.js (traduit en 10 langues)");
   const r = ask("J'ai besoin d'aide");
   assert.ok(hasCard(r, "navigation"));
 });

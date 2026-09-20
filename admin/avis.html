@@ -3,10 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex,nofollow">
 <title>Wisy Safety — Modération des avis</title>
-<link rel="icon" href="../assets/logo.png" type="image/png">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- seo:start — bloc généré par scripts/build-seo.js (registre du site + coordonnées) ; ne pas éditer à la main -->
+<meta name="robots" content="noindex,nofollow">
+<!-- seo:end -->
+<link rel="icon" href="../assets/icons/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="icon" href="../assets/icons/favicon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
+<link rel="stylesheet" href="../css/fonts.css">
 <style>
 :root{
   --epinette:#1F6F64;--sarcelle:#2F7D8C;--turquoise:#48D6C2;--brume:#3FA69B;
@@ -111,7 +115,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 <main class="wrap" id="dash" hidden>
   <div class="top">
     <div class="brand">
-      <img src="../assets/logo.png" alt="Wisy Safety">
+      <img src="../assets/images/logo/logo-102.webp" srcset="../assets/images/logo/logo-102.webp 102w, ../assets/images/logo/logo-204.webp 204w" sizes="72px" alt="Wisy Safety" width="102" height="112">
       <span><b>Modération des avis</b><span id="who"></span></span>
     </div>
     <button class="signout" id="signout">Se déconnecter</button>
@@ -128,7 +132,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 </main>
 
 <script src="../js/supabase-config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0" integrity="sha384-JBR+x8blGwjDRO63aHCGiZMD4VNiTR4ZUGA+N6ZKLf3zNt1fK8IBpcgPaMrxqWBp" crossorigin="anonymous"></script>
 <script>
 (function () {
   "use strict";

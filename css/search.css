@@ -41,6 +41,17 @@
   margin-inline: auto;
 }
 
+/* Espace réservé — la bande est injectée par js/search.js APRÈS le premier rendu. Sans réserve, tout
+   le contenu de la page descendait d'environ 68 px à cet instant (décalage de mise en page, CLS ≈ 0,07).
+   On réserve exactement sa hauteur tant qu'elle n'existe pas (:has() : navigateurs récents ; ailleurs,
+   comportement d'origine). Aucune réserve sur le Centre d'aide, qui masque cette bande. */
+.site-header { --wsy-search-h: calc(1px + 1.2rem + 48px); }        /* bordure + marges + champ (desktop) */
+body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
+  content: "";
+  display: block;
+  height: var(--wsy-search-h);
+}
+
 /* Région live pour lecteurs d'écran (annonce du nombre de résultats) */
 .wsy-search__live {
   position: absolute;
@@ -268,6 +279,11 @@
 .wsy-search__ic--thumb img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; display: block; }
 .wsy-search__item:hover .wsy-search__ic--thumb,
 .wsy-search__item.is-active .wsy-search__ic--thumb { background: var(--granit-12, rgba(94, 109, 106, .12)); }
+/* Une question de FAQ est une phrase : elle passe à la ligne (2 lignes max) au lieu d'être tronquée. */
+.wsy-search__item--faq .wsy-search__tt {
+  white-space: normal;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2;
+}
 .wsy-search__ds--wrap {
   white-space: normal;
   display: -webkit-box;
@@ -412,6 +428,7 @@
    6. RESPONSIVE / TACTILE
    -------------------------------------------------------------------------- */
 @media (max-width: 860px) {
+  .site-header { --wsy-search-h: calc(1px + 1rem + 50px); }         /* même calcul que la bande mobile */
   .wsy-search__wrap { padding-block: .5rem; }
   .wsy-search__inner { max-width: none; }
   .wsy-search__box { height: 50px; }               /* zone tactile confortable */

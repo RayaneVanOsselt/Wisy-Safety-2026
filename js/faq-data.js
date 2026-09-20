@@ -79,7 +79,12 @@
     region: "Bruxelles",
     /* Horaires du pied de page : lundi→jeudi 10:00–16:00, vendredi/week-end fermé. */
     hours: "Du lundi au jeudi, de 10h00 à 16h00",
-    contactUrl: "contact.html"
+    contactUrl: "contact.html",
+    /* Faits STRUCTURÉS (données Schema.org générées par scripts/build-seo.js) : mêmes horaires que le
+       pied de page ; latitude / longitude = celles de la carte intégrée à l'accueil (Google Maps).
+       tests/seo.test.js vérifie qu'ils ne divergent pas de ces deux sources. */
+    openingHours: [{ days: ["Monday", "Tuesday", "Wednesday", "Thursday"], opens: "10:00", closes: "16:00" }],
+    geo: { latitude: 50.834996, longitude: 4.276271 }
   };
 
   /* ---------------------------------------------------------------------

@@ -883,6 +883,7 @@
     sheet.classList.add("is-open");
     if (scrim) scrim.classList.add("is-open");
     sheet.setAttribute("aria-hidden", "false");
+    sheet.removeAttribute("inert");                     // ouvert : redevient atteignable au clavier et au lecteur d'écran
     if (trigger) trigger.setAttribute("aria-expanded", "true");
     document.body.style.overflow = "hidden";
     var close = sheet.querySelector("[data-close-sheet]");
@@ -896,6 +897,7 @@
     sheet.classList.remove("is-open");
     if (scrim) scrim.classList.remove("is-open");
     sheet.setAttribute("aria-hidden", "true");
+    sheet.setAttribute("inert", "");                    // fermé : hors focus clavier (le panneau reste hors écran)
     if (trigger) trigger.setAttribute("aria-expanded", "false");
     document.body.style.overflow = "";
   }
@@ -934,8 +936,20 @@
   /* ======================================================================
      17. INITIALISATION
      ====================================================================== */
+  /* Lien profond `inscription.html?formation=<id>` : la formation choisie est présélectionnée (1 participant).
+     Sans effet si elle l'est déjà (inscription restaurée) ou si l'identifiant est inconnu. */
+  function preselectFromUrl() {
+    var wanted;
+    try { wanted = new URLSearchParams(location.search).get("formation"); } catch (e) { return; }
+    var id = wanted && DATA.resolveTrainingId ? DATA.resolveTrainingId(wanted) : null;
+    if (!id || state.trainings[id]) return;
+    state.trainings[id] = clampQty(1);
+    save();
+  }
+
   function init() {
     load();
+    preselectFromUrl();
     /* Bannière « inscription restaurée » (affichée seulement à l'étape 1) */
     if (restored) {
       updateRestoredBanner();

@@ -1,0 +1,7 @@
+# Wisy Safety — tout le site public est explorable (CSS, JS et images compris : ils servent au rendu).
+# Les pages techniques (admin, 404, maquettes) portent `noindex` ; rien n'est bloqué ici pour que
+# les moteurs puissent lire cette consigne.
+User-agent: *
+Allow: /
+
+Sitemap: https://www.wisysafety.be/sitemap.xml

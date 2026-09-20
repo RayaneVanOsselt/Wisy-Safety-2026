@@ -15,7 +15,7 @@
          <button class="wsy-scenes__toggle" aria-pressed="false">…</button>
        </div>
        <div class="wsy-scenes__stage">
-         <article class="wsy-scene">…</article> × n
+         <div class="wsy-scene">…</div> × n   (div, pas article : role="group" n'est pas permis sur <article>)
        </div>
      </div>
 

@@ -99,17 +99,20 @@ test("témoignages : section prête mais MASQUÉE tant qu'aucun témoignage rée
   assert.ok(sec.includes("[Nom du participant]") && sec.includes("[Entreprise]") && sec.includes("[Témoignage à renseigner]"));
 });
 
-test("miroir serveur (Edge Function) : la nacelle du fichier .ts = registre", () => {
-  const ts = read("supabase/functions/chat/knowledge.ts");
-  const block = ts.slice(ts.indexOf('{ id: "nacelle"'), ts.indexOf('{ id: "fibre-optique"'));
-  assert.ok(block.length > 100, "entrée nacelle trouvée");
-  [
-    'title: "' + N.title + '"', 'url: "' + N.url + '"', 'signupUrl: "' + N.signupUrl + '"',
-    'duration: "' + Trainings.formatDuration(N.durationDays) + '"', 'priceLabel: "' + Trainings.formatPrice(N.price) + '"',
-    'format: "' + N.formatLabel + '"', 'category: "' + N.category + '"'
-  ].forEach((s) => assert.ok(block.indexOf(s) !== -1, "miroir .ts : " + s));
-  N.languageLabels.concat(N.audience, N.types.map((t) => t.name)).forEach((s) => assert.ok(block.indexOf('"' + s + '"') !== -1, "miroir .ts : " + s));
-  assert.doesNotMatch(block.replace(/AUCUNE certification[^"]*/i, ""), /caces|certifi/i, "mots-clés .ts");
+test("miroir serveur (Edge Function) : la nacelle du fichier généré .ts = registre", () => {
+  const ts = read("supabase/functions/chat/site.generated.ts");
+  const start = ts.indexOf("=", ts.indexOf("export const SITE_FORMATIONS")) + 1;
+  const formations = JSON.parse(ts.slice(start, ts.indexOf("];", start) + 1));
+  const n = formations.find((f) => f.id === "nacelle");
+  assert.ok(n, "entrée nacelle trouvée");
+  assert.equal(n.title, N.title); assert.equal(n.url, N.url); assert.equal(n.signupUrl, N.signupUrl);
+  assert.equal(n.duration, Trainings.formatDuration(N.durationDays)); assert.equal(n.priceLabel, Trainings.formatPrice(N.price));
+  assert.equal(n.format, N.formatLabel); assert.equal(n.category, N.category);
+  assert.deepEqual(n.languages, N.languageLabels); assert.deepEqual(n.audience, N.audience); assert.deepEqual(n.subtypes, N.types.map((t) => t.name));
+  assert.match(n.content, /AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer/, "consigne d'interdiction");
+  assert.doesNotMatch(n.content.replace(/AUCUNE certification[^.]*\./i, ""), /caces|certifi/i, "aucune affirmation non confirmée");
+  assert.doesNotMatch(n.keywords.join(" "), /caces|certifi/i, "mots-clés");
+  formations.filter((f) => f.id !== "nacelle").forEach((f) => assert.ok(!("priceLabel" in f), "pas de prix inventé : " + f.id));
 });
 
 test("inscription : le prix de la nacelle vient du registre (plus de valeur figée)", () => {
@@ -119,10 +122,14 @@ test("inscription : le prix de la nacelle vient du registre (plus de valeur fig�
 });
 
 test("recherche : l'entrée nacelle est bâtie sur le registre (page dédiée, miniature, faits)", () => {
+  const f = require("../js/site-content.js").formation(N.id);
+  assert.equal(f.url, N.url, "page dédiée");
+  assert.equal(f.thumb, N.images.thumb, "miniature");
+  assert.equal(f.fullTitleKey, N.fullTitleKey, "titre complet");
+  assert.deepEqual(f.factKeys, ["dd.nacelle_dur", "dd.nacelle_fmt", "dd.nacelle_langs"], "faits clés");
   const s = read("js/search.js");
-  ["TRAINING_NACELLE.url", "TRAINING_NACELLE.images.thumb", "TRAINING_NACELLE.fullTitleKey", "dd.nacelle_dur", "dd.nacelle_fmt", "dd.nacelle_langs"].forEach((k) => {
-    assert.ok(s.indexOf(k) !== -1, k);
-  });
+  assert.match(s, /Site\.formations\(\)/, "la recherche lit le registre commun js/site-content.js");
+  assert.doesNotMatch(s, /TRAINING_NACELLE|id: "vca-base"/, "plus aucune formation redéfinie dans search.js");
 });
 
 test("navigation : chaque page du site lie la nacelle vers la page dédiée (plus vers l'ancre du catalogue)", () => {

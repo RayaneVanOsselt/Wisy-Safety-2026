@@ -1,0 +1,24 @@
+# ---- macOS ------------------------------------------------------------------
+.DS_Store
+Icon?
+._*
+
+# ---- Éditeurs ---------------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+
+# ---- Outils de test (le site lui-même n'a ni build ni dépendances) ----------
+node_modules/
+npm-debug.log*
+*.log
+
+# ---- Secrets : seul .env.example (valeurs factices) est versionné -----------
+.env
+.env.*
+!.env.example
+
+# ---- Claude Code : réglages/aperçus locaux et worktrees ---------------------
+.claude/worktrees/
+.claude/settings.local.json
+.claude/launch.json

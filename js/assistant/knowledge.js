@@ -12,10 +12,11 @@
    figurent pas ici tant qu'elles ne sont pas confirmées → l'assistant
    redirige alors vers le contact humain.
 
-   Formations à page dédiée (aujourd'hui : « Nacelles élévatrices ») : leurs
-   faits (prix, durée, langues, format, public, route) viennent du registre
-   central js/trainings-data.js — une seule définition, partagée avec la
-   recherche et le parcours d'inscription.
+   Formations, pages et catégories : DÉRIVÉES du registre js/site-content.js
+   (source unique, partagée avec la recherche du site, le sitemap et la copie
+   Edge). Les faits de la formation à page dédiée (« Nacelles élévatrices » :
+   prix, durée, langues, format, public, route) viennent du registre
+   js/trainings-data.js, via ce même registre. Rien n'est redéfini ici.
 
    FAQ — la FAQ de l'assistant n'est PLUS définie ici : elle est DÉRIVÉE de la
    source unique du Centre d'aide (js/faq-data.js + moteur js/faq-search.js).
@@ -25,25 +26,26 @@
 
    Module « dual-mode » : s'expose comme `window.WisyAssistant.Knowledge`
    dans le navigateur ET comme `module.exports` sous Node (pour les tests),
-   sans build. Dépend de `window.WisyTrainings` (js/trainings-data.js) et de
-   `window.WisyFAQ` (js/faq-data.js puis js/faq-search.js), à charger AVANT ce
-   fichier. Sans FAQ chargée, l'assistant reste fonctionnel (sans réponses FAQ).
+   sans build. Dépend de `window.WisySite` (js/site-content.js, qui lit
+   js/trainings-data.js) et de `window.WisyFAQ` (js/faq-data.js puis
+   js/faq-search.js), à charger AVANT ce fichier. Sans FAQ chargée, l'assistant
+   reste fonctionnel (sans réponses FAQ).
 
-   Mise à jour : les URLs, ancres et clés i18n reflètent les fichiers du
-   dépôt. Pour ajouter une formation, dupliquer une entrée `formation` et
-   renseigner les mêmes champs — l'assistant et sa recherche la prendront
-   en compte automatiquement (voir aussi supabase/functions/chat/knowledge.ts).
+   Mise à jour : pour ajouter une formation ou une page, éditer
+   js/site-content.js puis lancer `node scripts/sync-edge.js` — l'assistant,
+   la recherche du site et la copie serveur (supabase/functions/chat/) la
+   prennent en compte ensemble.
    ========================================================================= */
 (function (root, factory) {
   "use strict";
   var isNode = (typeof module === "object" && module.exports);
-  var Trainings = isNode ? require("../trainings-data.js") : root.WisyTrainings;
+  var Site = isNode ? require("../site-content.js") : root.WisySite;
   var Faq = isNode ? require("../faq-search.js") : root.WisyFAQ;
-  var api = factory(Trainings, Faq);
+  var api = factory(Site, Faq);
   if (isNode) module.exports = api;
   root.WisyAssistant = root.WisyAssistant || {};
   root.WisyAssistant.Knowledge = api;
-})(typeof self !== "undefined" ? self : this, function (Trainings, Faq) {
+})(typeof self !== "undefined" ? self : this, function (Site, Faq) {
   "use strict";
 
   /* Date de dernière vérification du contenu face au site (ISO, statique
@@ -67,186 +69,30 @@
   };
 
   /* --------------------------------------------------------------------- */
-  /* Catégories (miroir de search.js — labels via i18n dans le navigateur) */
+  /* Catégories, formations, pages — DÉRIVÉES de js/site-content.js         */
+  /* (titleKey/descKey : clés i18n existantes → traduction live du panneau) */
   /* --------------------------------------------------------------------- */
-  var CATEGORIES = {
-    securite:   { id: "securite",   label: "Sécurité",   labelKey: "fo.filter_securite" },
-    secours:    { id: "secours",    label: "Secours",    labelKey: "fo.filter_secours" },
-    technique:  { id: "technique",  label: "Technique",  labelKey: "fo.filter_technique" },
-    management: { id: "management", label: "Management",  labelKey: "fo.filter_management" }
-  };
+  var CATEGORIES = {};
+  (Site ? Site.categories() : []).forEach(function (c) {
+    CATEGORIES[c.id] = { id: c.id, label: c.label, labelKey: c.filterKey };
+  });
 
-  /* --------------------------------------------------------------------- */
-  /* Formation à page dédiée — construite depuis le registre central       */
-  /* (js/trainings-data.js). Aucun fait n'est recopié ici.                 */
-  /* --------------------------------------------------------------------- */
-  /* Mots trop génériques pour discriminer UNE formation : les garder dans
-     `keywords` ferait matcher « une formation » sur la nacelle et écraserait
-     le contexte de page (voir retrieval.bestFormation). */
-  var GENERIC_KEYWORD = /\b(formations?|securite)\b/;
+  /* Champs de fiche utiles à l'assistant (les champs d'affichage propres à la recherche — miniature,
+     faits clés, mots-clés bruts — restent dans le registre). */
+  var FORMATION_FIELDS = ["id", "title", "fullTitle", "titleKey", "category", "url", "signupUrl", "duration", "level",
+    "description", "descKey", "objective", "price", "priceLabel", "format", "languages", "audience", "subtypes",
+    "unconfirmed", "features", "keywords"];
+  var FORMATIONS = (Site ? Site.formations() : []).map(function (f) {
+    var e = { type: "formation" };
+    FORMATION_FIELDS.forEach(function (k) { if (f[k] !== undefined) e[k] = f[k]; });
+    return e;
+  });
 
-  function fromRegistry(T) {
-    return {
-      id: T.id,
-      type: "formation",
-      title: T.title,
-      fullTitle: T.fullTitle,
-      titleKey: T.titleKey,
-      category: T.category,
-      url: T.url,
-      signupUrl: T.signupUrl,
-      duration: Trainings.formatDuration(T.durationDays),
-      level: "Spécialisée",
-      description: T.summary,
-      descKey: T.summaryKey,
-      objective: T.objective,
-      price: T.price,
-      priceLabel: Trainings.formatPrice(T.price),
-      format: T.formatLabel,
-      languages: T.languageLabels.slice(),
-      audience: T.audience.slice(),
-      subtypes: T.types.map(function (t) { return t.name; }),
-      /* Affirmations réglementaires NON confirmées : l'assistant ne doit jamais
-         les avancer (voir responder.js → certification non confirmée). */
-      unconfirmed: T.unconfirmed.slice(),
-      features: [T.formatLabel, "Approche orientée sécurité", T.languageLabels.join(", ")],
-      keywords: T.keywords.filter(function (k) { return !GENERIC_KEYWORD.test(k); })
-    };
-  }
-  var NACELLE = (Trainings && Trainings.nacelles) ? fromRegistry(Trainings.nacelles) : null;
-
-  /* --------------------------------------------------------------------- */
-  /* Formations — contenu réel de formations.html                          */
-  /* url        : fiche (ancre sur la page catalogue, ou page dédiée)       */
-  /* signupUrl  : pré-remplissage du formulaire d'inscription              */
-  /* titleKey/descKey : clés i18n existantes (traduction multilingue live) */
-  /* --------------------------------------------------------------------- */
-  var FORMATIONS = [
-    {
-      id: "vca-base",
-      type: "formation",
-      title: "VCA Base",
-      titleKey: "dd.vca_base",
-      category: "securite",
-      url: "formations.html#vca-base",
-      signupUrl: "inscription.html?formation=vca-base",
-      duration: "1 jour",
-      level: "Base",
-      description: "Formation sécurité de base pour tous les secteurs professionnels. Certification reconnue au niveau national.",
-      descKey: "fo.f1_desc",
-      features: ["Certification reconnue", "Formateur expert", "Support complet"],
-      keywords: ["vca", "base", "b-vca", "securite", "chantier", "fondamentaux", "certification", "national", "safety", "veiligheid", "sicherheit"]
-    },
-    {
-      id: "vca-hierarchique",
-      type: "formation",
-      title: "VCA Ligne hiérarchique",
-      titleKey: "dd.vca_hier",
-      category: "management",
-      url: "formations.html#vca-hierarchique",
-      signupUrl: "inscription.html?formation=vca-hierarchique",
-      duration: "2 jours",
-      level: "Avancé",
-      description: "Pour responsables et encadrants en milieu professionnel. Approfondissement des concepts de sécurité.",
-      descKey: "fo.f2_desc",
-      features: ["Management de la sécurité", "Approche pratique", "Cas concrets"],
-      keywords: ["vca", "hierarchique", "vol-vca", "ligne", "encadrement", "responsable", "responsables", "manager", "management", "chef", "supervisor", "leidinggevende"]
-    },
-    {
-      id: "diisocyanates",
-      type: "formation",
-      title: "Diisocyanates & substances dangereuses",
-      titleKey: "dd.diiso",
-      category: "securite",
-      url: "formations.html#diisocyanates",
-      signupUrl: "inscription.html?formation=diisocyanates",
-      duration: "1 jour",
-      level: "Spécialisée",
-      description: "Manipulation sécurisée des produits chimiques en entreprise. Conforme aux normes européennes en vigueur.",
-      descKey: "fo.f3_desc",
-      features: ["Produits chimiques", "Normes REACH", "Équipements adaptés"],
-      keywords: ["diisocyanate", "diisocyanates", "isocyanate", "reach", "chimique", "chimiques", "substances", "dangereuses", "produits", "chemical", "gevaarlijke"]
-    },
-    NACELLE,
-    {
-      id: "fibre-optique",
-      type: "formation",
-      title: "Fibre optique",
-      titleKey: "dd.fibre",
-      category: "technique",
-      url: "formations.html#fibre-optique",
-      signupUrl: "inscription.html?formation=fibre-optique",
-      duration: "3 jours",
-      level: "Technique",
-      description: "Soudure et installation professionnelle de fibres optiques. Formation complète avec équipement fourni.",
-      descKey: "fo.f5_desc",
-      features: ["Équipement fourni", "Expert technique", "Pratique intensive"],
-      keywords: ["fibre", "fiber", "optique", "optic", "soudure", "raccordement", "telecom", "installation", "ftth"]
-    },
-    {
-      id: "beps",
-      type: "formation",
-      title: "BEPS — Premier secours",
-      titleKey: "dd.beps",
-      category: "secours",
-      url: "formations.html#beps",
-      signupUrl: "inscription.html?formation=beps",
-      duration: "3 jours",
-      level: "Moyen",
-      description: "Maîtrisez les gestes qui sauvent : réanimation, hémorragies et positions de sécurité. Brevet européen de premiers secours reconnu.",
-      descKey: "fo.f6_desc",
-      features: ["Gestes qui sauvent", "Brevet reconnu", "Pratique sur mannequin"],
-      keywords: ["beps", "secours", "secourisme", "premiers", "brevet", "reanimation", "réanimation", "sauvetage", "first aid", "ehbo", "cpr", "defibrillateur"]
-    }
-  ].filter(Boolean);
-
-  /* --------------------------------------------------------------------- */
-  /* Pages principales (miroir de search.js PAGES)                          */
-  /* --------------------------------------------------------------------- */
-  var PAGES = [
-    {
-      id: "page-home", type: "page", title: "Accueil", url: "index.html",
-      titleKey: "search.page_home_t", descKey: "search.page_home_d",
-      content: "Page d'accueil de Wisy Safety, centre de formation à la sécurité.",
-      keywords: ["accueil", "home", "start", "presentation", "wisy"]
-    },
-    {
-      id: "page-formations", type: "page", title: "Formations", url: "formations.html",
-      titleKey: "search.page_formations_t", descKey: "search.page_formations_d",
-      content: "Catalogue complet des formations Wisy Safety : sécurité, secours, technique et management.",
-      keywords: ["formations", "catalogue", "cours", "liste", "offre", "courses", "opleidingen"]
-    },
-    {
-      id: "page-avis", type: "page", title: "Avis clients", url: "avis.html",
-      titleKey: "search.page_avis_t", descKey: "search.page_avis_d",
-      content: "Avis et témoignages des participants aux formations Wisy Safety.",
-      keywords: ["avis", "temoignages", "reviews", "opinions", "retours", "satisfaction"]
-    },
-    {
-      id: "page-contact", type: "page", title: "Contact", url: "contact.html",
-      titleKey: "search.page_contact_t", descKey: "search.page_contact_d",
-      content: "Coordonnées de Wisy Safety : téléphone, e-mail, adresse à Anderlecht et formulaire de contact.",
-      keywords: ["contact", "adresse", "telephone", "email", "coordonnees", "joindre", "kontakt"]
-    },
-    {
-      id: "page-inscription", type: "page", title: "Inscription", url: "inscription.html",
-      titleKey: "search.page_inscription_t", descKey: "search.page_inscription_d",
-      content: "Formulaire d'inscription en ligne aux formations Wisy Safety.",
-      keywords: ["inscription", "inscrire", "register", "enroll", "signup", "s'inscrire", "reserver"]
-    },
-    {
-      id: "page-faq", type: "page", title: "Centre d'aide", url: "faq.html",
-      titleKey: "footer.faq",
-      content: "Centre d'aide Wisy Safety : questions fréquentes sur les formations, l'inscription, les tarifs et les attestations.",
-      keywords: ["aide", "faq", "questions", "centre d'aide", "assistance", "support", "help", "helpcentrum"]
-    },
-    {
-      id: "page-agenda", type: "page", title: "Agenda des formations", url: "agenda.html",
-      titleKey: "search.page_agenda_t", descKey: "search.page_agenda_d",
-      content: "Agenda des formations Wisy Safety : la page qui accueillera les prochaines sessions, leurs horaires et leurs disponibilités. L'agenda en ligne arrive prochainement : aucune date n'y est publiée pour le moment.",
-      keywords: ["agenda", "calendrier", "dates", "date", "sessions", "session", "prochaines", "prochaine", "horaires", "planning", "quand", "disponibilites", "calendar", "schedule", "termine", "kalender"]
-    }
-  ];
+  /* Pages principales : id « page-<id> » (historique de l'assistant), textes du registre. */
+  var PAGES = (Site ? Site.pages() : []).map(function (p) {
+    return { id: "page-" + p.id, type: "page", title: p.title, url: p.url, titleKey: p.titleKey, descKey: p.descKey,
+      content: p.content, keywords: p.keywords };
+  });
 
   /* --------------------------------------------------------------------- */
   /* Contact — entrée dédiée                                                */

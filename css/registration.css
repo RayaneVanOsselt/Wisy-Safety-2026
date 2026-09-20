@@ -169,12 +169,12 @@
 }
 .reg-step-num svg { width: 18px; height: 18px; display: none; }
 .reg-step-meta { display: flex; flex-direction: column; line-height: 1.15; }
-.reg-step-k { font-family: var(--reg-mono); font-size: .64rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--granit-clair); }
+.reg-step-k { font-family: var(--reg-mono); font-size: .64rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--granit); }   /* granit : 5,1:1 sur crème (granit-clair : 2,4:1) */
 .reg-step-t { font-family: var(--font-titre); font-weight: 600; font-size: .92rem; color: inherit; }
 
 .reg-step-btn.is-active { color: var(--epinette); }
 .reg-step-btn.is-active .reg-step-num { background: var(--epinette); border-color: var(--epinette); color: var(--creme); box-shadow: 0 0 0 4px var(--brume-14); }
-.reg-step-btn.is-active .reg-step-k { color: var(--brume); }
+.reg-step-btn.is-active .reg-step-k { color: var(--epinette); }   /* brume : 2,8:1 sur crème (illisible en texte) */
 .reg-step-btn.is-done .reg-step-num { background: var(--brume-14); border-color: var(--epinette); color: var(--epinette); }
 .reg-step-btn.is-done .reg-step-num .reg-step-numval { display: none; }
 .reg-step-btn.is-done .reg-step-num svg { display: block; }

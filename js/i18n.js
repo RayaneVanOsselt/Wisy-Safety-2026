@@ -26,6 +26,15 @@
   var STORE   = "wisy-lang";
   var DIC     = window.I18N || (window.I18N = {});
 
+  /* Robots d'exploration (Googlebot, Bingbot, aperçus de liens, audits…) : leur navigateur annonce
+     « en-US ». Sans ce garde-fou, ils recevraient — et indexeraient — la version ANGLAISE des pages
+     françaises. Ils gardent donc la langue source du HTML (le français) ; un visiteur humain, lui,
+     retrouve la langue de son navigateur. ?lang=xx reste honoré pour tout le monde. */
+  var CRAWLER = /bot\b|crawl|spider|slurp|inspectiontool|mediapartners|facebookexternalhit|embedly|lighthouse|pagespeed|headlesschrome/i;
+  function isCrawler() {
+    try { return CRAWLER.test(navigator.userAgent || ""); } catch (e) { return false; }
+  }
+
   function norm(l) {
     if (!l) return null;
     l = String(l).toLowerCase().slice(0, 2);
@@ -41,6 +50,7 @@
       var s = localStorage.getItem(STORE);
       if (norm(s)) return norm(s);
     } catch (e) {}
+    if (isCrawler()) return DEFAULT;
     var navs = navigator.languages || [navigator.language || navigator.userLanguage || ""];
     for (var i = 0; i < navs.length; i++) {
       var n = norm(navs[i]);
@@ -59,11 +69,8 @@
     return (DIC.__names__ && DIC.__names__[lang]) || lang.toUpperCase();
   }
 
-  function apply(lang) {
-    var root = document.documentElement;
-    root.setAttribute("lang", lang);
-    root.setAttribute("dir", RTL.indexOf(lang) >= 0 ? "rtl" : "ltr");
-
+  // Réécrit le contenu de la page dans `lang` (data-i18n · data-i18n-html · data-i18n-attr)
+  function translate(lang) {
     // Texte
     document.querySelectorAll("[data-i18n]").forEach(function (el) {
       var v = get(lang, el.getAttribute("data-i18n"));
@@ -83,6 +90,23 @@
         if (v != null) el.setAttribute(p[0].trim(), v);
       });
     });
+  }
+
+  /* Premier affichage : le HTML servi est DÉJÀ le français du dictionnaire (tests/i18n-static.test.js
+     le garantit pour chaque texte, fragment et attribut). En français on ne réécrit donc pas ~1 000 nœuds
+     au chargement : moins de travail, pas de repeint, et le texte déjà affiché n'est pas « re-créé »
+     (ce qui décalait le LCP). Toute autre langue — ou un retour au français après une autre langue —
+     réécrit le contenu comme avant. */
+  var pristine = true;
+
+  function apply(lang) {
+    var root = document.documentElement;
+    root.setAttribute("lang", lang);
+    root.setAttribute("dir", RTL.indexOf(lang) >= 0 ? "rtl" : "ltr");
+
+    var skip = pristine && lang === DEFAULT;
+    pristine = false;
+    if (!skip) translate(lang);
     // Titre de l'onglet
     var t = get(lang, "meta.title");
     if (t != null) document.title = t;
@@ -99,6 +123,11 @@
     });
     document.querySelectorAll("[data-lang-current-code]").forEach(function (el) {
       el.textContent = lang.toUpperCase();
+    });
+    // Nom accessible du bouton = code affiché + action (WCAG 2.5.3 : l'étiquette visible figure dans le nom)
+    document.querySelectorAll("[data-lang-toggle]").forEach(function (el) {
+      var label = get(lang, "aria.choose_lang");
+      if (label != null) el.setAttribute("aria-label", lang.toUpperCase() + " — " + label);
     });
     document.querySelectorAll("[data-lang-option]").forEach(function (el) {
       var on = el.getAttribute("data-lang-option") === lang;

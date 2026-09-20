@@ -73,6 +73,8 @@
 
   /* Fichiers du moteur, DANS L'ORDRE d'exécution (chemins depuis la racine du site). */
   var ENGINE_FILES = [
+    "js/trainings-data.js",                 // registre des faits de fiche (déjà chargé par les pages : ignoré alors)
+    "js/site-content.js",                   // registre commun pages / catégories / formations
     "js/faq-data.js",
     "js/faq-search.js",
     "js/assistant/knowledge.js",
@@ -269,10 +271,16 @@
     relabel();
   }
 
+  /** Nom accessible du bouton : l'action + le libellé VISIBLE du badge (« IA ») — WCAG 2.5.3 (étiquette dans le nom). */
+  function fabLabel() {
+    return (S.open ? t("assistant.launcher_close", "Fermer l’Assistant Wisy") : t("assistant.launcher_open", "Ouvrir l’Assistant Wisy")) +
+      " (" + t("assistant.badge_ai", "IA") + ")";
+  }
+
   /** (Re)pose tous les libellés : à la construction et à chaque changement de langue. */
   function relabel() {
     if (!S.fab) return;
-    S.fab.setAttribute("aria-label", S.open ? t("assistant.launcher_close", "Fermer l’Assistant Wisy") : t("assistant.launcher_open", "Ouvrir l’Assistant Wisy"));
+    S.fab.setAttribute("aria-label", fabLabel());
     S.wrap.querySelector("#wa-fab-desc").textContent = t("assistant.launcher_desc", "Assistant virtuel de Wisy Safety : il répond automatiquement à vos questions à partir des informations publiées sur ce site.");
     S.fab.querySelector(".wa-fab__badge").textContent = t("assistant.badge_ai", "IA");
     S.invite.querySelector(".wa-invite__close").setAttribute("aria-label", t("assistant.bubble_dismiss", "Masquer ce message"));
@@ -373,6 +381,8 @@
   function engineHas(path) {
     var A = NS || {};
     switch (path) {
+      case "js/trainings-data.js": return !!root.WisyTrainings;
+      case "js/site-content.js": return !!root.WisySite;
       case "js/faq-data.js": return !!(root.WisyFAQ && root.WisyFAQ.CATEGORIES);
       case "js/faq-search.js": return !!(root.WisyFAQ && root.WisyFAQ.search);
       case "js/assistant/knowledge.js": return !!A.Knowledge;
@@ -471,7 +481,7 @@
     if (!S.root) return;
     S.root.classList.toggle("is-open", S.open);
     S.fab.setAttribute("aria-expanded", S.open ? "true" : "false");
-    S.fab.setAttribute("aria-label", S.open ? t("assistant.launcher_close", "Fermer l’Assistant Wisy") : t("assistant.launcher_open", "Ouvrir l’Assistant Wisy"));
+    S.fab.setAttribute("aria-label", fabLabel());
     if (S.open) { engage(); track("assistant_opened", { page: S.page }); }
     else { track("assistant_closed", { page: S.page }); }
   }

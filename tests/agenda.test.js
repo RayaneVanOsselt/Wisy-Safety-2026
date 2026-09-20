@@ -34,7 +34,7 @@ test("fichiers de la page Agenda présents, scripts liés, feuille propre à la 
   assert.match(HTML, /<body class="agenda-page">/);
 });
 
-test("SEO : title, meta description, un seul H1, landmarks, hreflang comme les autres pages", () => {
+test("SEO : title, meta description, un seul H1, landmarks, canonical absolu (bloc généré)", () => {
   assert.match(HTML, /<title>Agenda des formations \| Wisy Safety<\/title>/);
   const d = HTML.match(/<meta name="description" content="([^"]+)"/);
   assert.ok(d && d[1].length >= 100 && d[1].length <= 170, "meta description 100–170 caractères : " + (d && d[1].length));
@@ -43,8 +43,9 @@ test("SEO : title, meta description, un seul H1, landmarks, hreflang comme les a
   assert.match(HTML, /<main id="main" lang="fr" dir="ltr">/, "main + contenu français isolé du sens RTL");
   assert.ok((HTML.match(/<section /g) || []).length >= 7, "sections sémantiques");
   assert.match(HTML, /<nav class="ag-crumbs" aria-label="Fil d'Ariane">/, "fil d'Ariane");
-  assert.equal((HTML.match(/rel="alternate" hreflang=/g) || []).length, 11, "10 langues + x-default");
-  assert.doesNotMatch(HTML, /application\/ld\+json|"@type"\s*:\s*"Event"|schema\.org\/Event/, "aucune donnée structurée d'événement fictif");
+  assert.match(HTML, /<link rel="canonical" href="https:\/\/www\.wisysafety\.be\/agenda\.html">/, "canonical absolu");
+  assert.doesNotMatch(HTML, /rel="alternate" hreflang=/, "pas de hreflang relatif (langues = même URL traduite en JS)");
+  assert.doesNotMatch(HTML, /"@type"\s*:\s*"Event"|schema\.org\/Event/, "aucune donnée structurée d'événement fictif");
 });
 
 test("hiérarchie des titres sans saut (H1 → H2 → H3) et cibles ARIA existantes", () => {
@@ -166,7 +167,7 @@ test("iframe : isolé (sandbox sans navigation du parent), titre, chargement par
   assert.match(src, /f\.title = cfg\.title/); assert.match(src, /f\.loading = "lazy"/); assert.match(src, /referrerPolicy = "strict-origin-when-cross-origin"/);
   assert.match(src, /IntersectionObserver/, "chargement quand la section approche de l'écran");
   assert.match(src, /setAttribute\("aria-busy", "true"\)/, "état de chargement annoncé");
-  assert.match(HTML, /data-agc-open target="_blank" rel="noopener noreferrer" hidden/, "lien de secours (href posé par le composant) sans fuite d'opener");
+  assert.match(HTML, /data-agc-open href="#agenda" target="_blank" rel="noopener noreferrer" hidden/, "lien de secours (href remplacé par le composant ; #agenda le rend explorable tant qu'il est masqué) sans fuite d'opener");
   assert.doesNotMatch(strip(src), /console\.|innerHTML|document\.write|eval\(/, "aucun log, aucune injection HTML");
 });
 
@@ -269,9 +270,9 @@ test("en-tête sticky et chrome partagés : la page réutilise les blocs communs
 
 /* ------------------------------------------------------------------ recherche, assistant, Centre d'aide */
 test("recherche du site : la page Agenda est indexée en 10 langues (titre + description)", () => {
-  const src = read("js/search.js");
-  assert.match(src, /id: "agenda",\s+url: "agenda\.html",\s+titleKey: "search\.page_agenda_t",\s+descKey: "search\.page_agenda_d"/);
-  assert.match(src, /page_agenda:\s+'<rect/, "icône");
+  const reg = read("js/site-content.js");
+  assert.match(reg, /id: "agenda", url: "agenda\.html", title: "Agenda des formations", titleKey: "search\.page_agenda_t", descKey: "search\.page_agenda_d"/, "page déclarée dans le registre commun");
+  assert.match(read("js/search.js"), /page_agenda:\s+'<rect/, "icône");
   const ctx = { window: {} }; vm.runInNewContext(read("js/i18n-data-search.js"), ctx);
   const D = ctx.window.I18N;
   ["fr", "en", "nl", "af", "ar", "bg", "de", "ro", "it", "sl"].forEach((l) => {
@@ -285,9 +286,9 @@ test("assistant : page connue, route autorisée, miroir serveur à jour", () => 
   assert.equal(p.url, "agenda.html"); assert.equal(p.type, "page");
   assert.doesNotMatch(p.content, /\b(20\d\d|\d{1,2}\s+(janvier|février|mars|avril|mai|juin))\b/i, "aucune date dans le contenu de la page");
   assert.ok(Validation.isSafeUrl("agenda.html") && Validation.isSafeUrl("agenda.html#agenda"));
-  const kts = read("supabase/functions/chat/knowledge.ts");
-  assert.match(kts, /id: "page-agenda"[^}]*url: "agenda\.html"/s);
-  assert.match(kts, /"faq\.html", "agenda\.html",/, "allow-list serveur");
+  const kts = read("supabase/functions/chat/site.generated.ts");
+  assert.match(kts, /"id": "page-agenda"[^}]*"url": "agenda\.html"/s, "page Agenda dans la copie serveur (générée)");
+  assert.match(kts, /"agenda\.html"/, "allow-list serveur");
   assert.match(read("supabase/functions/chat/index.ts"), /AUCUNE date ni disponibilité[\s\S]*agenda\.html/, "consigne du prompt serveur");
 });
 

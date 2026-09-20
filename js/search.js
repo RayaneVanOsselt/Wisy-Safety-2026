@@ -3,8 +3,12 @@
    -------------------------------------------------------------------------
    • S'insère dans le header sticky (barre sous la navigation) sur toutes les
      pages qui incluent ce script — aucun markup à dupliquer manuellement.
-   • Indexe les VRAIES données du site : les 6 formations, leurs catégories
-     et les pages principales, via les clés i18n (source de vérité multilingue).
+   • Indexe les VRAIES données du site — formations, catégories, pages — lues dans
+     le registre commun js/site-content.js (même source que l'assistant et le
+     sitemap), via les clés i18n (source de vérité multilingue).
+   • Retrouve aussi les questions du Centre d'aide (FAQ) et les infos pratiques (adresse,
+     téléphone, e-mail, horaires) : chargés À LA DEMANDE (js/faq-data.js) au premier usage de
+     la barre — jamais sur le chemin critique de la page.
    • Combobox accessible (WAI-ARIA), navigation clavier, ⌘K / Ctrl+K, i18n live.
    ========================================================================= */
 (function () {
@@ -13,55 +17,90 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* -----------------------------------------------------------------------
-     Données recherchables — reflètent le contenu réel (aucun contenu fictif)
-     Titres/descriptions = clés i18n déjà traduites dans i18n-data-common.js.
+     Données recherchables — lues dans le registre commun (js/site-content.js,
+     chargé AVANT ce script) : aucune formation ni page n'est redéfinie ici.
+     Titres/descriptions = clés i18n déjà traduites (i18n-data-common.js…).
      ----------------------------------------------------------------------- */
-  var CAT_ORDER = ["securite", "secours", "technique", "management"];
-  var CATEGORIES = {
-    securite:   { filter: "securite",   labelKey: "search.cat_securite",   count: 2 },
-    secours:    { filter: "secours",    labelKey: "search.cat_secours",    count: 1 },
-    technique:  { filter: "technique",  labelKey: "search.cat_technique",  count: 2 },
-    management: { filter: "management", labelKey: "search.cat_management", count: 1 }
-  };
+  var Site = window.WisySite;
+  if (!Site) return;                       // registre absent : pas de barre plutôt qu'une erreur
 
-  /* Registre central (js/trainings-data.js, chargé AVANT ce script) : source
-     unique des faits de la formation « Nacelles élévatrices » (route, mots-clés,
-     visuel, durée, format, langues). Repli sur la page catalogue si absent. */
-  var TRAINING_NACELLE = window.WisyTrainings && window.WisyTrainings.nacelles;
+  var CAT_ORDER = [];
+  var CATEGORIES = {};                     // { id: { filter, labelKey, count } } — count = formations de la catégorie
+  Site.categories().forEach(function (c) {
+    CAT_ORDER.push(c.id);
+    CATEGORIES[c.id] = { filter: c.id, labelKey: c.labelKey, count: 0 };
+  });
 
-  var FORMATIONS = [
-    { id: "vca-base",         cat: "securite",   titleKey: "dd.vca_base",  descKey: "dd.vca_base_desc",
-      kw: ["vca", "base", "b-vca", "securite", "chantier", "fondamentaux", "certification", "safety", "veiligheid", "sicherheit"] },
-    { id: "vca-hierarchique", cat: "management", titleKey: "dd.vca_hier",  descKey: "dd.vca_hier_desc",
-      kw: ["vca", "hierarchique", "vol-vca", "ligne", "encadrement", "responsable", "management", "supervisor", "leidinggevende"] },
-    { id: "diisocyanates",    cat: "securite",   titleKey: "dd.diiso",     descKey: "dd.diiso_desc",
-      kw: ["diisocyanate", "diisocyanates", "isocyanate", "reach", "chimique", "chimiques", "substances", "dangereuses", "produits", "chemical", "gevaarlijke"] },
-    TRAINING_NACELLE ? {
-      /* Résultat riche : titre complet, description courte, faits clés, miniature, page dédiée */
-      id: TRAINING_NACELLE.id, cat: TRAINING_NACELLE.category,
-      titleKey: TRAINING_NACELLE.fullTitleKey, descKey: TRAINING_NACELLE.summaryKey,
-      kw: TRAINING_NACELLE.keywords,
-      url: TRAINING_NACELLE.url, thumb: TRAINING_NACELLE.images.thumb,
-      factKeys: ["dd.nacelle_dur", "dd.nacelle_fmt", "dd.nacelle_langs"]
-    } : { id: "nacelle", cat: "technique", titleKey: "dd.nacelle", descKey: "dd.nacelle_desc",
-      kw: ["nacelle", "nacelles", "pemp", "elevatrice", "plateforme", "hauteur", "lift", "aerial", "hoogwerker"] },
-    { id: "fibre-optique",    cat: "technique",  titleKey: "dd.fibre",     descKey: "dd.fibre_desc",
-      kw: ["fibre", "fiber", "optique", "optic", "soudure", "raccordement", "telecom", "installation", "ftth"] },
-    { id: "beps",             cat: "secours",    titleKey: "dd.beps",      descKey: "dd.beps_desc",
-      kw: ["beps", "secours", "secourisme", "premiers", "brevet", "reanimation", "sauvetage", "first aid", "ehbo", "erste hilfe", "cpr"] }
-  ];
+  var FORMATIONS = Site.formations().map(function (f) {
+    CATEGORIES[f.category].count++;
+    return {
+      id: f.id, cat: f.category, url: f.url,
+      /* Fiche riche (page dédiée) : titre complet, résumé, miniature et faits clés ; sinon accroche courte. */
+      titleKey: f.fullTitleKey || f.titleKey, descKey: f.summaryKey || f.taglineKey,
+      kw: f.searchKeywords || f.keywords,
+      thumb: f.thumb, factKeys: f.factKeys
+    };
+  });
 
-  var PAGES = [
-    { id: "home",        url: "index.html",       titleKey: "search.page_home_t",        descKey: "search.page_home_d",        kw: ["accueil", "home", "start", "startseite", "acasa"] },
-    { id: "formations",  url: "formations.html",  titleKey: "search.page_formations_t",  descKey: "search.page_formations_d",  kw: ["formations", "catalogue", "courses", "cours", "opleidingen", "schulungen", "corsi"] },
-    { id: "avis",        url: "avis.html",        titleKey: "search.page_avis_t",        descKey: "search.page_avis_d",        kw: ["avis", "reviews", "temoignages", "feedback", "opinions", "bewertungen", "recensioni"] },
-    { id: "contact",     url: "contact.html",     titleKey: "search.page_contact_t",     descKey: "search.page_contact_d",     kw: ["contact", "adresse", "telephone", "email", "coordonnees", "kontakt"] },
-    { id: "inscription", url: "inscription.html", titleKey: "search.page_inscription_t", descKey: "search.page_inscription_d", kw: ["inscription", "inscrire", "register", "registration", "enroll", "signup", "anmeldung", "iscrizione"] },
-    { id: "faq",         url: "faq.html",         titleKey: "search.page_faq_t",         descKey: "search.page_faq_d",         kw: ["aide", "centre", "faq", "questions", "help", "helpcentrum", "hulp", "hilfe", "aiuto", "ajutor", "assistance", "support"] },
-    { id: "agenda",      url: "agenda.html",      titleKey: "search.page_agenda_t",      descKey: "search.page_agenda_d",      kw: ["agenda", "calendrier", "dates", "date", "sessions", "session", "prochaines", "prochaine", "horaires", "planning", "quand", "calendar", "schedule", "upcoming", "termine", "kalender", "calendario", "urnik", "program", "datum"] }
-  ];
+  var PAGES = Site.pages().map(function (p) {
+    return { id: p.id, url: p.url, titleKey: p.titleKey, descKey: p.descKey, kw: p.keywords };
+  });
 
   var FEATURED = ["vca-base", "beps", "nacelle", "fibre-optique"]; // suggestions (état vide)
+
+  /* -----------------------------------------------------------------------
+     Contenus chargés À LA DEMANDE : questions du Centre d'aide + infos pratiques.
+     Source unique : js/faq-data.js (FAQ + coordonnées) — la même que la page faq.html et l'assistant.
+     Absent / en échec : la recherche reste pleinement fonctionnelle (formations, catégories, pages).
+     ----------------------------------------------------------------------- */
+  var FAQ_SCRIPT = "js/faq-data.js";
+  var FAQS = [];                 // { id, title (question), url, kw }
+  var INFOS = [];                // { id, titleKey, sub(), url, kw }
+  var extras = "idle";           // idle | loading | ready | failed
+  var MAX_FAQ = 3;               // évite une liste énorme : les 3 questions les plus pertinentes
+
+  function buildExtras() {
+    var F = window.WisyFAQ;
+    if (!F || !F.items) return;
+    FAQS = F.items().map(function (it) {
+      return { id: it.id, title: it.question, url: "faq.html#" + it.id, kw: (it.keywords || []).concat(it.synonyms || []) };
+    });
+    var C = F.CONTACT;
+    if (!C) return;
+    var dayKeys = { Monday: "footer.mon", Tuesday: "footer.tue", Wednesday: "footer.wed", Thursday: "footer.thu", Friday: "footer.fri" };
+    var oh = (C.openingHours || [])[0];
+    INFOS = [
+      { id: "info-address", titleKey: "footer.label_address", url: C.contactUrl,
+        sub: function () { return C.street + ", " + C.postalCode + " " + C.city; },
+        kw: ["adresse", "address", "adres", "anschrift", "indirizzo", "adresa", "acces", "plan", "carte", "map", "localisation", "situation", "venir", "itterbeek", "anderlecht", "bruxelles", "brussels", "brussel"] },
+      { id: "info-phone", titleKey: "footer.label_phone", url: C.phoneHref,
+        sub: function () { return C.phone; },
+        kw: ["telephone", "phone", "tel", "appeler", "call", "numero", "gsm", "bellen", "anrufen", "chiamare", "apel"] },
+      { id: "info-email", titleKey: "footer.label_email", url: "mailto:" + C.email,
+        sub: function () { return C.email; },
+        kw: ["email", "mail", "e-mail", "courriel", "ecrire", "write", "schrijven", "schreiben"] }
+    ];
+    if (oh && oh.days && oh.days.length) {
+      INFOS.push({ id: "info-hours", titleKey: "footer.col_hours", url: C.contactUrl,
+        // jours traduits (clés du pied de page) + horaires — aucune phrase française figée
+        sub: function () { return t(dayKeys[oh.days[0]]) + " – " + t(dayKeys[oh.days[oh.days.length - 1]]) + ", " + oh.opens + " – " + oh.closes; },
+        kw: ["horaires", "heures", "ouverture", "ouvert", "open", "opening", "hours", "openingstijden", "oeffnungszeiten", "orari", "program", "lundi", "jeudi"] });
+    }
+  }
+  function purgeCaches() { FORMATIONS.concat(PAGES, FAQS, INFOS).forEach(function (e) { e._hay = null; }); }
+  function ensureExtras() {
+    if (extras !== "idle") return;
+    if (window.WisyFAQ && window.WisyFAQ.items) { buildExtras(); extras = "ready"; return; }
+    extras = "loading";
+    var el = document.createElement("script");
+    el.src = FAQ_SCRIPT; el.async = true;
+    el.onload = function () {
+      buildExtras(); extras = "ready"; purgeCaches();
+      if (root && root.classList.contains("is-open")) render(input.value.trim());   // affiche aussitôt les résultats enrichis
+    };
+    el.onerror = function () { extras = "failed"; };
+    document.head.appendChild(el);
+  }
 
   /* -----------------------------------------------------------------------
      Icônes (cohérentes avec le système d'icônes du site — trait 1.8)
@@ -89,7 +128,12 @@
     page_contact:     '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>',
     page_inscription: '<path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="3"/><path d="M19 8v6M22 11h-6"/>',
     page_faq:         '<circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
-    page_agenda:      '<rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/>'
+    page_agenda:      '<rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/>',
+    // infos pratiques
+    "info-address":   '<path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+    "info-phone":     '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>',
+    "info-email":     '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>',
+    "info-hours":     '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'
   };
   function svg(inner) {
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + "</svg>";
@@ -148,11 +192,15 @@
   var GENERIC_TERMS = { formation: 1, formations: 1, training: 1, trainings: 1, opleiding: 1, opleidingen: 1, schulung: 1, schulungen: 1, course: 1, courses: 1 };
   var GENERIC_HAY = Object.keys(GENERIC_TERMS).join(" ");
 
+  function titleOf(e) { return e.titleKey ? t(e.titleKey) : String(e.title || ""); }
+  function subOf(e) { return typeof e.sub === "function" ? e.sub() : (e.sub || ""); }
+
   function hayOf(e, lg) {
     e._hay = e._hay || {};
     if (!e._hay[lg]) {
-      var parts = [t(e.titleKey)];
+      var parts = [titleOf(e)];
       if (e.descKey) parts.push(t(e.descKey));
+      if (e.sub) parts.push(subOf(e));
       if (e.cat) { parts.push(t(CATEGORIES[e.cat].labelKey)); parts.push(GENERIC_HAY); }
       if (e.kw) parts.push(e.kw.join(" "));
       e._hay[lg] = fold(parts.join(" "));
@@ -162,7 +210,7 @@
   function score(e, terms, lg) {
     var hay = hayOf(e, lg);
     for (var i = 0; i < terms.length; i++) if (hay.indexOf(terms[i]) === -1) return -1;
-    var title = fold(t(e.titleKey)), s = 0;
+    var title = fold(titleOf(e)), s = 0;
     terms.forEach(function (term) {
       if (GENERIC_TERMS[term]) return;
       if (title.indexOf(term) === 0) s += 6;
@@ -189,13 +237,14 @@
     function collect(list) {
       return list.map(function (e) { return { e: e, s: score(e, terms, lg) }; })
         .filter(function (r) { return r.s >= 0; })
-        .sort(function (a, b) { return b.s - a.s || t(a.e.titleKey).localeCompare(t(b.e.titleKey)); })
+        .sort(function (a, b) { return b.s - a.s || titleOf(a.e).localeCompare(titleOf(b.e)); })
         .map(function (r) { return r.e; });
     }
     var cats = CAT_ORDER.map(function (id) {
       return Object.assign({ id: id, isCat: true }, CATEGORIES[id], { titleKey: CATEGORIES[id].labelKey });
     });
-    return { formations: collect(FORMATIONS), categories: collect(cats), pages: collect(PAGES), terms: terms };
+    return { formations: collect(FORMATIONS), categories: collect(cats), pages: collect(PAGES),
+      infos: collect(INFOS), faqs: collect(FAQS).slice(0, MAX_FAQ), terms: terms };
   }
 
   /* -----------------------------------------------------------------------
@@ -222,30 +271,38 @@
      ----------------------------------------------------------------------- */
   var root, box, input, clearBtn, kbd, panel, listbox, live, currentQuery = "", options = [], activeIdx = -1, optSeq = 0;
 
+  /* Contenu de la bande. Il est AUSSI écrit tel quel dans l'en-tête de chaque page (rendu dès le premier
+     affichage : ni saut de mise en page, ni barre qui « apparaît » après 2 à 3 s sur réseau lent). Ce script
+     l'ANIME s'il existe ; à défaut (page sans bande statique), il l'injecte à l'identique. Les libellés
+     (placeholder, aria-label…) sont posés/traduits par refreshStatic(). */
+  function bandHTML() {
+    return '<div class="wsy-search__wrap"><div class="wsy-search__inner">' +
+      '<div class="wsy-search__box" role="search">' +
+        '<span class="wsy-search__icon">' + svg(IC.search) + "</span>" +
+        '<input class="wsy-search__input" type="search" role="combobox" aria-autocomplete="list" ' +
+          'aria-expanded="false" aria-haspopup="listbox" aria-controls="wsy-search-listbox" ' +
+          'autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />' +
+        '<kbd class="wsy-search__kbd"></kbd>' +
+        '<button class="wsy-search__clear" type="button" tabindex="-1">' + svg(IC.clear) + "</button>" +
+      "</div>" +
+      '<div class="wsy-search__panel">' +
+        '<div class="wsy-search__results" id="wsy-search-listbox" role="listbox"></div>' +
+        '<div class="wsy-search__foot"></div>' +
+      "</div>" +
+      '<span class="wsy-search__live" aria-live="polite"></span>' +
+    "</div></div>";
+  }
+
   function build() {
     var header = document.querySelector(".site-header");
-    if (!header || document.querySelector(".wsy-search")) return false;
-
-    root = document.createElement("div");
-    root.className = "wsy-search";
-    root.innerHTML =
-      '<div class="wsy-search__wrap"><div class="wsy-search__inner">' +
-        '<div class="wsy-search__box" role="search">' +
-          '<span class="wsy-search__icon">' + svg(IC.search) + "</span>" +
-          '<input class="wsy-search__input" type="search" role="combobox" aria-autocomplete="list" ' +
-            'aria-expanded="false" aria-haspopup="listbox" aria-controls="wsy-search-listbox" ' +
-            'autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />' +
-          '<kbd class="wsy-search__kbd"></kbd>' +
-          '<button class="wsy-search__clear" type="button" tabindex="-1">' + svg(IC.clear) + "</button>" +
-        "</div>" +
-        '<div class="wsy-search__panel">' +
-          '<div class="wsy-search__results" id="wsy-search-listbox" role="listbox"></div>' +
-          '<div class="wsy-search__foot"></div>' +
-        "</div>" +
-        '<span class="wsy-search__live" aria-live="polite"></span>' +
-      "</div></div>";
-
-    header.appendChild(root);
+    if (!header) return false;
+    root = header.querySelector(".wsy-search");
+    if (!root) {
+      root = document.createElement("div");
+      root.className = "wsy-search";
+      root.innerHTML = bandHTML();
+      header.appendChild(root);
+    }
 
     box      = root.querySelector(".wsy-search__box");
     input    = root.querySelector(".wsy-search__input");
@@ -283,7 +340,7 @@
     optSeq++;
     var id = "wsy-opt-" + optSeq;
     var meta = opts.meta ? '<span class="wsy-search__meta">' + esc(opts.meta) + "</span>" : "";
-    var attrs = 'id="' + id + '" role="option" aria-selected="false" class="wsy-search__item' + (opts.facts ? " wsy-search__item--rich" : "") + '"';
+    var attrs = 'id="' + id + '" role="option" aria-selected="false" class="wsy-search__item' + (opts.facts ? " wsy-search__item--rich" : "") + (opts.faq ? " wsy-search__item--faq" : "") + '"';
     var data = opts.recent ? ' data-recent="' + esc(opts.recent) + '"' : ' href="' + esc(opts.href) + '"';
     var tag = opts.recent ? "div" : "a";
     // Résultat riche : miniature (décorative : le titre porte le sens) à la place du pictogramme
@@ -351,7 +408,7 @@
 
     // ---- Résultats ----
     var res = runSearch(query);
-    var total = res.formations.length + res.categories.length + res.pages.length;
+    var total = res.formations.length + res.categories.length + res.pages.length + res.infos.length + res.faqs.length;
 
     if (!total) {
       html = '<div class="wsy-search__empty">' +
@@ -393,6 +450,16 @@
           sub: highlight(t(p.descKey), res.terms),
           href: p.url
         });
+      }).join(""));
+    }
+    if (res.infos.length) {
+      html += groupHTML(t("search.group_info"), res.infos.map(function (e) {
+        return itemHTML({ icon: IC[e.id], title: highlight(titleOf(e), res.terms), sub: highlight(subOf(e), res.terms), href: e.url });
+      }).join(""));
+    }
+    if (res.faqs.length) {
+      html += groupHTML(t("search.group_faq"), res.faqs.map(function (e) {
+        return itemHTML({ icon: IC.page_faq, title: highlight(e.title, res.terms), href: e.url, faq: true });
       }).join(""));
     }
 
@@ -542,7 +609,7 @@
 
   function wire() {
     input.addEventListener("input", onInput);
-    input.addEventListener("focus", function () { open(); render(input.value.trim()); });
+    input.addEventListener("focus", function () { ensureExtras(); open(); render(input.value.trim()); });
 
     input.addEventListener("keydown", function (e) {
       switch (e.key) {
@@ -605,7 +672,7 @@
     // Re-rendu à chaud lors d'un changement de langue
     document.addEventListener("i18n:changed", function () {
       // purge le cache d'index (les libellés ont changé)
-      FORMATIONS.concat(PAGES).forEach(function (e) { e._hay = null; });
+      purgeCaches();
       refreshStatic();
       if (root.classList.contains("is-open")) render(input.value.trim());
     });

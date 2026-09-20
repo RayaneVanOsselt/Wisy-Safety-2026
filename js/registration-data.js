@@ -65,7 +65,7 @@
       unit: "participant",
       category: "certification",
       icon: "shield",
-      image: "assets/images/reg/vca-base.webp",
+      image: "assets/images/formations/vca-base.webp",
       name: { fr: "VCA Base", en: "VCA Base", nl: "VCA Basis" },
       description: {
         fr: "Sécurité de base — examen agréé inclus",
@@ -80,7 +80,7 @@
       unit: "participant",
       category: "certification",
       icon: "hierarchy",
-      image: "assets/images/reg/vca-ligne-hierarchique.jpg",
+      image: "assets/images/formations/vca-hierarchique.webp",
       name: { fr: "VCA Ligne hiérarchique", en: "VCA for supervisors", nl: "VCA Leidinggevenden" },
       description: {
         fr: "Cadres & responsables opérationnels",
@@ -96,7 +96,7 @@
       unit: "participant",
       category: "engins",
       icon: "lift",
-      image: "assets/images/reg/nacelle-elevatrice.jpg",
+      image: "assets/images/formations/nacelle-elevatrice.webp",
       name: { fr: "Nacelles élévatrices", en: "Aerial work platform", nl: "Hoogwerker" },
       description: {
         fr: "Conduite en sécurité — théorie + pratique",
@@ -111,7 +111,7 @@
       unit: "participant",
       category: "telecom",
       icon: "fiber",
-      image: "assets/images/reg/fibre-optique.jpg",
+      image: "assets/images/formations/fibre-optique.webp",
       name: { fr: "Fibre optique", en: "Optical fiber", nl: "Glasvezel" },
       description: {
         fr: "Raccordement & soudure — pratique terrain",
@@ -127,7 +127,7 @@
       unit: "participant",
       category: "secours",
       icon: "aid",
-      image: "assets/images/reg/beps.jpg",
+      image: "assets/images/formations/beps.webp",
       name: { fr: "BEPS — Premier secours", en: "BEPS — First aid", nl: "BEPS — Eerste hulp" },
       description: {
         fr: "Les gestes qui sauvent — brevet européen reconnu",
@@ -142,7 +142,7 @@
       unit: "participant",
       category: "securite",
       icon: "hazard",
-      image: "assets/images/reg/diisocyanates.jpg",
+      image: "assets/images/formations/diisocyanates.webp",
       name: {
         fr: "Diisocyanates & substances dangereuses",
         en: "Diisocyanates & hazardous substances",
@@ -158,10 +158,27 @@
 
   var mutableCatalogue = CATALOGUE.slice();
 
+  /* Paramètre d'URL `?formation=` (cartes du catalogue, recherche, assistant) → identifiant du catalogue
+     d'inscription. Accepte l'identifiant du site (registre js/site-content.js : « vca-hierarchique »,
+     « nacelle »…) ou celui du catalogue. Renvoie null si la formation est inconnue. */
+  function resolveTrainingId(param) {
+    var wanted = String(param == null ? "" : param);
+    if (!wanted) return null;
+    var site = (window.WisySite && window.WisySite.formations) ? window.WisySite.formations() : [];
+    for (var i = 0; i < site.length; i++) {
+      if (site[i].id === wanted && site[i].registrationId) { wanted = site[i].registrationId; break; }
+    }
+    for (var j = 0; j < mutableCatalogue.length; j++) {
+      if (mutableCatalogue[j].id === wanted) return wanted;
+    }
+    return null;
+  }
+
   window.WisyRegistrationData = {
     CONFIG: CONFIG,
     CATEGORIES: CATEGORIES,
     getCatalogue: function () { return mutableCatalogue.slice(); },
+    resolveTrainingId: resolveTrainingId,
     getTraining: function (id) {
       for (var i = 0; i < mutableCatalogue.length; i++) {
         if (mutableCatalogue[i].id === id) return mutableCatalogue[i];

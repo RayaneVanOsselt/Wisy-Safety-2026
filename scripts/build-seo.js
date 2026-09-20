@@ -58,7 +58,7 @@ const DOCS = [
   { file: "agenda.html", graph: ["organization", "breadcrumb"], breadcrumb: [["Accueil", "index.html"], ["Agenda", "agenda.html"]] }
 ];
 /* Pages techniques : jamais indexées, jamais dans le sitemap. */
-const TECHNICAL = ["404.html", "admin/avis.html", "wisy-safety-header.html", "wisy-safety-footer.html"];
+const TECHNICAL = ["404.html", "admin/avis.html", "docs/maquettes/wisy-safety-header.html", "docs/maquettes/wisy-safety-footer.html"];
 
 /* ------------------------------------------------------------------ utilitaires */
 const decode = (s) => String(s || "").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#0?39;|&apos;/g, "'");

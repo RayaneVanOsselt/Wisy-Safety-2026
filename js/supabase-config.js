@@ -31,6 +31,6 @@ window.WISY_CONFIG = {
   ADMIN_NOTIFY_EMAIL:         "info@wisysafety.be",
 
   /* ---- Cloudflare Turnstile (facultatif, anti-spam) -------------------- */
-  /* Laissé vide = widget non affiché. Voir README-AVIS.md.                  */
+  /* Laissé vide = widget non affiché. Voir docs/README-AVIS.md.             */
   TURNSTILE_SITE_KEY: ""
 };

@@ -55,7 +55,7 @@ supabase/functions/chat/
   site.generated.ts                   GÉNÉRÉ (node scripts/sync-edge.js) : formations, pages, coordonnées, routes autorisées
 tests/
   knowledge.test.js  retrieval.test.js  responder.test.js  validation.test.js  launcher.test.js
-README-ASSISTANT.md                   Ce document
+docs/README-ASSISTANT.md              Ce document
 ```
 
 ## 3. Fichiers modifiés

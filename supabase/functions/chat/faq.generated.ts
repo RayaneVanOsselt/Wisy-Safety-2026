@@ -295,12 +295,13 @@ export const FAQ_ITEMS: FaqItem[] = [
     "id": "faq-inscription-dates",
     "category": "inscription",
     "question": "Puis-je choisir la date de ma formation ?",
-    "answer": "Les dates et horaires des sessions ne sont pas encore publiés en ligne. Contactez-nous pour connaître les prochaines disponibilités.",
+    "answer": "Les dates et horaires des sessions ne sont pas encore publiés en ligne : la page Agenda les accueillera prochainement. En attendant, contactez-nous pour connaître les prochaines disponibilités.",
     "keywords": [
       "dates",
       "session",
       "sessions",
       "calendrier",
+      "agenda",
       "planning",
       "quand",
       "prochaine",
@@ -323,7 +324,7 @@ export const FAQ_ITEMS: FaqItem[] = [
       "faq-deroulement-duree",
       "faq-contact-horaires"
     ],
-    "action": "contact"
+    "action": "agenda"
   },
   {
     "id": "faq-inscription-confirmation",

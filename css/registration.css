@@ -531,7 +531,7 @@ select.reg-input { appearance: none; -webkit-appearance: none; background-image:
   .reg-mobilebar__detail svg { width: 13px; height: 13px; }
   .reg-mobilebar__cta { flex-shrink: 0; min-height: var(--reg-tap); width: auto; }
 
-  body.reg-bar-active #wisy-assistant .wa-launcher { bottom: calc(max(16px, env(safe-area-inset-bottom, 0px)) + 80px); }
+  body.reg-bar-active #wisy-assistant { --wa-lift: 80px; }   /* le launcher passe au-dessus de la barre collante (css/assistant.css) */
   body.reg-bar-active .reg-stage { padding-bottom: 124px; }
 
   .reg-sheet-scrim { display: block; position: fixed; inset: 0; z-index: var(--reg-z-scrim); background: var(--jais-60); opacity: 0; visibility: hidden; transition: opacity var(--t-fast) var(--ease), visibility var(--t-fast); }

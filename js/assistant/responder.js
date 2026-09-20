@@ -65,6 +65,12 @@
   function navigationCard(p) {
     return { type: "navigation", title: p.title, titleKey: p.titleKey, description: p.content || p.description || "", url: p.url };
   }
+  /* Page Agenda (réelle) : jamais une date — l'agenda en ligne n'est pas encore connecté. */
+  function agendaCard() {
+    var p = Knowledge.byId("page-agenda");
+    return p ? navigationCard(p) : null;
+  }
+  function cardsOf() { return Array.prototype.slice.call(arguments).filter(Boolean); }
   function contactCard() {
     return {
       type: "contact",
@@ -102,6 +108,7 @@
     var a = it && it.action, p;
     if (!a || a === "assistant") return undefined;
     if (a === "contact") return [contactCard()];
+    if (a === "agenda") { var ag = agendaCard(); return ag ? [ag] : undefined; }
     if (a === "nacelle") { var n = Knowledge.byId("nacelle"); return n ? [trainingCard(n)] : undefined; }
     p = Knowledge.byId(a === "formations" ? "page-formations" : a === "inscription" ? "page-inscription" : "");
     return p ? [navigationCard(p)] : undefined;
@@ -176,7 +183,12 @@
             has(q, ["quelles", "quels", "quel", "liste", "toutes", "tous", "voir", "proposez", "propose", "disponibles", "disponible", "catalogue", "avez"]));
   }
   function isDuration(q) { return has(q, ["duree", "dure", "combien de temps", "jours", "jour", "heures", "long", "longue"]); }
-  function isSchedule(q) { return has(q, ["date", "dates", "quand", "prochaine", "session", "sessions", "calendrier", "planning", "horaire", "horaires"]); }
+  function isSchedule(q) { return has(q, ["date", "dates", "quand", "prochaine", "session", "sessions", "calendrier", "agenda", "agendas", "planning", "horaire", "horaires"]); }
+  /* Formats horaires (journée / soirée / week-end) d'une FORMATION — pas les horaires d'ouverture de l'équipe. */
+  function isScheduleFormat(q) {
+    return has(q, ["week-end", "weekend", "week end", "soir", "soiree", "soirees", "en journee", "samedi", "dimanche", "apres le travail"]) &&
+           has(q, ["formation", "formations", "cours", "session", "sessions", "stage", "stages", "former", "apprendre"]);
+  }
   function isHowItWorks(q) { return has(q, ["deroule", "deroulement", "passe", "fonctionne", "organise", "organisation", "comment ca", "comment se"]); }
   function isSignup(q) { return has(q, ["inscrire", "inscription", "inscris", "reserver", "reservation", "s'inscrire", "sinscrire", "reserve"]); }
   /* Détecteurs « fiche formation » (langues, format, public, types, lieu, réglementaire) */
@@ -223,7 +235,7 @@
   /* --------------------------------------------------------------------- */
   function welcome(ctx) {
     ctx = ctx || {};
-    var base = "Bonjour 👋\nJe suis l’assistant Wisy Safety. Je peux vous aider à trouver une formation, comprendre nos modalités ou retrouver rapidement une information.";
+    var base = "Bonjour,\nje suis l’Assistant Wisy. Comment puis-je vous aider aujourd’hui ?";
     var suggestions = ["Trouver une formation", "Voir les formations disponibles", "Comment se déroule une formation ?", "Contacter Wisy Safety"];
     var intro = base;
 
@@ -238,13 +250,13 @@
         }
       }
     } else if (ctx.page === "formations") {
-      intro = "Bonjour 👋\nJe peux vous aider à trouver la formation adaptée à votre besoin. Dites-moi votre secteur ou votre objectif.";
+      intro = "Bonjour,\nje peux vous aider à trouver la formation adaptée à votre besoin. Dites-moi votre secteur ou votre objectif.";
       suggestions = ["Formations sécurité", "Formations techniques", "Premiers secours", "Voir toutes les formations"];
     } else if (ctx.page === "contact") {
       suggestions = ["Voir les formations disponibles", "Comment se déroule une formation ?", "Vos horaires", "Trouver une formation"];
     } else if (ctx.page === "faq") {
       /* Centre d'aide : l'assistant s'appuie sur les MÊMES réponses que la page. */
-      intro = "Bonjour 👋\nJe suis l’assistant Wisy Safety. Je réponds à partir des mêmes informations que le Centre d’aide : posez votre question ou choisissez une suggestion.";
+      intro = "Bonjour,\nje suis l’Assistant Wisy. Je réponds à partir des mêmes informations que le Centre d’aide : posez votre question ou choisissez une suggestion.";
       var starters = starterQuestions(4);
       if (starters.length) suggestions = starters;
     }
@@ -283,7 +295,7 @@
     /* 2) Salutation seule */
     if (isGreeting(q)) {
       return {
-        message: "Bonjour 👋 Comment puis-je vous aider ? Je peux vous orienter vers une formation ou vous donner une information sur Wisy Safety.",
+        message: "Bonjour, comment puis-je vous aider ? Je peux vous orienter vers une formation ou vous donner une information sur Wisy Safety.",
         suggestions: ["Voir les formations disponibles", "Trouver une formation", "Contacter Wisy Safety"],
         meta: { intent: "greeting" }
       };
@@ -317,6 +329,20 @@
       };
     }
 
+    /* 2c) Journée / soirée / week-end : formats NON confirmés par le site → page Agenda + contact,
+       jamais une promesse (et jamais les horaires d'ouverture de l'équipe pris pour ceux des formations). */
+    if (isScheduleFormat(q) && !isPrice(q)) {
+      var fx = faqExtras("faq-inscription-dates");
+      return {
+        message: (mentioned ? "À propos de la formation « " + mentioned.title + " » :\n" : "") +
+          "Je n’ai pas d’information confirmée sur les formats proposés (journée, soirée ou week-end) : ils dépendent des sessions. Les sessions seront consultables sur la page Agenda ; en attendant, l’équipe Wisy Safety peut vous indiquer ce qui est possible.",
+        cards: cardsOf(agendaCard(), contactCard()),
+        suggestions: fx.related.length ? fx.related : ["Voir les formations disponibles", "Comment m’inscrire ?"],
+        sources: fx.sources.length ? fx.sources : [{ title: "Contact", url: C.contactUrl }],
+        meta: { intent: "schedule_format_unconfirmed", faqId: fx.sources.length ? "faq-inscription-dates" : undefined }
+      };
+    }
+
     /* 3a) Prix CONNU pour cette formation (confirmé par Wisy Safety) */
     if (isPrice(q) && mentioned && mentioned.priceLabel) {
       return {
@@ -345,13 +371,24 @@
 
     /* 4) Dates / sessions — NON présent sur le site → contact */
     if (isSchedule(q) && !isDuration(q)) {
+      /* « Où voir l'agenda ? » : on répond à la question posée (l'emplacement), sans jamais annoncer une date. */
+      if (has(q, ["agenda", "agendas", "calendrier"]) && isWhere(q)) {
+        var lx = faqExtras("faq-inscription-dates");
+        return {
+          message: "L’agenda des formations se trouve sur la page Agenda. L’agenda en ligne arrive prochainement : aucune session n’y est publiée pour le moment. Contactez l’équipe Wisy Safety pour connaître les prochaines disponibilités.",
+          cards: cardsOf(agendaCard(), contactCard()),
+          suggestions: lx.related.length ? lx.related : ["Voir les formations disponibles", "Comment m’inscrire ?"],
+          sources: lx.sources,
+          meta: { intent: "agenda_location", faqId: lx.sources.length ? "faq-inscription-dates" : undefined }
+        };
+      }
       var schedFaq = !mentioned && specificFaq(rawMessage, "faq-inscription-dates");   // ex. « vos horaires » = ouverture
       if (schedFaq) return faqResponse(schedFaq.top.item, schedFaq);
       var sx = faqExtras("faq-inscription-dates");
       return {
         message: (mentioned ? "À propos de la formation « " + mentioned.title + " » :\n" : "") +
-          faqText("faq-inscription-dates", "Les dates des sessions ne sont pas encore publiées en ligne. Contactez-nous pour connaître les prochaines disponibilités."),
-        cards: [contactCard()],
+          faqText("faq-inscription-dates", "Les dates des sessions ne sont pas encore publiées en ligne. La page Agenda les accueillera prochainement ; contactez-nous pour connaître les prochaines disponibilités."),
+        cards: cardsOf(agendaCard(), contactCard()),
         suggestions: sx.related.length ? sx.related : ["Voir les formations disponibles", "Comment m’inscrire ?"],
         sources: sx.sources,
         meta: { intent: "schedule_unavailable", faqId: sx.sources.length ? "faq-inscription-dates" : undefined }

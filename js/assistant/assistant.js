@@ -1,36 +1,49 @@
 /* =========================================================================
-   WISY SAFETY — Assistant Wisy · Contrôleur d'interface
+   WISY SAFETY — Assistant Wisy · Panneau conversationnel
    -------------------------------------------------------------------------
-   Point d'entrée unique. S'auto-injecte sur n'importe quelle page (aucun
-   markup à dupliquer) : launcher + micro-bulle + panneau conversationnel.
+   Chargé À LA DEMANDE par js/assistant/launcher.js (avec le moteur de
+   réponses et css/assistant-panel.css). Le launcher — bouton flottant, bulle
+   d'invitation, état ouvert/fermé — vit dans launcher.js ; ce fichier ne
+   fabrique que le panneau et sa logique.
 
    • Cœur FIABLE 100 % client (js/assistant/responder.js) : l'assistant
      répond depuis les vraies données du site, sans clé ni réseau.
    • Enrichissement OPTIONNEL par une route serveur (/api/chat) si
      window.WISY_ASSISTANT_CONFIG.apiUrl (ou WISY_CONFIG.ASSISTANT_API_URL)
-     est défini. En cas d'échec/timeout → repli automatique sur le cœur local.
+     est défini. En cas d'échec/timeout/hors-ligne → repli automatique sur le
+     cœur local ; jamais de détail technique montré au visiteur.
 
-   API publique (window.WisyAssistant.controller) : open, close, submit, ask(texte)
-   — `ask` ouvre l'assistant ET envoie la question (utilisé par le Centre d'aide) —,
-   newConversation, isOpen.
+   API (window.WisyAssistant.panel) : open({ask}), close, ask(texte),
+   newConversation, submit, isOpen. Le point d'entrée public pour les pages
+   reste window.WisyAssistant.controller (défini par launcher.js).
 
-   Accessibilité : launcher = vrai <button> nommé ; panneau role="dialog"
-   NON modal (n'enferme pas la page) ; Escape ferme ; focus géré et restauré ;
-   annonces polies via aria-live. Respect de prefers-reduced-motion (CSS).
+   Accessibilité
+     • panneau role="dialog" nommé ; NON modal sur desktop (n'enferme pas la
+       page) ; MODAL sur mobile (feuille quasi plein écran) : aria-modal,
+       arrière-plan inerte, Tab/Maj+Tab bouclés, défilement de la page bloqué
+       puis restauré ;
+     • focus : dans le panneau à l'ouverture (champ de saisie sur desktop, le
+       panneau sur mobile pour ne pas ouvrir le clavier), restauré sur le
+       launcher à la fermeture ; Échap ferme ;
+     • annonces polies (aria-live) pour les réponses ; indicateur « écrit » ;
+     • défilement : le fil suit les nouveaux messages seulement si le lecteur
+       est déjà en bas, sinon bouton « Nouveaux messages ↓ ».
 
-   Aucun HTML arbitraire n'est injecté : tout texte issu du moteur ou de
-   l'utilisateur est posé via textContent ; les liens ne sont créés qu'à
+   Sécurité : aucun HTML arbitraire n'est injecté — tout texte issu du moteur
+   ou de l'utilisateur est posé via textContent ; les liens ne sont créés qu'à
    partir d'URLs validées (js/assistant/validation.js).
    ========================================================================= */
 (function () {
   "use strict";
 
   var NS = window.WisyAssistant;
-  if (!NS || !NS.Responder || !NS.Validation || !NS.Mascot) return; // dépendances requises
+  if (!NS || !NS.Responder || !NS.Validation || !NS.Launcher) return; // dépendances requises
 
   var Responder = NS.Responder;
   var Validation = NS.Validation;
-  var Mascot = NS.Mascot;
+  var Launcher = NS.Launcher;
+  var el = Launcher.el;
+  var track = Launcher.track;
 
   /* ------------------------------------------------------------------ */
   /* Config (LLM optionnel)                                             */
@@ -42,8 +55,9 @@
     return u || null;
   }
 
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var NUDGE_KEY = "wisy_assistant_nudge_seen";
+  var mqMobile = window.matchMedia("(max-width: 560px)");   // feuille modale plein écran
+  var REQUEST_TIMEOUT = 15000;
+  var STICK_THRESHOLD = 80;                                  // px : « proche du bas » pour l'auto-scroll
 
   /* ------------------------------------------------------------------ */
   /* i18n : libellés d'interface (fallback FR)                          */
@@ -61,14 +75,14 @@
   /* ------------------------------------------------------------------ */
   function icon(inner, w) {
     return '<svg viewBox="0 0 24 24" width="' + (w || 20) + '" height="' + (w || 20) +
-      '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + "</svg>";
+      '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' + inner + "</svg>";
   }
   var IC = {
     close:    '<path d="M6 6l12 12M18 6L6 18"/>',
-    minimize: '<path d="M6 12h12"/>',
     send:     '<path d="M6 12h12M13 6l6 6-6 6"/>',
     newchat:  '<path d="M3 12a9 9 0 1 0 3-6.7M3 4v4h4"/>',
     arrow:    '<path d="M5 12h14M13 6l6 6-6 6"/>',
+    down:     '<path d="M12 5v14M6 13l6 6 6-6"/>',
     clock:    '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     level:    '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
     price:    '<path d="M18 7a6 6 0 0 0-5-3 6 6 0 0 0 0 16 6 6 0 0 0 5-3M4 10h9M4 14h9"/>',
@@ -80,52 +94,35 @@
     info:     '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6h.01"/>',
     book:     '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 5.5v16M8.5 8h7"/>'
   };
-
-  /* ------------------------------------------------------------------ */
-  /* Helpers DOM (aucun innerHTML pour le contenu texte)                */
-  /* ------------------------------------------------------------------ */
-  function el(tag, attrs, kids) {
-    var n = document.createElement(tag);
-    if (attrs) {
-      for (var k in attrs) {
-        if (!Object.prototype.hasOwnProperty.call(attrs, k)) continue;
-        var v = attrs[k];
-        if (v == null) continue;
-        if (k === "text") n.textContent = v;
-        else if (k === "html") n.innerHTML = v; // uniquement pour nos SVG/icônes de confiance
-        else if (k === "class") n.className = v;
-        else n.setAttribute(k, v);
-      }
-    }
-    if (kids) (Array.isArray(kids) ? kids : [kids]).forEach(function (c) {
-      if (c == null) return;
-      n.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
-    });
-    return n;
-  }
   function iconSpan(name, w) { return el("span", { html: icon(IC[name], w), "aria-hidden": "true" }); }
-
-  /* ------------------------------------------------------------------ */
-  /* Analytics respectueux : événements anonymisés, SANS contenu.        */
-  /* Aucune requête réseau ici — on émet un CustomEvent que le site peut  */
-  /* relayer vers son outil analytics EN RESPECTANT son consentement.    */
-  /* ------------------------------------------------------------------ */
-  function track(event, data) {
-    try {
-      document.dispatchEvent(new CustomEvent("wisy:analytics", { detail: Object.assign({ event: event }, data || {}) }));
-    } catch (e) { /* silencieux */ }
-  }
 
   /* ================================================================== */
   /* Contrôleur                                                          */
   /* ================================================================== */
   var App = {
-    root: null, launcher: null, panel: null, body: null, thread: null,
-    input: null, sendBtn: null, live: null, nudge: null,
-    isOpen: false, panelBuilt: false, busy: false,
-    lastFocus: null, compactTimer: null,
-    history: [], context: null
+    root: null, panel: null, main: null, body: null, thread: null,
+    input: null, sendBtn: null, live: null, newMsg: null, scrim: null, closeBtn: null,
+    isOpen: false, built: false, busy: false,
+    history: [], context: null, epoch: 0,   // epoch : change à chaque « nouvelle conversation »
+    stick: true,          // le lecteur est en bas du fil : l'auto-scroll est permis
+    modal: false,         // mode feuille mobile (aria-modal, arrière-plan inerte, défilement bloqué)
+    inerted: [], prevOverflow: null,
+    labels: []            // libellés statiques à retraduire au changement de langue
   };
+
+  /** Pose un libellé traduisible (texte ou attribut) et l'enregistre pour le relabel. */
+  function label(node, key, fallback, attr) {
+    App.labels.push({ node: node, key: key, fb: fallback, attr: attr || null });
+    var v = t(key, fallback);
+    if (attr) node.setAttribute(attr, v); else node.textContent = v;
+    return node;
+  }
+  function relabel() {
+    App.labels.forEach(function (l) {
+      var v = t(l.key, l.fb);
+      if (l.attr) l.node.setAttribute(l.attr, v); else l.node.textContent = v;
+    });
+  }
 
   /* --- Contexte de page (contextual awareness, non intrusif) -------- */
   function detectContext() {
@@ -158,189 +155,170 @@
   }
 
   /* ------------------------------------------------------------------ */
-  /* Construction : launcher + nudge                                     */
-  /* ------------------------------------------------------------------ */
-  function buildRoot() {
-    App.root = el("div", { id: "wisy-assistant" });
-
-    // Launcher (vrai bouton, nom accessible)
-    App.launcher = el("button", {
-      type: "button",
-      class: "wa-launcher",
-      "aria-label": t("assistant.aria_open", "Ouvrir l’assistant Wisy Safety"),
-      "aria-haspopup": "dialog",
-      "aria-expanded": "false"
-    }, [
-      el("span", { class: "wa-launcher__label", "aria-hidden": "true", text: t("assistant.launcher_label", "Besoin d’aide ?") }),
-      el("span", { class: "wa-launcher__badge" }, [
-        el("span", { html: Mascot.svg({ id: "launcher" }) }),
-        el("span", { class: "wa-launcher__dot", "aria-hidden": "true" })
-      ])
-    ]);
-    App.launcher.addEventListener("click", open);
-
-    App.root.appendChild(App.launcher);
-    document.body.appendChild(App.root);
-
-    // Apparition élégante + passage compact après quelques secondes
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () { App.launcher.classList.add("is-ready"); });
-    });
-    scheduleCompact();
-
-    maybeShowNudge();
-  }
-
-  function scheduleCompact() {
-    clearTimeout(App.compactTimer);
-    App.compactTimer = setTimeout(function () {
-      if (!App.isOpen) App.launcher.classList.add("is-compact");
-    }, 5200);
-  }
-
-  /* --- Micro-bulle d'accueil (première visite uniquement) ----------- */
-  function maybeShowNudge() {
-    if (detectContext().page === "faq") return; // le Centre d'aide présente déjà l'assistant
-    var seen;
-    try { seen = localStorage.getItem(NUDGE_KEY); } catch (e) { seen = "1"; /* si bloqué, ne pas insister */ }
-    if (seen) return;
-
-    App.nudge = el("div", { class: "wa-nudge", role: "status" }, [
-      el("button", {
-        type: "button", class: "wa-nudge__close",
-        "aria-label": t("assistant.nudge_close", "Fermer"), html: icon(IC.close, 15)
-      }),
-      el("span", { text: t("assistant.nudge", "Besoin d’aide pour trouver une formation ?") })
-    ]);
-    App.nudge.querySelector(".wa-nudge__close").addEventListener("click", function (e) {
-      e.stopPropagation();
-      dismissNudge();
-    });
-    App.nudge.addEventListener("click", function () { dismissNudge(); open(); });
-    App.root.appendChild(App.nudge);
-
-    setTimeout(function () { if (App.nudge) App.nudge.classList.add("is-visible"); }, 1400);
-    // Disparaît d'elle-même — ne jamais réafficher pendant la navigation
-    setTimeout(dismissNudge, 12000);
-  }
-  function dismissNudge() {
-    try { localStorage.setItem(NUDGE_KEY, "1"); } catch (e) {}
-    if (App.nudge) {
-      App.nudge.classList.remove("is-visible");
-      var n = App.nudge; App.nudge = null;
-      setTimeout(function () { if (n && n.parentNode) n.parentNode.removeChild(n); }, 420);
-    }
-  }
-
-  /* ------------------------------------------------------------------ */
-  /* Construction : panneau (paresseuse)                                 */
+  /* Construction : panneau (à la 1re ouverture)                         */
   /* ------------------------------------------------------------------ */
   function buildPanel() {
-    if (App.panelBuilt) return;
+    if (App.built) return;
+    App.root = document.getElementById("wisy-assistant");
 
     var titleId = "wa-title";
 
-    // Header
+    // En-tête : mini-mascotte · « Assistant Wisy » + pastille IA · sous-titre · fermer (44 × 44)
+    var title = label(el("span", { id: titleId }), "assistant.header_title", "Assistant Wisy");
+    var tag = label(el("span", { class: "wa-header__tag", "aria-hidden": "true" }), "assistant.badge_ai", "IA");
+    var subtitle = label(el("p", { class: "wa-header__subtitle" }), "assistant.header_subtitle", "Assistance Wisy Safety");
+    App.closeBtn = label(el("button", { type: "button", class: "wa-iconbtn wa-close", html: icon(IC.close) }),
+      "assistant.close", "Fermer l’Assistant Wisy", "aria-label");
+
     var header = el("div", { class: "wa-header" }, [
-      el("span", { class: "wa-header__badge", "aria-hidden": "true" }, el("span", { html: Mascot.svg({ id: "header" }) })),
-      el("div", { class: "wa-header__titles" }, [
-        el("p", { class: "wa-header__title", id: titleId, text: t("assistant.header_title", "Assistant Wisy Safety") }),
-        el("p", { class: "wa-header__subtitle" }, [
-          el("span", { class: "wa-status-dot", "aria-hidden": "true" }),
-          el("span", { text: t("assistant.status", "Assistant disponible") })
-        ])
+      el("span", { class: "wa-header__avatar", "aria-hidden": "true" }, [
+        Launcher.avatarInto(el("span", { class: "wa-disc" }), { sizes: "44px", size: 44 }),
+        el("span", { class: "wa-header__dot" })
       ]),
-      el("div", { class: "wa-header__actions" }, [
-        el("button", { type: "button", class: "wa-iconbtn wa-close", "aria-label": t("assistant.close", "Fermer l’assistant"), html: icon(IC.close) })
-      ])
+      el("div", { class: "wa-header__titles" }, [
+        el("p", { class: "wa-header__title" }, [title, tag]),
+        subtitle
+      ]),
+      el("div", { class: "wa-header__actions" }, [App.closeBtn])
     ]);
 
-    // Corps + zone live
+    // Corps défilant (région nommée, focusable au clavier) + zone live + « Nouveaux messages »
     App.thread = el("div", { class: "wa-thread" });
-    App.live = el("div", { class: "wa-live", "aria-live": "polite", "aria-atomic": "false", style: "position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);" });
-    App.body = el("div", { class: "wa-body", tabindex: "-1" }, [App.thread, App.live]);
+    App.live = el("div", { class: "wa-sr", "aria-live": "polite", "aria-atomic": "false" });
+    App.body = label(el("div", { class: "wa-body", role: "region", tabindex: "0" }, [App.thread, App.live]),
+      "assistant.conversation", "Conversation", "aria-label");
+    App.newMsg = el("button", { type: "button", class: "wa-newmsg", tabindex: "-1" }, [
+      iconSpan("down", 14), label(el("span"), "assistant.new_messages", "Nouveaux messages")
+    ]);
+    App.main = el("div", { class: "wa-main" }, [App.body, App.newMsg]);
 
     // Composer
     App.input = el("textarea", {
-      class: "wa-input", rows: "1",
-      placeholder: t("assistant.placeholder", "Posez votre question…"),
-      "aria-label": t("assistant.placeholder", "Posez votre question…"),
+      class: "wa-input", rows: "1", enterkeyhint: "send", autocomplete: "off",
       maxlength: String(Validation.MAX_MESSAGE)
     });
-    App.sendBtn = el("button", { type: "button", class: "wa-send", "aria-label": t("assistant.send", "Envoyer le message"), disabled: "", html: icon(IC.send, 18) });
+    label(App.input, "assistant.placeholder", "Posez votre question…", "placeholder");
+    label(App.input, "assistant.placeholder", "Posez votre question…", "aria-label");
+    App.sendBtn = label(el("button", { type: "button", class: "wa-send", disabled: "", html: icon(IC.send, 18) }),
+      "assistant.send", "Envoyer le message", "aria-label");
 
+    var hint = label(el("span", { class: "wa-composer__hint", "aria-hidden": "true" }),
+      "assistant.hint_enter", "Entrée pour envoyer · Maj+Entrée = nouvelle ligne");
+    var newChat = el("button", { type: "button", class: "wa-newchat" }, [
+      iconSpan("newchat", 13), label(el("span"), "assistant.new_chat", "Nouvelle conversation")
+    ]);
     var composer = el("div", { class: "wa-composer" }, [
       el("div", { class: "wa-composer__row" }, [App.input, App.sendBtn]),
-      el("div", { class: "wa-composer__meta" }, [
-        el("span", { class: "wa-composer__hint", "aria-hidden": "true", text: t("assistant.hint_enter", "Entrée pour envoyer · Maj+Entrée = nouvelle ligne") }),
-        el("button", { type: "button", class: "wa-newchat" }, [iconSpan("newchat", 13), el("span", { text: t("assistant.new_chat", "Nouvelle conversation") })])
-      ])
+      el("div", { class: "wa-composer__meta" }, [hint, newChat])
     ]);
 
     App.panel = el("div", {
-      class: "wa-panel", role: "dialog", "aria-labelledby": titleId, tabindex: "-1"
-    }, [header, App.body, composer]);
+      class: "wa-panel", id: "wa-panel", role: "dialog",
+      "aria-labelledby": titleId, "aria-modal": "false", tabindex: "-1"
+    }, [header, App.main, composer]);
+    App.scrim = el("div", { class: "wa-scrim", "aria-hidden": "true" });
 
+    App.root.appendChild(App.scrim);
     App.root.appendChild(App.panel);
+    Launcher.attachPanel(App.panel);
 
     // Événements
-    header.querySelector(".wa-close").addEventListener("click", close);
-    composer.querySelector(".wa-newchat").addEventListener("click", newConversation);
+    App.closeBtn.addEventListener("click", close);
+    App.scrim.addEventListener("click", close);
+    newChat.addEventListener("click", newConversation);
     App.sendBtn.addEventListener("click", onSend);
     App.input.addEventListener("input", onInput);
     App.input.addEventListener("keydown", onKeydown);
+    App.body.addEventListener("scroll", onBodyScroll, { passive: true });
+    App.newMsg.addEventListener("click", function () { scrollToEnd(true); App.input.focus(); });
+    document.addEventListener("i18n:changed", relabel);
 
-    App.panelBuilt = true;
+    App.built = true;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Mode feuille mobile : modal, arrière-plan inerte, défilement bloqué  */
+  /* ------------------------------------------------------------------ */
+  function setModal(on) {
+    if (on === App.modal) return;
+    App.modal = on;
+    App.panel.setAttribute("aria-modal", on ? "true" : "false");
+    var html = document.documentElement;
+    if (on) {
+      App.prevOverflow = html.style.overflow;
+      html.style.overflow = "hidden";
+      Array.prototype.forEach.call(document.body.children, function (n) {   // le reste de la page devient inerte
+        if (n === App.root || n.tagName === "SCRIPT" || n.hasAttribute("inert")) return;
+        n.setAttribute("inert", "");
+        App.inerted.push(n);
+      });
+    } else {
+      html.style.overflow = App.prevOverflow || "";
+      App.inerted.forEach(function (n) { n.removeAttribute("inert"); });
+      App.inerted = [];
+    }
+  }
+  function syncMode() { if (App.isOpen) setModal(mqMobile.matches); }
+
+  /** Tab / Maj+Tab restent dans la feuille (mode modal). */
+  function trapTab(e) {
+    var sel = 'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), [tabindex="0"]';
+    var nodes = Array.prototype.filter.call(App.panel.querySelectorAll(sel), function (n) {
+      return n.offsetParent !== null && getComputedStyle(n).visibility !== "hidden";
+    });
+    if (!nodes.length) return;
+    var first = nodes[0], last = nodes[nodes.length - 1], active = document.activeElement;
+    if (e.shiftKey && (active === first || active === App.panel || !App.panel.contains(active))) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && (active === last || !App.panel.contains(active))) {
+      e.preventDefault(); first.focus();
+    }
   }
 
   /* ------------------------------------------------------------------ */
   /* Ouverture / fermeture (focus & accessibilité)                       */
   /* ------------------------------------------------------------------ */
-  function open() {
-    if (App.isOpen) return;
+  function open(opts) {
+    opts = opts || {};
+    if (App.isOpen) { if (opts.ask) ask(opts.ask); return; }
     buildPanel();
     App.context = detectContext();
-
     if (!App.thread.childNodes.length) renderWelcome();
 
     App.isOpen = true;
-    App.lastFocus = document.activeElement;
-    App.root.classList.add("is-open");
-    App.launcher.setAttribute("aria-expanded", "true");
-    dismissNudge();
-    clearTimeout(App.compactTimer);
+    void App.panel.offsetWidth;          // force le style initial : la transition d'ouverture se joue dès le 1er affichage
+    Launcher.setOpen(true);              // classe is-open, aria-expanded et nom du launcher
 
+    setModal(mqMobile.matches);
+    if (mqMobile.addEventListener) mqMobile.addEventListener("change", syncMode);
     document.addEventListener("keydown", onDocKeydown, true);
-    // Focus dans le panneau (non modal : on n'enferme pas la page)
-    setTimeout(function () {
-      if (window.matchMedia("(max-width: 560px)").matches) { App.body.focus(); }
-      else if (App.input) { App.input.focus(); }
-    }, reduceMotion ? 0 : 120);
-
-    scrollToEnd();
     watchViewport(true);
-    track("chat_opened", { page: App.context.page });
+    scrollToEnd(true);
+
+    setTimeout(function () {
+      if (!App.isOpen) return;
+      // Mobile : focus sur le panneau (nommé) — pas sur le champ, pour ne pas ouvrir le clavier d'emblée.
+      try { (App.modal ? App.panel : App.input).focus({ preventScroll: true }); } catch (e) { /* silencieux */ }
+    }, Launcher.reduced() ? 0 : 120);
+
+    if (opts.ask) setTimeout(function () { submit(opts.ask); }, Launcher.reduced() ? 0 : 160);
   }
 
   function close() {
     if (!App.isOpen) return;
     App.isOpen = false;
-    App.root.classList.remove("is-open");
-    App.launcher.setAttribute("aria-expanded", "false");
+    setModal(false);
+    Launcher.setOpen(false);
     document.removeEventListener("keydown", onDocKeydown, true);
+    if (mqMobile.removeEventListener) mqMobile.removeEventListener("change", syncMode);
     watchViewport(false);
-    scheduleCompact();
-    // Restaure le focus vers le launcher
-    var target = App.launcher;
-    setTimeout(function () { try { target.focus(); } catch (e) {} }, 0);
-    track("chat_closed", {});
+    setTimeout(Launcher.focusFab, 0);    // le focus revient au launcher
   }
 
   function onDocKeydown(e) {
-    if (e.key === "Escape" && App.isOpen) {
-      e.stopPropagation();
-      close();
-    }
+    if (!App.isOpen) return;
+    if (e.key === "Escape") { e.stopPropagation(); close(); }
+    else if (e.key === "Tab" && App.modal) trapTab(e);
   }
 
   /* ------------------------------------------------------------------ */
@@ -358,9 +336,9 @@
     App.thread.appendChild(wrap);
   }
 
-  function makeChip(label) {
-    var b = el("button", { type: "button", class: "wa-chip", text: label });
-    b.addEventListener("click", function () { submit(label); });
+  function makeChip(text) {
+    var b = el("button", { type: "button", class: "wa-chip", text: text });
+    b.addEventListener("click", function () { track("assistant_suggestion_clicked", {}); submit(text); });
     return b;
   }
 
@@ -372,7 +350,7 @@
       el("div", { class: "wa-bubble wa-bubble--user", text: text })
     ]);
     App.thread.appendChild(turn);
-    scrollToEnd();
+    scrollToEnd(true);                    // l'utilisateur vient d'écrire : toujours montrer sa question
   }
 
   function addAssistantResponse(resp) {
@@ -394,13 +372,13 @@
     if (resp.suggestions && resp.suggestions.length) {
       var related = !!(resp.meta && resp.meta.faqId);
       var fu = el("div", { class: "wa-followups" }, [
-        el("span", { class: "wa-followups__label", text: related ? t("assistant.related_label", "Questions associées\u00a0:") : t("assistant.followups_label", "Vous pouvez aussi demander\u00a0:") }),
+        el("span", { class: "wa-followups__label", text: related ? t("assistant.related_label", "Questions associées :") : t("assistant.followups_label", "Vous pouvez aussi demander :") }),
         el("div", { class: "wa-chips" }, resp.suggestions.map(makeChip))
       ]);
       turn.appendChild(fu);
     }
     App.thread.appendChild(turn);
-    scrollToEnd();
+    scrollToEnd(false);                   // suit seulement si le lecteur est déjà en bas
 
     // Annonce polie (sans interrompre) : le texte de la réponse
     if (App.live) App.live.textContent = resp.message || "";
@@ -432,7 +410,7 @@
         meta,
         el("span", { class: "wa-card__cta" }, [el("span", { text: t("assistant.card_view_training", "Voir la formation") }), iconSpan("arrow", 16)])
       ]);
-      a.addEventListener("click", function () { track("training_card_clicked", { id: card.category || "formation" }); });
+      a.addEventListener("click", function () { track("assistant_training_card_clicked", { id: card.category || "formation" }); });
       return a;
     }
 
@@ -451,7 +429,7 @@
     if (card.type === "contact") {
       var links = el("div", { class: "wa-contact-links" });
       var page = el("a", { class: "wa-contact-link wa-contact-link--primary", href: card.url || "contact.html" }, [iconSpan("pin", 17), el("span", { text: t("assistant.contact_page", "Ouvrir la page contact") })]);
-      page.addEventListener("click", function () { track("contact_requested", { via: "page" }); });
+      page.addEventListener("click", function () { track("assistant_contact_requested", { via: "page" }); });
       links.appendChild(page);
       if (card.phoneHref) links.appendChild(el("a", { class: "wa-contact-link", href: card.phoneHref }, [iconSpan("phone", 17), el("span", { text: t("assistant.contact_call", "Appeler") + " · " + card.phone })]));
       if (card.email) links.appendChild(el("a", { class: "wa-contact-link", href: "mailto:" + card.email }, [iconSpan("mail", 17), el("span", { text: card.email })]));
@@ -467,32 +445,32 @@
   }
 
   /* ------------------------------------------------------------------ */
-  /* Indicateur « Wisy prépare votre réponse »                           */
+  /* Indicateur « Wisy prépare votre réponse » (3 points, aria-live)     */
   /* ------------------------------------------------------------------ */
   function showTyping() {
     var node = el("div", { class: "wa-turn wa-turn--assistant wa-typing-turn" }, [
       el("div", { class: "wa-typing", role: "status" }, [
-        el("span", { class: "wa-typing__orb", "aria-hidden": "true", html: "<span></span><span></span><span></span>" }),
+        el("span", { class: "wa-typing__dots", "aria-hidden": "true", html: "<span></span><span></span><span></span>" }),
         el("span", { text: t("assistant.typing", "Wisy prépare votre réponse") })
       ])
     ]);
     App.thread.appendChild(node);
-    scrollToEnd();
+    scrollToEnd(false);
     return node;
   }
 
-  function showError(retryText) {
-    var box = el("div", { class: "wa-error", role: "alert" });
-    box.appendChild(el("strong", { text: t("assistant.header_title", "Assistant Wisy Safety") + " — " }));
-    box.appendChild(document.createTextNode(t("assistant.error", "Une difficulté technique empêche momentanément l’assistant de répondre. Vous pouvez réessayer ou contacter directement Wisy Safety.")));
-    var actions = el("div", { class: "wa-chips", style: "margin-top:8px" }, [
-      (function () { var b = el("button", { type: "button", class: "wa-chip", text: t("assistant.retry", "Réessayer") }); b.addEventListener("click", function () { submit(retryText); }); return b; })()
+  /** Erreur : dit ce qui s'est passé et quoi faire — jamais de détail technique. */
+  function showError(retryText, offline) {
+    var retry = el("button", { type: "button", class: "wa-chip", text: t("assistant.retry", "Réessayer") });
+    retry.addEventListener("click", function () { submit(retryText); });
+    var contact = el("a", { class: "wa-chip", href: "contact.html", text: t("assistant.error_contact", "Contacter l’équipe") });
+    var box = el("div", { class: "wa-error", role: "alert" }, [
+      el("p", { text: offline ? t("assistant.error_offline", "Vous semblez hors connexion. Vérifiez votre connexion, puis réessayez.") : t("assistant.error", "Une erreur est survenue. Réessayez dans quelques instants.") }),
+      el("div", { class: "wa-chips" }, [retry, contact])
     ]);
-    box.appendChild(actions);
-    var turn = el("div", { class: "wa-turn wa-turn--assistant" }, [box]);
-    App.thread.appendChild(turn);
-    scrollToEnd();
-    track("chat_error", {});
+    App.thread.appendChild(el("div", { class: "wa-turn wa-turn--assistant" }, [box]));
+    scrollToEnd(false);
+    track("assistant_error", { stage: "answer", offline: !!offline });
   }
 
   /* ------------------------------------------------------------------ */
@@ -500,10 +478,10 @@
   /* ------------------------------------------------------------------ */
   function onInput() {
     autosize();
-    App.sendBtn.disabled = !App.input.value.trim();
+    App.sendBtn.disabled = !App.input.value.trim() || App.busy;
   }
   function onKeydown(e) {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {   // isComposing : ne pas envoyer pendant une saisie IME
       e.preventDefault();
       onSend();
     }
@@ -522,28 +500,31 @@
   }
 
   function submit(rawMessage) {
-    if (App.busy) return;
+    if (App.busy) return;                                       // pas de double envoi
     var message = Validation.sanitizeMessage(rawMessage);
     if (!message) return;
 
     addUserTurn(message);
     App.history.push({ role: "user", content: message });
     if (App.history.length > Validation.MAX_HISTORY) App.history = App.history.slice(-Validation.MAX_HISTORY);
-    track("chat_question_sent", { len: message.length });
+    track("assistant_question_sent", { len: message.length });   // longueur seulement : jamais le texte
 
     App.busy = true;
+    App.sendBtn.disabled = true;
     App.sendBtn.classList.add("is-loading");
-    App.root.classList.add("is-busy"); // état « thinking » de la mascotte
+    App.root.classList.add("is-busy");                          // état « écrit » de la mascotte
     var typing = showTyping();
+    var epoch = App.epoch;
 
     getResponse(message).then(function (result) {
       if (typing && typing.parentNode) typing.parentNode.removeChild(typing);
+      if (epoch !== App.epoch) return;                          // conversation réinitialisée entre-temps : réponse abandonnée
       if (result.hardError) {
-        showError(message);
+        showError(message, result.offline);
       } else {
         var clean = Validation.validateResponse(result.resp);
         if (result.degraded && (!clean.message || (clean.meta && clean.meta.intent === "not_found"))) {
-          showError(message);
+          showError(message, result.offline);
         } else {
           addAssistantResponse(clean);
           App.history.push({ role: "assistant", content: clean.message });
@@ -551,8 +532,9 @@
       }
     })["catch"](function () {
       if (typing && typing.parentNode) typing.parentNode.removeChild(typing);
-      showError(message);
+      if (epoch === App.epoch) showError(message, navigator.onLine === false);
     })["finally"](function () {
+      if (epoch !== App.epoch) return;                          // l'état d'occupation a déjà été remis à zéro
       App.busy = false;
       App.sendBtn.classList.remove("is-loading");
       App.root.classList.remove("is-busy");
@@ -560,18 +542,21 @@
     });
   }
 
-  /* Réponse : distante (si configurée) sinon locale, avec repli. */
+  /* Réponse : distante (si configurée) sinon locale, avec repli. Hors-ligne, on ne tente pas le réseau. */
   function getResponse(message) {
     var url = apiUrl();
     var localResp = function () { return Responder.respond(message, { context: App.context }); };
-    var minDelay = new Promise(function (res) { setTimeout(res, reduceMotion ? 120 : 420); });
+    var minDelay = new Promise(function (res) { setTimeout(res, Launcher.reduced() ? 120 : 420); });
 
     if (!url) {
       return minDelay.then(function () { return { resp: localResp(), degraded: false }; });
     }
+    if (navigator.onLine === false) {
+      return minDelay.then(function () { return { resp: localResp(), degraded: true, offline: true }; });
+    }
 
     var controller = new AbortController();
-    var timer = setTimeout(function () { controller.abort(); }, 15000);
+    var timer = setTimeout(function () { controller.abort(); }, REQUEST_TIMEOUT);
     var payload = { message: message, history: App.history.slice(-Validation.MAX_HISTORY), context: App.context };
 
     return fetch(url, {
@@ -588,7 +573,7 @@
     })["catch"](function () {
       clearTimeout(timer);
       // Repli automatique sur le cœur local (résilience)
-      return { resp: localResp(), degraded: true };
+      return { resp: localResp(), degraded: true, offline: navigator.onLine === false };
     });
   }
 
@@ -597,11 +582,9 @@
   /* ------------------------------------------------------------------ */
   function ask(text) {
     var msg = String(text == null ? "" : text).trim();
-    open();
-    if (!msg) return;
-    if (App.busy) return; // une réponse est déjà en cours : on n'empile pas
-    // laisse le panneau finir d'apparaître avant d'ajouter la question
-    setTimeout(function () { submit(msg); }, reduceMotion ? 0 : 140);
+    if (!App.isOpen) { open(msg ? { ask: msg } : {}); return; }
+    if (!msg || App.busy) return;                               // une réponse est déjà en cours : on n'empile pas
+    submit(msg);
   }
 
   /* ------------------------------------------------------------------ */
@@ -621,7 +604,7 @@
     if (vvHandler) return;
     vvHandler = function () {
       if (!App.isOpen) return;
-      if (!window.matchMedia("(max-width: 560px)").matches) {
+      if (!mqMobile.matches) {
         App.panel.style.removeProperty("--wa-kb"); App.panel.style.removeProperty("--wa-vvh"); return;
       }
       var kb = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
@@ -637,59 +620,56 @@
   /* Nouvelle conversation                                               */
   /* ------------------------------------------------------------------ */
   function newConversation() {
+    App.epoch++;
     App.history = [];
     App.busy = false;
     App.sendBtn.classList.remove("is-loading");
+    App.root.classList.remove("is-busy");
     while (App.thread.firstChild) App.thread.removeChild(App.thread.firstChild);
     App.context = detectContext();
     renderWelcome();
-    if (App.input) { App.input.value = ""; autosize(); App.sendBtn.disabled = true; App.input.focus(); }
-    track("chat_new", {});
+    App.input.value = ""; autosize(); App.sendBtn.disabled = true;
+    scrollToEnd(true);
+    if (!App.modal) App.input.focus();                          // mobile : on n'ouvre pas le clavier d'office
+    track("assistant_new_conversation", {});
   }
 
-  function scrollToEnd() {
+  /* ------------------------------------------------------------------ */
+  /* Défilement : suit les nouveaux messages SEULEMENT si le lecteur est  */
+  /* déjà en bas ; sinon bouton « Nouveaux messages ↓ » (jamais de saut). */
+  /* ------------------------------------------------------------------ */
+  function nearBottom() {
+    var b = App.body;
+    return b.scrollHeight - b.scrollTop - b.clientHeight < STICK_THRESHOLD;
+  }
+  function onBodyScroll() {
+    App.stick = nearBottom();
+    if (App.stick) App.newMsg.classList.remove("is-visible");
+    App.newMsg.tabIndex = App.newMsg.classList.contains("is-visible") ? 0 : -1;
+  }
+  function scrollToEnd(force) {
     if (!App.body) return;
-    var jump = function () { App.body.scrollTop = App.body.scrollHeight; };
-    // Double rAF + court repli : la hauteur se stabilise après l'animation
-    // d'entrée des bulles/cartes (translateY), sinon on scrolle trop tôt.
+    if (!force && !App.stick) {                                 // le lecteur relit plus haut : ne pas le déplacer
+      App.newMsg.classList.add("is-visible");
+      App.newMsg.tabIndex = 0;
+      return;
+    }
+    App.stick = true;
+    App.newMsg.classList.remove("is-visible");
+    App.newMsg.tabIndex = -1;
+    // Double rAF + court repli : la hauteur se stabilise après l'animation d'entrée des
+    // bulles/cartes (translateY), sinon on scrolle trop tôt. Si le lecteur remonte entre-temps
+    // (onBodyScroll remet `stick` à false), les sauts encore en attente sont abandonnés.
+    var jump = function () { if (App.stick) App.body.scrollTop = App.body.scrollHeight; };
     requestAnimationFrame(function () { jump(); requestAnimationFrame(jump); });
     setTimeout(jump, 80);
   }
 
-  /* Relabel de l'interface au changement de langue */
-  function relabel() {
-    if (!App.launcher) return;
-    App.launcher.setAttribute("aria-label", t("assistant.aria_open", "Ouvrir l’assistant Wisy Safety"));
-    var lbl = App.launcher.querySelector(".wa-launcher__label");
-    if (lbl) lbl.textContent = t("assistant.launcher_label", "Besoin d’aide ?");
-    // Le panneau se retraduit à la prochaine ouverture / nouvelle conversation.
-    if (App.panelBuilt && App.isOpen) {
-      // rafraîchit les libellés statiques visibles
-      var title = App.panel.querySelector(".wa-header__title"); if (title) title.textContent = t("assistant.header_title", "Assistant Wisy Safety");
-      if (App.input) App.input.setAttribute("placeholder", t("assistant.placeholder", "Posez votre question…"));
-    }
-  }
-
   /* ------------------------------------------------------------------ */
-  /* Init                                                                */
+  /* API                                                                 */
   /* ------------------------------------------------------------------ */
-  function init() {
-    if (document.getElementById("wisy-assistant")) return;
-    buildRoot();
-    document.body.classList.add("has-wisy-assistant"); // laisse la place au launcher (pied de page)
-    document.addEventListener("i18n:changed", relabel);
-    // Préconstruit le panneau à l'inactivité (perf : n'impacte pas le 1er rendu)
-    var pre = function () { try { buildPanel(); } catch (e) {} };
-    if ("requestIdleCallback" in window) requestIdleCallback(pre, { timeout: 4000 });
-    else setTimeout(pre, 2500);
-
-    // API de test / intégration
-    NS.controller = {
-      open: open, close: close, submit: submit, ask: ask, newConversation: newConversation,
-      isOpen: function () { return App.isOpen; }
-    };
-  }
-
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
-  else init();
+  NS.panel = {
+    open: open, close: close, ask: ask, submit: submit, newConversation: newConversation,
+    isOpen: function () { return App.isOpen; }
+  };
 })();

@@ -179,10 +179,11 @@ test("intégration page : faq.html branche la source unique, le moteur et les co
   assert.ok(exists("faq.html") && exists("js/faq-page.js"), "faq.html + js/faq-page.js existent");
   const html = read("faq.html");
   const pos = (re) => html.search(re);
-  const data = pos(/js\/faq-data\.js/), search = pos(/js\/faq-search\.js/), page = pos(/js\/faq-page\.js/), know = pos(/js\/assistant\/knowledge\.js/);
+  const data = pos(/js\/faq-data\.js/), search = pos(/js\/faq-search\.js/), page = pos(/js\/faq-page\.js/), launcher = pos(/js\/assistant\/launcher\.js/);
   assert.ok(data > 0 && data < search, "faq-data.js avant faq-search.js");
-  assert.ok(search < know, "le moteur est chargé AVANT la base de connaissances de l'assistant");
+  assert.ok(search < launcher, "les données et le moteur sont chargés AVANT le launcher (qui ne les recharge pas)");
   assert.ok(page > search, "faq-page.js chargé après les données et le moteur");
+  assert.doesNotMatch(html, /js\/assistant\/(knowledge|retrieval|validation|responder|assistant)\.js/, "le moteur de l'assistant se charge à la demande (launcher.js)");
   ["faqc-form", "faqc-q", "faqc-suggest", "faqc-cats", "faqc-pop", "faqc-groups", "faqc-results", "faqc-empty", "faqc-live", "faqc-try-list", "faqc-ask-form", "faqc-ask-q"].forEach((id) => {
     assert.match(html, new RegExp('id="' + id + '"'), "conteneur #" + id + " présent");
   });

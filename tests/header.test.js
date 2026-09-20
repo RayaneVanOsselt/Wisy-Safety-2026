@@ -1,7 +1,7 @@
 "use strict";
 /* En-tête partagé : l'accès « Centre d'aide » doit exister, rester visible sur mobile
    (cause du bug : `.header-actions{display:none}` masquait l'icône) et être identique
-   sur les 7 pages. `node --test tests/*.test.js` (aucune dépendance). */
+   sur les 8 pages. `node --test tests/*.test.js` (aucune dépendance). */
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -9,7 +9,7 @@ const path = require("node:path");
 
 const ROOT = path.join(__dirname, "..");
 const read = (p) => fs.readFileSync(path.join(ROOT, p), "utf8");
-const PAGES = ["index", "formations", "contact", "avis", "inscription", "formation-nacelles-elevatrices", "faq"];
+const PAGES = ["index", "formations", "contact", "avis", "inscription", "formation-nacelles-elevatrices", "faq", "agenda"];
 
 PAGES.forEach((name) => {
   test("[" + name + ".html] accès Centre d'aide : icône d'en-tête, lien de la barre utilitaire, rangée du menu mobile", () => {
@@ -42,10 +42,14 @@ PAGES.forEach((name) => {
     const currents = (html.match(/(header-help|util-help|m-help)[^>]*aria-current="page"/g) || []).length;
     assert.equal(currents, isFaq ? 3 : 0, "aria-current=\"page\" seulement sur faq.html");
 
-    /* 6) la FAQ partagée est chargée AVANT la base de connaissances de l'assistant */
-    const d = html.indexOf("js/faq-data.js"), s = html.indexOf("js/faq-search.js"), k = html.indexOf("js/assistant/knowledge.js");
-    assert.ok(d > 0 && d < s && s < k, "faq-data.js → faq-search.js → knowledge.js");
-    assert.match(html, /<script defer src="js\/faq-data\.js">/, "en defer, comme les scripts de l'assistant");
+    /* 6) assistant : SEUL le launcher est chargé d'emblée (moteur + panneau : à la demande) */
+    assert.match(html, /<script defer src="js\/assistant\/launcher\.js"><\/script>/, "launcher.js en defer");
+    assert.doesNotMatch(html, /<script[^>]+js\/assistant\/(knowledge|retrieval|validation|responder|assistant|mascot)\.js/, "aucun script du moteur sur le chemin critique");
+    const d = html.indexOf("js/faq-data.js"), s = html.indexOf("js/faq-search.js"), l = html.indexOf("js/assistant/launcher.js");
+    if (isFaq) assert.ok(d > 0 && d < s && s < l, "faq-data.js → faq-search.js → launcher.js (la page les utilise elle-même)");
+    else assert.ok(d < 0 && s < 0, "les données FAQ ne sont plus chargées d'emblée hors du Centre d'aide");
+    assert.equal((html.match(/css\/assistant\.css/g) || []).length, 1, "feuille du launcher");
+    assert.doesNotMatch(html, /css\/assistant-panel\.css/, "la feuille du panneau se charge à la demande");
   });
 });
 

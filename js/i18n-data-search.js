@@ -43,7 +43,9 @@
     "search.page_inscription_t": "Inscription",
     "search.page_inscription_d": "S'inscrire à une formation",
     "search.page_faq_t": "Centre d'aide",
-    "search.page_faq_d": "Questions fréquentes et assistant"
+    "search.page_faq_d": "Questions fréquentes et assistant",
+    "search.page_agenda_t": "Agenda des formations",
+    "search.page_agenda_d": "Prochaines sessions, horaires et lieux"
   });
 
   /* ---------------- ENGLISH ---------------- */
@@ -80,7 +82,9 @@
     "search.page_inscription_t": "Registration",
     "search.page_inscription_d": "Register for a training",
     "search.page_faq_t": "Help centre",
-    "search.page_faq_d": "FAQ and assistant"
+    "search.page_faq_d": "FAQ and assistant",
+    "search.page_agenda_t": "Training schedule",
+    "search.page_agenda_d": "Upcoming sessions, times and venues"
   });
 
   /* ---------------- NEDERLANDS ---------------- */
@@ -117,7 +121,9 @@
     "search.page_inscription_t": "Inschrijving",
     "search.page_inscription_d": "Inschrijven voor een opleiding",
     "search.page_faq_t": "Helpcentrum",
-    "search.page_faq_d": "Veelgestelde vragen en assistent"
+    "search.page_faq_d": "Veelgestelde vragen en assistent",
+    "search.page_agenda_t": "Opleidingsagenda",
+    "search.page_agenda_d": "Komende sessies, uren en locaties"
   });
 
   /* ---------------- AFRIKAANS ---------------- */
@@ -154,7 +160,9 @@
     "search.page_inscription_t": "Inskrywing",
     "search.page_inscription_d": "Skryf in vir 'n opleiding",
     "search.page_faq_t": "Hulpsentrum",
-    "search.page_faq_d": "Gereelde vrae en assistent"
+    "search.page_faq_d": "Gereelde vrae en assistent",
+    "search.page_agenda_t": "Opleidingsagenda",
+    "search.page_agenda_d": "Komende sessies, tye en plekke"
   });
 
   /* ---------------- العربية (RTL) ---------------- */
@@ -191,7 +199,9 @@
     "search.page_inscription_t": "التسجيل",
     "search.page_inscription_d": "التسجيل في دورة",
     "search.page_faq_t": "مركز المساعدة",
-    "search.page_faq_d": "الأسئلة الشائعة والمساعد"
+    "search.page_faq_d": "الأسئلة الشائعة والمساعد",
+    "search.page_agenda_t": "جدول الدورات التدريبية",
+    "search.page_agenda_d": "الدورات القادمة والمواعيد والأماكن"
   });
 
   /* ---------------- БЪЛГАРСКИ ---------------- */
@@ -228,7 +238,9 @@
     "search.page_inscription_t": "Записване",
     "search.page_inscription_d": "Записване за обучение",
     "search.page_faq_t": "Помощен център",
-    "search.page_faq_d": "Често задавани въпроси и асистент"
+    "search.page_faq_d": "Често задавани въпроси и асистент",
+    "search.page_agenda_t": "График на обученията",
+    "search.page_agenda_d": "Предстоящи сесии, часове и места"
   });
 
   /* ---------------- DEUTSCH ---------------- */
@@ -265,7 +277,9 @@
     "search.page_inscription_t": "Anmeldung",
     "search.page_inscription_d": "Für eine Schulung anmelden",
     "search.page_faq_t": "Hilfe-Center",
-    "search.page_faq_d": "Häufige Fragen und Assistent"
+    "search.page_faq_d": "Häufige Fragen und Assistent",
+    "search.page_agenda_t": "Schulungstermine",
+    "search.page_agenda_d": "Kommende Termine, Zeiten und Orte"
   });
 
   /* ---------------- ROMÂNĂ ---------------- */
@@ -302,7 +316,9 @@
     "search.page_inscription_t": "Înscriere",
     "search.page_inscription_d": "Înscrie-te la o formare",
     "search.page_faq_t": "Centru de ajutor",
-    "search.page_faq_d": "Întrebări frecvente și asistent"
+    "search.page_faq_d": "Întrebări frecvente și asistent",
+    "search.page_agenda_t": "Calendarul cursurilor",
+    "search.page_agenda_d": "Sesiuni viitoare, ore și locații"
   });
 
   /* ---------------- ITALIANO ---------------- */
@@ -339,7 +355,9 @@
     "search.page_inscription_t": "Iscrizione",
     "search.page_inscription_d": "Iscriviti a un corso",
     "search.page_faq_t": "Centro assistenza",
-    "search.page_faq_d": "Domande frequenti e assistente"
+    "search.page_faq_d": "Domande frequenti e assistente",
+    "search.page_agenda_t": "Calendario dei corsi",
+    "search.page_agenda_d": "Prossime sessioni, orari e sedi"
   });
 
   /* ---------------- SLOVENŠČINA ---------------- */
@@ -376,7 +394,9 @@
     "search.page_inscription_t": "Prijava",
     "search.page_inscription_d": "Prijava na usposabljanje",
     "search.page_faq_t": "Center za pomoč",
-    "search.page_faq_d": "Pogosta vprašanja in asistent"
+    "search.page_faq_d": "Pogosta vprašanja in asistent",
+    "search.page_agenda_t": "Urnik usposabljanj",
+    "search.page_agenda_d": "Prihajajoče izvedbe, ure in lokacije"
   });
 
   /* ---- Forme au singulier (compteur = 1), pour « 1 formation » vs « 2 formations » ---- */

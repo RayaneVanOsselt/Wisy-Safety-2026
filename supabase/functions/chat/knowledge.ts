@@ -100,6 +100,9 @@ export const PAGES: Entry[] = [
   { id: "page-faq", type: "page", title: "Centre d'aide", url: "faq.html",
     content: "Centre d'aide Wisy Safety : questions fréquentes sur les formations, l'inscription, les tarifs et les attestations.",
     keywords: ["aide", "faq", "questions", "assistance", "support"] },
+  { id: "page-agenda", type: "page", title: "Agenda des formations", url: "agenda.html",
+    content: "Agenda des formations Wisy Safety : la page qui accueillera les prochaines sessions, leurs horaires et leurs disponibilités. L'agenda en ligne arrive prochainement : aucune date n'y est publiée pour le moment.",
+    keywords: ["agenda", "calendrier", "dates", "sessions", "prochaines", "horaires", "planning", "quand", "disponibilites"] },
 ];
 
 export const CONTACT_ENTRY: Entry = {
@@ -122,7 +125,7 @@ export const ALL: Entry[] = [...FORMATIONS, ...PAGES, CONTACT_ENTRY, ...FAQ];
 
 // Toutes les URLs légitimes (allow-list pour la validation des réponses).
 export const ALLOWED_URLS = new Set<string>([
-  "index.html", "formations.html", "contact.html", "avis.html", "inscription.html", "faq.html",
+  "index.html", "formations.html", "contact.html", "avis.html", "inscription.html", "faq.html", "agenda.html",
   ...FORMATIONS.map((f) => f.url),
   ...FORMATIONS.map((f) => f.signupUrl!).filter(Boolean),
   `mailto:${CONTACT.email}`, CONTACT.phoneHref,

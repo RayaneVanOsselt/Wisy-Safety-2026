@@ -438,8 +438,8 @@ html{scroll-padding-top:calc(var(--faqc-hh,132px) + 16px)}
 .faqc-card{background:var(--creme);border:1px solid var(--fq-line);border-radius:var(--fq-r-lg);box-shadow:var(--fq-shadow);padding:1.5rem}
 .faqc-ask{background:linear-gradient(165deg,var(--fq-tint-2),var(--fq-tint) 55%,transparent),var(--creme)}
 .faqc-ask__top{display:flex;align-items:center;gap:.95rem;margin-bottom:.85rem}
-.faqc-ask__badge{flex:none;display:grid;place-items:end center;width:56px;height:56px;border-radius:18px;background:linear-gradient(150deg,#2A8477,var(--epinette) 55%,var(--sarcelle) 120%);box-shadow:inset 0 1px 0 rgba(255,255,255,.16);overflow:visible}
-.faqc-ask__badge svg{width:46px;height:46px;margin-bottom:3px;filter:drop-shadow(0 4px 6px rgba(27,45,40,.28))}
+.faqc-ask__badge{flex:none;display:block;width:56px;height:56px;margin:5px;border-radius:50%;overflow:hidden;background:#F4FAF9;background:radial-gradient(circle at 50% 30%,#fff 0,var(--creme) 56%,color-mix(in srgb,var(--epinette) 9%,var(--creme)) 100%);box-shadow:0 0 0 1px rgba(94,109,106,.32),0 0 0 3px var(--creme),0 0 0 4.5px rgba(31,111,100,.75),0 8px 18px rgba(27,45,40,.16)}
+.faqc-ask__badge img{display:block;width:100%;height:100%;object-fit:cover}
 .faqc-ask__t{margin:0;font-size:1.3rem;line-height:1.15;letter-spacing:-.015em}
 .faqc-ask__who{margin:.2rem 0 0;font-size:.84rem;color:var(--fq-soft)}
 .faqc-ask__p{margin:0 0 1.05rem;font-size:.96rem;line-height:1.6;color:var(--noir-jais)}
@@ -600,7 +600,7 @@ html{scroll-padding-top:calc(var(--faqc-hh,132px) + 16px)}
         <li><a class="nav-link" href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li>
         <li><a class="nav-link" href="#" data-i18n="nav.coordination">Coordination</a></li>
         <li><a class="nav-link" href="#" data-i18n="nav.certificat">Certificat</a></li>
-        <li><a class="nav-link" href="#" data-i18n="nav.agenda">Agenda</a></li>
+        <li><a class="nav-link" href="agenda.html" data-i18n="nav.agenda">Agenda</a></li>
         <li><a class="nav-link" href="avis.html" data-i18n="nav.avis">Avis</a></li>
       </ul>
     </nav>
@@ -639,7 +639,7 @@ html{scroll-padding-top:calc(var(--faqc-hh,132px) + 16px)}
         <li><a href="formations.html#vca-base" data-i18n="dd.vca_base">VCA de base</a></li><li><a href="formations.html#vca-hierarchique" data-i18n="dd.vca_hier">VCA ligne hiérarchique</a></li><li><a href="formation-nacelles-elevatrices.html" data-i18n="dd.nacelle">Nacelles élévatrices</a></li>
         <li><a href="formations.html#fibre-optique" data-i18n="dd.fibre">Fibre optique</a></li><li><a href="formations.html#beps" data-i18n="dd.beps">BEPS — Premier secours</a></li><li><a href="formations.html#diisocyanates" data-i18n="dd.diiso">Diisocyanates &amp; substances dangereuses</a></li>
       </ul></div></div></li>
-    <li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="#" data-i18n="nav.agenda">Agenda</a></li><li><a href="avis.html" data-i18n="nav.avis">Avis</a></li>
+    <li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="agenda.html" data-i18n="nav.agenda">Agenda</a></li><li><a href="avis.html" data-i18n="nav.avis">Avis</a></li>
   </ul>
   <a class="m-help" href="faq.html" aria-current="page"><span class="m-help__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span data-i18n="footer.faq">Centre d'aide</span><svg class="m-help__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
   <div class="m-actions"><a class="btn btn--outline" href="contact.html" data-i18n="header.contact">Contact</a><a class="btn btn--cta" href="inscription.html" data-i18n="header.register">S'inscrire</a></div>
@@ -737,8 +737,8 @@ html{scroll-padding-top:calc(var(--faqc-hh,132px) + 16px)}
         <aside class="faqc-aside" aria-label="Aide complémentaire">
           <section class="faqc-card faqc-ask" aria-labelledby="faqc-ask-t">
             <div class="faqc-ask__top">
-              <span class="faqc-ask__badge" id="faqc-mascot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#F4FAF9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-4 3.5V17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M9.2 9.6a2.1 2.1 0 0 1 3.9.8c0 1.3-1.9 1.9-1.9 1.9M11.2 14.3h.01"/></svg></span>
-              <div><h3 class="faqc-ask__t" id="faqc-ask-t">Posez votre question</h3><p class="faqc-ask__who">à l'assistant Wisy Safety</p></div>
+              <span class="faqc-ask__badge" aria-hidden="true"><picture><source type="image/avif" srcset="assets/images/assistant/wisy-assistant-144.avif 144w, assets/images/assistant/wisy-assistant-216.avif 216w" sizes="56px"><source type="image/webp" srcset="assets/images/assistant/wisy-assistant-144.webp 144w, assets/images/assistant/wisy-assistant-216.webp 216w" sizes="56px"><img src="assets/images/assistant/wisy-assistant-144.webp" srcset="assets/images/assistant/wisy-assistant-144.webp 144w, assets/images/assistant/wisy-assistant-216.webp 216w" sizes="56px" width="56" height="56" alt="" decoding="async" loading="lazy"></picture></span>
+              <div><h3 class="faqc-ask__t" id="faqc-ask-t">Posez votre question</h3><p class="faqc-ask__who">à l'Assistant Wisy</p></div>
             </div>
             <p class="faqc-ask__p">Il répond à partir des informations publiées sur ce site — les mêmes que ce Centre d'aide.</p>
             <form id="faqc-ask-form" novalidate>
@@ -828,7 +828,7 @@ html{scroll-padding-top:calc(var(--faqc-hh,132px) + 16px)}
       </div>
       <nav class="f-col reveal" style="--d:.08s" aria-labelledby="fs-serv">
         <h2 class="f-col__title" id="fs-serv" data-i18n="footer.col_services">Nos services</h2>
-        <ul class="f-links"><li><a href="formations.html" data-i18n="nav.formations">Formations</a></li><li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="#" data-i18n="nav.agenda">Agenda</a></li><li><a href="faq.html" data-i18n="footer.faq">Centre d'aide</a></li></ul>
+        <ul class="f-links"><li><a href="formations.html" data-i18n="nav.formations">Formations</a></li><li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="agenda.html" data-i18n="nav.agenda">Agenda</a></li><li><a href="faq.html" data-i18n="footer.faq">Centre d'aide</a></li></ul>
       </nav>
       <div class="f-col reveal" style="--d:.16s">
         <h2 class="f-col__title" data-i18n="header.contact">Contact</h2>
@@ -864,15 +864,11 @@ html{scroll-padding-top:calc(var(--faqc-hh,132px) + 16px)}
 <script src="js/trainings-data.js"></script>
 <script src="js/search.js"></script>
 
-<!-- Assistant Wisy (mascotte + assistant conversationnel) -->
+<!-- Assistant Wisy : launcher chargé d'emblée ; moteur et panneau à la demande. Les données et le moteur
+     de recherche du Centre d'aide sont déjà utilisés par cette page, le launcher ne les recharge pas. -->
 <script defer src="js/faq-data.js"></script>
 <script defer src="js/faq-search.js"></script>
-<script defer src="js/assistant/knowledge.js"></script>
-<script defer src="js/assistant/retrieval.js"></script>
-<script defer src="js/assistant/validation.js"></script>
-<script defer src="js/assistant/responder.js"></script>
-<script defer src="js/assistant/mascot.js"></script>
-<script defer src="js/assistant/assistant.js"></script>
+<script defer src="js/assistant/launcher.js"></script>
 
 <!-- Comportements partagés (en-tête, menu, sous-menu, reveal, horaires) — identiques aux autres pages -->
 <script>

@@ -1,20 +1,32 @@
 /* =========================================================================
-   WISY SAFETY — Assistant Wisy · Styles
+   WISY SAFETY — Assistant Wisy · LAUNCHER (bouton flottant + bulle)
    -------------------------------------------------------------------------
-   Design cohérent avec la charte du site (réutilise les tokens --epinette,
-   --sarcelle, --turquoise… présents sur chaque page). Tout est préfixé
-   .wa-* et isolé sous #wisy-assistant pour éviter toute collision.
+   Feuille CHARGÉE SUR TOUTES LES PAGES : volontairement courte. Le panneau
+   conversationnel vit dans css/assistant-panel.css, chargé à la demande
+   (au 1er survol / focus / toucher / clic, ou en tâche de fond) par
+   js/assistant/launcher.js.
 
-   Palette (rôles stricts) :
-     • Épinette #1F6F64 : primaire (header, bulles utilisateur, launcher)
-     • Sarcelle #2F7D8C : profondeur, dégradés
-     • Turquoise #48D6C2 : accent CTA / disponibilité UNIQUEMENT (~10%)
-     • Crème #F4FAF9 : surfaces, bulles assistant
-     • Granit #5E6D6A : texte secondaire, bordures
-     • Noir de jais #1B2D28 : texte principal, contrastes
+   Composition :   [ bulle d'invitation ]  ( mascotte )
+     • mascotte  : tête détourée (assets/images/assistant/) dans un disque
+                   crème, filet granit, anneau épinette discret ;
+     • indicateur de disponibilité : turquoise, UNIQUE accent du composant ;
+     • pastille « IA » : épinette (jamais un 2e accent turquoise).
 
-   Séparation obligatoire entre teintes proches : bordures fines / surfaces
-   distinctes (jamais deux teintes proches juxtaposées sans séparation).
+   Palette (rôles stricts)
+     Épinette #1F6F64 primaire · Sarcelle #2F7D8C secondaire · Turquoise #48D6C2
+     accent CTA/disponibilité seulement (≪ 10 % de la surface) · Brume #3FA69B
+     survol · Crème #F4FAF9 surfaces · Granit #5E6D6A texte secondaire/bordures ·
+     Jais #1B2D28 texte principal. Texte posé sur turquoise = jais.
+
+   Échelle z-index du site (voir aussi css/registration.css) :
+     60 recherche · 1000 en-tête · 1100 voile du menu · 1150 assistant [--wa-z] ·
+     1160 barre d'inscription mobile · 1200 menu mobile · 2000 liens d'évitement.
+
+   Réglages rapides (variables, surchargeables par n'importe quelle page) :
+     --wa-size    diamètre du launcher (72px desktop, 58px mobile)
+     --wa-offset  distance aux bords du viewport (24–32px, 16px mobile)
+     --wa-lift    décalage vertical supplémentaire (ex. barre collante, bandeau
+                  cookies futur) : `body.x #wisy-assistant { --wa-lift: 80px }`
    ========================================================================= */
 
 #wisy-assistant {
@@ -29,6 +41,7 @@
   --wa-surface: #ffffff;
   --wa-line: rgba(94, 109, 106, 0.16);
   --wa-line-soft: rgba(94, 109, 106, 0.10);
+  --wa-border: rgba(94, 109, 106, 0.32);            /* filet du launcher (granit) */
 
   --wa-font-title: var(--font-titre, "Poppins", system-ui, sans-serif);
   --wa-font-text: var(--font-texte, "Inter", system-ui, sans-serif);
@@ -37,15 +50,28 @@
   --wa-radius-lg: 22px;
   --wa-radius-pill: 999px;
 
-  --wa-shadow-launcher: 0 14px 34px rgba(27, 45, 40, 0.22), 0 2px 6px rgba(27, 45, 40, 0.12);
   --wa-shadow-panel: 0 26px 70px rgba(27, 45, 40, 0.26), 0 6px 18px rgba(27, 45, 40, 0.12);
   --wa-shadow-card: 0 6px 18px rgba(27, 45, 40, 0.10);
 
   --wa-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --wa-ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
   --wa-ease: cubic-bezier(0.4, 0, 0.2, 1);
 
-  --wa-gap: clamp(20px, 3vw, 32px); /* distance aux bords du viewport */
+  /* Launcher */
+  --wa-size: 72px;
+  --wa-offset: clamp(24px, 1.8vw, 32px);
+  --wa-lift: 0px;
   --wa-z: 1150;
+
+  /* Anneaux : 3px de crème (respiration) puis filet épinette (75 % : 3,3:1 sur blanc, seuil AA des
+     composants d'interface) ; plein au survol et quand l'assistant est ouvert */
+  --wa-ring-gap: 0 0 0 3px var(--wa-creme);
+  --wa-ring: 0 0 0 4.5px rgba(31, 111, 100, 0.75);
+  --wa-ring-strong: 0 0 0 4.5px var(--wa-epinette);
+  --wa-fab-shadow: 0 12px 30px rgba(27, 45, 40, 0.20), 0 2px 6px rgba(27, 45, 40, 0.12);
+
+  /* Décalage panneau : il s'ouvre AU-DESSUS du launcher (voir assistant-panel.css) */
+  --wa-panel-bottom: calc(max(var(--wa-offset), env(safe-area-inset-bottom, 0px)) + var(--wa-lift) + var(--wa-size) + 16px);
 
   position: fixed;
   z-index: var(--wa-z);
@@ -57,158 +83,288 @@
 #wisy-assistant *::before,
 #wisy-assistant *::after { box-sizing: border-box; }
 
+/* Texte réservé aux technologies d'assistance (pas de left:-9999px : scroll en RTL) */
+.wa-sr {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
 /* =========================================================================
-   1. LAUNCHER — élément « support » allongé d'où émerge la mascotte
+   1. CONTENEUR — fixé en bas à droite ; ne pèse jamais sur la mise en page
    ========================================================================= */
 .wa-launcher {
   position: fixed;
-  right: var(--wa-gap);
-  bottom: max(var(--wa-gap), env(safe-area-inset-bottom, 0px));
+  right: max(var(--wa-offset), env(safe-area-inset-right, 0px));
+  bottom: calc(max(var(--wa-offset), env(safe-area-inset-bottom, 0px)) + var(--wa-lift));
   z-index: var(--wa-z);
+  width: var(--wa-size);
+  height: var(--wa-size);
 
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-  padding: 8px;
-  padding-left: 18px;
-  max-width: 320px;
-
-  background: var(--wa-surface);
-  border: 1px solid var(--wa-line);
-  border-radius: var(--wa-radius-pill);
-  box-shadow: var(--wa-shadow-launcher);
-  color: var(--wa-jais);
-  cursor: pointer;
-
-  transition:
-    transform 0.2s var(--wa-ease-out),
-    box-shadow 0.2s var(--wa-ease-out),
-    opacity 0.25s var(--wa-ease),
-    padding 0.28s var(--wa-ease-out);
-}
-
-/* Apparition initiale (400–500 ms) */
-.wa-launcher {
+  /* Apparition (500–600 ms, sans rebond) : déclenchée par .is-ready */
   opacity: 0;
-  transform: translateY(14px) scale(0.96);
-}
-.wa-launcher.is-ready {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateY(10px) scale(0.97);
   transition:
-    opacity 0.45s var(--wa-ease-out),
-    transform 0.45s var(--wa-ease-out);
+    opacity 0.55s var(--wa-ease-premium),
+    transform 0.55s var(--wa-ease-premium),
+    bottom 0.3s var(--wa-ease-out);
 }
+.wa-launcher.is-ready { opacity: 1; transform: none; }
 
-/* Label discret « Besoin d'aide ? » */
-.wa-launcher__label {
-  font-family: var(--wa-font-title);
-  font-weight: 600;
-  font-size: 0.94rem;
-  line-height: 1.15;
-  white-space: nowrap;
-  color: var(--wa-jais);
-  padding-right: 12px;
-  max-width: 180px;
-  opacity: 1;
-  transition: max-width 0.3s var(--wa-ease-out), opacity 0.22s var(--wa-ease), padding 0.3s var(--wa-ease-out);
-}
-
-/* Support de la mascotte (la mascotte en « sort » légèrement) */
-.wa-launcher__badge {
+/* =========================================================================
+   2. MASCOTTE — vrai <button>, disque crème, anneau discret
+   ========================================================================= */
+.wa-fab {
   position: relative;
-  flex: none;
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
-  background: linear-gradient(150deg, #2A8477 0%, var(--wa-epinette) 55%, var(--wa-sarcelle) 120%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
-  overflow: visible;
-}
-.wa-launcher__badge .wm {
-  position: absolute;
-  left: 50%;
-  bottom: 5px;
-  width: 42px;
-  height: 42px;
-  transform: translateX(-50%);
-  filter: drop-shadow(0 4px 6px rgba(27, 45, 40, 0.28));
-  transition: transform 0.2s var(--wa-ease-out);
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--wa-border);
+  background: #F4FAF9;
+  background: radial-gradient(circle at 50% 30%, #ffffff 0%, var(--wa-creme) 56%,
+    color-mix(in srgb, var(--wa-epinette) 9%, var(--wa-creme)) 100%);
+  color: var(--wa-jais);
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  box-shadow: var(--wa-ring-gap), var(--wa-ring), var(--wa-fab-shadow);
+  transition:
+    transform 0.22s var(--wa-ease-out),
+    box-shadow 0.22s var(--wa-ease-out),
+    border-color 0.22s var(--wa-ease);
 }
 
-/* Indicateur de disponibilité (turquoise, statique — jamais clignotant) */
-.wa-launcher__dot {
+/* Disque qui rogne la mascotte (le point de disponibilité déborde, lui) */
+.wa-disc {
   position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 12px;
-  height: 12px;
+  inset: 0;
   border-radius: 50%;
-  background: var(--wa-turquoise);
-  border: 2.5px solid var(--wa-surface);
-}
-
-/* Hover / focus : la mascotte monte de 2–3 px, ombre légèrement renforcée */
-.wa-launcher:hover,
-.wa-launcher:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 40px rgba(27, 45, 40, 0.26), 0 3px 8px rgba(27, 45, 40, 0.14);
-}
-.wa-launcher:hover .wm,
-.wa-launcher:focus-visible .wm { transform: translateX(-50%) translateY(-3px); }
-.wa-launcher:focus-visible {
-  outline: 3px solid var(--wa-brume);
-  outline-offset: 3px;
-}
-
-/* État compact : après quelques secondes, seul le badge reste */
-.wa-launcher.is-compact {
-  padding-left: 8px;
-}
-.wa-launcher.is-compact .wa-launcher__label {
-  max-width: 0;
-  opacity: 0;
-  padding-right: 0;
   overflow: hidden;
 }
-/* Ré-expansion au survol même en mode compact */
-.wa-launcher.is-compact:hover .wa-launcher__label,
-.wa-launcher.is-compact:focus-visible .wa-launcher__label {
-  max-width: 180px;
-  opacity: 1;
-  padding-right: 12px;
-}
-
-/* Launcher masqué quand le panneau est ouvert (présence réduite) */
-#wisy-assistant.is-open .wa-launcher {
-  opacity: 0;
-  transform: translateY(8px) scale(0.94);
+.wa-avatar,
+.wa-avatar img { display: block; width: 100%; height: 100%; }
+.wa-avatar img {
+  object-fit: cover;
+  object-position: 50% 50%;
+  user-select: none;
+  -webkit-user-drag: none;
   pointer-events: none;
 }
 
-/* =========================================================================
-   2. MICRO-BULLE D'ACCUEIL (première visite uniquement)
-   ========================================================================= */
-.wa-nudge {
-  position: fixed;
-  right: var(--wa-gap);
-  bottom: calc(max(var(--wa-gap), env(safe-area-inset-bottom, 0px)) + 74px);
-  z-index: var(--wa-z);
-  max-width: 250px;
-  padding: 12px 40px 12px 14px;
-  background: var(--wa-surface);
-  border: 1px solid var(--wa-line);
-  border-radius: 16px 16px 6px 16px;
-  box-shadow: var(--wa-shadow-card);
-  font-size: 0.9rem;
-  line-height: 1.4;
-  color: var(--wa-jais);
-  opacity: 0;
-  transform: translateY(6px) scale(0.98);
-  transition: opacity 0.4s var(--wa-ease-out), transform 0.4s var(--wa-ease-out);
+/* Repli propre si l'image ne charge pas : glyphe assistant (jamais un cercle cassé) */
+.wa-fallback {
+  display: none;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  color: var(--wa-epinette);
 }
-.wa-nudge.is-visible { opacity: 1; transform: translateY(0) scale(1); }
-.wa-nudge__close {
+.wa-fallback svg { width: 46%; height: 46%; }
+.is-fallback > .wa-avatar { display: none; }
+.is-fallback > .wa-fallback { display: grid; }
+
+/* Indicateur de disponibilité — turquoise, statique (jamais clignotant).
+   Il indique seulement que l'assistant est accessible, pas qu'une personne est en ligne. */
+.wa-fab__status {
+  --wa-dot: 12px;
+  --wa-dot-border: 2.5px;
+  position: absolute;
+  right: calc(var(--wa-size) * 0.1464 - (var(--wa-dot) / 2 + var(--wa-dot-border)));
+  bottom: calc(var(--wa-size) * 0.1464 - (var(--wa-dot) / 2 + var(--wa-dot-border)));
+  width: var(--wa-dot);
+  height: var(--wa-dot);
+  box-sizing: content-box;
+  border: var(--wa-dot-border) solid var(--wa-creme);
+  border-radius: 50%;
+  background: var(--wa-turquoise);
+  pointer-events: none;
+}
+
+/* Pastille « IA » : épinette + crème (contraste 6:1) — l'accent turquoise reste unique */
+.wa-fab__badge {
+  position: absolute;
+  top: -3px;
+  left: -5px;
+  min-width: 22px;
+  height: 17px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--wa-creme);
+  border-radius: var(--wa-radius-pill);
+  box-sizing: content-box;
+  background: var(--wa-epinette);
+  color: var(--wa-creme);
+  font: 700 10px/1 var(--wa-font-title);
+  letter-spacing: 0.06em;
+  pointer-events: none;
+}
+
+/* Icône de fermeture : remplace le point quand l'assistant est ouvert */
+.wa-fab__chev {
+  position: absolute;
+  right: calc(var(--wa-size) * 0.1464 - 12px);
+  bottom: calc(var(--wa-size) * 0.1464 - 12px);
+  width: 24px;
+  height: 24px;
+  display: none;
+  place-items: center;
+  border: 2px solid var(--wa-creme);
+  border-radius: 50%;
+  box-sizing: border-box;
+  background: var(--wa-epinette);
+  color: var(--wa-creme);
+  pointer-events: none;
+}
+.wa-fab__chev svg { width: 12px; height: 12px; }
+
+/* Halo d'appel : anneau sarcelle qui s'élargit une fois puis disparaît (transform + opacity) */
+.wa-fab__halo {
+  position: absolute;
+  inset: -4.5px;
+  border: 1.5px solid var(--wa-sarcelle);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---- États --------------------------------------------------------- */
+.wa-fab:active { transform: scale(0.98); transition-duration: 0.09s; }
+
+/* Focus clavier : jais (contraste 3:1 sur fond clair) + turquoise (visible sur fond sombre) */
+.wa-fab:focus-visible {
+  outline: 3px solid transparent;               /* visible en mode contraste forcé */
+  outline-offset: 4px;
+  box-shadow: var(--wa-ring-gap), 0 0 0 5px var(--wa-jais), 0 0 0 8px var(--wa-turquoise), var(--wa-fab-shadow);
+}
+
+/* Survol (pointeur précis uniquement) : -2px, ×1.02, filet et anneau vers brume */
+@media (hover: hover) and (pointer: fine) {
+  .wa-fab:hover {
+    transform: translateY(-2px) scale(1.02);
+    border-color: var(--wa-brume);
+    box-shadow: var(--wa-ring-gap), var(--wa-ring-strong),
+      0 16px 36px rgba(27, 45, 40, 0.24), 0 3px 8px rgba(27, 45, 40, 0.14);
+  }
+  .wa-fab:hover:active { transform: scale(0.98); }
+  .wa-fab:focus-visible:hover {
+    box-shadow: var(--wa-ring-gap), 0 0 0 5px var(--wa-jais), 0 0 0 8px var(--wa-turquoise), var(--wa-fab-shadow);
+  }
+}
+
+/* Assistant ouvert : plus de halo, anneau brume, pastille de fermeture */
+.is-open .wa-fab {
+  transform: none;
+  border-color: var(--wa-brume);
+  box-shadow: var(--wa-ring-gap), var(--wa-ring-strong), var(--wa-fab-shadow);
+}
+.is-open .wa-fab:focus-visible {
+  box-shadow: var(--wa-ring-gap), 0 0 0 5px var(--wa-jais), 0 0 0 8px var(--wa-turquoise), var(--wa-fab-shadow);
+}
+.is-open .wa-fab__status { display: none; }
+.is-open .wa-fab__chev { display: grid; }
+.is-open .wa-fab__halo { display: none; }
+
+/* Chargement du moteur (clic très précoce) : halo doux, curseur d'attente */
+.is-loading .wa-fab { cursor: progress; }
+.is-loading .wa-fab__halo { animation: wa-loading 1.3s var(--wa-ease) infinite; }
+@keyframes wa-loading {
+  0%   { opacity: 0.5; transform: scale(0.98); }
+  100% { opacity: 0;   transform: scale(1.22); }
+}
+
+/* ---- Micro-animations d'appel : UNE à la fois, jamais en continu ---- */
+.is-cue-lift .wa-avatar img { animation: wa-cue-lift 5s ease-in-out 1; }
+@keyframes wa-cue-lift {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+.is-cue-halo .wa-fab__halo { animation: wa-cue-halo 3.4s var(--wa-ease-out) 1; }
+@keyframes wa-cue-halo {
+  0%   { opacity: 0.55; transform: scale(0.98); }
+  100% { opacity: 0;    transform: scale(1.3); }
+}
+
+/* =========================================================================
+   3. BULLE D'INVITATION (.wa-invite) — surface crème, pointe vers la mascotte
+   ========================================================================= */
+.wa-invite {
+  --wa-bx: 6px;
+  position: absolute;
+  right: calc(100% + 16px);
+  top: 50%;
+  width: max-content;
+  max-width: 260px;
+  padding: 12px 40px 12px 16px;
+  background: var(--wa-creme);
+  border: 1px solid rgba(94, 109, 106, 0.26);
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(27, 45, 40, 0.14), 0 2px 6px rgba(27, 45, 40, 0.08);
+  cursor: pointer;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(var(--wa-bx), -50%);
+  transition:
+    opacity 0.4s var(--wa-ease-out),
+    transform 0.4s var(--wa-ease-out),
+    visibility 0s linear 0.4s;
+}
+/* Pointe (carré tourné, 2 côtés bordés) orientée vers la mascotte */
+.wa-invite::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -6px;
+  width: 11px;
+  height: 11px;
+  background: var(--wa-creme);
+  border-top: 1px solid rgba(94, 109, 106, 0.26);
+  border-right: 1px solid rgba(94, 109, 106, 0.26);
+  border-top-right-radius: 3px;
+  transform: translateY(-50%) rotate(45deg);
+}
+.is-intro .wa-invite,
+.is-hint .wa-invite,
+.is-notice .wa-invite {
+  --wa-bx: 0px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity 0.4s var(--wa-ease-out),
+    transform 0.4s var(--wa-ease-out),
+    visibility 0s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .wa-launcher:hover .wa-invite { --wa-bx: 3px; }   /* la bulle se rapproche de 3 px */
+}
+.wa-invite__title {
+  margin: 0;
+  font: 600 0.94rem/1.25 var(--wa-font-title);
+  color: var(--wa-jais);
+}
+.wa-invite__text {
+  margin: 2px 0 0;
+  font: 400 0.8125rem/1.4 var(--wa-font-text);
+  color: var(--wa-granit);                           /* 5,1:1 sur crème */
+}
+.wa-invite__cta {
+  display: none;
+  margin-top: 8px;
+  font: 600 0.8125rem/1.3 var(--wa-font-title);
+  color: var(--wa-epinette);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.wa-invite__cta:focus-visible { outline: 2px solid var(--wa-jais); outline-offset: 3px; border-radius: 4px; }
+.is-notice .wa-invite__cta { display: inline-block; }
+
+/* Fermer la bulle : 24 px visibles, zone tactile 44 × 44 */
+.wa-invite__close {
   position: absolute;
   top: 6px;
   right: 6px;
@@ -216,500 +372,73 @@
   height: 26px;
   display: grid;
   place-items: center;
-  border-radius: 50%;
-  color: var(--wa-granit);
-}
-.wa-nudge__close:hover { background: var(--wa-creme); color: var(--wa-jais); }
-.wa-nudge__close svg { width: 15px; height: 15px; }
-
-/* =========================================================================
-   3. PANNEAU
-   ========================================================================= */
-.wa-panel {
-  position: fixed;
-  right: var(--wa-gap);
-  bottom: max(var(--wa-gap), env(safe-area-inset-bottom, 0px));
-  z-index: var(--wa-z);
-
-  display: flex;
-  flex-direction: column;
-  width: min(408px, calc(100vw - 2 * var(--wa-gap)));
-  height: min(720px, 75dvh);
-  max-height: min(720px, 75dvh);
-
-  background: var(--wa-surface);
-  border: 1px solid var(--wa-line);
-  border-radius: var(--wa-radius-lg);
-  box-shadow: var(--wa-shadow-panel);
-  overflow: hidden;
-
-  opacity: 0;
-  transform: translateY(14px) scale(0.98);
-  transform-origin: bottom right;
-  pointer-events: none;
-  visibility: hidden;
-  transition:
-    opacity 0.3s var(--wa-ease-out),
-    transform 0.3s var(--wa-ease-out),
-    visibility 0s linear 0.3s;
-}
-#wisy-assistant.is-open .wa-panel {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: auto;
-  visibility: visible;
-  transition:
-    opacity 0.32s var(--wa-ease-out),
-    transform 0.32s var(--wa-ease-out),
-    visibility 0s;
-}
-
-/* ---- Header ---- */
-.wa-header {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 14px 14px 16px;
-  background: linear-gradient(140deg, var(--wa-epinette) 0%, #23786C 60%, var(--wa-sarcelle) 130%);
-  color: var(--wa-creme);
-}
-.wa-header__badge {
-  position: relative;
-  flex: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 13px;
-  background: rgba(244, 250, 249, 0.14);
-  box-shadow: inset 0 0 0 1px rgba(244, 250, 249, 0.18);
-  overflow: visible;
-}
-.wa-header__badge .wm { position: absolute; left: 50%; bottom: 3px; width: 36px; height: 36px; transform: translateX(-50%); }
-/* État « thinking » : respiration interne très lente de la mascotte (subtile,
-   organique) — jamais de rebond/pulsation permanente. Coupée en reduced-motion. */
-.wa-header__badge .wm-figure { transform-box: fill-box; transform-origin: center; }
-#wisy-assistant.is-busy .wa-header__badge .wm-figure { animation: wa-breathe 2.6s var(--wa-ease) infinite; }
-#wisy-assistant.is-busy .wa-header__badge .wm-spark { animation: wa-spark 2.6s var(--wa-ease) infinite; }
-@keyframes wa-breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-0.8px); } }
-@keyframes wa-spark { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
-.wa-header__titles { min-width: 0; flex: 1; }
-.wa-header__title {
-  font-family: var(--wa-font-title);
-  font-weight: 600;
-  font-size: 1.02rem;
   margin: 0;
-  color: var(--wa-creme);
-  line-height: 1.2;
-}
-.wa-header__subtitle {
-  font-size: 0.8rem;
-  margin: 1px 0 0;
-  color: rgba(244, 250, 249, 0.82);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.wa-status-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--wa-turquoise);
-  box-shadow: 0 0 0 3px rgba(72, 214, 194, 0.25);
-  flex: none;
-}
-.wa-header__actions { display: flex; gap: 4px; }
-.wa-iconbtn {
-  width: 40px; height: 40px;
-  display: grid; place-items: center;
-  border-radius: 12px;
-  color: var(--wa-creme);
-  transition: background 0.18s var(--wa-ease);
-}
-.wa-iconbtn:hover { background: rgba(244, 250, 249, 0.16); }
-.wa-iconbtn:active { background: rgba(244, 250, 249, 0.24); }
-.wa-iconbtn:focus-visible { outline: 2px solid var(--wa-creme); outline-offset: 2px; }
-.wa-iconbtn svg { width: 19px; height: 19px; }
-
-/* ---- Corps défilant ---- */
-.wa-body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 18px 16px 8px;
-  background:
-    radial-gradient(120% 60% at 100% 0%, rgba(63, 166, 155, 0.06), transparent 60%),
-    var(--wa-surface);
-  scroll-behavior: smooth;
-  overscroll-behavior: contain;
-}
-.wa-body::-webkit-scrollbar { width: 8px; }
-.wa-body::-webkit-scrollbar-thumb { background: var(--wa-line); border-radius: 8px; }
-
-/* ---- Écran d'accueil ---- */
-.wa-welcome { padding: 6px 2px 4px; }
-.wa-welcome__hi {
-  font-size: 0.98rem;
-  line-height: 1.55;
-  color: var(--wa-jais);
-  margin: 0 0 16px;
-  white-space: pre-line;
-}
-.wa-welcome__hint {
-  font-size: 0.78rem;
+  padding: 0;
+  border: 0;
+  background: none;
   color: var(--wa-granit);
-  margin: 0 0 8px;
-  font-weight: 500;
-}
-
-/* Rôle de l'assistant : rassurant, sobre (jamais une promesse) */
-.wa-note {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  margin: 0 0 16px;
-  padding: 10px 12px;
-  font-size: 0.8rem;
-  line-height: 1.5;
-  color: var(--wa-granit);
-  background: rgba(63, 166, 155, 0.08);
-  border: 1px solid var(--wa-line-soft);
-  border-radius: 12px;
-}
-.wa-note svg { width: 15px; height: 15px; flex: none; margin-top: 2px; color: var(--wa-epinette); }
-
-/* Lien « Voir dans le Centre d'aide » (même réponse que la page FAQ) */
-.wa-source {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  align-self: flex-start;
-  min-height: 32px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--wa-epinette);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-thickness: 1px;
-}
-.wa-source svg { width: 14px; height: 14px; flex: none; }
-.wa-source:hover { color: var(--wa-jais); }
-.wa-source:focus-visible { outline: 2px solid var(--wa-epinette); outline-offset: 3px; border-radius: 4px; }
-
-/* Capsules de suggestion (élégantes, pas de gros boutons) */
-.wa-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.wa-chip {
-  font-family: var(--wa-font-text);
-  font-size: 0.86rem;
-  font-weight: 500;
-  color: var(--wa-epinette);
-  background: var(--wa-creme);
-  border: 1px solid var(--wa-line);
-  border-radius: var(--wa-radius-pill);
-  padding: 9px 14px;
-  min-height: 40px;
-  line-height: 1.3;
   cursor: pointer;
-  text-align: left;
-  transition: transform 0.18s var(--wa-ease-out), background 0.18s var(--wa-ease), border-color 0.18s var(--wa-ease);
+  -webkit-tap-highlight-color: transparent;
 }
-.wa-chip:hover { background: var(--brume-14, rgba(63, 166, 155, 0.14)); border-color: var(--wa-brume); transform: translateY(-1px); }
-.wa-chip:focus-visible { outline: 2px solid var(--wa-epinette); outline-offset: 2px; }
+.wa-invite__close::before { content: ""; position: absolute; inset: -9px; }   /* zone tactile 44 px */
+.wa-invite__close svg { width: 14px; height: 14px; }
+.wa-invite__close:hover { background: rgba(94, 109, 106, 0.12); color: var(--wa-jais); }
+.wa-invite__close:focus-visible { outline: 2px solid var(--wa-jais); outline-offset: 2px; }
 
-/* ---- Fil de conversation ---- */
-.wa-thread { display: flex; flex-direction: column; gap: 14px; }
-.wa-turn { display: flex; flex-direction: column; gap: 10px; }
-.wa-turn--user { align-items: flex-end; }
-.wa-turn--assistant { align-items: flex-start; }
+/* Laisse la place au launcher : rien d'essentiel du pied de page n'est masqué
+   (72 px de mascotte + 32 px de marge maximale + 12 px d'air ; 58 + 16 + 12 sur mobile) */
+.has-wisy-assistant .site-footer { padding-bottom: calc(116px + env(safe-area-inset-bottom, 0px)); }
 
-.wa-bubble {
-  max-width: 85%;
-  padding: 11px 14px;
-  font-size: 0.92rem;
-  line-height: 1.55;
-  white-space: pre-line;
-  word-wrap: break-word;
-  overflow-wrap: anywhere;
-  animation: wa-msg-in 0.26s var(--wa-ease-out) both;
-}
-.wa-bubble--assistant {
-  background: var(--wa-creme);
-  color: var(--wa-jais);
-  border: 1px solid var(--wa-line-soft);
-  border-radius: 16px 16px 16px 5px; /* asymétrie côté assistant */
-}
-.wa-bubble--user {
-  background: var(--wa-epinette);
-  color: #ffffff;
-  border-radius: 16px 16px 5px 16px; /* asymétrie inversée côté utilisateur */
-}
-.wa-bubble a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
-
-@keyframes wa-msg-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ---- Cartes enrichies ---- */
-.wa-cards { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 85%; }
-.wa-card {
-  display: block;
-  background: var(--wa-surface);
-  border: 1px solid var(--wa-line);
-  border-radius: var(--wa-radius);
-  padding: 13px 14px;
-  text-align: left;
-  color: var(--wa-jais);
-  box-shadow: var(--wa-shadow-card);
-  transition: transform 0.18s var(--wa-ease-out), box-shadow 0.18s var(--wa-ease-out), border-color 0.18s var(--wa-ease);
-  animation: wa-msg-in 0.28s var(--wa-ease-out) both;
-}
-a.wa-card:hover,
-a.wa-card:focus-visible {
-  transform: scale(1.02);
-  box-shadow: 0 12px 26px rgba(27, 45, 40, 0.16);
-  border-color: var(--wa-brume);
-}
-a.wa-card:focus-visible { outline: 2px solid var(--wa-brume); outline-offset: 2px; }
-
-.wa-card__eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--wa-epinette);
-  margin-bottom: 6px;
-}
-.wa-card__eyebrow svg { width: 14px; height: 14px; }
-.wa-card__title {
-  font-family: var(--wa-font-title);
-  font-weight: 600;
-  font-size: 0.98rem;
-  margin: 0 0 4px;
-  color: var(--wa-jais);
-  line-height: 1.25;
-}
-.wa-card__desc { font-size: 0.85rem; color: var(--wa-granit); margin: 0 0 10px; line-height: 1.5; }
-.wa-card__meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
-.wa-tag {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 0.74rem; font-weight: 500;
-  color: var(--wa-granit);
-  background: var(--wa-creme);
-  border: 1px solid var(--wa-line-soft);
-  border-radius: var(--wa-radius-pill);
-  padding: 3px 9px;
-}
-.wa-tag svg { width: 12px; height: 12px; }
-.wa-card__cta {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--wa-font-title);
-  font-weight: 600; font-size: 0.86rem;
-  color: var(--wa-epinette);
-}
-.wa-card__cta svg { width: 16px; height: 16px; transition: transform 0.18s var(--wa-ease-out); }
-a.wa-card:hover .wa-card__cta svg { transform: translateX(3px); }
-
-/* Contact : liens directs (dans une carte non-cliquable globalement) */
-.wa-card--contact { }
-.wa-contact-links { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
-.wa-contact-link {
-  display: inline-flex; align-items: center; gap: 9px;
-  font-size: 0.88rem; font-weight: 500; color: var(--wa-jais);
-  padding: 8px 10px; border-radius: 10px;
-  border: 1px solid var(--wa-line-soft);
-  transition: background 0.16s var(--wa-ease), border-color 0.16s var(--wa-ease);
-}
-.wa-contact-link:hover { background: var(--wa-creme); border-color: var(--wa-brume); }
-.wa-contact-link:focus-visible { outline: 2px solid var(--wa-brume); outline-offset: 2px; }
-.wa-contact-link svg { width: 17px; height: 17px; color: var(--wa-epinette); flex: none; }
-.wa-contact-link--primary {
-  background: var(--wa-turquoise);
-  color: var(--wa-jais);
-  border-color: transparent;
-  font-family: var(--wa-font-title); font-weight: 600;
-  justify-content: center;
-}
-.wa-contact-link--primary svg { color: var(--wa-jais); }
-.wa-contact-link--primary:hover { background: #37c9b4; border-color: transparent; }
-.wa-contact__hours { font-size: 0.78rem; color: var(--wa-granit); margin: 8px 0 0; }
-
-/* Suggestions contextuelles après réponse */
-.wa-followups { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 85%; }
-.wa-followups__label { font-size: 0.76rem; color: var(--wa-granit); font-weight: 500; }
-
-/* ---- Indicateur « Wisy prépare votre réponse » ---- */
-.wa-typing {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 10px 14px;
-  background: var(--wa-creme);
-  border: 1px solid var(--wa-line-soft);
-  border-radius: 16px 16px 16px 5px;
-  font-size: 0.85rem; color: var(--wa-granit);
-  animation: wa-msg-in 0.26s var(--wa-ease-out) both;
-}
-.wa-typing__orb {
-  position: relative; width: 18px; height: 18px; flex: none;
-}
-.wa-typing__orb span {
-  position: absolute; inset: 0; margin: auto;
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--wa-epinette);
-  animation: wa-orb 1.4s var(--wa-ease) infinite;
-}
-.wa-typing__orb span:nth-child(2) { background: var(--wa-brume); animation-delay: 0.18s; }
-.wa-typing__orb span:nth-child(3) { background: var(--wa-turquoise); animation-delay: 0.36s; }
-@keyframes wa-orb {
-  0%, 100% { transform: scale(0.55); opacity: 0.5; }
-  40% { transform: scale(1); opacity: 1; }
-}
-
-/* ---- Bandeau d'erreur ---- */
-.wa-error {
-  margin: 8px 0 4px;
-  padding: 11px 13px;
-  background: rgba(94, 109, 106, 0.08);
-  border: 1px solid var(--wa-line);
-  border-left: 3px solid var(--wa-granit);
-  border-radius: 10px;
-  font-size: 0.85rem;
-  color: var(--wa-jais);
-  line-height: 1.45;
-}
-.wa-error strong { font-weight: 600; }
-
-/* ---- Composer ---- */
-.wa-composer {
-  flex: none;
-  padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0px));
-  border-top: 1px solid var(--wa-line);
-  background: var(--wa-surface);
-}
-.wa-composer__row {
-  display: flex; align-items: flex-end; gap: 8px;
-  background: var(--wa-creme);
-  border: 1.5px solid var(--wa-line);
-  border-radius: 20px;
-  padding: 5px 5px 5px 14px;
-  transition: border-color 0.18s var(--wa-ease), box-shadow 0.18s var(--wa-ease);
-}
-.wa-composer__row:focus-within {
-  border-color: var(--wa-brume);
-  box-shadow: 0 0 0 3px rgba(63, 166, 155, 0.14);
-}
-.wa-input {
-  flex: 1; min-width: 0;
-  border: none; background: none; outline: none; resize: none;
-  font-family: var(--wa-font-text); font-size: 0.92rem; line-height: 1.5;
-  color: var(--wa-jais);
-  max-height: 96px; padding: 6px 0;
-}
-.wa-input::placeholder { color: var(--wa-granit); }
-.wa-send {
-  flex: none;
-  width: 38px; height: 38px;
-  display: grid; place-items: center;
-  border-radius: 50%;
-  background: var(--wa-turquoise);
-  color: var(--wa-jais);
-  transition: transform 0.18s var(--wa-ease-out), opacity 0.18s var(--wa-ease), background 0.18s var(--wa-ease);
-}
-.wa-send svg { width: 18px; height: 18px; }
-.wa-send:hover:not(:disabled) { transform: translateY(-1px) scale(1.04); background: #37c9b4; }
-.wa-send:focus-visible { outline: 2px solid var(--wa-brume); outline-offset: 2px; }
-.wa-send:disabled { opacity: 0.45; cursor: not-allowed; }
-.wa-send.is-loading { pointer-events: none; }
-.wa-send.is-loading svg { display: none; }
-.wa-send.is-loading::after {
-  content: ""; width: 16px; height: 16px; border-radius: 50%;
-  border: 2px solid rgba(27, 45, 40, 0.35); border-top-color: var(--wa-jais);
-  animation: wa-spin 0.7s linear infinite;
-}
-@keyframes wa-spin { to { transform: rotate(360deg); } }
-
-.wa-composer__meta {
-  display: flex; justify-content: space-between; align-items: center; gap: 10px;
-  margin-top: 7px; padding: 0 4px;
-}
-.wa-composer__hint { font-size: 0.68rem; color: var(--wa-granit); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.wa-newchat {
-  flex: none; white-space: nowrap;
-  font-size: 0.72rem; font-weight: 500; color: var(--wa-epinette);
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 3px 6px; border-radius: 8px;
-}
-.wa-newchat:hover { background: var(--wa-creme); }
-.wa-newchat:focus-visible { outline: 2px solid var(--wa-brume); outline-offset: 1px; }
-.wa-newchat svg { width: 13px; height: 13px; }
+/* Formes des éléments focusables. Les pages posent `:focus-visible { border-radius: 4px }` : ce serait
+   la forme de tout bouton au focus clavier (le launcher deviendrait un carré). La spécificité #id
+   (1,1,0) garantit que la forme reste la même dans TOUS les états. */
+#wisy-assistant .wa-fab,
+#wisy-assistant .wa-invite__close { border-radius: 50%; }
 
 /* =========================================================================
-   4. RESPONSIVE — bottom-sheet quasi plein écran sur mobile
+   4. RESPONSIVE — vraie adaptation mobile (pas une simple réduction)
    ========================================================================= */
-@media (max-width: 560px) {
-  .wa-panel {
-    right: 0; left: 0; top: auto;
-    /* --wa-kb / --wa-vvh : posés par assistant.js quand le clavier virtuel est ouvert,
-       pour que la saisie reste visible (visualViewport). Sans clavier : feuille à 92 %. */
-    bottom: var(--wa-kb, 0px);
-    width: 100%;
-    height: min(92dvh, calc(var(--wa-vvh, 100dvh) - 8px));
-    max-height: min(92dvh, calc(var(--wa-vvh, 100dvh) - 8px));
-    border-radius: 20px 20px 0 0;
-    border-bottom: none;
-    transform-origin: bottom center;
-    transform: translateY(18px);
+@media (max-width: 640px) {
+  #wisy-assistant {
+    --wa-size: 58px;                                  /* zone tactile ≥ 44 px */
+    --wa-offset: 16px;
   }
-  #wisy-assistant.is-open .wa-panel { transform: translateY(0); }
-
-  .wa-launcher { right: 16px; bottom: max(16px, env(safe-area-inset-bottom, 0px)); }
-  /* Sur mobile : seule la mascotte (économie d'espace) */
-  .wa-launcher { padding-left: 8px; }
-  .wa-launcher__label { max-width: 0; opacity: 0; padding-right: 0; overflow: hidden; }
-  .wa-launcher:hover .wa-launcher__label,
-  .wa-launcher:focus-visible .wa-launcher__label { max-width: 0; opacity: 0; padding-right: 0; }
-
-  .wa-nudge { right: 16px; left: 16px; max-width: none; bottom: calc(max(16px, env(safe-area-inset-bottom, 0px)) + 72px); }
-  .wa-bubble, .wa-cards, .wa-followups { max-width: 90%; }
-
-  /* Cibles tactiles ≥ 44 px ; 16 px minimum dans le champ (sinon iOS zoome la page au focus) */
-  .wa-iconbtn { width: 44px; height: 44px; }
-  .wa-send { width: 44px; height: 44px; }
-  .wa-chip { min-height: 44px; font-size: 0.9rem; }
-  .wa-input { font-size: 16px; }
-  .wa-newchat { min-height: 32px; }
-  .wa-composer { padding-left: max(14px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px)); }
+  /* Bulle compacte : le titre seul, largeur bornée (320 px : ≥ 90 px de marge à gauche) */
+  .wa-invite { max-width: calc(100vw - 2 * var(--wa-offset) - var(--wa-size) - 14px - 8px); padding: 10px 36px 10px 14px; }
+  .wa-invite__text { display: none; }
+  .is-notice .wa-invite__text { display: block; }
+  .wa-fab__badge { top: -4px; left: -4px; min-width: 19px; height: 15px; font-size: 9px; padding: 0 4px; }
+  .has-wisy-assistant .site-footer { padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
 }
-
-/* Laisse la place au launcher flottant : rien d'essentiel du pied de page n'est masqué
-   (ex. la ligne « © … · Mentions légales » au tout bas de la page). */
-.has-wisy-assistant .site-footer { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
-
-/* Paysage très bas : garantir l'utilisabilité */
-@media (max-height: 480px) and (min-width: 561px) {
-  .wa-panel { height: 88dvh; max-height: 88dvh; }
+@media (max-width: 360px) {
+  .wa-fab__badge { display: none; }                    /* 58 px : la mascotte prime */
+}
+/* Feuille plein écran (≤ 560 px) : le launcher s'efface quand l'assistant est ouvert */
+@media (max-width: 560px) {
+  .is-open .wa-launcher { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+/* Paysage bas (téléphone) : même logique, le panneau occupe la hauteur */
+@media (max-height: 520px) and (min-width: 561px) {
+  .is-open .wa-launcher { opacity: 0; visibility: hidden; pointer-events: none; }
 }
 
 /* =========================================================================
-   5. PRÉFÉRENCE MOUVEMENT RÉDUIT — désactive les animations non essentielles
+   5. MOUVEMENT RÉDUIT — plus d'idle, de halo ni de micro-mouvement décoratif
    ========================================================================= */
 @media (prefers-reduced-motion: reduce) {
-  #wisy-assistant *,
-  #wisy-assistant *::before,
-  #wisy-assistant *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-  }
-  .wa-launcher,
-  .wa-panel { transition: opacity 0.15s linear !important; transform: none !important; }
-  #wisy-assistant.is-open .wa-panel { transform: none !important; }
-  .wa-typing__orb span { animation: none !important; opacity: 0.8 !important; transform: none !important; }
-  .wa-send.is-loading::after { animation: wa-spin 0.9s linear infinite !important; } /* le seul feedback essentiel */
+  .wa-launcher { transform: none; transition: opacity 0.15s linear; }
+  .wa-fab,
+  .wa-invite { transition-duration: 0.01ms; }
+  .wa-fab:hover,
+  .wa-fab:active { transform: none; }
+  .wa-invite { --wa-bx: 0px !important; }
+  .wa-avatar img,
+  .wa-fab__halo { animation: none !important; }
+  .wa-fab__halo { display: none; }
 }
 
-/* Fallback si dvh non supporté */
-@supports not (height: 75dvh) {
-  .wa-panel { height: min(720px, 75vh); max-height: min(720px, 75vh); }
-  @media (max-width: 560px) { .wa-panel { height: 92vh; max-height: 92vh; } }
+/* Jamais à l'impression : un bouton flottant n'a rien à faire sur le papier */
+@media print {
+  #wisy-assistant { display: none !important; }
+  .has-wisy-assistant .site-footer { padding-bottom: 0; }
 }

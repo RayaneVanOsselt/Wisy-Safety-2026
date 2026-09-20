@@ -2,9 +2,9 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Inscription aux formations | Wisy Safety</title>
-<meta name="description" data-i18n-attr="content:meta.desc" content="Inscrivez-vous en quelques minutes à une formation Wisy Safety : VCA, premiers secours, nacelle, fibre optique et plus. Un parcours simple, clair et rassurant.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda des formations | Wisy Safety</title>
+<meta name="description" content="Agenda des formations Wisy Safety : prochaines sessions, horaires, lieux et infos utiles pour vous inscrire à une formation sécurité à Bruxelles (Anderlecht).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -13,21 +13,20 @@
 <link rel="stylesheet" href="css/site-header.css">
 <link rel="stylesheet" href="css/search.css">
 <link rel="stylesheet" href="css/assistant.css">
-<link rel="stylesheet" href="css/registration.css">
-<link rel="canonical" href="inscription.html">
-<link rel="alternate" hreflang="fr" href="inscription.html?lang=fr">
-<link rel="alternate" hreflang="en" href="inscription.html?lang=en">
-<link rel="alternate" hreflang="nl" href="inscription.html?lang=nl">
-<link rel="alternate" hreflang="af" href="inscription.html?lang=af">
-<link rel="alternate" hreflang="ar" href="inscription.html?lang=ar">
-<link rel="alternate" hreflang="bg" href="inscription.html?lang=bg">
-<link rel="alternate" hreflang="de" href="inscription.html?lang=de">
-<link rel="alternate" hreflang="ro" href="inscription.html?lang=ro">
-<link rel="alternate" hreflang="it" href="inscription.html?lang=it">
-<link rel="alternate" hreflang="sl" href="inscription.html?lang=sl">
-<link rel="alternate" hreflang="x-default" href="inscription.html">
+<link rel="stylesheet" href="css/agenda.css">
+<link rel="alternate" hreflang="fr" href="agenda.html?lang=fr">
+<link rel="alternate" hreflang="en" href="agenda.html?lang=en">
+<link rel="alternate" hreflang="nl" href="agenda.html?lang=nl">
+<link rel="alternate" hreflang="af" href="agenda.html?lang=af">
+<link rel="alternate" hreflang="ar" href="agenda.html?lang=ar">
+<link rel="alternate" hreflang="bg" href="agenda.html?lang=bg">
+<link rel="alternate" hreflang="de" href="agenda.html?lang=de">
+<link rel="alternate" hreflang="ro" href="agenda.html?lang=ro">
+<link rel="alternate" hreflang="it" href="agenda.html?lang=it">
+<link rel="alternate" hreflang="sl" href="agenda.html?lang=sl">
+<link rel="alternate" hreflang="x-default" href="agenda.html">
 <style>
-/* ==================== TOKENS (charte Wisy Safety) ==================== */
+/* ==================== TOKENS ==================== */
 :root{
   --epinette:#1F6F64;--sarcelle:#2F7D8C;--turquoise:#48D6C2;--brume:#3FA69B;
   --creme:#F4FAF9;--granit:#5E6D6A;--noir-jais:#1B2D28;--granit-clair:#9AA8A4;
@@ -35,7 +34,6 @@
   --granit-20:rgba(94,109,106,.20);--granit-12:rgba(94,109,106,.12);
   --jais-60:rgba(27,45,40,.60);--turquoise-glow:rgba(72,214,194,.45);
   --line:rgba(244,250,249,.12);--line-strong:rgba(244,250,249,.20);
-  --danger:#c23b4b;--danger-bg:rgba(194,59,75,.08);
   --font-titre:"Poppins","Segoe UI",system-ui,sans-serif;
   --font-texte:"Inter","Segoe UI",system-ui,sans-serif;
   --fs-h2:clamp(1.9rem,3.4vw,2.8rem);--fs-h3:clamp(1.2rem,1.8vw,1.5rem);
@@ -49,14 +47,13 @@
   --t-fast:var(--motion-base);--t-med:.45s;--t-reveal:var(--motion-slow);
 }
 *,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth}
 body{margin:0;font-family:var(--font-texte);font-size:1rem;line-height:1.65;color:var(--noir-jais);background:var(--creme);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 h1,h2,h3,h4{font-family:var(--font-titre);font-weight:700;line-height:1.1;color:var(--noir-jais);margin:0 0 .5em;letter-spacing:-.01em}
 p{margin:0 0 1rem}a{color:inherit;text-decoration:none}img{max-width:100%;display:block}
 ul{margin:0;padding:0;list-style:none}button{font-family:inherit;cursor:pointer;border:none;background:none}
 :focus-visible{outline:3px solid var(--brume);outline-offset:2px;border-radius:4px}
 .container{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad-x)}
-.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
 /* ==================== BOUTONS ==================== */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:48px;font-family:var(--font-titre);font-weight:600;font-size:.98rem;line-height:1.2;padding:.875rem 1.5rem;border-radius:var(--radius-btn);white-space:nowrap;
@@ -67,10 +64,12 @@ ul{margin:0;padding:0;list-style:none}button{font-family:inherit;cursor:pointer;
 .btn--outline:hover,.btn--outline:focus-visible{background:var(--brume-14);border-color:var(--brume)}
 .btn--ghost{background:transparent;color:var(--creme);border:1.5px solid var(--line-strong)}
 .btn--ghost:hover,.btn--ghost:focus-visible{background:rgba(244,250,249,.07);border-color:rgba(244,250,249,.5)}
+.btn--light{background:transparent;color:var(--creme);border:1.5px solid rgba(244,250,249,.75)}
+.btn--light:hover,.btn--light:focus-visible{background:rgba(244,250,249,.12);border-color:var(--creme)}
 .btn__arrow{display:inline-block;font-size:1.05em;line-height:1;transition:transform var(--motion-base) var(--ease-premium)}
 .btn:hover .btn__arrow,.btn:focus-visible .btn__arrow{transform:translateX(4px)}
 
-/* ==================== HEADER (repris du site) ==================== */
+/* ==================== HEADER (validé) ==================== */
 .site-header{position:sticky;top:0;z-index:1000}
 .util-bar{background:var(--noir-jais);color:var(--granit-clair);font-size:var(--fs-small);max-height:52px;overflow:hidden;transition:max-height var(--t-med) var(--ease),opacity var(--t-fast) var(--ease)}
 .util-inner{max-width:var(--maxw);margin-inline:auto;padding:.65rem var(--pad-x);display:flex;align-items:center;justify-content:space-between;gap:1rem}
@@ -131,7 +130,7 @@ ul{margin:0;padding:0;list-style:none}button{font-family:inherit;cursor:pointer;
 .m-actions{margin-top:auto;padding-top:1.5rem;display:flex;flex-direction:column;gap:.75rem}
 .m-actions .btn{width:100%}
 
-/* ==================== FOOTER (repris du site) ==================== */
+/* ==================== FOOTER (validé) ==================== */
 .site-footer{position:relative;overflow:hidden;background:var(--noir-jais);color:var(--creme);isolation:isolate}
 .site-footer::before,.site-footer::after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none}
 .site-footer::before{width:520px;height:520px;top:-160px;left:-120px;background:radial-gradient(circle,var(--epinette),transparent 68%)}
@@ -179,26 +178,14 @@ a.f-c-value:hover{color:var(--turquoise)}
 .f-legal__links a{transition:color var(--t-fast) var(--ease)}.f-legal__links a:hover{color:var(--turquoise)}
 .f-legal__vat{font-variant-numeric:tabular-nums}
 
-/* REVEAL */
+/* REVEAL (transform/opacity uniquement) */
 .reveal{opacity:0;transform:translateY(20px);transition:opacity var(--t-reveal) var(--ease-out),transform var(--t-reveal) var(--ease-out);transition-delay:var(--d,0s);will-change:opacity,transform}
 .reveal.in{opacity:1;transform:none}
 
-/* ==================== RESPONSIVE ==================== */
-@media (max-width:1080px){
-  .main-nav,.header-actions{display:none}.nav-toggle{display:inline-flex}.main-inner{justify-content:space-between}
-  .f-grid{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));row-gap:2.75rem}.f-grid>*:first-child{grid-column:1/-1;max-width:520px}
-}
-@media (max-width:920px){.util-tag{display:none}.util-contacts{margin-inline:auto}}
-@media (max-width:640px){
-  .util-bar{font-size:.8rem}.util-contacts{gap:1.1rem}.util-contacts svg{width:14px;height:14px}
-  .f-grid{grid-template-columns:1fr}.f-cta{flex-direction:column;align-items:flex-start}.f-legal{flex-direction:column;text-align:center;justify-content:center}.f-legal__links{justify-content:center}
-}
-@media (max-width:380px){.util-contacts{gap:.7rem;font-size:.72rem}}
-/* Zone de sécurité basse (mobiles à encoche) */
-@supports(padding:max(0px)){
-  body{padding-bottom:env(safe-area-inset-bottom)}
-}
-
+/* RESPONSIVE (en-tête + pied de page) */
+@media (max-width:1080px){.main-nav,.header-actions{display:none}.nav-toggle{display:inline-flex}.main-inner{justify-content:space-between}.f-grid{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));row-gap:2.75rem}.f-grid>*:first-child{grid-column:1/-1;max-width:520px}}
+@media (max-width:920px){.util-tag{display:none}.util-contacts{margin-inline:auto}}@media (max-width:640px){.util-bar{font-size:.8rem}.util-contacts{gap:1.1rem}.util-contacts svg{width:14px;height:14px}}@media (max-width:380px){.util-contacts{gap:.7rem;font-size:.72rem}}
+@media (max-width:620px){.f-grid{grid-template-columns:1fr}.f-cta{flex-direction:column;align-items:flex-start}.f-legal{flex-direction:column;text-align:center;justify-content:center}.f-legal__links{justify-content:center}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
   .reveal{opacity:1;transform:none}
@@ -206,7 +193,8 @@ a.f-c-value:hover{color:var(--turquoise)}
 </style>
 </head>
 
-<body>
+<body class="agenda-page">
+<a class="ag-skip" href="#main">Aller au contenu</a>
 
 <!-- ==================== HEADER ==================== -->
 <header class="site-header" id="top">
@@ -239,7 +227,7 @@ a.f-c-value:hover{color:var(--turquoise)}
         <li><a class="nav-link" href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li>
         <li><a class="nav-link" href="#" data-i18n="nav.coordination">Coordination</a></li>
         <li><a class="nav-link" href="#" data-i18n="nav.certificat">Certificat</a></li>
-        <li><a class="nav-link" href="agenda.html" data-i18n="nav.agenda">Agenda</a></li>
+        <li><a class="nav-link" href="agenda.html" aria-current="page" data-i18n="nav.agenda">Agenda</a></li>
         <li><a class="nav-link" href="avis.html" data-i18n="nav.avis">Avis</a></li>
       </ul>
     </nav>
@@ -278,7 +266,7 @@ a.f-c-value:hover{color:var(--turquoise)}
         <li><a href="formations.html#vca-base" data-i18n="dd.vca_base">VCA de base</a></li><li><a href="formations.html#vca-hierarchique" data-i18n="dd.vca_hier">VCA ligne hiérarchique</a></li><li><a href="formation-nacelles-elevatrices.html" data-i18n="dd.nacelle">Nacelles élévatrices</a></li>
         <li><a href="formations.html#fibre-optique" data-i18n="dd.fibre">Fibre optique</a></li><li><a href="formations.html#beps" data-i18n="dd.beps">BEPS — Premier secours</a></li><li><a href="formations.html#diisocyanates" data-i18n="dd.diiso">Diisocyanates &amp; substances dangereuses</a></li>
       </ul></div></div></li>
-    <li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="agenda.html" data-i18n="nav.agenda">Agenda</a></li><li><a href="avis.html" data-i18n="nav.avis">Avis</a></li>
+    <li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="agenda.html" aria-current="page" data-i18n="nav.agenda">Agenda</a></li><li><a href="avis.html" data-i18n="nav.avis">Avis</a></li>
   </ul>
   <a class="m-help" href="faq.html"><span class="m-help__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span data-i18n="footer.faq">Centre d'aide</span><svg class="m-help__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>
   <div class="m-actions"><a class="btn btn--outline" href="contact.html" data-i18n="header.contact">Contact</a><a class="btn btn--cta" href="inscription.html" data-i18n="header.register">S'inscrire</a></div>
@@ -300,36 +288,223 @@ a.f-c-value:hover{color:var(--turquoise)}
   </div>
 </aside>
 
-<main class="reg" id="reg-app">
+<main id="main" lang="fr" dir="ltr">
 
-  <!-- ==================== HERO (compact) ==================== -->
-  <section class="reg-hero">
-    <span class="reg-hero__mesh reg-hero__mesh--1" aria-hidden="true"></span>
-    <span class="reg-hero__mesh reg-hero__mesh--2" aria-hidden="true"></span>
-    <div class="reg-hero__inner">
-      <div class="reg-hero__intro">
-        <span class="reg-eyebrow" data-i18n="reg.eyebrow">Inscription aux formations</span>
-        <h1 class="reg-hero__title" data-i18n-html="reg.hero_title">Construisez votre <span class="accent">parcours de formation</span></h1>
-        <p class="reg-hero__lead" data-i18n="reg.hero_lead">Sélectionnez vos formations, indiquez le nombre de participants et obtenez immédiatement votre récapitulatif.</p>
-        <span class="reg-hero__chip">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/><path d="M9 11.5l2 2 4-4"/></svg>
-          <span data-i18n="reg.hero_chip">Tarifs transparents · Prix par participant</span>
-        </span>
-      </div>
-
-      <!-- Signature visuelle : la « feuille de plan » du parcours -->
-      <div class="reg-hero__visual" aria-hidden="true">
-        <div class="reg-plan reg-tech">
-          <div class="reg-plan__titleblock">
-            <span class="k" data-i18n="reg.journey_k">Votre parcours</span>
-            <span class="ref">WS · 2026</span>
+  <!-- ============ 1. HERO — Agenda des formations ============ -->
+  <section class="ag-hero" aria-labelledby="ag-title">
+    <div class="container ag-container">
+      <nav class="ag-crumbs" aria-label="Fil d'Ariane">
+        <ol><li><a href="index.html">Accueil</a></li><li aria-current="page">Agenda</li></ol>
+      </nav>
+      <div class="ag-hero__grid">
+        <div class="ag-hero__copy">
+          <p class="ag-eyebrow ag-in ag-in--fade" style="--i:0">Agenda des formations</p>
+          <h1 class="ag-hero__title ag-in" id="ag-title" style="--i:1">Planifiez votre prochaine formation <span class="ag-accent">en toute simplicité</span>.</h1>
+          <p class="ag-hero__lead ag-in" style="--i:2">L'agenda vous permet de retrouver les prochaines sessions Wisy Safety, leurs horaires, leurs lieux et toutes les informations utiles pour vous inscrire.</p>
+          <div class="ag-hero__actions ag-in" style="--i:3">
+            <a class="btn btn--cta" href="#agenda" data-ag-jump>Consulter l'agenda <span class="btn__arrow" aria-hidden="true">↓</span></a>
+            <a class="btn btn--outline" href="formations.html">Découvrir nos formations</a>
           </div>
-          <div class="reg-plan__body">
-            <div class="reg-plan__list">
-              <div class="reg-plan__node"><span class="reg-plan__dot">01</span><span><span class="reg-plan__label" data-i18n="reg.journey_1">Formation</span><br><span class="reg-plan__sub" data-i18n="reg.journey_1s">Choisissez vos modules</span></span></div>
-              <div class="reg-plan__node"><span class="reg-plan__dot">02</span><span><span class="reg-plan__label" data-i18n="reg.journey_2">Participants</span><br><span class="reg-plan__sub" data-i18n="reg.journey_2s">Nombre & noms</span></span></div>
-              <div class="reg-plan__node"><span class="reg-plan__dot">03</span><span><span class="reg-plan__label" data-i18n="reg.journey_3">Coordonnées</span><br><span class="reg-plan__sub" data-i18n="reg.journey_3s">Facturation</span></span></div>
-              <div class="reg-plan__node reg-plan__node--end"><span class="reg-plan__dot">04</span><span><span class="reg-plan__label" data-i18n="reg.journey_4">Paiement</span><br><span class="reg-plan__sub" data-i18n="reg.journey_4s">Étape finale sécurisée</span></span></div>
+          <p class="ag-hero__note ag-in ag-in--fade" style="--i:4">L'agenda en ligne arrive prochainement. <a href="contact.html">Contacter l'équipe</a></p>
+        </div>
+
+        <!-- Composition abstraite : planning + sessions + repères (décorative, aucune date, aucun texte) -->
+        <div class="ag-visual ag-in" style="--i:2" aria-hidden="true">
+          <span class="ag-visual__halo"></span><span class="ag-visual__ring"></span><span class="ag-visual__dots"></span>
+          <div class="ag-board">
+            <div class="ag-board__bar"><i></i><i></i><i></i><b></b></div>
+            <div class="ag-board__days"><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="ag-board__grid">
+              <div class="ag-sess ag-sess--a"><i></i><i></i></div>
+              <div class="ag-sess ag-sess--b"><i></i><i></i></div>
+              <div class="ag-sess ag-sess--c ag-sess--pick"><i></i><i></i></div>
+              <div class="ag-sess ag-sess--d"><i></i><i></i></div>
+              <div class="ag-sess ag-sess--e"><i></i><i></i></div>
+            </div>
+          </div>
+          <div class="ag-chip ag-chip--shield"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <div class="ag-chip ag-chip--clock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div class="ag-chip__bars"><span></span><span></span></div></div>
+          <div class="ag-chip ag-chip--pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.8"/></svg><span></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. BARRE DE RÉASSURANCE (chiffres déjà validés sur le site) ============ -->
+  <section class="ag-trust" aria-label="Wisy Safety en chiffres">
+    <div class="container ag-container">
+      <ul class="ag-trust__panel reveal">
+        <li class="ag-trust__item">
+          <svg class="ag-trust__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.2a3.2 3.2 0 0 1 0 5.6M18 14.4c1.9.8 3 2.6 3 5.6"/></svg>
+          <span class="ag-trust__val"><span aria-hidden="true"><span data-count="500">0</span><span class="u">+</span></span><span class="ag-sr">Plus de 500</span></span>
+          <span class="ag-trust__label">Professionnels formés</span>
+        </li>
+        <li class="ag-trust__item">
+          <svg class="ag-trust__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v4h4"/><path d="M12 8v4l3 2"/></svg>
+          <span class="ag-trust__val"><span aria-hidden="true"><span data-count="10">0</span><span class="u">+</span></span><span class="ag-sr">Plus de 10</span></span>
+          <span class="ag-trust__label">Années d'expérience</span>
+        </li>
+        <li class="ag-trust__item">
+          <svg class="ag-trust__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg>
+          <span class="ag-trust__val"><span aria-hidden="true"><span data-count="250">0</span><span class="u">+</span></span><span class="ag-sr">Plus de 250</span></span>
+          <span class="ag-trust__label">Certifications délivrées</span>
+        </li>
+        <li class="ag-trust__item">
+          <svg class="ag-trust__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9.5h.01M15 9.5h.01"/></svg>
+          <span class="ag-trust__val"><span aria-hidden="true"><span data-count="100">0</span><span class="u">&nbsp;%</span></span><span class="ag-sr">100 %</span></span>
+          <span class="ag-trust__label">Satisfaction clients</span>
+        </li>
+        <li class="ag-trust__item">
+          <svg class="ag-trust__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><path d="M4 14h3v5H5.5A1.5 1.5 0 0 1 4 17.5zM20 14h-3v5h1.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>
+          <span class="ag-trust__val ag-trust__val--text">Lun. – Jeu.</span>
+          <span class="ag-trust__label">Équipe joignable de 10 h à 16 h</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 3. UNE FORMATION QUI S'ADAPTE AU TERRAIN ============ -->
+  <section class="ag-field" aria-labelledby="field-title">
+    <div class="container ag-container ag-field__grid">
+      <div class="ag-field__copy">
+        <p class="ag-eyebrow reveal">Notre approche</p>
+        <h2 class="ag-h2 reveal" id="field-title" style="--d:.06s">Une formation qui s'adapte au terrain</h2>
+        <p class="ag-lead reveal" style="--d:.12s">Nous proposons des formations pragmatiques, adaptées aux réalités du terrain. Nos formateurs sont des experts, forts d'une expérience concrète de la sécurité au travail.</p>
+        <a class="ag-link reveal" style="--d:.18s" href="formations.html">Découvrir nos formations <span aria-hidden="true">→</span></a>
+      </div>
+      <ul class="ag-benefits">
+        <li class="ag-benefit reveal" style="--d:0s">
+          <div class="ag-benefit__top"><span class="ag-benefit__num" aria-hidden="true">01</span><span class="ag-benefit__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2.5h8l4 4v14a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 5 20.5v-16A2 2 0 0 1 6 2.5z"/><path d="M14 2.5v4h4M9 14l2 2 4-4.5"/></svg></span></div>
+          <h3>Normes &amp; conformité</h3>
+          <p>Des formations conformes aux normes belges et internationales.</p>
+        </li>
+        <li class="ag-benefit reveal" style="--d:.08s">
+          <div class="ag-benefit__top"><span class="ag-benefit__num" aria-hidden="true">02</span><span class="ag-benefit__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.2a3.2 3.2 0 0 1 0 5.6M18 14.4c1.9.8 3 2.6 3 5.6"/></svg></span></div>
+          <h3>Apprentissage en groupes restreints</h3>
+          <p>De petits groupes, pour une meilleure interactivité pendant la formation.</p>
+        </li>
+        <li class="ag-benefit reveal" style="--d:.16s">
+          <div class="ag-benefit__top"><span class="ag-benefit__num" aria-hidden="true">03</span><span class="ag-benefit__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16v-1a8 8 0 0 1 16 0v1"/><path d="M2.5 16h19v2.5h-19z"/><path d="M12 7V4"/></svg></span></div>
+          <h3>Équipements adaptés</h3>
+          <p>Du matériel et des équipements certifiés, pour vous former avec les bons outils.</p>
+        </li>
+        <li class="ag-benefit reveal" style="--d:.24s">
+          <div class="ag-benefit__top"><span class="ag-benefit__num" aria-hidden="true">04</span><span class="ag-benefit__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span></div>
+          <h3>Certification reconnue</h3>
+          <p>Une certification reconnue à l'issue des formations concernées. La fiche de chaque formation précise ce qui est délivré.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 4. TOUT CE QU'IL VOUS FAUT POUR PLANIFIER — timeline éditoriale ============ -->
+  <section class="ag-plan" aria-labelledby="plan-title">
+    <div class="container ag-container">
+      <header class="ag-plan__head">
+        <p class="ag-eyebrow reveal">Votre planification</p>
+        <h2 class="ag-h2 reveal" id="plan-title" style="--d:.06s">Tout ce qu'il vous faut pour planifier votre formation</h2>
+        <p class="ag-lead reveal" style="--d:.12s">L'agenda et l'équipe Wisy Safety réunissent l'essentiel pour organiser votre formation sereinement.</p>
+      </header>
+      <ol class="ag-timeline">
+        <li class="ag-step">
+          <span class="ag-step__node" aria-hidden="true">01</span>
+          <div class="ag-step__body reveal ag-from-l">
+            <span class="ag-step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18M9 15.5l2 2 4-4.5"/></svg></span>
+            <h3>Calendrier actualisé</h3>
+            <p>Les dates et horaires de nos formations sont centralisés dans l'agenda : une seule page pour retrouver toutes les sessions.</p>
+          </div>
+        </li>
+        <li class="ag-step">
+          <span class="ag-step__node" aria-hidden="true">02</span>
+          <div class="ag-step__body reveal ag-from-r" style="--d:.06s">
+            <span class="ag-step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17.5" rx="2"/><path d="M9 2.5h6v3H9zM9 11h6M9 15h6"/></svg></span>
+            <h3>Informations essentielles</h3>
+            <p>Programme, lieu, horaires, conditions d'accès et modalités d'inscription : tout ce qu'il faut savoir avant de vous décider.</p>
+          </div>
+        </li>
+        <li class="ag-step">
+          <span class="ag-step__node" aria-hidden="true">03</span>
+          <div class="ag-step__body reveal ag-from-l">
+            <span class="ag-step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg></span>
+            <h3>Support Wisy Safety</h3>
+            <p>Notre équipe répond à vos questions et vous guide dans le choix de votre formation.</p>
+          </div>
+        </li>
+        <li class="ag-step">
+          <span class="ag-step__node" aria-hidden="true">04</span>
+          <div class="ag-step__body reveal ag-from-r" style="--d:.06s">
+            <span class="ag-step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span>
+            <h3>Formations certifiées</h3>
+            <p>Nos formations certifiantes débouchent sur une certification reconnue par les employeurs. La fiche de chaque formation précise ce qui vous est délivré.</p>
+          </div>
+        </li>
+        <li class="ag-step">
+          <span class="ag-step__node" aria-hidden="true">05</span>
+          <div class="ag-step__body reveal ag-from-l">
+            <span class="ag-step__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18h18M6 18a6 6 0 0 1 12 0M12 4v3M4.9 8.9l2.1 2.1M19.1 8.9L17 11"/></svg></span>
+            <h3>Flexibilité</h3>
+            <p>Journée, soirée ou week-end lorsque ces formats sont proposés : consultez l'agenda ou demandez à l'équipe.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ 5. AGENDA — cœur de la page · AgendaCalendarSection ============ -->
+  <section class="ag-cal" id="agenda" aria-labelledby="agenda-title">
+    <div class="container ag-container">
+      <header class="ag-cal__head">
+        <p class="ag-eyebrow reveal">Planifiez votre formation</p>
+        <h2 class="ag-h2 reveal" id="agenda-title" tabindex="-1" data-ag-focus style="--d:.06s">Les prochaines sessions Wisy Safety</h2>
+        <p class="ag-lead reveal" style="--d:.12s">Les dates, horaires et disponibilités seront accessibles directement depuis l'agenda synchronisé de Wisy Safety.</p>
+      </header>
+
+      <!-- AgendaCalendarSection — js/agenda-calendar.js
+           Pour brancher le calendrier Outlook : renseigner data-calendar-url (https, hôte Outlook / Microsoft 365).
+           Vide = état « à venir » ci-dessous. Voir README-AGENDA.md. -->
+      <div class="reveal" style="--d:.16s">
+        <div class="agc" data-agenda-calendar data-calendar-url="" data-calendar-title="Agenda des formations Wisy Safety" data-state="planned">
+          <div class="agc__bar">
+            <h3 class="agc__title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></svg>Agenda Wisy Safety</h3>
+            <p class="agc__status" role="status"><span class="agc__dot" aria-hidden="true"></span><span data-agc-status>Intégration Outlook prévue</span></p>
+          </div>
+
+          <div class="agc__empty" data-agc-empty>
+            <div class="agc__art" aria-hidden="true">
+              <svg viewBox="0 0 320 284" fill="none">
+                <ellipse class="a-shadow" cx="160" cy="262" rx="118" ry="13"/>
+                <rect class="a-sheet" x="40" y="52" width="220" height="188" rx="20"/>
+                <path class="a-band" d="M40 72a20 20 0 0 1 20-20h180a20 20 0 0 1 20 20v30H40z"/>
+                <path class="a-tick" d="M92 40v26M208 40v26"/>
+                <rect class="a-cell" x="60" y="118" width="36" height="26" rx="7"/><rect class="a-cell" x="108" y="118" width="36" height="26" rx="7"/><rect class="a-cell a-cell--hi" x="156" y="118" width="36" height="26" rx="7"/><rect class="a-cell" x="204" y="118" width="36" height="26" rx="7"/>
+                <rect class="a-cell" x="60" y="154" width="36" height="26" rx="7"/><rect class="a-cell" x="108" y="154" width="36" height="26" rx="7"/><rect class="a-cell" x="156" y="154" width="36" height="26" rx="7"/><rect class="a-cell" x="204" y="154" width="36" height="26" rx="7"/>
+                <rect class="a-cell" x="60" y="190" width="36" height="26" rx="7"/><rect class="a-cell" x="108" y="190" width="36" height="26" rx="7"/>
+                <circle class="a-clock" cx="236" cy="212" r="40"/><circle class="a-ring" cx="236" cy="212" r="40"/>
+                <path class="a-hand" d="M236 190v22l14 10"/>
+                <path class="a-pin" d="M64 8c-14.4 0-26 10.8-26 24.4 0 17.6 26 37 26 37s26-19.4 26-37C90 18.8 78.4 8 64 8z"/><circle class="a-pin-hole" cx="64" cy="32" r="9"/>
+              </svg>
+            </div>
+            <div>
+              <h3>L'agenda en ligne arrive prochainement</h3>
+              <p>Les prochaines sessions Wisy Safety seront bientôt consultables directement depuis cette page : dates, horaires et disponibilités.</p>
+              <ul class="agc__facts" aria-label="Ce que l'agenda présentera">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></svg>Dates</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Horaires</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.8"/></svg>Lieux</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Disponibilités</li>
+              </ul>
+              <div class="agc__actions">
+                <a class="btn btn--outline" href="formations.html">Découvrir les formations</a>
+                <a class="ag-link" href="contact.html">Nous contacter</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="agc__frame" data-agc-frame hidden aria-busy="true">
+            <div class="agc__slot" data-agc-slot><div class="agc__loader" aria-hidden="true">Chargement de l'agenda…</div></div>
+            <div class="agc__fallback">
+              <a class="ag-link" data-agc-open target="_blank" rel="noopener noreferrer" hidden>Ouvrir l'agenda dans un nouvel onglet <span aria-hidden="true">↗</span></a>
+              <a class="ag-link" href="contact.html">Une question sur une session ? Contactez-nous</a>
             </div>
           </div>
         </div>
@@ -337,242 +512,100 @@ a.f-c-value:hover{color:var(--turquoise)}
     </div>
   </section>
 
-  <!-- ==================== STEPPER ==================== -->
-  <nav class="reg-stepper-wrap" aria-label="Étapes de l'inscription">
-    <ol class="reg-stepper">
-      <li class="reg-step-item">
-        <button type="button" class="reg-step-btn" data-goto="1" aria-current="step">
-          <span class="reg-step-num"><span class="reg-step-numval">01</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></span>
-          <span class="reg-step-meta"><span class="reg-step-k" data-i18n="reg.step_word">Étape</span><span class="reg-step-t" data-i18n="reg.step_choose">Choisir</span></span>
-        </button>
-      </li>
-      <li class="reg-step-item">
-        <button type="button" class="reg-step-btn" data-goto="2">
-          <span class="reg-step-num"><span class="reg-step-numval">02</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></span>
-          <span class="reg-step-meta"><span class="reg-step-k" data-i18n="reg.step_word">Étape</span><span class="reg-step-t" data-i18n="reg.step_participants">Participants</span></span>
-        </button>
-      </li>
-      <li class="reg-step-item">
-        <button type="button" class="reg-step-btn" data-goto="3">
-          <span class="reg-step-num"><span class="reg-step-numval">03</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></span>
-          <span class="reg-step-meta"><span class="reg-step-k" data-i18n="reg.step_word">Étape</span><span class="reg-step-t" data-i18n="reg.step_contact">Coordonnées</span></span>
-        </button>
-      </li>
-      <li class="reg-step-item">
-        <button type="button" class="reg-step-btn" data-goto="4">
-          <span class="reg-step-num"><span class="reg-step-numval">04</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></span>
-          <span class="reg-step-meta"><span class="reg-step-k" data-i18n="reg.step_word">Étape</span><span class="reg-step-t" data-i18n="reg.step_payment">Paiement</span></span>
-        </button>
-      </li>
-    </ol>
-  </nav>
-
-  <!-- ==================== SCÈNE ==================== -->
-  <section class="reg-stage" id="reg-stage">
-    <div class="reg-layout" id="reg-layout">
-      <div class="reg-content">
-
-        <!-- Bannière restauration localStorage -->
-        <div class="reg-block reg-restored" id="reg-restored" role="status" hidden>
-          <span class="reg-block__ic reg-restored__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 4v4h4"/></svg></span>
-          <span class="reg-restored__txt" data-i18n="reg.restored_text">Votre inscription précédente a été restaurée.</span>
-          <button type="button" class="reg-remove reg-restored__close" data-dismiss-restore aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-        </div>
-
-        <!-- ---------- ÉTAPE 1 — CHOISIR ---------- -->
-        <div class="reg-step" data-step="1">
-          <div class="reg-step__head">
-            <p class="reg-step__eyebrow" data-i18n="reg.step_choose">Choisir</p>
-            <h2 class="reg-step__title" data-i18n="reg.s1_title">Choisissez vos formations</h2>
-            <p class="reg-step__sub" data-i18n="reg.s1_sub">Ajoutez une ou plusieurs formations, puis ajustez le nombre de participants. Le prix se calcule automatiquement.</p>
-          </div>
-          <div class="reg-toolbar">
-            <div class="reg-search">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-              <input type="search" id="reg-search" data-i18n-attr="placeholder:reg.search_placeholder,aria-label:reg.search_label" placeholder="Rechercher une formation…" aria-label="Rechercher une formation" autocomplete="off">
-            </div>
-            <div class="reg-filters" id="reg-filters" role="group" aria-label="Filtrer par catégorie"></div>
-          </div>
-          <div class="reg-catalogue" id="reg-catalogue"></div>
-        </div>
-
-        <!-- ---------- ÉTAPE 2 — PARTICIPANTS ---------- -->
-        <div class="reg-step" data-step="2" hidden>
-          <button type="button" class="reg-back" data-back><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-i18n="reg.back">Retour</span></button>
-          <div class="reg-step__head">
-            <p class="reg-step__eyebrow" data-i18n="reg.step_participants">Participants</p>
-            <h2 class="reg-step__title" data-i18n="reg.s2_title">Associez vos participants</h2>
-            <p class="reg-step__sub" data-i18n="reg.s2_sub">Renseignez les participants pour chaque formation, ou communiquez-les plus tard. Vous pouvez ajuster les quantités à tout moment.</p>
-          </div>
-          <div id="reg-participants"></div>
-        </div>
-
-        <!-- ---------- ÉTAPE 3 — COORDONNÉES ---------- -->
-        <div class="reg-step" data-step="3" hidden>
-          <button type="button" class="reg-back" data-back><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-i18n="reg.back">Retour</span></button>
-          <div class="reg-step__head">
-            <p class="reg-step__eyebrow" data-i18n="reg.step_contact">Coordonnées</p>
-            <h2 class="reg-step__title" data-i18n="reg.s3_title">Coordonnées de facturation</h2>
-            <p class="reg-step__sub" data-i18n="reg.s3_sub">Ces informations figureront sur votre confirmation et votre facture.</p>
-          </div>
-
-          <!-- Bloc responsable -->
-          <div class="reg-block">
-            <div class="reg-block__head">
-              <span class="reg-block__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg></span>
-              <div><h3 class="reg-block__title" data-i18n="reg.resp_title">Responsable de l'inscription</h3><p class="reg-block__sub" data-i18n="reg.resp_sub">La personne à contacter pour cette inscription.</p></div>
-              <span class="reg-block__ref">RESP</span>
-            </div>
-            <div class="reg-fields">
-              <div class="reg-row">
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-cust-firstname" data-i18n="reg.f_firstname">Prénom</label>
-                  <input class="reg-input" id="reg-cust-firstname" type="text" autocomplete="given-name" aria-describedby="reg-cust-firstname-err">
-                  <p class="reg-error" id="reg-cust-firstname-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span data-i18n="reg.err_required">Ce champ est requis.</span></p>
-                </div>
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-cust-lastname" data-i18n="reg.f_lastname">Nom</label>
-                  <input class="reg-input" id="reg-cust-lastname" type="text" autocomplete="family-name" aria-describedby="reg-cust-lastname-err">
-                  <p class="reg-error" id="reg-cust-lastname-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span data-i18n="reg.err_required">Ce champ est requis.</span></p>
-                </div>
-              </div>
-              <div class="reg-row">
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-cust-email" data-i18n="reg.f_email">E-mail</label>
-                  <input class="reg-input" id="reg-cust-email" type="email" autocomplete="email" aria-describedby="reg-cust-email-err">
-                  <p class="reg-error" id="reg-cust-email-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span data-i18n="reg.err_email">Veuillez saisir une adresse e-mail valide.</span></p>
-                </div>
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-cust-phone" data-i18n="reg.f_phone">Téléphone</label>
-                  <input class="reg-input" id="reg-cust-phone" type="tel" autocomplete="tel" placeholder="+32 …" aria-describedby="reg-cust-phone-err">
-                  <p class="reg-error" id="reg-cust-phone-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span data-i18n="reg.err_required">Ce champ est requis.</span></p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bloc facturation -->
-          <div class="reg-block">
-            <div class="reg-block__head">
-              <span class="reg-block__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v18l2.5-1.5L10 21l2-1.5L14 21l2.5-1.5L19 21V3l-2.5 1.5L14 3l-2 1.5L10 3 7.5 4.5 5 3z"/><path d="M9 8h6M9 12h6"/></svg></span>
-              <div><h3 class="reg-block__title" data-i18n="reg.bill_title">Adresse de facturation</h3><p class="reg-block__sub" data-i18n="reg.bill_sub">Entreprise et adresse pour l'établissement de la facture.</p></div>
-              <span class="reg-block__ref">FACT</span>
-            </div>
-            <div class="reg-fields">
-              <div class="reg-row">
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-bill-company"><span data-i18n="reg.f_company">Entreprise</span> <span class="reg-optlabel" data-i18n="reg.optional">facultatif</span></label>
-                  <input class="reg-input" id="reg-bill-company" type="text" autocomplete="organization">
-                </div>
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-bill-vat"><span data-i18n="reg.f_vat">N° TVA</span> <span class="reg-optlabel" data-i18n="reg.optional">facultatif</span></label>
-                  <input class="reg-input" id="reg-bill-vat" type="text" placeholder="BE0123.456.789">
-                </div>
-              </div>
-              <div class="reg-field reg-field--wide">
-                <label class="reg-label" for="reg-bill-address" data-i18n="reg.f_address">Adresse</label>
-                <input class="reg-input" id="reg-bill-address" type="text" autocomplete="street-address" aria-describedby="reg-bill-address-err">
-                <p class="reg-error" id="reg-bill-address-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span data-i18n="reg.err_required">Ce champ est requis.</span></p>
-              </div>
-              <div class="reg-row--3 reg-row">
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-bill-zip" data-i18n="reg.f_zip">Code postal</label>
-                  <input class="reg-input" id="reg-bill-zip" type="text" autocomplete="postal-code" aria-describedby="reg-bill-zip-err">
-                  <p class="reg-error" id="reg-bill-zip-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span data-i18n="reg.err_required">Ce champ est requis.</span></p>
-                </div>
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-bill-city" data-i18n="reg.f_city">Ville</label>
-                  <input class="reg-input" id="reg-bill-city" type="text" autocomplete="address-level2" aria-describedby="reg-bill-city-err">
-                  <p class="reg-error" id="reg-bill-city-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span data-i18n="reg.err_required">Ce champ est requis.</span></p>
-                </div>
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-bill-country" data-i18n="reg.f_country">Pays</label>
-                  <select class="reg-input" id="reg-bill-country" autocomplete="country">
-                    <option value="BE" data-i18n="reg.country_be">Belgique</option>
-                    <option value="FR" data-i18n="reg.country_fr">France</option>
-                    <option value="LU" data-i18n="reg.country_lu">Luxembourg</option>
-                    <option value="NL" data-i18n="reg.country_nl">Pays-Bas</option>
-                    <option value="DE" data-i18n="reg.country_de">Allemagne</option>
-                    <option value="other" data-i18n="reg.country_other">Autre</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <label class="reg-consent" for="reg-consent">
-              <input type="checkbox" id="reg-consent">
-              <span data-i18n="reg.consent">J'accepte que ces informations soient utilisées pour traiter mon inscription et établir ma facture.</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- ---------- ÉTAPE 4 — PAIEMENT ---------- -->
-        <div class="reg-step" data-step="4" hidden>
-          <button type="button" class="reg-back" data-back><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-i18n="reg.back">Retour</span></button>
-          <div class="reg-step__head">
-            <p class="reg-step__eyebrow" data-i18n="reg.step_payment">Paiement</p>
-            <h2 class="reg-step__title" data-i18n="reg.s4_title">Finaliser votre inscription</h2>
-            <p class="reg-step__sub" data-i18n="reg.s4_sub">Vérifiez votre récapitulatif. Le paiement en ligne sera proposé à cette étape.</p>
-          </div>
-
-          <div class="reg-finalize-total">
-            <span class="reg-finalize-total__k" data-i18n="reg.finalize_total_k">Total de votre inscription</span>
-            <span class="reg-finalize-total__v" id="reg-final-total">—</span>
-          </div>
-
-          <div class="reg-block" style="padding-top:.5rem">
-            <div id="reg-final-summary"></div>
-          </div>
-
-          <!-- Emplacement prestataire de paiement — clairement isolé -->
-          <div class="reg-payment" id="reg-payment">
-            <div class="reg-payment__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div>
-            <h3 class="reg-payment__title" data-i18n="reg.pay_title">Paiement en ligne</h3>
-            <p class="reg-payment__text" data-i18n="reg.pay_desc">Le module de paiement sécurisé sera activé prochainement. Aucun montant n'est débité pour le moment.</p>
-            <div class="reg-payment__providers" aria-hidden="true">
-              <span class="reg-provider-tag"><span class="dot"></span>Stripe</span>
-              <span class="reg-provider-tag"><span class="dot"></span>Mollie</span>
-              <span class="reg-provider-tag"><span class="dot"></span>PayPal</span>
-            </div>
-            <button type="button" class="reg-cta reg-pay-btn" id="reg-pay-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span data-i18n="reg.pay_action">Procéder au paiement</span></button>
-            <p class="reg-payment__status" id="reg-pay-status"></p>
-            <p id="reg-pay-message" class="reg-payment__text" role="status" hidden style="margin-top:1rem;color:var(--epinette);font-weight:600"></p>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Résumé desktop (sticky) -->
-      <aside class="reg-aside" aria-label="Récapitulatif de l'inscription">
-        <div class="reg-summary" id="reg-summary"></div>
-      </aside>
+  <!-- ============ 6. COMMENT ÇA FONCTIONNE ? ============ -->
+  <section class="ag-how" aria-labelledby="how-title">
+    <div class="container ag-container">
+      <header>
+        <p class="ag-eyebrow reveal">En trois étapes</p>
+        <h2 class="ag-h2 reveal" id="how-title" style="--d:.06s">Comment ça fonctionne ?</h2>
+      </header>
+      <ol class="ag-how__list">
+        <li class="ag-how__item reveal">
+          <span class="ag-how__node" aria-hidden="true">01</span>
+          <h3>Choisissez votre formation</h3>
+          <p>Consultez les programmes correspondant à vos besoins professionnels.</p>
+          <a class="ag-link" href="formations.html">Voir les formations <span aria-hidden="true">→</span></a>
+        </li>
+        <li class="ag-how__item reveal" style="--d:.08s">
+          <span class="ag-how__node" aria-hidden="true">02</span>
+          <h3>Trouvez une session</h3>
+          <p>Consultez les dates et horaires disponibles dans l'agenda.</p>
+          <a class="ag-link" href="#agenda" data-ag-jump>Aller à l'agenda <span aria-hidden="true">↑</span></a>
+        </li>
+        <li class="ag-how__item reveal" style="--d:.16s">
+          <span class="ag-how__node" aria-hidden="true">03</span>
+          <h3>Confirmez votre inscription</h3>
+          <p>Effectuez votre demande et laissez l'équipe Wisy Safety vous accompagner dans la finalisation.</p>
+          <a class="ag-link" href="inscription.html">Faire une demande <span aria-hidden="true">→</span></a>
+        </li>
+      </ol>
     </div>
   </section>
 
-  <!-- ==================== BARRE MOBILE STICKY ==================== -->
-  <div class="reg-mobilebar" id="reg-mobilebar" role="region" aria-label="Résumé de l'inscription">
-    <button type="button" class="reg-mobilebar__info" data-open-sheet aria-expanded="false" aria-controls="reg-sheet">
-      <span class="reg-mobilebar__count" data-bar-count></span>
-      <span class="reg-mobilebar__total" data-bar-total></span>
-      <span class="reg-mobilebar__detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg><span data-i18n="reg.mobilebar_detail">Voir le détail</span></span>
-    </button>
-    <button type="button" class="reg-cta reg-mobilebar__cta" data-advance style="width:auto"><span data-bar-cta-label data-i18n="reg.cta_next_short">Continuer</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-  </div>
+  <!-- ============ 7. BESOIN D'AIDE ============ -->
+  <section class="ag-help" aria-labelledby="help-title">
+    <div class="container ag-container ag-help__grid">
+      <div>
+        <p class="ag-eyebrow reveal">Accompagnement</p>
+        <h2 class="ag-h2 reveal" id="help-title" style="--d:.06s">Vous ne trouvez pas la session qui vous convient ?</h2>
+        <p class="ag-lead reveal" style="--d:.12s">L'équipe Wisy Safety peut vous aider à identifier la formation ou la session la plus adaptée à votre situation. Dites-nous ce que vous cherchez.</p>
+        <div class="ag-help__actions reveal" style="--d:.18s">
+          <a class="btn btn--outline" href="contact.html">Contacter Wisy Safety</a>
+          <a class="ag-link" href="formations.html">Voir toutes les formations <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="ag-assist reveal" style="--d:.24s">
+          <span class="ag-assist__face" aria-hidden="true"><picture>
+            <source type="image/avif" srcset="assets/images/assistant/wisy-assistant-144.avif 144w, assets/images/assistant/wisy-assistant-216.avif 216w" sizes="52px">
+            <source type="image/webp" srcset="assets/images/assistant/wisy-assistant-144.webp 144w, assets/images/assistant/wisy-assistant-216.webp 216w" sizes="52px">
+            <img src="assets/images/assistant/wisy-assistant-144.webp" srcset="assets/images/assistant/wisy-assistant-144.webp 144w, assets/images/assistant/wisy-assistant-216.webp 216w" sizes="52px" width="52" height="52" alt="" loading="lazy" decoding="async">
+          </picture></span>
+          <p>Une question rapide ? <button type="button" data-ag-assistant>Posez-la à l'Assistant Wisy</button></p>
+        </div>
+      </div>
 
-  <!-- ==================== BOTTOM SHEET (détail récap mobile) ==================== -->
-  <div class="reg-sheet-scrim" id="reg-sheet-scrim" data-close-sheet></div>
-  <aside class="reg-sheet" id="reg-sheet" aria-hidden="true" aria-label="Détail de votre inscription">
-    <span class="reg-sheet__grip" aria-hidden="true"></span>
-    <div class="reg-sheet__head">
-      <h2 class="reg-sheet__title" data-i18n="reg.sheet_title">Votre inscription</h2>
-      <button type="button" class="reg-sheet__close" data-close-sheet data-i18n-attr="aria-label:reg.sheet_close" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <div class="reveal" style="--d:.12s">
+        <div class="ag-contact">
+          <p class="ag-contact__label">Nous joindre</p>
+          <div class="ag-contact__rows">
+            <a class="ag-contact__row ag-contact__row--lead" href="tel:+3223188659">
+              <span class="ag-contact__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg></span>
+              <span><span class="ag-contact__k">Téléphone</span><span class="ag-contact__v">+32 2 318 86 59</span></span>
+              <svg class="ag-contact__go ag-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="ag-contact__row" href="mailto:info@wisysafety.be">
+              <span class="ag-contact__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg></span>
+              <span><span class="ag-contact__k">E-mail</span><span class="ag-contact__v">info@wisysafety.be</span></span>
+              <svg class="ag-contact__go ag-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="ag-contact__row" href="contact.html">
+              <span class="ag-contact__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></span>
+              <span><span class="ag-contact__k">Formulaire</span><span class="ag-contact__v">Écrire à l'équipe</span></span>
+              <svg class="ag-contact__go ag-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+          <div class="ag-contact__meta">
+            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Du lundi au jeudi, de 10h00 à 16h00</span></div>
+            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.8"/></svg><span>Avenue d'Itterbeek 378, 1070 Anderlecht</span></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="reg-sheet__body" id="reg-sheet-body"></div>
-  </aside>
+  </section>
 
-  <!-- Zone d'annonce accessible (mises à jour du panier) -->
-  <p class="visually-hidden" id="reg-live" role="status" aria-live="polite"></p>
+  <!-- ============ 8. CTA FINAL ============ -->
+  <section class="ag-final" aria-labelledby="final-title">
+    <div class="container ag-container">
+      <div class="ag-final__panel reveal">
+        <h2 class="ag-final__title" id="final-title">Prêt à planifier votre prochaine formation ?</h2>
+        <p class="ag-final__text">Parcourez nos programmes dès maintenant et laissez l'équipe Wisy Safety vous accompagner, de votre première question jusqu'à l'inscription.</p>
+        <div class="ag-final__actions">
+          <a class="btn btn--cta" href="formations.html">Voir les formations <span class="btn__arrow" aria-hidden="true">↗</span></a>
+          <a class="btn btn--light" href="contact.html">Nous contacter</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
-
 
 <!-- ==================== FOOTER ==================== -->
 <footer class="site-footer">
@@ -591,7 +624,7 @@ a.f-c-value:hover{color:var(--turquoise)}
       </div>
       <nav class="f-col reveal" style="--d:.08s" aria-labelledby="fs-serv">
         <h2 class="f-col__title" id="fs-serv" data-i18n="footer.col_services">Nos services</h2>
-        <ul class="f-links"><li><a href="formations.html" data-i18n="nav.formations">Formations</a></li><li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="agenda.html" data-i18n="nav.agenda">Agenda</a></li><li><a href="faq.html" data-i18n="footer.faq">Centre d'aide</a></li></ul>
+        <ul class="f-links"><li><a href="formations.html" data-i18n="nav.formations">Formations</a></li><li><a href="#" data-i18n="nav.vca_entreprise">VCA Entreprise</a></li><li><a href="#" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</a></li><li><a href="#" data-i18n="nav.coordination">Coordination</a></li><li><a href="#" data-i18n="nav.certificat">Certificat</a></li><li><a href="agenda.html" aria-current="page" data-i18n="nav.agenda">Agenda</a></li><li><a href="faq.html" data-i18n="footer.faq">Centre d'aide</a></li></ul>
       </nav>
       <div class="f-col reveal" style="--d:.16s">
         <h2 class="f-col__title" data-i18n="header.contact">Contact</h2>
@@ -622,27 +655,22 @@ a.f-c-value:hover{color:var(--turquoise)}
 <script src="js/i18n-data-common.js"></script>
 <script src="js/i18n-data-search.js"></script>
 <script src="js/i18n-data-assistant.js"></script>
-<script src="js/i18n-data-formations.js"></script>
-<script src="js/i18n-data-inscription.js"></script>
 <script src="js/i18n.js"></script>
 <!-- Recherche globale -->
 <script src="js/trainings-data.js"></script>
 <script src="js/search.js"></script>
 
-<!-- Parcours d'inscription (données + moteur) -->
-<script src="js/registration-data.js"></script>
-<script src="js/registration.js"></script>
-
 <!-- Assistant Wisy : seul le launcher est chargé d'emblée ; le moteur de réponses et le panneau
      se chargent à la demande (survol, focus, toucher, clic) — voir js/assistant/launcher.js -->
 <script defer src="js/assistant/launcher.js"></script>
-
-<!-- Interactions communes (header, menu mobile, reveal, footer) -->
+<!-- Agenda : composant AgendaCalendarSection (intégration Outlook future) + comportements de page -->
+<script defer src="js/agenda-calendar.js"></script>
+<script defer src="js/agenda.js"></script>
 <script>
 (function(){
   var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* Header — ombre au scroll */
+  /* Header */
   var header=document.querySelector(".site-header");
   function onScroll(){header.classList.toggle("is-scrolled",scrollY>8);}
   onScroll();addEventListener("scroll",onScroll,{passive:true});
@@ -655,6 +683,7 @@ a.f-c-value:hover{color:var(--turquoise)}
     function sc(){clearTimeout(ct);ct=setTimeout(cl,250);}
     wrap.addEventListener("mouseenter",op);wrap.addEventListener("mouseleave",sc);
     wrap.addEventListener("mousemove",function(){if(wrap.classList.contains("is-open"))clearTimeout(ct);});
+    // Clic : ouvre toujours le menu (le survol l'ouvre déjà ; un clic ne doit pas le refermer aussitôt)
     trig.addEventListener("click",function(e){e.preventDefault();op();});
     wrap.addEventListener("keydown",function(e){if(e.key==="Escape"){cl();trig.focus();}});
     wrap.addEventListener("focusout",function(e){if(!wrap.contains(e.relatedTarget))cl();});
@@ -672,7 +701,14 @@ a.f-c-value:hover{color:var(--turquoise)}
   if(reduce||!("IntersectionObserver" in window)){rv.forEach(function(e){e.classList.add("in");});}
   else{var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:.12,rootMargin:"0px 0px -6% 0px"});rv.forEach(function(e){io.observe(e);});}
 
-  /* Horaires + statut temps réel */
+  /* Compteurs animés (une seule fois) */
+  function cnt(el){var t=parseFloat(el.getAttribute("data-count"));if(reduce){el.textContent=t.toLocaleString("fr-BE");return;}
+    var d=1600,s=null;function st(ts){if(!s)s=ts;var p=Math.min((ts-s)/d,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(t*e).toLocaleString("fr-BE");if(p<1)requestAnimationFrame(st);}requestAnimationFrame(st);}
+  var cs=document.querySelectorAll("[data-count]");
+  if(!("IntersectionObserver" in window)){cs.forEach(cnt);}
+  else{var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){cnt(e.target);cio.unobserve(e.target);}});},{threshold:.6});cs.forEach(function(e){cio.observe(e);});}
+
+  /* Horaires + statut temps réel (traduit, re-calculé au changement de langue) */
   var SCH={1:[600,960],2:[600,960],3:[600,960],4:[600,960],5:null,6:null,0:null};
   var now=new Date(),day=now.getDay();
   var tr=document.querySelector('.f-hours li[data-day="'+day+'"]');if(tr)tr.classList.add("is-today");
@@ -689,6 +725,5 @@ a.f-c-value:hover{color:var(--turquoise)}
   var yy=document.querySelector("[data-year]");if(yy)yy.textContent=String(Math.max(2026,now.getFullYear()));
 })();
 </script>
-
 </body>
 </html>

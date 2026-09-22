@@ -43,6 +43,8 @@ const OG_DEFAULT = {
 };
 const N = Trainings.nacelles;
 const OG_NACELLES = { file: N.images.og, width: 1200, height: 630, alt: N.imageAlt };
+const B = Trainings.beps;
+const OG_BEPS = { file: B.images.og, width: 1200, height: 630, alt: "Wisy Safety — La sécurité comme une référence. Formations sécurité à Anderlecht, Bruxelles" };
 
 /* Pages indexables. `graph` = nœuds JSON-LD ; `breadcrumb` = fil d'Ariane AFFICHÉ sur la page (les
    données structurées ne décrivent que ce que le visiteur voit). */
@@ -51,6 +53,8 @@ const DOCS = [
   { file: "formations.html", graph: ["organization", "courseList"] },
   { file: "formation-nacelles-elevatrices.html", graph: ["organization", "breadcrumb", "course"], image: OG_NACELLES,
     breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["Nacelles élévatrices", "formation-nacelles-elevatrices.html"]] },
+  { file: "formation-beps-premiers-secours.html", graph: ["organization", "breadcrumb", "course"], image: OG_BEPS,
+    breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["BEPS — Premier secours", "formation-beps-premiers-secours.html"]] },
   { file: "inscription.html", graph: ["organization"] },
   { file: "contact.html", graph: ["organization", "contactPage"] },
   { file: "avis.html", graph: ["organization"] },
@@ -110,20 +114,24 @@ const NODES = {
     "@type": "BreadcrumbList",
     itemListElement: doc.breadcrumb.map(([name, file], i) => ({ "@type": "ListItem", position: i + 1, name, item: Site.absoluteUrl(file) }))
   }),
-  course: (doc, meta) => ({
-    "@type": "Course",
-    name: N.fullTitle,
-    description: meta.description,
-    url: Site.absoluteUrl(doc.file),
-    image: ORIGIN + "/" + N.images.og,
-    inLanguage: N.languages.slice(),
-    timeRequired: "P" + N.durationDays + "D",
-    provider: providerOf(),
-    offers: {
-      "@type": "Offer", url: Site.absoluteUrl(doc.file), price: String(N.price.amountCents / 100), priceCurrency: N.price.currency,
-      priceSpecification: { "@type": "PriceSpecification", price: String(N.price.amountCents / 100), priceCurrency: N.price.currency, valueAddedTaxIncluded: !!N.price.vatIncluded }
-    }
-  }),
+  /* Généralisé à TOUTES les formations à page dédiée (registre js/trainings-data.js) : la fiche
+     correspond au fichier de la page (doc.file), pas à une formation figée. */
+  course: (doc, meta) => {
+    const t = Trainings.all().filter((x) => x.url === doc.file)[0];
+    const priceSpec = { "@type": "PriceSpecification", price: String(t.price.amountCents / 100), priceCurrency: t.price.currency };
+    if (t.price.vatIncluded === true || t.price.vatIncluded === false) priceSpec.valueAddedTaxIncluded = t.price.vatIncluded;
+    return {
+      "@type": "Course",
+      name: t.fullTitle,
+      description: meta.description,
+      url: Site.absoluteUrl(doc.file),
+      image: ORIGIN + "/" + t.images.og,
+      inLanguage: t.languages.slice(),
+      timeRequired: t.durationDays != null ? "P" + t.durationDays + "D" : "PT" + t.durationHours + "H",
+      provider: providerOf(),
+      offers: { "@type": "Offer", url: Site.absoluteUrl(doc.file), price: String(t.price.amountCents / 100), priceCurrency: t.price.currency, priceSpecification: priceSpec }
+    };
+  },
   courseList: () => ({
     "@type": "ItemList",
     name: "Formations Wisy Safety",

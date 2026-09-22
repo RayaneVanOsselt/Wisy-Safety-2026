@@ -16,6 +16,7 @@ Dépendances : Pillow (WebP). Aucune autre. Sortie déterministe (mêmes options
   icônes          assets/images/logo/logo.png             → assets/icons/* · favicon.ico
   formations      assets/originaux/formations/<id>.jpg    → assets/images/formations/<id>.webp
                   (vca-base : n'a pas d'original à part — le WebP servi EST l'original)
+  illustrations BEPS  assets/originaux/beps/<nom>.jpg      → assets/images/beps/<nom>-240.webp (recadrage carré centré)
   partenaires     assets/originaux/partenaires/<nom>.*    → assets/images/partenaires/<nom>-240.webp
   contact         assets/originaux/contact/hero-contact.png → assets/images/contact/hero-contact.webp
   affiche vidéo   assets/originaux/accueil/poster.jpg     → assets/videos/accueil/poster.webp
@@ -117,6 +118,43 @@ def formations():
         report(fid, src, size, f"{im.width}×{im.height}")
 
 
+# --------------------------------------------------------------------------- illustrations BEPS (accents ronds, affichés ≤ 96 px @2x)
+def center_square(im):
+    w, h = im.size
+    s = min(w, h)
+    left, top = (w - s) // 2, (h - s) // 2
+    return im.crop((left, top, left + s, top + s))
+
+
+BEPS_ILLUSTRATIONS = ["trousse-secours-illustration", "mascotte-premiers-secours", "journee-mondiale-premiers-secours", "geste-secouriste-illustration"]
+
+
+def beps():
+    for name in BEPS_ILLUSTRATIONS:
+        src = f"assets/originaux/beps/{name}.jpg"
+        dst = f"assets/images/beps/{name}-240.webp"
+        if not os.path.exists(src) or not need(dst, src):
+            continue
+        im = center_square(to_rgb(Image.open(src))).resize((240, 240), Image.LANCZOS)
+        size = save_webp(im, dst, quality=80)
+        report(f"beps {name}", src, size, f"{im.width}×{im.height}")
+
+    # Photo de formation réelle (même master que assets/images/formations/beps.webp) : dérivés
+    # dédiés à la page BEPS — hero (pleine largeur du cadre) + miniature de résultat de recherche.
+    src = "assets/originaux/formations/beps.jpg"
+    if os.path.exists(src):
+        dst = "assets/images/beps/beps-hero-1024.webp"
+        if need(dst, src):
+            im = fit_width(to_rgb(Image.open(src)), 1024)
+            size = save_webp(im, dst, quality=82)
+            report("beps hero", src, size, f"{im.width}×{im.height}")
+        dst = "assets/images/beps/beps-thumb-192.webp"
+        if need(dst, src):
+            im = fit_width(to_rgb(Image.open(src)), 192)
+            size = save_webp(im, dst, quality=78)
+            report("beps thumb", src, size, f"{im.width}×{im.height}")
+
+
 # --------------------------------------------------------------------------- partenaires (affichés ≤ 75 px)
 PARTNERS = {
     "orange": "orange.png", "proximus": "proximus.webp", "telenet": "telenet.webp",
@@ -193,6 +231,7 @@ if __name__ == "__main__":
     print("Optimisation des images (Pillow", Image.__version__ + ")")
     logo()
     formations()
+    beps()
     partners()
     misc()
     if "--og" in sys.argv:

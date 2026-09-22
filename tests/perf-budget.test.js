@@ -107,7 +107,7 @@ test("iframes : chargement différé, titre accessible et politique de référen
 });
 
 test("JS et CSS partagés : budgets non minifiés (chemin critique de chaque page)", () => {
-  const budget = { "js/site-content.js": 16, "js/search.js": 42, "js/i18n.js": 8, "js/trainings-data.js": 8, "js/assistant/launcher.js": 30, "css/search.css": 17, "css/site-header.css": 12, "css/assistant.css": 18, "css/fonts.css": 6 };
+  const budget = { "js/site-content.js": 16, "js/search.js": 42, "js/i18n.js": 8, "js/trainings-data.js": 14, "js/assistant/launcher.js": 30, "css/search.css": 17, "css/site-header.css": 12, "css/assistant.css": 18, "css/fonts.css": 6 };
   Object.keys(budget).forEach((f) => assert.ok(size(f) <= budget[f] * KB, f + " : " + Math.round(size(f) / KB) + " Ko > " + budget[f] + " Ko"));
   /* le FAQ (37 Ko) n'est JAMAIS sur le chemin critique : il ne se charge qu'à la première utilisation de la recherche */
   PAGES.filter((f) => f !== "faq.html").forEach((f) => assert.doesNotMatch(read(f), /<script[^>]+js\/faq-data\.js/, f + " : faq-data.js chargé d'emblée"));

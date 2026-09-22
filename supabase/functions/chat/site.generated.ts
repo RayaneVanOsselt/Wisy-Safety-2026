@@ -191,24 +191,63 @@ export const SITE_FORMATIONS: SiteEntry[] = [
     "type": "formation",
     "title": "BEPS — Premier secours",
     "category": "secours",
-    "url": "formations.html#beps",
+    "url": "formation-beps-premiers-secours.html",
     "signupUrl": "inscription.html?formation=beps",
-    "duration": "3 jours",
+    "duration": "15 heures",
     "level": "Moyen",
-    "content": "Maîtrisez les gestes qui sauvent : réanimation, hémorragies et positions de sécurité. Brevet européen de premiers secours reconnu.",
+    "priceLabel": "70 €",
+    "format": "Essentiellement pratique",
+    "languages": [
+      "Français",
+      "Néerlandais",
+      "Anglais"
+    ],
+    "audience": [
+      "toute personne souhaitant apprendre les gestes qui sauvent"
+    ],
+    "subtypes": [
+      "Réanimation & défibrillation",
+      "Position latérale de sécurité",
+      "Étouffement & désobstruction",
+      "Hémorragies & plaies",
+      "Malaises & brûlures",
+      "Alerter le 112"
+    ],
+    "content": "Apprendre, en 15 heures, à protéger, alerter le 112 et secourir une victime en attendant les professionnels : réanimation, défibrillation, position latérale de sécurité, hémorragies, étouffement, malaises et brûlures. Objectif : Rendre chaque participant capable d'intervenir efficacement dès les premières minutes d'une urgence, dans le bon ordre et sans se mettre en danger. AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer.",
     "keywords": [
       "beps",
-      "secours",
+      "premiers secours",
+      "premier secours",
       "secourisme",
-      "premiers",
-      "brevet",
+      "secouriste",
+      "brevet europeen de premiers secours",
+      "brevet de secourisme",
       "reanimation",
-      "réanimation",
+      "massage cardiaque",
+      "cpr",
+      "rcp",
+      "dea",
+      "defibrillateur",
+      "defibrillation",
+      "pls",
+      "victime inconsciente",
+      "etouffement",
+      "desobstruction",
+      "obstruction",
+      "hemorragie",
+      "plaie",
+      "malaise",
+      "avc",
+      "brulure",
+      "intoxication",
+      "urgence",
+      "112",
+      "alerter",
+      "gestes qui sauvent",
       "sauvetage",
       "first aid",
       "ehbo",
-      "cpr",
-      "defibrillateur"
+      "erste hilfe"
     ]
   }
 ];
@@ -364,5 +403,6 @@ export const SITE_PATHS: string[] = [
   "inscription.html",
   "faq.html",
   "agenda.html",
-  "formation-nacelles-elevatrices.html"
+  "formation-nacelles-elevatrices.html",
+  "formation-beps-premiers-secours.html"
 ];

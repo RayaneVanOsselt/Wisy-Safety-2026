@@ -34,7 +34,7 @@ test("noms propres : minuscules, chiffres, tirets — sans espace, sans accent, 
 
 test("dossiers connus : chaque image est rangée dans un dossier prévu (voir assets/README.md)", () => {
   const TOP = ["fonts", "icons", "images", "videos", "originaux"];
-  const IMAGES = ["assistant", "contact", "faq", "formations", "logo", "nacelles", "partage", "partenaires"];
+  const IMAGES = ["assistant", "beps", "contact", "faq", "formations", "logo", "nacelles", "partage", "partenaires"];
   const bad = [];
   FILES.forEach((f) => {
     const [, a, b] = f.split("/");
@@ -69,10 +69,10 @@ test("aucun fichier orphelin : tout fichier hors « originaux » est utilisé pa
   assert.deepEqual(orphan, [], "fichiers que rien n'utilise : à supprimer, ou à déplacer dans assets/originaux/");
 });
 
-test("originaux : chacun est cité par l'outil de génération ou par le guide de la formation Nacelles", () => {
-  const cited = read("scripts/optimize-images.py") + "\n" + read("docs/README-NACELLES.md");
+test("originaux : chacun est cité par l'outil de génération ou par le guide d'une page dédiée", () => {
+  const cited = read("scripts/optimize-images.py") + "\n" + read("docs/README-NACELLES.md") + "\n" + read("docs/README-BEPS.md");
   const bad = FILES.filter((f) => f.startsWith("assets/originaux/") && !cited.includes(path.basename(f)));
-  assert.deepEqual(bad, [], "original que ni scripts/optimize-images.py ni docs/README-NACELLES.md ne mentionne");
+  assert.deepEqual(bad, [], "original que ni scripts/optimize-images.py ni docs/README-NACELLES.md ni docs/README-BEPS.md ne mentionne");
 });
 
 test("l'outil de génération lit et écrit aux BONS endroits (tous les chemins qu'il cite existent)", () => {

@@ -44,6 +44,8 @@
      partagée avec la page dédiée, la recherche et l'assistant. Sans registre :
      « Sur devis » (jamais de prix inventé). */
   var NACELLE = (window.WisyTrainings && window.WisyTrainings.nacelles) || null;
+  /* Idem pour le BEPS (voir js/trainings-data.js) : 70 € — jamais de prix inventé si le registre manque. */
+  var BEPS = (window.WisyTrainings && window.WisyTrainings.beps) || null;
 
   /* Catégories — clé stable => libellé i18n (résolu dans registration.js) */
   var CATEGORIES = [
@@ -122,8 +124,8 @@
     {
       id: "beps",
       code: "BEPS",
-      priceCents: null,           /* tarif non publié => « Sur devis » */
-      onQuote: true,
+      priceCents: BEPS ? BEPS.price.amountCents : null,   /* 70 € — registre central */
+      onQuote: !BEPS,
       unit: "participant",
       category: "secours",
       icon: "aid",

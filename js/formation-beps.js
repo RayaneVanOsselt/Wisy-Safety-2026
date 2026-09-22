@@ -5,10 +5,19 @@
      initHeader()          header sticky, sous-menu Formations, menu mobile
      initFooterStatus()    horaires du jour + statut d'ouverture
      initScrollReveal()    entrées au scroll (IntersectionObserver), cascade 70 ms
+     initMaskReveal()      révélation des titres signature par masque (voir .beps-mask)
      initAccordions()      programme + FAQ (aria-expanded / aria-controls, clavier)
      initTabs()             onglets « Face à une urgence » (role=tablist, flèches)
-     initChain()            chaîne des secours : ligne animée au scroll + révélation par étape
+     initChain()            chaîne des secours : ligne + étapes ; scroll pinné sur desktop
+                            (feature-detecté), grille statique partout ailleurs
+     initCounters()         chiffres 15 / 70 € / 3 / 112 / 6 : 0 → valeur au scroll-in
+     initTilt()             tilt 3D très léger des cartes « Pourquoi Wisy Safety » (souris fine)
+     initMagnetic()         micro-déplacement des CTA vers le curseur (souris fine)
      initSmoothScroll()    ancres internes (respecte prefers-reduced-motion)
+   Motion : toujours transform/opacity, jamais de layout thrashing. Tout est neutralisé par
+   prefers-reduced-motion (section 12 de css/formation-beps.css) et par la détection tactile /
+   pointeur grossier (voir canHover()) — aucune de ces interactions n'est nécessaire pour lire ou
+   utiliser la page (voir aussi le <noscript> du head).
    ========================================================================= */
 (() => {
   "use strict";
@@ -16,6 +25,7 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canHover = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   const currentLang = () => (window.WisyI18N && window.WisyI18N.current()) || "fr";
   const tr = (key, fallback) => {
@@ -122,6 +132,27 @@
   }
 
   /* =======================================================================
+     REVEAL PAR MASQUE — titres signature (.beps-mask). Réservé à quelques titres
+     (hero, chaîne, CTA final) : jamais généralisé à tout le texte de la page.
+     ======================================================================= */
+  function initMaskReveal() {
+    const targets = $$("[data-mask]");
+    if (!targets.length) return;
+    if (prefersReducedMotion() || !("IntersectionObserver" in window)) {
+      targets.forEach((el) => el.classList.add("in"));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("in");
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.4 });
+    targets.forEach((el) => io.observe(el));
+  }
+
+  /* =======================================================================
      ACCORDÉONS — programme & FAQ. Boutons dans des <h3>, aria-expanded +
      aria-controls, panneaux `inert` tant que fermés, flèches ↑ ↓ Début Fin.
      ======================================================================= */
@@ -195,27 +226,86 @@
   }
 
   /* =======================================================================
-     CHAÎNE DES SECOURS — révélation de chaque étape (via .reveal habituel)
-     + ligne qui se remplit progressivement pendant que la section défile
-     (transform scaleX/scaleY piloté par une custom property, pas de layout
-     shift, rAF-throttled ; statique si prefers-reduced-motion).
+     CHAÎNE DES SECOURS — signature de la page (brief : section « majeure »).
+
+     Deux modes, TOUJOURS avec le même HTML (jamais de contenu dupliqué) :
+
+     · Mode standard (mobile, tablette, tactile, souris grossière, reduced-motion,
+       ou JS absent) : grille statique 3 colonnes (desktop) / pile verticale
+       (mobile), déjà pleinement accessible — la ligne se remplit et chaque étape
+       se révèle simplement en fonction du scroll, sans rien « épingler ».
+
+     · Mode « pinné » (desktop ≥900px + pointeur fin + hover + sans
+       prefers-reduced-motion, voir canPin()) : on ajoute .beps-chain--pinned
+       (voir css/formation-beps.css) qui rend .beps-chain__rail très haut
+       (320vh) et .beps-chain__stage sticky. Pendant les ~3 hauteurs d'écran de
+       défilement, les 3 étapes se superposent et se fondent l'une dans l'autre
+       (opacity/transform) selon la progression, avec un rail latéral numéroté
+       qui indique l'étape active — exactement le principe demandé : PROTÉGER
+       apparaît, puis une transition conduit vers ALERTER, puis SECOURIR.
+
+     Le mode est réévalué au redimensionnement (rotation d'écran, fenêtre
+     redimensionnée) : jamais bloqué dans un état inadapté.
      ======================================================================= */
   function initChain() {
+    const section = $(".beps-chain");
     const rail = $("[data-chain-rail]");
-    if (!rail) return;
+    const stage = $("[data-chain-stage]");
+    if (!section || !rail || !stage) return;
+    const steps = $$("[data-chain-step]", stage);
+    const navItems = $$("[data-chain-nav-item]", stage);
     if (prefersReducedMotion()) { rail.style.setProperty("--chain-progress", "1"); return; }
 
-    let ticking = false;
-    function update() {
-      ticking = false;
+    let pinned = false;
+    const canPin = () => window.matchMedia("(min-width: 900px)").matches && canHover();
+
+    function setActive(index) {
+      steps.forEach((el, i) => el.classList.toggle("is-active", i === index));
+      navItems.forEach((el, i) => el.classList.toggle("is-active", i === index));
+    }
+
+    /* Mode standard : une seule progression 0→1 sur la hauteur du rail (comme avant). */
+    function updateStandard() {
       const rect = rail.getBoundingClientRect();
       const vh = window.innerHeight || document.documentElement.clientHeight;
-      // 0 quand le haut du rail atteint 80% de la hauteur d'écran, 1 quand le bas atteint 35%
       const start = vh * 0.8, end = vh * 0.35;
       const total = rect.height + (start - end);
       const traveled = start - rect.top;
       const progress = total > 0 ? Math.min(1, Math.max(0, traveled / total)) : 0;
       rail.style.setProperty("--chain-progress", String(progress));
+    }
+
+    /* Mode pinné : progression sur toute la hauteur du rail (320vh), divisée en 3 segments
+       égaux qui pilotent l'étape active ; la ligne se remplit sur l'ensemble du parcours. */
+    function updatePinned() {
+      const rect = rail.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const total = rail.offsetHeight - vh;
+      const traveled = -rect.top;
+      const progress = total > 0 ? Math.min(1, Math.max(0, traveled / total)) : 0;
+      rail.style.setProperty("--chain-progress", String(progress));
+      const index = Math.min(steps.length - 1, Math.floor(progress * steps.length));
+      setActive(index);
+    }
+
+    function applyMode() {
+      const shouldPin = canPin();
+      if (shouldPin === pinned) return;
+      pinned = shouldPin;
+      section.classList.toggle("beps-chain--pinned", pinned);
+      if (pinned) {
+        setActive(0);
+      } else {
+        steps.forEach((el) => el.classList.remove("is-active"));
+        navItems.forEach((el) => el.classList.remove("is-active"));
+      }
+    }
+
+    let ticking = false;
+    function update() {
+      ticking = false;
+      applyMode();
+      if (pinned) updatePinned(); else updateStandard();
     }
     function onScroll() {
       if (ticking) return;
@@ -225,6 +315,85 @@
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+  }
+
+  /* =======================================================================
+     COMPTEURS — [data-count] : 0 → valeur cible sur ~800 ms au scroll-in,
+     easing out. La valeur finale reste toujours présente dans le HTML (le
+     premier texte du nœud), donc l'information existe même sans JS/animation.
+     ======================================================================= */
+  function initCounters() {
+    const targets = $$("[data-count]");
+    if (!targets.length) return;
+    const setFinal = (el) => {
+      const target = parseInt(el.getAttribute("data-count"), 10);
+      el.childNodes[0].nodeValue = String(target);
+    };
+    if (prefersReducedMotion() || !("IntersectionObserver" in window)) {
+      targets.forEach(setFinal);
+      return;
+    }
+    function animate(el) {
+      const target = parseInt(el.getAttribute("data-count"), 10);
+      if (!Number.isFinite(target)) return;
+      const duration = 800, start = performance.now();
+      function frame(now) {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.childNodes[0].nodeValue = String(Math.round(target * eased));
+        if (t < 1) requestAnimationFrame(frame); else el.childNodes[0].nodeValue = String(target);
+      }
+      requestAnimationFrame(frame);
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        animate(entry.target);
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.6 });
+    targets.forEach((el) => io.observe(el));
+  }
+
+  /* =======================================================================
+     TILT 3D LÉGER — cartes « Pourquoi Wisy Safety », souris fine uniquement.
+     Amplitude faible (≤6°), remise à zéro à la sortie ; jamais au clavier/tactile.
+     ======================================================================= */
+  function initTilt() {
+    if (!canHover() || prefersReducedMotion()) return;
+    $$(".beps-why__card").forEach((card) => {
+      const MAX = 5;
+      const onMove = (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.setProperty("--tiltx", `${(px * MAX * 2).toFixed(2)}deg`);
+        card.style.setProperty("--tilty", `${(-py * MAX * 2).toFixed(2)}deg`);
+      };
+      const reset = () => { card.style.removeProperty("--tiltx"); card.style.removeProperty("--tilty"); };
+      card.addEventListener("mousemove", onMove);
+      card.addEventListener("mouseleave", reset);
+    });
+  }
+
+  /* =======================================================================
+     CTA MAGNÉTIQUE — micro-déplacement du bouton vers le curseur (≤8 px),
+     souris fine uniquement ; jamais au clavier/tactile, jamais permanent.
+     ======================================================================= */
+  function initMagnetic() {
+    if (!canHover() || prefersReducedMotion()) return;
+    $$(".beps-magnetic").forEach((btn) => {
+      const MAX = 7;
+      const onMove = (e) => {
+        const r = btn.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        btn.style.transform = `translate(${(px * MAX).toFixed(1)}px, ${(py * MAX).toFixed(1)}px)`;
+      };
+      const reset = () => { btn.style.transform = ""; };
+      btn.addEventListener("mousemove", onMove);
+      btn.addEventListener("mouseleave", reset);
+    });
   }
 
   /* =======================================================================
@@ -276,9 +445,13 @@
     initHeader();
     initFooterStatus();
     initScrollReveal();
+    initMaskReveal();
     initAccordions();
     initTabs();
     initChain();
+    initCounters();
+    initTilt();
+    initMagnetic();
     initFaqSchema();
     initSmoothScroll();
   }

@@ -334,6 +334,9 @@ a.f-c-value:hover{color:var(--turquoise)}
 
   <!-- ==================== 1. HERO ==================== -->
   <section class="beps-hero" aria-labelledby="beps-h1">
+    <span class="beps-hero__bg" aria-hidden="true"></span>
+    <span class="beps-hero__grid-bg" aria-hidden="true"></span>
+    <span class="beps-hero__blob" aria-hidden="true"></span>
     <div class="container">
       <nav class="beps-bc" aria-label="Fil d'Ariane">
         <ol>
@@ -348,29 +351,31 @@ a.f-c-value:hover{color:var(--turquoise)}
       <div class="beps-hero__grid">
         <div class="beps-hero__text" data-stagger>
           <p class="beps-badge reveal"><span class="beps-badge__dot" aria-hidden="true"></span>Formation · 15 heures</p>
-          <h1 class="beps-hero__title reveal" id="beps-h1">BEPS <span class="beps-hero__sep">—</span> Brevet Européen de Premiers Secours</h1>
+          <h1 class="beps-hero__title" id="beps-h1"><span class="beps-mask" data-mask><span class="beps-mask__inner">BEPS <span class="beps-hero__sep">—</span></span></span> <span class="beps-mask" data-mask style="--d:.08s"><span class="beps-mask__inner">Brevet Européen</span></span> <span class="beps-mask" data-mask style="--d:.16s"><span class="beps-mask__inner">de Premiers Secours</span></span></h1>
           <p class="beps-hero__accroche reveal">Apprendre les gestes qui peuvent sauver une vie.</p>
           <p class="beps-lead reveal">Un malaise, un étouffement, un accident : ces situations surviennent sans prévenir. La formation BEPS vous rend capable d'agir vite, avec méthode et sang-froid, en attendant l'arrivée des secours.</p>
 
           <dl class="beps-stats reveal" data-stagger>
-            <div class="beps-stats__item reveal"><dt>Heures de formation</dt><dd>15</dd></div>
-            <div class="beps-stats__item reveal"><dt>Tarif</dt><dd>70&nbsp;€</dd></div>
+            <div class="beps-stats__item reveal"><dt>Heures de formation</dt><dd data-count="15">0</dd></div>
+            <div class="beps-stats__item reveal"><dt>Tarif</dt><dd data-count="70">0<span class="unit">€</span></dd></div>
             <div class="beps-stats__item reveal"><dt>À la clé</dt><dd>Certificat</dd></div>
           </dl>
 
           <div class="beps-actions reveal">
-            <a class="btn btn--cta" href="inscription.html?formation=beps"><span>S'inscrire à la formation</span><svg class="ic btn__arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-            <a class="btn btn--outline" href="#programme"><span>Découvrir le programme</span></a>
+            <a class="btn btn--cta beps-magnetic" href="inscription.html?formation=beps"><span>S'inscrire à la formation</span><svg class="ic btn__arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--outline beps-magnetic" href="#programme"><span>Découvrir le programme</span></a>
           </div>
         </div>
 
         <div class="beps-hero__media reveal">
           <span class="beps-hero__outline" aria-hidden="true"></span>
+          <span class="beps-hero__ring" aria-hidden="true"></span>
           <div class="beps-hero__frame">
             <img class="beps-hero__img" src="assets/images/beps/beps-hero-1024.webp" width="1024" height="684"
                  alt="Formateur Wisy Safety encadrant un massage cardiaque sur mannequin d'entraînement" fetchpriority="high" decoding="async">
           </div>
-          <div class="beps-fiche" aria-hidden="true">
+          <div class="beps-hero__float reveal" style="--d:.3s"><span class="beps-hero__float-ic"><svg class="ic" aria-hidden="true"><use href="#i-check-circle"/></svg></span><dl><dt>À la clé</dt><dd>Certificat remis</dd></dl></div>
+          <div class="beps-fiche reveal" style="--d:.2s" aria-hidden="true">
             <p class="beps-fiche__head">Fiche · Chaîne des secours</p>
             <svg class="beps-fiche__pulse" viewBox="0 0 240 40" preserveAspectRatio="none" focusable="false">
               <path d="M0 20h50l8-14 10 28 8-20 6 6h158" />
@@ -384,6 +389,7 @@ a.f-c-value:hover{color:var(--turquoise)}
         </div>
       </div>
     </div>
+    <div class="beps-scrollcue" aria-hidden="true"><span class="beps-scrollcue__t">Scroll</span><span class="beps-scrollcue__line"></span></div>
   </section>
 
   <!-- ==================== 2. SIGNATURE — CHAÎNE DES SECOURS ==================== -->
@@ -391,38 +397,45 @@ a.f-c-value:hover{color:var(--turquoise)}
     <div class="container">
       <header class="beps-section__head reveal">
         <p class="beps-label"><span class="beps-label__no">01</span><span>La chaîne des secours</span></p>
-        <h2 class="beps-title" id="beps-chain-t">Protéger. Alerter. Secourir.</h2>
+        <h2 class="beps-title" id="beps-chain-t"><span class="beps-mask" data-mask><span class="beps-mask__inner">Protéger. Alerter. Secourir.</span></span></h2>
         <p class="beps-lead">Trois étapes, toujours dans le même ordre. C'est ce réflexe que la formation BEPS installe, jusqu'à ce qu'il devienne automatique.</p>
       </header>
 
       <div class="beps-chain__rail" data-chain-rail>
-        <div class="beps-chain__track" aria-hidden="true"><span class="beps-chain__fill" data-chain-fill></span></div>
-        <ol class="beps-chain__steps" data-stagger>
-          <li class="beps-chain__step reveal" data-chain-step>
-            <span class="beps-chain__dot" aria-hidden="true"></span>
-            <span class="beps-chain__no">01</span>
-            <svg class="ic beps-chain__ic" aria-hidden="true"><use href="#i-shield-check"/></svg>
-            <h3>Protéger</h3>
-            <p>Repérer le danger, sécuriser la zone et écarter tout risque de sur-accident — pour la victime comme pour vous.</p>
-            <ul class="beps-chain__list"><li>Analyser la scène</li><li>Écarter le danger</li><li>Ne jamais s'exposer</li></ul>
-          </li>
-          <li class="beps-chain__step reveal" data-chain-step>
-            <span class="beps-chain__dot" aria-hidden="true"></span>
-            <span class="beps-chain__no">02</span>
-            <svg class="ic beps-chain__ic" aria-hidden="true"><use href="#i-phone-alert"/></svg>
-            <h3>Alerter</h3>
-            <p>Donner l'alerte au 112 de façon claire et complète, pour que les secours arrivent plus vite et mieux préparés.</p>
-            <ul class="beps-chain__list"><li>Localiser précisément</li><li>Décrire la situation</li><li>Rester en ligne</li></ul>
-          </li>
-          <li class="beps-chain__step reveal" data-chain-step>
-            <span class="beps-chain__dot" aria-hidden="true"></span>
-            <span class="beps-chain__no">03</span>
-            <svg class="ic beps-chain__ic" aria-hidden="true"><use href="#i-heart-pulse"/></svg>
-            <h3>Secourir</h3>
-            <p>Agir avec les gestes appris — réanimation, PLS, compression d'une hémorragie — en attendant l'arrivée des professionnels.</p>
-            <ul class="beps-chain__list"><li>Évaluer la victime</li><li>Pratiquer le bon geste</li><li>Surveiller jusqu'aux secours</li></ul>
-          </li>
-        </ol>
+        <div class="beps-chain__stage" data-chain-stage>
+          <ol class="beps-chain__rail-nav" aria-hidden="true" data-chain-nav>
+            <li class="is-active" data-chain-nav-item="0"><span class="no">01</span><span>Protéger</span></li>
+            <li data-chain-nav-item="1"><span class="no">02</span><span>Alerter</span></li>
+            <li data-chain-nav-item="2"><span class="no">03</span><span>Secourir</span></li>
+          </ol>
+          <div class="beps-chain__track" aria-hidden="true"><span class="beps-chain__fill" data-chain-fill></span></div>
+          <ol class="beps-chain__steps" data-stagger>
+            <li class="beps-chain__step reveal is-active" data-chain-step data-step-index="0">
+              <span class="beps-chain__dot" aria-hidden="true"></span>
+              <span class="beps-chain__no">01</span>
+              <svg class="ic beps-chain__ic" aria-hidden="true"><use href="#i-shield-check"/></svg>
+              <h3>Protéger</h3>
+              <p>Repérer le danger, sécuriser la zone et écarter tout risque de sur-accident — pour la victime comme pour vous.</p>
+              <ul class="beps-chain__list"><li>Analyser la scène</li><li>Écarter le danger</li><li>Ne jamais s'exposer</li></ul>
+            </li>
+            <li class="beps-chain__step reveal" data-chain-step data-step-index="1">
+              <span class="beps-chain__dot" aria-hidden="true"></span>
+              <span class="beps-chain__no">02</span>
+              <svg class="ic beps-chain__ic" aria-hidden="true"><use href="#i-phone-alert"/></svg>
+              <h3>Alerter</h3>
+              <p>Donner l'alerte au 112 de façon claire et complète, pour que les secours arrivent plus vite et mieux préparés.</p>
+              <ul class="beps-chain__list"><li>Localiser précisément</li><li>Décrire la situation</li><li>Rester en ligne</li></ul>
+            </li>
+            <li class="beps-chain__step reveal" data-chain-step data-step-index="2">
+              <span class="beps-chain__dot" aria-hidden="true"></span>
+              <span class="beps-chain__no">03</span>
+              <svg class="ic beps-chain__ic" aria-hidden="true"><use href="#i-heart-pulse"/></svg>
+              <h3>Secourir</h3>
+              <p>Agir avec les gestes appris — réanimation, PLS, compression d'une hémorragie — en attendant l'arrivée des professionnels.</p>
+              <ul class="beps-chain__list"><li>Évaluer la victime</li><li>Pratiquer le bon geste</li><li>Surveiller jusqu'aux secours</li></ul>
+            </li>
+          </ol>
+        </div>
       </div>
     </div>
   </section>
@@ -497,33 +510,33 @@ a.f-c-value:hover{color:var(--turquoise)}
         <p class="beps-body">Une progression pensée pour transformer des connaissances en réflexes : cadrage, gestes de base, situations spécifiques, puis mise en pratique.</p>
       </header>
       <div class="beps-split__body">
-        <div class="beps-acc" data-accordion>
+        <div class="beps-acc beps-acc--programme" data-accordion>
           <div class="beps-acc__item is-open">
-            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-1" aria-expanded="true" aria-controls="prog-p-1"><span class="beps-acc__no"><small>Module</small> 01</span><span class="beps-acc__t">Accueil &amp; objectifs</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
+            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-1" aria-expanded="true" aria-controls="prog-p-1"><span class="beps-acc__ic-wrap" aria-hidden="true"><svg class="ic"><use href="#i-clipboard"/></svg></span><span class="beps-acc__no"><small>Module</small> 01</span><span class="beps-acc__t">Accueil &amp; objectifs</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
             <div class="beps-acc__panel" id="prog-p-1" role="region" aria-labelledby="prog-b-1"><div class="beps-acc__inner"><p>Présentation du déroulement, du matériel utilisé (mannequin, DEA d'entraînement) et des objectifs de la session.</p></div></div>
           </div>
           <div class="beps-acc__item">
-            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-2" aria-expanded="false" aria-controls="prog-p-2"><span class="beps-acc__no"><small>Module</small> 02</span><span class="beps-acc__t">Protéger</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
+            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-2" aria-expanded="false" aria-controls="prog-p-2"><span class="beps-acc__ic-wrap" aria-hidden="true"><svg class="ic"><use href="#i-shield-check"/></svg></span><span class="beps-acc__no"><small>Module</small> 02</span><span class="beps-acc__t">Protéger</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
             <div class="beps-acc__panel" id="prog-p-2" role="region" aria-labelledby="prog-b-2"><div class="beps-acc__inner"><p>Repérer les dangers, sécuriser la zone et adopter les bons réflexes avant d'intervenir.</p></div></div>
           </div>
           <div class="beps-acc__item">
-            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-3" aria-expanded="false" aria-controls="prog-p-3"><span class="beps-acc__no"><small>Module</small> 03</span><span class="beps-acc__t">Alerter</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
+            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-3" aria-expanded="false" aria-controls="prog-p-3"><span class="beps-acc__ic-wrap" aria-hidden="true"><svg class="ic"><use href="#i-phone-alert"/></svg></span><span class="beps-acc__no"><small>Module</small> 03</span><span class="beps-acc__t">Alerter</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
             <div class="beps-acc__panel" id="prog-p-3" role="region" aria-labelledby="prog-b-3"><div class="beps-acc__inner"><p>Structurer l'appel au 112 : localisation, description de la situation, état de la victime.</p></div></div>
           </div>
           <div class="beps-acc__item">
-            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-4" aria-expanded="false" aria-controls="prog-p-4"><span class="beps-acc__no"><small>Module</small> 04</span><span class="beps-acc__t">Secourir — gestes de base</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
+            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-4" aria-expanded="false" aria-controls="prog-p-4"><span class="beps-acc__ic-wrap" aria-hidden="true"><svg class="ic"><use href="#i-heart-pulse"/></svg></span><span class="beps-acc__no"><small>Module</small> 04</span><span class="beps-acc__t">Secourir — gestes de base</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
             <div class="beps-acc__panel" id="prog-p-4" role="region" aria-labelledby="prog-b-4"><div class="beps-acc__inner"><p>Réanimation cardio-pulmonaire, utilisation du défibrillateur (DEA), position latérale de sécurité.</p></div></div>
           </div>
           <div class="beps-acc__item">
-            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-5" aria-expanded="false" aria-controls="prog-p-5"><span class="beps-acc__no"><small>Module</small> 05</span><span class="beps-acc__t">Secourir — situations spécifiques</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
+            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-5" aria-expanded="false" aria-controls="prog-p-5"><span class="beps-acc__ic-wrap" aria-hidden="true"><svg class="ic"><use href="#i-droplet"/></svg></span><span class="beps-acc__no"><small>Module</small> 05</span><span class="beps-acc__t">Secourir — situations spécifiques</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
             <div class="beps-acc__panel" id="prog-p-5" role="region" aria-labelledby="prog-b-5"><div class="beps-acc__inner"><p>Étouffement, hémorragies et plaies, malaises, brûlures : la conduite à tenir pour chaque situation.</p></div></div>
           </div>
           <div class="beps-acc__item">
-            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-6" aria-expanded="false" aria-controls="prog-p-6"><span class="beps-acc__no"><small>Module</small> 06</span><span class="beps-acc__t">Mises en situation pratiques</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
+            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-6" aria-expanded="false" aria-controls="prog-p-6"><span class="beps-acc__ic-wrap" aria-hidden="true"><svg class="ic"><use href="#i-users"/></svg></span><span class="beps-acc__no"><small>Module</small> 06</span><span class="beps-acc__t">Mises en situation pratiques</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
             <div class="beps-acc__panel" id="prog-p-6" role="region" aria-labelledby="prog-b-6"><div class="beps-acc__inner"><p>Des scénarios concrets, en petits groupes, pour répéter le schéma d'intervention jusqu'à l'automatisme.</p></div></div>
           </div>
           <div class="beps-acc__item">
-            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-7" aria-expanded="false" aria-controls="prog-p-7"><span class="beps-acc__no"><small>Module</small> 07</span><span class="beps-acc__t">Bilan &amp; certificat</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
+            <h3 class="beps-acc__h"><button type="button" class="beps-acc__btn" id="prog-b-7" aria-expanded="false" aria-controls="prog-p-7"><span class="beps-acc__ic-wrap" aria-hidden="true"><svg class="ic"><use href="#i-check-circle"/></svg></span><span class="beps-acc__no"><small>Module</small> 07</span><span class="beps-acc__t">Bilan &amp; certificat</span><span class="beps-acc__ic" aria-hidden="true"></span></button></h3>
             <div class="beps-acc__panel" id="prog-p-7" role="region" aria-labelledby="prog-b-7"><div class="beps-acc__inner"><p>Un temps de synthèse, puis la remise du certificat de participation aux personnes ayant suivi l'intégralité du programme.</p></div></div>
           </div>
         </div>
@@ -598,11 +611,11 @@ a.f-c-value:hover{color:var(--turquoise)}
         </article>
       </div>
 
-      <dl class="beps-metrics reveal" data-stagger>
-        <div class="beps-metrics__item reveal"><dd>15</dd><dt>Heures de formation</dt></div>
-        <div class="beps-metrics__item reveal"><dd>3</dd><dt>Langues d'enseignement</dt></div>
-        <div class="beps-metrics__item reveal"><dd>112</dd><dt>Le réflexe alerte</dt></div>
-        <div class="beps-metrics__item reveal"><dd>6</dd><dt>Gestes qui sauvent</dt></div>
+      <dl class="beps-metrics" data-stagger>
+        <div class="beps-metrics__item reveal"><dd data-count="15">0</dd><dt>Heures de formation</dt></div>
+        <div class="beps-metrics__item reveal"><dd data-count="3">0</dd><dt>Langues d'enseignement</dt></div>
+        <div class="beps-metrics__item reveal"><dd data-count="112">0</dd><dt>Le réflexe alerte</dt></div>
+        <div class="beps-metrics__item reveal"><dd data-count="6">0</dd><dt>Gestes qui sauvent</dt></div>
       </dl>
     </div>
   </section>
@@ -674,6 +687,7 @@ a.f-c-value:hover{color:var(--turquoise)}
   <section class="beps-cta-wrap" aria-labelledby="beps-cta-t">
     <div class="container">
       <div class="beps-cta reveal">
+        <span class="beps-cta__glow" aria-hidden="true"></span>
         <svg class="beps-cta__art" viewBox="0 0 800 480" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true" focusable="false">
           <path d="M-20 420C120 340 220 470 380 390S640 250 820 320"/>
           <path d="M-20 450C140 370 240 500 400 420S660 280 820 350"/>
@@ -682,15 +696,15 @@ a.f-c-value:hover{color:var(--turquoise)}
         </svg>
         <div class="beps-cta__inner">
           <p class="beps-label beps-label--on-dark"><span>Inscription · Session premiers secours</span></p>
-          <h2 class="beps-cta__title" id="beps-cta-t">Prêt à savoir agir quand tout se joue ?</h2>
+          <h2 class="beps-cta__title" id="beps-cta-t"><span class="beps-mask" data-mask><span class="beps-mask__inner">Prêt à savoir agir</span></span> <span class="beps-mask" data-mask style="--d:.08s"><span class="beps-mask__inner">quand tout se joue ?</span></span></h2>
           <dl class="beps-cta__stats">
-            <div><dt>Durée</dt><dd>15 heures</dd></div>
-            <div><dt>Tarif</dt><dd>70&nbsp;€</dd></div>
+            <div><dt>Durée</dt><dd data-count="15">0<span class="unit">heures</span></dd></div>
+            <div><dt>Tarif</dt><dd data-count="70">0<span class="unit">€</span></dd></div>
             <div><dt>À la clé</dt><dd>Certificat remis</dd></div>
           </dl>
           <div class="beps-actions">
-            <a class="btn btn--cta" href="inscription.html?formation=beps"><span>S'inscrire à la formation BEPS</span><svg class="ic btn__arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-            <a class="btn btn--ghost" href="contact.html"><span>Nous contacter</span></a>
+            <a class="btn btn--cta beps-magnetic" href="inscription.html?formation=beps"><span>S'inscrire à la formation BEPS</span><svg class="ic btn__arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--ghost beps-magnetic" href="contact.html"><span>Nous contacter</span></a>
           </div>
         </div>
       </div>

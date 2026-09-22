@@ -31,10 +31,10 @@ test("« Combien coûte cette formation ? » → PRIX NON INVENTÉ + contact (te
   assert.ok(!/\d+\s?€/.test(r.message), "aucun prix chiffré inventé");
 });
 
-test("« Quelle est sa durée ? » (BEPS) → 3 jours (donnée réelle)", () => {
+test("« Quelle est sa durée ? » (BEPS) → 15 heures (donnée réelle)", () => {
   const r = Responder.respond("Quelle est la durée de la formation BEPS ?");
   assert.equal(r.meta.intent, "formation_duration");
-  assert.match(r.message, /3 jours/);
+  assert.match(r.message, /15 heures/);
 });
 
 test("« Comment vous contacter ? » → carte contact", () => {
@@ -181,11 +181,17 @@ test("VÉRACITÉ : aucune réponse « nacelle » n'affirme certification / CACES
 });
 
 test("prix : une formation SANS prix confirmé reste « non indiqué » (aucun chiffre)", () => {
-  ["Combien coûte une formation ?", "Quel est le tarif de la formation fibre optique ?", "Prix du BEPS ?"].forEach((q) => {
+  ["Combien coûte une formation ?", "Quel est le tarif de la formation fibre optique ?", "Prix du VCA de base ?"].forEach((q) => {
     const r = Responder.respond(q);
     assert.equal(r.meta.intent, "price_unavailable", q);
     assert.ok(!/\d+\s?€/.test(r.message), "aucun chiffre pour : " + q);
   });
+});
+
+test("prix : le BEPS a désormais un tarif CONFIRMÉ (70 €, registre central)", () => {
+  const r = Responder.respond("Prix du BEPS ?");
+  assert.equal(r.meta.intent, "formation_price");
+  assert.match(r.message, /70\s?€/);
 });
 
 test("écran d'accueil de la fiche nacelle : questions utiles proposées d'abord", () => {

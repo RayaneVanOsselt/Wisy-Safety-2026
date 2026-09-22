@@ -113,7 +113,7 @@ test("miroir serveur (Edge Function) : la nacelle du fichier généré .ts = reg
   assert.match(n.content, /AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer/, "consigne d'interdiction");
   assert.doesNotMatch(n.content.replace(/AUCUNE certification[^.]*\./i, ""), /caces|certifi/i, "aucune affirmation non confirmée");
   assert.doesNotMatch(n.keywords.join(" "), /caces|certifi/i, "mots-clés");
-  formations.filter((f) => f.id !== "nacelle").forEach((f) => assert.ok(!("priceLabel" in f), "pas de prix inventé : " + f.id));
+  formations.filter((f) => f.id !== "nacelle" && f.id !== "beps").forEach((f) => assert.ok(!("priceLabel" in f), "pas de prix inventé : " + f.id));
 });
 
 test("inscription : le prix de la nacelle vient du registre (plus de valeur figée)", () => {

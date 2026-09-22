@@ -103,15 +103,9 @@
       features: ["Équipement fourni", "Expert technique", "Pratique intensive"],
       keywords: ["fibre", "fiber", "optique", "optic", "soudure", "raccordement", "telecom", "installation", "ftth"]
     },
-    {
-      id: "beps", registrationId: "beps", category: "secours",
-      title: "BEPS — Premier secours", titleKey: "dd.beps", taglineKey: "dd.beps_desc", descKey: "fo.f6_desc",
-      url: "formations.html#beps", signupUrl: "inscription.html?formation=beps",
-      duration: "3 jours", level: "Moyen",
-      description: "Maîtrisez les gestes qui sauvent : réanimation, hémorragies et positions de sécurité. Brevet européen de premiers secours reconnu.",
-      features: ["Gestes qui sauvent", "Brevet reconnu", "Pratique sur mannequin"],
-      keywords: ["beps", "secours", "secourisme", "premiers", "brevet", "reanimation", "réanimation", "sauvetage", "first aid", "ehbo", "cpr", "defibrillateur"]
-    }
+    /* BEPS — Premier secours : construite depuis le registre js/trainings-data.js (voir plus bas),
+       comme la nacelle. Page dédiée formation-beps-premiers-secours.html. */
+    { id: "beps", fromTrainings: true }
   ];
 
   /* Formation à page dédiée : TOUS ses faits viennent du registre js/trainings-data.js
@@ -120,9 +114,10 @@
     return {
       id: T.id, registrationId: T.registrationId, category: T.category,
       title: T.title, fullTitle: T.fullTitle,
-      titleKey: T.titleKey, fullTitleKey: T.fullTitleKey, taglineKey: "dd.nacelle_desc", summaryKey: T.summaryKey, descKey: T.summaryKey,
+      titleKey: T.titleKey, fullTitleKey: T.fullTitleKey, taglineKey: "dd." + T.id + "_desc", summaryKey: T.summaryKey, descKey: T.summaryKey,
       url: T.url, signupUrl: T.signupUrl,
-      duration: Trainings.formatDuration(T.durationDays), level: "Spécialisée",
+      duration: T.durationDays != null ? Trainings.formatDuration(T.durationDays) : Trainings.formatDurationHours(T.durationHours),
+      level: T.level || "Spécialisée",
       description: T.summary, objective: T.objective,
       price: T.price, priceLabel: Trainings.formatPrice(T.price),
       format: T.formatLabel, languages: T.languageLabels.slice(), audience: T.audience.slice(),
@@ -135,7 +130,7 @@
       searchKeywords: T.keywords.slice(),
       keywords: T.keywords.filter(function (k) { return !GENERIC_KEYWORD.test(k); }),
       thumb: T.images.thumb, image: T.images.card, imageAlt: T.imageAlt,
-      factKeys: ["dd.nacelle_dur", "dd.nacelle_fmt", "dd.nacelle_langs"],
+      factKeys: ["dd." + T.id + "_dur", "dd." + T.id + "_fmt", "dd." + T.id + "_langs"],
       dedicatedPage: true
     };
   }
@@ -194,7 +189,10 @@
   }
   function buildFormations() {
     return CATALOGUE.map(function (f) {
-      if (f.fromTrainings) return Trainings && Trainings.nacelles ? fromTrainings(Trainings.nacelles) : null;
+      if (f.fromTrainings) {
+        var t = Trainings && Trainings.get ? Trainings.get(f.id) : null;
+        return t ? fromTrainings(t) : null;
+      }
       return clone(f);
     }).filter(Boolean);
   }

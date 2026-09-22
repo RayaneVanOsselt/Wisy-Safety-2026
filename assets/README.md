@@ -10,6 +10,7 @@ assets/
 ├── icons/            Icône de l'onglet du navigateur et icône « écran d'accueil » du téléphone
 ├── images/
 │   ├── assistant/    Mascotte de l'assistant virtuel
+│   ├── beps/         Photo + illustrations d'accent de la page Formation BEPS
 │   ├── contact/      Photo de la page Contact
 │   ├── faq/          Décor du Centre d'aide
 │   ├── formations/   Photos des 6 formations (catalogue + inscription)
@@ -49,6 +50,7 @@ s'ils échouent, ils indiquent le fichier en cause.
 |---|---|
 | `images/formations/` | cartes de `formations.html` et étape 1 de `inscription.html` |
 | `images/nacelles/` | `formation-nacelles-elevatrices.html` (et l'aperçu dans la recherche) |
+| `images/beps/` | `formation-beps-premiers-secours.html` (et l'aperçu dans la recherche) |
 | `images/partenaires/` | bandeau des partenaires de `index.html` |
 | `images/contact/` | `contact.html` |
 | `images/partage/` | aperçu des liens partagés (balises générées par `scripts/build-seo.js`) |

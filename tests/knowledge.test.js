@@ -28,7 +28,7 @@ test("formations : url = fiche (ancre catalogue OU page dédiée existante), sig
       assert.ok(fs.existsSync(path.join(__dirname, "..", f.url)), "la page dédiée existe : " + f.url);
     }
     assert.match(f.signupUrl, /^inscription\.html\?formation=/, "signup " + f.id);
-    assert.ok(f.duration && /jour/.test(f.duration), "durée " + f.id);
+    assert.ok(f.duration && /jour|heure/.test(f.duration), "durée " + f.id);
   });
 });
 
@@ -40,13 +40,13 @@ test("byId + formationsByCategory", () => {
 });
 
 test("HONNÊTETÉ : seul un prix CONFIRMÉ peut figurer sur une formation (registre central)", () => {
-  /* Prix confirmés par Wisy Safety, en centimes HT. Toute autre formation reste sans prix. */
-  const CONFIRMED = { nacelle: 35000 };
+  /* Prix confirmés par Wisy Safety, en centimes. Toute autre formation reste sans prix. */
+  const CONFIRMED = { nacelle: { cents: 35000, label: "350 € HT" }, beps: { cents: 7000, label: "70 €" } };
   Knowledge.formations().forEach((f) => {
     assert.ok(!("prix" in f), "pas de champ « prix » sur " + f.id);
     if (CONFIRMED[f.id]) {
-      assert.equal(f.price.amountCents, CONFIRMED[f.id], "prix confirmé " + f.id);
-      assert.equal(f.priceLabel, "350 € HT", "libellé " + f.id);
+      assert.equal(f.price.amountCents, CONFIRMED[f.id].cents, "prix confirmé " + f.id);
+      assert.equal(f.priceLabel, CONFIRMED[f.id].label, "libellé " + f.id);
     } else {
       assert.ok(!("price" in f) && !f.priceLabel, "pas de prix inventé sur " + f.id);
     }

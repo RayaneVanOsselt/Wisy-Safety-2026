@@ -150,11 +150,12 @@ test("VÉRACITÉ NACELLE : CACES / certification restent « à confirmer », y c
 });
 
 test("les prix : jamais un chiffre hors formation confirmée (assistant ET FAQ)", () => {
-  ["Combien coûte une formation ?", "Prix du BEPS ?", "Quel est le tarif de la formation fibre optique ?", "Quels sont les tarifs des formations ?"].forEach((q) => {
+  ["Combien coûte une formation ?", "Prix du VCA de base ?", "Quel est le tarif de la formation fibre optique ?", "Quels sont les tarifs des formations ?"].forEach((q) => {
     const r = ask(q);
     assert.doesNotMatch(r.message, /\d+\s?€/, q);
   });
-  assert.match(ask("Combien coûte la formation nacelle ?").message, /350 € HT/, "le seul prix confirmé reste servi par le registre");
+  assert.match(ask("Combien coûte la formation nacelle ?").message, /350 € HT/, "le prix nacelle reste servi par le registre");
+  assert.match(ask("Prix du BEPS ?").message, /70 €/, "le prix BEPS (registre central) est désormais confirmé");
 });
 
 test("prompt-injection : la FAQ ne permet pas de contourner les garde-fous", () => {

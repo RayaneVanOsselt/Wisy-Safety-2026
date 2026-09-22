@@ -102,8 +102,84 @@
     unconfirmed: ["CACES", "CACES R486", "certification", "certifiant", "agrément", "agréé", "reconnu", "obligatoire"]
   };
 
+  var IMG_BEPS = "assets/images/beps/";
+
+  /* BEPS — Brevet Européen de Premiers Secours. Faits repris de la fiche déjà publiée par
+     Wisy Safety (durée, tarif, certificat, programme) : voir docs/README-BEPS.md. */
+  var BEPS = {
+    id: "beps",
+    registrationId: "beps",
+    slug: "beps-premiers-secours",
+    category: "secours",
+
+    url: "formation-beps-premiers-secours.html",
+    signupUrl: "inscription.html?formation=beps",
+    catalogueUrl: "formations.html#beps",
+
+    title: "BEPS — Premier secours",
+    fullTitle: "Brevet Européen de Premiers Secours",
+    summary: "Apprendre, en 15 heures, à protéger, alerter le 112 et secourir une victime en attendant les professionnels : réanimation, défibrillation, position latérale de sécurité, hémorragies, étouffement, malaises et brûlures.",
+    objective: "Rendre chaque participant capable d'intervenir efficacement dès les premières minutes d'une urgence, dans le bon ordre et sans se mettre en danger.",
+    titleKey: "dd.beps",
+    fullTitleKey: "dd.beps_full",
+    summaryKey: "dd.beps_summary",
+
+    /* Faits confirmés (fiche BEPS publiée par Wisy Safety) */
+    durationHours: 15,
+    /* 70 € — le statut TVA n'est pas précisé sur la fiche source : on n'invente ni HT ni TTC. */
+    price: { amountCents: 7000, currency: "EUR", vatIncluded: null },
+    languages: ["fr", "nl", "en"],
+    languageLabels: ["Français", "Néerlandais", "Anglais"],
+    format: "practice-focused",
+    formatLabel: "Essentiellement pratique",
+    level: "Moyen",
+    audience: ["toute personne souhaitant apprendre les gestes qui sauvent"],
+
+    /* Les 6 gestes enseignés (ordre d'affichage de la section « Ce que vous saurez faire ») */
+    types: [
+      { id: "reanimation",  name: "Réanimation & défibrillation" },
+      { id: "pls",          name: "Position latérale de sécurité" },
+      { id: "etouffement",  name: "Étouffement & désobstruction" },
+      { id: "hemorragies",  name: "Hémorragies & plaies" },
+      { id: "malaises",     name: "Malaises & brûlures" },
+      { id: "alerte",       name: "Alerter le 112" }
+    ],
+
+    /* Recherche : titre, synonymes, termes métier (sans accents, minuscules) */
+    keywords: [
+      "beps", "premiers secours", "premier secours", "secourisme", "secouriste",
+      "brevet europeen de premiers secours", "brevet de secourisme",
+      "reanimation", "massage cardiaque", "cpr", "rcp",
+      "dea", "defibrillateur", "defibrillation",
+      "pls", "position laterale de securite", "victime inconsciente",
+      "etouffement", "desobstruction", "obstruction",
+      "hemorragie", "plaie", "malaise", "avc", "brulure", "intoxication",
+      "urgence", "112", "alerter", "gestes qui sauvent", "sauvetage",
+      "first aid", "ehbo", "erste hilfe"
+    ],
+
+    /* Visuels : photo de formation réelle (même master que assets/images/formations/beps.webp)
+       pour le hero + la miniature de recherche ; illustrations d'accent pour « Pourquoi Wisy Safety ». */
+    images: {
+      hero:  IMG_BEPS + "beps-hero-1024.webp",
+      card:  "assets/images/formations/beps.webp",
+      thumb: IMG_BEPS + "beps-thumb-192.webp",
+      og:    "assets/images/partage/wisy-safety-1200x630.jpg",
+      accents: [
+        IMG_BEPS + "geste-secouriste-illustration-240.webp",
+        IMG_BEPS + "trousse-secours-illustration-240.webp",
+        IMG_BEPS + "mascotte-premiers-secours-240.webp",
+        IMG_BEPS + "journee-mondiale-premiers-secours-240.webp"
+      ]
+    },
+    imageAlt: "Formateur Wisy Safety encadrant un massage cardiaque sur mannequin d'entraînement",
+
+    /* Affirmations INTERDITES tant qu'elles ne sont pas confirmées par Wisy Safety */
+    unconfirmed: ["CACES", "certification officielle", "agrément", "agréé", "accrédité", "accréditation", "obligatoire", "diplôme d'état"]
+  };
+
   /* Toutes les formations à page dédiée (extensible : ajouter une entrée). */
-  var TRAININGS = { nacelle: NACELLES };
+  var TRAININGS = { nacelle: NACELLES, beps: BEPS };
 
   /* ---------------------------------------------------------------------
      Formatage (FR) — l'i18n de l'interface passe par les clés `dd.*`.
@@ -111,12 +187,17 @@
   function formatDuration(days) {
     return days + (days > 1 ? " jours" : " jour");
   }
-  /* 35000 -> "350 € HT" ; 24550 -> "245,50 € HT" */
+  /* 15 -> "15 heures" ; 1 -> "1 heure" */
+  function formatDurationHours(hours) {
+    return hours + (hours > 1 ? " heures" : " heure");
+  }
+  /* 35000/HT -> "350 € HT" ; 24550/HT -> "245,50 € HT" ; 7000/null -> "70 €" (statut TVA non précisé) */
   function formatPrice(p) {
     if (!p) return null;
     var euros = p.amountCents / 100;
     var s = (euros % 1 === 0) ? String(euros) : euros.toFixed(2).replace(".", ",");
-    return s + " €" + (p.vatIncluded ? " TTC" : " HT");
+    var suffix = p.vatIncluded === true ? " TTC" : p.vatIncluded === false ? " HT" : "";
+    return s + " €" + suffix;
   }
   function get(id) { return TRAININGS[id] || null; }
   function all() { return Object.keys(TRAININGS).map(function (k) { return TRAININGS[k]; }); }
@@ -130,9 +211,11 @@
     get: get,
     all: all,
     formatDuration: formatDuration,
+    formatDurationHours: formatDurationHours,
     formatPrice: formatPrice,
     pagePath: pagePath,
     hasDedicatedPage: hasDedicatedPage,
-    nacelles: NACELLES
+    nacelles: NACELLES,
+    beps: BEPS
   };
 });

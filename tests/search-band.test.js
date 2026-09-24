@@ -11,7 +11,7 @@ const vm = require("node:vm");
 
 const ROOT = path.join(__dirname, "..");
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda"].map((n) => n + ".html");
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda", "peb-wallonie-bruxelles"].map((n) => n + ".html");
 
 /* Gabarit JS de repli : on exécute bandHTML() tel qu'écrit dans search.js. */
 function jsBand() {

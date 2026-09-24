@@ -47,7 +47,9 @@
     "search.page_faq_t": "Centre d'aide",
     "search.page_faq_d": "Questions fréquentes et assistant",
     "search.page_agenda_t": "Agenda des formations",
-    "search.page_agenda_d": "Prochaines sessions, horaires et lieux"
+    "search.page_agenda_d": "Prochaines sessions, horaires et lieux",
+    "search.page_peb_t": "Devenez certificateur PEB",
+    "search.page_peb_d": "Formation, examen et agrément en Wallonie et à Bruxelles"
   });
 
   /* ---------------- ENGLISH ---------------- */
@@ -88,7 +90,9 @@
     "search.page_faq_t": "Help centre",
     "search.page_faq_d": "FAQ and assistant",
     "search.page_agenda_t": "Training schedule",
-    "search.page_agenda_d": "Upcoming sessions, times and venues"
+    "search.page_agenda_d": "Upcoming sessions, times and venues",
+    "search.page_peb_t": "Become a PEB certifier",
+    "search.page_peb_d": "Training, exam and approval in Wallonia and Brussels"
   });
 
   /* ---------------- NEDERLANDS ---------------- */
@@ -129,7 +133,9 @@
     "search.page_faq_t": "Helpcentrum",
     "search.page_faq_d": "Veelgestelde vragen en assistent",
     "search.page_agenda_t": "Opleidingsagenda",
-    "search.page_agenda_d": "Komende sessies, uren en locaties"
+    "search.page_agenda_d": "Komende sessies, uren en locaties",
+    "search.page_peb_t": "Word EPB-certificateur",
+    "search.page_peb_d": "Opleiding, examen en erkenning in Wallonië en Brussel"
   });
 
   /* ---------------- AFRIKAANS ---------------- */
@@ -170,7 +176,9 @@
     "search.page_faq_t": "Hulpsentrum",
     "search.page_faq_d": "Gereelde vrae en assistent",
     "search.page_agenda_t": "Opleidingsagenda",
-    "search.page_agenda_d": "Komende sessies, tye en plekke"
+    "search.page_agenda_d": "Komende sessies, tye en plekke",
+    "search.page_peb_t": "Word 'n PEB-sertifiseerder",
+    "search.page_peb_d": "Opleiding, eksamen en erkenning in Wallonië en Brussel"
   });
 
   /* ---------------- العربية (RTL) ---------------- */
@@ -211,7 +219,9 @@
     "search.page_faq_t": "مركز المساعدة",
     "search.page_faq_d": "الأسئلة الشائعة والمساعد",
     "search.page_agenda_t": "جدول الدورات التدريبية",
-    "search.page_agenda_d": "الدورات القادمة والمواعيد والأماكن"
+    "search.page_agenda_d": "الدورات القادمة والمواعيد والأماكن",
+    "search.page_peb_t": "كن معتمَدًا لشهادة الأداء الطاقي PEB",
+    "search.page_peb_d": "التدريب والامتحان والاعتماد في والونيا وبروكسل"
   });
 
   /* ---------------- БЪЛГАРСКИ ---------------- */
@@ -252,7 +262,9 @@
     "search.page_faq_t": "Помощен център",
     "search.page_faq_d": "Често задавани въпроси и асистент",
     "search.page_agenda_t": "График на обученията",
-    "search.page_agenda_d": "Предстоящи сесии, часове и места"
+    "search.page_agenda_d": "Предстоящи сесии, часове и места",
+    "search.page_peb_t": "Станете сертификатор PEB",
+    "search.page_peb_d": "Обучение, изпит и одобрение във Валония и Брюксел"
   });
 
   /* ---------------- DEUTSCH ---------------- */
@@ -293,7 +305,9 @@
     "search.page_faq_t": "Hilfe-Center",
     "search.page_faq_d": "Häufige Fragen und Assistent",
     "search.page_agenda_t": "Schulungstermine",
-    "search.page_agenda_d": "Kommende Termine, Zeiten und Orte"
+    "search.page_agenda_d": "Kommende Termine, Zeiten und Orte",
+    "search.page_peb_t": "PEB-Zertifizierer werden",
+    "search.page_peb_d": "Ausbildung, Prüfung und Zulassung in Wallonien und Brüssel"
   });
 
   /* ---------------- ROMÂNĂ ---------------- */
@@ -334,7 +348,9 @@
     "search.page_faq_t": "Centru de ajutor",
     "search.page_faq_d": "Întrebări frecvente și asistent",
     "search.page_agenda_t": "Calendarul cursurilor",
-    "search.page_agenda_d": "Sesiuni viitoare, ore și locații"
+    "search.page_agenda_d": "Sesiuni viitoare, ore și locații",
+    "search.page_peb_t": "Deveniți certificator PEB",
+    "search.page_peb_d": "Formare, examen și aprobare în Valonia și Bruxelles"
   });
 
   /* ---------------- ITALIANO ---------------- */
@@ -375,7 +391,9 @@
     "search.page_faq_t": "Centro assistenza",
     "search.page_faq_d": "Domande frequenti e assistente",
     "search.page_agenda_t": "Calendario dei corsi",
-    "search.page_agenda_d": "Prossime sessioni, orari e sedi"
+    "search.page_agenda_d": "Prossime sessioni, orari e sedi",
+    "search.page_peb_t": "Diventa certificatore PEB",
+    "search.page_peb_d": "Formazione, esame e abilitazione in Vallonia e Bruxelles"
   });
 
   /* ---------------- SLOVENŠČINA ---------------- */
@@ -416,7 +434,9 @@
     "search.page_faq_t": "Center za pomoč",
     "search.page_faq_d": "Pogosta vprašanja in asistent",
     "search.page_agenda_t": "Urnik usposabljanj",
-    "search.page_agenda_d": "Prihajajoče izvedbe, ure in lokacije"
+    "search.page_agenda_d": "Prihajajoče izvedbe, ure in lokacije",
+    "search.page_peb_t": "Postanite certifikator PEB",
+    "search.page_peb_d": "Usposabljanje, izpit in pooblastilo v Valoniji in Bruslju"
   });
 
   /* ---- Forme au singulier (compteur = 1), pour « 1 formation » vs « 2 formations » ---- */

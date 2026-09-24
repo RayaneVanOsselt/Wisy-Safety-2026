@@ -28,6 +28,7 @@ et sans rien à installer pour le mettre en ligne.
 | Changer les questions du Centre d'aide | `js/faq-data.js` | [docs/README-FAQ.md](docs/README-FAQ.md) |
 | Changer le prix, la durée ou les langues de la formation Nacelles | `js/trainings-data.js` | [docs/README-NACELLES.md](docs/README-NACELLES.md) |
 | Brancher le calendrier Outlook | l'attribut `data-calendar-url` dans `agenda.html` | [docs/README-AGENDA.md](docs/README-AGENDA.md) |
+| Changer les faits PEB (Wallonie/Bruxelles), le tarif ou les sessions | `js/peb-data.js` | [docs/README-PEB.md](docs/README-PEB.md) |
 | Configurer les avis clients (Supabase, e-mail, anti-spam) | `js/supabase-config.js` | [docs/README-AVIS.md](docs/README-AVIS.md) |
 | Comprendre ou activer l'assistant virtuel | `js/assistant/` | [docs/README-ASSISTANT.md](docs/README-ASSISTANT.md) |
 

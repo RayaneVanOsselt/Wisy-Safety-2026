@@ -9,7 +9,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const ROOT = path.join(__dirname, "..");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda"].map((n) => n + ".html");
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda", "peb-wallonie-bruxelles"].map((n) => n + ".html");
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 const size = (f) => fs.statSync(path.join(ROOT, f)).size;
 const noScripts = (html) => html.replace(/<!--[\s\S]*?-->/g, "").replace(/<script\b[\s\S]*?<\/script>/gi, "").replace(/<style\b[\s\S]*?<\/style>/gi, "");

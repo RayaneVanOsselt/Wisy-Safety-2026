@@ -155,6 +155,38 @@ def beps():
             report("beps thumb", src, size, f"{im.width}×{im.height}")
 
 
+# --------------------------------------------------------------------------- page PEB (Wallonie & Bruxelles)
+# Photos génériques fournies par Wisy Safety pour la page /peb-wallonie-bruxelles.html (voir
+# docs/image-sources.md pour la provenance). Hero + deux visuels de section en pleine largeur,
+# plus un accent carré (même traitement que les illustrations BEPS : recadrage centré 240×240).
+PEB_SECTIONS = {
+    "peb-residence-facade": ("assets/originaux/peb/peb-residence-facade.jpg", 1200),   # hero
+    "peb-structure-chantier": ("assets/originaux/peb/peb-structure-chantier.jpg", 900),  # section "bâtiment & technique"
+    "peb-cles-immeuble": ("assets/originaux/peb/peb-cles-immeuble.jpg", 900),         # section "agrément obtenu"
+}
+
+
+def peb():
+    for name, (src, max_w) in PEB_SECTIONS.items():
+        if not os.path.exists(src):
+            continue
+        dst = f"assets/images/peb/{name}-{max_w}.webp"
+        if not need(dst, src):
+            continue
+        im = fit_width(to_rgb(Image.open(src)), max_w)
+        size = save_webp(im, dst, quality=74)
+        report(f"peb {name}", src, size, f"{im.width}×{im.height}")
+
+    # Accent (badge rond, section éligibilité) : même traitement que les illustrations BEPS.
+    src = "assets/originaux/peb/peb-verification-conformite.jpg"
+    if os.path.exists(src):
+        dst = "assets/images/peb/peb-verification-conformite-240.webp"
+        if need(dst, src):
+            im = center_square(to_rgb(Image.open(src))).resize((240, 240), Image.LANCZOS)
+            size = save_webp(im, dst, quality=80)
+            report("peb accent", src, size, f"{im.width}×{im.height}")
+
+
 # --------------------------------------------------------------------------- partenaires (affichés ≤ 75 px)
 PARTNERS = {
     "orange": "orange.png", "proximus": "proximus.webp", "telenet": "telenet.webp",
@@ -232,6 +264,7 @@ if __name__ == "__main__":
     logo()
     formations()
     beps()
+    peb()
     partners()
     misc()
     if "--og" in sys.argv:

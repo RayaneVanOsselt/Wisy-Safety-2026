@@ -96,7 +96,7 @@ test("URL absolue : la racine pour l'accueil, .html ailleurs, domaine canonique 
 });
 
 test("chaque page charge le registre AVANT la recherche (et le lanceur le charge à la demande si besoin)", () => {
-  ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda"].forEach((n) => {
+  ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda", "peb-wallonie-bruxelles"].forEach((n) => {
     const html = read(n + ".html");
     const t = html.indexOf('<script src="js/trainings-data.js">'), s = html.indexOf('<script src="js/site-content.js">'), q = html.indexOf('<script src="js/search.js">');
     assert.ok(t > 0 && t < s && s < q, n + ".html : trainings-data.js → site-content.js → search.js");

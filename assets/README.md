@@ -16,6 +16,7 @@ assets/
 │   ├── formations/   Photos des 6 formations (catalogue + inscription)
 │   ├── logo/         Logo Wisy Safety (voir ci-dessous)
 │   ├── nacelles/     Photos de la page Formation Nacelles
+│   ├── peb/          Photos de la page Certificateur PEB (Wallonie & Bruxelles)
 │   ├── partage/      Images affichées quand on partage un lien (Facebook, LinkedIn, WhatsApp…)
 │   └── partenaires/  Logos des partenaires (bandeau de l'accueil)
 ├── videos/
@@ -51,6 +52,7 @@ s'ils échouent, ils indiquent le fichier en cause.
 | `images/formations/` | cartes de `formations.html` et étape 1 de `inscription.html` |
 | `images/nacelles/` | `formation-nacelles-elevatrices.html` (et l'aperçu dans la recherche) |
 | `images/beps/` | `formation-beps-premiers-secours.html` (et l'aperçu dans la recherche) |
+| `images/peb/` | `peb-wallonie-bruxelles.html` |
 | `images/partenaires/` | bandeau des partenaires de `index.html` |
 | `images/contact/` | `contact.html` |
 | `images/partage/` | aperçu des liens partagés (balises générées par `scripts/build-seo.js`) |

@@ -176,6 +176,11 @@
       id: "agenda", url: "agenda.html", title: "Agenda des formations", titleKey: "search.page_agenda_t", descKey: "search.page_agenda_d",
       content: "Agenda des formations Wisy Safety : la page qui accueillera les prochaines sessions, leurs horaires et leurs disponibilités. L'agenda en ligne arrive prochainement : aucune date n'y est publiée pour le moment.",
       keywords: ["agenda", "calendrier", "dates", "date", "sessions", "session", "prochaines", "prochaine", "horaires", "planning", "quand", "disponibilites", "calendar", "schedule", "upcoming", "termine", "kalender", "calendario", "urnik", "program", "datum"]
+    },
+    {
+      id: "peb", url: "peb-wallonie-bruxelles.html", title: "Devenez certificateur PEB", titleKey: "search.page_peb_t", descKey: "search.page_peb_d",
+      content: "Devenir certificateur PEB (performance énergétique des bâtiments) en Wallonie ou à Bruxelles : conditions d'accès, formation réglementaire, examen, demande d'agrément et sessions. Les deux Régions ont des procédures et des autorités distinctes : un agrément wallon ou bruxellois ne permet d'exercer que dans sa propre Région. Tarif de la formation Wisy Safety communiqué sur demande.",
+      keywords: ["peb", "certificateur peb", "certificateur peb bruxelles", "certificateur peb wallonie", "formation peb", "formation peb bruxelles", "formation peb wallonie", "formation certificateur peb", "performance energetique des batiments", "performance energetique batiment", "agrement peb", "agrement certificateur peb", "examen peb", "examen certificateur peb", "prix peb", "prix formation peb", "tarif peb", "devenir certificateur", "devenir certificateur peb", "spw energie", "bruxelles environnement", "epb", "certificateur epb", "energieprestatie", "energy performance certificate"]
     }
   ];
 

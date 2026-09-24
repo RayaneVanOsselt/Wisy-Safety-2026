@@ -391,6 +391,40 @@ export const SITE_PAGES: SiteEntry[] = [
       "program",
       "datum"
     ]
+  },
+  {
+    "id": "page-peb",
+    "type": "page",
+    "title": "Devenez certificateur PEB",
+    "url": "peb-wallonie-bruxelles.html",
+    "content": "Devenir certificateur PEB (performance énergétique des bâtiments) en Wallonie ou à Bruxelles : conditions d'accès, formation réglementaire, examen, demande d'agrément et sessions. Les deux Régions ont des procédures et des autorités distinctes : un agrément wallon ou bruxellois ne permet d'exercer que dans sa propre Région. Tarif de la formation Wisy Safety communiqué sur demande.",
+    "keywords": [
+      "peb",
+      "certificateur peb",
+      "certificateur peb bruxelles",
+      "certificateur peb wallonie",
+      "formation peb",
+      "formation peb bruxelles",
+      "formation peb wallonie",
+      "formation certificateur peb",
+      "performance energetique des batiments",
+      "performance energetique batiment",
+      "agrement peb",
+      "agrement certificateur peb",
+      "examen peb",
+      "examen certificateur peb",
+      "prix peb",
+      "prix formation peb",
+      "tarif peb",
+      "devenir certificateur",
+      "devenir certificateur peb",
+      "spw energie",
+      "bruxelles environnement",
+      "epb",
+      "certificateur epb",
+      "energieprestatie",
+      "energy performance certificate"
+    ]
   }
 ];
 
@@ -403,6 +437,7 @@ export const SITE_PATHS: string[] = [
   "inscription.html",
   "faq.html",
   "agenda.html",
+  "peb-wallonie-bruxelles.html",
   "formation-nacelles-elevatrices.html",
   "formation-beps-premiers-secours.html"
 ];

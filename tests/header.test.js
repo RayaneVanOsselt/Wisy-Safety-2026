@@ -9,7 +9,7 @@ const path = require("node:path");
 
 const ROOT = path.join(__dirname, "..");
 const read = (p) => fs.readFileSync(path.join(ROOT, p), "utf8");
-const PAGES = ["index", "formations", "contact", "avis", "inscription", "formation-nacelles-elevatrices", "faq", "agenda"];
+const PAGES = ["index", "formations", "contact", "avis", "inscription", "formation-nacelles-elevatrices", "faq", "agenda", "peb-wallonie-bruxelles"];
 
 PAGES.forEach((name) => {
   test("[" + name + ".html] accès Centre d'aide : icône d'en-tête, lien de la barre utilitaire, rangée du menu mobile", () => {

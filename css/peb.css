@@ -1,0 +1,415 @@
+/* =========================================================================
+   WISY SAFETY — Page « Certificateur PEB — Wallonie & Bruxelles »
+   -------------------------------------------------------------------------
+   Namespace .peb-*, chargé APRÈS le socle inline de la page (tokens/boutons/
+   header/footer partagés — voir peb-wallonie-bruxelles.html), scopé par
+   body.peb-page. Même famille que css/formation-beps.css / css/agenda.css.
+
+   Signature visuelle : univers « document technique / dossier d'agrément » —
+   grille de plan d'architecte très discrète, lignes de cotation, labels
+   numérotés, fiches façon carnet technique — jamais un faux certificat PEB
+   réel (voir le motif .peb-gauge : toujours annoté « exemple »).
+
+   Motion : transform/opacity uniquement, 180–500 ms, prefers-reduced-motion
+   respecté en section finale. Turquoise réservé aux CTA (≤10 % de la page).
+   ========================================================================= */
+
+body.peb-page { background: var(--creme); }
+
+.peb-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+.peb-skip { position: fixed; left: 1rem; top: -4rem; z-index: 2000; padding: .75rem 1.1rem; border-radius: var(--radius-sm); background: var(--noir-jais); color: var(--creme); font-weight: 600; font-family: var(--font-titre); box-shadow: var(--shadow-md); transition: top var(--motion-fast) var(--ease-premium); }
+.peb-skip:focus { top: 1rem; }
+
+/* ==================== MOTIFS PARTAGÉS ==================== */
+/* Grille de plan d'architecte : très discrète, jamais décorative au point de nuire à la lecture. */
+.peb-blueprint {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(244,250,249,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244,250,249,.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+  -webkit-mask-image: linear-gradient(180deg, #000, transparent 85%);
+          mask-image: linear-gradient(180deg, #000, transparent 85%);
+}
+.peb-blueprint--light {
+  background-image:
+    linear-gradient(rgba(27,45,40,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27,45,40,.05) 1px, transparent 1px);
+}
+
+.peb-label { display: flex; align-items: center; gap: .75rem; font-family: var(--font-titre); font-size: var(--fs-micro); font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--epinette); margin: 0 0 1rem; }
+.peb-label__no { display: inline-flex; align-items: center; justify-content: center; min-width: 2.1em; padding: .25em .3em; border: 1px solid var(--granit-20); border-radius: var(--radius-sm); font-variant-numeric: tabular-nums; color: var(--granit); }
+.peb-label--on-dark { color: var(--turquoise); }
+.peb-label--on-dark .peb-label__no { border-color: rgba(244,250,249,.3); color: var(--granit-clair); }
+
+.peb-title { font-size: var(--fs-h2); margin: 0 0 .85rem; max-width: 20ch; }
+.peb-lead { font-size: var(--fs-lead); color: var(--granit); max-width: 62ch; margin: 0; }
+.peb-body { color: var(--granit); max-width: 58ch; }
+
+.peb-section { padding: clamp(3.5rem, 7vw, 6.5rem) 0; }
+.peb-section--tint { background: var(--brume-08); }
+.peb-section__head { max-width: 74ch; margin: 0 0 clamp(2rem, 4vw, 3rem); }
+.peb-section__head--center { margin-inline: auto; text-align: center; }
+.peb-section__head--center .peb-label { justify-content: center; }
+.peb-section__head--center .peb-lead { margin-inline: auto; }
+
+.peb-inline-link { color: var(--epinette); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--granit-20); transition: text-decoration-color var(--t-fast) var(--ease); }
+.peb-inline-link:hover, .peb-inline-link:focus-visible { text-decoration-color: currentColor; }
+
+/* Étiquette de véracité (n'apparaît que si les données sont réellement vérifiées, voir js/peb-data.js) */
+.peb-verified { display: inline-flex; align-items: center; gap: .5rem; font-size: var(--fs-micro); color: var(--granit); }
+.peb-verified .ic { width: 14px; height: 14px; color: var(--epinette); flex-shrink: 0; }
+
+/* Badge d'illustration générique (même traitement que les accents BEPS : luminosité unifiée sur fond épinette) */
+.peb-accent-badge { display: inline-flex; width: 56px; height: 56px; border-radius: 50%; overflow: hidden; background: var(--epinette); flex-shrink: 0; }
+.peb-accent-badge img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: luminosity; opacity: .88; }
+
+.ic { width: 1em; height: 1em; stroke: currentColor; fill: none; }
+
+/* ==================== 00. FIL D'ARIANE ==================== */
+.peb-bc { padding-top: clamp(1.5rem, 3vw, 2.25rem); }
+.peb-bc ol { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: var(--fs-small); color: rgba(244,250,249,.62); }
+.peb-bc a { color: rgba(244,250,249,.8); transition: color var(--t-fast) var(--ease); }
+.peb-bc a:hover, .peb-bc a:focus-visible { color: var(--turquoise); }
+.peb-bc li:not(:last-child)::after { content: "/"; margin-left: .5rem; color: rgba(244,250,249,.35); }
+.peb-bc li[aria-current] span { color: var(--creme); }
+
+/* ==================== 01. HERO ==================== */
+.peb-hero { position: relative; overflow: hidden; background: linear-gradient(160deg, var(--noir-jais) 0%, #17332e 46%, var(--epinette) 130%); color: var(--creme); isolation: isolate; }
+.peb-hero::after { content: ""; position: absolute; z-index: -1; width: 640px; height: 640px; right: -220px; top: -200px; border-radius: 50%; background: radial-gradient(circle, rgba(72,214,194,.16), transparent 68%); pointer-events: none; }
+
+.peb-registry { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin: 1.75rem 0 0; font-size: var(--fs-micro); letter-spacing: .08em; text-transform: uppercase; color: rgba(244,250,249,.55); }
+.peb-registry__item { display: inline-flex; align-items: center; gap: .5rem; }
+.peb-registry__item .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--turquoise); }
+.peb-registry__sep { width: 14px; height: 1px; background: rgba(244,250,249,.25); }
+
+.peb-hero__grid { display: grid; grid-template-columns: minmax(0,1.05fr) minmax(0,.95fr); gap: clamp(2.5rem, 5vw, 5rem); align-items: center; padding: clamp(2.25rem, 5vw, 3.5rem) 0 clamp(3.5rem, 6vw, 5rem); }
+
+.peb-badge { display: inline-flex; align-items: center; gap: .55rem; padding: .5rem 1rem; border-radius: var(--radius-pill); border: 1px solid rgba(244,250,249,.22); font-family: var(--font-titre); font-size: var(--fs-small); font-weight: 600; letter-spacing: .04em; color: var(--creme); margin: 1.5rem 0 1.25rem; }
+.peb-badge__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--turquoise); box-shadow: 0 0 0 3px rgba(72,214,194,.18); }
+
+.peb-hero__title { font-size: clamp(2.3rem, 5vw, 3.6rem); color: var(--creme); margin: 0 0 1rem; max-width: 15ch; }
+.peb-hero__accroche { font-family: var(--font-titre); font-weight: 600; font-size: clamp(1.1rem, 1.6vw, 1.3rem); color: var(--turquoise); margin: 0 0 .85rem; }
+
+/* Masque de révélation des titres signature (identique au principe .beps-mask) */
+.peb-mask { display: inline-block; overflow: hidden; vertical-align: top; }
+.peb-mask__inner { display: inline-block; transform: translateY(105%); transition: transform var(--t-reveal) var(--ease-premium); transition-delay: var(--d, 0s); }
+.peb-mask.in .peb-mask__inner { transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) { .peb-mask__inner { transform: none !important; transition: none !important; } }
+
+/* ---- Sélecteur de Région (segmented control premium) ---- */
+.peb-switch { display: inline-flex; padding: 5px; gap: 4px; border-radius: var(--radius-pill); background: rgba(244,250,249,.08); border: 1px solid rgba(244,250,249,.16); }
+.peb-switch__btn { position: relative; display: inline-flex; align-items: center; gap: .55rem; padding: .7rem 1.35rem; border-radius: var(--radius-pill); font-family: var(--font-titre); font-weight: 600; font-size: .96rem; color: rgba(244,250,249,.72); transition: color var(--t-fast) var(--ease); min-height: 44px; }
+.peb-switch__btn::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--turquoise); opacity: 0; transform: scale(.92); transition: opacity var(--t-fast) var(--ease-premium), transform var(--t-fast) var(--ease-premium); z-index: -1; }
+.peb-switch__btn[aria-pressed="true"] { color: var(--noir-jais); }
+.peb-switch__btn[aria-pressed="true"]::before { opacity: 1; transform: scale(1); }
+.peb-switch__btn:hover:not([aria-pressed="true"]), .peb-switch__btn:focus-visible { color: var(--creme); }
+.peb-switch__flag { font-size: .78em; opacity: .85; }
+.peb-switch--light { background: var(--brume-08); border-color: var(--granit-20); }
+.peb-switch--light .peb-switch__btn { color: var(--granit); }
+.peb-switch--light .peb-switch__btn[aria-pressed="true"] { color: var(--noir-jais); }
+.peb-switch--light .peb-switch__btn:hover:not([aria-pressed="true"]) { color: var(--epinette); }
+
+.peb-hero__micro { margin: 1.35rem 0 0; font-size: var(--fs-small); color: rgba(244,250,249,.6); max-width: 46ch; }
+.peb-hero__micro .sep { margin: 0 .5em; opacity: .5; }
+
+.peb-actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.75rem; }
+
+/* ---- Composition visuelle du hero (droite) ---- */
+.peb-hero__media { position: relative; }
+.peb-hero__frame { position: relative; border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 4/5; box-shadow: var(--shadow-drop); border: 1px solid rgba(244,250,249,.14); }
+.peb-hero__frame img { width: 100%; height: 100%; object-fit: cover; }
+.peb-hero__frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(200deg, transparent 55%, rgba(27,45,40,.55)); }
+
+.peb-hero__ring { position: absolute; inset: -18px; border: 1px dashed rgba(244,250,249,.22); border-radius: calc(var(--radius-lg) + 18px); pointer-events: none; }
+
+/* Fiche « énergétique » flottante — TOUJOURS annotée « exemple » : jamais un vrai certificat. */
+.peb-gauge { position: absolute; left: -8%; bottom: -8%; width: min(230px, 60%); background: var(--creme); color: var(--noir-jais); border-radius: var(--radius); box-shadow: var(--shadow-drop); padding: 1rem 1.1rem 1.1rem; }
+.peb-gauge__head { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; margin-bottom: .65rem; }
+.peb-gauge__title { font-family: var(--font-titre); font-weight: 700; font-size: .78rem; letter-spacing: .04em; }
+.peb-gauge__example { font-size: .64rem; letter-spacing: .06em; text-transform: uppercase; color: var(--granit); }
+.peb-gauge__scale { display: flex; flex-direction: column; gap: 3px; }
+.peb-gauge__row { display: grid; grid-template-columns: 1.1em 1fr; align-items: center; gap: .5rem; height: 15px; }
+.peb-gauge__row b { font-size: .72rem; font-family: var(--font-titre); }
+.peb-gauge__bar { height: 100%; border-radius: 3px; }
+.peb-gauge__row[data-g="A"] .peb-gauge__bar { width: 34%; background: #2f9e6f; }
+.peb-gauge__row[data-g="B"] .peb-gauge__bar { width: 44%; background: #6cb24a; }
+.peb-gauge__row[data-g="C"] .peb-gauge__bar { width: 54%; background: #b7c332; }
+.peb-gauge__row[data-g="D"] .peb-gauge__bar { width: 64%; background: #e8c53a; }
+.peb-gauge__row[data-g="E"] .peb-gauge__bar { width: 74%; background: #e89a3a; }
+.peb-gauge__row[data-g="F"] .peb-gauge__bar { width: 86%; background: #d9622f; }
+.peb-gauge__row[data-g="G"] .peb-gauge__bar { width: 100%; background: #c62828; }
+.peb-gauge__row.is-marked { outline: 2px solid var(--noir-jais); outline-offset: 1px; border-radius: 3px; }
+
+.peb-parcours-card { position: absolute; right: -6%; top: 10%; width: min(190px, 54%); background: rgba(27,45,40,.82); backdrop-filter: blur(10px); border: 1px solid rgba(244,250,249,.18); border-radius: var(--radius); padding: .9rem 1rem; color: var(--creme); }
+.peb-parcours-card__t { font-family: var(--font-titre); font-weight: 700; font-size: .78rem; margin-bottom: .5rem; }
+.peb-parcours-card ol { display: flex; flex-direction: column; gap: .35rem; font-size: .72rem; color: rgba(244,250,249,.85); }
+.peb-parcours-card li { display: flex; align-items: center; gap: .5rem; }
+.peb-parcours-card .no { display: inline-flex; align-items: center; justify-content: center; width: 1.3em; height: 1.3em; border-radius: 50%; background: rgba(72,214,194,.18); color: var(--turquoise); font-size: .68rem; font-weight: 700; flex-shrink: 0; }
+
+.peb-region-badge { position: absolute; left: 6%; top: -6%; display: inline-flex; align-items: center; gap: .5rem; padding: .5rem .9rem; border-radius: var(--radius-pill); background: var(--turquoise); color: var(--noir-jais); font-family: var(--font-titre); font-weight: 700; font-size: .8rem; box-shadow: var(--shadow-md); }
+
+.peb-scrollcue { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding-bottom: 1.75rem; opacity: .55; }
+.peb-scrollcue__t { font-size: var(--fs-micro); letter-spacing: .18em; text-transform: uppercase; color: var(--creme); }
+.peb-scrollcue__line { width: 1px; height: 26px; background: linear-gradient(var(--creme), transparent); animation: peb-cue 1.8s ease infinite; }
+@keyframes peb-cue { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+/* ==================== 02. TRUST BAR ==================== */
+.peb-trust { border-bottom: 1px solid var(--granit-20); background: var(--creme); }
+.peb-trust__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: clamp(1.5rem, 4vw, 3.5rem); padding: clamp(1.4rem, 3vw, 2rem) 0; }
+.peb-trust__item { display: flex; align-items: center; gap: .65rem; font-size: .92rem; color: var(--granit); white-space: nowrap; }
+.peb-trust__item .ic { width: 20px; height: 20px; color: var(--epinette); flex-shrink: 0; }
+.peb-trust__item strong { color: var(--noir-jais); font-family: var(--font-titre); }
+
+/* ==================== RÉGION : contenu bascule ==================== */
+[data-region-panel] { transition: opacity .22s var(--ease-out); }
+html[data-peb-region] [data-region-panel] { opacity: 1; }
+/* Garde-fou : certains panneaux régionaux portent aussi une classe de mise en page qui fixe son
+   propre `display` (ex. .peb-conditions{display:grid}) — une règle AUTEUR l'emporte toujours sur
+   la règle UA « [hidden]{display:none} », même à spécificité égale, ce qui neutralisait `hidden`
+   sur ces panneaux précis (les deux Régions restaient visibles en même temps). `!important` ici
+   garantit que `hidden` gagne quelle que soit la classe posée sur le même élément. */
+[data-region-panel][hidden] { display: none !important; }
+
+/* ==================== 04. POURQUOI DEVENIR CERTIFICATEUR ==================== */
+.peb-why-cert { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.5rem, 3vw, 2rem); }
+.peb-why-cert__card { padding: 1.75rem; border: 1px solid var(--granit-20); border-radius: var(--radius); background: var(--creme); }
+.peb-why-cert__card .ic-wrap { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: var(--radius-sm); background: var(--brume-14); color: var(--epinette); margin-bottom: 1rem; }
+.peb-why-cert__card .ic-wrap .ic { width: 22px; height: 22px; }
+.peb-why-cert__card h3 { font-size: 1.08rem; margin-bottom: .45rem; }
+.peb-why-cert__card p { color: var(--granit); font-size: .95rem; margin: 0; }
+
+/* ==================== 05. PARCOURS (timeline) ==================== */
+.peb-tl { display: flex; flex-direction: column; gap: 0; counter-reset: peb-step; position: relative; }
+.peb-tl__step { position: relative; display: grid; grid-template-columns: 3.25rem 1fr; gap: 1.5rem; padding: 1.35rem 0; }
+.peb-tl__step:not(:last-child) { border-bottom: 1px dashed var(--granit-20); }
+.peb-tl__node { display: flex; flex-direction: column; align-items: center; }
+.peb-tl__no { width: 3.25rem; height: 3.25rem; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-titre); font-weight: 700; font-size: 1.05rem; background: var(--epinette); color: var(--creme); flex-shrink: 0; }
+.peb-tl__body h3 { font-size: 1.12rem; margin-bottom: .35rem; }
+.peb-tl__body p { color: var(--granit); margin: 0; max-width: 62ch; }
+
+/* ==================== 06. PROGRAMME (accordéon) — & 14. FAQ, même composant ==================== */
+.peb-split { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr); gap: clamp(2.5rem, 5vw, 4rem); align-items: start; }
+.peb-split__head { position: sticky; top: calc(var(--header-offset, 7rem) + .5rem); }
+
+.peb-acc__item { border-bottom: 1px solid var(--granit-20); }
+.peb-acc__item:first-child { border-top: 1px solid var(--granit-20); }
+.peb-acc__h { margin: 0; }
+.peb-acc__btn { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; width: 100%; padding: 1.1rem .25rem; text-align: left; }
+.peb-acc__no { font-family: var(--font-titre); font-weight: 700; color: var(--granit); font-variant-numeric: tabular-nums; font-size: .95rem; }
+.peb-acc__no small { display: block; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; color: var(--granit); }
+.peb-acc__t { font-family: var(--font-titre); font-weight: 600; font-size: 1.02rem; color: var(--noir-jais); }
+.peb-acc__ic { position: relative; width: 20px; height: 20px; flex-shrink: 0; }
+.peb-acc__ic::before, .peb-acc__ic::after { content: ""; position: absolute; top: 50%; left: 50%; background: var(--epinette); transition: transform var(--t-fast) var(--ease-premium); }
+.peb-acc__ic::before { width: 14px; height: 2px; transform: translate(-50%,-50%); }
+.peb-acc__ic::after { width: 2px; height: 14px; transform: translate(-50%,-50%); }
+.peb-acc__item.is-open .peb-acc__ic::after { transform: translate(-50%,-50%) rotate(90deg) scaleY(0); }
+.peb-acc__item.is-open .peb-acc__t { color: var(--epinette); }
+.peb-acc__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--t-med) var(--ease-out); overflow: hidden; }
+.peb-acc__panel > div { min-height: 0; overflow: hidden; }
+.peb-acc__item.is-open .peb-acc__panel { grid-template-rows: 1fr; }
+/* Volontairement SANS padding vertical ici : sur un conteneur grid 0fr→1fr, un padding vertical
+   fixe empêche la ligne de revenir à une hauteur réellement nulle une fois fermée (le padding
+   n'est jamais « rogné » par overflow:hidden, contrairement à une marge d'enfant). L'espace bas
+   vient donc d'une marge sur le DERNIER enfant (voir plus bas), jamais d'un padding du conteneur. */
+.peb-acc__inner { padding-inline: .25rem; }
+.peb-acc__inner p { color: var(--granit); margin: 0 0 .6rem; }
+.peb-acc__inner > *:last-child { margin-bottom: 1.25rem; }
+.peb-acc__skills { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
+.peb-acc__skill { font-size: .78rem; padding: .3rem .65rem; border-radius: var(--radius-pill); background: var(--brume-14); color: var(--epinette); }
+.peb-acc__region-tag { display: inline-flex; align-items: center; gap: .4rem; font-size: .78rem; font-weight: 700; font-family: var(--font-titre); color: var(--epinette); margin-bottom: .35rem; }
+.peb-acc__region-tag + .peb-acc__region-tag { margin-top: .9rem; }
+/* Sans JS : tout est ouvert et lisible (dégradation propre, voir <noscript>) */
+.no-js .peb-acc__panel { grid-template-rows: 1fr; }
+
+/* ==================== 08. CONDITIONS D'ACCÈS ==================== */
+.peb-conditions { display: grid; gap: 1rem; }
+.peb-condition { display: flex; gap: 1rem; align-items: flex-start; padding: 1.1rem 1.25rem; border: 1px solid var(--granit-20); border-radius: var(--radius); background: var(--creme); }
+.peb-condition .ic-wrap { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--brume-14); color: var(--epinette); }
+.peb-condition .ic-wrap .ic { width: 17px; height: 17px; }
+.peb-condition p { margin: 0; color: var(--noir-jais); }
+
+/* ==================== 09. EXAMEN ==================== */
+.peb-exam-card { padding: clamp(1.5rem, 3vw, 2.25rem); border-radius: var(--radius-lg); background: var(--noir-jais); color: var(--creme); position: relative; overflow: hidden; }
+.peb-exam-card::before { content: ""; position: absolute; inset: 0; opacity: .5; background-image: linear-gradient(rgba(244,250,249,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(244,250,249,.05) 1px, transparent 1px); background-size: 28px 28px; }
+.peb-exam-card > * { position: relative; }
+.peb-exam-card__format { font-family: var(--font-titre); font-weight: 700; font-size: clamp(1.2rem, 2vw, 1.5rem); margin: 0 0 .75rem; color: var(--creme); }
+.peb-exam-card__notes { color: rgba(244,250,249,.78); margin: 0 0 1rem; max-width: 62ch; }
+.peb-exam-card__thresholds { display: inline-flex; flex-wrap: wrap; gap: .6rem; }
+.peb-exam-card__pill { font-size: .82rem; padding: .4rem .8rem; border-radius: var(--radius-pill); border: 1px solid rgba(244,250,249,.24); color: rgba(244,250,249,.9); }
+.peb-exam-card a { color: var(--turquoise); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ==================== 10. SESSIONS ==================== */
+.peb-session-filter { display: inline-flex; gap: .4rem; padding: 4px; border-radius: var(--radius-pill); background: var(--brume-08); border: 1px solid var(--granit-20); margin-bottom: 2rem; }
+.peb-session-filter__btn { padding: .6rem 1.1rem; border-radius: var(--radius-pill); font-family: var(--font-titre); font-weight: 600; font-size: .88rem; color: var(--granit); min-height: 40px; transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
+.peb-session-filter__btn[aria-pressed="true"] { background: var(--epinette); color: var(--creme); }
+.peb-session-filter__btn:hover:not([aria-pressed="true"]) { color: var(--epinette); }
+
+.peb-sessions__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1.25rem; }
+.peb-session-card { border: 1px solid var(--granit-20); border-radius: var(--radius); padding: 1.35rem; background: var(--creme); display: flex; flex-direction: column; gap: .65rem; }
+.peb-session-card__region { display: inline-flex; align-self: flex-start; align-items: center; gap: .4rem; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--epinette); }
+.peb-session-card__status { display: inline-flex; align-self: flex-start; align-items: center; gap: .45rem; font-size: .78rem; font-weight: 600; padding: .3rem .7rem; border-radius: var(--radius-pill); background: var(--brume-14); color: var(--epinette); }
+.peb-session-card__status .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.peb-session-card__status--full { background: var(--granit-12); color: var(--granit); }
+.peb-session-card dl { display: grid; grid-template-columns: auto 1fr; gap: .3rem .75rem; font-size: .88rem; margin: 0; }
+.peb-session-card dt { color: var(--granit); }
+.peb-session-card dd { margin: 0; color: var(--noir-jais); font-weight: 600; }
+
+.peb-empty { grid-column: 1/-1; text-align: center; padding: clamp(2.5rem, 5vw, 3.5rem) 1.5rem; border: 1.5px dashed var(--granit-20); border-radius: var(--radius-lg); }
+.peb-empty .ic-wrap { display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: var(--brume-14); color: var(--epinette); margin-bottom: 1rem; }
+.peb-empty .ic-wrap .ic { width: 24px; height: 24px; }
+.peb-empty p { color: var(--granit); max-width: 44ch; margin: 0 auto 1.25rem; }
+
+/* ==================== 11. TARIFS ==================== */
+.peb-pricing { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(1.5rem, 3vw, 2rem); }
+.peb-price-card { border: 1px solid var(--granit-20); border-radius: var(--radius-lg); background: var(--creme); padding: clamp(1.75rem, 3vw, 2.25rem); display: flex; flex-direction: column; }
+.peb-price-card__region { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--font-titre); font-weight: 700; font-size: .82rem; letter-spacing: .05em; text-transform: uppercase; color: var(--epinette); margin-bottom: 1rem; }
+.peb-price-card__value { font-family: var(--font-titre); font-weight: 700; font-size: clamp(1.5rem, 2.6vw, 1.9rem); margin: 0 0 .35rem; }
+.peb-price-card__note { font-size: .88rem; color: var(--granit); margin: 0 0 1.35rem; }
+.peb-price-card__list { display: flex; flex-direction: column; gap: .6rem; margin: 0 0 1.5rem; flex: 1; }
+.peb-price-card__list li { display: flex; align-items: flex-start; gap: .6rem; font-size: .92rem; color: var(--noir-jais); }
+.peb-price-card__list .ic { width: 16px; height: 16px; color: var(--epinette); flex-shrink: 0; margin-top: .2em; }
+.peb-price-card__admin { padding: .9rem 1rem; border-radius: var(--radius-sm); background: var(--brume-08); border: 1px solid var(--granit-20); font-size: .84rem; color: var(--granit); margin-bottom: 1.25rem; }
+.peb-price-card__admin strong { color: var(--noir-jais); }
+.peb-price-card__benchmark { margin-top: auto; padding-top: 1rem; border-top: 1px dashed var(--granit-20); }
+.peb-price-card__benchmark-label { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--granit-clair); margin-bottom: .5rem; }
+.peb-price-card__benchmark ul { display: flex; flex-direction: column; gap: .3rem; }
+.peb-price-card__benchmark li { font-size: .82rem; color: var(--granit); display: flex; justify-content: space-between; gap: .5rem; }
+.peb-price-card__benchmark b { color: var(--noir-jais); font-weight: 600; }
+
+/* ==================== 12. COMPARAISON WALLONIE / BRUXELLES ==================== */
+.peb-compare-wrap { overflow-x: auto; border: 1px solid var(--granit-20); border-radius: var(--radius-lg); }
+.peb-compare { width: 100%; border-collapse: collapse; min-width: 640px; }
+.peb-compare caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+.peb-compare th, .peb-compare td { padding: 1rem 1.25rem; text-align: left; font-size: .92rem; vertical-align: top; border-bottom: 1px solid var(--granit-20); }
+.peb-compare thead th { font-family: var(--font-titre); font-weight: 700; background: var(--noir-jais); color: var(--creme); position: sticky; top: 0; }
+.peb-compare thead th:first-child { border-top-left-radius: var(--radius-lg); }
+.peb-compare thead th:last-child { border-top-right-radius: var(--radius-lg); }
+.peb-compare tbody th { font-family: var(--font-titre); font-weight: 600; color: var(--granit); background: var(--brume-08); white-space: nowrap; }
+.peb-compare tbody tr:last-child td, .peb-compare tbody tr:last-child th { border-bottom: none; }
+.peb-compare td { color: var(--noir-jais); }
+.peb-compare__note { display: flex; align-items: flex-start; gap: .65rem; margin-top: 1.25rem; padding: 1rem 1.25rem; border-radius: var(--radius); background: var(--brume-14); color: var(--noir-jais); font-size: .92rem; }
+.peb-compare__note .ic { width: 18px; height: 18px; color: var(--epinette); flex-shrink: 0; margin-top: .15em; }
+
+/* ==================== 13. POURQUOI WISY ==================== */
+.peb-why__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(1.25rem, 2.5vw, 1.75rem); }
+.peb-why__card { padding: 1.5rem; border-radius: var(--radius); background: var(--creme); border: 1px solid var(--granit-20); transition: transform var(--t-fast) var(--ease-out), box-shadow var(--t-fast) var(--ease-out); transform: perspective(800px) rotateX(var(--tiltx,0)) rotateY(var(--tilty,0)); }
+.peb-why__card:hover { box-shadow: var(--shadow-card); }
+.peb-why__badge { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: var(--epinette); color: var(--creme); margin-bottom: 1rem; }
+.peb-why__badge .ic { width: 22px; height: 22px; }
+.peb-why__card h3 { font-size: 1.02rem; margin-bottom: .4rem; }
+.peb-why__card p { color: var(--granit); font-size: .9rem; margin: 0; }
+
+/* ==================== ÉLIGIBILITÉ (quiz) ==================== */
+.peb-quiz { position: relative; border: 1px solid var(--granit-20); border-radius: var(--radius-lg); background: var(--creme); padding: clamp(1.75rem, 4vw, 2.75rem); box-shadow: var(--shadow-card); }
+.peb-quiz__dots { display: flex; gap: .5rem; margin-bottom: 1.75rem; }
+.peb-quiz__dots span { height: 4px; flex: 1; border-radius: 2px; background: var(--granit-20); transition: background-color var(--t-fast) var(--ease); }
+.peb-quiz__dots span.is-active { background: var(--epinette); }
+.peb-quiz__step { }
+.peb-quiz__step[hidden] { display: none; }
+.peb-quiz__step--shake { animation: peb-shake .32s var(--ease); }
+@keyframes peb-shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+.peb-quiz__q { font-family: var(--font-titre); font-weight: 700; font-size: 1.2rem; margin: 0 0 1.35rem; }
+.peb-quiz__options { display: grid; gap: .75rem; margin-bottom: 1.5rem; }
+.peb-quiz__options--2col { grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); }
+.peb-quiz__opt { position: relative; }
+.peb-quiz__opt input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.peb-quiz__opt label { display: flex; align-items: center; gap: .75rem; padding: .95rem 1.1rem; border: 1.5px solid var(--granit-20); border-radius: var(--radius); cursor: pointer; font-size: .95rem; color: var(--noir-jais); transition: border-color var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease); min-height: 44px; }
+.peb-quiz__opt input:checked + label { border-color: var(--epinette); background: var(--brume-14); font-weight: 600; }
+.peb-quiz__opt input:focus-visible + label { outline: 3px solid var(--brume); outline-offset: 2px; }
+.peb-quiz__opt .radio-dot { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--granit-20); flex-shrink: 0; display: grid; place-items: center; }
+.peb-quiz__opt input:checked + label .radio-dot { border-color: var(--epinette); }
+.peb-quiz__opt input:checked + label .radio-dot::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--epinette); }
+
+.peb-quiz__field { margin-bottom: 1.25rem; }
+.peb-quiz__field label { display: block; font-size: .88rem; font-weight: 600; color: var(--noir-jais); margin-bottom: .5rem; }
+.peb-quiz__field input, .peb-quiz__field textarea { width: 100%; padding: .85rem 1rem; border: 1.5px solid var(--granit-20); border-radius: var(--radius-sm); font: inherit; color: var(--noir-jais); background: var(--creme); min-height: 48px; transition: border-color var(--t-fast) var(--ease); }
+.peb-quiz__field input:focus-visible, .peb-quiz__field textarea:focus-visible { outline: 3px solid var(--brume); outline-offset: 1px; border-color: var(--brume); }
+.peb-quiz__nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: .5rem; }
+.peb-quiz__nav .btn { min-width: 130px; }
+.peb-quiz__status { min-height: 1.4em; font-size: .88rem; color: var(--epinette); margin-top: .85rem; }
+
+.peb-quiz__result { text-align: center; }
+.peb-quiz__result .ic-wrap { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; background: var(--brume-14); color: var(--epinette); margin-bottom: 1.1rem; }
+.peb-quiz__result .ic-wrap .ic { width: 26px; height: 26px; }
+.peb-quiz__result-text { font-size: 1.02rem; color: var(--noir-jais); max-width: 48ch; margin: 0 auto 1.15rem; }
+.peb-quiz__disclaimer { display: flex; align-items: flex-start; gap: .6rem; text-align: left; font-size: .84rem; color: var(--granit); background: var(--brume-08); border-radius: var(--radius-sm); padding: .9rem 1.1rem; margin: 0 auto 1.5rem; max-width: 52ch; }
+.peb-quiz__disclaimer .ic { width: 16px; height: 16px; color: var(--epinette); flex-shrink: 0; margin-top: .15em; }
+
+/* ==================== 15. CTA FINAL ==================== */
+.peb-cta-wrap { padding: clamp(3rem, 6vw, 5rem) 0; }
+.peb-cta { position: relative; overflow: hidden; border-radius: var(--radius-lg); background: linear-gradient(135deg, var(--noir-jais), var(--epinette) 150%); padding: clamp(2.5rem, 6vw, 4.5rem); isolation: isolate; }
+.peb-cta::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .18; background-image: radial-gradient(circle, rgba(244,250,249,.5) 1px, transparent 1px); background-size: 22px 22px; }
+.peb-cta__inner { max-width: 60ch; }
+.peb-cta__title { color: var(--creme); font-size: clamp(1.9rem, 4vw, 2.7rem); margin: 0 0 1rem; }
+.peb-cta p { color: rgba(244,250,249,.82); margin: 0 0 1.75rem; }
+
+/* ==================== 16. SOURCES OFFICIELLES ==================== */
+.peb-sources { border-top: 1px solid var(--granit-20); background: var(--brume-08); }
+.peb-sources__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 1.5rem; }
+.peb-sources__col h3 { font-size: .95rem; margin-bottom: .75rem; }
+.peb-sources__col ul { display: flex; flex-direction: column; gap: .55rem; }
+.peb-sources__col a { display: inline-flex; align-items: center; gap: .5rem; font-size: .88rem; color: var(--epinette); }
+.peb-sources__col a:hover, .peb-sources__col a:focus-visible { text-decoration: underline; }
+.peb-sources__col a .ic { width: 14px; height: 14px; flex-shrink: 0; }
+.peb-sources__foot { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px dashed var(--granit-20); font-size: .82rem; color: var(--granit); }
+
+/* ==================== BARRE CTA COLLANTE ==================== */
+.peb-sticky { position: fixed; left: 0; right: 0; top: 0; z-index: 900; transform: translateY(-8px); opacity: 0; visibility: hidden; pointer-events: none; transition: transform var(--t-fast) var(--ease-out), opacity var(--t-fast) var(--ease-out), visibility var(--t-fast); background: rgba(244,250,249,.94); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--granit-20); box-shadow: var(--shadow-sm); }
+.peb-sticky.is-visible { transform: translateY(0); opacity: 1; visibility: visible; pointer-events: auto; }
+.peb-sticky__inner { max-width: var(--maxw); margin-inline: auto; padding: .85rem var(--pad-x); display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+.peb-sticky__txt { display: flex; align-items: baseline; gap: .6rem; font-family: var(--font-titre); font-weight: 600; font-size: .92rem; color: var(--noir-jais); white-space: nowrap; }
+.peb-sticky__txt .sub { font-weight: 400; color: var(--granit); font-size: .85rem; }
+.peb-sticky .btn { padding: .7rem 1.35rem; font-size: .9rem; }
+
+.peb-mobile-bar { display: none; }
+@media (max-width: 640px) {
+  .peb-sticky { display: none; }
+  .peb-mobile-bar {
+    display: flex; align-items: center; gap: .75rem; position: fixed; left: 0; right: 0; bottom: 0; z-index: 1160;
+    padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom, 0px));
+    background: rgba(244,250,249,.96); backdrop-filter: saturate(1.4) blur(10px); border-top: 1px solid var(--granit-20); box-shadow: 0 -8px 24px rgba(27,45,40,.1);
+  }
+  .peb-mobile-bar__txt { flex: 1; min-width: 0; font-size: .82rem; color: var(--granit); }
+  .peb-mobile-bar__txt strong { display: block; font-family: var(--font-titre); color: var(--noir-jais); font-size: .9rem; }
+  .peb-mobile-bar .btn { flex-shrink: 0; padding: .75rem 1.1rem; font-size: .88rem; }
+  body.peb-bar-active #wisy-assistant { --wa-lift: 76px; }
+  body.peb-bar-active { padding-bottom: 72px; }
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 1080px) {
+  .peb-hero__grid { grid-template-columns: 1fr; }
+  .peb-hero__media { max-width: 420px; margin-inline: auto; margin-top: 1rem; }
+  .peb-split { grid-template-columns: 1fr; }
+  .peb-split__head { position: static; }
+  .peb-why-cert { grid-template-columns: 1fr; }
+  .peb-why__grid { grid-template-columns: repeat(2, 1fr); }
+  .peb-pricing { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .peb-hero__grid { padding-top: 1.5rem; }
+  .peb-tl__step { grid-template-columns: 2.6rem 1fr; gap: 1rem; }
+  .peb-tl__no { width: 2.6rem; height: 2.6rem; font-size: .92rem; }
+  .peb-compare th, .peb-compare td { padding: .85rem 1rem; font-size: .85rem; }
+}
+@media (max-width: 640px) {
+  .peb-why__grid { grid-template-columns: 1fr; }
+  .peb-gauge { left: 2%; }
+  .peb-parcours-card { right: 2%; }
+  .peb-region-badge { left: 2%; }
+  .peb-quiz__nav { flex-direction: column-reverse; }
+  .peb-quiz__nav .btn { width: 100%; }
+}
+@media (max-width: 420px) {
+  .peb-hero__frame { aspect-ratio: 3/4; }
+  .peb-gauge, .peb-parcours-card { position: static; width: 100%; margin-top: .85rem; }
+  .peb-hero__ring { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .peb-scrollcue__line { animation: none; }
+  .peb-quiz__step--shake { animation: none; }
+  .peb-why__card { transform: none !important; }
+}

@@ -29,6 +29,7 @@ const ROOT = path.join(__dirname, "..");
 const Site = require("../js/site-content.js");
 const FAQ = require("../js/faq-data.js");
 const Trainings = require("../js/trainings-data.js");
+const Peb = require("../js/peb-data.js");
 
 const ORIGIN = Site.ORIGIN;
 const C = FAQ.CONTACT;
@@ -59,7 +60,9 @@ const DOCS = [
   { file: "contact.html", graph: ["organization", "contactPage"] },
   { file: "avis.html", graph: ["organization"] },
   { file: "faq.html", graph: ["organization"] },   /* FAQPage : injecté par js/faq-page.js depuis les questions affichées */
-  { file: "agenda.html", graph: ["organization", "breadcrumb"], breadcrumb: [["Accueil", "index.html"], ["Agenda", "agenda.html"]] }
+  { file: "agenda.html", graph: ["organization", "breadcrumb"], breadcrumb: [["Accueil", "index.html"], ["Agenda", "agenda.html"]] },
+  { file: "peb-wallonie-bruxelles.html", graph: ["organization", "breadcrumb", "pebCourses"],
+    breadcrumb: [["Accueil", "index.html"], ["Certificateur PEB", "peb-wallonie-bruxelles.html"]] }
 ];
 /* Pages techniques : jamais indexées, jamais dans le sitemap. */
 const TECHNICAL = ["404.html", "admin/avis.html", "docs/maquettes/wisy-safety-header.html", "docs/maquettes/wisy-safety-footer.html"];
@@ -140,7 +143,24 @@ const NODES = {
       item: { "@type": "Course", name: fr(f.titleKey), description: fr(f.descKey), url: Site.absoluteUrl(f.url), provider: providerOf() }
     }))
   }),
-  contactPage: (doc, meta) => ({ "@type": "ContactPage", url: Site.absoluteUrl(doc.file), name: meta.title })
+  contactPage: (doc, meta) => ({ "@type": "ContactPage", url: Site.absoluteUrl(doc.file), name: meta.title }),
+  /* Les deux parcours régionaux de la page Certificateur PEB — SOURCE UNIQUE js/peb-data.js.
+     Aucun `offers` : le tarif Wisy n'est pas encore fixé (PEB_PRICING = null), jamais inventé. */
+  pebCourses: (doc, meta) => ({
+    "@type": "ItemList",
+    name: "Certificateur PEB — Wisy Safety",
+    itemListElement: [Peb.brussels, Peb.wallonia].map((r, i) => ({
+      "@type": "ListItem", position: i + 1,
+      item: {
+        "@type": "Course",
+        name: r.scope,
+        description: meta.description,
+        url: Site.absoluteUrl(doc.file),
+        inLanguage: ["fr"],
+        provider: providerOf()
+      }
+    }))
+  })
 };
 
 function graphFor(doc, meta) {

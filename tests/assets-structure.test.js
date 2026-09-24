@@ -34,7 +34,7 @@ test("noms propres : minuscules, chiffres, tirets — sans espace, sans accent, 
 
 test("dossiers connus : chaque image est rangée dans un dossier prévu (voir assets/README.md)", () => {
   const TOP = ["fonts", "icons", "images", "videos", "originaux"];
-  const IMAGES = ["assistant", "beps", "contact", "faq", "formations", "logo", "nacelles", "partage", "partenaires"];
+  const IMAGES = ["assistant", "beps", "contact", "faq", "formations", "logo", "nacelles", "partage", "partenaires", "peb"];
   const bad = [];
   FILES.forEach((f) => {
     const [, a, b] = f.split("/");

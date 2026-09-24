@@ -36,6 +36,7 @@
 <link rel="stylesheet" href="css/site-header.css">
 <link rel="stylesheet" href="css/search.css">
 <link rel="stylesheet" href="css/assistant.css">
+<link rel="stylesheet" href="css/cookie-consent.css">
 <style>
 /* ==================== TOKENS ==================== */
 :root{
@@ -1283,6 +1284,8 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
 <!-- Assistant Wisy : seul le launcher est chargé d'emblée ; le moteur de réponses et le panneau
      se chargent à la demande (survol, focus, toucher, clic) — voir js/assistant/launcher.js -->
 <script defer src="js/assistant/launcher.js"></script>
+<!-- Consentement aux cookies : bandeau + centre de préférences (voir js/cookie-consent.js) -->
+<script defer src="js/cookie-consent.js"></script>
 <script>
 (function(){
   var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;

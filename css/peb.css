@@ -355,17 +355,9 @@ html[data-peb-region] [data-region-panel] { opacity: 1; }
 .peb-sources__col a .ic { width: 14px; height: 14px; flex-shrink: 0; }
 .peb-sources__foot { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px dashed var(--granit-20); font-size: .82rem; color: var(--granit); }
 
-/* ==================== BARRE CTA COLLANTE ==================== */
-.peb-sticky { position: fixed; left: 0; right: 0; top: 0; z-index: 900; transform: translateY(-8px); opacity: 0; visibility: hidden; pointer-events: none; transition: transform var(--t-fast) var(--ease-out), opacity var(--t-fast) var(--ease-out), visibility var(--t-fast); background: rgba(244,250,249,.94); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--granit-20); box-shadow: var(--shadow-sm); }
-.peb-sticky.is-visible { transform: translateY(0); opacity: 1; visibility: visible; pointer-events: auto; }
-.peb-sticky__inner { max-width: var(--maxw); margin-inline: auto; padding: .85rem var(--pad-x); display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
-.peb-sticky__txt { display: flex; align-items: baseline; gap: .6rem; font-family: var(--font-titre); font-weight: 600; font-size: .92rem; color: var(--noir-jais); white-space: nowrap; }
-.peb-sticky__txt .sub { font-weight: 400; color: var(--granit); font-size: .85rem; }
-.peb-sticky .btn { padding: .7rem 1.35rem; font-size: .9rem; }
-
+/* ==================== BARRE CTA COLLANTE (mobile uniquement) ==================== */
 .peb-mobile-bar { display: none; }
 @media (max-width: 640px) {
-  .peb-sticky { display: none; }
   .peb-mobile-bar {
     display: flex; align-items: center; gap: .75rem; position: fixed; left: 0; right: 0; bottom: 0; z-index: 1160;
     padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom, 0px));

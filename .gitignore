@@ -2,6 +2,11 @@
 .DS_Store
 Icon?
 ._*
+# `Icon?` ci-dessus (fichier spécial Finder "Icon\r") ignore aussi, par collision de casse
+# (core.ignorecase=true sur macOS), notre dossier assets/icons/ — jamais suivi par git jusqu'ici
+# alors que scripts/optimize-images.py l'alimente. On le réautorise explicitement.
+!assets/icons/
+!assets/icons/**
 
 # ---- Éditeurs ---------------------------------------------------------------
 .idea/

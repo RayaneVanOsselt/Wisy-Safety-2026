@@ -366,32 +366,16 @@
   }
 
   /* =======================================================================
-     BARRE CTA COLLANTE — discrète (desktop, sous l'en-tête) + compacte (mobile,
-     bas d'écran). Ne bloque jamais la navigation ; laisse le launcher assistant
-     au-dessus d'elle sur mobile (body.peb-bar-active, voir css/peb.css).
+     BARRE CTA COLLANTE — compacte, mobile uniquement (bas d'écran, voir
+     .peb-mobile-bar dans le HTML). Pas de version desktop (retirée à la
+     demande). Lève le launcher assistant au-dessus d'elle sur mobile
+     (body.peb-bar-active, voir css/peb.css).
      ======================================================================= */
   function initStickyBar() {
-    const bar = $("[data-peb-sticky]");
-    const hero = $(".peb-hero");
-    if (!bar || !hero) return;
-
-    document.body.classList.add("peb-bar-active"); /* barre mobile toujours présente : lève le launcher */
-
-    const header = $(".site-header");
-    const setTop = () => { if (header) bar.style.top = `${header.offsetHeight}px`; };
-    setTop();
-    window.addEventListener("resize", setTop);
-
-    let ticking = false;
-    const update = () => {
-      ticking = false;
-      const pastHero = window.scrollY > hero.offsetHeight * 0.7;
-      bar.classList.toggle("is-visible", pastHero);
-    };
-    window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
-    update();
-
-    $$("a", bar).forEach((a) => a.addEventListener("click", () => track("peb_session_signup_click", { from: "sticky-bar" })));
+    const bar = $(".peb-mobile-bar");
+    if (!bar) return;
+    document.body.classList.add("peb-bar-active");
+    $$("a", bar).forEach((a) => a.addEventListener("click", () => track("peb_session_signup_click", { from: "mobile-bar" })));
   }
 
   /* =======================================================================

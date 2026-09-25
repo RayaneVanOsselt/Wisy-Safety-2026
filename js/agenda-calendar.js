@@ -52,6 +52,8 @@
      pop-ups pour ouvrir un événement ; pas de allow-top-navigation → il ne peut pas rediriger la page. */
   var SANDBOX = "allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms";
 
+  /* Libellés français = repli du code (et de tests/agenda.test.js). Traduits à l'affichage via le
+     dictionnaire de la page (js/i18n-data-agenda.js, clés « ag.st_* » / « ag.cal_title »). */
   var LABELS = {
     planned: "Intégration Outlook prévue",
     loading: "Chargement de l’agenda…",
@@ -59,6 +61,7 @@
     readyOutlook: "Synchronisé avec Outlook",
     slow: "L’agenda met du temps à répondre"
   };
+  var LABEL_KEYS = { planned: "ag.st_planned", loading: "ag.st_loading", ready: "ag.st_ready", readyOutlook: "ag.st_ready_outlook", slow: "ag.st_slow" };
 
   /* ------------------------------------------------------------------ */
   /* Logique pure (testée sous Node)                                     */
@@ -102,13 +105,17 @@
     };
   }
 
-  /** Libellé de la barre d'état ; « Synchronisé avec Outlook » seulement pour un vrai agenda Outlook chargé. */
-  function statusText(state, url) {
+  /**
+   * Libellé de la barre d'état ; « Synchronisé avec Outlook » seulement pour un vrai agenda Outlook chargé.
+   * `tr(clé, repli)` (facultatif) fournit la traduction ; sans lui, le texte est en français.
+   */
+  function statusText(state, url, tr) {
+    var pick = function (name) { return tr ? tr(LABEL_KEYS[name], LABELS[name]) : LABELS[name]; };
     if (state === "ready") {
       var host = ""; try { host = new URL(url).hostname; } catch (e) { /* url absente */ }
-      return OUTLOOK_HOST.test(host) ? LABELS.readyOutlook : LABELS.ready;
+      return pick(OUTLOOK_HOST.test(host) ? "readyOutlook" : "ready");
     }
-    return LABELS[state] || LABELS.planned;
+    return pick(LABELS[state] ? state : "planned");
   }
 
   /* ------------------------------------------------------------------ */
@@ -116,16 +123,23 @@
   /* ------------------------------------------------------------------ */
   function q(el, sel) { return el.querySelector(sel); }
 
+  /* Traduction : dictionnaire de la page (WisyI18N) si présent, sinon repli français. */
+  function tr(key, fallback) {
+    var i = root.WisyI18N, v = i && i.get ? i.get(i.current(), key) : null;
+    return v != null ? v : fallback;
+  }
+
   function setState(el, state, url) {
     el.setAttribute("data-state", state);
+    el.__agcUrl = url;
     var label = q(el, "[data-agc-status]");
-    if (label) label.textContent = statusText(state, url);
+    if (label) label.textContent = statusText(state, url, tr);
   }
 
   function createFrame(cfg) {
     var f = document.createElement("iframe");
     f.className = "agc__iframe";
-    f.title = cfg.title;                                        // nom accessible
+    f.title = tr("ag.cal_title", cfg.title);                    // nom accessible (traduit)
     f.loading = "lazy";
     f.referrerPolicy = "strict-origin-when-cross-origin";
     f.setAttribute("sandbox", SANDBOX);
@@ -187,9 +201,20 @@
     return ctrl;
   }
 
+  /* Changement de langue : le libellé d'état et le titre de l'iframe suivent (l'état, lui, ne change pas). */
+  function refreshLabels() {
+    var nodes = document.querySelectorAll("[data-agenda-calendar]");
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i], label = q(el, "[data-agc-status]"), fr = q(el, "iframe");
+      if (label) label.textContent = statusText(el.getAttribute("data-state"), el.__agcUrl, tr);
+      if (fr) fr.title = tr("ag.cal_title", fr.title);
+    }
+  }
+
   function autoInit() {
     var nodes = document.querySelectorAll("[data-agenda-calendar]");
     for (var i = 0; i < nodes.length; i++) mount(nodes[i], root);
+    if (nodes.length) document.addEventListener("i18n:changed", refreshLabels);
   }
 
   return {

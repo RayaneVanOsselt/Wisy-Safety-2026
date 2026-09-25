@@ -14,7 +14,7 @@ const vm = require("node:vm");
 
 const ROOT = path.join(__dirname, "..");
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda", "peb-wallonie-bruxelles"];
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "404"];
 
 const NAMED = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", mdash: "—", ndash: "–", hellip: "…", rsquo: "’", lsquo: "‘", laquo: "«", raquo: "»", eacute: "é", egrave: "è", agrave: "à", ccedil: "ç", euro: "€", times: "×", middot: "·", bull: "•", rarr: "→", check: "✓" };
 const decode = (s) => String(s).replace(/&(?:#(\d+)|#x([0-9a-f]+)|([a-z]+));/gi, (m, d, x, n) => d ? String.fromCodePoint(+d) : x ? String.fromCodePoint(parseInt(x, 16)) : (NAMED[n] !== undefined ? NAMED[n] : m));
@@ -24,7 +24,7 @@ const text = (html) => norm(html.replace(/<[^>]+>/g, ""));
 /* Dictionnaire français tel que la page le charge (mêmes fichiers, même ordre). */
 function frOf(html) {
   const ctx = { window: {} }; ctx.window.I18N = {}; vm.createContext(ctx);
-  [...html.matchAll(/<script[^>]*\bsrc="(js\/i18n-data-[^"]+)"/g)].forEach((m) => vm.runInContext(read(m[1]), ctx, { filename: m[1] }));
+  [...html.matchAll(/<script[^>]*\bsrc="\/?(js\/i18n-data-[^"]+)"/g)].forEach((m) => vm.runInContext(read(m[1]), ctx, { filename: m[1] }));
   return ctx.window.I18N.fr || {};
 }
 

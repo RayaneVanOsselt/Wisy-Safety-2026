@@ -230,8 +230,8 @@ a.f-c-value:hover{color:var(--turquoise)}
     </div>
   </div></div>
   <div class="main-bar"><div class="main-inner">
-    <a class="logo" href="index.html" aria-label="Wisy Safety — accueil"><img class="logo__img" src="assets/images/logo/logo-102.webp" srcset="assets/images/logo/logo-102.webp 102w, assets/images/logo/logo-204.webp 204w" sizes="51px" alt="Wisy Safety" width="51" height="56"></a>
-    <nav class="main-nav" aria-label="Navigation principale">
+    <a class="logo" href="index.html" data-i18n-attr="aria-label:aria.home" aria-label="Wisy Safety — accueil"><img class="logo__img" src="assets/images/logo/logo-102.webp" srcset="assets/images/logo/logo-102.webp 102w, assets/images/logo/logo-204.webp 204w" sizes="51px" alt="Wisy Safety" width="51" height="56"></a>
+    <nav class="main-nav" data-i18n-attr="aria-label:aria.main_nav" aria-label="Navigation principale">
       <ul class="nav-list">
         <li class="has-dropdown">
           <a class="nav-link" href="formations.html" aria-haspopup="true" aria-expanded="false" aria-controls="dd-formations"><span data-i18n="nav.formations">Formations</span>
@@ -281,7 +281,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 <div class="wsy-search"><div class="wsy-search__wrap"><div class="wsy-search__inner"><div class="wsy-search__box" role="search" aria-label="Rechercher sur le site"><span class="wsy-search__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span><input class="wsy-search__input" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-haspopup="listbox" aria-controls="wsy-search-listbox" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Rechercher une formation, un thème…" aria-label="Rechercher sur le site"><kbd class="wsy-search__kbd"></kbd><button class="wsy-search__clear" type="button" tabindex="-1" aria-label="Effacer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="wsy-search__panel"><div class="wsy-search__results" id="wsy-search-listbox" role="listbox"></div><div class="wsy-search__foot"></div></div><span class="wsy-search__live" aria-live="polite"></span></div></div></div>
 </header>
 <div class="m-scrim" aria-hidden="true"></div>
-<aside class="m-panel" id="m-panel" aria-label="Menu mobile">
+<aside class="m-panel" id="m-panel" data-i18n-attr="aria-label:aria.mobile_menu" aria-label="Menu mobile">
   <div class="m-head"><img class="logo__img" src="assets/images/logo/logo-102.webp" srcset="assets/images/logo/logo-102.webp 102w, assets/images/logo/logo-204.webp 204w" sizes="40px" alt="Wisy Safety" width="40" height="44" style="height:44px"><button class="m-close" data-i18n-attr="aria-label:aria.close_menu" aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <ul class="m-nav">
     <li><button class="m-acc__trigger" aria-expanded="false"><span data-i18n="nav.formations">Formations</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
@@ -350,7 +350,7 @@ a.f-c-value:hover{color:var(--turquoise)}
   </section>
 
   <!-- ==================== STEPPER ==================== -->
-  <nav class="reg-stepper-wrap" aria-label="Étapes de l'inscription">
+  <nav class="reg-stepper-wrap" data-i18n-attr="aria-label:reg.aria_steps" aria-label="Étapes de l'inscription">
     <ol class="reg-stepper">
       <li class="reg-step-item">
         <button type="button" class="reg-step-btn" data-goto="1" aria-current="step">
@@ -388,7 +388,7 @@ a.f-c-value:hover{color:var(--turquoise)}
         <div class="reg-block reg-restored" id="reg-restored" role="status" hidden>
           <span class="reg-block__ic reg-restored__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 4v4h4"/></svg></span>
           <span class="reg-restored__txt" data-i18n="reg.restored_text">Votre inscription précédente a été restaurée.</span>
-          <button type="button" class="reg-remove reg-restored__close" data-dismiss-restore aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+          <button type="button" class="reg-remove reg-restored__close" data-dismiss-restore data-i18n-attr="aria-label:reg.sheet_close" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </div>
 
         <!-- ---------- ÉTAPE 1 — CHOISIR ---------- -->
@@ -403,7 +403,7 @@ a.f-c-value:hover{color:var(--turquoise)}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
               <input type="search" id="reg-search" data-i18n-attr="placeholder:reg.search_placeholder,aria-label:reg.search_label" placeholder="Rechercher une formation…" aria-label="Rechercher une formation" autocomplete="off">
             </div>
-            <div class="reg-filters" id="reg-filters" role="group" aria-label="Filtrer par catégorie"></div>
+            <div class="reg-filters" id="reg-filters" role="group" data-i18n-attr="aria-label:reg.aria_filter" aria-label="Filtrer par catégorie"></div>
           </div>
           <div class="reg-catalogue" id="reg-catalogue"></div>
         </div>
@@ -554,14 +554,14 @@ a.f-c-value:hover{color:var(--turquoise)}
       </div>
 
       <!-- Résumé desktop (sticky) -->
-      <aside class="reg-aside" aria-label="Récapitulatif de l'inscription">
+      <aside class="reg-aside" data-i18n-attr="aria-label:reg.aria_summary" aria-label="Récapitulatif de l'inscription">
         <div class="reg-summary" id="reg-summary"></div>
       </aside>
     </div>
   </section>
 
   <!-- ==================== BARRE MOBILE STICKY ==================== -->
-  <div class="reg-mobilebar" id="reg-mobilebar" role="region" aria-label="Résumé de l'inscription">
+  <div class="reg-mobilebar" id="reg-mobilebar" role="region" data-i18n-attr="aria-label:reg.aria_overview" aria-label="Résumé de l'inscription">
     <button type="button" class="reg-mobilebar__info" data-open-sheet aria-expanded="false" aria-controls="reg-sheet">
       <span class="reg-mobilebar__count" data-bar-count></span>
       <span class="reg-mobilebar__total" data-bar-total></span>
@@ -572,7 +572,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 
   <!-- ==================== BOTTOM SHEET (détail récap mobile) ==================== -->
   <div class="reg-sheet-scrim" id="reg-sheet-scrim" data-close-sheet></div>
-  <aside class="reg-sheet" id="reg-sheet" aria-hidden="true" inert aria-label="Détail de votre inscription">
+  <aside class="reg-sheet" id="reg-sheet" aria-hidden="true" inert data-i18n-attr="aria-label:reg.aria_detail" aria-label="Détail de votre inscription">
     <span class="reg-sheet__grip" aria-hidden="true"></span>
     <div class="reg-sheet__head">
       <h2 class="reg-sheet__title" data-i18n="reg.sheet_title">Votre inscription</h2>
@@ -623,8 +623,8 @@ a.f-c-value:hover{color:var(--turquoise)}
       </div>
     </div>
     <div class="f-legal">
-      <span class="f-legal__vat">TVA BE0XXX.XXX.XXX</span>
-      <nav class="f-legal__links" aria-label="Liens légaux"><a href="#" data-i18n="footer.legal_mentions">Mentions légales</a><a href="#" data-i18n="footer.legal_privacy">Politique de confidentialité</a><a href="#" data-i18n="footer.legal_terms">Conditions générales</a></nav>
+      <span class="f-legal__vat"><span data-i18n="footer.vat">TVA</span> BE0XXX.XXX.XXX</span>
+      <nav class="f-legal__links" data-i18n-attr="aria-label:aria.legal_nav" aria-label="Liens légaux"><a href="#" data-i18n="footer.legal_mentions">Mentions légales</a><a href="#" data-i18n="footer.legal_privacy">Politique de confidentialité</a><a href="#" data-i18n="footer.legal_terms">Conditions générales</a></nav>
       <span>© <span data-year>2026</span> Wisy Safety · <span data-i18n="footer.rights">Tous droits réservés.</span></span>
     </div>
   </div>

@@ -40,13 +40,15 @@
     return field[lang()] || field.fr || Object.values(field)[0] || "";
   }
 
-  /* Formatage monétaire — centimes -> devise, selon la langue */
-  var LOCALE_MAP = { fr: "fr-BE", nl: "nl-BE", en: "en-BE", de: "de-BE" };
+  /* Formatage monétaire — centimes -> devise, selon la langue (les 10 langues du site ; chiffres latins
+     partout, y compris en arabe : « ar-MA » suit la convention belge 1.225,50 €).
+     narrowSymbol : « € » plutôt que « EUR » (le roumain affiche sinon le code de la devise). */
+  var LOCALE_MAP = { fr: "fr-BE", nl: "nl-BE", en: "en-BE", de: "de-BE", af: "af-ZA", ar: "ar-MA", bg: "bg-BG", ro: "ro-RO", it: "it-IT", sl: "sl-SI" };
   function money(cents) {
     var locale = LOCALE_MAP[lang()] || CONFIG.locale;
     var value = (cents || 0) / 100;
     try {
-      return new Intl.NumberFormat(locale, { style: "currency", currency: CONFIG.currency }).format(value);
+      return new Intl.NumberFormat(locale, { style: "currency", currency: CONFIG.currency, currencyDisplay: "narrowSymbol" }).format(value);
     } catch (e) {
       return value.toFixed(2) + " €";
     }
@@ -430,9 +432,22 @@
       '<button type="button" class="reg-qty__btn" data-qty="inc" data-id="' + id + '"' + (plus ? " disabled" : "") + ' aria-label="' + t("reg.increase", "Augmenter le nombre de participants") + '">' + icon("plus") + "</button>" +
     "</div>";
   }
-  function participantsWord(q) {
-    return q > 1 ? t("reg.participants", "participants") : t("reg.participant", "participant");
+  /* Mot accordé au nombre, selon les règles de pluriel de la langue (Intl.PluralRules) : « un » → clé au
+     singulier, « autre » → clé au pluriel. Les langues à formes supplémentaires (slovène : duel/paucal ;
+     roumain : « 20 de… » ; arabe : 6 catégories) les déclarent par des clés FACULTATIVES
+     « <clé pluriel>_zero | _two | _few | _many » ; sans elles, le pluriel est utilisé. */
+  function countWord(singularKey, pluralKey, n, fbOne, fbMany) {
+    var cat;
+    try { cat = new Intl.PluralRules(lang()).select(n); } catch (e) { cat = n > 1 ? "other" : "one"; }
+    if (cat === "one") return t(singularKey, fbOne);
+    if (cat !== "other" && window.WisyI18N && window.WisyI18N.get) {
+      var extra = window.WisyI18N.get(lang(), pluralKey + "_" + cat);
+      if (extra != null) return extra;
+    }
+    return t(pluralKey, fbMany);
   }
+  function participantsWord(q) { return countWord("reg.participant", "reg.participants", q, "participant", "participants"); }
+  function formationsWord(q) { return countWord("reg.formation", "reg.formations", q, "formation", "formations"); }
 
   function renderCatalogue() {
     var grid = document.getElementById("reg-catalogue");
@@ -461,7 +476,7 @@
     var count = ids.length;
     var head = '<div class="reg-summary__head">' +
       '<h2 class="reg-summary__title">' + icon("clip2") + t("reg.summary_title", "Votre inscription") + "</h2>" +
-      '<span class="reg-summary__count">' + count + " " + (count > 1 ? t("reg.formations", "formations") : t("reg.formation", "formation")) + "</span></div>";
+      '<span class="reg-summary__count">' + count + " " + formationsWord(count) + "</span></div>";
 
     if (!count) {
       return head + '<div class="reg-summary__inner"><div class="reg-empty">' +
@@ -540,7 +555,7 @@
     var bar = document.getElementById("reg-mobilebar");
     var showBar = count > 0 && state.step < 4;
     if (bar) {
-      bar.querySelector("[data-bar-count]").textContent = count + " " + (count > 1 ? t("reg.formations", "formations") : t("reg.formation", "formation")) +
+      bar.querySelector("[data-bar-count]").textContent = count + " " + formationsWord(count) +
         " · " + pcount + " " + participantsWord(pcount);
       bar.querySelector("[data-bar-total]").textContent = grandTotalLabel(totals);
       bar.querySelector("[data-bar-cta-label]").textContent = state.step === 3 ? t("reg.cta_pay", "Aller au paiement") : t("reg.cta_next_short", "Continuer");

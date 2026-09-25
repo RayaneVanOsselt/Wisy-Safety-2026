@@ -388,4 +388,49 @@
   m("ro", { "footer.faq": "Centru de ajutor" });
   m("it", { "footer.faq": "Centro assistenza" });
   m("sl", { "footer.faq": "Center za pomoč" });
+
+  /* Libellés d'accessibilité communs (logo, navigation, menu mobile, liens légaux) et libellé « TVA » du pied de page.
+     Le numéro de TVA lui-même (BE0XXX.XXX.XXX) n'est pas un texte : il reste tel quel dans le HTML. */
+  m("fr", { "aria.home": "Wisy Safety — accueil", "aria.main_nav": "Navigation principale", "aria.mobile_menu": "Menu mobile", "aria.legal_nav": "Liens légaux", "footer.vat": "TVA" });
+  m("en", { "aria.home": "Wisy Safety — home", "aria.main_nav": "Main navigation", "aria.mobile_menu": "Mobile menu", "aria.legal_nav": "Legal information", "footer.vat": "VAT" });
+  m("nl", { "aria.home": "Wisy Safety — startpagina", "aria.main_nav": "Hoofdnavigatie", "aria.mobile_menu": "Mobiel menu", "aria.legal_nav": "Juridische informatie", "footer.vat": "BTW" });
+  m("af", { "aria.home": "Wisy Safety — tuisblad", "aria.main_nav": "Hoofnavigasie", "aria.mobile_menu": "Mobiele kieslys", "aria.legal_nav": "Regsinligting", "footer.vat": "BTW" });
+  m("ar", { "aria.home": "Wisy Safety — الصفحة الرئيسية", "aria.main_nav": "التنقل الرئيسي", "aria.mobile_menu": "قائمة الجوال", "aria.legal_nav": "المعلومات القانونية", "footer.vat": "ضريبة القيمة المضافة" });
+  m("bg", { "aria.home": "Wisy Safety — начало", "aria.main_nav": "Основна навигация", "aria.mobile_menu": "Мобилно меню", "aria.legal_nav": "Правна информация", "footer.vat": "ДДС" });
+  m("de", { "aria.home": "Wisy Safety — Startseite", "aria.main_nav": "Hauptnavigation", "aria.mobile_menu": "Mobiles Menü", "aria.legal_nav": "Rechtliche Informationen", "footer.vat": "MwSt." });
+  m("ro", { "aria.home": "Wisy Safety — pagina principală", "aria.main_nav": "Navigare principală", "aria.mobile_menu": "Meniu mobil", "aria.legal_nav": "Informații juridice", "footer.vat": "TVA" });
+  m("it", { "aria.home": "Wisy Safety — home", "aria.main_nav": "Navigazione principale", "aria.mobile_menu": "Menu mobile", "aria.legal_nav": "Informazioni legali", "footer.vat": "IVA" });
+  m("sl", { "aria.home": "Wisy Safety — domača stran", "aria.main_nav": "Glavna navigacija", "aria.mobile_menu": "Mobilni meni", "aria.legal_nav": "Pravne informacije", "footer.vat": "DDV" });
+
+  /* Champ piège anti-spam (invisible), commun aux formulaires de contact et d'avis. */
+  m("fr", {
+    "form.hp_label": "Ne remplissez pas ce champ"
+  });
+  m("en", {
+    "form.hp_label": "Do not fill in this field"
+  });
+  m("nl", {
+    "form.hp_label": "Vul dit veld niet in"
+  });
+  m("af", {
+    "form.hp_label": "Moenie hierdie veld invul nie"
+  });
+  m("ar", {
+    "form.hp_label": "لا تملأ هذا الحقل"
+  });
+  m("bg", {
+    "form.hp_label": "Не попълвайте това поле"
+  });
+  m("de", {
+    "form.hp_label": "Dieses Feld bitte nicht ausfüllen"
+  });
+  m("ro", {
+    "form.hp_label": "Nu completați acest câmp"
+  });
+  m("it", {
+    "form.hp_label": "Non compilare questo campo"
+  });
+  m("sl", {
+    "form.hp_label": "Tega polja ne izpolnjujte"
+  });
 })();

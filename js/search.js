@@ -59,11 +59,25 @@
   var extras = "idle";           // idle | loading | ready | failed
   var MAX_FAQ = 3;               // évite une liste énorme : les 3 questions les plus pertinentes
 
+  /* Traduction des questions : pack js/faq-i18n/faq-<langue>.js, chargé à la demande (repli : français). */
+  function ensureFaqPack(done) {
+    var l = lang(), F = window.WisyFAQ;
+    if (l === "fr" || !F || !F.register || (F.hasPack && F.hasPack(l))) { done(); return; }
+    var el = document.createElement("script");
+    el.src = "js/faq-i18n/faq-" + l + ".js"; el.async = true;
+    el.onload = function () { done(); };
+    el.onerror = function () { done(); };
+    document.head.appendChild(el);
+  }
   function buildExtras() {
     var F = window.WisyFAQ;
     if (!F || !F.items) return;
-    FAQS = F.items().map(function (it) {
-      return { id: it.id, title: it.question, url: "faq.html#" + it.id, kw: (it.keywords || []).concat(it.synonyms || []) };
+    var L = lang();
+    FAQS = F.items(L).map(function (it) {
+      var fr = L !== "fr" && F.get ? F.get(it.id) : null;   // + mots-clés français : une saisie en français reste comprise
+      var kw = (it.keywords || []).concat(it.synonyms || []);
+      if (fr) kw = kw.concat(fr.keywords || [], fr.synonyms || []);
+      return { id: it.id, title: it.question, url: "faq.html#" + it.id, kw: kw };
     });
     var C = F.CONTACT;
     if (!C) return;
@@ -90,13 +104,15 @@
   function purgeCaches() { FORMATIONS.concat(PAGES, FAQS, INFOS).forEach(function (e) { e._hay = null; }); }
   function ensureExtras() {
     if (extras !== "idle") return;
-    if (window.WisyFAQ && window.WisyFAQ.items) { buildExtras(); extras = "ready"; return; }
+    if (window.WisyFAQ && window.WisyFAQ.items) { extras = "loading"; ensureFaqPack(function () { buildExtras(); extras = "ready"; purgeCaches(); if (root && root.classList.contains("is-open")) render(input.value.trim()); }); return; }
     extras = "loading";
     var el = document.createElement("script");
     el.src = FAQ_SCRIPT; el.async = true;
     el.onload = function () {
-      buildExtras(); extras = "ready"; purgeCaches();
-      if (root && root.classList.contains("is-open")) render(input.value.trim());   // affiche aussitôt les résultats enrichis
+      ensureFaqPack(function () {
+        buildExtras(); extras = "ready"; purgeCaches();
+        if (root && root.classList.contains("is-open")) render(input.value.trim());   // affiche aussitôt les résultats enrichis
+      });
     };
     el.onerror = function () { extras = "failed"; };
     document.head.appendChild(el);
@@ -676,6 +692,11 @@
       purgeCaches();
       refreshStatic();
       if (root.classList.contains("is-open")) render(input.value.trim());
+      // les questions du Centre d'aide suivent la langue (pack chargé à la demande)
+      if (extras === "ready") ensureFaqPack(function () {
+        buildExtras(); purgeCaches();
+        if (root.classList.contains("is-open")) render(input.value.trim());
+      });
     });
   }
   function isTyping(el) {

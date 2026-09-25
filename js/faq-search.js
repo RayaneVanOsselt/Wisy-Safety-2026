@@ -10,8 +10,10 @@
    instantanée et testable, suffisante pour ~30 questions.
 
    Ce qu'elle sait faire
-     1. Normalisation : minuscules, accents et ligatures retirés, apostrophes /
-        tirets neutralisés, mots vides ignorés (« comment », « puis-je »…).
+     1. Normalisation (toutes écritures) : minuscules, accents, ligatures et marques
+        diacritiques retirés (latin, cyrillique, arabe — variantes de l'alif ramenées
+        à une seule forme…), ponctuation neutralisée, mots vides ignorés
+        (« comment », « hoe », « wie »…).
      2. Variantes simples : pluriels / féminins ramenés à une même racine
         (formation ~ formations, certifiante ~ certifiant).
      3. Synonymes et familles de mots (LEXIQUE ci-dessous) : « prix » retrouve
@@ -24,6 +26,13 @@
         tolérance aux fautes de frappe (« inscirption »).
      6. Confiance du résultat (exact / high / medium / low / none) : l'assistant
         ne répond QUE si la confiance est suffisante, sinon il le dit.
+
+   Langues : la recherche s'exécute sur le texte de la langue demandée (option
+   `lang`, packs js/faq-i18n/) — question, mots-clés, synonymes, catégorie et
+   réponse traduits — ET sur les mots-clés / synonymes français, pour qu'un mot
+   français saisi sur une page traduite retrouve la bonne entrée. Le lexique de
+   familles de mots (LEXIQUE) reste français : ailleurs, ce sont les mots-clés et
+   synonymes propres à chaque langue qui élargissent la recherche.
 
    Module « dual-mode » : complète `window.WisyFAQ` (navigateur) ou l'objet
    exporté par js/faq-data.js (Node). Charger js/faq-data.js AVANT.
@@ -44,12 +53,16 @@
      --------------------------------------------------------------------- */
   function fold(s) {
     return String(s == null ? "" : s).toLowerCase()
-      .replace(/œ/g, "oe").replace(/æ/g, "ae")
-      .normalize("NFD").replace(/[̀-ͯ]/g, "");
+      .replace(/œ/g, "oe").replace(/æ/g, "ae").replace(/ß/g, "ss")
+      /* arabe : variantes de l'alif, ya / alif maqsura, ta marbouta, hamza portée, tatwil */
+      .replace(/[\u0623\u0625\u0622\u0671]/g, "\u0627").replace(/\u0649/g, "\u064a").replace(/\u0629/g, "\u0647")
+      .replace(/\u0624/g, "\u0648").replace(/\u0626/g, "\u064a").replace(/\u0640/g, "")
+      /* accents latins / cyrilliques (U+0300–036F) et voyelles brèves arabes (U+064B–065F, U+0670) */
+      .normalize("NFD").replace(/[\u0300-\u036f\u064b-\u065f\u0670]/g, "");
   }
-  /* « Où s'inscrire ? » → « ou s inscrire » */
+  /* « Où s'inscrire ? » → « ou s inscrire » ; toutes les écritures (lettres et chiffres Unicode) */
   function normalize(s) {
-    return fold(s).replace(/[^a-z0-9]+/g, " ").trim();
+    return fold(s).replace(/[^\p{L}\p{N}]+/gu, " ").trim();
   }
 
   var STOP = {};
@@ -66,12 +79,30 @@
    "the an of to in on for and or is are do you my your it this that with how what where").split(" ")
     .forEach(function (w) { if (w) STOP[w] = 1; });
 
+  /* Mots vides des langues traduites (repliés comme le reste). Volontairement courts : seulement
+     les mots-outils qui n'aident pas à trouver une réponse (« comment », « can », « wie », « как »…). */
+  ("de het een en of van voor met bij op in te is zijn ik je u we wij ze hij zij ons uw mijn jouw hoe wat waar wanneer wie kan kunnen mag moet naar aan om dat dit die er niet geen ook maar dan als " +
+   "die en of van vir met by op in te is was ek jy u ons hulle hy sy my jou hoe wat waar wanneer wie kan kon mag moet na aan om dat dit nie geen ook maar dan as " +
+   "der die das ein eine einen und oder von fur mit bei auf zu ist sind ich du sie wir er es mein ihr ihre ihren wie was wo wann wer kann konnen darf muss nach an um dass nicht kein auch aber dann wenn " +
+   "sau cu pe un o este sunt eu el ea noi voi ei ele meu mea tau dumneavoastra cum ce unde cand cine poate pot trebuie catre prin din ca nu nici dar apoi daca " +
+   "il lo gli uno una da con su per tra fra sono io lui lei loro mio tuo come cosa dove quando chi puo posso devo verso che non anche ma poi se " +
+   "in ali ter da je so sem si smo ste jaz ti on ona mi vi oni moj tvoj vas kako kaj kje kdaj kdo lahko moram do za od na v z s pri po ne tudi ampak potem ce " +
+   "и или на в във за с със от до по при е са съм си сме сте аз ти той тя ние вие те мой ваш как какво къде кога кой може мога трябва към че не също но след ако " +
+   "في من على الى عن مع هو هي نحن انا انت هم هذا هذه ذلك و او ثم لا ما هل كيف اين متى لماذا يمكن يجب ان كان قد كل بعد قبل").split(" ")
+    .forEach(function (w) { w = fold(w); if (w) STOP[w] = 1; });
+
   function keepWord(w) { return !!w && (w.length >= 2 || /\d/.test(w)) && !STOP[w]; }
   function words(s) { var n = normalize(s); return n ? n.split(" ") : []; }
 
   /* Racine légère : pluriel (s/x) puis « e » final féminin. Appliquée à l'identique
      aux mots de la requête, du contenu et du lexique. */
   function stem(w) {
+    if (/^[\u0600-\u06ff]+$/.test(w)) {              // arabe : article « ال » (et ses préfixes) puis pluriel régulier
+      var a = w.replace(/^(?:\u0648\u0627\u0644|\u0628\u0627\u0644|\u0643\u0627\u0644|\u0641\u0627\u0644|\u0644\u0644|\u0627\u0644)/, "");
+      if (a.length >= 3) w = a;
+      if (w.length > 4) w = w.replace(/(?:\u0627\u062a|\u0627\u0646|\u0648\u0646|\u064a\u0646)$/, "");
+      return w;
+    }
     if (w.length > 4 && /[sx]$/.test(w)) w = w.slice(0, -1);
     if (w.length > 5 && /e$/.test(w)) w = w.slice(0, -1);
     return w;
@@ -137,17 +168,20 @@
      --------------------------------------------------------------------- */
   var W_Q = 6, W_KEY = 7, W_SYN = 5, W_KW = 2.2, W_C = 2.5, W_A = 2;
   var W_GROUP = 0.8, W_LINK = 0.35, W_FUZZY = 0.7;
-  var INDEX = null;
+  var INDEXES = {};                                   // un index par langue (français = « fr »)
 
   function setOf(list) { var o = {}; list.forEach(function (s) { o[s] = 1; }); return o; }
 
-  function build() {
-    if (INDEX) return INDEX;
+  function langOf(lang) { return lang && lang !== "fr" && Data.hasPack && Data.hasPack(lang) ? lang : "fr"; }
+
+  function build(lang) {
+    var L = langOf(lang);
+    if (INDEXES[L]) return INDEXES[L];
     var vocab = {}, df = {};
     function note(o) { Object.keys(o).forEach(function (s) { vocab[s] = 1; }); }
 
-    var docs = Data.ITEMS.map(function (it, i) {
-      var cat = Data.categoryById(it.category);
+    var docs = Data.items(L).map(function (it, i) {
+      var cat = Data.categoryById(it.category, L);
       var d = {
         item: it, order: i,
         qNorm: normalize(it.question),
@@ -169,6 +203,11 @@
       }
       (it.keywords || []).forEach(function (t) { indexTerm(t, d.key); });
       (it.synonyms || []).forEach(function (t) { indexTerm(t, d.syn); });
+      if (L !== "fr") {                               // + mots-clés / synonymes français (saisie française sur une page traduite)
+        var fr = Data.get(it.id) || {};
+        (fr.keywords || []).forEach(function (t) { indexTerm(t, d.key); });
+        (fr.synonyms || []).forEach(function (t) { indexTerm(t, d.syn); });
+      }
       var seen = {};
       [d.q, d.key, d.syn, d.kw, d.c, d.a].forEach(function (o) { Object.keys(o).forEach(function (s) { seen[s] = 1; }); });
       Object.keys(seen).forEach(function (s) { df[s] = (df[s] || 0) + 1; vocab[s] = 1; });
@@ -177,13 +216,12 @@
     LEXICON.forEach(function (g) { note(g.stems); });
 
     var n = docs.length;
-    INDEX = { docs: docs, vocab: vocab, vocabList: Object.keys(vocab), df: df, n: n, maxIdf: Math.log(1 + n) };
-    return INDEX;
+    INDEXES[L] = { docs: docs, vocab: vocab, vocabList: Object.keys(vocab), df: df, n: n, maxIdf: Math.log(1 + n) };
+    return INDEXES[L];
   }
 
   /* Poids d'un mot selon sa rareté : « formation » (partout) pèse moins que « nacelle ». */
-  function idfWeight(stemTok) {
-    var ix = build();
+  function idfWeight(stemTok, ix) {
     var f = ix.df[stemTok] || 1;
     return 0.3 + 0.7 * (Math.log(1 + ix.n / f) / ix.maxIdf);
   }
@@ -219,8 +257,7 @@
     });
   }
 
-  function analyze(query, partialMode) {
-    var ix = build();
+  function analyze(query, partialMode, ix) {
     var toks = words(query).filter(keepWord).map(stem);
     var used = toks.map(function () { return false; });
     var items = [];
@@ -274,7 +311,7 @@
           }
         });
       }
-      items.push({ pos: i, phrase: false, stem: t, variants: v, idf: idfWeight(t), partial: partial, fuzzy: fuzzy });
+      items.push({ pos: i, phrase: false, stem: t, variants: v, idf: idfWeight(t, ix), partial: partial, fuzzy: fuzzy });
     });
 
     items.sort(function (a, b) { return a.pos - b.pos; });
@@ -322,16 +359,17 @@
    *   terms:{ stems:{…}, prefixes:[…] }   // pour le surlignage
    * }
    * options.limit (déf. 8) · options.category (id) : restreint à une catégorie ·
-   * options.partial : le dernier mot peut être incomplet (saisie en direct de la page).
+   * options.partial : le dernier mot peut être incomplet (saisie en direct de la page) ·
+   * options.lang : langue des textes interrogés (défaut « fr » ; sans pack chargé → français).
    */
   function search(query, options) {
     options = options || {};
-    var ix = build();
+    var ix = build(options.lang);
     var normalized = normalize(query);
     var res = { query: String(query == null ? "" : query), normalized: normalized, hits: [], top: null, confidence: "none", terms: { stems: {}, prefixes: [] } };
     if (!normalized) return res;
 
-    var an = analyze(query, options.partial);
+    var an = analyze(query, options.partial, ix);
     if (!an.items.length) return res;
 
     /* termes à surligner : mots de la requête + équivalents directs */
@@ -412,7 +450,7 @@
      6. Surlignage — segments prêts à rendre SANS innerHTML.
         highlight("Tarifs et prix", terms) → [{text:"Tarifs",mark:true}, …]
      --------------------------------------------------------------------- */
-  var WORD_RE = /[A-Za-zÀ-ÖØ-öø-ÿŒœ0-9]+/g;
+  var WORD_RE = /[\p{L}\p{M}\p{N}]+/gu;
 
   function highlight(text, terms) {
     text = String(text == null ? "" : text);

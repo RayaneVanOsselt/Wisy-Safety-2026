@@ -265,4 +265,16 @@
     "home.info_hours_val": "Ponedeljek → Četrtek: 10:00 – 16:00", "home.info_hours_sub": "Petek → Nedelja: Zaprto",
     "home.capacity_txt": "udeležencev", "home.capacity_sub": "Največja zmogljivost na termin", "home.map_link": "Poglejte na Google Zemljevidih"
   });
+
+  /* Accessibilité de la page d'accueil : réseau de partenaires, carte, ville de l'adresse. */
+  m("fr", { "home.hive_aria": "Wisy Safety au centre de son réseau de 6 partenaires : Orange, Proximus, Telenet, Constructel, VOO, Unifiber", "home.map_title": "Localisation du centre de formation Wisy Safety, Avenue d'Itterbeek 378, 1070 Anderlecht", "home.addr_city": "1070 Anderlecht, Belgique" });
+  m("en", { "home.hive_aria": "Wisy Safety at the centre of its network of 6 partners: Orange, Proximus, Telenet, Constructel, VOO, Unifiber", "home.map_title": "Location of the Wisy Safety training centre, Avenue d'Itterbeek 378, 1070 Anderlecht", "home.addr_city": "1070 Anderlecht, Belgium" });
+  m("nl", { "home.hive_aria": "Wisy Safety in het centrum van zijn netwerk van 6 partners: Orange, Proximus, Telenet, Constructel, VOO, Unifiber", "home.map_title": "Locatie van het opleidingscentrum Wisy Safety, Avenue d'Itterbeek 378, 1070 Anderlecht", "home.addr_city": "1070 Anderlecht, België" });
+  m("af", { "home.hive_aria": "Wisy Safety in die middel van sy netwerk van 6 vennote: Orange, Proximus, Telenet, Constructel, VOO, Unifiber", "home.map_title": "Ligging van die Wisy Safety-opleidingsentrum, Avenue d'Itterbeek 378, 1070 Anderlecht", "home.addr_city": "1070 Anderlecht, België" });
+  m("ar", { "home.hive_aria": "Wisy Safety في مركز شبكتها المكوّنة من 6 شركاء: Orange وProximus وTelenet وConstructel وVOO وUnifiber", "home.map_title": "موقع مركز التدريب Wisy Safety، Avenue d'Itterbeek 378، 1070 أندرلخت", "home.addr_city": "1070 أندرلخت، بلجيكا" });
+  m("bg", { "home.hive_aria": "Wisy Safety в центъра на своята мрежа от 6 партньори: Orange, Proximus, Telenet, Constructel, VOO, Unifiber", "home.map_title": "Местоположение на учебния център Wisy Safety, Avenue d'Itterbeek 378, 1070 Андерлехт", "home.addr_city": "1070 Андерлехт, Белгия" });
+  m("de", { "home.hive_aria": "Wisy Safety im Zentrum seines Netzwerks von 6 Partnern: Orange, Proximus, Telenet, Constructel, VOO, Unifiber", "home.map_title": "Standort des Ausbildungszentrums Wisy Safety, Avenue d'Itterbeek 378, 1070 Anderlecht", "home.addr_city": "1070 Anderlecht, Belgien" });
+  m("ro", { "home.hive_aria": "Wisy Safety în centrul rețelei sale de 6 parteneri: Orange, Proximus, Telenet, Constructel, VOO, Unifiber", "home.map_title": "Localizarea centrului de formare Wisy Safety, Avenue d'Itterbeek 378, 1070 Anderlecht", "home.addr_city": "1070 Anderlecht, Belgia" });
+  m("it", { "home.hive_aria": "Wisy Safety al centro della sua rete di 6 partner: Orange, Proximus, Telenet, Constructel, VOO, Unifiber", "home.map_title": "Ubicazione del centro di formazione Wisy Safety, Avenue d'Itterbeek 378, 1070 Anderlecht", "home.addr_city": "1070 Anderlecht, Belgio" });
+  m("sl", { "home.hive_aria": "Wisy Safety v središču svoje mreže 6 partnerjev: Orange, Proximus, Telenet, Constructel, VOO, Unifiber", "home.map_title": "Lokacija centra za usposabljanje Wisy Safety, Avenue d'Itterbeek 378, 1070 Anderlecht", "home.addr_city": "1070 Anderlecht, Belgija" });
 })();

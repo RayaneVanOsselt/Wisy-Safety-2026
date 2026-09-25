@@ -764,4 +764,56 @@
   m("ro", { "av.f_head_sub": "Împărtășește experiența ta — 2 minute sunt de ajuns.", "av.trust_email": "E-mail confidențial", "av.trust_valid": "Publicat după validare", "av.trust_time": "2 minute" });
   m("it", { "av.f_head_sub": "Condividi la tua esperienza — bastano 2 minuti.", "av.trust_email": "E-mail riservata", "av.trust_valid": "Pubblicato dopo verifica", "av.trust_time": "2 minuti" });
   m("sl", { "av.f_head_sub": "Delite svojo izkušnjo — dovolj sta 2 minuti.", "av.trust_email": "E-pošta zaupna", "av.trust_valid": "Objavljeno po pregledu", "av.trust_time": "2 minuti" });
+
+  /* Accessibilité (indice de confiance, carrousel) et bandeau de configuration. */
+  m("fr", {
+    "av.aria_trust": "Indice de confiance",
+    "av.aria_reviews": "Avis clients",
+    "av.config_note": "Le dépôt d'avis n'est pas encore relié à Supabase (voir <code>js/supabase-config.js</code>)."
+  });
+  m("en", {
+    "av.aria_trust": "Trust index",
+    "av.aria_reviews": "Customer reviews",
+    "av.config_note": "Review submission is not yet connected to Supabase (see <code>js/supabase-config.js</code>)."
+  });
+  m("nl", {
+    "av.aria_trust": "Vertrouwensindex",
+    "av.aria_reviews": "Klantbeoordelingen",
+    "av.config_note": "Het indienen van beoordelingen is nog niet gekoppeld aan Supabase (zie <code>js/supabase-config.js</code>)."
+  });
+  m("af", {
+    "av.aria_trust": "Vertroue-indeks",
+    "av.aria_reviews": "Kliëntresensies",
+    "av.config_note": "Die indiening van resensies is nog nie aan Supabase gekoppel nie (sien <code>js/supabase-config.js</code>)."
+  });
+  m("ar", {
+    "av.aria_trust": "مؤشر الثقة",
+    "av.aria_reviews": "آراء العملاء",
+    "av.config_note": "لم يُربط إرسال الآراء بـ Supabase بعد (انظر <code>js/supabase-config.js</code>)."
+  });
+  m("bg", {
+    "av.aria_trust": "Индекс на доверие",
+    "av.aria_reviews": "Отзиви на клиенти",
+    "av.config_note": "Подаването на отзиви все още не е свързано със Supabase (вижте <code>js/supabase-config.js</code>)."
+  });
+  m("de", {
+    "av.aria_trust": "Vertrauensindex",
+    "av.aria_reviews": "Kundenbewertungen",
+    "av.config_note": "Die Abgabe von Bewertungen ist noch nicht mit Supabase verbunden (siehe <code>js/supabase-config.js</code>)."
+  });
+  m("ro", {
+    "av.aria_trust": "Indice de încredere",
+    "av.aria_reviews": "Recenzii ale clienților",
+    "av.config_note": "Depunerea recenziilor nu este încă conectată la Supabase (vedeți <code>js/supabase-config.js</code>)."
+  });
+  m("it", {
+    "av.aria_trust": "Indice di fiducia",
+    "av.aria_reviews": "Recensioni dei clienti",
+    "av.config_note": "L'invio di recensioni non è ancora collegato a Supabase (vedi <code>js/supabase-config.js</code>)."
+  });
+  m("sl", {
+    "av.aria_trust": "Indeks zaupanja",
+    "av.aria_reviews": "Mnenja strank",
+    "av.config_note": "Oddaja mnenj še ni povezana s storitvijo Supabase (glejte <code>js/supabase-config.js</code>)."
+  });
 })();

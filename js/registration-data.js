@@ -11,7 +11,8 @@
    ► Structure prête pour un remplacement par une API / un CMS : il suffira
      de fournir le même objet (mêmes clés) depuis le réseau, puis d'appeler
      window.WisyRegistration.setCatalogue(list).
-   ► Libellés (name/description) localisés fr/en/nl avec repli fr.
+   ► Libellés (name/description) localisés dans les 10 langues du site (fr, en, nl, af, ar, bg, de,
+     ro, it, sl ; contrôle : scripts/check-i18n.js) ; repli sur le français si une langue manquait.
    ► image : visuel de la formation (fiche). alt = nom de la formation.
 
    SÉCURITÉ (future intégration paiement) : ces données sont côté client à des
@@ -68,11 +69,21 @@
       category: "certification",
       icon: "shield",
       image: "assets/images/formations/vca-base.webp",
-      name: { fr: "VCA Base", en: "VCA Base", nl: "VCA Basis" },
+      name: {
+        fr: "VCA Base", en: "VCA Base", nl: "VCA Basis", af: "VCA Basis", ar: "VCA الأساسي",
+        bg: "VCA основи", de: "VCA Grundlagen", ro: "VCA de bază", it: "VCA base", sl: "VCA osnovni"
+      },
       description: {
         fr: "Sécurité de base — examen agréé inclus",
         en: "Basic safety — accredited exam included",
-        nl: "Basisveiligheid — erkend examen inbegrepen"
+        nl: "Basisveiligheid — erkend examen inbegrepen",
+        af: "Basiese veiligheid — erkende eksamen ingesluit",
+        ar: "السلامة الأساسية — الامتحان المعتمد مشمول",
+        bg: "Основна безопасност — включен акредитиран изпит",
+        de: "Grundlegende Sicherheit — anerkannte Prüfung inklusive",
+        ro: "Securitate de bază — examen acreditat inclus",
+        it: "Sicurezza di base — esame accreditato incluso",
+        sl: "Osnovna varnost — akreditiran izpit vključen"
       }
     },
     {
@@ -83,11 +94,22 @@
       category: "certification",
       icon: "hierarchy",
       image: "assets/images/formations/vca-hierarchique.webp",
-      name: { fr: "VCA Ligne hiérarchique", en: "VCA for supervisors", nl: "VCA Leidinggevenden" },
+      name: {
+        fr: "VCA Ligne hiérarchique", en: "VCA for supervisors", nl: "VCA Leidinggevenden", af: "VCA vir Toesighouers",
+        ar: "VCA للمشرفين", bg: "VCA за ръководители", de: "VCA für Führungskräfte",
+        ro: "VCA pentru personalul de conducere", it: "VCA per responsabili", sl: "VCA za vodstvo"
+      },
       description: {
         fr: "Cadres & responsables opérationnels",
         en: "Managers & operational supervisors",
-        nl: "Kaderleden & operationeel verantwoordelijken"
+        nl: "Kaderleden & operationeel verantwoordelijken",
+        af: "Bestuurders & operasionele toesighouers",
+        ar: "الإداريون والمسؤولون التشغيليون",
+        bg: "Ръководни кадри и оперативни отговорници",
+        de: "Führungskräfte & operative Verantwortliche",
+        ro: "Cadre de conducere & responsabili operaționali",
+        it: "Dirigenti e responsabili operativi",
+        sl: "Vodstveni kader in operativni vodje"
       }
     },
     {
@@ -99,11 +121,22 @@
       category: "engins",
       icon: "lift",
       image: "assets/images/formations/nacelle-elevatrice.webp",
-      name: { fr: "Nacelles élévatrices", en: "Aerial work platform", nl: "Hoogwerker" },
+      name: {
+        fr: "Nacelles élévatrices", en: "Aerial work platform", nl: "Hoogwerker", af: "Hoogwerker",
+        ar: "منصة العمل المرتفعة", bg: "Автовишка", de: "Hubarbeitsbühne", ro: "Nacelă elevatoare",
+        it: "Piattaforma elevatrice", sl: "Dvižna ploščad"
+      },
       description: {
         fr: "Conduite en sécurité — théorie + pratique",
         en: "Safe operation — theory + practice",
-        nl: "Veilig besturen — theorie + praktijk"
+        nl: "Veilig besturen — theorie + praktijk",
+        af: "Veilige bediening — teorie + praktyk",
+        ar: "التشغيل الآمن — نظري + عملي",
+        bg: "Безопасно управление — теория + практика",
+        de: "Sicheres Bedienen — Theorie + Praxis",
+        ro: "Operare în siguranță — teorie + practică",
+        it: "Guida in sicurezza — teoria + pratica",
+        sl: "Varno upravljanje — teorija + praksa"
       }
     },
     {
@@ -114,11 +147,21 @@
       category: "telecom",
       icon: "fiber",
       image: "assets/images/formations/fibre-optique.webp",
-      name: { fr: "Fibre optique", en: "Optical fiber", nl: "Glasvezel" },
+      name: {
+        fr: "Fibre optique", en: "Optical fiber", nl: "Glasvezel", af: "Optiese vesel", ar: "الألياف الضوئية",
+        bg: "Оптични влакна", de: "Glasfaser", ro: "Fibră optică", it: "Fibra ottica", sl: "Optična vlakna"
+      },
       description: {
         fr: "Raccordement & soudure — pratique terrain",
         en: "Splicing & connection — field practice",
-        nl: "Lassen & aansluiten — praktijk op terrein"
+        nl: "Lassen & aansluiten — praktijk op terrein",
+        af: "Splitsing & aansluiting — praktyk in die veld",
+        ar: "التوصيل واللحام — ممارسة ميدانية",
+        bg: "Свързване и заваряване — практика на терен",
+        de: "Anschluss & Spleißen — Praxis vor Ort",
+        ro: "Racordare & sudură — practică pe teren",
+        it: "Giunzione e collegamento — pratica sul campo",
+        sl: "Priključitev in spajanje — praksa na terenu"
       }
     },
     {
@@ -130,11 +173,22 @@
       category: "secours",
       icon: "aid",
       image: "assets/images/formations/beps.webp",
-      name: { fr: "BEPS — Premier secours", en: "BEPS — First aid", nl: "BEPS — Eerste hulp" },
+      name: {
+        fr: "BEPS — Premier secours", en: "BEPS — First aid", nl: "BEPS — Eerste hulp", af: "BEPS — Noodhulp",
+        ar: "BEPS — الإسعافات الأولية", bg: "BEPS — Първа помощ", de: "BEPS — Erste Hilfe",
+        ro: "BEPS — Prim ajutor", it: "BEPS — Primo soccorso", sl: "BEPS — Prva pomoč"
+      },
       description: {
         fr: "Les gestes qui sauvent — brevet européen reconnu",
         en: "Life-saving skills — recognised European certificate",
-        nl: "Levensreddende handelingen — erkend Europees brevet"
+        nl: "Levensreddende handelingen — erkend Europees brevet",
+        af: "Lewensreddende handelinge — erkende Europese brevet",
+        ar: "الإجراءات التي تنقذ الحياة — شهادة أوروبية معترف بها",
+        bg: "Действия, които спасяват живот — признато европейско удостоверение",
+        de: "Lebensrettende Handgriffe — anerkanntes europäisches Zertifikat",
+        ro: "Gesturile care salvează vieți — brevet european recunoscut",
+        it: "I gesti che salvano la vita — brevetto europeo riconosciuto",
+        sl: "Ukrepi, ki rešujejo življenja — priznano evropsko spričevalo"
       }
     },
     {
@@ -148,12 +202,26 @@
       name: {
         fr: "Diisocyanates & substances dangereuses",
         en: "Diisocyanates & hazardous substances",
-        nl: "Diisocyanaten & gevaarlijke stoffen"
+        nl: "Diisocyanaten & gevaarlijke stoffen",
+        af: "Di-isosianate & gevaarlike stowwe",
+        ar: "ثنائي الأيزوسيانات والمواد الخطرة",
+        bg: "Диизоцианати и опасни вещества",
+        de: "Diisocyanate & Gefahrstoffe",
+        ro: "Diizocianați & substanțe periculoase",
+        it: "Diisocianati & sostanze pericolose",
+        sl: "Diizocianati in nevarne snovi"
       },
       description: {
         fr: "Formation obligatoire (REACH)",
         en: "Mandatory training (REACH)",
-        nl: "Verplichte opleiding (REACH)"
+        nl: "Verplichte opleiding (REACH)",
+        af: "Verpligte opleiding (REACH)",
+        ar: "تدريب إلزامي (REACH)",
+        bg: "Задължително обучение (REACH)",
+        de: "Verpflichtende Schulung (REACH)",
+        ro: "Formare obligatorie (REACH)",
+        it: "Formazione obbligatoria (REACH)",
+        sl: "Obvezno usposabljanje (REACH)"
       }
     }
   ];

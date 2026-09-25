@@ -46,22 +46,26 @@ footer a{color:inherit}
   <a href="/index.html"><img src="/assets/images/logo/logo-102.webp" srcset="/assets/images/logo/logo-102.webp 102w, /assets/images/logo/logo-204.webp 204w" sizes="40px" alt="" width="40" height="44"><span>Wisy Safety</span></a>
 </header>
 <main id="main">
-  <p class="eyebrow">Erreur 404</p>
-  <h1>Cette page est introuvable.</h1>
-  <p class="lead">L'adresse que vous avez suivie n'existe pas ou a été déplacée. Retrouvez l'essentiel de Wisy Safety ci-dessous.</p>
-  <a class="btn" href="/index.html">Retour à l'accueil</a>
+  <p class="eyebrow" data-i18n="e404.eyebrow">Erreur 404</p>
+  <h1 data-i18n="e404.title">Cette page est introuvable.</h1>
+  <p class="lead" data-i18n="e404.lead">L'adresse que vous avez suivie n'existe pas ou a été déplacée. Retrouvez l'essentiel de Wisy Safety ci-dessous.</p>
+  <a class="btn" href="/index.html" data-i18n="e404.home">Retour à l'accueil</a>
 
-  <h2>Les pages les plus utiles</h2>
+  <h2 data-i18n="e404.useful">Les pages les plus utiles</h2>
   <ul class="links">
-    <li><a href="/formations.html"><strong>Formations</strong><span>Notre catalogue complet de formations</span></a></li>
-    <li><a href="/agenda.html"><strong>Agenda des formations</strong><span>Prochaines sessions, horaires et lieux</span></a></li>
-    <li><a href="/inscription.html"><strong>Inscription</strong><span>S'inscrire à une formation</span></a></li>
-    <li><a href="/faq.html"><strong>Centre d'aide</strong><span>Questions fréquentes et assistant</span></a></li>
-    <li><a href="/contact.html"><strong>Contact</strong><span>Coordonnées et formulaire de contact</span></a></li>
+    <li><a href="/formations.html"><strong data-i18n="search.page_formations_t">Formations</strong><span data-i18n="search.page_formations_d">Notre catalogue complet de formations</span></a></li>
+    <li><a href="/agenda.html"><strong data-i18n="search.page_agenda_t">Agenda des formations</strong><span data-i18n="search.page_agenda_d">Prochaines sessions, horaires et lieux</span></a></li>
+    <li><a href="/inscription.html"><strong data-i18n="search.page_inscription_t">Inscription</strong><span data-i18n="search.page_inscription_d">S'inscrire à une formation</span></a></li>
+    <li><a href="/faq.html"><strong data-i18n="search.page_faq_t">Centre d'aide</strong><span data-i18n="search.page_faq_d">Questions fréquentes et assistant</span></a></li>
+    <li><a href="/contact.html"><strong data-i18n="search.page_contact_t">Contact</strong><span data-i18n="search.page_contact_d">Coordonnées et formulaire de contact</span></a></li>
   </ul>
 </main>
 <footer>
-  Besoin d'aide ? <a href="mailto:info@wisysafety.be">info@wisysafety.be</a> · <a href="tel:+3223188659">+32 2 318 86 59</a>
+  <span data-i18n="e404.help">Besoin d'aide ?</span> <a href="mailto:info@wisysafety.be">info@wisysafety.be</a> · <a href="tel:+3223188659">+32 2 318 86 59</a>
 </footer>
+<!-- Système multilingue (i18n) — chemins racine : cette page est servie à toute profondeur -->
+<script src="/js/i18n-data-search.js"></script>
+<script src="/js/i18n-data-404.js"></script>
+<script src="/js/i18n.js"></script>
 </body>
 </html>

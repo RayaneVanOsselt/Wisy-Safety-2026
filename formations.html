@@ -310,8 +310,8 @@ a.f-c-value:hover{color:var(--turquoise)}
     </div>
   </div></div>
   <div class="main-bar"><div class="main-inner">
-    <a class="logo" href="index.html" aria-label="Wisy Safety — accueil"><img class="logo__img" src="assets/images/logo/logo-102.webp" srcset="assets/images/logo/logo-102.webp 102w, assets/images/logo/logo-204.webp 204w" sizes="51px" alt="Wisy Safety" width="51" height="56"></a>
-    <nav class="main-nav" aria-label="Navigation principale">
+    <a class="logo" href="index.html" data-i18n-attr="aria-label:aria.home" aria-label="Wisy Safety — accueil"><img class="logo__img" src="assets/images/logo/logo-102.webp" srcset="assets/images/logo/logo-102.webp 102w, assets/images/logo/logo-204.webp 204w" sizes="51px" alt="Wisy Safety" width="51" height="56"></a>
+    <nav class="main-nav" data-i18n-attr="aria-label:aria.main_nav" aria-label="Navigation principale">
       <ul class="nav-list">
         <li class="has-dropdown">
           <a class="nav-link" href="formations.html" aria-current="page" aria-haspopup="true" aria-expanded="false" aria-controls="dd-formations"><span data-i18n="nav.formations">Formations</span>
@@ -361,7 +361,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 <div class="wsy-search"><div class="wsy-search__wrap"><div class="wsy-search__inner"><div class="wsy-search__box" role="search" aria-label="Rechercher sur le site"><span class="wsy-search__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span><input class="wsy-search__input" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-haspopup="listbox" aria-controls="wsy-search-listbox" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Rechercher une formation, un thème…" aria-label="Rechercher sur le site"><kbd class="wsy-search__kbd"></kbd><button class="wsy-search__clear" type="button" tabindex="-1" aria-label="Effacer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="wsy-search__panel"><div class="wsy-search__results" id="wsy-search-listbox" role="listbox"></div><div class="wsy-search__foot"></div></div><span class="wsy-search__live" aria-live="polite"></span></div></div></div>
 </header>
 <div class="m-scrim" aria-hidden="true"></div>
-<aside class="m-panel" id="m-panel" aria-label="Menu mobile">
+<aside class="m-panel" id="m-panel" data-i18n-attr="aria-label:aria.mobile_menu" aria-label="Menu mobile">
   <div class="m-head"><img class="logo__img" src="assets/images/logo/logo-102.webp" srcset="assets/images/logo/logo-102.webp 102w, assets/images/logo/logo-204.webp 204w" sizes="40px" alt="Wisy Safety" width="40" height="44" style="height:44px"><button class="m-close" data-i18n-attr="aria-label:aria.close_menu" aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <ul class="m-nav">
     <li><button class="m-acc__trigger" aria-expanded="false"><span data-i18n="nav.formations">Formations</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
@@ -416,7 +416,7 @@ a.f-c-value:hover{color:var(--turquoise)}
       <h2 class="section__title reveal" id="cat-title" style="max-width:none;margin-bottom:1.75rem" data-i18n="fo.cat_title">Notre catalogue de formations</h2>
 
       <div class="fo-toolbar reveal">
-        <div class="fo-filters" role="tablist" aria-label="Filtrer les formations par catégorie">
+        <div class="fo-filters" role="tablist" data-i18n-attr="aria-label:fo.aria_filters" aria-label="Filtrer les formations par catégorie">
           <button class="fo-filter is-active" role="tab" aria-selected="true" data-filter="all"><span data-i18n="fo.filter_all">Toutes les formations</span> <span class="fo-filter__count">6</span></button>
           <button class="fo-filter" role="tab" aria-selected="false" data-filter="securite"><span data-i18n="fo.filter_securite">Sécurité</span> <span class="fo-filter__count">2</span></button>
           <button class="fo-filter" role="tab" aria-selected="false" data-filter="secours"><span data-i18n="fo.filter_secours">Premiers secours</span> <span class="fo-filter__count">1</span></button>
@@ -430,9 +430,9 @@ a.f-c-value:hover{color:var(--turquoise)}
 
         <!-- Formation 1 — VCA Base (mise en avant) -->
         <article class="fo-card fo-card--wide fo-card--securite reveal" id="vca-base" data-category="securite">
-          <img class="fo-card__img" src="assets/images/formations/vca-base.webp" alt="Formation VCA de base — sécurité sur chantier" loading="lazy" width="720" height="540">
+          <img class="fo-card__img" src="assets/images/formations/vca-base.webp" data-i18n-attr="alt:fo.f1_alt" alt="Formation VCA de base — sécurité sur chantier" loading="lazy" width="720" height="540">
           <span class="fo-card__scrim" aria-hidden="true"></span>
-          <a class="fo-card__overlay" href="inscription.html?formation=vca-base" aria-label="S'inscrire à la formation VCA Base"></a>
+          <a class="fo-card__overlay" href="inscription.html?formation=vca-base" data-i18n-attr="aria-label:fo.f1_aria" aria-label="S'inscrire à la formation VCA Base"></a>
           <div class="fo-card__body">
             <div class="fo-card__top">
               <span class="fo-card__cat" data-i18n="fo.filter_securite">Sécurité</span>
@@ -456,9 +456,9 @@ a.f-c-value:hover{color:var(--turquoise)}
 
         <!-- Formation 2 — VCA Ligne hiérarchique -->
         <article class="fo-card fo-card--management reveal" id="vca-hierarchique" data-category="management">
-          <img class="fo-card__img" src="assets/images/formations/vca-hierarchique.webp" alt="Formation VCA ligne hiérarchique — encadrement et management de la sécurité" loading="lazy" width="1000" height="800">
+          <img class="fo-card__img" src="assets/images/formations/vca-hierarchique.webp" data-i18n-attr="alt:fo.f2_alt" alt="Formation VCA ligne hiérarchique — encadrement et management de la sécurité" loading="lazy" width="1000" height="800">
           <span class="fo-card__scrim" aria-hidden="true"></span>
-          <a class="fo-card__overlay" href="inscription.html?formation=vca-hierarchique" aria-label="S'inscrire à la formation VCA Ligne hiérarchique"></a>
+          <a class="fo-card__overlay" href="inscription.html?formation=vca-hierarchique" data-i18n-attr="aria-label:fo.f2_aria" aria-label="S'inscrire à la formation VCA Ligne hiérarchique"></a>
           <div class="fo-card__body">
             <div class="fo-card__top">
               <span class="fo-card__cat" data-i18n="fo.filter_management">Management</span>
@@ -482,9 +482,9 @@ a.f-c-value:hover{color:var(--turquoise)}
 
         <!-- Formation 3 — Diisocyanates -->
         <article class="fo-card fo-card--securite reveal" id="diisocyanates" data-category="securite">
-          <img class="fo-card__img" src="assets/images/formations/diisocyanates.webp" alt="Formation diisocyanates et substances dangereuses — manipulation de produits chimiques" loading="lazy" width="500" height="333">
+          <img class="fo-card__img" src="assets/images/formations/diisocyanates.webp" data-i18n-attr="alt:fo.f3_alt" alt="Formation diisocyanates et substances dangereuses — manipulation de produits chimiques" loading="lazy" width="500" height="333">
           <span class="fo-card__scrim" aria-hidden="true"></span>
-          <a class="fo-card__overlay" href="inscription.html?formation=diisocyanates" aria-label="S'inscrire à la formation Diisocyanates et substances dangereuses"></a>
+          <a class="fo-card__overlay" href="inscription.html?formation=diisocyanates" data-i18n-attr="aria-label:fo.f3_aria" aria-label="S'inscrire à la formation Diisocyanates et substances dangereuses"></a>
           <div class="fo-card__body">
             <div class="fo-card__top">
               <span class="fo-card__cat" data-i18n="fo.filter_securite">Sécurité</span>
@@ -508,9 +508,9 @@ a.f-c-value:hover{color:var(--turquoise)}
 
         <!-- Formation 4 — Nacelles élévatrices (page dédiée : formation-nacelles-elevatrices.html) -->
         <article class="fo-card fo-card--technique reveal" id="nacelle" data-category="technique">
-          <img class="fo-card__img fo-card__img--nacelle" src="assets/images/nacelles/nacelles-hero-800.webp" srcset="assets/images/nacelles/nacelles-hero-800.webp 800w, assets/images/nacelles/nacelles-hero-1200.webp 1200w" sizes="(min-width:981px) 25vw, 100vw" alt="Formation nacelles élévatrices — nacelle ciseaux bleue déployée en position haute sur un chantier" loading="lazy" decoding="async" width="800" height="1000">
+          <img class="fo-card__img fo-card__img--nacelle" src="assets/images/nacelles/nacelles-hero-800.webp" srcset="assets/images/nacelles/nacelles-hero-800.webp 800w, assets/images/nacelles/nacelles-hero-1200.webp 1200w" sizes="(min-width:981px) 25vw, 100vw" data-i18n-attr="alt:fo.f4_alt" alt="Formation nacelles élévatrices — nacelle ciseaux bleue déployée en position haute sur un chantier" loading="lazy" decoding="async" width="800" height="1000">
           <span class="fo-card__scrim" aria-hidden="true"></span>
-          <a class="fo-card__overlay" href="formation-nacelles-elevatrices.html" aria-label="Découvrir la formation Nacelles élévatrices"></a>
+          <a class="fo-card__overlay" href="formation-nacelles-elevatrices.html" data-i18n-attr="aria-label:fo.f4_aria" aria-label="Découvrir la formation Nacelles élévatrices"></a>
           <div class="fo-card__body">
             <div class="fo-card__top">
               <span class="fo-card__cat" data-i18n="fo.filter_technique">Technique</span>
@@ -534,9 +534,9 @@ a.f-c-value:hover{color:var(--turquoise)}
 
         <!-- Formation 5 — Fibre optique -->
         <article class="fo-card fo-card--technique reveal" id="fibre-optique" data-category="technique">
-          <img class="fo-card__img" src="assets/images/formations/fibre-optique.webp" alt="Formation fibre optique — soudure et installation professionnelle" loading="lazy" width="1000" height="600">
+          <img class="fo-card__img" src="assets/images/formations/fibre-optique.webp" data-i18n-attr="alt:fo.f5_alt" alt="Formation fibre optique — soudure et installation professionnelle" loading="lazy" width="1000" height="600">
           <span class="fo-card__scrim" aria-hidden="true"></span>
-          <a class="fo-card__overlay" href="inscription.html?formation=fibre-optique" aria-label="S'inscrire à la formation Fibre optique"></a>
+          <a class="fo-card__overlay" href="inscription.html?formation=fibre-optique" data-i18n-attr="aria-label:fo.f5_aria" aria-label="S'inscrire à la formation Fibre optique"></a>
           <div class="fo-card__body">
             <div class="fo-card__top">
               <span class="fo-card__cat" data-i18n="fo.filter_technique">Technique</span>
@@ -560,9 +560,9 @@ a.f-c-value:hover{color:var(--turquoise)}
 
         <!-- Formation 6 — BEPS Premier secours (page dédiée : formation-beps-premiers-secours.html) -->
         <article class="fo-card fo-card--wide fo-card--secours reveal" id="beps" data-category="secours">
-          <img class="fo-card__img" src="assets/images/formations/beps.webp" alt="Formation BEPS — brevet européen de premiers secours, les gestes qui sauvent" loading="lazy" width="1024" height="684">
+          <img class="fo-card__img" src="assets/images/formations/beps.webp" data-i18n-attr="alt:fo.f6_alt" alt="Formation BEPS — brevet européen de premiers secours, les gestes qui sauvent" loading="lazy" width="1024" height="684">
           <span class="fo-card__scrim" aria-hidden="true"></span>
-          <a class="fo-card__overlay" href="formation-beps-premiers-secours.html" aria-label="Découvrir la formation BEPS — Premier secours"></a>
+          <a class="fo-card__overlay" href="formation-beps-premiers-secours.html" data-i18n-attr="aria-label:fo.f6_aria" aria-label="Découvrir la formation BEPS — Premier secours"></a>
           <div class="fo-card__body">
             <div class="fo-card__top">
               <span class="fo-card__cat" data-i18n="fo.filter_secours">Premiers secours</span>
@@ -634,8 +634,8 @@ a.f-c-value:hover{color:var(--turquoise)}
       </div>
     </div>
     <div class="f-legal">
-      <span class="f-legal__vat">TVA BE0XXX.XXX.XXX</span>
-      <nav class="f-legal__links" aria-label="Liens légaux"><a href="#" data-i18n="footer.legal_mentions">Mentions légales</a><a href="#" data-i18n="footer.legal_privacy">Politique de confidentialité</a><a href="#" data-i18n="footer.legal_terms">Conditions générales</a></nav>
+      <span class="f-legal__vat"><span data-i18n="footer.vat">TVA</span> BE0XXX.XXX.XXX</span>
+      <nav class="f-legal__links" data-i18n-attr="aria-label:aria.legal_nav" aria-label="Liens légaux"><a href="#" data-i18n="footer.legal_mentions">Mentions légales</a><a href="#" data-i18n="footer.legal_privacy">Politique de confidentialité</a><a href="#" data-i18n="footer.legal_terms">Conditions générales</a></nav>
       <span>© <span data-year>2026</span> Wisy Safety · <span data-i18n="footer.rights">Tous droits réservés.</span></span>
     </div>
   </div>

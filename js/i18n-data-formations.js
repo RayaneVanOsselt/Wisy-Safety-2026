@@ -317,4 +317,156 @@
     "fo.empty_text": "To usposabljanje še ni načrtovano na spletu. Kontaktirajte nas za naslednje termine ali za usposabljanje po meri.",
     "fo.empty_btn": "Kontaktirajte nas"
   });
+
+  /* Accessibilité des cartes : filtre de catégories, textes alternatifs des photos et libellés des liens de carte. */
+  m("fr", {
+    "fo.aria_filters": "Filtrer les formations par catégorie",
+    "fo.f1_alt": "Formation VCA de base — sécurité sur chantier",
+    "fo.f1_aria": "S'inscrire à la formation VCA Base",
+    "fo.f2_alt": "Formation VCA ligne hiérarchique — encadrement et management de la sécurité",
+    "fo.f2_aria": "S'inscrire à la formation VCA Ligne hiérarchique",
+    "fo.f3_alt": "Formation diisocyanates et substances dangereuses — manipulation de produits chimiques",
+    "fo.f3_aria": "S'inscrire à la formation Diisocyanates et substances dangereuses",
+    "fo.f4_alt": "Formation nacelles élévatrices — nacelle ciseaux bleue déployée en position haute sur un chantier",
+    "fo.f4_aria": "Découvrir la formation Nacelles élévatrices",
+    "fo.f5_alt": "Formation fibre optique — soudure et installation professionnelle",
+    "fo.f5_aria": "S'inscrire à la formation Fibre optique",
+    "fo.f6_alt": "Formation BEPS — brevet européen de premiers secours, les gestes qui sauvent",
+    "fo.f6_aria": "Découvrir la formation BEPS — Premier secours"
+  });
+  m("en", {
+    "fo.aria_filters": "Filter courses by category",
+    "fo.f1_alt": "VCA Basic course — site safety",
+    "fo.f1_aria": "Register for the VCA Basic course",
+    "fo.f2_alt": "VCA for Supervisors course — safety supervision and management",
+    "fo.f2_aria": "Register for the VCA for Supervisors course",
+    "fo.f3_alt": "Diisocyanates and hazardous substances course — handling chemical products",
+    "fo.f3_aria": "Register for the Diisocyanates and hazardous substances course",
+    "fo.f4_alt": "Aerial work platform course — blue scissor lift raised on a construction site",
+    "fo.f4_aria": "Discover the Aerial work platform course",
+    "fo.f5_alt": "Optical fibre course — splicing and professional installation",
+    "fo.f5_aria": "Register for the Optical fibre course",
+    "fo.f6_alt": "BEPS course — European first-aid certificate, the gestures that save lives",
+    "fo.f6_aria": "Discover the BEPS — First aid course"
+  });
+  m("nl", {
+    "fo.aria_filters": "Opleidingen filteren op categorie",
+    "fo.f1_alt": "Opleiding VCA Basis — veiligheid op de werf",
+    "fo.f1_aria": "Inschrijven voor de opleiding VCA Basis",
+    "fo.f2_alt": "Opleiding VCA voor Leidinggevenden — begeleiding en management van de veiligheid",
+    "fo.f2_aria": "Inschrijven voor de opleiding VCA voor Leidinggevenden",
+    "fo.f3_alt": "Opleiding di-isocyanaten en gevaarlijke stoffen — omgaan met chemische producten",
+    "fo.f3_aria": "Inschrijven voor de opleiding Di-isocyanaten en gevaarlijke stoffen",
+    "fo.f4_alt": "Opleiding hoogwerker — blauwe schaarhoogwerker in hoge stand op een werf",
+    "fo.f4_aria": "De opleiding Hoogwerker ontdekken",
+    "fo.f5_alt": "Opleiding glasvezel — lassen en professionele installatie",
+    "fo.f5_aria": "Inschrijven voor de opleiding Glasvezel",
+    "fo.f6_alt": "Opleiding BEPS — Europees brevet eerste hulp, de handelingen die levens redden",
+    "fo.f6_aria": "De opleiding BEPS — Eerste hulp ontdekken"
+  });
+  m("af", {
+    "fo.aria_filters": "Filtreer opleidings volgens kategorie",
+    "fo.f1_alt": "Opleiding VCA Basis — terreinveiligheid",
+    "fo.f1_aria": "Skryf in vir die opleiding VCA Basis",
+    "fo.f2_alt": "Opleiding VCA vir Toesighouers — toesig oor en bestuur van veiligheid",
+    "fo.f2_aria": "Skryf in vir die opleiding VCA vir Toesighouers",
+    "fo.f3_alt": "Opleiding di-isosianate en gevaarlike stowwe — hantering van chemiese produkte",
+    "fo.f3_aria": "Skryf in vir die opleiding Di-isosianate en gevaarlike stowwe",
+    "fo.f4_alt": "Opleiding hoogwerker — blou skêrhoogwerker in hoë posisie op 'n konstruksieterrein",
+    "fo.f4_aria": "Ontdek die opleiding Hoogwerker",
+    "fo.f5_alt": "Opleiding optiese vesel — las en professionele installasie",
+    "fo.f5_aria": "Skryf in vir die opleiding Optiese vesel",
+    "fo.f6_alt": "Opleiding BEPS — Europese noodhulpsertifikaat, die handelinge wat lewens red",
+    "fo.f6_aria": "Ontdek die opleiding BEPS — Noodhulp"
+  });
+  m("ar", {
+    "fo.aria_filters": "تصفية الدورات حسب الفئة",
+    "fo.f1_alt": "دورة VCA الأساسي — السلامة في موقع العمل",
+    "fo.f1_aria": "التسجيل في دورة VCA الأساسي",
+    "fo.f2_alt": "دورة VCA للمشرفين — الإشراف على السلامة وإدارتها",
+    "fo.f2_aria": "التسجيل في دورة VCA للمشرفين",
+    "fo.f3_alt": "دورة ثنائي الأيزوسيانات والمواد الخطرة — التعامل مع المنتجات الكيميائية",
+    "fo.f3_aria": "التسجيل في دورة ثنائي الأيزوسيانات والمواد الخطرة",
+    "fo.f4_alt": "دورة منصة العمل المرتفعة — منصة مقصية زرقاء مرفوعة في موقع بناء",
+    "fo.f4_aria": "اكتشف دورة منصة العمل المرتفعة",
+    "fo.f5_alt": "دورة الألياف الضوئية — اللحام والتركيب الاحترافي",
+    "fo.f5_aria": "التسجيل في دورة الألياف الضوئية",
+    "fo.f6_alt": "دورة BEPS — شهادة الإسعافات الأولية الأوروبية، الإجراءات التي تنقذ الحياة",
+    "fo.f6_aria": "اكتشف دورة BEPS — الإسعافات الأولية"
+  });
+  m("bg", {
+    "fo.aria_filters": "Филтриране на обученията по категория",
+    "fo.f1_alt": "Обучение VCA основи — безопасност на обекта",
+    "fo.f1_aria": "Записване за обучението VCA основи",
+    "fo.f2_alt": "Обучение VCA за ръководители — надзор и управление на безопасността",
+    "fo.f2_aria": "Записване за обучението VCA за ръководители",
+    "fo.f3_alt": "Обучение по диизоцианати и опасни вещества — работа с химични продукти",
+    "fo.f3_aria": "Записване за обучението по диизоцианати и опасни вещества",
+    "fo.f4_alt": "Обучение за автовишка — синя ножична платформа във вдигната позиция на строителен обект",
+    "fo.f4_aria": "Разгледайте обучението за автовишка",
+    "fo.f5_alt": "Обучение по оптични влакна — заваряване и професионален монтаж",
+    "fo.f5_aria": "Записване за обучението по оптични влакна",
+    "fo.f6_alt": "Обучение BEPS — европейски сертификат за първа помощ, действията, които спасяват живот",
+    "fo.f6_aria": "Разгледайте обучението BEPS — Първа помощ"
+  });
+  m("de", {
+    "fo.aria_filters": "Schulungen nach Kategorie filtern",
+    "fo.f1_alt": "Schulung VCA Grundlagen — Sicherheit auf der Baustelle",
+    "fo.f1_aria": "Für die Schulung VCA Grundlagen anmelden",
+    "fo.f2_alt": "Schulung VCA für Führungskräfte — Führung und Management der Sicherheit",
+    "fo.f2_aria": "Für die Schulung VCA für Führungskräfte anmelden",
+    "fo.f3_alt": "Schulung Diisocyanate und Gefahrstoffe — Umgang mit chemischen Produkten",
+    "fo.f3_aria": "Für die Schulung Diisocyanate und Gefahrstoffe anmelden",
+    "fo.f4_alt": "Schulung Hubarbeitsbühne — blaue Scherenbühne in ausgefahrener Position auf einer Baustelle",
+    "fo.f4_aria": "Schulung Hubarbeitsbühne entdecken",
+    "fo.f5_alt": "Schulung Glasfaser — Spleißen und professionelle Installation",
+    "fo.f5_aria": "Für die Schulung Glasfaser anmelden",
+    "fo.f6_alt": "Schulung BEPS — europäisches Erste-Hilfe-Zertifikat, Handgriffe, die Leben retten",
+    "fo.f6_aria": "Schulung BEPS — Erste Hilfe entdecken"
+  });
+  m("ro", {
+    "fo.aria_filters": "Filtrați cursurile după categorie",
+    "fo.f1_alt": "Curs VCA de bază — securitate pe șantier",
+    "fo.f1_aria": "Înscrieți-vă la cursul VCA de bază",
+    "fo.f2_alt": "Curs VCA pentru personalul de conducere — coordonarea și managementul securității",
+    "fo.f2_aria": "Înscrieți-vă la cursul VCA pentru personalul de conducere",
+    "fo.f3_alt": "Curs despre diizocianați și substanțe periculoase — manipularea produselor chimice",
+    "fo.f3_aria": "Înscrieți-vă la cursul despre diizocianați și substanțe periculoase",
+    "fo.f4_alt": "Curs pentru nacele elevatoare — nacelă cu foarfecă albastră ridicată pe un șantier",
+    "fo.f4_aria": "Descoperiți cursul pentru nacele elevatoare",
+    "fo.f5_alt": "Curs de fibră optică — sudură și instalare profesională",
+    "fo.f5_aria": "Înscrieți-vă la cursul de fibră optică",
+    "fo.f6_alt": "Curs BEPS — brevet european de prim ajutor, gesturile care salvează vieți",
+    "fo.f6_aria": "Descoperiți cursul BEPS — Prim ajutor"
+  });
+  m("it", {
+    "fo.aria_filters": "Filtra i corsi per categoria",
+    "fo.f1_alt": "Corso VCA base — sicurezza in cantiere",
+    "fo.f1_aria": "Iscriviti al corso VCA base",
+    "fo.f2_alt": "Corso VCA per responsabili — coordinamento e gestione della sicurezza",
+    "fo.f2_aria": "Iscriviti al corso VCA per responsabili",
+    "fo.f3_alt": "Corso diisocianati e sostanze pericolose — manipolazione dei prodotti chimici",
+    "fo.f3_aria": "Iscriviti al corso diisocianati e sostanze pericolose",
+    "fo.f4_alt": "Corso piattaforma elevatrice — piattaforma a forbice blu sollevata in un cantiere",
+    "fo.f4_aria": "Scopri il corso piattaforma elevatrice",
+    "fo.f5_alt": "Corso fibra ottica — giunzione e installazione professionale",
+    "fo.f5_aria": "Iscriviti al corso fibra ottica",
+    "fo.f6_alt": "Corso BEPS — brevetto europeo di primo soccorso, i gesti che salvano la vita",
+    "fo.f6_aria": "Scopri il corso BEPS — Primo soccorso"
+  });
+  m("sl", {
+    "fo.aria_filters": "Filtrirajte usposabljanja po kategoriji",
+    "fo.f1_alt": "Usposabljanje VCA osnovni — varnost na gradbišču",
+    "fo.f1_aria": "Prijava na usposabljanje VCA osnovni",
+    "fo.f2_alt": "Usposabljanje VCA za vodstvo — vodenje in upravljanje varnosti",
+    "fo.f2_aria": "Prijava na usposabljanje VCA za vodstvo",
+    "fo.f3_alt": "Usposabljanje o diizocianatih in nevarnih snoveh — ravnanje s kemičnimi izdelki",
+    "fo.f3_aria": "Prijava na usposabljanje o diizocianatih in nevarnih snoveh",
+    "fo.f4_alt": "Usposabljanje za dvižne ploščadi — modra škarjasta ploščad v dvignjenem položaju na gradbišču",
+    "fo.f4_aria": "Odkrijte usposabljanje za dvižne ploščadi",
+    "fo.f5_alt": "Usposabljanje za optična vlakna — varjenje in profesionalna namestitev",
+    "fo.f5_aria": "Prijava na usposabljanje za optična vlakna",
+    "fo.f6_alt": "Usposabljanje BEPS — evropsko potrdilo o prvi pomoči, ukrepi, ki rešujejo življenja",
+    "fo.f6_aria": "Odkrijte usposabljanje BEPS — Prva pomoč"
+  });
 })();

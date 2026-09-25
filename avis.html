@@ -932,8 +932,8 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
     </div>
   </div></div>
   <div class="main-bar"><div class="main-inner">
-    <a class="logo" href="index.html" aria-label="Wisy Safety — accueil"><img class="logo__img" src="assets/images/logo/logo-102.webp" srcset="assets/images/logo/logo-102.webp 102w, assets/images/logo/logo-204.webp 204w" sizes="51px" alt="Wisy Safety" width="51" height="56"></a>
-    <nav class="main-nav" aria-label="Navigation principale">
+    <a class="logo" href="index.html" data-i18n-attr="aria-label:aria.home" aria-label="Wisy Safety — accueil"><img class="logo__img" src="assets/images/logo/logo-102.webp" srcset="assets/images/logo/logo-102.webp 102w, assets/images/logo/logo-204.webp 204w" sizes="51px" alt="Wisy Safety" width="51" height="56"></a>
+    <nav class="main-nav" data-i18n-attr="aria-label:aria.main_nav" aria-label="Navigation principale">
       <ul class="nav-list">
         <li class="has-dropdown">
           <a class="nav-link" href="formations.html" aria-haspopup="true" aria-expanded="false" aria-controls="dd-formations"><span data-i18n="nav.formations">Formations</span>
@@ -983,7 +983,7 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
 <div class="wsy-search"><div class="wsy-search__wrap"><div class="wsy-search__inner"><div class="wsy-search__box" role="search" aria-label="Rechercher sur le site"><span class="wsy-search__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span><input class="wsy-search__input" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-haspopup="listbox" aria-controls="wsy-search-listbox" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Rechercher une formation, un thème…" aria-label="Rechercher sur le site"><kbd class="wsy-search__kbd"></kbd><button class="wsy-search__clear" type="button" tabindex="-1" aria-label="Effacer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="wsy-search__panel"><div class="wsy-search__results" id="wsy-search-listbox" role="listbox"></div><div class="wsy-search__foot"></div></div><span class="wsy-search__live" aria-live="polite"></span></div></div></div>
 </header>
 <div class="m-scrim" aria-hidden="true"></div>
-<aside class="m-panel" id="m-panel" aria-label="Menu mobile">
+<aside class="m-panel" id="m-panel" data-i18n-attr="aria-label:aria.mobile_menu" aria-label="Menu mobile">
   <div class="m-head"><img class="logo__img" src="assets/images/logo/logo-102.webp" srcset="assets/images/logo/logo-102.webp 102w, assets/images/logo/logo-204.webp 204w" sizes="40px" alt="Wisy Safety" width="40" height="44" style="height:44px"><button class="m-close" data-i18n-attr="aria-label:aria.close_menu" aria-label="Fermer le menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <ul class="m-nav">
     <li><button class="m-acc__trigger" aria-expanded="false"><span data-i18n="nav.formations">Formations</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
@@ -1032,7 +1032,7 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
         </div>
       </div>
       <aside class="av-hero__aside reveal" style="--d:.12s">
-        <div id="rc-stats" data-empty="true" role="group" aria-label="Indice de confiance">
+        <div id="rc-stats" data-empty="true" role="group" data-i18n-attr="aria-label:av.aria_trust" aria-label="Indice de confiance">
           <span class="av-mono rc-stats__label" data-i18n="av.stats_avg_label">Note moyenne</span>
           <div class="rc-stats__big">
             <span class="rc-stats__avg" data-stat-avg>&mdash;</span>
@@ -1159,7 +1159,7 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
                 </div>
 
                 <!-- Piège anti-spam (invisible) -->
-                <div class="rc-hp" aria-hidden="true"><label>Ne remplissez pas ce champ<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+                <div class="rc-hp" aria-hidden="true"><label><span data-i18n="form.hp_label">Ne remplissez pas ce champ</span><input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
 
                 <!-- Consentement -->
                 <label class="rc-consent">
@@ -1183,7 +1183,7 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
                   <span class="rc-trust__item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-i18n="av.trust_time">2 minutes</span></span>
                 </div>
 
-                <p id="rc-config-note" hidden>Le dépôt d'avis n'est pas encore relié à Supabase (voir <code>js/supabase-config.js</code>).</p>
+                <p id="rc-config-note" hidden data-i18n-html="av.config_note">Le dépôt d'avis n'est pas encore relié à Supabase (voir <code>js/supabase-config.js</code>).</p>
               </form>
             </div>
 
@@ -1220,7 +1220,7 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
       </div>
       <p class="av-state" id="rc-loading" hidden data-i18n="av.reviews_loading">Chargement des avis&hellip;</p>
       <p class="av-state" id="rc-empty" hidden></p>
-      <div class="rc reveal" id="rc-carousel" hidden aria-label="Avis clients"></div>
+      <div class="rc reveal" id="rc-carousel" hidden data-i18n-attr="aria-label:av.aria_reviews" aria-label="Avis clients"></div>
     </div>
   </section>
 </main>
@@ -1263,8 +1263,8 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
       </div>
     </div>
     <div class="f-legal">
-      <span class="f-legal__vat">TVA BE0XXX.XXX.XXX</span>
-      <nav class="f-legal__links" aria-label="Liens légaux"><a href="#" data-i18n="footer.legal_mentions">Mentions légales</a><a href="#" data-i18n="footer.legal_privacy">Politique de confidentialité</a><a href="#" data-i18n="footer.legal_terms">Conditions générales</a></nav>
+      <span class="f-legal__vat"><span data-i18n="footer.vat">TVA</span> BE0XXX.XXX.XXX</span>
+      <nav class="f-legal__links" data-i18n-attr="aria-label:aria.legal_nav" aria-label="Liens légaux"><a href="#" data-i18n="footer.legal_mentions">Mentions légales</a><a href="#" data-i18n="footer.legal_privacy">Politique de confidentialité</a><a href="#" data-i18n="footer.legal_terms">Conditions générales</a></nav>
       <span>© <span data-year>2026</span> Wisy Safety · <span data-i18n="footer.rights">Tous droits réservés.</span></span>
     </div>
   </div>

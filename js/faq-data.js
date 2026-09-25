@@ -46,9 +46,17 @@
    confirmé. (Le terme « caces » n'est reconnu que côté requête, dans le moteur
    de recherche, pour orienter vers la réponse prudente.)
 
-   i18n — le contenu est rédigé en français (langue source du site). L'ossature
-   de page (en-tête, pied de page, sélecteur de langue) reste traduite via le
-   système i18n existant. Traduire le contenu de la FAQ est un ajout ultérieur.
+   i18n — le contenu est rédigé en français (langue source du site) ; c'est CE fichier
+   qui fait foi (identifiants, catégories, liens entre questions, actions, questions
+   « provisoires »). Les traductions vivent à part, en un fichier par langue :
+   js/faq-i18n/faq-<langue>.js, chargé à la demande par faq.html, qui appelle
+   `WisyFAQ.register(langue, { categories, actions, popular, items })`. Une traduction
+   ne fait que REMPLACER des textes (question, réponse, mots-clés, synonymes, libellés)
+   pour des identifiants existants : la structure, les liens et les drapeaux restent
+   ceux d'ici. Toutes les fonctions d'accès acceptent un dernier argument `lang`
+   facultatif ; sans lui (assistant, tests, copie serveur) elles renvoient le français.
+   L'ossature de la page (titres, boutons, messages) est traduite via le dictionnaire
+   js/i18n-data-faq.js.
 
    Module « dual-mode » : `window.WisyFAQ` dans le navigateur ET `module.exports`
    sous Node (tests) — aucune dépendance, aucun build.
@@ -497,6 +505,52 @@
   /* ---------------------------------------------------------------------
      Helpers (partagés navigateur + assistant + tests)
      --------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------
+     Traductions (facultatives) — packs enregistrés par js/faq-i18n/faq-<langue>.js.
+     Une langue sans pack (ou « fr ») renvoie exactement les données françaises.
+     --------------------------------------------------------------------- */
+  var PACKS = {}, LOCAL = {};
+  function register(lang, pack) { if (lang && pack) { PACKS[lang] = pack; delete LOCAL[lang]; } }
+  function hasPack(lang) { return !!PACKS[lang]; }
+  function packLangs() { return Object.keys(PACKS); }
+  function activeLang(lang) { return lang && lang !== "fr" && PACKS[lang] ? lang : "fr"; }
+
+  /* Vue localisée (construite une fois par langue) : mêmes objets que ITEMS, textes remplacés. */
+  function view(lang) {
+    var l = activeLang(lang);
+    if (l === "fr") return null;
+    if (LOCAL[l]) return LOCAL[l];
+    var p = PACKS[l], v = { items: [], byId: {}, categories: [], popular: [], actions: {} };
+    ITEMS.forEach(function (it) {
+      var t = (p.items && p.items[it.id]) || {}, o = {}, k;
+      for (k in it) o[k] = it[k];
+      if (typeof t.question === "string" && t.question) o.question = t.question;
+      if (typeof t.answer === "string" && t.answer) o.answer = t.answer;
+      if (t.keywords) o.keywords = t.keywords.slice();
+      if (t.synonyms) o.synonyms = t.synonyms.slice();
+      v.items.push(o); v.byId[o.id] = o;
+    });
+    CATEGORIES.forEach(function (c) {
+      var t = (p.categories && p.categories[c.id]) || {}, o = {}, k;
+      for (k in c) o[k] = c[k];
+      if (t.label) o.label = t.label;
+      if (t.tagline) o.tagline = t.tagline;
+      v.categories.push(o);
+    });
+    POPULAR.forEach(function (pp, i) {
+      var t = (p.popular && p.popular[i]) || {};
+      v.popular.push({ label: t.label || pp.label, query: t.query || pp.query });
+    });
+    Object.keys(ACTIONS).forEach(function (id) {
+      var o = {}, k;
+      for (k in ACTIONS[id]) o[k] = ACTIONS[id][k];
+      if (p.actions && p.actions[id]) o.label = p.actions[id];
+      v.actions[id] = o;
+    });
+    LOCAL[l] = v;
+    return v;
+  }
+
   var byIdIndex = null;
   function indexById() {
     if (byIdIndex) return byIdIndex;
@@ -505,28 +559,30 @@
     return byIdIndex;
   }
 
-  function categories() { return CATEGORIES.slice(); }
-  function items() { return ITEMS.slice(); }
-  function popular() { return POPULAR.slice(); }
+  function categories(lang) { var v = view(lang); return (v ? v.categories : CATEGORIES).slice(); }
+  function items(lang) { var v = view(lang); return (v ? v.items : ITEMS).slice(); }
+  function popular(lang) { var v = view(lang); return (v ? v.popular : POPULAR).slice(); }
+  function actions(lang) { var v = view(lang); return v ? v.actions : ACTIONS; }
 
-  function categoryById(id) {
-    for (var i = 0; i < CATEGORIES.length; i++) {
-      if (CATEGORIES[i].id === id) return CATEGORIES[i];
+  function categoryById(id, lang) {
+    var list = categories(lang);
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].id === id) return list[i];
     }
     return null;
   }
 
-  function get(id) { return indexById()[id] || null; }
+  function get(id, lang) { var v = view(lang); return (v ? v.byId[id] : indexById()[id]) || null; }
 
-  function byCategory(id) {
-    return ITEMS.filter(function (it) { return it.category === id; });
+  function byCategory(id, lang) {
+    return items(lang).filter(function (it) { return it.category === id; });
   }
 
-  function featured() {
-    return ITEMS.filter(function (it) { return it.featured === true; });
+  function featured(lang) {
+    return items(lang).filter(function (it) { return it.featured === true; });
   }
 
-  /* Nombre de questions par catégorie — { choisir: 4, ... } */
+  /* Nombre de questions par catégorie — { choisir: 4, ... } (identique dans toutes les langues) */
   function counts() {
     var out = {};
     CATEGORIES.forEach(function (c) { out[c.id] = 0; });
@@ -538,17 +594,17 @@
   }
 
   /* Questions liées (1 à n) — d'abord celles déclarées, à défaut la même catégorie. */
-  function related(id, n) {
-    var it = get(id);
+  function related(id, n, lang) {
+    var it = get(id, lang);
     if (!it) return [];
     var max = n || 3, out = [], seen = {};
     seen[id] = true;
     (it.relatedQuestions || []).forEach(function (rid) {
-      var r = get(rid);
+      var r = get(rid, lang);
       if (r && !seen[rid] && out.length < max) { seen[rid] = true; out.push(r); }
     });
     if (out.length < max) {
-      byCategory(it.category).forEach(function (r) {
+      byCategory(it.category, lang).forEach(function (r) {
         if (!seen[r.id] && out.length < max) { seen[r.id] = true; out.push(r); }
       });
     }
@@ -581,11 +637,12 @@
   /* Données structurées Schema.org FAQPage — construites depuis la MÊME source
      que la page : elles ne peuvent donc jamais contenir une question absente de
      la page (exigence SEO). */
-  function toStructuredData() {
+  function toStructuredData(lang) {
     return {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      "mainEntity": ITEMS.map(function (it) {
+      "inLanguage": activeLang(lang),
+      "mainEntity": items(lang).map(function (it) {
         return {
           "@type": "Question",
           "name": it.question,
@@ -605,6 +662,10 @@
     categories: categories,
     items: items,
     popular: popular,
+    actions: actions,
+    register: register,
+    hasPack: hasPack,
+    packLangs: packLangs,
     categoryById: categoryById,
     get: get,
     byCategory: byCategory,

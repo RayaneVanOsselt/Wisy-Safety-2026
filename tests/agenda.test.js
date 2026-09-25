@@ -40,9 +40,10 @@ test("SEO : title, meta description, un seul H1, landmarks, canonical absolu (bl
   assert.ok(d && d[1].length >= 100 && d[1].length <= 170, "meta description 100–170 caractères : " + (d && d[1].length));
   assert.match(d[1], /formation/i);
   assert.equal((HTML.match(/<h1[\s>]/g) || []).length, 1, "un seul H1");
-  assert.match(HTML, /<main id="main" lang="fr" dir="ltr">/, "main + contenu français isolé du sens RTL");
+  assert.match(HTML, /<main id="main">/, "main SANS lang ni dir imposés : la page suit la langue choisie (français, arabe RTL…)");
+  assert.doesNotMatch(HTML, /<main\b[^>]*\b(lang|dir)=/, "aucun forçage de langue / de sens de lecture sur le contenu");
   assert.ok((HTML.match(/<section /g) || []).length >= 7, "sections sémantiques");
-  assert.match(HTML, /<nav class="ag-crumbs" aria-label="Fil d'Ariane">/, "fil d'Ariane");
+  assert.match(HTML, /<nav data-i18n-attr="aria-label:ag\.crumbs_label" class="ag-crumbs" aria-label="Fil d'Ariane">/, "fil d'Ariane (libellé traduit)");
   assert.match(HTML, /<link rel="canonical" href="https:\/\/www\.wisysafety\.be\/agenda\.html">/, "canonical absolu");
   assert.doesNotMatch(HTML, /rel="alternate" hreflang=/, "pas de hreflang relatif (langues = même URL traduite en JS)");
   assert.doesNotMatch(HTML, /"@type"\s*:\s*"Event"|schema\.org\/Event/, "aucune donnée structurée d'événement fictif");
@@ -54,7 +55,7 @@ test("hiérarchie des titres sans saut (H1 → H2 → H3) et cibles ARIA existan
   levels.reduce((prev, l) => { assert.ok(l <= prev + 1, "saut de niveau : h" + prev + " → h" + l); return l; }, 1);
   assert.equal(levels.filter((l) => l === 2).length, 6, "6 sections H2");
   [...HTML.matchAll(/aria-labelledby="([^"]+)"/g)].forEach((m) => assert.match(HTML, new RegExp('id="' + m[1] + '"'), "id cible : " + m[1]));
-  assert.match(HTML, /<a class="ag-skip" href="#main">/, "lien d'évitement");
+  assert.match(HTML, /<a data-i18n="ag\.skip" class="ag-skip" href="#main">/, "lien d'évitement");
   [...HTML.matchAll(/<img\b[^>]*>/g)].forEach((m) => assert.match(m[0], /width="\d+" height="\d+"/, "dimensions explicites (aucun CLS) : " + m[0].slice(0, 60)));
 });
 
@@ -109,7 +110,7 @@ test("coordonnées = celles du pied de page et de la base de connaissances", () 
 test("AgendaCalendarSection : URL vide par défaut, aucune URL fictive, état « Intégration Outlook prévue »", () => {
   assert.match(HTML, /<div class="agc" data-agenda-calendar data-calendar-url=""/);
   assert.doesNotMatch(HTML.replace(/<!--[\s\S]*?-->/g, ""), /https?:\/\/[^"'\s>]*(outlook|office365|live\.com)/i, "aucune URL Outlook dans la page");
-  assert.match(HTML, /<span data-agc-status>Intégration Outlook prévue<\/span>/);
+  assert.match(HTML, /<span data-i18n="ag\.st_planned" data-agc-status>Intégration Outlook prévue<\/span>/);
   assert.doesNotMatch(MAIN.match(/<p class="agc__status"[\s\S]*?<\/p>/)[0], /[Ss]ynchronis/, "jamais « synchronisé » comme état réel");
   ["data-agc-empty", "data-agc-frame", "data-agc-slot", "data-agc-open"].forEach((a) => assert.match(HTML, new RegExp(a), "gabarit : " + a));
   assert.match(HTML, /<div class="agc__frame" data-agc-frame hidden/, "cadre de l'agenda masqué tant qu'aucune URL n'est configurée");
@@ -164,7 +165,7 @@ test("iframe : isolé (sandbox sans navigation du parent), titre, chargement par
   assert.match(Cal.SANDBOX, /allow-scripts/); assert.match(Cal.SANDBOX, /allow-popups/);
   assert.equal(Cal.LOAD_TIMEOUT, 12000);
   const src = read("js/agenda-calendar.js");
-  assert.match(src, /f\.title = cfg\.title/); assert.match(src, /f\.loading = "lazy"/); assert.match(src, /referrerPolicy = "strict-origin-when-cross-origin"/);
+  assert.match(src, /f\.title = tr\("ag\.cal_title", cfg\.title\)/); assert.match(src, /f\.loading = "lazy"/); assert.match(src, /referrerPolicy = "strict-origin-when-cross-origin"/);
   assert.match(src, /IntersectionObserver/, "chargement quand la section approche de l'écran");
   assert.match(src, /setAttribute\("aria-busy", "true"\)/, "état de chargement annoncé");
   assert.match(HTML, /data-agc-open href="#agenda" target="_blank" rel="noopener noreferrer" hidden/, "lien de secours (href remplacé par le composant ; #agenda le rend explorable tant qu'il est masqué) sans fuite d'opener");
@@ -228,7 +229,7 @@ test("mouvement réduit : entrées, flottements et révélations neutralisés ; 
   assert.match(HTML, /@media \(prefers-reduced-motion:reduce\)\{[\s\S]*?\.reveal\{opacity:1;transform:none\}/, "le site rend .reveal visible");
   assert.match(HTML, /var reduce=matchMedia\("\(prefers-reduced-motion: reduce\)"\)\.matches/, "compteurs sans animation");
   assert.match(HTML, /querySelectorAll\("\[data-count\]"\)/, "compteurs animés par le script commun (une seule fois)");
-  assert.match(MAIN, /<span class="ag-sr">Plus de 500<\/span>/, "valeur finale lisible sans animation (texte pour lecteur d'écran)");
+  assert.match(MAIN, /<span data-i18n="ag\.sr_500" class="ag-sr">Plus de 500<\/span>/, "valeur finale lisible sans animation (texte pour lecteur d'écran)");
 });
 
 test("accessibilité CSS : focus visible épinette (crème sur fond sombre), lien d'évitement sans left:-9999px, éléments décoratifs masqués", () => {

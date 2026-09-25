@@ -49,6 +49,8 @@
     return v != null ? v : fallback;
   };
 
+  const slideWord = () => text("nac.sc_slide", "diapositive");
+
   class Scenes {
     constructor(root) {
       this.root = root;
@@ -93,7 +95,7 @@
       this.buildDashes();
       this.scenes.forEach((s, i) => {
         s.setAttribute("role", "group");
-        s.setAttribute("aria-roledescription", "slide");
+        s.setAttribute("aria-roledescription", slideWord());
         s.setAttribute("aria-label", (i + 1) + " / " + this.scenes.length);
         s.classList.toggle("is-active", i === this.index);
         s.classList.remove("is-leaving");
@@ -142,6 +144,7 @@
 
     relabel() {
       const base = this.root.dataset.itemLabel || text("nac.sc_item", "Point fort");
+      if (this.enhanced) this.scenes.forEach((s) => s.setAttribute("aria-roledescription", slideWord()));
       this.dashes.forEach((b, i) => b.setAttribute("aria-label", base + " " + (i + 1) + " / " + this.scenes.length));
     }
 

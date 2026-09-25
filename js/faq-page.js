@@ -19,6 +19,13 @@
    titre ; contenu replié non focusable (visibility) ; annonces polies
    (aria-live) ; raccourcis « / » et ⌘K/Ctrl+K vers la recherche ; respect de
    prefers-reduced-motion (défilement instantané).
+
+   Langues : les textes de l'interface viennent du dictionnaire « faq.* »
+   (js/i18n-data-faq.js, via WisyI18N) ; le CONTENU (questions, réponses, catégories,
+   recherches populaires) vient du pack js/faq-i18n/faq-<langue>.js, chargé à la
+   demande ; sans pack, la page reste en français. Au changement de langue
+   (événement « i18n:changed ») la page est reconstruite en conservant la recherche,
+   le filtre et les questions ouvertes.
    ========================================================================= */
 (function () {
   "use strict";
@@ -34,6 +41,28 @@
     if (fb) fb.hidden = false;
     return;
   }
+
+  /* ---------------------------------------------------------------------
+     i18n — dictionnaire « faq.* » (WisyI18N) ; les variables {n} {q} {c} {count} sont substituées ici
+     --------------------------------------------------------------------- */
+  function lang() { return (window.WisyI18N && window.WisyI18N.current && window.WisyI18N.current()) || "fr"; }
+  function raw(key) {
+    var v = window.WisyI18N && window.WisyI18N.get ? window.WisyI18N.get(lang(), key) : null;
+    return v == null ? null : String(v);
+  }
+  function fill(str, vars) {
+    return String(str).replace(/\{(\w+)\}/g, function (all, k) { return vars && vars[k] != null ? vars[k] : all; });
+  }
+  function T(key, vars) { var v = raw(key); return fill(v == null ? key : v, vars); }
+  /* Gabarit d'un nombre : singulier / pluriel selon la langue (« 1 question », « 5 de întrebări », « سؤالان »…).
+     one = clé du singulier, many = clé de la forme générale ; variantes facultatives « <many>_two|few|many|zero ». */
+  function countTpl(one, many, n) {
+    var cat;
+    try { cat = new Intl.PluralRules(lang()).select(n); } catch (e) { cat = n === 1 ? "one" : "other"; }
+    var tpl = cat === "one" ? raw(one) : (cat === "other" ? null : raw(many + "_" + cat));
+    return tpl != null ? tpl : (raw(cat === "one" ? one : many) || raw(many) || "{n}");
+  }
+  function countText(one, many, n) { return fill(countTpl(one, many, n), { n: n }); }
 
   /* ---------------------------------------------------------------------
      Petits outils DOM (aucun innerHTML sur du texte)
@@ -95,7 +124,6 @@
     });
     return frag;
   }
-  function plural(n, one, many) { return n + " " + (n > 1 ? many : one); }
   /* Une recherche démarre à 3 caractères (ou un chiffre) : pas d'« aucun résultat » qui clignote pendant la frappe. */
   function searchable(q) { q = String(q || "").trim(); return q.length >= 3 || /\d/.test(q); }
   function emit(event, detail) {
@@ -105,24 +133,27 @@
   /* ---------------------------------------------------------------------
      Données
      --------------------------------------------------------------------- */
-  var cats = F.categories(), items = F.items(), counts = F.counts();
-  var catMap = {};
-  cats.forEach(function (c) { catMap[c.id] = c; });
+  var LANG = "fr", cats = [], items = [], counts = F.counts(), catMap = {}, ACTIONS = {};
+  function refreshData() {
+    LANG = lang();
+    cats = F.categories(LANG); items = F.items(LANG); counts = F.counts();
+    ACTIONS = F.actions ? F.actions(LANG) : (F.ACTIONS || {});
+    catMap = {};
+    cats.forEach(function (c) { catMap[c.id] = c; });
+  }
+  refreshData();
 
   var live = $("faqc-live"), countEl = $("faqc-count"), filtersEl = $("faqc-filters");
   var resultsEl = $("faqc-results"), resultsTitle = $("faqc-results-t"), emptyEl = $("faqc-empty");
   var clearBtn = $("faqc-clear"), kbd = $("faqc-kbd"), sugEl = $("faqc-suggest");
   var state = { q: "", cat: "all", mode: "browse" };
 
-  /* Placeholder complet sur grand écran, version courte sur mobile (jamais tronqué) */
-  (function () {
-    var full = input.getAttribute("placeholder") || "";
-    var mq = window.matchMedia ? matchMedia("(max-width: 860px)") : null;
-    if (!mq) return;
-    function sync() { input.setAttribute("placeholder", mq.matches ? "Rechercher une question…" : full); }
-    sync();
-    if (mq.addEventListener) mq.addEventListener("change", sync); else if (mq.addListener) mq.addListener(sync);
-  })();
+  /* Placeholder complet sur grand écran, version courte sur mobile (jamais tronqué) — re-posé aussi
+     après un changement de langue (js/i18n.js réécrit l'attribut avec la version complète). */
+  var mqShort = window.matchMedia ? matchMedia("(max-width: 860px)") : null;
+  function syncPlaceholder() { input.setAttribute("placeholder", mqShort && mqShort.matches ? T("faq.ph_short") : T("faq.search_placeholder")); }
+  if (mqShort) { if (mqShort.addEventListener) mqShort.addEventListener("change", syncPlaceholder); else if (mqShort.addListener) mqShort.addListener(syncPlaceholder); }
+  syncPlaceholder();
 
   /* ---------------------------------------------------------------------
      Assistant : la « 3e façon » d'obtenir une réponse
@@ -153,7 +184,8 @@
   /* ---------------------------------------------------------------------
      Catégories, recherches populaires, questions essentielles
      --------------------------------------------------------------------- */
-  var catsEl = $("faqc-cats");
+  var catsEl = $("faqc-cats"), popEl = $("faqc-pop"), emptyTopics = $("faqc-empty-topics");
+  var tryEl = $("faqc-try"), tryList = $("faqc-try-list");
   function catButton(id, name, meta, icon) {
     return h("button", { type: "button", class: "faqc-cat", "data-cat": id, "aria-pressed": id === "all" ? "true" : "false" }, [
       h("span", { class: "faqc-cat__ic" }, [svg(icon)]),
@@ -161,28 +193,8 @@
       h("span", { class: "faqc-cat__check", "aria-hidden": "true" }, [svg("check")])
     ]);
   }
-  if (catsEl) {
-    catsEl.appendChild(catButton("all", "Toutes les questions", plural(items.length, "question", "questions"), "all"));
-    cats.forEach(function (c) { catsEl.appendChild(catButton(c.id, c.label, plural(counts[c.id] || 0, "question", "questions"), c.icon)); });
-  }
-
   function chip(label, query, light) {
     return h("button", { type: "button", class: "faqc-chip" + (light ? " faqc-chip--light" : ""), "data-q": query, "aria-pressed": "false", text: label });
-  }
-  var popEl = $("faqc-pop"), emptyTopics = $("faqc-empty-topics");
-  F.popular().forEach(function (p) {
-    if (popEl) popEl.appendChild(chip(p.label, p.query, false));
-    if (emptyTopics) emptyTopics.appendChild(chip(p.label, p.query, true));
-  });
-
-  /* Questions essentielles : amorces de la carte assistant (l'assistant répond avec les mêmes réponses) */
-  var tryEl = $("faqc-try"), tryList = $("faqc-try-list");
-  var featured = F.featured();
-  if (tryEl && tryList) {
-    featured.slice(0, 3).forEach(function (it) {
-      tryList.appendChild(h("li", null, [h("button", { type: "button", class: "faqc-ask__ex", "data-ask-text": it.question }, [svg("chevron"), h("span", { text: it.question })])]));
-    });
-    tryEl.hidden = !tryList.childNodes.length;
   }
 
   /* ---------------------------------------------------------------------
@@ -190,7 +202,6 @@
      --------------------------------------------------------------------- */
   var recs = {};      // id → { root, btn, qEl, tagEl, copyEl, it }
   var groups = {};    // catégorie → { root, body }
-  var ACTIONS = F.ACTIONS || {};
 
   function buildAnswerParts(rec) {
     var it = rec.it;
@@ -204,17 +215,17 @@
       parts.push(h("div", { class: "faqc-actions" }, [node]));
     }
 
-    var rel = F.related(it.id, 3);
+    var rel = F.related(it.id, 3, LANG);
     if (rel.length) {
-      var list = h("div", { class: "faqc-related" }, [h("p", { class: "faqc-related__t", text: "Questions associées" })]);
+      var list = h("div", { class: "faqc-related" }, [h("p", { class: "faqc-related__t", text: T("faq.related") })]);
       rel.forEach(function (r) { list.appendChild(h("button", { type: "button", class: "faqc-rel", "data-goto": r.id }, [svg("chevron"), h("span", { text: r.question })])); });
       parts.push(list);
     }
 
-    var fbox = h("div", { class: "faqc-fb", role: "group", "aria-label": "Cette réponse vous a-t-elle aidé ?" }, [
-      h("span", { class: "faqc-fb__q", text: "Cette réponse vous a-t-elle aidé ?" }),
-      h("button", { type: "button", class: "faqc-fb__btn", "data-fb": "yes", text: "Oui" }),
-      h("button", { type: "button", class: "faqc-fb__btn", "data-fb": "no", text: "Pas tout à fait" })
+    var fbox = h("div", { class: "faqc-fb", role: "group", "aria-label": T("faq.fb_q") }, [
+      h("span", { class: "faqc-fb__q", text: T("faq.fb_q") }),
+      h("button", { type: "button", class: "faqc-fb__btn", "data-fb": "yes", text: T("faq.fb_yes") }),
+      h("button", { type: "button", class: "faqc-fb__btn", "data-fb": "no", text: T("faq.fb_no") })
     ]);
     parts.push(fbox);
     return parts;
@@ -239,23 +250,50 @@
     return rec;
   }
 
-  cats.forEach(function (c) {
-    var list = items.filter(function (it) { return it.category === c.id; });
-    if (!list.length) return;                       // jamais de catégorie vide
-    var body = h("div", { class: "faqc-group__body" });
-    var titleId = "faqc-g-" + c.id;
-    var root = h("section", { class: "faqc-group", "data-cat": c.id, "aria-labelledby": titleId }, [
-      h("header", { class: "faqc-group__head" }, [
-        h("span", { class: "faqc-group__ic", "aria-hidden": "true" }, [svg(c.icon)]),
-        h("div", null, [h("h3", { class: "faqc-group__title", id: titleId, text: c.label }), h("p", { class: "faqc-group__sub", text: c.tagline })]),
-        h("span", { class: "faqc-group__count", text: plural(list.length, "question", "questions") })
-      ]),
-      body
-    ]);
-    list.forEach(function (it) { body.appendChild(buildItem(it).root); });
-    groups[c.id] = { root: root, body: body };
-    groupsEl.appendChild(root);
-  });
+  /* (Re)construit tout ce qui dépend de la langue : catégories, recherches populaires, amorces de
+     l'assistant et accordéons. Renvoie les identifiants des questions qui étaient ouvertes. */
+  function build() {
+    var openIds = Object.keys(recs).filter(function (id) { return recs[id].root.classList.contains("is-open"); });
+    refreshData();
+    [catsEl, popEl, emptyTopics, tryList, groupsEl].forEach(function (n) { if (n) n.textContent = ""; });
+    Array.prototype.slice.call(resultsEl.querySelectorAll(".faqc-item")).forEach(function (n) { n.parentNode.removeChild(n); });
+    recs = {}; groups = {};
+
+    if (catsEl) {
+      catsEl.appendChild(catButton("all", T("faq.cat_all"), countText("faq.n_question", "faq.n_questions", items.length), "all"));
+      cats.forEach(function (c) { catsEl.appendChild(catButton(c.id, c.label, countText("faq.n_question", "faq.n_questions", counts[c.id] || 0), c.icon)); });
+    }
+    F.popular(LANG).forEach(function (p) {
+      if (popEl) popEl.appendChild(chip(p.label, p.query, false));
+      if (emptyTopics) emptyTopics.appendChild(chip(p.label, p.query, true));
+    });
+    /* Questions essentielles : amorces de la carte assistant (l'assistant répond avec les mêmes réponses) */
+    if (tryEl && tryList) {
+      F.featured(LANG).slice(0, 3).forEach(function (it) {
+        tryList.appendChild(h("li", null, [h("button", { type: "button", class: "faqc-ask__ex", "data-ask-text": it.question }, [svg("chevron"), h("span", { text: it.question })])]));
+      });
+      tryEl.hidden = !tryList.childNodes.length;
+    }
+
+    cats.forEach(function (c) {
+      var list = items.filter(function (it) { return it.category === c.id; });
+      if (!list.length) return;                       // jamais de catégorie vide
+      var body = h("div", { class: "faqc-group__body" });
+      var titleId = "faqc-g-" + c.id;
+      var root = h("section", { class: "faqc-group", "data-cat": c.id, "aria-labelledby": titleId }, [
+        h("header", { class: "faqc-group__head" }, [
+          h("span", { class: "faqc-group__ic", "aria-hidden": "true" }, [svg(c.icon)]),
+          h("div", null, [h("h3", { class: "faqc-group__title", id: titleId, text: c.label }), h("p", { class: "faqc-group__sub", text: c.tagline })]),
+          h("span", { class: "faqc-group__count", text: countText("faq.n_question", "faq.n_questions", list.length) })
+        ]),
+        body
+      ]);
+      list.forEach(function (it) { body.appendChild(buildItem(it).root); });
+      groups[c.id] = { root: root, body: body };
+      groupsEl.appendChild(root);
+    });
+    return openIds;
+  }
 
   /* ---------------------------------------------------------------------
      Rendu des libellés / réponses (avec surlignage éventuel)
@@ -315,7 +353,7 @@
     var searching = searchable(q);
     var prev = state.mode;
     state.mode = searching ? "search" : "browse";
-    var res = searching ? F.search(q, { partial: true, limit: 50 }) : null;
+    var res = searching ? F.search(q, { partial: true, limit: 50, lang: LANG }) : null;
     var hits = res ? res.hits : [];
 
     /* catégories : état pressé */
@@ -344,9 +382,9 @@
         setOpen(rec, i === 0);                       // la meilleure réponse s'ouvre d'elle-même
       });
       resultsEl.hidden = !hits.length;
-      resultsTitle.textContent = "Résultats pour « " + q + " »";
+      resultsTitle.textContent = T("faq.results_for", { q: q });
       emptyEl.hidden = hits.length > 0;
-      if (!hits.length) $("faqc-empty-q").textContent = "« " + q + " »";
+      if (!hits.length) fillEmpty(q);
     } else {
       resultsEl.hidden = true;
       emptyEl.hidden = true;
@@ -365,23 +403,43 @@
     /* barre d'outils : compteur + filtres actifs */
     var n = searching ? hits.length : (state.cat === "all" ? items.length : (counts[state.cat] || 0));
     state.count = n;
-    countEl.textContent = "";
-    countEl.appendChild(h("b", { text: String(n) }));
-    countEl.appendChild(document.createTextNode(" " + (searching ? (n > 1 ? "résultats" : "résultat") : (n > 1 ? "questions" : "question"))));
+    setCount(n, searching);
     filtersEl.textContent = "";
     if (searching) {
-      filtersEl.appendChild(pill("Recherche : « " + q + " »", "query", "Effacer la recherche"));
+      filtersEl.appendChild(pill(T("faq.pill_query", { q: q }), "query", T("faq.clear_search")));
     } else if (state.cat !== "all") {
-      filtersEl.appendChild(pill("Catégorie : " + (catMap[state.cat] ? catMap[state.cat].label : state.cat), "cat", "Retirer le filtre de catégorie"));
-      filtersEl.appendChild(h("button", { type: "button", class: "faqc-link", "data-remove": "cat", text: "Tout afficher" }));
+      filtersEl.appendChild(pill(T("faq.pill_cat", { c: catMap[state.cat] ? catMap[state.cat].label : state.cat }), "cat", T("faq.pill_cat_remove")));
+      filtersEl.appendChild(h("button", { type: "button", class: "faqc-link", "data-remove": "cat", text: T("faq.show_all") }));
     }
     filtersEl.hidden = !filtersEl.childNodes.length;
 
     if (state.ready) {   // pas d'annonce au chargement de la page
       announce(searching
-        ? (n ? plural(n, "résultat", "résultats") + " pour « " + q + " »." : "Aucun résultat pour « " + q + " ».")
-        : (state.cat === "all" ? plural(n, "question affichée", "questions affichées") + "." : catMap[state.cat].label + " : " + plural(n, "question", "questions") + "."));
+        ? (n ? T("faq.ann_results", { count: countText("faq.n_result", "faq.n_results", n), q: q }) : T("faq.ann_none", { q: q }))
+        : (state.cat === "all" ? T("faq.ann_shown", { count: countText("faq.n_shown", "faq.n_shown_pl", n) }) : T("faq.ann_cat", { c: catMap[state.cat].label, count: countText("faq.n_question", "faq.n_questions", n) })));
     }
+  }
+
+  /* Compteur de la barre d'outils : « <b>N</b> questions » — le nombre est mis en gras où qu'il se trouve dans la phrase. */
+  function setCount(n, searching) {
+    var tpl = searching ? countTpl("faq.n_result", "faq.n_results", n) : countTpl("faq.n_question", "faq.n_questions", n);
+    var i = tpl.indexOf("{n}");
+    countEl.textContent = "";
+    if (i < 0) { countEl.appendChild(document.createTextNode(tpl)); return; }
+    if (i > 0) countEl.appendChild(document.createTextNode(tpl.slice(0, i)));
+    countEl.appendChild(h("b", { text: String(n) }));
+    if (i + 3 < tpl.length) countEl.appendChild(document.createTextNode(tpl.slice(i + 3)));
+  }
+  /* État « aucun résultat » : la phrase vient du dictionnaire, la recherche saisie est insérée en gras à la place de {q}. */
+  function fillEmpty(q) {
+    var p = $("faqc-empty-p");
+    if (!p) return;
+    var tpl = T("faq.empty_text"), i = tpl.indexOf("{q}");
+    p.textContent = "";
+    if (i < 0) { p.appendChild(document.createTextNode(tpl)); return; }
+    p.appendChild(document.createTextNode(tpl.slice(0, i)));
+    p.appendChild(h("span", { class: "faqc-empty__q", text: q }));
+    p.appendChild(document.createTextNode(tpl.slice(i + 3)));
   }
 
   function setQuery(q, o) {
@@ -416,7 +474,7 @@
     o = o || {};
     var visible = false;
     if (state.mode === "search") {
-      var res = F.search(state.q, { partial: true, limit: 50 });
+      var res = F.search(state.q, { partial: true, limit: 50, lang: LANG });
       visible = res.hits.some(function (x) { return x.item.id === id; });
       if (!visible) { state.q = ""; input.value = ""; clearBtn.hidden = true; if (kbd) kbd.hidden = false; state.cat = "all"; apply(); }
     } else if (state.cat !== "all" && state.cat !== rec.it.category) {
@@ -463,13 +521,13 @@
   function renderSuggest() {
     var q = input.value.trim();
     if (!searchable(q)) { closeSuggest(); return; }
-    var res = F.search(q, { partial: true, limit: 5 });
+    var res = F.search(q, { partial: true, limit: 5, lang: LANG });
     sugEl.textContent = "";
     sug.opts = []; sug.idx = -1;
     input.removeAttribute("aria-activedescendant");
 
     if (!res.hits.length) {
-      sugEl.appendChild(h("div", { class: "faqc-suggest__none", role: "option", "aria-disabled": "true", "aria-selected": "false" }, [h("b", { text: "Aucun résultat" }), " pour « " + q + " »."]));
+      sugEl.appendChild(h("div", { class: "faqc-suggest__none", role: "option", "aria-disabled": "true", "aria-selected": "false" }, [h("b", { text: T("search.empty_title") }), " " + T("faq.sug_none_q", { q: q })]));
     } else {
       res.hits.forEach(function (hit) {
         var it = hit.item, cat = catMap[it.category];
@@ -485,13 +543,13 @@
       if (res.total > res.hits.length) {
         addOpt(h("div", { class: "faqc-opt faqc-opt--act" }, [
           h("span", { class: "faqc-opt__ic", "aria-hidden": "true" }, [svg("all")]),
-          h("span", { class: "faqc-opt__body", text: "Voir les " + res.total + " résultats" })
+          h("span", { class: "faqc-opt__body", text: T("faq.sug_all", { n: res.total }) })
         ]), function () { setQuery(input.value, { scroll: true }); });
       }
     }
     addOpt(h("div", { class: "faqc-opt faqc-opt--act" }, [
       h("span", { class: "faqc-opt__ic", "aria-hidden": "true" }, [svg("chat")]),
-      h("span", { class: "faqc-opt__body", text: "Poser cette question à l'assistant Wisy Safety" })
+      h("span", { class: "faqc-opt__body", text: T("faq.sug_ask") })
     ]), function () { closeSuggest(); askAssistant(input.value.trim()); });
 
     sug.open = true;
@@ -599,12 +657,12 @@
       emit("faq_feedback", { id: article ? article.id : "", helpful: helpful });
       box.textContent = "";
       if (helpful) {
-        box.appendChild(h("span", { class: "faqc-fb__done", text: "Merci pour votre retour." }));
+        box.appendChild(h("span", { class: "faqc-fb__done", text: T("faq.fb_thanks") }));
       } else {
         var qText = article && recs[article.id] ? recs[article.id].it.question : "";
-        box.appendChild(h("span", { class: "faqc-fb__q", text: "Nous pouvons vous aider davantage :" }));
-        box.appendChild(h("button", { type: "button", class: "faqc-fb__btn", "data-ask-text": qText, text: "Demander à l'assistant" }));
-        box.appendChild(h("a", { class: "faqc-fb__btn", href: "contact.html", text: "Contacter l'équipe" }));
+        box.appendChild(h("span", { class: "faqc-fb__q", text: T("faq.fb_more") }));
+        box.appendChild(h("button", { type: "button", class: "faqc-fb__btn", "data-ask-text": qText, text: T("faq.fb_ask") }));
+        box.appendChild(h("a", { class: "faqc-fb__btn", href: "contact.html", text: T("faq.contact_team") }));
       }
     }
   });
@@ -656,16 +714,47 @@
 
   /* ---------------------------------------------------------------------
      Données structurées FAQPage — uniquement les questions AFFICHÉES ci-dessus
+     (mises à jour au changement de langue : un seul bloc, jamais dupliqué)
      --------------------------------------------------------------------- */
-  try {
-    var ld = document.createElement("script");
-    ld.type = "application/ld+json";
-    ld.textContent = JSON.stringify(F.toStructuredData());
-    document.head.appendChild(ld);
-  } catch (e) { /* silencieux */ }
+  var ldEl = null;
+  function refreshLd() {
+    try {
+      if (!ldEl) { ldEl = document.createElement("script"); ldEl.type = "application/ld+json"; document.head.appendChild(ldEl); }
+      ldEl.textContent = JSON.stringify(F.toStructuredData(LANG));
+    } catch (e) { /* silencieux */ }
+  }
+
+  /* ---------------------------------------------------------------------
+     Langue — pack de contenu chargé à la demande ; repli français si indisponible
+     --------------------------------------------------------------------- */
+  function ensurePack(l, done) {
+    if (l === "fr" || (F.hasPack && F.hasPack(l))) { done(); return; }
+    var sc = document.createElement("script");
+    sc.src = "js/faq-i18n/faq-" + l + ".js";
+    sc.async = true;
+    sc.onload = function () { done(); };
+    sc.onerror = function () { done(); };            // pack absent : contenu français, interface traduite
+    document.head.appendChild(sc);
+  }
+  function rebuild() {
+    var open = build();
+    apply();
+    open.forEach(function (id) { if (recs[id]) setOpen(recs[id], true); });
+    syncPlaceholder();
+    refreshLd();
+  }
+  document.addEventListener("i18n:changed", function () {
+    var l = lang();
+    ensurePack(l, function () { if (lang() === l) rebuild(); });
+  });
 
   /* Démarrage */
-  apply();
-  state.ready = true;
-  fromUrl(true);
+  ensurePack(lang(), function () {
+    build();
+    apply();
+    syncPlaceholder();
+    refreshLd();
+    state.ready = true;
+    fromUrl(true);
+  });
 })();

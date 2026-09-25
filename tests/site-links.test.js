@@ -58,7 +58,7 @@ function refs(file) {
   return out;
 }
 const isExternal = (u) => /^(https?:)?\/\//i.test(u);
-const isSpecial = (u) => /^(mailto:|tel:|data:|blob:)/i.test(u);
+const isSpecial = (u) => /^(mailto:|tel:|data:|blob:|about:)/i.test(u);
 
 /* ------------------------------------------------------------------ ressources et pages */
 test("toute page, image, feuille de style, script, poster et srcset référencés existent (casse exacte)", () => {

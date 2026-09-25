@@ -37,6 +37,7 @@
 <link rel="stylesheet" href="css/site-header.css">
 <link rel="stylesheet" href="css/search.css">
 <link rel="stylesheet" href="css/assistant.css">
+<link rel="stylesheet" href="css/cookie-consent.css">
 <style>
 /* ==================== TOKENS ==================== */
 :root{
@@ -605,10 +606,16 @@ a.f-c-value:hover{color:var(--turquoise)}
         </div>
 
         <div class="reveal">
-          <div class="map-wrapper">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2519.793116555751!2d4.276270977152576!3d50.834995871668056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c3c6c0d4b22ebf%3A0xc34a5df237b263cf!2sAv.%20d'Itterbeek%20378%2C%201070%20Anderlecht!5e0!3m2!1sfr!2sbe!4v1789299970751!5m2!1sfr!2sbe"
+          <div class="map-wrapper" data-consent-gate>
+            <iframe src="about:blank" data-consent-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2519.793116555751!2d4.276270977152576!3d50.834995871668056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c3c6c0d4b22ebf%3A0xc34a5df237b263cf!2sAv.%20d'Itterbeek%20378%2C%201070%20Anderlecht!5e0!3m2!1sfr!2sbe!4v1789299970751!5m2!1sfr!2sbe"
               allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
               data-i18n-attr="title:home.map_title" title="Localisation du centre de formation Wisy Safety, Avenue d'Itterbeek 378, 1070 Anderlecht"></iframe>
+              title="Localisation du centre de formation Wisy Safety, Avenue d'Itterbeek 378, 1070 Anderlecht"></iframe>
+            <div class="wcc-gate">
+              <span class="wcc-gate__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3.2v5.1c0 4.6-3 8.7-7 9.9-4-1.2-7-5.3-7-9.9V6.2L12 3z"/></svg></span>
+              <p class="wcc-gate__text">Ce contenu nécessite votre autorisation.</p>
+              <button type="button" class="btn btn--outline" data-wcc-open>Modifier mes préférences</button>
+            </div>
           </div>
           <a class="map-link" href="https://maps.google.com/?q=Avenue+d'Itterbeek+378,+1070+Anderlecht" target="_blank" rel="noopener"><span data-i18n="home.map_link">Voir sur Google Maps</span> <span aria-hidden="true">↗</span></a>
         </div>
@@ -675,6 +682,8 @@ a.f-c-value:hover{color:var(--turquoise)}
 <!-- Assistant Wisy : seul le launcher est chargé d'emblée ; le moteur de réponses et le panneau
      se chargent à la demande (survol, focus, toucher, clic) — voir js/assistant/launcher.js -->
 <script defer src="js/assistant/launcher.js"></script>
+<!-- Consentement aux cookies : bandeau + centre de préférences (voir js/cookie-consent.js) -->
+<script defer src="js/cookie-consent.js"></script>
 <script>
 (function(){
   var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;

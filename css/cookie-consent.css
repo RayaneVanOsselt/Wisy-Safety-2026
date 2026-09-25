@@ -1,0 +1,273 @@
+/* =========================================================================
+   WISY SAFETY — Consentement aux cookies (bannière + centre de préférences)
+   Charte 2026 · réutilise les tokens du site (épinette, turquoise, crème…)
+   et les classes .btn / .btn--cta / .btn--outline déjà définies par chaque
+   page. Fabriqué par js/cookie-consent.js ; feuille indépendante des autres
+   widgets (recherche, assistant) pour rester légère sur toutes les pages.
+
+   Échelle z-index du site (voir css/assistant.css) : 1000 en-tête · 1100
+   voile du menu · 1150 assistant · 1200 menu mobile · 2000 évitement.
+   Bandeau : 1130 (sous l'assistant, qui se décale au-dessus via --wa-lift,
+   voir la règle body.has-wcc-banner plus bas). Centre de préférences : 1400
+   (au-dessus de tout : c'est une boîte de dialogue bloquante).
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   0. Décalage de l'assistant flottant pendant que le bandeau est affiché
+      (mécanisme prévu par css/assistant.css : variable --wa-lift)
+   ------------------------------------------------------------------------- */
+body.has-wcc-banner #wisy-assistant {
+  --wa-lift: calc(var(--wcc-banner-h, 96px) + 14px);
+}
+
+/* -------------------------------------------------------------------------
+   1. BANDEAU — flottant, bas d'écran, largeur généreuse et centrée
+   ------------------------------------------------------------------------- */
+.wcc-banner {
+  position: fixed;
+  left: clamp(1rem, 4vw, 2.5rem);
+  right: clamp(1rem, 4vw, 2.5rem);
+  bottom: clamp(1rem, 3vw, 1.75rem);
+  z-index: 1130;
+  max-width: 900px;
+  margin-inline: auto;
+  background: #fff;
+  border: 1px solid var(--granit-12, rgba(94, 109, 106, .12));
+  border-radius: var(--radius-lg, 22px);
+  box-shadow: var(--shadow-drop, 0 22px 50px rgba(27, 45, 40, .16));
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .3s var(--ease-premium, var(--ease-out, cubic-bezier(.22,1,.36,1))),
+              transform .3s var(--ease-premium, var(--ease-out, cubic-bezier(.22,1,.36,1)));
+}
+.wcc-banner.is-visible { opacity: 1; transform: translateY(0); }
+.wcc-banner.is-hiding { opacity: 0; transform: translateY(12px); }
+@media (prefers-reduced-motion: reduce) {
+  .wcc-banner { transition: opacity .01s linear; transform: none; }
+  .wcc-banner.is-hiding { transform: none; }
+}
+
+.wcc-banner__inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.5rem clamp(1.25rem, 3vw, 2rem);
+}
+.wcc-icon {
+  display: flex; align-items: center; justify-content: center;
+  flex: none; width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(72, 214, 194, .16);
+  color: var(--epinette, #1F6F64);
+}
+.wcc-icon svg { width: 22px; height: 22px; }
+.wcc-banner__body { flex: 1 1 auto; min-width: 220px; }
+.wcc-banner__title {
+  margin: 0 0 .35rem;
+  font-family: var(--font-titre, "Poppins", sans-serif);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--noir-jais, #1B2D28);
+}
+.wcc-banner__text {
+  margin: 0 0 .5rem;
+  font-size: .92rem;
+  line-height: 1.6;
+  color: var(--granit, #5E6D6A);
+  max-width: 62ch;
+}
+.wcc-banner__link {
+  display: inline-block;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--epinette, #1F6F64);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.wcc-banner__link:hover, .wcc-banner__link:focus-visible { color: var(--brume, #3FA69B); }
+
+.wcc-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .6rem;
+  flex: none;
+  margin-left: auto;
+}
+.wcc-btn { min-height: 46px; padding: .7rem 1.25rem; font-size: .92rem; white-space: nowrap; }
+.wcc-btn--text {
+  background: transparent;
+  color: var(--epinette, #1F6F64);
+  font-family: var(--font-titre, "Poppins", sans-serif);
+  font-weight: 600;
+  font-size: .92rem;
+  padding: .7rem .5rem;
+  border-radius: var(--radius-btn, 12px);
+  transition: color .2s var(--ease, ease), background-color .2s var(--ease, ease);
+}
+.wcc-btn--text:hover, .wcc-btn--text:focus-visible { color: var(--brume, #3FA69B); background: rgba(63, 166, 155, .08); }
+
+@media (max-width: 900px) {
+  .wcc-banner__inner { flex-wrap: wrap; }
+  .wcc-banner__actions { margin-left: 0; width: 100%; }
+}
+
+/* -------------------------------------------------------------------------
+   2. FEUILLE MOBILE — bottom sheet compact (jamais 80 % de l'écran)
+   ------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .wcc-banner {
+    left: .6rem; right: .6rem; bottom: .6rem;
+    max-height: min(64dvh, 520px);
+    overflow-y: auto;
+  }
+  .wcc-banner__inner { padding: 1.25rem 1.1rem; gap: .85rem; }
+  .wcc-icon { width: 36px; height: 36px; }
+  .wcc-icon svg { width: 18px; height: 18px; }
+  .wcc-banner__title { font-size: 1rem; }
+  .wcc-banner__actions { flex-direction: column; align-items: stretch; }
+  .wcc-btn, .wcc-btn--text { width: 100%; }
+  /* Ordre visuel demandé sur mobile : Tout accepter, Tout refuser, Personnaliser */
+  .wcc-banner__actions [data-wcc-action="accept"] { order: -1; }
+}
+
+/* -------------------------------------------------------------------------
+   3. CENTRE DE PRÉFÉRENCES — modal premium
+   ------------------------------------------------------------------------- */
+.wcc-scrim {
+  position: fixed; inset: 0; z-index: 1400;
+  background: rgba(27, 45, 40, .55);
+  opacity: 0; visibility: hidden;
+  transition: opacity .25s var(--ease, ease), visibility 0s linear .25s;
+}
+.wcc-scrim.is-visible { opacity: 1; visibility: visible; transition-delay: 0s; }
+@media (prefers-reduced-motion: reduce) { .wcc-scrim { transition: opacity .01s linear, visibility 0s; } }
+
+.wcc-modal {
+  position: fixed;
+  z-index: 1401;
+  top: 50%; left: 50%;
+  width: min(92vw, 620px);
+  max-height: min(86dvh, 720px);
+  display: flex; flex-direction: column;
+  background: #fff;
+  border-radius: var(--radius-lg, 22px);
+  box-shadow: var(--shadow-drop, 0 22px 50px rgba(27, 45, 40, .16));
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.97);
+  visibility: hidden;
+  transition: opacity .25s var(--ease-premium, ease), transform .25s var(--ease-premium, ease), visibility 0s linear .25s;
+}
+.wcc-modal.is-visible { opacity: 1; transform: translate(-50%, -50%) scale(1); visibility: visible; transition-delay: 0s; }
+@media (prefers-reduced-motion: reduce) {
+  .wcc-modal { transition: opacity .01s linear, visibility 0s; transform: translate(-50%, -50%); }
+  .wcc-modal.is-visible { transform: translate(-50%, -50%); }
+}
+
+.wcc-modal__head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--granit-12, rgba(94, 109, 106, .12));
+}
+.wcc-modal__title {
+  margin: 0;
+  font-family: var(--font-titre, "Poppins", sans-serif);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--noir-jais, #1B2D28);
+}
+.wcc-modal__close {
+  display: flex; align-items: center; justify-content: center;
+  flex: none; width: 36px; height: 36px;
+  border-radius: 50%;
+  color: var(--granit, #5E6D6A);
+  transition: background-color .2s var(--ease, ease), color .2s var(--ease, ease);
+}
+.wcc-modal__close:hover, .wcc-modal__close:focus-visible { background: var(--granit-12, rgba(94,109,106,.12)); color: var(--noir-jais, #1B2D28); }
+.wcc-modal__close svg { width: 18px; height: 18px; }
+
+.wcc-modal__body { padding: 1.1rem 1.5rem; overflow-y: auto; flex: 1 1 auto; }
+.wcc-modal__intro { margin: 0 0 1.1rem; font-size: .92rem; line-height: 1.6; color: var(--granit, #5E6D6A); }
+
+.wcc-cat {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--granit-12, rgba(94, 109, 106, .12));
+}
+.wcc-cat:first-child { border-top: none; padding-top: 0; }
+.wcc-cat__text { flex: 1 1 auto; }
+.wcc-cat__title { margin: 0 0 .25rem; font-family: var(--font-titre, "Poppins", sans-serif); font-weight: 600; font-size: .96rem; color: var(--noir-jais, #1B2D28); }
+.wcc-cat__desc { margin: 0; font-size: .85rem; line-height: 1.55; color: var(--granit, #5E6D6A); max-width: 44ch; }
+.wcc-cat__locked-tag {
+  display: inline-flex; align-items: center; gap: .3rem; margin-top: .4rem;
+  font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--epinette, #1F6F64);
+}
+.wcc-cat__locked-tag svg { width: 14px; height: 14px; flex: none; }
+.wcc-cat__control { flex: none; display: flex; flex-direction: column; align-items: center; gap: .3rem; padding-top: .1rem; }
+
+/* Interrupteur accessible : case à cocher réelle, habillée visuellement */
+.wcc-switch { position: relative; display: inline-block; width: 44px; height: 26px; flex: none; }
+.wcc-switch input {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  margin: 0; opacity: 0; cursor: pointer; z-index: 2;
+}
+.wcc-switch input:disabled { cursor: default; }
+.wcc-switch__track {
+  position: absolute; inset: 0;
+  border-radius: 999px;
+  background: var(--granit-20, rgba(94, 109, 106, .24));
+  transition: background-color .2s var(--ease, ease);
+}
+.wcc-switch__thumb {
+  position: absolute; top: 3px; left: 3px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(27, 45, 40, .3);
+  transition: transform .2s var(--ease, ease);
+}
+.wcc-switch input:checked + .wcc-switch__track { background: var(--epinette, #1F6F64); }
+.wcc-switch input:checked + .wcc-switch__track .wcc-switch__thumb { transform: translateX(18px); }
+.wcc-switch input:focus-visible + .wcc-switch__track { outline: 3px solid var(--brume, #3FA69B); outline-offset: 2px; }
+.wcc-switch input:disabled + .wcc-switch__track { opacity: .55; }
+@media (prefers-reduced-motion: reduce) {
+  .wcc-switch__track, .wcc-switch__thumb { transition: none; }
+}
+
+.wcc-modal__foot {
+  display: flex; flex-wrap: wrap; gap: .6rem;
+  padding: 1.1rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--granit-12, rgba(94, 109, 106, .12));
+}
+.wcc-modal__foot .wcc-btn { flex: 1 1 160px; }
+
+@media (max-width: 480px) {
+  .wcc-modal__foot { flex-direction: column; }
+  .wcc-modal__foot .wcc-btn { width: 100%; }
+}
+
+/* -------------------------------------------------------------------------
+   4. Lien « Préférences cookies » injecté dans le pied de page
+   ------------------------------------------------------------------------- */
+.wcc-footer-link {
+  font: inherit;
+  color: inherit;
+  transition: color var(--t-fast, .3s) var(--ease, ease);
+}
+.wcc-footer-link:hover, .wcc-footer-link:focus-visible { color: var(--turquoise, #48D6C2); }
+
+/* -------------------------------------------------------------------------
+   5. Contenu tiers en attente de consentement (ex. carte Google Maps)
+   ------------------------------------------------------------------------- */
+.wcc-gate {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .75rem; text-align: center; padding: 1.5rem;
+  background: var(--creme, #F4FAF9);
+  transition: opacity .2s var(--ease, ease);
+}
+[data-consent-gate].is-granted .wcc-gate { display: none; }
+.wcc-gate__icon { color: var(--epinette, #1F6F64); }
+.wcc-gate__icon svg { width: 28px; height: 28px; }
+.wcc-gate__text { margin: 0; max-width: 32ch; font-size: .9rem; color: var(--granit, #5E6D6A); }

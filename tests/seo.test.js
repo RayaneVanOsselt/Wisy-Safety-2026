@@ -108,7 +108,7 @@ test("plus de hreflang relatifs ni de balises SEO en double (le bloc généré e
 
 /* ------------------------------------------------------------------ données structurées */
 test("JSON-LD : valide, types autorisés, une Organisation dont les faits = coordonnées du site", () => {
-  const ALLOWED = new Set(["EducationalOrganization", "LocalBusiness", "WebSite", "BreadcrumbList", "ListItem", "ItemList", "Course", "Article", "ContactPage", "PostalAddress", "GeoCoordinates", "OpeningHoursSpecification", "Offer", "PriceSpecification"]);
+  const ALLOWED = new Set(["EducationalOrganization", "LocalBusiness", "WebSite", "BreadcrumbList", "ListItem", "ItemList", "Course", "Article", "ContactPage", "PostalAddress", "GeoCoordinates", "OpeningHoursSpecification", "Offer", "Service", "BusinessAudience", "UnitPriceSpecification", "PriceSpecification"]);
   PUBLIC.forEach((f) => {
     const blocks = ldBlocks(read(f));
     assert.equal(blocks.length, 1, f + " : un seul bloc JSON-LD statique (le FAQPage de faq.html est injecté à l'exécution)");

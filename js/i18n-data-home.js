@@ -88,13 +88,13 @@
     "meta.title": "Wisy Safety | Veiligheidsopleiding in Brussel (Anderlecht)",
     "home.hero_eyebrow": "Opleidingsentrum · Anderlecht",
     "home.hero_title": "Veiligheid as die maatstaf",
-    "home.hero_sub": "Lei jou spanne op en sertifiseer hulle met kundiges uit die veld — VCA, PEB, koördinasie, noodhulp.",
+    "home.hero_sub": "Lei u spanne op en sertifiseer hulle met kundiges uit die veld — VCA, PEB, koördinasie, noodhulp.",
     "home.hero_cta1": "Blaai deur die opleidings", "home.hero_cta2": "Kontak ons", "home.scroll": "Ontdek",
     "home.partners_eyebrow": "Ons vennote", "home.partners_badge": "6 vertroude vennote",
     "home.partners_sub": "Groot spelers in telekommunikasie en konstruksie lei hul spanne op en sertifiseer hulle met Wisy Safety.",
     "home.impact_eyebrow": "Impak & Fasiliteit",
     "home.impact_title": "Tien jaar kundigheid, in syfers en in detail",
-    "home.impact_lead": "Konkrete resultate en 'n ten volle toegeruste opleidingsentrum in Anderlecht om jou spanne na uitnemendheid in werkplekveiligheid te lei.",
+    "home.impact_lead": "Konkrete resultate en 'n ten volle toegeruste opleidingsentrum in Anderlecht om u spanne na uitnemendheid in werkplekveiligheid te lei.",
     "home.b_stats": "Statistieke", "home.b_specialists": "Spesialiste", "home.b_nationalities": "Nasionaliteite opgelei",
     "home.b_pros": "Professionele persone opgelei", "home.b_sat_pill": "★ 100% tevredenheid",
     "home.b_certifications": "Sertifiserings", "home.b_delivered": "Uitgereik",
@@ -193,7 +193,7 @@
     "home.hero_eyebrow": "Centru de formare · Anderlecht",
     "home.hero_title": "Securitatea ca punct de referință",
     "home.hero_sub": "Formați și certificați-vă echipele cu experți din teren — VCA, PEB, coordonare, prim ajutor.",
-    "home.hero_cta1": "Vezi cursurile", "home.hero_cta2": "Contactați-ne", "home.scroll": "Descoperă",
+    "home.hero_cta1": "Consultați cursurile", "home.hero_cta2": "Contactați-ne", "home.scroll": "Descoperiți",
     "home.partners_eyebrow": "Partenerii noștri", "home.partners_badge": "6 parteneri de încredere",
     "home.partners_sub": "Companii majore din telecomunicații și construcții își formează și certifică echipele cu Wisy Safety.",
     "home.impact_eyebrow": "Impact & Sediu",
@@ -211,7 +211,7 @@
     "home.fiche_lead": "Un sediu de formare profesional cu spații moderne, complet echipate, dedicat excelenței în securitatea muncii.",
     "home.info_access": "Accesibilitate", "home.info_access_val": "Transport public", "home.info_access_sub": "Accesibil cu autobuzul și trenul",
     "home.info_hours_val": "Luni → Joi: 10:00 – 16:00", "home.info_hours_sub": "Vineri → Duminică: Închis",
-    "home.capacity_txt": "participanți", "home.capacity_sub": "Capacitate maximă pe sesiune", "home.map_link": "Vezi pe Google Maps"
+    "home.capacity_txt": "participanți", "home.capacity_sub": "Capacitate maximă pe sesiune", "home.map_link": "Vedeți pe Google Maps"
   });
 
   m("it", {

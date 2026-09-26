@@ -79,7 +79,7 @@
     "search.cat_management": "Management",
     "search.page_home_t": "Home",
     "search.page_home_d": "The Wisy Safety home page",
-    "search.page_formations_t": "Trainings",
+    "search.page_formations_t": "Training",
     "search.page_formations_d": "Our full training catalogue",
     "search.page_avis_t": "Reviews",
     "search.page_avis_d": "Client testimonials and feedback",
@@ -134,7 +134,7 @@
     "search.page_faq_d": "Veelgestelde vragen en assistent",
     "search.page_agenda_t": "Opleidingsagenda",
     "search.page_agenda_d": "Komende sessies, uren en locaties",
-    "search.page_peb_t": "Word EPB-certificateur",
+    "search.page_peb_t": "Word PEB-certificeerder",
     "search.page_peb_d": "Opleiding, examen en erkenning in Wallonië en Brussel"
   });
 
@@ -152,7 +152,7 @@
     "search.recent": "Onlangse soektogte",
     "search.recent_clear": "Vee uit",
     "search.empty_title": "Geen resultate nie",
-    "search.empty_text": "Niks stem met jou soektog ooreen nie. Probeer 'n ander term.",
+    "search.empty_text": "Niks stem met u soektog ooreen nie. Probeer 'n ander term.",
     "search.empty_suggest": "Blaai eerder deur 'n kategorie:",
     "search.hint_navigate": "navigeer",
     "search.hint_select": "kies",
@@ -220,7 +220,7 @@
     "search.page_faq_d": "الأسئلة الشائعة والمساعد",
     "search.page_agenda_t": "جدول الدورات التدريبية",
     "search.page_agenda_d": "الدورات القادمة والمواعيد والأماكن",
-    "search.page_peb_t": "كن معتمَدًا لشهادة الأداء الطاقي PEB",
+    "search.page_peb_t": "كن مُصدِر شهادات PEB معتمدًا",
     "search.page_peb_d": "التدريب والامتحان والاعتماد في والونيا وبروكسل"
   });
 
@@ -263,7 +263,7 @@
     "search.page_faq_d": "Често задавани въпроси и асистент",
     "search.page_agenda_t": "График на обученията",
     "search.page_agenda_d": "Предстоящи сесии, часове и места",
-    "search.page_peb_t": "Станете сертификатор PEB",
+    "search.page_peb_t": "Станете PEB сертификатор",
     "search.page_peb_d": "Обучение, изпит и одобрение във Валония и Брюксел"
   });
 
@@ -312,9 +312,9 @@
 
   /* ---------------- ROMÂNĂ ---------------- */
   m("ro", {
-    "search.placeholder": "Caută o formare, o temă…",
-    "search.aria_label": "Caută pe site",
-    "search.clear": "Șterge căutarea",
+    "search.placeholder": "Căutați o formare, o temă…",
+    "search.aria_label": "Căutați pe site",
+    "search.clear": "Ștergeți căutarea",
     "search.group_formations": "Formări",
     "search.group_categories": "Categorii",
     "search.group_pages": "Pagini",
@@ -322,13 +322,13 @@
     "search.group_faq": "Ajutor și întrebări frecvente",
     "search.suggestions": "Sugestii",
     "search.recent": "Căutări recente",
-    "search.recent_clear": "Șterge",
+    "search.recent_clear": "Ștergeți",
     "search.empty_title": "Niciun rezultat",
-    "search.empty_text": "Nimic nu corespunde căutării tale. Încearcă alt termen.",
+    "search.empty_text": "Nimic nu corespunde căutării dumneavoastră. Încercați alt termen.",
     "search.empty_suggest": "Explorează în schimb o categorie:",
     "search.hint_navigate": "navighează",
-    "search.hint_select": "selectează",
-    "search.hint_close": "închide",
+    "search.hint_select": "selectați",
+    "search.hint_close": "închideți",
     "search.results_word": "rezultate",
     "search.formations_word": "formări",
     "search.cat_securite": "Securitate",
@@ -337,14 +337,14 @@
     "search.cat_management": "Management",
     "search.page_home_t": "Acasă",
     "search.page_home_d": "Pagina principală Wisy Safety",
-    "search.page_formations_t": "Formări",
+    "search.page_formations_t": "Cursuri",
     "search.page_formations_d": "Catalogul nostru complet de formări",
     "search.page_avis_t": "Recenzii",
     "search.page_avis_d": "Mărturii și feedback de la clienți",
     "search.page_contact_t": "Contact",
     "search.page_contact_d": "Date de contact și formular",
     "search.page_inscription_t": "Înscriere",
-    "search.page_inscription_d": "Înscrie-te la o formare",
+    "search.page_inscription_d": "Înscrieți-vă la o formare",
     "search.page_faq_t": "Centru de ajutor",
     "search.page_faq_d": "Întrebări frecvente și asistent",
     "search.page_agenda_t": "Calendarul cursurilor",
@@ -384,7 +384,7 @@
     "search.page_formations_d": "Il nostro catalogo completo di corsi",
     "search.page_avis_t": "Recensioni",
     "search.page_avis_d": "Testimonianze e opinioni dei clienti",
-    "search.page_contact_t": "Contatto",
+    "search.page_contact_t": "Contatti",
     "search.page_contact_d": "Recapiti e modulo di contatto",
     "search.page_inscription_t": "Iscrizione",
     "search.page_inscription_d": "Iscriviti a un corso",
@@ -427,7 +427,7 @@
     "search.page_formations_d": "Naš celoten katalog usposabljanj",
     "search.page_avis_t": "Mnenja",
     "search.page_avis_d": "Pričevanja in mnenja strank",
-    "search.page_contact_t": "Stik",
+    "search.page_contact_t": "Kontakt",
     "search.page_contact_d": "Kontaktni podatki in obrazec",
     "search.page_inscription_t": "Prijava",
     "search.page_inscription_d": "Prijava na usposabljanje",

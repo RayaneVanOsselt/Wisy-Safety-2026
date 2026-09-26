@@ -30,6 +30,7 @@ et sans rien à installer pour le mettre en ligne.
 | Brancher le calendrier Outlook | l'attribut `data-calendar-url` dans `agenda.html` | [docs/README-AGENDA.md](docs/README-AGENDA.md) |
 | Changer les faits PEB (Wallonie/Bruxelles), le tarif ou les sessions | `js/peb-data.js` | [docs/README-PEB.md](docs/README-PEB.md) |
 | Configurer les avis clients (Supabase, e-mail, anti-spam) | `js/supabase-config.js` | [docs/README-AVIS.md](docs/README-AVIS.md) |
+| Corriger une traduction, ajouter un texte ou une page traduite | `js/i18n-data-*.js` (+ le HTML) | [docs/README-I18N.md](docs/README-I18N.md) |
 | Comprendre ou activer l'assistant virtuel | `js/assistant/` | [docs/README-ASSISTANT.md](docs/README-ASSISTANT.md) |
 
 Les coordonnées, les horaires et la position sur la carte sont dans `js/faq-data.js` (`CONTACT`) ; le pied de
@@ -47,6 +48,12 @@ Vérifier que tout est cohérent (tous les tests doivent passer) :
 
 ```bash
 node --test tests/*.test.js
+```
+
+Contrôler les traductions (10 langues : clés, chiffres, textes restés en dur, encodage) — voir [docs/README-I18N.md](docs/README-I18N.md) :
+
+```bash
+node scripts/check-i18n.js
 ```
 
 Régénérer les images optimisées à partir des originaux de `assets/` (nécessite Python et Pillow) :

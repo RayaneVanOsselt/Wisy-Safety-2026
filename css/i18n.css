@@ -94,3 +94,32 @@
 [dir="rtl"] .chero__link svg,
 [dir="rtl"] .map-link span,
 [dir="rtl"] .gt-card__btn span { display: inline-block; transform: scaleX(-1); }
+
+/* Numéros de téléphone et adresses e-mail : toujours lus de gauche à droite, isolés du texte arabe
+   (sans cela « +32 2 318 86 59 » s'affiche « 59 86 318 2 32+ »). */
+[dir="rtl"] a[href^="tel:"],
+[dir="rtl"] a[href^="mailto:"] { direction: ltr; unicode-bidi: isolate; }
+
+/* Bandeau et centre de préférences des cookies (css/cookie-consent.css) : miroir en arabe */
+[dir="rtl"] .wcc-banner__actions { margin-left: 0; margin-right: auto; }
+[dir="rtl"] .wcc-switch__thumb { left: auto; right: 3px; }
+[dir="rtl"] .wcc-switch input:checked + .wcc-switch__track .wcc-switch__thumb { transform: translateX(-18px); }
+@media (max-width: 900px) { [dir="rtl"] .wcc-banner__actions { margin-right: 0; } }
+
+/* ---------- Libellés plus longs selon la langue : jamais de débordement sur mobile ---------- */
+@media (max-width: 640px) {
+  /* un bouton dont le libellé est long passe à la ligne au lieu de dépasser de l'écran */
+  body .btn { white-space: normal; text-align: center; }
+  /* un mot surligné dans un titre (« experts certifiés ») peut passer à la ligne */
+  body .team-head h2 .mark, body .chero__title .mark, body .gt__title .mark { white-space: normal; }
+}
+
+/* Mots longs (allemand, néerlandais, bulgare…) : césure automatique des titres et boutons plutôt que débordement.
+   Le français et l'anglais gardent leur mise en page d'origine. */
+html[lang]:not([lang="fr"]):not([lang="en"]) :is(h1, h2, h3, h4, .btn) { overflow-wrap: break-word; hyphens: auto; }
+
+/* Alignements « à gauche » écrits en dur dans le CSS des pages : à droite en arabe */
+[dir="rtl"] .m-nav > li > a, [dir="rtl"] .m-acc__trigger, [dir="rtl"] .tcard__hab,
+[dir="rtl"] .faqc-search, [dir="rtl"] .faqc-way, [dir="rtl"] .faqc-cat, [dir="rtl"] .faqc-trigger, [dir="rtl"] .faqc-ask__ex,
+[dir="rtl"] .beps-acc__btn, [dir="rtl"] .nac-acc__btn { text-align: right; }
+

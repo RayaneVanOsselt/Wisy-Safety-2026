@@ -37,6 +37,7 @@
 <link rel="stylesheet" href="css/site-header.css">
 <link rel="stylesheet" href="css/search.css">
 <link rel="stylesheet" href="css/assistant.css">
+<link rel="stylesheet" href="css/cookie-consent.css">
 <style>
 /* Socle du site : tokens, boutons, header, footer (identiques aux autres pages) */
 /* ==================== TOKENS ==================== */
@@ -210,7 +211,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 <noscript><style>.reveal{opacity:1;transform:none}.peb-acc__panel{grid-template-rows:1fr!important}</style></noscript>
 </head>
 <body class="peb-page">
-<a class="peb-skip" href="#contenu">Aller au contenu</a>
+<a data-i18n="peb.page_a1" class="peb-skip" href="#contenu">Aller au contenu</a>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
@@ -335,47 +336,47 @@ a.f-c-value:hover{color:var(--turquoise)}
   <!-- ==================== 01. HERO ==================== -->
   <section class="peb-hero" aria-labelledby="peb-h1">
     <div class="container">
-      <nav class="peb-bc" aria-label="Fil d'Ariane">
+      <nav data-i18n-attr="aria-label:peb.hero_nav1" class="peb-bc" aria-label="Fil d'Ariane">
         <ol>
-          <li><a href="index.html">Accueil</a></li>
-          <li><span aria-current="page">Certificateur PEB</span></li>
+          <li><a data-i18n="peb.bc_a1" href="index.html">Accueil</a></li>
+          <li><span data-i18n="peb.bc_s1" aria-current="page">Certificateur PEB</span></li>
         </ol>
       </nav>
 
-      <p class="peb-registry reveal"><span class="peb-registry__item"><span class="dot" aria-hidden="true"></span>Registre des formations</span><span class="peb-registry__sep" aria-hidden="true"></span><span class="peb-registry__item">Réf. WSY-PEB</span><span class="peb-registry__sep" aria-hidden="true"></span><span class="peb-registry__item">Wallonie · Bruxelles</span></p>
+      <p class="peb-registry reveal"><span class="peb-registry__item"><span class="dot" aria-hidden="true"></span><span data-i18n="peb.hero_s1">Registre des formations</span></span><span class="peb-registry__sep" aria-hidden="true"></span><span data-i18n="peb.hero_s2" class="peb-registry__item">Réf. WSY-PEB</span><span class="peb-registry__sep" aria-hidden="true"></span><span data-i18n="peb.hero_s3" class="peb-registry__item">Wallonie · Bruxelles</span></p>
 
       <div class="peb-hero__grid">
         <div class="peb-hero__text" data-stagger>
-          <p class="peb-badge reveal"><span class="peb-badge__dot" aria-hidden="true"></span>Formation professionnelle · PEB · 2026</p>
-          <h1 class="peb-hero__title" id="peb-h1"><span class="peb-mask" data-mask><span class="peb-mask__inner">Devenez certificateur</span></span> <span class="peb-mask" data-mask style="--d:.08s"><span class="peb-mask__inner">PEB agréé</span></span></h1>
-          <p class="peb-hero__accroche reveal">En Wallonie ou à Bruxelles.</p>
-          <p class="peb-lead reveal" style="color:rgba(244,250,249,.82)">Une formation réglementaire et pratique pour préparer votre agrément de certificateur PEB. Les procédures wallonne et bruxelloise sont différentes : choisissez votre Région pour voir le parcours qui vous concerne.</p>
+          <p class="peb-badge reveal"><span class="peb-badge__dot" aria-hidden="true"></span><span data-i18n="peb.hero_s4">Formation professionnelle · PEB · 2026</span></p>
+          <h1 class="peb-hero__title" id="peb-h1"><span class="peb-mask" data-mask><span data-i18n="peb.hero_s5" class="peb-mask__inner">Devenez certificateur</span></span> <span class="peb-mask" data-mask style="--d:.08s"><span data-i18n="peb.hero_s6" class="peb-mask__inner">PEB agréé</span></span></h1>
+          <p data-i18n="peb.hero_p1" class="peb-hero__accroche reveal">En Wallonie ou à Bruxelles.</p>
+          <p data-i18n="peb.hero_p2" class="peb-lead reveal" style="color:rgba(244,250,249,.82)">Une formation réglementaire et pratique pour préparer votre agrément de certificateur PEB. Les procédures wallonne et bruxelloise sont différentes : choisissez votre Région pour voir le parcours qui vous concerne.</p>
 
           <div class="reveal" style="margin-top:1.5rem">
-            <div class="peb-switch" data-region-switch role="group" aria-label="Choisir la Région">
-              <button type="button" class="peb-switch__btn" data-region-btn="brussels" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#pi-flag-bxl"/></svg>Bruxelles</button>
-              <button type="button" class="peb-switch__btn" data-region-btn="wallonia" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#pi-flag-wal"/></svg>Wallonie</button>
+            <div data-i18n-attr="aria-label:peb.hero_d1" class="peb-switch" data-region-switch role="group" aria-label="Choisir la Région">
+              <button type="button" class="peb-switch__btn" data-region-btn="brussels" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#pi-flag-bxl"/></svg><span data-i18n="peb.region_brussels">Bruxelles</span></button>
+              <button type="button" class="peb-switch__btn" data-region-btn="wallonia" aria-pressed="false"><svg class="ic" aria-hidden="true"><use href="#pi-flag-wal"/></svg><span data-i18n="peb.region_wallonia">Wallonie</span></button>
             </div>
           </div>
 
-          <p class="peb-hero__micro reveal">Autorité compétente pour la Région choisie : <strong style="color:var(--creme)" data-region-authority>Bruxelles Environnement</strong><span class="sep">·</span>parcours détaillé ci-dessous</p>
+          <p class="peb-hero__micro reveal"><span data-i18n="peb.hero_s9">Autorité compétente pour la Région choisie :</span> <strong style="color:var(--creme)" data-region-authority>Bruxelles Environnement</strong><span class="sep">·</span><span data-i18n="peb.hero_s10">parcours détaillé ci-dessous</span></p>
 
           <div class="peb-actions reveal">
-            <a class="btn btn--cta peb-magnetic" href="#sessions"><span>Voir les prochaines sessions</span><svg class="ic btn__arrow" aria-hidden="true"><use href="#pi-arrow"/></svg></a>
-            <a class="btn btn--light peb-magnetic" href="#eligibilite" data-quiz-open><span>Vérifier mon éligibilité</span></a>
+            <a class="btn btn--cta peb-magnetic" href="#sessions"><span data-i18n="peb.hero_s11">Voir les prochaines sessions</span><svg class="ic btn__arrow" aria-hidden="true"><use href="#pi-arrow"/></svg></a>
+            <a class="btn btn--light peb-magnetic" href="#eligibilite" data-quiz-open><span data-i18n="peb.hero_s12">Vérifier mon éligibilité</span></a>
           </div>
-          <p class="peb-hero__micro reveal" style="margin-top:1.1rem">Formation en présentiel · Encadrement professionnel · Programme conforme aux exigences régionales</p>
+          <p data-i18n="peb.hero_p3" class="peb-hero__micro reveal" style="margin-top:1.1rem">Formation en présentiel · Encadrement professionnel · Programme conforme aux exigences régionales</p>
         </div>
 
         <div class="peb-hero__media reveal">
           <span class="peb-hero__ring" aria-hidden="true"></span>
           <div class="peb-hero__frame">
-            <img src="assets/images/peb/peb-residence-facade-1200.webp" width="1024" height="1024"
+            <img data-i18n-attr="alt:peb.hero_img1" src="assets/images/peb/peb-residence-facade-1200.webp" width="1024" height="1024"
                  alt="Immeuble résidentiel contemporain en Belgique, illustration" fetchpriority="high" decoding="async">
           </div>
           <div class="peb-region-badge reveal" style="--d:.15s"><svg class="ic" aria-hidden="true"><use href="#pi-map"/></svg><span data-region-label>Bruxelles</span></div>
           <div class="peb-gauge reveal" style="--d:.25s" aria-hidden="true">
-            <div class="peb-gauge__head"><span class="peb-gauge__title">Label énergétique</span><span class="peb-gauge__example">Exemple illustratif</span></div>
+            <div class="peb-gauge__head"><span data-i18n="peb.hero_s13" class="peb-gauge__title">Label énergétique</span><span data-i18n="peb.hero_s14" class="peb-gauge__example">Exemple illustratif</span></div>
             <div class="peb-gauge__scale">
               <div class="peb-gauge__row" data-g="A"><b>A</b><span class="peb-gauge__bar"></span></div>
               <div class="peb-gauge__row" data-g="B"><b>B</b><span class="peb-gauge__bar"></span></div>
@@ -387,26 +388,26 @@ a.f-c-value:hover{color:var(--turquoise)}
             </div>
           </div>
           <div class="peb-parcours-card reveal" style="--d:.32s" aria-hidden="true">
-            <p class="peb-parcours-card__t">Parcours 2026</p>
+            <p data-i18n="peb.hero_p4" class="peb-parcours-card__t">Parcours 2026</p>
             <ol>
-              <li><span class="no">1</span>Formation</li>
-              <li><span class="no">2</span>Examen</li>
-              <li><span class="no">3</span>Agrément</li>
+              <li data-i18n-html="peb.hero_li1"><span class="no">1</span>Formation</li>
+              <li data-i18n-html="peb.hero_li2"><span class="no">2</span>Examen</li>
+              <li data-i18n-html="peb.hero_li3"><span class="no">3</span>Agrément</li>
             </ol>
           </div>
         </div>
       </div>
     </div>
-    <div class="peb-scrollcue" aria-hidden="true"><span class="peb-scrollcue__t">Scroll</span><span class="peb-scrollcue__line"></span></div>
+    <div class="peb-scrollcue" aria-hidden="true"><span data-i18n="peb.hero_s15" class="peb-scrollcue__t">Scroll</span><span class="peb-scrollcue__line"></span></div>
   </section>
 
   <!-- ==================== 02. TRUST BAR ==================== -->
-  <section class="peb-trust" aria-label="Repères Wisy Safety">
+  <section data-i18n-attr="aria-label:peb.contenu_section1" class="peb-trust" aria-label="Repères Wisy Safety">
     <div class="container peb-trust__row reveal">
-      <span class="peb-trust__item"><svg class="ic" aria-hidden="true"><use href="#pi-clock"/></svg><strong>10+</strong>&nbsp;ans d'expérience</span>
-      <span class="peb-trust__item"><svg class="ic" aria-hidden="true"><use href="#pi-users"/></svg><strong>500+</strong>&nbsp;stagiaires formés</span>
-      <span class="peb-trust__item"><svg class="ic" aria-hidden="true"><use href="#pi-check-circle"/></svg><strong>100&nbsp;%</strong>&nbsp;de satisfaction déclarée</span>
-      <span class="peb-trust__item"><svg class="ic" aria-hidden="true"><use href="#pi-map"/></svg>Centre à <strong>Anderlecht</strong>, Bruxelles</span>
+      <span class="peb-trust__item"><svg class="ic" aria-hidden="true"><use href="#pi-clock"/></svg><strong>10+</strong>&nbsp;<span data-i18n="peb.trust_s1">ans d'expérience</span></span>
+      <span class="peb-trust__item"><svg class="ic" aria-hidden="true"><use href="#pi-users"/></svg><strong>500+</strong>&nbsp;<span data-i18n="peb.trust_s2">stagiaires formés</span></span>
+      <span class="peb-trust__item"><svg class="ic" aria-hidden="true"><use href="#pi-check-circle"/></svg><strong>100&nbsp;%</strong>&nbsp;<span data-i18n="peb.trust_s3">de satisfaction déclarée</span></span>
+      <span class="peb-trust__item"><svg class="ic" aria-hidden="true"><use href="#pi-map"/></svg><span data-i18n="peb.trust_s4">Centre à</span> <strong data-i18n="peb.trust_b1">Anderlecht</strong><span data-i18n="peb.trust_s5">, Bruxelles</span></span>
     </div>
   </section>
 
@@ -414,28 +415,28 @@ a.f-c-value:hover{color:var(--turquoise)}
   <section class="peb-section" id="pourquoi" aria-labelledby="peb-pourquoi-t">
     <div class="container">
       <header class="peb-section__head reveal">
-        <p class="peb-label"><span class="peb-label__no">01</span><span>Le métier</span></p>
-        <h2 class="peb-title" id="peb-pourquoi-t">Pourquoi devenir certificateur PEB</h2>
-        <p class="peb-lead">Le certificateur PEB évalue la performance énergétique d'un bâtiment et établit le certificat qui l'atteste. Une compétence de plus en plus demandée, dans un secteur de la construction en pleine transition énergétique.</p>
+        <p class="peb-label"><span class="peb-label__no">01</span><span data-i18n="peb.section_head_s1">Le métier</span></p>
+        <h2 data-i18n="peb.section_head_h2_1" class="peb-title" id="peb-pourquoi-t">Pourquoi devenir certificateur PEB</h2>
+        <p data-i18n="peb.section_head_p1" class="peb-lead">Le certificateur PEB évalue la performance énergétique d'un bâtiment et établit le certificat qui l'atteste. Une compétence de plus en plus demandée, dans un secteur de la construction en pleine transition énergétique.</p>
       </header>
       <figure class="reveal" style="margin:0 0 2.5rem;border-radius:var(--radius-lg);overflow:hidden;max-height:280px">
-        <img src="assets/images/peb/peb-cles-immeuble-900.webp" width="900" height="900" style="width:100%;height:280px;object-fit:cover" alt="Remise de clés devant un immeuble résidentiel, illustration" loading="lazy" decoding="async">
+        <img data-i18n-attr="alt:peb.reveal_img1" src="assets/images/peb/peb-cles-immeuble-900.webp" width="900" height="900" style="width:100%;height:280px;object-fit:cover" alt="Remise de clés devant un immeuble résidentiel, illustration" loading="lazy" decoding="async">
       </figure>
       <div class="peb-why-cert" data-stagger>
         <article class="peb-why-cert__card reveal">
           <span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-building"/></svg></span>
-          <h3>Un métier réglementé</h3>
-          <p>Un cadre légal précis, propre à chaque Région, qui garantit la valeur et la fiabilité du certificat délivré.</p>
+          <h3 data-i18n="peb.why_cert_card_h3_1">Un métier réglementé</h3>
+          <p data-i18n="peb.why_cert_card_p1">Un cadre légal précis, propre à chaque Région, qui garantit la valeur et la fiabilité du certificat délivré.</p>
         </article>
         <article class="peb-why-cert__card reveal">
           <span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-gauge"/></svg></span>
-          <h3>Une expertise recherchée</h3>
-          <p>Chaque vente, location ou rénovation de bâtiment s'appuie sur le certificat PEB : une compétence utile dans la durée.</p>
+          <h3 data-i18n="peb.why_cert_card_h3_2">Une expertise recherchée</h3>
+          <p data-i18n="peb.why_cert_card_p2">Chaque vente, location ou rénovation de bâtiment s'appuie sur le certificat PEB : une compétence utile dans la durée.</p>
         </article>
         <article class="peb-why-cert__card reveal">
           <span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-scale"/></svg></span>
-          <h3>Une activité indépendante ou complémentaire</h3>
-          <p>Exercée à titre indépendant ou en complément d'une activité d'architecte, d'ingénieur ou de professionnel de la construction.</p>
+          <h3 data-i18n="peb.why_cert_card_h3_3">Une activité indépendante ou complémentaire</h3>
+          <p data-i18n="peb.why_cert_card_p3">Exercée à titre indépendant ou en complément d'une activité d'architecte, d'ingénieur ou de professionnel de la construction.</p>
         </article>
       </div>
     </div>
@@ -445,33 +446,33 @@ a.f-c-value:hover{color:var(--turquoise)}
   <section class="peb-section peb-section--tint" id="parcours" aria-labelledby="peb-parcours-t">
     <div class="container">
       <header class="peb-section__head reveal">
-        <p class="peb-label"><span class="peb-label__no">02</span><span>Parcours</span></p>
-        <h2 class="peb-title" id="peb-parcours-t">Le parcours vers l'agrément</h2>
-        <p class="peb-lead">Les procédures sont régionales : choisissez la Région dans laquelle vous souhaitez exercer. Le sélecteur ci-dessus (ou ci-dessous) met à jour les étapes.</p>
-        <div class="peb-switch peb-switch--light reveal" data-region-switch role="group" aria-label="Choisir la Région" style="margin-top:1.25rem">
-          <button type="button" class="peb-switch__btn" data-region-btn="brussels" aria-pressed="false">Bruxelles</button>
-          <button type="button" class="peb-switch__btn" data-region-btn="wallonia" aria-pressed="false">Wallonie</button>
+        <p class="peb-label"><span class="peb-label__no">02</span><span data-i18n="peb.section_head_s2">Parcours</span></p>
+        <h2 data-i18n="peb.section_head_h2_2" class="peb-title" id="peb-parcours-t">Le parcours vers l'agrément</h2>
+        <p data-i18n="peb.section_head_p2" class="peb-lead">Les procédures sont régionales : choisissez la Région dans laquelle vous souhaitez exercer. Le sélecteur ci-dessus (ou ci-dessous) met à jour les étapes.</p>
+        <div data-i18n-attr="aria-label:peb.hero_d1" class="peb-switch peb-switch--light reveal" data-region-switch role="group" aria-label="Choisir la Région" style="margin-top:1.25rem">
+          <button data-i18n="peb.region_brussels" type="button" class="peb-switch__btn" data-region-btn="brussels" aria-pressed="false">Bruxelles</button>
+          <button data-i18n="peb.region_wallonia" type="button" class="peb-switch__btn" data-region-btn="wallonia" aria-pressed="false">Wallonie</button>
         </div>
       </header>
 
       <div data-region-panel="brussels">
         <ol class="peb-tl" data-stagger>
-          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">1</span></div><div class="peb-tl__body"><h3>Suivre une formation reconnue</h3><p>Formation reconnue par Bruxelles Environnement. L'attestation obtenue permet de s'inscrire à 2 séances d'examen maximum.</p></div></li>
-          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">2</span></div><div class="peb-tl__body"><h3>Réussir l'examen centralisé</h3><p>Épreuve théorique et épreuve pratique, organisées par Bruxelles Environnement via sa plateforme officielle.</p></div></li>
-          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">3</span></div><div class="peb-tl__body"><h3>Introduire la demande d'agrément</h3><p>Dossier déposé auprès de Bruxelles Environnement : attestation de réussite (&lt; 6 mois), preuve du droit de dossier (50&nbsp;€), diplôme ou preuve d'expérience, extrait de casier judiciaire.</p></div></li>
-          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">4</span></div><div class="peb-tl__body"><h3>Recevoir l'agrément</h3><p>Délivré par Bruxelles Environnement : il permet d'exercer comme certificateur PEB à Bruxelles.</p></div></li>
-          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">5</span></div><div class="peb-tl__body"><h3>Apparaître au registre des certificateurs agréés</h3><p>Inscription au registre public bruxellois, condition pour exercer.</p></div></li>
+          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">1</span></div><div class="peb-tl__body"><h3 data-i18n="peb.tl_h3_1">Suivre une formation reconnue</h3><p data-i18n="peb.tl_p1">Formation reconnue par Bruxelles Environnement. L'attestation obtenue permet de s'inscrire à 2 séances d'examen maximum.</p></div></li>
+          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">2</span></div><div class="peb-tl__body"><h3 data-i18n="peb.tl_h3_2">Réussir l'examen centralisé</h3><p data-i18n="peb.tl_p2">Épreuve théorique et épreuve pratique, organisées par Bruxelles Environnement via sa plateforme officielle.</p></div></li>
+          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">3</span></div><div class="peb-tl__body"><h3 data-i18n="peb.tl_h3_3">Introduire la demande d'agrément</h3><p data-i18n="peb.tl_p3">Dossier déposé auprès de Bruxelles Environnement : attestation de réussite (&lt; 6 mois), preuve du droit de dossier (50&nbsp;€), diplôme ou preuve d'expérience, extrait de casier judiciaire.</p></div></li>
+          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">4</span></div><div class="peb-tl__body"><h3 data-i18n="peb.tl_h3_4">Recevoir l'agrément</h3><p data-i18n="peb.tl_p4">Délivré par Bruxelles Environnement : il permet d'exercer comme certificateur PEB à Bruxelles.</p></div></li>
+          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">5</span></div><div class="peb-tl__body"><h3 data-i18n="peb.tl_h3_5">Apparaître au registre des certificateurs agréés</h3><p data-i18n="peb.tl_p5">Inscription au registre public bruxellois, condition pour exercer.</p></div></li>
         </ol>
       </div>
 
       <div data-region-panel="wallonia" hidden>
         <ol class="peb-tl" data-stagger>
-          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">1</span></div><div class="peb-tl__body"><h3>Vérifier les conditions d'accès</h3><p>Diplôme admissible ou expérience professionnelle d'au moins 2 ans concernant les aspects énergétiques des bâtiments.</p></div></li>
-          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">2</span></div><div class="peb-tl__body"><h3>Introduire une demande d'agrément au SPW Énergie</h3><p>Formulaire officiel envoyé par courrier ou e-mail ; un accusé de réception est délivré sous 10 jours.</p></div></li>
-          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">3</span></div><div class="peb-tl__body"><h3>Être autorisé à s'inscrire à la formation et à l'examen</h3><p>L'administration autorise le candidat à s'inscrire auprès d'un centre de formation agréé.</p></div></li>
-          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">4</span></div><div class="peb-tl__body"><h3>Suivre la formation réglementaire</h3><p>Formation dispensée par le centre agréé, conforme au programme fixé par le SPW Énergie.</p></div></li>
-          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">5</span></div><div class="peb-tl__body"><h3>Réussir l'épreuve écrite puis l'épreuve orale</h3><p>Les deux épreuves sont organisées par le centre agréé, selon le calendrier de la session suivie.</p></div></li>
-          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">6</span></div><div class="peb-tl__body"><h3>Obtenir l'agrément</h3><p>Le centre transmet le rapport de session à l'administration ; l'agrément est délivré par le Ministre dans les 40 jours qui suivent.</p></div></li>
+          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">1</span></div><div class="peb-tl__body"><h3 data-i18n="peb.tl_h3_6">Vérifier les conditions d'accès</h3><p data-i18n="peb.tl_p6">Diplôme admissible ou expérience professionnelle d'au moins 2 ans concernant les aspects énergétiques des bâtiments.</p></div></li>
+          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">2</span></div><div class="peb-tl__body"><h3 data-i18n="peb.tl_h3_7">Introduire une demande d'agrément au SPW Énergie</h3><p data-i18n="peb.tl_p7">Formulaire officiel envoyé par courrier ou e-mail ; un accusé de réception est délivré sous 10 jours.</p></div></li>
+          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">3</span></div><div class="peb-tl__body"><h3 data-i18n="peb.tl_h3_8">Être autorisé à s'inscrire à la formation et à l'examen</h3><p data-i18n="peb.tl_p8">L'administration autorise le candidat à s'inscrire auprès d'un centre de formation agréé.</p></div></li>
+          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">4</span></div><div class="peb-tl__body"><h3 data-i18n="peb.tl_h3_9">Suivre la formation réglementaire</h3><p data-i18n="peb.tl_p9">Formation dispensée par le centre agréé, conforme au programme fixé par le SPW Énergie.</p></div></li>
+          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">5</span></div><div class="peb-tl__body"><h3 data-i18n="peb.tl_h3_10">Réussir l'épreuve écrite puis l'épreuve orale</h3><p data-i18n="peb.tl_p10">Les deux épreuves sont organisées par le centre agréé, selon le calendrier de la session suivie.</p></div></li>
+          <li class="peb-tl__step reveal"><div class="peb-tl__node"><span class="peb-tl__no">6</span></div><div class="peb-tl__body"><h3 data-i18n="peb.tl_h3_11">Obtenir l'agrément</h3><p data-i18n="peb.tl_p11">Le centre transmet le rapport de session à l'administration ; l'agrément est délivré par le Ministre dans les 40 jours qui suivent.</p></div></li>
         </ol>
       </div>
     </div>
@@ -481,54 +482,54 @@ a.f-c-value:hover{color:var(--turquoise)}
   <section class="peb-section" id="programme" aria-labelledby="peb-prog-t">
     <div class="container peb-split">
       <header class="peb-split__head reveal">
-        <p class="peb-label"><span class="peb-label__no">03</span><span>Programme</span></p>
-        <h2 class="peb-title" id="peb-prog-t">Programme de la formation</h2>
-        <p class="peb-body">Un socle commun de connaissances techniques du bâtiment, complété d'une mise en pratique et d'une préparation ciblée à l'épreuve de la Région choisie. Formation en présentiel, orientée terrain : relevés, cas concrets, retours du formateur.</p>
+        <p class="peb-label"><span class="peb-label__no">03</span><span data-i18n="peb.split_head_s1">Programme</span></p>
+        <h2 data-i18n="peb.split_head_h2_1" class="peb-title" id="peb-prog-t">Programme de la formation</h2>
+        <p data-i18n="peb.split_head_p1" class="peb-body">Un socle commun de connaissances techniques du bâtiment, complété d'une mise en pratique et d'une préparation ciblée à l'épreuve de la Région choisie. Formation en présentiel, orientée terrain : relevés, cas concrets, retours du formateur.</p>
         <figure style="margin:1.75rem 0 0;border-radius:var(--radius-lg);overflow:hidden">
-          <img src="assets/images/peb/peb-structure-chantier-900.webp" width="900" height="675" style="width:100%;height:auto" alt="Structure métallique d'un bâtiment en construction, illustration" loading="lazy" decoding="async">
+          <img data-i18n-attr="alt:peb.split_head_img1" src="assets/images/peb/peb-structure-chantier-900.webp" width="900" height="675" style="width:100%;height:auto" alt="Structure métallique d'un bâtiment en construction, illustration" loading="lazy" decoding="async">
         </figure>
       </header>
       <div class="peb-split__body">
         <div class="peb-acc" data-accordion>
           <div class="peb-acc__item is-open">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-1" aria-expanded="true" aria-controls="prog-p-1"><span class="peb-acc__no"><small>Module</small>01</span><span class="peb-acc__t">Cadre réglementaire PEB</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="prog-p-1" role="region" aria-labelledby="prog-b-1"><div class="peb-acc__inner"><p>Principes de la performance énergétique des bâtiments et rôle du certificateur.</p><div class="peb-acc__skills"><span class="peb-acc__skill">Repères réglementaires</span><span class="peb-acc__skill">Rôle et responsabilités du certificateur</span></div></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-1" aria-expanded="true" aria-controls="prog-p-1"><span class="peb-acc__no"><small data-i18n="peb.programme_sm1">Module</small>01</span><span data-i18n="peb.programme_s1" class="peb-acc__t">Cadre réglementaire PEB</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="prog-p-1" role="region" aria-labelledby="prog-b-1"><div class="peb-acc__inner"><p data-i18n="peb.programme_p1">Principes de la performance énergétique des bâtiments et rôle du certificateur.</p><div class="peb-acc__skills"><span data-i18n="peb.programme_s2" class="peb-acc__skill">Repères réglementaires</span><span data-i18n="peb.programme_s3" class="peb-acc__skill">Rôle et responsabilités du certificateur</span></div></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-2" aria-expanded="false" aria-controls="prog-p-2"><span class="peb-acc__no"><small>Module</small>02</span><span class="peb-acc__t">Enveloppe du bâtiment</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="prog-p-2" role="region" aria-labelledby="prog-b-2"><div class="peb-acc__inner"><p>Lecture des plans, composition des parois et ponts thermiques.</p><div class="peb-acc__skills"><span class="peb-acc__skill">Lecture de plans</span><span class="peb-acc__skill">Repérage des ponts thermiques</span></div></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-2" aria-expanded="false" aria-controls="prog-p-2"><span class="peb-acc__no"><small data-i18n="peb.programme_sm1">Module</small>02</span><span data-i18n="peb.programme_s4" class="peb-acc__t">Enveloppe du bâtiment</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="prog-p-2" role="region" aria-labelledby="prog-b-2"><div class="peb-acc__inner"><p data-i18n="peb.programme_p2">Lecture des plans, composition des parois et ponts thermiques.</p><div class="peb-acc__skills"><span data-i18n="peb.programme_s5" class="peb-acc__skill">Lecture de plans</span><span data-i18n="peb.programme_s6" class="peb-acc__skill">Repérage des ponts thermiques</span></div></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-3" aria-expanded="false" aria-controls="prog-p-3"><span class="peb-acc__no"><small>Module</small>03</span><span class="peb-acc__t">Isolation et performances thermiques</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="prog-p-3" role="region" aria-labelledby="prog-b-3"><div class="peb-acc__inner"><p>Matériaux isolants, résistances thermiques et méthodes d'évaluation.</p><div class="peb-acc__skills"><span class="peb-acc__skill">Évaluation de l'isolation</span></div></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-3" aria-expanded="false" aria-controls="prog-p-3"><span class="peb-acc__no"><small data-i18n="peb.programme_sm1">Module</small>03</span><span data-i18n="peb.programme_s7" class="peb-acc__t">Isolation et performances thermiques</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="prog-p-3" role="region" aria-labelledby="prog-b-3"><div class="peb-acc__inner"><p data-i18n="peb.programme_p3">Matériaux isolants, résistances thermiques et méthodes d'évaluation.</p><div class="peb-acc__skills"><span data-i18n="peb.programme_s8" class="peb-acc__skill">Évaluation de l'isolation</span></div></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-4" aria-expanded="false" aria-controls="prog-p-4"><span class="peb-acc__no"><small>Module</small>04</span><span class="peb-acc__t">Chauffage et eau chaude sanitaire</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="prog-p-4" role="region" aria-labelledby="prog-b-4"><div class="peb-acc__inner"><p>Systèmes de production et de distribution de chaleur.</p><div class="peb-acc__skills"><span class="peb-acc__skill">Identification des systèmes</span></div></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-4" aria-expanded="false" aria-controls="prog-p-4"><span class="peb-acc__no"><small data-i18n="peb.programme_sm1">Module</small>04</span><span data-i18n="peb.programme_s9" class="peb-acc__t">Chauffage et eau chaude sanitaire</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="prog-p-4" role="region" aria-labelledby="prog-b-4"><div class="peb-acc__inner"><p data-i18n="peb.programme_p4">Systèmes de production et de distribution de chaleur.</p><div class="peb-acc__skills"><span data-i18n="peb.programme_s10" class="peb-acc__skill">Identification des systèmes</span></div></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-5" aria-expanded="false" aria-controls="prog-p-5"><span class="peb-acc__no"><small>Module</small>05</span><span class="peb-acc__t">Ventilation et systèmes techniques</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="prog-p-5" role="region" aria-labelledby="prog-b-5"><div class="peb-acc__inner"><p>Systèmes de ventilation et leur incidence sur la performance énergétique.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-5" aria-expanded="false" aria-controls="prog-p-5"><span class="peb-acc__no"><small data-i18n="peb.programme_sm1">Module</small>05</span><span data-i18n="peb.programme_s11" class="peb-acc__t">Ventilation et systèmes techniques</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="prog-p-5" role="region" aria-labelledby="prog-b-5"><div class="peb-acc__inner"><p data-i18n="peb.programme_p5">Systèmes de ventilation et leur incidence sur la performance énergétique.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-6" aria-expanded="false" aria-controls="prog-p-6"><span class="peb-acc__no"><small>Module</small>06</span><span class="peb-acc__t">Énergies renouvelables</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="prog-p-6" role="region" aria-labelledby="prog-b-6"><div class="peb-acc__inner"><p>Installations solaires, pompes à chaleur et autres sources renouvelables.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-6" aria-expanded="false" aria-controls="prog-p-6"><span class="peb-acc__no"><small data-i18n="peb.programme_sm1">Module</small>06</span><span data-i18n="peb.programme_s12" class="peb-acc__t">Énergies renouvelables</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="prog-p-6" role="region" aria-labelledby="prog-b-6"><div class="peb-acc__inner"><p data-i18n="peb.programme_p6">Installations solaires, pompes à chaleur et autres sources renouvelables.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-7" aria-expanded="false" aria-controls="prog-p-7"><span class="peb-acc__no"><small>Module</small>07</span><span class="peb-acc__t">Collecte des données sur site</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="prog-p-7" role="region" aria-labelledby="prog-b-7"><div class="peb-acc__inner"><p>Méthode de relevé sur place, mesures et photos requises.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-7" aria-expanded="false" aria-controls="prog-p-7"><span class="peb-acc__no"><small data-i18n="peb.programme_sm1">Module</small>07</span><span data-i18n="peb.programme_s13" class="peb-acc__t">Collecte des données sur site</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="prog-p-7" role="region" aria-labelledby="prog-b-7"><div class="peb-acc__inner"><p data-i18n="peb.programme_p7">Méthode de relevé sur place, mesures et photos requises.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-8" aria-expanded="false" aria-controls="prog-p-8"><span class="peb-acc__no"><small>Module</small>08</span><span class="peb-acc__t">Logiciel / méthode applicable</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="prog-p-8" role="region" aria-labelledby="prog-b-8"><div class="peb-acc__inner"><p>Méthode d'encodage utilisée pour produire le certificat, selon la Région (dont le logiciel Certibru-RES à Bruxelles).</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-8" aria-expanded="false" aria-controls="prog-p-8"><span class="peb-acc__no"><small data-i18n="peb.programme_sm1">Module</small>08</span><span data-i18n="peb.programme_s14" class="peb-acc__t">Logiciel / méthode applicable</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="prog-p-8" role="region" aria-labelledby="prog-b-8"><div class="peb-acc__inner"><p data-i18n="peb.programme_p8">Méthode d'encodage utilisée pour produire le certificat, selon la Région (dont le logiciel Certibru-RES à Bruxelles).</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-9" aria-expanded="false" aria-controls="prog-p-9"><span class="peb-acc__no"><small>Module</small>09</span><span class="peb-acc__t">Cas pratique</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="prog-p-9" role="region" aria-labelledby="prog-b-9"><div class="peb-acc__inner"><p>Mise en situation sur un dossier complet, du relevé au certificat.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-9" aria-expanded="false" aria-controls="prog-p-9"><span class="peb-acc__no"><small data-i18n="peb.programme_sm1">Module</small>09</span><span data-i18n="peb.programme_s15" class="peb-acc__t">Cas pratique</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="prog-p-9" role="region" aria-labelledby="prog-b-9"><div class="peb-acc__inner"><p data-i18n="peb.programme_p9">Mise en situation sur un dossier complet, du relevé au certificat.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-10" aria-expanded="false" aria-controls="prog-p-10"><span class="peb-acc__no"><small>Module</small>10</span><span class="peb-acc__t">Préparation aux épreuves</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="prog-p-10" role="region" aria-labelledby="prog-b-10"><div class="peb-acc__inner"><p>Révision ciblée et mise en conditions avant l'examen régional.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="prog-b-10" aria-expanded="false" aria-controls="prog-p-10"><span class="peb-acc__no"><small data-i18n="peb.programme_sm1">Module</small>10</span><span data-i18n="peb.programme_s16" class="peb-acc__t">Préparation aux épreuves</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="prog-p-10" role="region" aria-labelledby="prog-b-10"><div class="peb-acc__inner"><p data-i18n="peb.programme_p10">Révision ciblée et mise en conditions avant l'examen régional.</p></div></div>
           </div>
         </div>
       </div>
@@ -539,27 +540,27 @@ a.f-c-value:hover{color:var(--turquoise)}
   <section class="peb-section peb-section--tint" id="conditions" aria-labelledby="peb-cond-t">
     <div class="container">
       <header class="peb-section__head reveal">
-        <p class="peb-label"><span class="peb-label__no">04</span><span>Conditions d'accès</span></p>
-        <h2 class="peb-title" id="peb-cond-t">Qui peut devenir certificateur PEB</h2>
-        <div class="peb-switch reveal" data-region-switch role="group" aria-label="Choisir la Région" style="margin-top:1.25rem">
-          <button type="button" class="peb-switch__btn" data-region-btn="brussels" aria-pressed="false">Bruxelles</button>
-          <button type="button" class="peb-switch__btn" data-region-btn="wallonia" aria-pressed="false">Wallonie</button>
+        <p class="peb-label"><span class="peb-label__no">04</span><span data-i18n="peb.section_head_s3">Conditions d'accès</span></p>
+        <h2 data-i18n="peb.section_head_h2_3" class="peb-title" id="peb-cond-t">Qui peut devenir certificateur PEB</h2>
+        <div data-i18n-attr="aria-label:peb.hero_d1" class="peb-switch peb-switch--light reveal" data-region-switch role="group" aria-label="Choisir la Région" style="margin-top:1.25rem">
+          <button data-i18n="peb.region_brussels" type="button" class="peb-switch__btn" data-region-btn="brussels" aria-pressed="false">Bruxelles</button>
+          <button data-i18n="peb.region_wallonia" type="button" class="peb-switch__btn" data-region-btn="wallonia" aria-pressed="false">Wallonie</button>
         </div>
       </header>
 
       <div class="peb-conditions reveal" data-region-panel="brussels">
-        <div class="peb-condition"><span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-doc"/></svg></span><p>Diplôme en architecture, ingénierie ou construction (belge ou équivalent étranger).</p></div>
-        <div class="peb-condition"><span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-clock"/></svg></span><p>À défaut de diplôme admissible : au moins 2 ans d'expérience professionnelle liée aux aspects énergétiques des bâtiments.</p></div>
-        <div class="peb-condition"><span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg></span><p>Attestation de réussite de l'examen centralisé, datant de moins de 6 mois au moment du dépôt du dossier d'agrément.</p></div>
+        <div class="peb-condition"><span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-doc"/></svg></span><p data-i18n="peb.conditions_p1">Diplôme en architecture, ingénierie ou construction (belge ou équivalent étranger).</p></div>
+        <div class="peb-condition"><span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-clock"/></svg></span><p data-i18n="peb.conditions_p2">À défaut de diplôme admissible : au moins 2 ans d'expérience professionnelle liée aux aspects énergétiques des bâtiments.</p></div>
+        <div class="peb-condition"><span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg></span><p data-i18n="peb.conditions_p3">Attestation de réussite de l'examen centralisé, datant de moins de 6 mois au moment du dépôt du dossier d'agrément.</p></div>
       </div>
       <div class="peb-conditions reveal" data-region-panel="wallonia" hidden>
-        <div class="peb-condition"><span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-doc"/></svg></span><p>Diplôme d'architecte, d'ingénieur architecte, d'ingénieur civil, de bio-ingénieur, d'ingénieur industriel, de gradué/bachelier en construction, ou tout autre diplôme de l'enseignement supérieur couvrant les aspects énergétiques des bâtiments.</p></div>
-        <div class="peb-condition"><span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-clock"/></svg></span><p>À défaut de diplôme admissible : justifier d'au moins 2 ans d'expérience professionnelle concernant les aspects énergétiques des bâtiments.</p></div>
-        <div class="peb-condition"><span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg></span><p>Ne pas avoir eu d'agrément retiré depuis moins de 3 ans.</p></div>
+        <div class="peb-condition"><span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-doc"/></svg></span><p data-i18n="peb.conditions_p4">Diplôme d'architecte, d'ingénieur architecte, d'ingénieur civil, de bio-ingénieur, d'ingénieur industriel, de gradué/bachelier en construction, ou tout autre diplôme de l'enseignement supérieur couvrant les aspects énergétiques des bâtiments.</p></div>
+        <div class="peb-condition"><span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-clock"/></svg></span><p data-i18n="peb.conditions_p5">À défaut de diplôme admissible : justifier d'au moins 2 ans d'expérience professionnelle concernant les aspects énergétiques des bâtiments.</p></div>
+        <div class="peb-condition"><span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg></span><p data-i18n="peb.conditions_p6">Ne pas avoir eu d'agrément retiré depuis moins de 3 ans.</p></div>
       </div>
 
-      <p class="peb-body reveal" style="margin-top:1.5rem">Vous n'êtes pas certain de remplir les conditions ? Le vérificateur ci-dessous donne une première indication, en quelques minutes.</p>
-      <a class="btn btn--outline peb-magnetic reveal" href="#eligibilite" data-quiz-open><span>Vérifier mon éligibilité</span><svg class="ic btn__arrow" aria-hidden="true"><use href="#pi-arrow"/></svg></a>
+      <p data-i18n="peb.conditions_p7" class="peb-body reveal" style="margin-top:1.5rem">Vous n'êtes pas certain de remplir les conditions ? Le vérificateur ci-dessous donne une première indication, en quelques minutes.</p>
+      <a class="btn btn--outline peb-magnetic reveal" href="#eligibilite" data-quiz-open><span data-i18n="peb.hero_s12">Vérifier mon éligibilité</span><svg class="ic btn__arrow" aria-hidden="true"><use href="#pi-arrow"/></svg></a>
     </div>
   </section>
 
@@ -567,11 +568,11 @@ a.f-c-value:hover{color:var(--turquoise)}
   <section class="peb-section" id="eligibilite" aria-labelledby="peb-elig-t">
     <div class="container peb-split">
       <header class="peb-split__head reveal">
-        <p class="peb-label"><span class="peb-label__no">05</span><span>Éligibilité</span></p>
+        <p class="peb-label"><span class="peb-label__no">05</span><span data-i18n="peb.split_head_s2">Éligibilité</span></p>
         <span class="peb-accent-badge reveal" style="margin-bottom:1.1rem"><img src="assets/images/peb/peb-verification-conformite-240.webp" width="240" height="240" alt="" loading="lazy" decoding="async"></span>
-        <h2 class="peb-title" id="peb-elig-t">Vérifier mon éligibilité</h2>
-        <p class="peb-body">Quatre étapes, deux minutes. Un premier repère avant de nous contacter — jamais une décision administrative.</p>
-        <p class="peb-verified reveal" style="margin-top:1rem"><svg class="ic" aria-hidden="true"><use href="#pi-info"/></svg>Vérification indicative : l'éligibilité définitive relève de l'autorité régionale compétente.</p>
+        <h2 data-i18n="peb.hero_s12" class="peb-title" id="peb-elig-t">Vérifier mon éligibilité</h2>
+        <p data-i18n="peb.split_head_p2" class="peb-body">Quatre étapes, deux minutes. Un premier repère avant de nous contacter — jamais une décision administrative.</p>
+        <p class="peb-verified reveal" style="margin-top:1rem"><svg class="ic" aria-hidden="true"><use href="#pi-info"/></svg><span data-i18n="peb.split_head_s3">Vérification indicative : l'éligibilité définitive relève de l'autorité régionale compétente.</span></p>
       </header>
 
       <div class="peb-split__body">
@@ -579,53 +580,53 @@ a.f-c-value:hover{color:var(--turquoise)}
           <div class="peb-quiz__dots" aria-hidden="true"><span class="is-active"></span><span></span><span></span><span></span></div>
           <form novalidate>
             <div class="peb-quiz__step" data-quiz-step="1">
-              <p class="peb-quiz__q">Quelle Région vous concerne ?</p>
+              <p data-i18n="peb.eligibilite_p1" class="peb-quiz__q">Quelle Région vous concerne ?</p>
               <div class="peb-quiz__options peb-quiz__options--2col">
-                <div class="peb-quiz__opt"><input type="radio" name="quiz-region" id="qr-bxl" value="brussels"><label for="qr-bxl"><span class="radio-dot" aria-hidden="true"></span>Bruxelles</label></div>
-                <div class="peb-quiz__opt"><input type="radio" name="quiz-region" id="qr-wal" value="wallonia"><label for="qr-wal"><span class="radio-dot" aria-hidden="true"></span>Wallonie</label></div>
+                <div class="peb-quiz__opt"><input type="radio" name="quiz-region" id="qr-bxl" value="brussels"><label for="qr-bxl"><span class="radio-dot" aria-hidden="true"></span><span data-i18n="peb.region_brussels">Bruxelles</span></label></div>
+                <div class="peb-quiz__opt"><input type="radio" name="quiz-region" id="qr-wal" value="wallonia"><label for="qr-wal"><span class="radio-dot" aria-hidden="true"></span><span data-i18n="peb.region_wallonia">Wallonie</span></label></div>
               </div>
-              <div class="peb-quiz__nav"><span></span><button type="button" class="btn btn--cta" data-quiz-next>Continuer</button></div>
+              <div class="peb-quiz__nav"><span></span><button data-i18n="peb.eligibilite_btn1" type="button" class="btn btn--cta" data-quiz-next>Continuer</button></div>
             </div>
 
             <div class="peb-quiz__step" data-quiz-step="2" hidden>
-              <p class="peb-quiz__q">Quel est votre profil ?</p>
+              <p data-i18n="peb.eligibilite_p2" class="peb-quiz__q">Quel est votre profil ?</p>
               <div class="peb-quiz__options">
-                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-1" value="architecte"><label for="qp-1"><span class="radio-dot" aria-hidden="true"></span>Architecte</label></div>
-                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-2" value="ingenieur-architecte"><label for="qp-2"><span class="radio-dot" aria-hidden="true"></span>Ingénieur architecte</label></div>
-                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-3" value="ingenieur-civil"><label for="qp-3"><span class="radio-dot" aria-hidden="true"></span>Ingénieur civil</label></div>
-                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-4" value="bio-ingenieur"><label for="qp-4"><span class="radio-dot" aria-hidden="true"></span>Bio-ingénieur</label></div>
-                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-5" value="ingenieur-industriel"><label for="qp-5"><span class="radio-dot" aria-hidden="true"></span>Ingénieur industriel</label></div>
-                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-6" value="gradue-construction"><label for="qp-6"><span class="radio-dot" aria-hidden="true"></span>Gradué/bachelier construction</label></div>
-                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-7" value="autre-diplome-energie"><label for="qp-7"><span class="radio-dot" aria-hidden="true"></span>Autre diplôme supérieur lié à l'énergie du bâtiment</label></div>
-                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-8" value="experience"><label for="qp-8"><span class="radio-dot" aria-hidden="true"></span>Expérience professionnelle (sans ce diplôme)</label></div>
-                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-9" value="autre"><label for="qp-9"><span class="radio-dot" aria-hidden="true"></span>Autre</label></div>
+                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-1" value="architecte"><label for="qp-1"><span class="radio-dot" aria-hidden="true"></span><span data-i18n="peb.eligibilite_s1">Architecte</span></label></div>
+                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-2" value="ingenieur-architecte"><label for="qp-2"><span class="radio-dot" aria-hidden="true"></span><span data-i18n="peb.eligibilite_s2">Ingénieur architecte</span></label></div>
+                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-3" value="ingenieur-civil"><label for="qp-3"><span class="radio-dot" aria-hidden="true"></span><span data-i18n="peb.eligibilite_s3">Ingénieur civil</span></label></div>
+                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-4" value="bio-ingenieur"><label for="qp-4"><span class="radio-dot" aria-hidden="true"></span><span data-i18n="peb.eligibilite_s4">Bio-ingénieur</span></label></div>
+                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-5" value="ingenieur-industriel"><label for="qp-5"><span class="radio-dot" aria-hidden="true"></span><span data-i18n="peb.eligibilite_s5">Ingénieur industriel</span></label></div>
+                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-6" value="gradue-construction"><label for="qp-6"><span class="radio-dot" aria-hidden="true"></span><span data-i18n="peb.eligibilite_s6">Gradué/bachelier construction</span></label></div>
+                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-7" value="autre-diplome-energie"><label for="qp-7"><span class="radio-dot" aria-hidden="true"></span><span data-i18n="peb.eligibilite_s7">Autre diplôme supérieur lié à l'énergie du bâtiment</span></label></div>
+                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-8" value="experience"><label for="qp-8"><span class="radio-dot" aria-hidden="true"></span><span data-i18n="peb.eligibilite_s8">Expérience professionnelle (sans ce diplôme)</span></label></div>
+                <div class="peb-quiz__opt"><input type="radio" name="quiz-profile" id="qp-9" value="autre"><label for="qp-9"><span class="radio-dot" aria-hidden="true"></span><span data-i18n="peb.eligibilite_s9">Autre</span></label></div>
               </div>
-              <div class="peb-quiz__nav"><button type="button" class="btn btn--outline" data-quiz-back>Retour</button><button type="button" class="btn btn--cta" data-quiz-next>Continuer</button></div>
+              <div class="peb-quiz__nav"><button data-i18n="peb.eligibilite_btn2" type="button" class="btn btn--outline" data-quiz-back>Retour</button><button data-i18n="peb.eligibilite_btn1" type="button" class="btn btn--cta" data-quiz-next>Continuer</button></div>
             </div>
 
             <div class="peb-quiz__step" data-quiz-step="3" hidden>
-              <p class="peb-quiz__q">Combien d'années d'expérience liée aux aspects énergétiques des bâtiments ?</p>
+              <p data-i18n="peb.eligibilite_p3" class="peb-quiz__q">Combien d'années d'expérience liée aux aspects énergétiques des bâtiments ?</p>
               <div class="peb-quiz__field">
-                <label for="qy">Nombre d'années</label>
-                <input type="number" id="qy" name="quiz-years" min="0" max="60" step="0.5" inputmode="decimal" placeholder="Ex. 3">
+                <label data-i18n="peb.eligibilite_lbl1" for="qy">Nombre d'années</label>
+                <input data-i18n-attr="placeholder:peb.eligibilite_input1" type="number" id="qy" name="quiz-years" min="0" max="60" step="0.5" inputmode="decimal" placeholder="Ex. 3">
               </div>
-              <div class="peb-quiz__nav"><button type="button" class="btn btn--outline" data-quiz-back>Retour</button><button type="button" class="btn btn--cta" data-quiz-next>Continuer</button></div>
+              <div class="peb-quiz__nav"><button data-i18n="peb.eligibilite_btn2" type="button" class="btn btn--outline" data-quiz-back>Retour</button><button data-i18n="peb.eligibilite_btn1" type="button" class="btn btn--cta" data-quiz-next>Continuer</button></div>
             </div>
 
             <div class="peb-quiz__step" data-quiz-step="4" hidden>
-              <p class="peb-quiz__q">Vos coordonnées</p>
-              <div class="peb-quiz__field"><label for="qn">Nom</label><input type="text" id="qn" name="quiz-name" autocomplete="name" required></div>
-              <div class="peb-quiz__field"><label for="qe">E-mail</label><input type="email" id="qe" name="quiz-email" autocomplete="email" required></div>
-              <div class="peb-quiz__field"><label for="qt">Téléphone (facultatif)</label><input type="tel" id="qt" name="quiz-phone" autocomplete="tel"></div>
-              <div class="peb-quiz__nav"><button type="button" class="btn btn--outline" data-quiz-back>Retour</button><button type="submit" class="btn btn--cta">Voir mon résultat indicatif</button></div>
+              <p data-i18n="peb.eligibilite_p4" class="peb-quiz__q">Vos coordonnées</p>
+              <div class="peb-quiz__field"><label data-i18n="peb.eligibilite_lbl2" for="qn">Nom</label><input type="text" id="qn" name="quiz-name" autocomplete="name" required></div>
+              <div class="peb-quiz__field"><label data-i18n="peb.eligibilite_lbl3" for="qe">E-mail</label><input type="email" id="qe" name="quiz-email" autocomplete="email" required></div>
+              <div class="peb-quiz__field"><label data-i18n="peb.eligibilite_lbl4" for="qt">Téléphone (facultatif)</label><input type="tel" id="qt" name="quiz-phone" autocomplete="tel"></div>
+              <div class="peb-quiz__nav"><button data-i18n="peb.eligibilite_btn2" type="button" class="btn btn--outline" data-quiz-back>Retour</button><button data-i18n="peb.eligibilite_btn3" type="submit" class="btn btn--cta">Voir mon résultat indicatif</button></div>
             </div>
 
             <div class="peb-quiz__step peb-quiz__result" data-quiz-step="result" hidden>
               <span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-info"/></svg></span>
               <p class="peb-quiz__result-text" data-quiz-result-text></p>
-              <p class="peb-quiz__disclaimer"><svg class="ic" aria-hidden="true"><use href="#pi-alert"/></svg><span>Cette vérification est indicative. L'éligibilité définitive relève de l'autorité régionale compétente.</span></p>
+              <p class="peb-quiz__disclaimer"><svg class="ic" aria-hidden="true"><use href="#pi-alert"/></svg><span data-i18n="peb.eligibilite_s10">Cette vérification est indicative. L'éligibilité définitive relève de l'autorité régionale compétente.</span></p>
               <p class="peb-quiz__status" data-quiz-status aria-live="polite"></p>
-              <a class="btn btn--outline" href="contact.html"><span>Contacter Wisy Safety</span></a>
+              <a class="btn btn--outline" href="contact.html"><span data-i18n="peb.eligibilite_s11">Contacter Wisy Safety</span></a>
             </div>
           </form>
         </div>
@@ -637,29 +638,29 @@ a.f-c-value:hover{color:var(--turquoise)}
   <section class="peb-section peb-section--tint" id="examen" aria-labelledby="peb-exam-t">
     <div class="container">
       <header class="peb-section__head reveal">
-        <p class="peb-label"><span class="peb-label__no">06</span><span>Examen</span></p>
-        <h2 class="peb-title" id="peb-exam-t">Comment se déroule l'examen</h2>
-        <div class="peb-switch reveal" data-region-switch role="group" aria-label="Choisir la Région" style="margin-top:1.25rem">
-          <button type="button" class="peb-switch__btn" data-region-btn="brussels" aria-pressed="false">Bruxelles</button>
-          <button type="button" class="peb-switch__btn" data-region-btn="wallonia" aria-pressed="false">Wallonie</button>
+        <p class="peb-label"><span class="peb-label__no">06</span><span data-i18n="peb.section_head_s4">Examen</span></p>
+        <h2 data-i18n="peb.section_head_h2_4" class="peb-title" id="peb-exam-t">Comment se déroule l'examen</h2>
+        <div data-i18n-attr="aria-label:peb.hero_d1" class="peb-switch peb-switch--light reveal" data-region-switch role="group" aria-label="Choisir la Région" style="margin-top:1.25rem">
+          <button data-i18n="peb.region_brussels" type="button" class="peb-switch__btn" data-region-btn="brussels" aria-pressed="false">Bruxelles</button>
+          <button data-i18n="peb.region_wallonia" type="button" class="peb-switch__btn" data-region-btn="wallonia" aria-pressed="false">Wallonie</button>
         </div>
       </header>
 
       <div class="reveal" data-region-panel="brussels">
         <div class="peb-exam-card">
-          <p class="peb-exam-card__format">Épreuve théorique (20 questions à choix multiple) et épreuve pratique (encodage d'un cas avec le logiciel Certibru-RES) — 4 heures maximum</p>
+          <p data-i18n="peb.examen_p1" class="peb-exam-card__format">Épreuve théorique (20 questions à choix multiple) et épreuve pratique (encodage d'un cas avec le logiciel Certibru-RES) — 4 heures maximum</p>
           <p class="peb-exam-card__notes" data-i18n-html="peb.examen_notes_bxl">Organisé directement par Bruxelles Environnement, via sa plateforme officielle. Le règlement en vigueur (depuis le 27/01/2026) est à vérifier avant chaque session sur <a href="https://examen.environnement.brussels/fr/conditions" target="_blank" rel="noopener noreferrer">examen.environnement.brussels <svg class="ic" aria-hidden="true" style="width:.85em;height:.85em"><use href="#pi-external"/></svg></a>. Des frais de participation à l'examen lui-même sont susceptibles de s'appliquer : à confirmer directement auprès de Bruxelles Environnement (distincts du droit de dossier de l'agrément, voir la section Tarifs).</p>
           <div class="peb-exam-card__thresholds">
-            <span class="peb-exam-card__pill">≥ 15/30 à la théorie</span>
-            <span class="peb-exam-card__pill">≥ 35/70 à la pratique</span>
-            <span class="peb-exam-card__pill">≥ 60/100 au total</span>
+            <span data-i18n="peb.examen_s1" class="peb-exam-card__pill">≥ 15/30 à la théorie</span>
+            <span data-i18n="peb.examen_s2" class="peb-exam-card__pill">≥ 35/70 à la pratique</span>
+            <span data-i18n="peb.examen_s3" class="peb-exam-card__pill">≥ 60/100 au total</span>
           </div>
         </div>
       </div>
       <div class="reveal" data-region-panel="wallonia" hidden>
         <div class="peb-exam-card">
-          <p class="peb-exam-card__format">Épreuve écrite, puis épreuve orale</p>
-          <p class="peb-exam-card__notes">Les deux épreuves sont organisées par le centre de formation agréé, selon le calendrier publié pour la session suivie.</p>
+          <p data-i18n="peb.examen_p2" class="peb-exam-card__format">Épreuve écrite, puis épreuve orale</p>
+          <p data-i18n="peb.examen_p3" class="peb-exam-card__notes">Les deux épreuves sont organisées par le centre de formation agréé, selon le calendrier publié pour la session suivie.</p>
         </div>
       </div>
     </div>
@@ -669,23 +670,23 @@ a.f-c-value:hover{color:var(--turquoise)}
   <section class="peb-section" id="sessions" aria-labelledby="peb-sess-t">
     <div class="container">
       <header class="peb-section__head reveal">
-        <p class="peb-label"><span class="peb-label__no">07</span><span>Sessions</span></p>
-        <h2 class="peb-title" id="peb-sess-t">Prochaines sessions</h2>
-        <p class="peb-lead">Aucune session Wisy Safety n'est encore programmée pour cette formation. Laissez-nous vos coordonnées pour être informé dès l'ouverture.</p>
+        <p class="peb-label"><span class="peb-label__no">07</span><span data-i18n="peb.section_head_s5">Sessions</span></p>
+        <h2 data-i18n="peb.section_head_h2_5" class="peb-title" id="peb-sess-t">Prochaines sessions</h2>
+        <p data-i18n="peb.section_head_p3" class="peb-lead">Aucune session Wisy Safety n'est encore programmée pour cette formation. Laissez-nous vos coordonnées pour être informé dès l'ouverture.</p>
       </header>
 
-      <div class="peb-session-filter reveal" data-session-filter role="group" aria-label="Filtrer les sessions">
-        <button type="button" class="peb-session-filter__btn" data-filter-btn="all" aria-pressed="true">Toutes</button>
-        <button type="button" class="peb-session-filter__btn" data-filter-btn="brussels" aria-pressed="false">Bruxelles</button>
-        <button type="button" class="peb-session-filter__btn" data-filter-btn="wallonia" aria-pressed="false">Wallonie</button>
+      <div data-i18n-attr="aria-label:peb.sessions_d1" class="peb-session-filter reveal" data-session-filter role="group" aria-label="Filtrer les sessions">
+        <button data-i18n="peb.sessions_btn1" type="button" class="peb-session-filter__btn" data-filter-btn="all" aria-pressed="true">Toutes</button>
+        <button data-i18n="peb.region_brussels" type="button" class="peb-session-filter__btn" data-filter-btn="brussels" aria-pressed="false">Bruxelles</button>
+        <button data-i18n="peb.region_wallonia" type="button" class="peb-session-filter__btn" data-filter-btn="wallonia" aria-pressed="false">Wallonie</button>
       </div>
 
       <div class="peb-sessions__grid reveal">
         <!-- Aucune session réelle actuellement : l'état vide est la seule chose à afficher (voir js/peb-data.js `sessions: []`). -->
         <div class="peb-empty" data-session-empty>
           <span class="ic-wrap"><svg class="ic" aria-hidden="true"><use href="#pi-clock"/></svg></span>
-          <p>Les prochaines dates seront publiées prochainement.</p>
-          <a class="btn btn--outline" href="contact.html"><span>Être informé de la prochaine session</span></a>
+          <p data-i18n="peb.sessions_p1">Les prochaines dates seront publiées prochainement.</p>
+          <a class="btn btn--outline" href="contact.html"><span data-i18n="peb.sessions_s1">Être informé de la prochaine session</span></a>
         </div>
       </div>
     </div>
@@ -695,58 +696,58 @@ a.f-c-value:hover{color:var(--turquoise)}
   <section class="peb-section peb-section--tint" id="tarifs" aria-labelledby="peb-tarifs-t">
     <div class="container">
       <header class="peb-section__head reveal">
-        <p class="peb-label"><span class="peb-label__no">08</span><span>Tarifs</span></p>
-        <h2 class="peb-title" id="peb-tarifs-t">Tarifs</h2>
-        <p class="peb-lead">Le tarif Wisy Safety est communiqué sur demande pour la prochaine session. Les frais administratifs éventuels (droit de dossier, examen) sont fixés par l'autorité compétente et toujours distincts du prix de la formation.</p>
+        <p class="peb-label"><span class="peb-label__no">08</span><span data-i18n="peb.section_head_s6">Tarifs</span></p>
+        <h2 data-i18n="peb.section_head_s6" class="peb-title" id="peb-tarifs-t">Tarifs</h2>
+        <p data-i18n="peb.section_head_p4" class="peb-lead">Le tarif Wisy Safety est communiqué sur demande pour la prochaine session. Les frais administratifs éventuels (droit de dossier, examen) sont fixés par l'autorité compétente et toujours distincts du prix de la formation.</p>
       </header>
 
       <div class="peb-pricing" data-stagger>
         <article class="peb-price-card reveal">
-          <span class="peb-price-card__region"><svg class="ic" aria-hidden="true"><use href="#pi-flag-bxl"/></svg>Bruxelles</span>
-          <p class="peb-price-card__value">Tarif sur demande</p>
-          <p class="peb-price-card__note">Contactez-nous pour le tarif de la prochaine session.</p>
+          <span class="peb-price-card__region"><svg class="ic" aria-hidden="true"><use href="#pi-flag-bxl"/></svg><span data-i18n="peb.region_brussels">Bruxelles</span></span>
+          <p data-i18n="peb.price_card_p1" class="peb-price-card__value">Tarif sur demande</p>
+          <p data-i18n="peb.price_card_p2" class="peb-price-card__note">Contactez-nous pour le tarif de la prochaine session.</p>
           <ul class="peb-price-card__list">
-            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg>Formation</li>
-            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg>Supports pédagogiques</li>
-            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg>Exercices pratiques</li>
-            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg>Accompagnement pédagogique</li>
+            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg><span data-i18n="peb.price_card_list_s1">Formation</span></li>
+            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg><span data-i18n="peb.price_card_list_s2">Supports pédagogiques</span></li>
+            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg><span data-i18n="peb.price_card_list_s3">Exercices pratiques</span></li>
+            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg><span data-i18n="peb.price_card_list_s4">Accompagnement pédagogique</span></li>
           </ul>
-          <div class="peb-price-card__admin"><strong>Frais administratifs (hors formation Wisy) :</strong> droit de dossier de la demande d'agrément résidentiel — 50 € selon les informations actuellement publiées par Bruxelles Environnement. Les frais administratifs sont susceptibles d'être modifiés par l'autorité compétente.</div>
+          <div data-i18n-html="peb.price_card_d1" class="peb-price-card__admin"><strong>Frais administratifs (hors formation Wisy) :</strong> droit de dossier de la demande d'agrément résidentiel — 50 € selon les informations actuellement publiées par Bruxelles Environnement. Les frais administratifs sont susceptibles d'être modifiés par l'autorité compétente.</div>
           <div class="peb-price-card__benchmark">
-            <p class="peb-price-card__benchmark-label">Repères du marché (non Wisy Safety)</p>
+            <p data-i18n="peb.price_card_p3" class="peb-price-card__benchmark-label">Repères du marché (non Wisy Safety)</p>
             <ul>
-              <li><span>Homegrade</span><b>645 €</b></li>
-              <li><span>Certinergie Academy</span><b>745 € TVAC</b></li>
+              <li><span translate="no">Homegrade</span><b>645 €</b></li>
+              <li><span translate="no">Certinergie Academy</span><b data-i18n="peb.price_card_b1">745 € TVAC</b></li>
             </ul>
           </div>
-          <a class="btn btn--cta peb-magnetic" href="contact.html" style="margin-top:1.5rem"><span>Poser une question</span></a>
+          <a class="btn btn--cta peb-magnetic" href="contact.html" style="margin-top:1.5rem"><span data-i18n="peb.price_card_s3">Poser une question</span></a>
         </article>
 
         <article class="peb-price-card reveal" style="--d:.08s">
-          <span class="peb-price-card__region"><svg class="ic" aria-hidden="true"><use href="#pi-flag-wal"/></svg>Wallonie</span>
-          <p class="peb-price-card__value">Tarif sur demande</p>
-          <p class="peb-price-card__note">Contactez-nous pour le tarif de la prochaine session.</p>
+          <span class="peb-price-card__region"><svg class="ic" aria-hidden="true"><use href="#pi-flag-wal"/></svg><span data-i18n="peb.region_wallonia">Wallonie</span></span>
+          <p data-i18n="peb.price_card_p1" class="peb-price-card__value">Tarif sur demande</p>
+          <p data-i18n="peb.price_card_p2" class="peb-price-card__note">Contactez-nous pour le tarif de la prochaine session.</p>
           <ul class="peb-price-card__list">
-            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg>Formation</li>
-            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg>Supports pédagogiques</li>
-            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg>Exercices pratiques</li>
-            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg>Accompagnement pédagogique</li>
+            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg><span data-i18n="peb.price_card_list_s1">Formation</span></li>
+            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg><span data-i18n="peb.price_card_list_s2">Supports pédagogiques</span></li>
+            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg><span data-i18n="peb.price_card_list_s3">Exercices pratiques</span></li>
+            <li><svg class="ic" aria-hidden="true"><use href="#pi-check"/></svg><span data-i18n="peb.price_card_list_s4">Accompagnement pédagogique</span></li>
           </ul>
-          <div class="peb-price-card__admin"><strong>Frais administratifs :</strong> aucun droit de dossier n'est communiqué par le SPW Énergie pour la demande d'agrément wallonne à ce jour.</div>
+          <div data-i18n-html="peb.price_card_d2" class="peb-price-card__admin"><strong>Frais administratifs :</strong> aucun droit de dossier n'est communiqué par le SPW Énergie pour la demande d'agrément wallonne à ce jour.</div>
           <div class="peb-price-card__benchmark">
-            <p class="peb-price-card__benchmark-label">Repères du marché (non Wisy Safety)</p>
+            <p data-i18n="peb.price_card_p3" class="peb-price-card__benchmark-label">Repères du marché (non Wisy Safety)</p>
             <ul>
-              <li><span>Certinergie Academy</span><b>1 050 € TTC</b></li>
-              <li><span>IFAPME Dinant (56 h / 8 j)</span><b>1 390 €</b></li>
+              <li><span translate="no">Certinergie Academy</span><b data-i18n="peb.price_card_b2">1 050 € TTC</b></li>
+              <li><span data-i18n="peb.price_card_s4">IFAPME Dinant (56 h / 8 j)</span><b>1 390 €</b></li>
             </ul>
           </div>
-          <a class="btn btn--cta peb-magnetic" href="contact.html" style="margin-top:1.5rem"><span>Poser une question</span></a>
+          <a class="btn btn--cta peb-magnetic" href="contact.html" style="margin-top:1.5rem"><span data-i18n="peb.price_card_s3">Poser une question</span></a>
         </article>
       </div>
 
       <div class="peb-actions reveal" style="margin-top:2rem">
-        <a class="btn btn--outline peb-magnetic" href="#sessions"><span>S'inscrire à une session</span></a>
-        <a class="btn btn--ghost peb-magnetic" href="#eligibilite" data-quiz-open style="color:var(--epinette);border-color:var(--epinette)"><span>Vérifier mon éligibilité</span></a>
+        <a class="btn btn--outline peb-magnetic" href="#sessions"><span data-i18n="peb.tarifs_s1">S'inscrire à une session</span></a>
+        <a class="btn btn--ghost peb-magnetic" href="#eligibilite" data-quiz-open style="color:var(--epinette);border-color:var(--epinette)"><span data-i18n="peb.hero_s12">Vérifier mon éligibilité</span></a>
       </div>
     </div>
   </section>
@@ -755,41 +756,41 @@ a.f-c-value:hover{color:var(--turquoise)}
   <section class="peb-section" id="comparaison" aria-labelledby="peb-comp-t">
     <div class="container">
       <header class="peb-section__head reveal">
-        <p class="peb-label"><span class="peb-label__no">09</span><span>Comparaison</span></p>
-        <h2 class="peb-title" id="peb-comp-t">Wallonie et Bruxelles, deux procédures distinctes</h2>
-        <p class="peb-lead">Les procédures sont régionales : choisissez la Région dans laquelle vous souhaitez exercer. Un agrément obtenu dans une Région ne permet pas d'exercer dans l'autre.</p>
+        <p class="peb-label"><span class="peb-label__no">09</span><span data-i18n="peb.section_head_s7">Comparaison</span></p>
+        <h2 data-i18n="peb.section_head_h2_6" class="peb-title" id="peb-comp-t">Wallonie et Bruxelles, deux procédures distinctes</h2>
+        <p data-i18n="peb.section_head_p5" class="peb-lead">Les procédures sont régionales : choisissez la Région dans laquelle vous souhaitez exercer. Un agrément obtenu dans une Région ne permet pas d'exercer dans l'autre.</p>
       </header>
 
       <div class="peb-compare-wrap reveal">
         <table class="peb-compare">
-          <caption>Comparaison des procédures de certification PEB entre la Wallonie et Bruxelles</caption>
-          <thead><tr><th scope="col">Critère</th><th scope="col">Wallonie</th><th scope="col">Bruxelles</th></tr></thead>
+          <caption data-i18n="peb.compare_caption1">Comparaison des procédures de certification PEB entre la Wallonie et Bruxelles</caption>
+          <thead><tr><th data-i18n="peb.compare_th1" scope="col">Critère</th><th data-i18n="peb.region_wallonia" scope="col">Wallonie</th><th data-i18n="peb.region_brussels" scope="col">Bruxelles</th></tr></thead>
           <tbody>
-            <tr><th scope="row">Autorité compétente</th><td>SPW Énergie (agrément délivré par le Ministre wallon de l'Énergie)</td><td>Bruxelles Environnement</td></tr>
-            <tr><th scope="row">Champ</th><td>Bâtiment résidentiel existant</td><td>Habitations individuelles</td></tr>
-            <tr><th scope="row">Formation</th><td>Dispensée par un centre agréé, après autorisation du SPW Énergie</td><td>Dispensée par un centre reconnu par Bruxelles Environnement</td></tr>
-            <tr><th scope="row">Examen</th><td>Épreuve écrite, puis épreuve orale</td><td>Épreuve théorique (QCM) et épreuve pratique (logiciel Certibru-RES)</td></tr>
-            <tr><th scope="row">Demande d'agrément</th><td>Introduite avant la formation, auprès du SPW Énergie</td><td>Introduite après l'examen, auprès de Bruxelles Environnement</td></tr>
-            <tr><th scope="row">Droit de dossier</th><td>Aucun communiqué à ce jour</td><td>50 € (demande d'agrément résidentiel)</td></tr>
-            <tr><th scope="row">Logiciel / méthode</th><td>Méthode wallonne de calcul PEB</td><td>Certibru-RES</td></tr>
-            <tr><th scope="row">Registre</th><td>Registre wallon des certificateurs agréés</td><td>Registre bruxellois des certificateurs agréés</td></tr>
+            <tr><th data-i18n="peb.compare_th2" scope="row">Autorité compétente</th><td data-i18n="peb.compare_td1">SPW Énergie (agrément délivré par le Ministre wallon de l'Énergie)</td><td translate="no">Bruxelles Environnement</td></tr>
+            <tr><th data-i18n="peb.compare_th3" scope="row">Champ</th><td data-i18n="peb.compare_td3">Bâtiment résidentiel existant</td><td data-i18n="peb.compare_td4">Habitations individuelles</td></tr>
+            <tr><th data-i18n="peb.price_card_list_s1" scope="row">Formation</th><td data-i18n="peb.compare_td5">Dispensée par un centre agréé, après autorisation du SPW Énergie</td><td data-i18n="peb.compare_td6">Dispensée par un centre reconnu par Bruxelles Environnement</td></tr>
+            <tr><th data-i18n="peb.section_head_s4" scope="row">Examen</th><td data-i18n="peb.examen_p2">Épreuve écrite, puis épreuve orale</td><td data-i18n="peb.compare_td7">Épreuve théorique (QCM) et épreuve pratique (logiciel Certibru-RES)</td></tr>
+            <tr><th data-i18n="peb.compare_th4" scope="row">Demande d'agrément</th><td data-i18n="peb.compare_td8">Introduite avant la formation, auprès du SPW Énergie</td><td data-i18n="peb.compare_td9">Introduite après l'examen, auprès de Bruxelles Environnement</td></tr>
+            <tr><th data-i18n="peb.compare_th5" scope="row">Droit de dossier</th><td data-i18n="peb.compare_td10">Aucun communiqué à ce jour</td><td data-i18n="peb.compare_td11">50 € (demande d'agrément résidentiel)</td></tr>
+            <tr><th data-i18n="peb.compare_th6" scope="row">Logiciel / méthode</th><td data-i18n="peb.compare_td12">Méthode wallonne de calcul PEB</td><td>Certibru-RES</td></tr>
+            <tr><th data-i18n="peb.compare_th7" scope="row">Registre</th><td data-i18n="peb.compare_td13">Registre wallon des certificateurs agréés</td><td data-i18n="peb.compare_td14">Registre bruxellois des certificateurs agréés</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="peb-compare__note reveal"><svg class="ic" aria-hidden="true"><use href="#pi-info"/></svg><span>Les procédures sont régionales : choisissez la Région dans laquelle vous souhaitez exercer. La Wallonie et Bruxelles appliquent chacune leur propre législation, leur propre autorité, leur propre examen et leur propre registre — un agrément obtenu dans une Région ne permet pas d'exercer dans l'autre.</span></p>
+      <p class="peb-compare__note reveal"><svg class="ic" aria-hidden="true"><use href="#pi-info"/></svg><span data-i18n="peb.comparaison_s1">Les procédures sont régionales : choisissez la Région dans laquelle vous souhaitez exercer. La Wallonie et Bruxelles appliquent chacune leur propre législation, leur propre autorité, leur propre examen et leur propre registre — un agrément obtenu dans une Région ne permet pas d'exercer dans l'autre.</span></p>
 
       <div class="peb-acc reveal" data-accordion style="margin-top:2.5rem; max-width:74ch">
         <div class="peb-acc__item">
-          <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="nr-b" aria-expanded="false" aria-controls="nr-p"><span class="peb-acc__t">Bruxelles — unités non résidentielles</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+          <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="nr-b" aria-expanded="false" aria-controls="nr-p"><span data-i18n="peb.comparaison_s2" class="peb-acc__t">Bruxelles — unités non résidentielles</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
           <div class="peb-acc__panel" id="nr-p" role="region" aria-labelledby="nr-b"><div class="peb-acc__inner">
-            <p><strong>Formation actuellement indisponible.</strong> Bruxelles Environnement indique : « Pour le moment, aucun centre de formation ne donne cette formation. » Bruxelles Environnement travaille à une évolution de la législation et des outils concernant la certification PEB des unités PEB tertiaires ; les centres de formation devraient recommencer à la dispenser une fois cette évolution finalisée.</p>
-            <p><a class="peb-inline-link" href="https://environnement.brussels/pro/services-et-demandes/agrements-et-enregistrements/formations-des-certificateurs-peb" target="_blank" rel="noopener noreferrer">Voir la source officielle <svg class="ic" aria-hidden="true" style="width:.85em;height:.85em"><use href="#pi-external"/></svg></a></p>
+            <p data-i18n-html="peb.comparaison_p1"><strong>Formation actuellement indisponible.</strong> Bruxelles Environnement indique : « Pour le moment, aucun centre de formation ne donne cette formation. » Bruxelles Environnement travaille à une évolution de la législation et des outils concernant la certification PEB des unités PEB tertiaires ; les centres de formation devraient recommencer à la dispenser une fois cette évolution finalisée.</p>
+            <p><a class="peb-inline-link" href="https://environnement.brussels/pro/services-et-demandes/agrements-et-enregistrements/formations-des-certificateurs-peb" target="_blank" rel="noopener noreferrer"><span data-i18n="peb.comparaison_s3">Voir la source officielle</span> <svg class="ic" aria-hidden="true" style="width:.85em;height:.85em"><use href="#pi-external"/></svg></a></p>
           </div></div>
         </div>
         <div class="peb-acc__item">
-          <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="pb-b" aria-expanded="false" aria-controls="pb-p"><span class="peb-acc__t">Bâtiments publics</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+          <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="pb-b" aria-expanded="false" aria-controls="pb-p"><span data-i18n="peb.comparaison_s4" class="peb-acc__t">Bâtiments publics</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
           <div class="peb-acc__panel" id="pb-p" role="region" aria-labelledby="pb-b"><div class="peb-acc__inner">
-            <p>L'agrément « bâtiment public » est distinct de l'agrément résidentiel présenté sur cette page, en Wallonie comme à Bruxelles : formation et procédure propres. Non détaillé ici tant que l'offre Wisy Safety pour cet agrément n'est pas confirmée — contactez-nous pour en savoir plus.</p>
+            <p data-i18n="peb.comparaison_p2">L'agrément « bâtiment public » est distinct de l'agrément résidentiel présenté sur cette page, en Wallonie comme à Bruxelles : formation et procédure propres. Non détaillé ici tant que l'offre Wisy Safety pour cet agrément n'est pas confirmée — contactez-nous pour en savoir plus.</p>
           </div></div>
         </div>
       </div>
@@ -801,29 +802,29 @@ a.f-c-value:hover{color:var(--turquoise)}
     <div class="container">
       <header class="peb-section__head reveal">
         <p class="peb-label"><span class="peb-label__no">10</span><span>Wisy Safety</span></p>
-        <h2 class="peb-title" id="peb-why-t">Pourquoi préparer votre agrément avec Wisy Safety</h2>
-        <p class="peb-lead">Une formation structurée autour des exigences régionales et de la pratique terrain — sans surpromesse sur ce qui relève de l'autorité compétente.</p>
+        <h2 data-i18n="peb.section_head_h2_7" class="peb-title" id="peb-why-t">Pourquoi préparer votre agrément avec Wisy Safety</h2>
+        <p data-i18n="peb.section_head_p6" class="peb-lead">Une formation structurée autour des exigences régionales et de la pratique terrain — sans surpromesse sur ce qui relève de l'autorité compétente.</p>
       </header>
       <div class="peb-why__grid" data-stagger>
         <article class="peb-why__card peb-tilt reveal">
           <span class="peb-why__badge"><svg class="ic" aria-hidden="true"><use href="#pi-users"/></svg></span>
-          <h3>Formateurs expérimentés</h3>
-          <p>Une équipe habituée au terrain de la construction et de la sécurité, qui structure les connaissances techniques de façon claire.</p>
+          <h3 data-i18n="peb.why_card_h3_1">Formateurs expérimentés</h3>
+          <p data-i18n="peb.why_card_p1">Une équipe habituée au terrain de la construction et de la sécurité, qui structure les connaissances techniques de façon claire.</p>
         </article>
         <article class="peb-why__card peb-tilt reveal">
           <span class="peb-why__badge"><svg class="ic" aria-hidden="true"><use href="#pi-scale"/></svg></span>
-          <h3>Deux parcours distincts</h3>
-          <p>Un contenu qui respecte les spécificités de chaque Région, plutôt qu'un programme générique appliqué aux deux.</p>
+          <h3 data-i18n="peb.why_card_h3_2">Deux parcours distincts</h3>
+          <p data-i18n="peb.why_card_p2">Un contenu qui respecte les spécificités de chaque Région, plutôt qu'un programme générique appliqué aux deux.</p>
         </article>
         <article class="peb-why__card peb-tilt reveal">
           <span class="peb-why__badge"><svg class="ic" aria-hidden="true"><use href="#pi-building"/></svg></span>
-          <h3>Centre à Anderlecht</h3>
-          <p>Un centre de formation établi à Bruxelles, accessible depuis la Wallonie comme depuis Bruxelles.</p>
+          <h3 data-i18n="peb.why_card_h3_3">Centre à Anderlecht</h3>
+          <p data-i18n="peb.why_card_p3">Un centre de formation établi à Bruxelles, accessible depuis la Wallonie comme depuis Bruxelles.</p>
         </article>
         <article class="peb-why__card peb-tilt reveal">
           <span class="peb-why__badge"><svg class="ic" aria-hidden="true"><use href="#pi-award"/></svg></span>
-          <h3>Approche pédagogique active</h3>
-          <p>Cas pratiques et mises en situation, pour transformer les connaissances techniques en réflexes de terrain.</p>
+          <h3 data-i18n="peb.why_card_h3_4">Approche pédagogique active</h3>
+          <p data-i18n="peb.why_card_p4">Cas pratiques et mises en situation, pour transformer les connaissances techniques en réflexes de terrain.</p>
         </article>
       </div>
     </div>
@@ -834,61 +835,61 @@ a.f-c-value:hover{color:var(--turquoise)}
     <div class="container peb-split">
       <header class="peb-split__head reveal">
         <p class="peb-label"><span class="peb-label__no">11</span><span>FAQ</span></p>
-        <h2 class="peb-title" id="peb-faq-t">Questions fréquentes</h2>
-        <p class="peb-body">Une autre question ? <a class="peb-inline-link" href="faq.html">Consultez le centre d'aide</a> ou <a class="peb-inline-link" href="contact.html">contactez-nous</a>.</p>
+        <h2 data-i18n="peb.split_head_h2_2" class="peb-title" id="peb-faq-t">Questions fréquentes</h2>
+        <p data-i18n-html="peb.split_head_p3" class="peb-body">Une autre question ? <a class="peb-inline-link" href="faq.html">Consultez le centre d'aide</a> ou <a class="peb-inline-link" href="contact.html">contactez-nous</a>.</p>
       </header>
       <div class="peb-split__body">
         <div class="peb-acc peb-acc--faq" data-accordion>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-1" aria-expanded="false" aria-controls="faq-p-1"><span class="peb-acc__t">Comment devenir certificateur PEB en 2026 ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-1" aria-expanded="false" aria-controls="faq-p-1"><span data-i18n="peb.faq_s1" class="peb-acc__t">Comment devenir certificateur PEB en 2026 ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
             <div class="peb-acc__panel" id="faq-p-1" role="region" aria-labelledby="faq-b-1"><div class="peb-acc__inner">
-              <p><span class="peb-acc__region-tag">Wallonie</span>Vérifier les conditions d'accès, introduire une demande d'agrément auprès du SPW Énergie, suivre la formation auprès d'un centre agréé, réussir l'épreuve écrite puis l'épreuve orale, puis obtenir l'agrément délivré par le Ministre.</p>
-              <p><span class="peb-acc__region-tag">Bruxelles</span>Suivre une formation reconnue par Bruxelles Environnement, réussir l'examen centralisé (théorique et pratique), puis introduire la demande d'agrément auprès de Bruxelles Environnement.</p>
+              <p data-i18n-html="peb.faq_p1"><span class="peb-acc__region-tag">Wallonie</span>Vérifier les conditions d'accès, introduire une demande d'agrément auprès du SPW Énergie, suivre la formation auprès d'un centre agréé, réussir l'épreuve écrite puis l'épreuve orale, puis obtenir l'agrément délivré par le Ministre.</p>
+              <p data-i18n-html="peb.faq_p2"><span class="peb-acc__region-tag">Bruxelles</span>Suivre une formation reconnue par Bruxelles Environnement, réussir l'examen centralisé (théorique et pratique), puis introduire la demande d'agrément auprès de Bruxelles Environnement.</p>
             </div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-2" aria-expanded="false" aria-controls="faq-p-2"><span class="peb-acc__t">Quelle formation faut-il suivre en Wallonie ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="faq-p-2" role="region" aria-labelledby="faq-b-2"><div class="peb-acc__inner"><p>Une formation réglementaire dispensée par un centre agréé, préparant aux épreuves écrite et orale du parcours wallon — accessible après l'introduction d'une demande d'agrément auprès du SPW Énergie.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-2" aria-expanded="false" aria-controls="faq-p-2"><span data-i18n="peb.faq_s2" class="peb-acc__t">Quelle formation faut-il suivre en Wallonie ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="faq-p-2" role="region" aria-labelledby="faq-b-2"><div class="peb-acc__inner"><p data-i18n="peb.faq_p3">Une formation réglementaire dispensée par un centre agréé, préparant aux épreuves écrite et orale du parcours wallon — accessible après l'introduction d'une demande d'agrément auprès du SPW Énergie.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-3" aria-expanded="false" aria-controls="faq-p-3"><span class="peb-acc__t">Quelle formation faut-il suivre à Bruxelles ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="faq-p-3" role="region" aria-labelledby="faq-b-3"><div class="peb-acc__inner"><p>Une formation reconnue par Bruxelles Environnement, préparant à l'examen centralisé (théorique et pratique, avec le logiciel Certibru-RES) organisé par cette même autorité.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-3" aria-expanded="false" aria-controls="faq-p-3"><span data-i18n="peb.faq_s3" class="peb-acc__t">Quelle formation faut-il suivre à Bruxelles ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="faq-p-3" role="region" aria-labelledby="faq-b-3"><div class="peb-acc__inner"><p data-i18n="peb.faq_p4">Une formation reconnue par Bruxelles Environnement, préparant à l'examen centralisé (théorique et pratique, avec le logiciel Certibru-RES) organisé par cette même autorité.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-4" aria-expanded="false" aria-controls="faq-p-4"><span class="peb-acc__t">Quelles sont les conditions d'accès ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="faq-p-4" role="region" aria-labelledby="faq-b-4"><div class="peb-acc__inner"><p>Elles dépendent de la Région choisie : un diplôme admissible (architecture, ingénierie, construction ou énergie du bâtiment) ou, à défaut, au moins 2 ans d'expérience professionnelle liée aux aspects énergétiques des bâtiments. Voir la section « Conditions d'accès » ci-dessus selon la Région.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-4" aria-expanded="false" aria-controls="faq-p-4"><span data-i18n="peb.faq_s4" class="peb-acc__t">Quelles sont les conditions d'accès ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="faq-p-4" role="region" aria-labelledby="faq-b-4"><div class="peb-acc__inner"><p data-i18n="peb.faq_p5">Elles dépendent de la Région choisie : un diplôme admissible (architecture, ingénierie, construction ou énergie du bâtiment) ou, à défaut, au moins 2 ans d'expérience professionnelle liée aux aspects énergétiques des bâtiments. Voir la section « Conditions d'accès » ci-dessus selon la Région.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-5" aria-expanded="false" aria-controls="faq-p-5"><span class="peb-acc__t">Peut-on devenir certificateur PEB avec 2 ans d'expérience ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="faq-p-5" role="region" aria-labelledby="faq-b-5"><div class="peb-acc__inner"><p>Oui, dans les deux Régions : à défaut d'un diplôme admissible, au moins 2 ans d'expérience professionnelle concernant les aspects énergétiques des bâtiments peuvent remplacer le diplôme, selon les conditions administratives propres à chaque autorité.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-5" aria-expanded="false" aria-controls="faq-p-5"><span data-i18n="peb.faq_s5" class="peb-acc__t">Peut-on devenir certificateur PEB avec 2 ans d'expérience ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="faq-p-5" role="region" aria-labelledby="faq-b-5"><div class="peb-acc__inner"><p data-i18n="peb.faq_p6">Oui, dans les deux Régions : à défaut d'un diplôme admissible, au moins 2 ans d'expérience professionnelle concernant les aspects énergétiques des bâtiments peuvent remplacer le diplôme, selon les conditions administratives propres à chaque autorité.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-6" aria-expanded="false" aria-controls="faq-p-6"><span class="peb-acc__t">L'agrément wallon est-il valable à Bruxelles ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="faq-p-6" role="region" aria-labelledby="faq-b-6"><div class="peb-acc__inner"><p>Non. La Wallonie et Bruxelles appliquent chacune leur propre législation, leur propre autorité (SPW Énergie / Bruxelles Environnement), leur propre examen et leur propre registre de certificateurs. Un agrément obtenu dans une Région ne permet pas d'exercer dans l'autre.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-6" aria-expanded="false" aria-controls="faq-p-6"><span data-i18n="peb.faq_s6" class="peb-acc__t">L'agrément wallon est-il valable à Bruxelles ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="faq-p-6" role="region" aria-labelledby="faq-b-6"><div class="peb-acc__inner"><p data-i18n="peb.faq_p7">Non. La Wallonie et Bruxelles appliquent chacune leur propre législation, leur propre autorité (SPW Énergie / Bruxelles Environnement), leur propre examen et leur propre registre de certificateurs. Un agrément obtenu dans une Région ne permet pas d'exercer dans l'autre.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-7" aria-expanded="false" aria-controls="faq-p-7"><span class="peb-acc__t">Comment se déroule l'examen en Wallonie ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="faq-p-7" role="region" aria-labelledby="faq-b-7"><div class="peb-acc__inner"><p>Le parcours wallon prévoit une épreuve écrite, puis une épreuve orale, organisées par le centre de formation agréé selon le calendrier de la session suivie.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-7" aria-expanded="false" aria-controls="faq-p-7"><span data-i18n="peb.faq_s7" class="peb-acc__t">Comment se déroule l'examen en Wallonie ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="faq-p-7" role="region" aria-labelledby="faq-b-7"><div class="peb-acc__inner"><p data-i18n="peb.faq_p8">Le parcours wallon prévoit une épreuve écrite, puis une épreuve orale, organisées par le centre de formation agréé selon le calendrier de la session suivie.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-8" aria-expanded="false" aria-controls="faq-p-8"><span class="peb-acc__t">Comment fonctionne l'examen centralisé à Bruxelles ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="faq-p-8" role="region" aria-labelledby="faq-b-8"><div class="peb-acc__inner"><p>Il comprend une épreuve théorique (20 questions à choix multiple) et une épreuve pratique (encodage d'un cas avec le logiciel Certibru-RES), sur 4 heures maximum, organisé directement par Bruxelles Environnement. Le règlement en vigueur est à vérifier sur la plateforme officielle avant chaque session.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-8" aria-expanded="false" aria-controls="faq-p-8"><span data-i18n="peb.faq_s8" class="peb-acc__t">Comment fonctionne l'examen centralisé à Bruxelles ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="faq-p-8" role="region" aria-labelledby="faq-b-8"><div class="peb-acc__inner"><p data-i18n="peb.faq_p9">Il comprend une épreuve théorique (20 questions à choix multiple) et une épreuve pratique (encodage d'un cas avec le logiciel Certibru-RES), sur 4 heures maximum, organisé directement par Bruxelles Environnement. Le règlement en vigueur est à vérifier sur la plateforme officielle avant chaque session.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-9" aria-expanded="false" aria-controls="faq-p-9"><span class="peb-acc__t">Combien coûte une formation de certificateur PEB ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="faq-p-9" role="region" aria-labelledby="faq-b-9"><div class="peb-acc__inner"><p>Le tarif de la formation Wisy Safety est communiqué sur demande pour la prochaine session, dans la Région choisie. Des ordres de grandeur observés chez d'autres organismes sont indiqués à titre de repère dans la section Tarifs, mais ne reflètent pas le tarif Wisy Safety.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-9" aria-expanded="false" aria-controls="faq-p-9"><span data-i18n="peb.faq_s9" class="peb-acc__t">Combien coûte une formation de certificateur PEB ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="faq-p-9" role="region" aria-labelledby="faq-b-9"><div class="peb-acc__inner"><p data-i18n="peb.faq_p10">Le tarif de la formation Wisy Safety est communiqué sur demande pour la prochaine session, dans la Région choisie. Des ordres de grandeur observés chez d'autres organismes sont indiqués à titre de repère dans la section Tarifs, mais ne reflètent pas le tarif Wisy Safety.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-10" aria-expanded="false" aria-controls="faq-p-10"><span class="peb-acc__t">Combien coûte la demande d'agrément à Bruxelles ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="faq-p-10" role="region" aria-labelledby="faq-b-10"><div class="peb-acc__inner"><p>Un droit de dossier de 50 € s'applique actuellement à la demande d'agrément résidentiel, selon les informations publiées par Bruxelles Environnement. Ce montant est fixé par l'autorité compétente et peut évoluer — ce n'est pas le prix de la formation.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-10" aria-expanded="false" aria-controls="faq-p-10"><span data-i18n="peb.faq_s10" class="peb-acc__t">Combien coûte la demande d'agrément à Bruxelles ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="faq-p-10" role="region" aria-labelledby="faq-b-10"><div class="peb-acc__inner"><p data-i18n="peb.faq_p11">Un droit de dossier de 50 € s'applique actuellement à la demande d'agrément résidentiel, selon les informations publiées par Bruxelles Environnement. Ce montant est fixé par l'autorité compétente et peut évoluer — ce n'est pas le prix de la formation.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-11" aria-expanded="false" aria-controls="faq-p-11"><span class="peb-acc__t">Combien de temps faut-il pour devenir certificateur ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="faq-p-11" role="region" aria-labelledby="faq-b-11"><div class="peb-acc__inner"><p>La durée totale dépend de la Région, du centre de formation et des délais propres à chaque autorité (inscription, session, résultats, traitement de la demande d'agrément) : elle n'est pas communiquée ici pour éviter toute estimation non confirmée. Contactez-nous pour un point sur les délais actuels.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-11" aria-expanded="false" aria-controls="faq-p-11"><span data-i18n="peb.faq_s11" class="peb-acc__t">Combien de temps faut-il pour devenir certificateur ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="faq-p-11" role="region" aria-labelledby="faq-b-11"><div class="peb-acc__inner"><p data-i18n="peb.faq_p12">La durée totale dépend de la Région, du centre de formation et des délais propres à chaque autorité (inscription, session, résultats, traitement de la demande d'agrément) : elle n'est pas communiquée ici pour éviter toute estimation non confirmée. Contactez-nous pour un point sur les délais actuels.</p></div></div>
           </div>
           <div class="peb-acc__item">
-            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-12" aria-expanded="false" aria-controls="faq-p-12"><span class="peb-acc__t">Puis-je exercer dans les deux Régions ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
-            <div class="peb-acc__panel" id="faq-p-12" role="region" aria-labelledby="faq-b-12"><div class="peb-acc__inner"><p>Seulement en obtenant les deux agréments séparément : un parcours complet (formation, examen, agrément) dans chaque Région où vous souhaitez exercer.</p></div></div>
+            <h3 class="peb-acc__h"><button type="button" class="peb-acc__btn" id="faq-b-12" aria-expanded="false" aria-controls="faq-p-12"><span data-i18n="peb.faq_s12" class="peb-acc__t">Puis-je exercer dans les deux Régions ?</span><span class="peb-acc__ic" aria-hidden="true"></span></button></h3>
+            <div class="peb-acc__panel" id="faq-p-12" role="region" aria-labelledby="faq-b-12"><div class="peb-acc__inner"><p data-i18n="peb.faq_p13">Seulement en obtenant les deux agréments séparément : un parcours complet (formation, examen, agrément) dans chaque Région où vous souhaitez exercer.</p></div></div>
           </div>
         </div>
       </div>
@@ -900,13 +901,13 @@ a.f-c-value:hover{color:var(--turquoise)}
     <div class="container">
       <div class="peb-cta reveal">
         <div class="peb-cta__inner">
-          <p class="peb-label peb-label--on-dark"><span>Prêt à démarrer</span></p>
-          <h2 class="peb-cta__title" id="peb-cta-t">Préparez votre agrément de certificateur PEB</h2>
-          <p>Formation réglementaire et pratique, en Wallonie ou à Bruxelles. Sessions communiquées sur demande.</p>
+          <p class="peb-label peb-label--on-dark"><span data-i18n="peb.cta_wrap_s1">Prêt à démarrer</span></p>
+          <h2 data-i18n="peb.cta_wrap_h2_1" class="peb-cta__title" id="peb-cta-t">Préparez votre agrément de certificateur PEB</h2>
+          <p data-i18n="peb.cta_wrap_p1">Formation réglementaire et pratique, en Wallonie ou à Bruxelles. Sessions communiquées sur demande.</p>
           <div class="peb-actions">
-            <a class="btn btn--cta peb-magnetic" href="#sessions"><span>Voir les prochaines sessions</span><svg class="ic btn__arrow" aria-hidden="true"><use href="#pi-arrow"/></svg></a>
-            <a class="btn btn--ghost peb-magnetic" href="#eligibilite" data-quiz-open><span>Vérifier mon éligibilité</span></a>
-            <a class="btn btn--ghost peb-magnetic" href="contact.html"><span>Poser une question</span></a>
+            <a class="btn btn--cta peb-magnetic" href="#sessions"><span data-i18n="peb.hero_s11">Voir les prochaines sessions</span><svg class="ic btn__arrow" aria-hidden="true"><use href="#pi-arrow"/></svg></a>
+            <a class="btn btn--ghost peb-magnetic" href="#eligibilite" data-quiz-open><span data-i18n="peb.hero_s12">Vérifier mon éligibilité</span></a>
+            <a class="btn btn--ghost peb-magnetic" href="contact.html"><span data-i18n="peb.price_card_s3">Poser une question</span></a>
           </div>
         </div>
       </div>
@@ -916,25 +917,25 @@ a.f-c-value:hover{color:var(--turquoise)}
   <!-- ==================== 16. SOURCES OFFICIELLES ==================== -->
   <section class="peb-sources" aria-labelledby="peb-src-t">
     <div class="container peb-section" style="padding-block:clamp(2.5rem,5vw,3.5rem)">
-      <h2 class="peb-sr" id="peb-src-t">Sources réglementaires</h2>
-      <p class="peb-label" style="margin-bottom:1.5rem"><span class="peb-label__no">12</span><span>Sources réglementaires</span></p>
+      <h2 data-i18n="peb.sources_h2_1" class="peb-sr" id="peb-src-t">Sources réglementaires</h2>
+      <p class="peb-label" style="margin-bottom:1.5rem"><span class="peb-label__no">12</span><span data-i18n="peb.sources_h2_1">Sources réglementaires</span></p>
       <div class="peb-sources__grid reveal">
         <div class="peb-sources__col">
-          <h3>Wallonie</h3>
+          <h3 data-i18n="peb.region_wallonia">Wallonie</h3>
           <ul>
-            <li><a href="https://www.wallonie.be/fr/demarches/devenir-certificateur-peb-batiment-residentiel" target="_blank" rel="noopener noreferrer"><svg class="ic" aria-hidden="true"><use href="#pi-external"/></svg>Wallonie.be — Devenir certificateur PEB</a></li>
-            <li><a href="https://energie.wallonie.be/" target="_blank" rel="noopener noreferrer"><svg class="ic" aria-hidden="true"><use href="#pi-external"/></svg>SPW Énergie</a></li>
+            <li><a href="https://www.wallonie.be/fr/demarches/devenir-certificateur-peb-batiment-residentiel" target="_blank" rel="noopener noreferrer"><svg class="ic" aria-hidden="true"><use href="#pi-external"/></svg><span data-i18n="peb.sources_s1">Wallonie.be — Devenir certificateur PEB</span></a></li>
+            <li><a href="https://energie.wallonie.be/" target="_blank" rel="noopener noreferrer"><svg class="ic" aria-hidden="true"><use href="#pi-external"/></svg><span translate="no">SPW Énergie</span></a></li>
           </ul>
         </div>
         <div class="peb-sources__col">
-          <h3>Bruxelles</h3>
+          <h3 data-i18n="peb.region_brussels">Bruxelles</h3>
           <ul>
-            <li><a href="https://environnement.brussels/pro/services-et-demandes/agrements-et-enregistrements/devenir-certificateur-ou-certificatrice-peb" target="_blank" rel="noopener noreferrer"><svg class="ic" aria-hidden="true"><use href="#pi-external"/></svg>Bruxelles Environnement — Devenir certificateur·rice PEB</a></li>
-            <li><a href="https://examen.environnement.brussels/fr/conditions" target="_blank" rel="noopener noreferrer"><svg class="ic" aria-hidden="true"><use href="#pi-external"/></svg>Plateforme officielle de l'examen — Conditions</a></li>
+            <li><a href="https://environnement.brussels/pro/services-et-demandes/agrements-et-enregistrements/devenir-certificateur-ou-certificatrice-peb" target="_blank" rel="noopener noreferrer"><svg class="ic" aria-hidden="true"><use href="#pi-external"/></svg><span data-i18n="peb.sources_s3">Bruxelles Environnement — Devenir certificateur·rice PEB</span></a></li>
+            <li><a href="https://examen.environnement.brussels/fr/conditions" target="_blank" rel="noopener noreferrer"><svg class="ic" aria-hidden="true"><use href="#pi-external"/></svg><span data-i18n="peb.sources_s4">Plateforme officielle de l'examen — Conditions</span></a></li>
           </ul>
         </div>
       </div>
-      <p class="peb-sources__foot">Informations réglementaires vérifiées le 24 septembre 2026, sur les sources officielles ci-dessus. En cas de doute, la source officielle de la Région concernée fait toujours foi.</p>
+      <p data-i18n="peb.sources_p1" class="peb-sources__foot">Informations réglementaires vérifiées le 24 septembre 2026, sur les sources officielles ci-dessus. En cas de doute, la source officielle de la Région concernée fait toujours foi.</p>
     </div>
   </section>
 
@@ -986,14 +987,15 @@ a.f-c-value:hover{color:var(--turquoise)}
 
 <!-- Barre CTA mobile (compacte, bas d'écran) — voir js/peb.js initStickyBar() -->
 <div class="peb-mobile-bar">
-  <span class="peb-mobile-bar__txt"><strong>Certificateur PEB</strong>Bruxelles · Wallonie</span>
-  <a class="btn btn--cta" href="#sessions"><span>Sessions</span></a>
+  <span data-i18n-html="peb.page_s1" class="peb-mobile-bar__txt"><strong>Certificateur PEB</strong>Bruxelles · Wallonie</span>
+  <a class="btn btn--cta" href="#sessions"><span data-i18n="peb.section_head_s5">Sessions</span></a>
 </div>
 
-<!-- Système multilingue (i18n) : chrome uniquement — le contenu PEB ci-dessus est en français -->
+<!-- Système multilingue (i18n) : dictionnaires communs + dictionnaire de la page PEB (js/i18n-data-peb.js) -->
 <script src="js/i18n-data-common.js"></script>
 <script src="js/i18n-data-search.js"></script>
 <script src="js/i18n-data-assistant.js"></script>
+<script src="js/i18n-data-peb.js"></script>
 <script src="js/i18n.js"></script>
 <!-- Registre central (source unique des faits) + recherche globale -->
 <script src="js/trainings-data.js"></script>
@@ -1003,6 +1005,8 @@ a.f-c-value:hover{color:var(--turquoise)}
 <!-- Assistant Wisy : seul le launcher est chargé d'emblée ; le moteur de réponses et le panneau
      se chargent à la demande (survol, focus, toucher, clic) — voir js/assistant/launcher.js -->
 <script defer src="js/assistant/launcher.js"></script>
+<!-- Consentement aux cookies : bandeau + centre de préférences (voir js/cookie-consent.js) -->
+<script defer src="js/cookie-consent.js"></script>
 
 <!-- Envoi du vérificateur d'éligibilité : même compte EmailJS que contact.html. Différé : seul un clic
      sur « Voir mon résultat indicatif » en a besoin, jamais le rendu initial de la page. -->

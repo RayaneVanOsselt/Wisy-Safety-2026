@@ -134,8 +134,8 @@ node --test tests/*.test.js
 
 ## 7. Limites connues
 
-- Contenu **en français uniquement** (l'ossature — en-tête, pied de page — reste traduite ;
-  `<main dir="ltr">` garde le français lisible en arabe). Traduire le contenu est le
-  principal chantier suivant.
+- Contenu **traduit dans les 10 langues** (`js/faq-i18n/faq-<langue>.js`, chargés à la demande ; l'ossature de la page :
+  `js/i18n-data-faq.js`). Le français reste la source unique (`js/faq-data.js`). Voir `docs/README-I18N.md`. Les réponses
+  de l'**Assistant Wisy** (`js/assistant/`) restent, elles, en français.
 - La fonction Edge (IA) n'a pas pu être exécutée ici (Deno non installé) : son module de
   connaissances est vérifié par les tests, mais un déploiement de test reste à faire.

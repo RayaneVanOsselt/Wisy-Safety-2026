@@ -18,7 +18,7 @@ body.peb-page { background: var(--creme); }
 
 .peb-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
-.peb-skip { position: fixed; left: 1rem; top: -4rem; z-index: 2000; padding: .75rem 1.1rem; border-radius: var(--radius-sm); background: var(--noir-jais); color: var(--creme); font-weight: 600; font-family: var(--font-titre); box-shadow: var(--shadow-md); transition: top var(--motion-fast) var(--ease-premium); }
+.peb-skip { position: fixed; inset-inline-start: 1rem; top: -4rem; z-index: 2000; padding: .75rem 1.1rem; border-radius: var(--radius-sm); background: var(--noir-jais); color: var(--creme); font-weight: 600; font-family: var(--font-titre); box-shadow: var(--shadow-md); transition: top var(--motion-fast) var(--ease-premium); }
 .peb-skip:focus { top: 1rem; }
 
 /* ==================== MOTIFS PARTAGÉS ==================== */
@@ -69,10 +69,10 @@ body.peb-page { background: var(--creme); }
 
 /* ==================== 00. FIL D'ARIANE ==================== */
 .peb-bc { padding-top: clamp(1.5rem, 3vw, 2.25rem); }
-.peb-bc ol { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: var(--fs-small); color: rgba(244,250,249,.62); }
+.peb-bc ol { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: 0; padding: 0; list-style: none; font-size: var(--fs-small); color: rgba(244,250,249,.62); }
 .peb-bc a { color: rgba(244,250,249,.8); transition: color var(--t-fast) var(--ease); }
 .peb-bc a:hover, .peb-bc a:focus-visible { color: var(--turquoise); }
-.peb-bc li:not(:last-child)::after { content: "/"; margin-left: .5rem; color: rgba(244,250,249,.35); }
+.peb-bc li:not(:last-child)::after { content: "/"; margin-inline-start: .5rem; color: rgba(244,250,249,.35); }
 .peb-bc li[aria-current] span { color: var(--creme); }
 
 /* ==================== 01. HERO ==================== */
@@ -196,7 +196,7 @@ html[data-peb-region] [data-region-panel] { opacity: 1; }
 .peb-acc__item { border-bottom: 1px solid var(--granit-20); }
 .peb-acc__item:first-child { border-top: 1px solid var(--granit-20); }
 .peb-acc__h { margin: 0; }
-.peb-acc__btn { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; width: 100%; padding: 1.1rem .25rem; text-align: left; }
+.peb-acc__btn { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; width: 100%; padding: 1.1rem .25rem; text-align: start; }
 .peb-acc__no { font-family: var(--font-titre); font-weight: 700; color: var(--granit); font-variant-numeric: tabular-nums; font-size: .95rem; }
 .peb-acc__no small { display: block; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; color: var(--granit); }
 .peb-acc__t { font-family: var(--font-titre); font-weight: 600; font-size: 1.02rem; color: var(--noir-jais); }
@@ -241,7 +241,7 @@ html[data-peb-region] [data-region-panel] { opacity: 1; }
 .peb-exam-card a { color: var(--turquoise); text-decoration: underline; text-underline-offset: 3px; }
 
 /* ==================== 10. SESSIONS ==================== */
-.peb-session-filter { display: inline-flex; gap: .4rem; padding: 4px; border-radius: var(--radius-pill); background: var(--brume-08); border: 1px solid var(--granit-20); margin-bottom: 2rem; }
+.peb-session-filter { display: inline-flex; flex-wrap: wrap; max-width: 100%; gap: .4rem; padding: 4px; border-radius: var(--radius-pill); background: var(--brume-08); border: 1px solid var(--granit-20); margin-bottom: 2rem; }
 .peb-session-filter__btn { padding: .6rem 1.1rem; border-radius: var(--radius-pill); font-family: var(--font-titre); font-weight: 600; font-size: .88rem; color: var(--granit); min-height: 40px; transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
 .peb-session-filter__btn[aria-pressed="true"] { background: var(--epinette); color: var(--creme); }
 .peb-session-filter__btn:hover:not([aria-pressed="true"]) { color: var(--epinette); }
@@ -282,7 +282,7 @@ html[data-peb-region] [data-region-panel] { opacity: 1; }
 .peb-compare-wrap { overflow-x: auto; border: 1px solid var(--granit-20); border-radius: var(--radius-lg); }
 .peb-compare { width: 100%; border-collapse: collapse; min-width: 640px; }
 .peb-compare caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
-.peb-compare th, .peb-compare td { padding: 1rem 1.25rem; text-align: left; font-size: .92rem; vertical-align: top; border-bottom: 1px solid var(--granit-20); }
+.peb-compare th, .peb-compare td { padding: 1rem 1.25rem; text-align: start; font-size: .92rem; vertical-align: top; border-bottom: 1px solid var(--granit-20); }
 .peb-compare thead th { font-family: var(--font-titre); font-weight: 700; background: var(--noir-jais); color: var(--creme); position: sticky; top: 0; }
 .peb-compare thead th:first-child { border-top-left-radius: var(--radius-lg); }
 .peb-compare thead th:last-child { border-top-right-radius: var(--radius-lg); }
@@ -334,7 +334,7 @@ html[data-peb-region] [data-region-panel] { opacity: 1; }
 .peb-quiz__result .ic-wrap { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; background: var(--brume-14); color: var(--epinette); margin-bottom: 1.1rem; }
 .peb-quiz__result .ic-wrap .ic { width: 26px; height: 26px; }
 .peb-quiz__result-text { font-size: 1.02rem; color: var(--noir-jais); max-width: 48ch; margin: 0 auto 1.15rem; }
-.peb-quiz__disclaimer { display: flex; align-items: flex-start; gap: .6rem; text-align: left; font-size: .84rem; color: var(--granit); background: var(--brume-08); border-radius: var(--radius-sm); padding: .9rem 1.1rem; margin: 0 auto 1.5rem; max-width: 52ch; }
+.peb-quiz__disclaimer { display: flex; align-items: flex-start; gap: .6rem; text-align: start; font-size: .84rem; color: var(--granit); background: var(--brume-08); border-radius: var(--radius-sm); padding: .9rem 1.1rem; margin: 0 auto 1.5rem; max-width: 52ch; }
 .peb-quiz__disclaimer .ic { width: 16px; height: 16px; color: var(--epinette); flex-shrink: 0; margin-top: .15em; }
 
 /* ==================== 15. CTA FINAL ==================== */
@@ -368,6 +368,11 @@ html[data-peb-region] [data-region-panel] { opacity: 1; }
   .peb-mobile-bar .btn { flex-shrink: 0; padding: .75rem 1.1rem; font-size: .88rem; }
   body.peb-bar-active #wisy-assistant { --wa-lift: 76px; }
   body.peb-bar-active { padding-bottom: 72px; }
+  /* Bandeau de consentement aux cookies (css/cookie-consent.css) : tant qu'il est affiché, il occupe le bas de
+     l'écran ; la barre CTA s'efface et l'assistant se cale sur la hauteur du bandeau. */
+  body.has-wcc-banner .peb-mobile-bar { display: none; }
+  body.has-wcc-banner.peb-bar-active { padding-bottom: 0; }
+  body.has-wcc-banner.peb-bar-active #wisy-assistant { --wa-lift: calc(var(--wcc-banner-h, 96px) + 14px); }
 }
 
 /* ==================== RESPONSIVE ==================== */
@@ -405,3 +410,17 @@ html[data-peb-region] [data-region-panel] { opacity: 1; }
   .peb-quiz__step--shake { animation: none; }
   .peb-why__card { transform: none !important; }
 }
+
+/* ==================== RTL (arabe) — habillage de la vignette du hero en miroir ==================== */
+[dir="rtl"] .peb-hero::after { right: auto; left: -220px; }
+[dir="rtl"] .peb-gauge { left: auto; right: -8%; }
+[dir="rtl"] .peb-parcours-card { right: auto; left: -6%; }
+[dir="rtl"] .peb-region-badge { left: auto; right: 6%; }
+@media (max-width: 640px) {
+  [dir="rtl"] .peb-gauge { left: auto; right: 2%; }
+  [dir="rtl"] .peb-parcours-card { right: auto; left: 2%; }
+  [dir="rtl"] .peb-region-badge { left: auto; right: 2%; }
+}
+
+/* ==================== Mots longs (traductions) : passage à la ligne plutôt que débordement ==================== */
+.peb-page :is(h1, h2, h3, .peb-label, .peb-condition p, .peb-tl__body p, .peb-price-card__admin) { overflow-wrap: anywhere; }

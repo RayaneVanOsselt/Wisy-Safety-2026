@@ -149,8 +149,8 @@ Demandez à l'Assistant Wisy » s'y ajoute :
 | Survol / focus clavier | La bulle se révèle (elle se rapproche de 3 px), mascotte −2 px et ×1.02, filet → brume ; `:active` ×0.98. Survol réservé aux pointeurs précis. |
 | Assistant ouvert | Le panneau s'ouvre **au-dessus** du launcher (opacité + 12 px + ×0.98, ~380 ms, origine bas-droite) ; le launcher reste, anneau plein + pastille de fermeture, nom « Fermer l'Assistant Wisy ». Sur mobile (≤ 560 px) : feuille quasi plein écran, le launcher s'efface. |
 
-**Modifier les textes** — tout est dans `js/i18n-data-assistant.js` (fr/en/nl ; les autres
-langues retombent sur le français) : `assistant.launcher_title` (« Besoin d'aide ? »),
+**Modifier les textes** — tout est dans `js/i18n-data-assistant.js` (les 10 langues du site ; les
+**réponses** de l'assistant, elles, restent en français) : `assistant.launcher_title` (« Besoin d'aide ? »),
 `assistant.launcher_text` (« Demandez à l'Assistant Wisy »), `assistant.launcher_open` /
 `launcher_close` (noms accessibles), `assistant.launcher_desc`, `assistant.badge_ai` (« IA »),
 `assistant.header_title` / `header_subtitle` (en-tête du panneau).

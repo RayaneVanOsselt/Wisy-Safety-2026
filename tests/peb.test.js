@@ -77,6 +77,37 @@ test("VÉRACITÉ — Wisy Safety n'est jamais qualifié d'« agréé »/« recon
   }
 });
 
+test("VÉRACITÉ (10 langues) — dans js/i18n-data-peb.js, aucun texte ne présente Wisy Safety comme agréé / reconnu / officiel pour le PEB", () => {
+  const Check = require("../scripts/check-i18n.js");
+  const I = Check.loadDict(["js/i18n-data-peb.js"]);
+  /* adjectifs d'agrément/reconnaissance/officialité, par langue (les NOMS « agrément », « erkenning »… désignent la procédure
+     des autorités : ils restent permis) */
+  const CLAIM = {
+    fr: /agréé|agréée|reconnu|reconnue|officiel|officielle/i,
+    en: /\bapproved\b|\baccredited\b|\brecogni[sz]ed\b|\bofficial\b|\bcertified\b/i,
+    nl: /\berkend|geaccrediteerd|\bofficieel|\bofficiële|gecertificeerd/i,
+    af: /\berkende?\b|geakkrediteer|\bamptelike?\b|gesertifiseer/i,
+    ar: /معتمد|معترف|رسمي|مُعتمد/,
+    bg: /одобрен(?!ие)|признат|официал|акредитир|сертифициран/i,
+    de: /zugelassen|anerkannt|akkreditiert|\boffiziell|zertifiziert/i,
+    ro: /\baprobat|recunoscut|acreditat|\boficial|certificat\b/i,
+    it: /abilitat|accreditat|riconosciut|\bufficial|certificat[oa]\b/i,
+    sl: /odobren|pooblaščen|priznan|akreditiran|\buradn|certificiran/i
+  };
+  const WINDOW = 60;
+  Object.keys(CLAIM).forEach((lang) => {
+    Object.entries(I[lang]).forEach(([key, value]) => {
+      const text = String(value).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+      let idx = 0;
+      while ((idx = text.indexOf("Wisy Safety", idx)) !== -1) {
+        const around = text.slice(Math.max(0, idx - WINDOW), idx + "Wisy Safety".length + WINDOW);
+        assert.doesNotMatch(around, CLAIM[lang], lang + " · " + key + " : affirmation d'agrément à proximité de « Wisy Safety » : " + around.trim());
+        idx += "Wisy Safety".length;
+      }
+    });
+  });
+});
+
 test("distinction des concepts : certificat / agrément / formation / examen / frais ne sont jamais confondus dans les libellés visibles", () => {
   assert.match(visible, /droit de dossier/i, "les 50 € sont désignés comme un droit de dossier");
   assert.doesNotMatch(visible, /50\s?€[^.]*(prix de la formation|tarif de la formation)/i, "les 50 € ne sont jamais présentés comme le prix de la formation");

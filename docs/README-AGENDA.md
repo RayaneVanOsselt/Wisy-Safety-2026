@@ -75,8 +75,9 @@ le lien « Ouvrir dans un nouvel onglet » reste le repli. Si le site reçoit un
   « Calendrier complet 2025 » (obsolète).
 - Le statut « Agenda en cours de synchronisation » n'est **pas** affiché : rien n'est en cours de synchronisation ;
   la page dit « Intégration Outlook prévue ».
-- Contenu en **français seulement** (`<main lang="fr" dir="ltr">`, comme le Centre d'aide) ; l'en-tête, le menu et le pied de
-  page sont traduits. Traduire le contenu (`data-i18n` + `js/i18n-data-agenda.js`) est un ajout ultérieur.
+- Contenu **traduit dans les 10 langues** (`data-i18n` + `js/i18n-data-agenda.js`, clés `ag.*`) ; le composant calendrier
+  (`js/agenda-calendar.js`) retraduit ses statuts (`ag.st_*`) et le titre de l'iframe (`ag.cal_title`) à chaque changement de
+  langue. Les chiffres du bandeau de confiance sont les mêmes dans toutes les langues.
 
 ## Intégrations
 

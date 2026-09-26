@@ -23,7 +23,9 @@ refait.
    formulaire de `contact.html`).
 4. **Formations** — les six formations du registre `js/site-content.js` + le certificateur PEB. Titres, descriptions
    et durées reprennent les clés partagées (`dd.*`, `search.*`) : un seul texte par information.
-5. **VCA** — faits confirmés de la VCA Base (`js/trainings-data.js`), VCA ligne hiérarchique, les deux articles.
+5. **VCA** (bande sombre) — carte « billet » VCA Base (faits confirmés de `js/trainings-data.js`), carte « Examen
+   officiel B-VCA » (jauge 64,5 %, 40 questions, 60 minutes : chiffres officiels du registre, source BeSaCC-VCA),
+   puis VCA ligne hiérarchique et les deux articles.
 6. **Pourquoi Wisy Safety** — engagements tirés des textes existants (experts du terrain, théorie + pratique, centre
    équipé accessible en transports en commun, équipe joignable du lundi au jeudi de 10 h à 16 h).
 7. **Comment ça marche** — les quatre étapes réelles de `inscription.html` (chaque étape est un lien).
@@ -46,12 +48,13 @@ refait.
 | `assets/videos/accueil/logo-animation-fin.webp` | Image finale (logo complet) : mouvement réduit, économie de données, sans JavaScript |
 
 **Intro (1re visite de la session uniquement).** Décidée avant le premier affichage par le petit script du `<head>`
-(`html.home-intro`) : l'écran de la vidéo est centré sur une scène sombre ; quand « Wisy Safety » est apparu (≈ 3,2 s de
-vidéo, lue à 1,15×), il rejoint sa place dans le hero pendant que le titre apparaît. L'en-tête reste utilisable pendant
+(`html.home-intro`) : l'écran de la vidéo est centré sur une scène sombre ; la vidéo est jouée en entier (8 s), puis le
+logo complet reste affiché avec la signature « La sécurité comme une référence » (2,6 s) avant de rejoindre sa place
+dans le hero pendant que le titre apparaît (≈ 11,5 s au total). L'en-tête reste utilisable pendant
 toute l'intro. Elle s'arrête d'elle-même si la vidéo ne démarre pas en 1,8 s (réseau lent) et au plus tard après
-6,5 s ; bouton « Passer l'intro », Échap, défilement, molette, toucher ou tabulation l'interrompent. Jamais d'intro :
+16 s ; bouton « Passer l'intro », Échap, défilement, molette, toucher ou tabulation l'interrompent. Jamais d'intro :
 mouvement réduit, économie de données, lien avec ancre (`index.html#centre`), robots, 2e visite de la session
-(clé `wisy-home-intro` en `sessionStorage`). Réglages : `INTRO_AT`, `INTRO_RATE`, `INTRO_START_TIMEOUT`, `INTRO_MAX`
+(clé `wisy-home-intro` en `sessionStorage`). Réglages : `INTRO_HOLD`, `INTRO_START_TIMEOUT`, `INTRO_MAX`
 en tête de `js/home.js`.
 
 **Remplacer la vidéo.** Déposer le nouvel original sous le même nom dans `assets/originaux/accueil/`, puis

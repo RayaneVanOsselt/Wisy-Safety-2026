@@ -1,0 +1,27 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "wisy-static-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8080"
+      ],
+      "port": 8080
+    },
+    {
+      "name": "wisy-merge-check",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8091",
+        "--directory",
+        "/private/tmp/claude-501/-Users-rayanevanosselt-Desktop-Wisy-Safety-2026/43e5b9ab-1974-42bc-aa98-5fd95fd4ecb0/scratchpad/wt"
+      ],
+      "port": 8091
+    }
+  ]
+}

@@ -41,7 +41,7 @@ test("byId + formationsByCategory", () => {
 
 test("HONNÊTETÉ : seul un prix CONFIRMÉ peut figurer sur une formation (registre central)", () => {
   /* Prix confirmés par Wisy Safety, en centimes. Toute autre formation reste sans prix. */
-  const CONFIRMED = { nacelle: { cents: 35000, label: "350 € HT" }, beps: { cents: 7000, label: "70 €" } };
+  const CONFIRMED = { nacelle: { cents: 35000, label: "350 € HT" }, beps: { cents: 7000, label: "70 €" }, "vca-base": { cents: 22500, label: "225 €" } };
   Knowledge.formations().forEach((f) => {
     assert.ok(!("prix" in f), "pas de champ « prix » sur " + f.id);
     if (CONFIRMED[f.id]) {

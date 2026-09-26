@@ -46,6 +46,7 @@ WisyFAQ.register("it", {
   "contact": "Contatta il team",
   "agenda": "Consulta il calendario",
   "nacelle": "Scopri il corso piattaforma elevatrice",
+  "vca": "Scopri il corso VCA base",
   "assistant": "Fai la domanda all'assistente"
  },
  "popular": [
@@ -278,7 +279,7 @@ WisyFAQ.register("it", {
   },
   "faq-inscription-dates": {
    "question": "Posso scegliere la data del mio corso?",
-   "answer": "Le date e gli orari delle sessioni non sono ancora pubblicati online: la pagina Calendario li ospiterà a breve. Nel frattempo, contattaci per conoscere le prossime disponibilità.",
+   "answer": "Le sessioni vengono pubblicate nel calendario e nella pagina di ciascun corso non appena sono confermate, ognuna con il proprio link di iscrizione. Se per il corso che ti interessa non è ancora indicata alcuna sessione, contattaci per conoscere le prossime disponibilità.",
    "keywords": [
     "date",
     "sessione",
@@ -346,7 +347,7 @@ WisyFAQ.register("it", {
   },
   "faq-tarifs-prix": {
    "question": "Quali sono le tariffe dei corsi?",
-   "answer": "Le tariffe variano in base al corso e al contesto (partecipante singolo o azienda). Una parte delle tariffe è indicata al momento dell'iscrizione online; alcuni corsi sono proposti su preventivo.\n\nPer una tariffa adatta alle tue esigenze, contattaci.",
+   "answer": "Le tariffe variano in base al corso e al contesto (partecipante singolo o azienda). La tariffa compare nella pagina del corso e nell'iscrizione online quando è confermata; alcuni corsi sono proposti su preventivo.\n\nPer una tariffa adatta alle tue esigenze, contattaci.",
    "keywords": [
     "tariffa",
     "tariffe",
@@ -370,7 +371,7 @@ WisyFAQ.register("it", {
   },
   "faq-tarifs-tva": {
    "question": "I prezzi indicati includono l'IVA?",
-   "answer": "Le tariffe indicate sono espresse IVA esclusa. L'aliquota IVA applicabile non è ancora visualizzata nel percorso di iscrizione online: per conoscere l'importo IVA inclusa, contattaci.",
+   "answer": "Dipende dal corso. La tariffa del corso piattaforma elevatrice è indicata IVA esclusa. Per le altre tariffe pubblicate, lo stato dell'IVA (esclusa o inclusa) non è precisato online: contattaci per conoscere l'importo applicabile IVA inclusa.\n\nL'aliquota IVA non è ancora visualizzata nel percorso di iscrizione online.",
    "keywords": [
     "iva",
     "iva esclusa",
@@ -541,7 +542,7 @@ WisyFAQ.register("it", {
   },
   "faq-attestations-recevoir": {
    "question": "Cosa riceverò dopo il corso?",
-   "answer": "Dipende dal corso seguito. Diversi nostri corsi portano a un riconoscimento ufficiale:\n- VCA base include un esame accreditato;\n- BEPS prepara al brevetto europeo di primo soccorso.\n\nPer sapere con precisione cosa ti viene consegnato al termine di un corso specifico, contattaci.",
+   "answer": "Dipende dal corso seguito:\n- VCA base include l'esame VCA: la certificazione VCA viene rilasciata dopo il superamento dell'esame;\n- BEPS prepara al brevetto europeo di primo soccorso.\n\nPer sapere con precisione cosa ti viene consegnato al termine di un corso specifico, contattaci.",
    "keywords": [
     "attestato",
     "certificato",
@@ -567,18 +568,17 @@ WisyFAQ.register("it", {
   },
   "faq-attestations-vca-examen": {
    "question": "Il corso VCA porta a un esame?",
-   "answer": "Sì: VCA base include un esame accreditato. Per le modalità dell'esame (svolgimento, lingua, condizioni), contattaci.",
+   "answer": "Sì: il corso VCA base include l'esame. Secondo i documenti ufficiali di BeSaCC-VCA, l'esame VCA base comprende 40 domande, dura 60 minuti e si supera a partire dal 64,5 % di risposte corrette; la certificazione VCA viene rilasciata dopo il superamento dell'esame.\n\nPer le modalità pratiche (lingua, condizioni), contattaci.",
    "keywords": [
     "esame",
     "vca",
-    "accreditato",
     "test",
-    "valutazione"
+    "valutazione",
+    "certificazione"
    ],
    "synonyms": [
     "sostenere l'esame",
     "esame vca",
-    "esame accreditato",
     "quiz",
     "superamento",
     "bocciatura",

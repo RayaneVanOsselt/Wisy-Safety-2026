@@ -31,7 +31,18 @@ const OUT_SITE = path.join(OUT_DIR, "site.generated.ts");
 function contentOf(f) {
   let c = f.description;
   if (f.objective) c += " Objectif : " + f.objective;
+  if (f.priceUnit === "participant") c += " Le tarif est indiqué par personne.";
+  if (f.price && f.price.vatIncluded !== true && f.price.vatIncluded !== false) c += " Le statut TVA (HT ou TTC) du tarif n'est PAS précisé : ne jamais écrire « HT », « TTC » ni « hors TVA ».";
+  if (f.exam && f.exam.included) c += " L'examen est inclus dans le tarif.";
+  if (f.official && f.official.exam) {
+    const x = f.official.exam;
+    c += " Examen officiel (source BeSaCC-VCA, vérifié le " + f.official.verifiedAt + ") : " + x.questions + " questions, " + x.minutes + " minutes, seuil de réussite " + String(x.passPercent).replace(".", ",") + " %.";
+  }
+  if (f.official && f.official.diplomaValidityYears) c += " Un diplôme de sécurité de base est considéré comme valable s'il date de moins de " + f.official.diplomaValidityYears + " ans à compter de la date de l'examen.";
+  if (f.certification) c += " " + f.certification + ".";
+  if (f.venue === "centre") c += " La formation se déroule au centre Wisy Safety d'Anderlecht.";
   if (f.unconfirmed && f.unconfirmed.length) c += " AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer.";
+  if (f.unconfirmedClaims && f.unconfirmedClaims.length) c += " NON CONFIRMÉ (ne jamais l'affirmer) : " + f.unconfirmedClaims.join(" ; ") + ".";
   return c;
 }
 
@@ -46,7 +57,7 @@ function formationEntry(f) {
   e.keywords = f.keywords;
   return e;
 }
-const pageEntry = (p) => ({ id: "page-" + p.id, type: "page", title: p.title, url: p.url, content: p.content, keywords: p.keywords });
+const pageEntry = (p) => ({ id: "page-" + p.id, type: p.kind === "article" ? "article" : "page", title: p.title, url: p.url, content: p.content, keywords: p.keywords });
 
 function generateSite() {
   const C = FAQ.CONTACT;
@@ -61,7 +72,7 @@ function generateSite() {
     "",
     "export interface SiteEntry {",
     "  id: string;",
-    '  type: "formation" | "page";',
+    '  type: "formation" | "page" | "article";',
     "  title: string;",
     "  url: string;",
     "  category?: string;",

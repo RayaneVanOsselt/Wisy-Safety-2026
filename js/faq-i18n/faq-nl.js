@@ -46,6 +46,7 @@ WisyFAQ.register("nl", {
   "contact": "Contact opnemen met het team",
   "agenda": "De agenda raadplegen",
   "nacelle": "Ontdek de opleiding Hoogwerker",
+  "vca": "Ontdek de opleiding VCA Basis",
   "assistant": "De vraag aan de assistent stellen"
  },
  "popular": [
@@ -278,7 +279,7 @@ WisyFAQ.register("nl", {
   },
   "faq-inscription-dates": {
    "question": "Kan ik de datum van mijn opleiding kiezen?",
-   "answer": "De data en uren van de sessies zijn nog niet online gepubliceerd: de pagina Agenda zal ze binnenkort bevatten. Neem in tussentijd contact met ons op om de eerstvolgende beschikbaarheden te kennen.",
+   "answer": "De sessies worden in de agenda en op de pagina van elke opleiding gepubliceerd zodra ze bevestigd zijn, elk met een eigen inschrijvingslink. Staat er nog geen sessie vermeld voor de opleiding die u interesseert, neem dan contact met ons op om de eerstvolgende beschikbaarheden te kennen.",
    "keywords": [
     "data",
     "sessie",
@@ -347,7 +348,7 @@ WisyFAQ.register("nl", {
   },
   "faq-tarifs-prix": {
    "question": "Wat zijn de tarieven van de opleidingen?",
-   "answer": "De tarieven verschillen naargelang de opleiding en de context (individuele deelnemer of bedrijf). Een deel van de tarieven wordt getoond bij de online inschrijving; sommige opleidingen worden op offerte aangeboden.\n\nNeem contact met ons op voor een tarief dat bij uw behoefte past.",
+   "answer": "De tarieven verschillen naargelang de opleiding en de context (individuele deelnemer of bedrijf). Het tarief staat op de pagina van de opleiding en in de online inschrijving zodra het bevestigd is; sommige opleidingen worden op offerte aangeboden.\n\nNeem contact met ons op voor een tarief dat bij uw behoefte past.",
    "keywords": [
     "tarief",
     "tarieven",
@@ -371,7 +372,7 @@ WisyFAQ.register("nl", {
   },
   "faq-tarifs-tva": {
    "question": "Zijn de getoonde prijzen inclusief btw?",
-   "answer": "De vermelde tarieven zijn uitgedrukt exclusief btw. Het toepasselijke btw-tarief wordt nog niet getoond in het online inschrijvingstraject: neem contact met ons op om het bedrag inclusief btw te kennen.",
+   "answer": "Dat hangt af van de opleiding. Het tarief van de opleiding Hoogwerker wordt exclusief btw vermeld. Voor de andere gepubliceerde tarieven is de btw-status (excl. of incl. btw) online niet gepreciseerd: neem contact met ons op om het toepasselijke bedrag inclusief btw te kennen.\n\nHet btw-tarief wordt nog niet getoond in het online inschrijvingstraject.",
    "keywords": [
     "btw",
     "excl. btw",
@@ -541,7 +542,7 @@ WisyFAQ.register("nl", {
   },
   "faq-attestations-recevoir": {
    "question": "Wat ontvang ik na mijn opleiding?",
-   "answer": "Dat hangt af van de gevolgde opleiding. Verschillende van onze opleidingen leiden tot een officiële erkenning:\n- VCA Basis omvat een erkend examen;\n- BEPS bereidt voor op het Europees brevet eerste hulp.\n\nNeem contact met ons op om precies te weten wat u na een bepaalde opleiding ontvangt.",
+   "answer": "Dat hangt af van de gevolgde opleiding:\n- VCA Basis omvat het VCA-examen: het VCA-certificaat wordt uitgereikt na het slagen voor het examen;\n- BEPS bereidt voor op het Europees brevet eerste hulp.\n\nNeem contact met ons op om precies te weten wat u na een bepaalde opleiding ontvangt.",
    "keywords": [
     "attest",
     "certificaat",
@@ -567,18 +568,17 @@ WisyFAQ.register("nl", {
   },
   "faq-attestations-vca-examen": {
    "question": "Leidt de VCA-opleiding tot een examen?",
-   "answer": "Ja: VCA Basis omvat een erkend examen. Neem contact met ons op voor de modaliteiten van het examen (verloop, taal, voorwaarden).",
+   "answer": "Ja: de opleiding VCA Basis omvat het examen. Volgens de officiële documenten van BeSaCC-VCA telt het examen VCA Basis 40 vragen, duurt het 60 minuten en slaagt u vanaf 64,5 % juiste antwoorden; het VCA-certificaat wordt uitgereikt na het slagen voor het examen.\n\nNeem contact met ons op voor de praktische modaliteiten (taal, voorwaarden).",
    "keywords": [
     "examen",
     "vca",
-    "erkend",
     "test",
-    "evaluatie"
+    "evaluatie",
+    "certificering"
    ],
    "synonyms": [
     "het examen afleggen",
     "vca-examen",
-    "erkend examen",
     "meerkeuzevragen",
     "slagen",
     "niet slagen",

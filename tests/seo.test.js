@@ -78,7 +78,8 @@ test("Open Graph + Twitter complets sur chaque page publique ; l'image de partag
     assert.equal(metaContent(h, "property", "og:title"), title, f + " : og:title = <title>");
     assert.equal(metaContent(h, "property", "og:description"), description, f + " : og:description = meta description");
     assert.equal(metaContent(h, "property", "og:url"), Site.absoluteUrl(f), f + " : og:url = canonical");
-    assert.equal(metaContent(h, "property", "og:type"), "website");
+    const isArticle = SEO.DOCS.find((d) => d.file === f).ogType === "article";
+    assert.equal(metaContent(h, "property", "og:type"), isArticle ? "article" : "website");
     assert.equal(metaContent(h, "property", "og:site_name"), "Wisy Safety");
     assert.equal(metaContent(h, "property", "og:locale"), "fr_BE");
     assert.equal(metaContent(h, "name", "twitter:card"), "summary_large_image");
@@ -107,7 +108,7 @@ test("plus de hreflang relatifs ni de balises SEO en double (le bloc généré e
 
 /* ------------------------------------------------------------------ données structurées */
 test("JSON-LD : valide, types autorisés, une Organisation dont les faits = coordonnées du site", () => {
-  const ALLOWED = new Set(["EducationalOrganization", "LocalBusiness", "WebSite", "BreadcrumbList", "ListItem", "ItemList", "Course", "ContactPage", "PostalAddress", "GeoCoordinates", "OpeningHoursSpecification", "Offer", "PriceSpecification"]);
+  const ALLOWED = new Set(["EducationalOrganization", "LocalBusiness", "WebSite", "BreadcrumbList", "ListItem", "ItemList", "Course", "Article", "ContactPage", "PostalAddress", "GeoCoordinates", "OpeningHoursSpecification", "Offer", "PriceSpecification"]);
   PUBLIC.forEach((f) => {
     const blocks = ldBlocks(read(f));
     assert.equal(blocks.length, 1, f + " : un seul bloc JSON-LD statique (le FAQPage de faq.html est injecté à l'exécution)");
@@ -158,6 +159,39 @@ test("données structurées = contenu VISIBLE : horaires, position, fil d'Ariane
     assert.ok(text.includes(li.item.name), "titre affiché : " + li.item.name);
     assert.ok(text.includes(li.item.description), "description affichée : " + li.item.name);
   });
+});
+
+test("VCA Base : la fiche Course reprend le registre (prix, durée) ; langues NON confirmées → aucune `inLanguage`", () => {
+  const V = Trainings.vcaBase, html = read(V.url), course = ldBlocks(html)[0]["@graph"].find((n) => n["@type"] === "Course");
+  assert.equal(course.name, V.fullTitle); assert.equal(course.timeRequired, "P1D");
+  assert.equal(course.offers.price, String(V.price.amountCents / 100)); assert.equal(course.offers.priceCurrency, "EUR");
+  assert.ok(!("valueAddedTaxIncluded" in course.offers.priceSpecification), "statut TVA non précisé : jamais inventé");
+  assert.ok(!("inLanguage" in course), "langues non confirmées : aucune langue déclarée");
+  assert.ok(!("hasCourseInstance" in course), "aucune session inventée dans les données structurées");
+  assert.match(strip(html), /225\s*€/, "le prix du JSON-LD est affiché sur la page");
+  assert.equal(course.description, SEO.metaOf(html).description, "description = meta description");
+});
+
+test("articles : og:type article, dates du registre AFFICHÉES, auteur = l'organisation, image de partage propre", () => {
+  const arts = SEO.DOCS.filter((d) => d.ogType === "article");
+  assert.equal(arts.length, 2);
+  arts.forEach((d) => {
+    const html = read(d.file), h = head(html), meta = SEO.metaOf(html);
+    const page = Site.pages().find((p) => p.url === d.file), art = ldBlocks(html)[0]["@graph"].find((n) => n["@type"] === "Article");
+    assert.equal(page.kind, "article");
+    assert.equal(art.headline, meta.h1, d.file + " : headline = H1 affiché");
+    assert.equal(art.description, meta.description);
+    assert.equal(art.datePublished, page.published); assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(art.datePublished));
+    assert.equal(metaContent(h, "property", "article:published_time"), page.published);
+    assert.deepEqual(art.author, { "@id": SEO.ORG_ID }); assert.deepEqual(art.publisher, { "@id": SEO.ORG_ID });
+    assert.equal(art.image, metaContent(h, "property", "og:image"));
+    assert.equal(art.inLanguage, "fr");
+    /* la date de publication est celle AFFICHÉE (« 26 septembre 2026 ») */
+    const [y, m, dd] = page.published.split("-"), mois = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+    assert.ok(strip(html).includes(+dd + " " + mois[+m - 1] + " " + y), d.file + " : date de publication non affichée");
+    assert.doesNotMatch(JSON.stringify(art), /"Person"|aggregateRating|"Review"/, "aucun auteur ni avis inventé");
+  });
+  assert.notEqual(arts[0].image.file, arts[1].image.file, "une image de partage par article");
 });
 
 test("les pages françaises-seulement n'affirment rien qu'elles n'affichent pas : aucune Review/AggregateRating/FAQPage statique/Event", () => {

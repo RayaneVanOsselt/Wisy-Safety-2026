@@ -14,7 +14,7 @@ const vm = require("node:vm");
 
 const ROOT = path.join(__dirname, "..");
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "404"];
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "article-vca-cout-financement", "article-vca-erreurs-examen", "404"];
 
 const NAMED = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", mdash: "—", ndash: "–", hellip: "…", rsquo: "’", lsquo: "‘", laquo: "«", raquo: "»", eacute: "é", egrave: "è", agrave: "à", ccedil: "ç", euro: "€", times: "×", middot: "·", bull: "•", rarr: "→", check: "✓" };
 const decode = (s) => String(s).replace(/&(?:#(\d+)|#x([0-9a-f]+)|([a-z]+));/gi, (m, d, x, n) => d ? String.fromCodePoint(+d) : x ? String.fromCodePoint(parseInt(x, 16)) : (NAMED[n] !== undefined ? NAMED[n] : m));

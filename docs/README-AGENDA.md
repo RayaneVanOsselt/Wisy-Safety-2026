@@ -1,11 +1,13 @@
 # Page Agenda — `agenda.html`
 
-Nouvelle page « Agenda des formations » (site statique, sans build). Aujourd'hui elle **explique** l'agenda
-et présente un état « à venir » soigné ; demain elle affichera le **calendrier Outlook** de Wisy Safety, sans
-reconstruire la section : il suffira de renseigner **une URL**.
+Page « Agenda des formations » (site statique, sans build). Elle affiche la **liste des sessions publiées**
+(lues dans `js/sessions.js`, voir [README-SESSIONS.md](README-SESSIONS.md)) et, en dessous, le composant qui
+accueillera le **calendrier Outlook** de Wisy Safety : il suffira de renseigner **une URL** (voir plus bas).
 
-> ⚠ Aucune date, aucune disponibilité, aucune formation fictive n'apparaît sur la page — c'est une règle
-> (testée dans `tests/agenda.test.js`). Le contenu vient de l'ancienne page, restructuré et vérifié.
+> ⚠ Aucune date, aucune disponibilité, aucune formation fictive n'est écrite dans le HTML — c'est une règle
+> (testée dans `tests/agenda.test.js` et `tests/sessions.test.js`). Les sessions viennent de `js/sessions-data.js`
+> (vide aujourd'hui : la page dit alors « Aucune session n'est publiée pour le moment », avec les boutons Contact et
+> Formations) ou de la table Supabase `training_sessions`.
 
 ## Fichiers
 
@@ -14,7 +16,8 @@ reconstruire la section : il suffira de renseigner **une URL**.
 | `agenda.html` | Page complète : chrome du site (en-tête, menu mobile, pied de page, scripts communs) + contenu |
 | `css/agenda.css` | Styles propres à la page (`.ag-*`) et au composant calendrier (`.agc*`) |
 | `js/agenda-calendar.js` | Composant **AgendaCalendarSection** (URL Outlook future, iframe isolé, états) |
-| `js/agenda.js` | Colle de page : `--ag-hh` (hauteur d'en-tête), sauts d'ancre accessibles, bouton « Assistant » |
+| `js/agenda.js` | Colle de page : `--ag-hh` (hauteur d'en-tête), sauts d'ancre accessibles, bouton « Assistant », **liste des sessions publiées** (filtre par formation, inscription à une session, état vide honnête) |
+| `js/sessions.js` · `js/sessions-data.js` | Source unique des dates (chargées par la page) |
 | `tests/agenda.test.js` | 24 tests : structure, honnêteté du contenu, charte, mouvement, accessibilité, composant, intégrations |
 
 Réutilisé tel quel : jetons de couleurs/typo/rayons/ombres, `.btn` (`--cta`, `--outline`, `--light`), `.container`,

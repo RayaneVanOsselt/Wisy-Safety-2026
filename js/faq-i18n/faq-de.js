@@ -46,6 +46,7 @@ WisyFAQ.register("de", {
   "contact": "Team kontaktieren",
   "agenda": "Termine ansehen",
   "nacelle": "Schulung Hubarbeitsbühnen entdecken",
+  "vca": "Schulung VCA Grundlagen entdecken",
   "assistant": "Frage an den Assistenten stellen"
  },
  "popular": [
@@ -278,7 +279,7 @@ WisyFAQ.register("de", {
   },
   "faq-inscription-dates": {
    "question": "Kann ich das Datum meiner Schulung wählen?",
-   "answer": "Die Termine und Uhrzeiten der Sitzungen sind noch nicht online veröffentlicht: Die Seite „Termine“ wird sie in Kürze enthalten. Kontaktieren Sie uns in der Zwischenzeit, um die nächsten Verfügbarkeiten zu erfahren.",
+   "answer": "Die Sitzungen werden im Terminplan und auf der Seite jeder Schulung veröffentlicht, sobald sie bestätigt sind, jeweils mit eigenem Anmeldelink. Ist für die gewünschte Schulung noch keine Sitzung aufgeführt, kontaktieren Sie uns, um die nächsten Verfügbarkeiten zu erfahren.",
    "keywords": [
     "termine",
     "sitzung",
@@ -347,7 +348,7 @@ WisyFAQ.register("de", {
   },
   "faq-tarifs-prix": {
    "question": "Wie hoch sind die Preise der Schulungen?",
-   "answer": "Die Preise variieren je nach Schulung und Kontext (Einzelteilnehmer oder Unternehmen). Ein Teil der Preise wird bei der Online-Anmeldung angezeigt; einige Schulungen werden auf Anfrage angeboten.\n\nFür einen Preis, der zu Ihrem Bedarf passt, kontaktieren Sie uns.",
+   "answer": "Die Preise variieren je nach Schulung und Kontext (Einzelteilnehmer oder Unternehmen). Der Preis steht auf der Seite der Schulung und in der Online-Anmeldung, sobald er bestätigt ist; einige Schulungen werden auf Anfrage angeboten.\n\nFür einen Preis, der zu Ihrem Bedarf passt, kontaktieren Sie uns.",
    "keywords": [
     "preis",
     "preise",
@@ -371,7 +372,7 @@ WisyFAQ.register("de", {
   },
   "faq-tarifs-tva": {
    "question": "Enthalten die angezeigten Preise die MwSt.?",
-   "answer": "Die angegebenen Preise verstehen sich ohne MwSt. Der geltende MwSt.-Satz wird im Online-Anmeldeprozess noch nicht angezeigt: Um den Betrag inklusive MwSt. zu erfahren, kontaktieren Sie uns.",
+   "answer": "Das hängt von der Schulung ab. Der Preis der Schulung Hubarbeitsbühnen wird ohne MwSt. angegeben. Bei den übrigen veröffentlichten Preisen ist online nicht angegeben, ob sie mit oder ohne MwSt. gelten: Kontaktieren Sie uns, um den geltenden Betrag inklusive MwSt. zu erfahren.\n\nDer MwSt.-Satz wird im Online-Anmeldeprozess noch nicht angezeigt.",
    "keywords": [
     "mwst",
     "ohne mwst",
@@ -541,7 +542,7 @@ WisyFAQ.register("de", {
   },
   "faq-attestations-recevoir": {
    "question": "Was erhalte ich nach meiner Schulung?",
-   "answer": "Das hängt von der besuchten Schulung ab. Mehrere unserer Schulungen führen zu einer offiziellen Anerkennung:\n- VCA Grundlagen umfasst eine zugelassene Prüfung;\n- BEPS bereitet auf das europäische Erste-Hilfe-Zertifikat vor.\n\nUm genau zu erfahren, was Ihnen am Ende einer bestimmten Schulung ausgehändigt wird, kontaktieren Sie uns.",
+   "answer": "Das hängt von der besuchten Schulung ab:\n- VCA Grundlagen umfasst die VCA-Prüfung: Das VCA-Zertifikat wird nach bestandener Prüfung ausgestellt;\n- BEPS bereitet auf das europäische Erste-Hilfe-Zertifikat vor.\n\nUm genau zu erfahren, was Ihnen am Ende einer bestimmten Schulung ausgehändigt wird, kontaktieren Sie uns.",
    "keywords": [
     "bescheinigung",
     "zertifikat",
@@ -567,18 +568,17 @@ WisyFAQ.register("de", {
   },
   "faq-attestations-vca-examen": {
    "question": "Führt die VCA-Schulung zu einer Prüfung?",
-   "answer": "Ja: VCA Grundlagen umfasst eine zugelassene Prüfung. Zu den Modalitäten der Prüfung (Ablauf, Sprache, Bedingungen) kontaktieren Sie uns.",
+   "answer": "Ja: Die Schulung VCA Grundlagen umfasst die Prüfung. Laut den offiziellen Dokumenten von BeSaCC-VCA umfasst die Prüfung VCA Grundlagen 40 Fragen, dauert 60 Minuten und ist ab 64,5 % richtigen Antworten bestanden; das VCA-Zertifikat wird nach bestandener Prüfung ausgestellt.\n\nZu den praktischen Modalitäten (Sprache, Bedingungen) kontaktieren Sie uns.",
    "keywords": [
     "prüfung",
     "vca",
-    "zugelassen",
     "test",
-    "bewertung"
+    "bewertung",
+    "zertifizierung"
    ],
    "synonyms": [
     "die prüfung ablegen",
     "vca-prüfung",
-    "zugelassene prüfung",
     "multiple choice",
     "bestehen",
     "durchfallen",

@@ -80,17 +80,19 @@
   /* Champs de fiche utiles à l'assistant (les champs d'affichage propres à la recherche — miniature,
      faits clés, mots-clés bruts — restent dans le registre). */
   var FORMATION_FIELDS = ["id", "title", "fullTitle", "titleKey", "category", "url", "signupUrl", "duration", "level",
-    "description", "descKey", "objective", "price", "priceLabel", "format", "languages", "audience", "subtypes",
-    "unconfirmed", "features", "keywords"];
+    "description", "descKey", "objective", "price", "priceUnit", "priceLabel", "format", "venue", "languages", "audience", "subtypes",
+    "exam", "certification", "official", "unconfirmed", "unconfirmedClaims", "features", "keywords"];
   var FORMATIONS = (Site ? Site.formations() : []).map(function (f) {
     var e = { type: "formation" };
     FORMATION_FIELDS.forEach(function (k) { if (f[k] !== undefined) e[k] = f[k]; });
     return e;
   });
 
-  /* Pages principales : id « page-<id> » (historique de l'assistant), textes du registre. */
+  /* Pages principales : id « page-<id> » (historique de l'assistant), textes du registre. Les ARTICLES
+     (`kind: "article"`) forment un type à part : ils ne « volent » pas une question générale (« comment… »)
+     à cause d'un mot du titre — le moteur ne les propose que sur une correspondance forte (responder.js). */
   var PAGES = (Site ? Site.pages() : []).map(function (p) {
-    return { id: "page-" + p.id, type: "page", title: p.title, url: p.url, titleKey: p.titleKey, descKey: p.descKey,
+    return { id: "page-" + p.id, type: p.kind === "article" ? "article" : "page", title: p.title, url: p.url, titleKey: p.titleKey, descKey: p.descKey,
       content: p.content, keywords: p.keywords };
   });
 

@@ -542,18 +542,25 @@
     });
   }
 
+  /* Sessions PUBLIÉES (js/sessions.js — source unique des dates) : le moteur les cite telles quelles, jamais une
+     date écrite dans l'assistant. WisySessions.load() ne rejette jamais ; sans le module, aucune session. */
+  function loadSessions() {
+    var S = window.WisySessions;
+    if (!S || !S.load) return Promise.resolve([]);
+    return S.load().then(function () { return S.upcoming(S.peek()); }, function () { return []; });
+  }
+
   /* Réponse : distante (si configurée) sinon locale, avec repli. Hors-ligne, on ne tente pas le réseau. */
   function getResponse(message) {
     var url = apiUrl();
-    var localResp = function () { return Responder.respond(message, { context: App.context }); };
+    var localResp = function (sessions) { return Responder.respond(message, { context: App.context, sessions: sessions || [] }); };
     var minDelay = new Promise(function (res) { setTimeout(res, Launcher.reduced() ? 120 : 420); });
+    var localWith = function (extra) {
+      return Promise.all([minDelay, loadSessions()]).then(function (r) { return Object.assign({ resp: localResp(r[1]) }, extra); });
+    };
 
-    if (!url) {
-      return minDelay.then(function () { return { resp: localResp(), degraded: false }; });
-    }
-    if (navigator.onLine === false) {
-      return minDelay.then(function () { return { resp: localResp(), degraded: true, offline: true }; });
-    }
+    if (!url) return localWith({ degraded: false });
+    if (navigator.onLine === false) return localWith({ degraded: true, offline: true });
 
     var controller = new AbortController();
     var timer = setTimeout(function () { controller.abort(); }, REQUEST_TIMEOUT);
@@ -573,7 +580,7 @@
     })["catch"](function () {
       clearTimeout(timer);
       // Repli automatique sur le cœur local (résilience)
-      return { resp: localResp(), degraded: true, offline: navigator.onLine === false };
+      return loadSessions().then(function (ss) { return { resp: localResp(ss), degraded: true, offline: navigator.onLine === false }; });
     });
   }
 

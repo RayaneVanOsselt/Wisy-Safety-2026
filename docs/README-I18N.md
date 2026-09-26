@@ -27,6 +27,7 @@ complété, pas remplacé.
 | `js/i18n-data-search.js` | barre de recherche et fiches des pages |
 | `js/i18n-data-assistant.js` | interface de l'Assistant Wisy (les *réponses* restent en français) |
 | `js/i18n-data-<page>.js` | `home`, `formations`, `contact`, `avis`, `inscription`, `faq`, `agenda`, `nacelles`, `beps`, `peb`, `404` |
+| `js/i18n-data-vca.js` · `i18n-data-articles.js` · `i18n-data-art-cost.js` · `i18n-data-art-exam.js` | page **VCA Base** (232 clés `vca.*`), éléments communs aux deux articles (`art.*`), article « coût et financement » (`a1.*`), article « erreurs à l'examen » (`a2.*`) |
 | `js/faq-i18n/faq-<langue>.js` | questions/réponses du Centre d'aide (voir plus bas) |
 | `js/registration-data.js` | noms et descriptions des formations du parcours d'inscription (10 langues) |
 
@@ -98,3 +99,17 @@ logiques (`margin-inline-start`, `text-align: start`) pour tout nouveau CSS.
 - **E-mails envoyés à l'équipe** (contact, avis, vérificateur PEB) : rédigés en français ; la langue du visiteur y figure.
 - Contenu affiché sans JavaScript (`<noscript>`) ; l'espace `admin/` ; les documents de `docs/`.
 - Sur les pages avec JSON-LD `FAQPage` injecté (FAQ, BEPS, PEB), le JSON-LD suit la langue affichée.
+
+
+## Pages VCA Base et articles (2026-09-26)
+
+- Les trois pages sont dans `PAGES` de `scripts/check-i18n.js` : chaque clé est contrôlée dans les 10 langues, avec les mêmes
+  **chiffres** (40 questions, 60 minutes, 64,5 %, 10 ans, 8 heures : en arabe aussi, en chiffres et non en toutes lettres),
+  les mêmes balises et les mêmes variables.
+- Les textes réglementaires suivent le français **mot à mot** (mêmes prudences). Ce ne sont **pas** des traductions
+  juridiques : en cas de doute, le français et les sources officielles font foi. À faire relire par un locuteur natif pour
+  les usages engageants (arabe, bulgare, roumain, slovène notamment).
+- Le mot « session » : anglais *session*, néerlandais *sessie*, allemand *Termin* (parcours d'inscription) / *Sitzung* (Centre
+  d'aide), slovène *izvedba* — cohérent avec le vocabulaire déjà validé du site.
+- Limite volontaire inchangée : `<meta name="description">`, Open Graph et JSON-LD restent en français (adresse unique par page ;
+  les robots reçoivent le français). Les réponses de l'assistant restent en français.

@@ -20,6 +20,7 @@
    chaque donnée structurée reprend un fait déjà affiché sur le site (tests/seo.test.js le vérifie).
 
    Ajouter une page publique : l'ajouter à js/site-content.js (PAGES) ET à DOCS ci-dessous, puis relancer.
+   (Article : `kind: "article"` + `published` / `modified` dans PAGES ; `ogType: "article"` + `image` dans DOCS.)
    ========================================================================= */
 const fs = require("node:fs");
 const path = require("node:path");
@@ -46,12 +47,19 @@ const N = Trainings.nacelles;
 const OG_NACELLES = { file: N.images.og, width: 1200, height: 630, alt: N.imageAlt };
 const B = Trainings.beps;
 const OG_BEPS = { file: B.images.og, width: 1200, height: 630, alt: "Wisy Safety — La sécurité comme une référence. Formations sécurité à Anderlecht, Bruxelles" };
+const V = Trainings.vcaBase;
+const OG_VCA = { file: V.images.og, width: 1200, height: 630, alt: V.imageAlt };
+/* Articles « Conseils & ressources VCA » : image de partage propre à chaque article (photo de l'article + logo). */
+const OG_ART_COST = { file: "assets/images/partage/article-cout-financement-1200x630.jpg", width: 1200, height: 630, alt: "Équipe en gilets de sécurité réunie autour d'une table de travail, avec des documents et un panneau d'évaluation des risques" };
+const OG_ART_EXAM = { file: "assets/images/partage/article-erreurs-examen-1200x630.jpg", width: 1200, height: 630, alt: "Homme casqué en gilet haute visibilité qui prend des notes sur un chantier" };
 
 /* Pages indexables. `graph` = nœuds JSON-LD ; `breadcrumb` = fil d'Ariane AFFICHÉ sur la page (les
    données structurées ne décrivent que ce que le visiteur voit). */
 const DOCS = [
   { file: "index.html", graph: ["organization", "website"] },
   { file: "formations.html", graph: ["organization", "courseList"] },
+  { file: "formation-vca-base.html", graph: ["organization", "breadcrumb", "course"], image: OG_VCA,
+    breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["VCA Base", "formation-vca-base.html"]] },
   { file: "formation-nacelles-elevatrices.html", graph: ["organization", "breadcrumb", "course"], image: OG_NACELLES,
     breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["Nacelles élévatrices", "formation-nacelles-elevatrices.html"]] },
   { file: "formation-beps-premiers-secours.html", graph: ["organization", "breadcrumb", "course"], image: OG_BEPS,
@@ -62,7 +70,12 @@ const DOCS = [
   { file: "faq.html", graph: ["organization"] },   /* FAQPage : injecté par js/faq-page.js depuis les questions affichées */
   { file: "agenda.html", graph: ["organization", "breadcrumb"], breadcrumb: [["Accueil", "index.html"], ["Agenda", "agenda.html"]] },
   { file: "peb-wallonie-bruxelles.html", graph: ["organization", "breadcrumb", "pebCourses"],
-    breadcrumb: [["Accueil", "index.html"], ["Certificateur PEB", "peb-wallonie-bruxelles.html"]] }
+    breadcrumb: [["Accueil", "index.html"], ["Certificateur PEB", "peb-wallonie-bruxelles.html"]] },
+  /* Articles : og:type « article », dates lues dans le registre (js/site-content.js → `published` / `modified`). */
+  { file: "article-vca-cout-financement.html", graph: ["organization", "breadcrumb", "article"], image: OG_ART_COST, ogType: "article",
+    breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["VCA Base", "formation-vca-base.html"], ["Coût et financement d'une formation VCA", "article-vca-cout-financement.html"]] },
+  { file: "article-vca-erreurs-examen.html", graph: ["organization", "breadcrumb", "article"], image: OG_ART_EXAM, ogType: "article",
+    breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["VCA Base", "formation-vca-base.html"], ["Erreurs à l'examen VCA", "article-vca-erreurs-examen.html"]] }
 ];
 /* Pages techniques : jamais indexées, jamais dans le sitemap. */
 const TECHNICAL = ["404.html", "admin/avis.html", "docs/maquettes/wisy-safety-header.html", "docs/maquettes/wisy-safety-footer.html"];
@@ -89,7 +102,8 @@ function metaOf(html) {
   const title = decode(((html.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [])[1] || "").trim());
   const tag = (html.match(/<meta\s[^>]*name="description"[^>]*>/i) || [])[0] || "";
   const description = decode((tag.match(/\scontent="([^"]*)"/i) || [])[1] || "");
-  return { title, description };
+  const h1 = decode(((html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i) || [])[1] || "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim());
+  return { title, description, h1 };
 }
 
 /* ------------------------------------------------------------------ JSON-LD */
@@ -123,16 +137,36 @@ const NODES = {
     const t = Trainings.all().filter((x) => x.url === doc.file)[0];
     const priceSpec = { "@type": "PriceSpecification", price: String(t.price.amountCents / 100), priceCurrency: t.price.currency };
     if (t.price.vatIncluded === true || t.price.vatIncluded === false) priceSpec.valueAddedTaxIncluded = t.price.vatIncluded;
-    return {
+    const node = {
       "@type": "Course",
       name: t.fullTitle,
       description: meta.description,
       url: Site.absoluteUrl(doc.file),
-      image: ORIGIN + "/" + t.images.og,
-      inLanguage: t.languages.slice(),
-      timeRequired: t.durationDays != null ? "P" + t.durationDays + "D" : "PT" + t.durationHours + "H",
-      provider: providerOf(),
-      offers: { "@type": "Offer", url: Site.absoluteUrl(doc.file), price: String(t.price.amountCents / 100), priceCurrency: t.price.currency, priceSpecification: priceSpec }
+      image: ORIGIN + "/" + t.images.og
+    };
+    /* Langues : uniquement si confirmées (VCA Base : `languages: null` → aucune `inLanguage`, jamais devinée). */
+    if (t.languages && t.languages.length) node.inLanguage = t.languages.slice();
+    node.timeRequired = t.durationDays != null ? "P" + t.durationDays + "D" : "PT" + t.durationHours + "H";
+    node.provider = providerOf();
+    node.offers = { "@type": "Offer", url: Site.absoluteUrl(doc.file), price: String(t.price.amountCents / 100), priceCurrency: t.price.currency, priceSpecification: priceSpec };
+    return node;
+  },
+  /* Article : titre = H1 affiché, dates = celles du registre ET affichées sur la page, auteur/éditeur =
+     l'organisation Wisy (aucune personne inventée). */
+  article: (doc, meta) => {
+    const p = Site.pages().filter((x) => x.url === doc.file)[0];
+    return {
+      "@type": "Article",
+      headline: meta.h1,
+      description: meta.description,
+      url: Site.absoluteUrl(doc.file),
+      mainEntityOfPage: Site.absoluteUrl(doc.file),
+      image: ORIGIN + "/" + doc.image.file,
+      inLanguage: "fr",
+      datePublished: p.published,
+      dateModified: p.modified || p.published,
+      author: { "@id": ORG_ID },
+      publisher: { "@id": ORG_ID }
     };
   },
   courseList: () => ({
@@ -168,6 +202,15 @@ function graphFor(doc, meta) {
 }
 
 /* ------------------------------------------------------------------ bloc <head> */
+/* Balises propres aux articles (Open Graph « article ») : dates du registre. */
+function articleMeta(doc) {
+  if (doc.ogType !== "article") return [];
+  const p = Site.pages().filter((x) => x.url === doc.file)[0];
+  return [
+    '<meta property="article:published_time" content="' + p.published + '">',
+    '<meta property="article:modified_time" content="' + (p.modified || p.published) + '">'
+  ];
+}
 function headBlock(doc, meta) {
   const url = Site.absoluteUrl(doc.file);
   const img = doc.image || OG_DEFAULT;
@@ -176,7 +219,7 @@ function headBlock(doc, meta) {
     HEAD_START,
     '<link rel="canonical" href="' + url + '">',
     '<meta name="theme-color" content="#F4FAF9">',
-    '<meta property="og:type" content="website">',
+    '<meta property="og:type" content="' + (doc.ogType || "website") + '">',
     '<meta property="og:site_name" content="' + esc(Site.SITE_NAME) + '">',
     '<meta property="og:locale" content="fr_BE">',
     '<meta property="og:title" content="' + esc(meta.title) + '">',
@@ -186,6 +229,7 @@ function headBlock(doc, meta) {
     '<meta property="og:image:width" content="' + img.width + '">',
     '<meta property="og:image:height" content="' + img.height + '">',
     '<meta property="og:image:alt" content="' + esc(img.alt) + '">',
+    ...articleMeta(doc),
     '<meta name="twitter:card" content="summary_large_image">',
     '<meta name="twitter:title" content="' + esc(meta.title) + '">',
     '<meta name="twitter:description" content="' + esc(meta.description) + '">',

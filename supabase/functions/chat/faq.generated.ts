@@ -16,7 +16,7 @@ export interface FaqItem {
   provisional?: boolean;
 }
 
-export const FAQ_VERIFIED_AT = "2026-09-20";
+export const FAQ_VERIFIED_AT = "2026-09-26";
 
 export const FAQ_ITEMS: FaqItem[] = [
   {
@@ -295,7 +295,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     "id": "faq-inscription-dates",
     "category": "inscription",
     "question": "Puis-je choisir la date de ma formation ?",
-    "answer": "Les dates et horaires des sessions ne sont pas encore publiés en ligne : la page Agenda les accueillera prochainement. En attendant, contactez-nous pour connaître les prochaines disponibilités.",
+    "answer": "Les sessions sont publiées dans l'agenda et sur la page de chaque formation dès qu'elles sont confirmées, chacune avec son lien d'inscription. Si aucune session n'y figure encore pour la formation qui vous intéresse, contactez-nous pour connaître les prochaines disponibilités.",
     "keywords": [
       "dates",
       "session",
@@ -390,7 +390,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     "id": "faq-tarifs-prix",
     "category": "tarifs",
     "question": "Quels sont les tarifs des formations ?",
-    "answer": "Les tarifs varient selon la formation et le contexte (participant individuel ou entreprise). Une partie des tarifs est indiquée au moment de l'inscription en ligne ; certaines formations sont proposées sur devis.\n\nPour un tarif adapté à votre besoin, contactez-nous.",
+    "answer": "Les tarifs varient selon la formation et le contexte (participant individuel ou entreprise). Le tarif figure sur la page de la formation et dans l'inscription en ligne lorsqu'il est confirmé ; certaines formations sont proposées sur devis.\n\nPour un tarif adapté à votre besoin, contactez-nous.",
     "keywords": [
       "tarif",
       "tarifs",
@@ -421,7 +421,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     "id": "faq-tarifs-tva",
     "category": "tarifs",
     "question": "Les prix affichés incluent-ils la TVA ?",
-    "answer": "Les tarifs indiqués sont exprimés hors TVA (HT). Le taux de TVA applicable n'est pas encore affiché dans le parcours d'inscription en ligne : pour connaître le montant TTC, contactez-nous.",
+    "answer": "Cela dépend de la formation. Le tarif de la formation Nacelles élévatrices est indiqué hors TVA (HT). Pour les autres tarifs publiés, le statut TVA (HT ou TTC) n'est pas précisé en ligne : contactez-nous pour connaître le montant TTC applicable.\n\nLe taux de TVA n'est pas encore affiché dans le parcours d'inscription en ligne.",
     "keywords": [
       "tva",
       "ht",
@@ -660,7 +660,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     "id": "faq-attestations-recevoir",
     "category": "attestations",
     "question": "Que vais-je recevoir après ma formation ?",
-    "answer": "Cela dépend de la formation suivie. Plusieurs de nos formations débouchent sur une reconnaissance officielle :\n- la VCA Base inclut un examen agréé ;\n- le BEPS prépare au brevet européen de premiers secours.\n\nPour savoir précisément ce qui vous est remis à l'issue d'une formation donnée, contactez-nous.",
+    "answer": "Cela dépend de la formation suivie :\n- la VCA Base inclut l'examen VCA : la certification VCA est délivrée après réussite de l'examen ;\n- le BEPS prépare au brevet européen de premiers secours.\n\nPour savoir précisément ce qui vous est remis à l'issue d'une formation donnée, contactez-nous.",
     "keywords": [
       "attestation",
       "certificat",
@@ -694,18 +694,17 @@ export const FAQ_ITEMS: FaqItem[] = [
     "id": "faq-attestations-vca-examen",
     "category": "attestations",
     "question": "La formation VCA débouche-t-elle sur un examen ?",
-    "answer": "Oui : la VCA Base inclut un examen agréé. Pour les modalités de l'examen (déroulé, langue, conditions), contactez-nous.",
+    "answer": "Oui : la formation VCA Base inclut l'examen. D'après les documents officiels de BeSaCC-VCA, l'examen VCA Base compte 40 questions, dure 60 minutes et se réussit à partir de 64,5 % de bonnes réponses ; la certification VCA est délivrée après réussite de l'examen.\n\nPour les modalités pratiques (langue, conditions), contactez-nous.",
     "keywords": [
       "examen",
       "vca",
-      "agréé",
       "test",
-      "évaluation"
+      "évaluation",
+      "certification"
     ],
     "synonyms": [
       "passer l'examen",
       "examen vca",
-      "examen agréé",
       "qcm",
       "réussite",
       "échec",
@@ -717,7 +716,7 @@ export const FAQ_ITEMS: FaqItem[] = [
       "faq-choisir-vca-difference",
       "faq-contact-contact"
     ],
-    "action": "contact"
+    "action": "vca"
   },
   {
     "id": "faq-attestations-nacelle",

@@ -46,6 +46,7 @@ WisyFAQ.register("en", {
   "contact": "Contact the team",
   "agenda": "View the schedule",
   "nacelle": "Discover the Aerial work platform course",
+  "vca": "Discover the VCA Basic course",
   "assistant": "Ask the assistant"
  },
  "popular": [
@@ -279,7 +280,7 @@ WisyFAQ.register("en", {
   },
   "faq-inscription-dates": {
    "question": "Can I choose the date of my course?",
-   "answer": "Session dates and times are not yet published online: the Schedule page will host them soon. In the meantime, contact us to find out the next availabilities.",
+   "answer": "Sessions are published in the Schedule and on each course page as soon as they are confirmed, each with its own registration link. If no session is listed yet for the course you are interested in, contact us to find out the next availabilities.",
    "keywords": [
     "dates",
     "session",
@@ -348,7 +349,7 @@ WisyFAQ.register("en", {
   },
   "faq-tarifs-prix": {
    "question": "How much do the courses cost?",
-   "answer": "Prices vary depending on the course and the context (individual participant or company). Some prices are shown at the time of online registration; some courses are offered on request.\n\nFor a price suited to your needs, contact us.",
+   "answer": "Prices vary depending on the course and the context (individual participant or company). The price is shown on the course page and in the online registration when it is confirmed; some courses are offered on request.\n\nFor a price suited to your needs, contact us.",
    "keywords": [
     "fee",
     "fees",
@@ -372,7 +373,7 @@ WisyFAQ.register("en", {
   },
   "faq-tarifs-tva": {
    "question": "Do the displayed prices include VAT?",
-   "answer": "The prices shown are exclusive of VAT (excl. VAT). The applicable VAT rate is not yet displayed in the online registration process: to know the amount including VAT, contact us.",
+   "answer": "It depends on the course. The price of the Aerial work platform course is shown excluding VAT (excl. VAT). For the other published prices, the VAT status (excl. or incl. VAT) is not specified online: contact us to find out the applicable amount including VAT.\n\nThe VAT rate is not yet displayed in the online registration process.",
    "keywords": [
     "vat",
     "excl. vat",
@@ -543,7 +544,7 @@ WisyFAQ.register("en", {
   },
   "faq-attestations-recevoir": {
    "question": "What will I receive after my course?",
-   "answer": "It depends on the course followed. Several of our courses lead to official recognition:\n- VCA Basic includes an approved exam;\n- BEPS prepares for the European first-aid certificate.\n\nTo know precisely what you are given at the end of a specific course, contact us.",
+   "answer": "It depends on the course followed:\n- VCA Basic includes the VCA exam: the VCA certification is issued after passing the exam;\n- BEPS prepares for the European first-aid certificate.\n\nTo know precisely what you are given at the end of a specific course, contact us.",
    "keywords": [
     "certificate",
     "attestation",
@@ -569,18 +570,17 @@ WisyFAQ.register("en", {
   },
   "faq-attestations-vca-examen": {
    "question": "Does the VCA course lead to an exam?",
-   "answer": "Yes: VCA Basic includes an approved exam. For the exam arrangements (format, language, conditions), contact us.",
+   "answer": "Yes: the VCA Basic course includes the exam. According to the official BeSaCC-VCA documents, the VCA Basic exam has 40 questions, lasts 60 minutes and is passed from 64.5% of correct answers; the VCA certification is issued after passing the exam.\n\nFor the practical arrangements (language, conditions), contact us.",
    "keywords": [
     "exam",
     "vca",
-    "approved",
     "test",
-    "assessment"
+    "assessment",
+    "certification"
    ],
    "synonyms": [
     "take the exam",
     "vca exam",
-    "approved exam",
     "multiple choice",
     "pass",
     "fail",

@@ -46,6 +46,7 @@ WisyFAQ.register("ro", {
   "contact": "Contactați echipa",
   "agenda": "Consultați programul",
   "nacelle": "Descoperiți formarea nacele elevatoare",
+  "vca": "Descoperiți formarea VCA de bază",
   "assistant": "Puneți întrebarea asistentului"
  },
  "popular": [
@@ -277,7 +278,7 @@ WisyFAQ.register("ro", {
   },
   "faq-inscription-dates": {
    "question": "Pot alege data formării mele?",
-   "answer": "Datele și orele sesiunilor nu sunt încă publicate online: pagina Program le va găzdui în curând. Între timp, contactați-ne pentru a afla următoarele disponibilități.",
+   "answer": "Sesiunile sunt publicate în program și pe pagina fiecărei formări imediat ce sunt confirmate, fiecare cu propriul link de înscriere. Dacă nu este încă afișată nicio sesiune pentru formarea care vă interesează, contactați-ne pentru a afla următoarele disponibilități.",
    "keywords": [
     "date",
     "sesiune",
@@ -346,7 +347,7 @@ WisyFAQ.register("ro", {
   },
   "faq-tarifs-prix": {
    "question": "Care sunt tarifele formărilor?",
-   "answer": "Tarifele variază în funcție de formare și de context (participant individual sau companie). O parte dintre tarife este indicată la înscrierea online; unele formări sunt propuse pe bază de ofertă.\n\nPentru un tarif adaptat nevoii dumneavoastră, contactați-ne.",
+   "answer": "Tarifele variază în funcție de formare și de context (participant individual sau companie). Tariful apare pe pagina formării și în înscrierea online atunci când este confirmat; unele formări sunt propuse pe bază de ofertă.\n\nPentru un tarif adaptat nevoii dumneavoastră, contactați-ne.",
    "keywords": [
     "tarif",
     "tarife",
@@ -370,7 +371,7 @@ WisyFAQ.register("ro", {
   },
   "faq-tarifs-tva": {
    "question": "Prețurile afișate includ TVA?",
-   "answer": "Tarifele indicate sunt exprimate fără TVA. Cota de TVA aplicabilă nu este încă afișată în parcursul de înscriere online: pentru a afla suma cu TVA inclus, contactați-ne.",
+   "answer": "Depinde de formare. Tariful formării nacele elevatoare este indicat fără TVA. Pentru celelalte tarife publicate, statutul TVA (cu sau fără TVA) nu este precizat online: contactați-ne pentru a afla suma aplicabilă cu TVA inclus.\n\nCota de TVA nu este încă afișată în parcursul de înscriere online.",
    "keywords": [
     "tva",
     "fără tva",
@@ -540,7 +541,7 @@ WisyFAQ.register("ro", {
   },
   "faq-attestations-recevoir": {
    "question": "Ce voi primi după formare?",
-   "answer": "Depinde de formarea urmată. Mai multe dintre formările noastre conduc la o recunoaștere oficială:\n- VCA de bază include un examen autorizat;\n- BEPS pregătește pentru brevetul european de prim ajutor.\n\nPentru a afla exact ce vi se remite la finalul unei formări anume, contactați-ne.",
+   "answer": "Depinde de formarea urmată:\n- VCA de bază include examenul VCA: certificarea VCA este eliberată după promovarea examenului;\n- BEPS pregătește pentru brevetul european de prim ajutor.\n\nPentru a afla exact ce vi se remite la finalul unei formări anume, contactați-ne.",
    "keywords": [
     "atestat",
     "certificat",
@@ -566,18 +567,17 @@ WisyFAQ.register("ro", {
   },
   "faq-attestations-vca-examen": {
    "question": "Formarea VCA se încheie cu un examen?",
-   "answer": "Da: VCA de bază include un examen autorizat. Pentru modalitățile examenului (desfășurare, limbă, condiții), contactați-ne.",
+   "answer": "Da: formarea VCA de bază include examenul. Conform documentelor oficiale BeSaCC-VCA, examenul VCA de bază are 40 de întrebări, durează 60 de minute și se promovează de la 64,5 % răspunsuri corecte; certificarea VCA este eliberată după promovarea examenului.\n\nPentru modalitățile practice (limbă, condiții), contactați-ne.",
    "keywords": [
     "examen",
     "vca",
-    "autorizat",
     "test",
-    "evaluare"
+    "evaluare",
+    "certificare"
    ],
    "synonyms": [
     "a da examenul",
     "examen vca",
-    "examen autorizat",
     "grilă",
     "reușită",
     "eșec",

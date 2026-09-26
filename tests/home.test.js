@@ -48,7 +48,7 @@ test("chaque carte / bloc cliquable est un lien complet vers une destination ré
     assert.doesNotMatch(inner, /<a\b|<button\b/, "élément interactif imbriqué dans un lien : " + href);
     if (/^#/.test(href)) assert.match(MAIN, new RegExp('id="' + href.slice(1) + '"'), "ancre locale introuvable : " + href);
   });
-  const cards = ["home-path", "home-tr ", "home-tr-row", "home-level", "home-article", "home-step", "home-float"];
+  const cards = ["home-path", "home-tr ", "home-tr-row", "home-pass", "home-exam", "home-vlink", "home-step", "home-float"];
   cards.forEach((c) => {
     const n = (MAIN.match(new RegExp('class="' + c.trim() + '[\\s"]', "g")) || []).length;
     const asLink = (MAIN.match(new RegExp('<a class="' + c.trim() + '[\\s"]', "g")) || []).length;
@@ -77,7 +77,14 @@ test("formations mises en avant = registre du site (route, titre traduit, durée
 
 test("VCA : formation VCA Base + ressources ; pas de section VCA Entreprise sur l'accueil (retirée), parcours entreprise → devis réel", () => {
   const vca = part(MAIN, '<section class="home-section home-vca"', "</section>");
-  assert.match(vca, /href="formation-vca-base\.html"/); assert.match(vca, /href="article-vca-cout-financement\.html"/); assert.match(vca, /href="article-vca-erreurs-examen\.html"/);
+  assert.match(vca, /<a class="home-pass[^"]*" href="formation-vca-base\.html"/); assert.match(vca, /<a class="home-exam[^"]*" href="formation-vca-base\.html#examen"/);
+  assert.match(vca, /href="article-vca-cout-financement\.html"/); assert.match(vca, /href="article-vca-erreurs-examen\.html"/); assert.match(vca, /href="formations\.html#vca-hierarchique"/);
+  /* examen officiel : les chiffres affichés = registre (faits OFFICIELS sourcés, js/trainings-data.js) */
+  const ex = Trainings.vcaBase.official.exam;
+  assert.match(vca, new RegExp('data-count="' + ex.questions + '"')); assert.match(vca, new RegExp('data-count="' + ex.minutes + '"'));
+  assert.equal(I18N.fr["home.exam_pass"].replace(/\u00a0/g, " "), String(ex.passPercent).replace(".", ",") + " %", "seuil affiché = registre");
+  assert.match(read("css/home.css"), new RegExp("stroke-dashoffset: " + (100 - ex.passPercent) + ";"), "jauge = seuil officiel");
+  assert.match(I18N.fr["home.exam_src"], /BeSaCC-VCA/, "source officielle citée");
   /* section « VCA Entreprise » retirée de l'accueil à la demande du propriétaire (2026-09-26) : plus de bloc ni d'ancre */
   assert.doesNotMatch(MAIN, /home-biz|id="entreprises"|href="#entreprises"|homeBizVideo/);
   assert.doesNotMatch(read("css/home.css") + read("js/home.js"), /home-biz|homeBizVideo/, "aucun style ni script résiduel");
@@ -94,7 +101,8 @@ test("aucune affirmation interdite ou inventée dans le contenu de l'accueil", (
   const nac = part(MAIN, 'href="formation-nacelles-elevatrices.html"', "</a>");
   assert.doesNotMatch(nac, /certif|agré|reconnu|obligatoire/i, "nacelles : jamais présentée comme certifiante (registre : unconfirmed)");
   /* chiffres : uniquement ceux déjà publiés par le site (accueil historique, contact, agenda) */
-  assert.deepEqual([...MAIN.matchAll(/data-count="(\d+)"/g)].map((m) => +m[1]).sort((a, b) => a - b), [10, 100, 250, 500]);
+  const ex = Trainings.vcaBase.official.exam;
+  assert.deepEqual([...MAIN.matchAll(/data-count="(\d+)"/g)].map((m) => +m[1]).sort((a, b) => a - b), [10, ex.questions, ex.minutes, 100, 250, 500].sort((a, b) => a - b));
   assert.doesNotMatch(TEXT, /\b(1[1-9]|[2-9]\d)\s*ans\b|\b\d{2,3}\s*%\s*de réussite/i, "aucune autre ancienneté ni taux");
   /* aucune date écrite en dur (les sessions ne viennent que de js/sessions-data.js) */
   assert.doesNotMatch(TEXT, /\b\d{1,2}\s+(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+20\d{2}\b/i);
@@ -108,7 +116,8 @@ test("intro du logo : décidée avant l'affichage, une fois par session, jamais 
   assert.match(head, /bot\\b\|crawl\|spider/, "pas d'intro pour les robots");
   assert.match(head, /catch\(e\)\{seen="1";\}/, "stockage indisponible → pas d'intro");
   const js = read("js/home.js");
-  assert.match(js, /INTRO_START_TIMEOUT = 1800, INTRO_MAX = 6500/, "garde-fous : vidéo qui ne démarre pas / durée maximale");
+  assert.match(js, /INTRO_START_TIMEOUT = 1800, INTRO_MAX = 16000/, "garde-fous : vidéo qui ne démarre pas / durée maximale");
+  assert.match(js, /INTRO_HOLD = 2600/, "tenue finale (logo complet + signature) après la vidéo entière : ≈ 11,5 s au total");
   ["click", "keydown", "wheel", "touchmove", "scroll", "focusin", "visibilitychange"].forEach((ev) => assert.ok(js.includes('"' + ev + '"'), "passer l'intro : " + ev));
   assert.match(js, /first\.width \/ last\.width/, "FLIP à échelle uniforme (même format 4:5, aucune déformation)");
   assert.match(HTML, /<button class="home-intro-skip" type="button" data-intro-skip><span data-i18n="home\.intro_skip">/, "bouton « Passer l'intro » traduit");

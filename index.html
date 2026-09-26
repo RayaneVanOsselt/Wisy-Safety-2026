@@ -381,6 +381,7 @@ if(!seen&&!location.hash&&!/bot\b|crawl|spider|slurp|mediapartners|facebookexter
           </script>
           <img class="home-hero__still" src="assets/videos/accueil/logo-animation-fin.webp" width="720" height="900" alt="" loading="lazy" decoding="async">
           <span class="home-hero__tag" data-i18n="home.hero_tag">La sécurité comme une référence</span>
+          <p class="home-intro-tagline" aria-hidden="true" data-i18n="home.hero_tag">La sécurité comme une référence</p>
           <button class="home-hero__toggle" type="button" data-video-toggle data-state="pause">
             <svg class="i-pause" aria-hidden="true"><use href="#i-pause"/></svg><svg class="i-play" aria-hidden="true"><use href="#i-play"/></svg><svg class="i-replay" aria-hidden="true"><use href="#i-replay"/></svg>
             <span class="home-sr" data-i18n="home.video_pause">Mettre l'animation en pause</span>
@@ -549,47 +550,84 @@ if(!seen&&!location.hash&&!/bot\b|crawl|spider|slurp|mediapartners|facebookexter
 
   <!-- ==================== VCA ==================== -->
   <section class="home-section home-vca" id="vca" aria-labelledby="home-vca-title">
-    <div class="home-wrap home-vca__grid">
-      <div class="home-vca__intro">
-        <p class="home-eyebrow home-reveal" data-i18n="home.vca_eyebrow">VCA</p>
-        <h2 class="home-h2 home-reveal" id="home-vca-title" data-i18n="home.vca_title">Préparez votre VCA avec méthode.</h2>
-        <p class="home-lead home-reveal" data-i18n="dd.vca_base_summary">Maîtrisez les règles fondamentales de sécurité au travail et préparez votre examen VCA Base, en présentiel à Anderlecht (Bruxelles), examen inclus.</p>
-        <ul class="home-chips home-reveal">
-          <li class="home-chip"><svg aria-hidden="true"><use href="#i-clock"/></svg><span data-i18n="dd.vca_base_dur">1 jour</span></li>
-          <li class="home-chip"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="dd.vca_base_fmt">Présentiel</span></li>
-          <li class="home-chip"><svg aria-hidden="true"><use href="#i-badge"/></svg><span data-i18n="dd.vca_base_exam">Examen inclus</span></li>
-          <li class="home-chip"><svg aria-hidden="true"><use href="#i-tag"/></svg><span data-i18n="home.vca_price">225 € / personne</span></li>
-        </ul>
-        <div class="home-actions home-reveal">
-          <a class="home-btn home-btn--primary" href="formation-vca-base.html"><span data-i18n="home.vca_cta">Découvrir la formation VCA Base</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        </div>
-      </div>
-      <div class="home-vca__side">
+    <div class="home-vca__bg" aria-hidden="true"></div>
+    <div class="home-wrap home-vca__wrap">
+      <header class="home-head home-head--split">
         <div>
-          <p class="home-kicker home-reveal" data-i18n="home.vca_lead_kicker">Vous encadrez une équipe&nbsp;?</p>
-          <a class="home-level home-spot home-reveal" href="formations.html#vca-hierarchique" aria-labelledby="vca-hier-title" aria-describedby="vca-hier-text">
-            <span class="home-level__icon" aria-hidden="true"><svg><use href="#i-hier"/></svg></span>
-            <div>
-              <h3 class="home-level__title" id="vca-hier-title" data-i18n="dd.vca_hier">VCA ligne hiérarchique</h3>
-              <p class="home-level__text" id="vca-hier-text" data-i18n="home.vca_hier_for">Pour les cadres et responsables opérationnels qui encadrent des équipes.</p>
-              <span class="home-level__meta"><span class="home-chip"><svg aria-hidden="true"><use href="#i-clock"/></svg><span data-i18n="home.dur_2d">2 jours</span></span><span class="home-chip"><svg aria-hidden="true"><use href="#i-hier"/></svg><span data-i18n="search.cat_management">Management</span></span></span>
-            </div>
-            <span class="home-tr__go" aria-hidden="true"><svg class="home-arrow"><use href="#i-arrow"/></svg></span>
-          </a>
+          <p class="home-eyebrow home-eyebrow--light home-reveal" data-i18n="home.vca_eyebrow">VCA · Sécurité de base</p>
+          <h2 class="home-h2 home-h2--light home-reveal" id="home-vca-title" data-i18n-html="home.vca_h2">Votre VCA, de la formation <span class="home-hl">à l'examen.</span></h2>
         </div>
-        <div>
-          <p class="home-kicker home-reveal" data-i18n="home.vca_resources">Conseils &amp; ressources</p>
-          <div class="home-articles" data-stagger>
-            <a class="home-article home-reveal" href="article-vca-cout-financement.html" aria-labelledby="art-cost-title">
-              <span class="home-article__media"><img src="assets/images/vca-base/article-cout-financement-640.webp" width="640" height="427" alt="" loading="lazy" decoding="async"></span>
-              <div class="home-article__body"><span class="home-article__kicker" data-i18n="home.art_kicker">Article</span><h3 class="home-article__title" id="art-cost-title" data-i18n="search.page_art_cost_t">Combien coûte une formation VCA et qui peut la financer ?</h3></div>
-            </a>
-            <a class="home-article home-reveal" href="article-vca-erreurs-examen.html" aria-labelledby="art-exam-title">
-              <span class="home-article__media"><img src="assets/images/vca-base/article-erreurs-examen-640.webp" width="640" height="427" alt="" loading="lazy" decoding="async"></span>
-              <div class="home-article__body"><span class="home-article__kicker" data-i18n="home.art_kicker">Article</span><h3 class="home-article__title" id="art-exam-title" data-i18n="search.page_art_exam_t">Les erreurs fréquentes à l'examen VCA et comment les éviter</h3></div>
-            </a>
+        <p class="home-lead home-lead--light home-reveal" data-i18n="dd.vca_base_summary">Maîtrisez les règles fondamentales de sécurité au travail et préparez votre examen VCA Base, en présentiel à Anderlecht (Bruxelles), examen inclus.</p>
+      </header>
+
+      <div class="home-vca__grid" data-stagger>
+        <!-- Carte « pass » : la formation VCA Base (faits confirmés du registre js/trainings-data.js) -->
+        <a class="home-pass home-spot home-reveal" href="formation-vca-base.html" aria-labelledby="vca-pass-title vca-pass-cta" aria-describedby="vca-pass-facts">
+          <div class="home-pass__main">
+            <span class="home-pass__kicker"><svg aria-hidden="true"><use href="#i-shield"/></svg><span data-i18n="search.cat_securite">Sécurité</span></span>
+            <h3 class="home-pass__title" id="vca-pass-title" data-i18n="dd.vca_base">VCA de base</h3>
+            <p class="home-pass__desc" data-i18n="dd.vca_base_desc">Les fondamentaux de la sécurité chantier</p>
+            <dl class="home-pass__facts" id="vca-pass-facts">
+              <div><dt data-i18n="home.fact_dur_k">Durée</dt><dd data-i18n="dd.vca_base_dur">1 jour</dd></div>
+              <div><dt data-i18n="home.fact_fmt_k">Format</dt><dd data-i18n="dd.vca_base_fmt">Présentiel</dd></div>
+              <div><dt data-i18n="home.fact_exam_k">Examen</dt><dd data-i18n="home.fact_exam_v">Inclus dans le tarif</dd></div>
+              <div><dt data-i18n="home.fact_price_k">Prix</dt><dd data-i18n="home.vca_price">225 € / personne</dd></div>
+            </dl>
+            <span class="home-pass__cta" id="vca-pass-cta"><span data-i18n="home.vca_cta">Découvrir la formation VCA Base</span><span class="home-pass__go" aria-hidden="true"><svg class="home-arrow"><use href="#i-arrow"/></svg></span></span>
           </div>
-        </div>
+          <div class="home-pass__stub">
+            <span class="home-pass__photo"><img src="assets/images/formations/vca-base.webp" width="720" height="540" alt="" loading="lazy" decoding="async"></span>
+            <span class="home-pass__chip"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="home.float_centre">Centre d'Anderlecht</span></span>
+          </div>
+        </a>
+
+        <!-- L'examen officiel : jauge du seuil de réussite (chiffres officiels du registre, source BeSaCC-VCA) -->
+        <a class="home-exam home-spot home-reveal" href="formation-vca-base.html#examen" aria-labelledby="vca-exam-title vca-exam-go" aria-describedby="vca-exam-facts vca-exam-src">
+          <p class="home-exam__kicker" id="vca-exam-title" data-i18n="home.exam_kicker">Examen officiel B-VCA</p>
+          <div class="home-exam__body">
+            <div class="home-ring" data-draw>
+              <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+                <defs><linearGradient id="home-ring-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#48D6C2"/><stop offset="1" stop-color="#3FA69B"/></linearGradient></defs>
+                <circle class="home-ring__track" cx="60" cy="60" r="52" pathLength="100"/>
+                <circle class="home-ring__bar" cx="60" cy="60" r="52" pathLength="100"/>
+              </svg>
+              <span class="home-ring__value"><b data-i18n="home.exam_pass">64,5&nbsp;%</b><span data-i18n="home.exam_pass_w">pour réussir</span></span>
+            </div>
+            <ul class="home-exam__facts" id="vca-exam-facts">
+              <li><b data-count="40">40</b> <span data-i18n="home.exam_q_w">questions</span></li>
+              <li><b data-count="60">60</b> <span data-i18n="home.exam_min_w">minutes</span></li>
+            </ul>
+          </div>
+          <p class="home-exam__src" id="vca-exam-src" data-i18n="home.exam_src">Chiffres officiels BeSaCC-VCA, qui ne constituent pas un engagement de Wisy Safety.</p>
+          <span class="home-exam__go" id="vca-exam-go"><span data-i18n="home.exam_go">Détails de l'examen</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+        </a>
+
+        <!-- Aller plus loin : encadrement + ressources -->
+        <a class="home-vlink home-spot home-reveal" href="formations.html#vca-hierarchique" aria-labelledby="vca-hier-title" aria-describedby="vca-hier-meta">
+          <span class="home-vlink__icon" aria-hidden="true"><svg><use href="#i-hier"/></svg></span>
+          <div class="home-vlink__body">
+            <span class="home-vlink__kicker" data-i18n="home.vca_lead_kicker">Vous encadrez une équipe&nbsp;?</span>
+            <h3 class="home-vlink__title" id="vca-hier-title" data-i18n="dd.vca_hier">VCA ligne hiérarchique</h3>
+            <span class="home-vlink__meta" id="vca-hier-meta"><span data-i18n="search.cat_management">Management</span> · <span data-i18n="home.dur_2d">2 jours</span></span>
+          </div>
+          <svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </a>
+        <a class="home-vlink home-vlink--art home-spot home-reveal" href="article-vca-cout-financement.html" aria-labelledby="art-cost-title">
+          <span class="home-vlink__thumb"><img src="assets/images/vca-base/article-cout-financement-640.webp" width="640" height="427" alt="" loading="lazy" decoding="async"></span>
+          <div class="home-vlink__body">
+            <span class="home-vlink__kicker" data-i18n="home.art_kicker">Article</span>
+            <h3 class="home-vlink__title" id="art-cost-title" data-i18n="search.page_art_cost_t">Combien coûte une formation VCA et qui peut la financer ?</h3>
+          </div>
+          <svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </a>
+        <a class="home-vlink home-vlink--art home-spot home-reveal" href="article-vca-erreurs-examen.html" aria-labelledby="art-exam-title">
+          <span class="home-vlink__thumb"><img src="assets/images/vca-base/article-erreurs-examen-640.webp" width="640" height="427" alt="" loading="lazy" decoding="async"></span>
+          <div class="home-vlink__body">
+            <span class="home-vlink__kicker" data-i18n="home.art_kicker">Article</span>
+            <h3 class="home-vlink__title" id="art-exam-title" data-i18n="search.page_art_exam_t">Les erreurs fréquentes à l'examen VCA et comment les éviter</h3>
+          </div>
+          <svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </a>
       </div>
     </div>
   </section>

@@ -8,12 +8,14 @@
 
    Intro (html.home-intro, décidée AVANT le premier affichage par le script du
    <head>) : 1re visite de la session, sans ancre, hors mouvement réduit et
-   économie de données. L'écran de la vidéo est centré sur une scène sombre ; dès
-   que « Wisy Safety » est apparu (≈ 3,2 s de vidéo), il rejoint sa place dans le
-   hero (technique FLIP : translation + échelle UNIFORME, jamais déformée) pendant
-   que le titre apparaît. Passer l'intro : bouton, Échap, défilement, molette,
-   toucher ou tabulation dans le hero. Garde-fous : si la vidéo ne démarre pas en
-   1,8 s, ou au plus tard après 6,5 s, l'intro s'arrête d'elle-même.
+   économie de données. L'écran de la vidéo est centré sur une scène sombre : la
+   vidéo est jouée EN ENTIER (8 s), puis le logo complet reste affiché avec la
+   signature « La sécurité comme une référence » (tenue de 2,6 s) ; l'écran rejoint
+   ensuite sa place dans le hero (technique FLIP : translation + échelle UNIFORME,
+   jamais déformée) pendant que le titre apparaît — environ 11,5 s au total. Passer
+   l'intro : bouton, Échap, défilement, molette, toucher ou tabulation dans le hero.
+   Garde-fous : si la vidéo ne démarre pas en 1,8 s, ou au plus tard après 16 s,
+   l'intro s'arrête d'elle-même.
    ========================================================================= */
 (function () {
   "use strict";
@@ -22,9 +24,8 @@
   var reduce = win.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var finePointer = win.matchMedia("(hover: hover) and (pointer: fine)").matches;
   var hasIO = "IntersectionObserver" in win;
-  var INTRO_AT = 3.2;            // s de vidéo : « Wisy Safety » est lisible → l'écran rejoint le hero
-  var INTRO_RATE = 1.15;         // vidéo légèrement accélérée pendant l'intro (≈ 2,8 s réelles)
-  var INTRO_START_TIMEOUT = 1800, INTRO_MAX = 6500;
+  var INTRO_HOLD = 2600;         // ms : logo complet + signature, tenus après la vidéo (8 s) avant de rejoindre le hero
+  var INTRO_START_TIMEOUT = 1800, INTRO_MAX = 16000;
   var FR = {                     // repli si le dictionnaire n'est pas chargé
     "home.video_pause": "Mettre l'animation en pause",
     "home.video_play": "Lire l'animation",
@@ -116,15 +117,16 @@
   function runIntro() {
     var skip = hero.querySelector("[data-intro-skip]");
     var bar = skip && skip.querySelector(".home-intro-skip__bar");
-    var startTimer, maxTimer, frameReq = 0;
+    var startTimer, maxTimer, holdTimer, holdStart = 0, frameReq = 0, dur = 8, finished = false;
     var listeners = [];
     function on(target, type, fn, opts) { target.addEventListener(type, fn, opts); listeners.push([target, type, fn, opts]); }
 
     var end = once(function (fast) {
-      clearTimeout(startTimer); clearTimeout(maxTimer); cancelAnimationFrame(frameReq);
+      finished = true;
+      clearTimeout(startTimer); clearTimeout(maxTimer); clearTimeout(holdTimer); cancelAnimationFrame(frameReq);
       listeners.forEach(function (l) { l[0].removeEventListener(l[1], l[2], l[3]); });
       var hadFocus = skip && doc.activeElement === skip;
-      video.playbackRate = 1;
+      hero.classList.remove("is-intro-hold");                   // la signature s'efface pendant que l'écran rejoint le hero
 
       /* FLIP : position de l'intro (First) → place dans le hero (Last). is-revealed est posé AVANT la mesure :
          l'état « pas encore apparu » réduit l'écran (scale .97), ce qui fausserait le calcul. */
@@ -162,17 +164,29 @@
       playWhenVisible(video, heroCtl, 0.35);
     });
 
+    /* Tenue finale : la vidéo est terminée, le logo complet reste affiché et la signature apparaît. */
+    function hold() {
+      if (holdStart || finished) return;
+      holdStart = win.performance ? performance.now() : Date.now();
+      hero.classList.add("is-intro-hold");
+      holdTimer = setTimeout(function () { end(false); }, INTRO_HOLD);
+    }
+    /* Barre de progression du bouton « Passer l'intro » : durée de la vidéo + tenue finale */
     function tick() {
-      if (bar) bar.style.setProperty("--p", Math.min(1, video.currentTime / INTRO_AT).toFixed(3));
-      if (video.currentTime >= INTRO_AT) { end(false); return; }
+      var total = dur * 1000 + INTRO_HOLD;
+      var elapsed = holdStart ? dur * 1000 + ((win.performance ? performance.now() : Date.now()) - holdStart) : video.currentTime * 1000;
+      if (bar) bar.style.setProperty("--p", Math.min(1, elapsed / total).toFixed(3));
+      if (!holdStart && (video.ended || video.currentTime >= dur - 0.05)) hold();
       frameReq = requestAnimationFrame(tick);
     }
 
-    video.playbackRate = INTRO_RATE;
+    function readDuration() { if (isFinite(video.duration) && video.duration > 0) dur = video.duration; }
+    readDuration();
+    video.addEventListener("loadedmetadata", readDuration);
+    on(video, "ended", hold);
     video.addEventListener("playing", function onPlaying() {
       video.removeEventListener("playing", onPlaying);
       clearTimeout(startTimer);
-      video.playbackRate = INTRO_RATE;
       frameReq = requestAnimationFrame(tick);
     });
     startTimer = setTimeout(function () { if (video.paused || video.readyState < 3) end(true); }, INTRO_START_TIMEOUT);
@@ -193,7 +207,7 @@
   doc.querySelectorAll("[data-stagger]").forEach(function (group) {
     group.querySelectorAll(".home-reveal").forEach(function (el, i) { el.style.setProperty("--i", Math.min(i, 6)); });
   });
-  var reveals = doc.querySelectorAll(".home-reveal"), steps = doc.querySelectorAll("[data-steps]");
+  var reveals = doc.querySelectorAll(".home-reveal"), steps = doc.querySelectorAll("[data-steps], [data-draw]");   // tracés : fil des étapes, jauge de l'examen
   if (reduce || !hasIO) {
     reveals.forEach(function (el) { el.classList.add("is-in"); });
     steps.forEach(function (el) { el.classList.add("is-in"); });

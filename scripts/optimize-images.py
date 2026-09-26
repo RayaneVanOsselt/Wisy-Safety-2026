@@ -24,6 +24,8 @@ Dépendances : Pillow (WebP). Aucune autre. Sortie déterministe (mêmes options
                   → assets/videos/accueil/logo-animation-debut.webp · logo-animation-fin.webp (affiches de l'accueil)
                   (la vidéo assets/originaux/accueil/logo-animation.mp4 et ses deux images sont traitées HORS Pillow :
                    recadrage 4:5, ré-encodage web, extraction des images — commandes dans docs/README-ACCUEIL.md)
+  (conservées)    assets/originaux/accueil/hero-720.mp4 · hero-1080.mp4 · hero-1080.webm : vidéo de chantier de l'ancien
+                  hero de l'accueil, plus chargée par le site (son affiche poster.webp reste générée ci-dessous)
   VCA Base        assets/originaux/vca-base/article-*.webp → assets/images/vca-base/article-*-640.webp · -1024.webp
                   (+ miniature de recherche + 3 cartes de partage 1200×630 : page VCA Base et ses 2 articles)
   carte de partage (Open Graph) : `--og <dossier de polices Poppins .ttf>` → assets/images/partage/wisy-safety-1200x630.jpg

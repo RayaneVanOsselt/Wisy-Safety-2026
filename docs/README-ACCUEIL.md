@@ -15,25 +15,24 @@ refait.
 ## Déroulé de la page
 
 1. **Hero** — titre en trois lignes, deux actions (« Découvrir nos formations » → `formations.html`, « Former mon
-   équipe » → section VCA Entreprise), l'écran de la **vidéo du logo** et deux cartes flottantes (VCA de base, centre
-   d'Anderlecht).
+   équipe » → formulaire de devis `contact.html#wisy-contact-form`), l'écran de la **vidéo du logo** et deux cartes
+   flottantes (VCA de base, centre d'Anderlecht).
 2. **Confiance** — logos des 6 partenaires (déjà présents sur le site) et les chiffres déjà publiés (10+ ans, 500+,
    250+, 100 % — les mêmes que la page Contact et l'agenda, voir `tests/agenda.test.js`).
-3. **Parcours** — « Je me forme » (→ `formations.html`) / « Je forme mes équipes » (→ section VCA Entreprise).
+3. **Parcours** — « Je me forme » (→ `formations.html`) / « Je forme mes équipes » (→ « Demander un devis »,
+   formulaire de `contact.html`).
 4. **Formations** — les six formations du registre `js/site-content.js` + le certificateur PEB. Titres, descriptions
    et durées reprennent les clés partagées (`dd.*`, `search.*`) : un seul texte par information.
 5. **VCA** — faits confirmés de la VCA Base (`js/trainings-data.js`), VCA ligne hiérarchique, les deux articles.
-6. **VCA Entreprise** — trois réponses publiées du Centre d'aide (inscription de plusieurs collaborateurs, devis,
-   formation dédiée / sur site) et deux actions : formulaire de contact (`contact.html#wisy-contact-form`) et téléphone.
-7. **Pourquoi Wisy Safety** — engagements tirés des textes existants (experts du terrain, théorie + pratique, centre
+6. **Pourquoi Wisy Safety** — engagements tirés des textes existants (experts du terrain, théorie + pratique, centre
    équipé accessible en transports en commun, équipe joignable du lundi au jeudi de 10 h à 16 h).
-8. **Comment ça marche** — les quatre étapes réelles de `inscription.html` (chaque étape est un lien).
-9. **Le centre** — coordonnées, horaires, carte Google Maps (soumise au consentement « Fonctionnalités »).
+7. **Comment ça marche** — les quatre étapes réelles de `inscription.html` (chaque étape est un lien).
+8. **Le centre** — coordonnées, horaires, carte Google Maps (soumise au consentement « Fonctionnalités »).
 
-> **VCA Entreprise n'a pas encore de page dédiée** (le lien du menu est `href="#"`, comme « Coordination » et
-> « Certificat »). La homepage ne crée donc aucune route : le parcours « entreprise » mène à la section
-> `#entreprises` de l'accueil, dont les actions vont vers le formulaire de contact et le Centre d'aide. Le jour où la
-> page existe : remplacer `href="#entreprises"` (carte « Je forme mes équipes ») par sa route, et retirer
+> **Pas de section « VCA Entreprise » sur l'accueil** (retirée à la demande du propriétaire le 2026-09-26). Aucune
+> page VCA Entreprise n'existe encore (le lien du menu est `href="#"`, comme « Coordination » et « Certificat », en-tête
+> inchangé). Le bouton « Former mon équipe » et la carte « Je forme mes équipes » mènent au formulaire de devis réel
+> (`contact.html#wisy-contact-form`). Le jour où la page existe : lui faire pointer ces deux liens si souhaité, et retirer
 > `nav.vca_entreprise` de la liste `KNOWN` de `tests/site-links.test.js` après avoir mis à jour le menu.
 
 ## La vidéo du logo
@@ -70,8 +69,9 @@ python3 scripts/optimize-images.py
 machine.) Puis `node --test tests/*.test.js` : `tests/perf-budget.test.js` vérifie les poids (720 px < 1 Mo,
 480 px < 550 Ko, affiches < 100 Ko et assez détaillées pour compter comme LCP).
 
-La section VCA Entreprise réutilise la vidéo de chantier de l'ancien hero (`hero-720.mp4`, `hero-1080.*`,
-`poster.webp`) : chargée seulement à l'approche de la section, en pause hors écran, jamais en mouvement réduit.
+La vidéo de chantier de l'ancien hero (`hero-720.mp4`, `hero-1080.mp4`, `hero-1080.webm`) n'est plus utilisée par le
+site : elle est conservée dans `assets/originaux/accueil/` (son affiche `poster.webp` reste produite par
+`scripts/optimize-images.py`).
 
 ## Modifier un texte
 

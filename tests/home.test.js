@@ -1,7 +1,7 @@
 "use strict";
 /* Page d'accueil (index.html) : en-tête et pied de page INCHANGÉS, destinations réelles, faits repris du registre
    (aucune donnée inventée), cartes entièrement cliquables, intro du logo sûre (jamais bloquante, jamais en mouvement
-   réduit), parcours VCA / VCA Entreprise distincts. `node --test tests/*.test.js` — aucune dépendance. */
+   réduit), section VCA sans section VCA Entreprise (retirée). `node --test tests/*.test.js` — aucune dépendance. */
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -48,7 +48,7 @@ test("chaque carte / bloc cliquable est un lien complet vers une destination ré
     assert.doesNotMatch(inner, /<a\b|<button\b/, "élément interactif imbriqué dans un lien : " + href);
     if (/^#/.test(href)) assert.match(MAIN, new RegExp('id="' + href.slice(1) + '"'), "ancre locale introuvable : " + href);
   });
-  const cards = ["home-path", "home-tr ", "home-tr-row", "home-level", "home-article", "home-biz-row", "home-step", "home-float"];
+  const cards = ["home-path", "home-tr ", "home-tr-row", "home-level", "home-article", "home-step", "home-float"];
   cards.forEach((c) => {
     const n = (MAIN.match(new RegExp('class="' + c.trim() + '[\\s"]', "g")) || []).length;
     const asLink = (MAIN.match(new RegExp('<a class="' + c.trim() + '[\\s"]', "g")) || []).length;
@@ -75,19 +75,17 @@ test("formations mises en avant = registre du site (route, titre traduit, durée
   ["dd.vca_base_dur", "dd.vca_base_fmt", "dd.vca_base_exam"].forEach((k) => assert.ok(MAIN.includes('data-i18n="' + k + '"'), k));
 });
 
-test("VCA (formation) et VCA Entreprise (organisations) : deux destinations distinctes, sans mélange de données", () => {
+test("VCA : formation VCA Base + ressources ; pas de section VCA Entreprise sur l'accueil (retirée), parcours entreprise → devis réel", () => {
   const vca = part(MAIN, '<section class="home-section home-vca"', "</section>");
-  const biz = part(MAIN, '<section class="home-section home-biz"', "</section>");
   assert.match(vca, /href="formation-vca-base\.html"/); assert.match(vca, /href="article-vca-cout-financement\.html"/); assert.match(vca, /href="article-vca-erreurs-examen\.html"/);
-  assert.doesNotMatch(biz, /vca_base|formation-vca-base|225|Examen inclus/, "aucun fait de la formation VCA Base dans la section entreprises");
-  /* la section entreprises ne reprend que des réponses publiées du Centre d'aide + le formulaire de contact réel */
-  ["faq-entreprises-plusieurs", "faq-entreprises-devis", "faq-entreprises-sur-site"].forEach((id) => {
-    assert.ok(FAQ.items().some((it) => it.id === id), "question du Centre d'aide : " + id);
-    assert.match(biz, new RegExp('href="faq\\.html#' + id + '"'));
-  });
-  assert.match(biz, /href="contact\.html#wisy-contact-form"/); assert.match(read("contact.html"), /id="wisy-contact-form"/);
-  assert.match(MAIN, /<a class="home-path home-path--team[^"]*" href="#entreprises"/, "parcours « entreprise » → section VCA Entreprise");
-  assert.match(MAIN, /<section class="home-section home-biz" id="entreprises"/);
+  /* section « VCA Entreprise » retirée de l'accueil à la demande du propriétaire (2026-09-26) : plus de bloc ni d'ancre */
+  assert.doesNotMatch(MAIN, /home-biz|id="entreprises"|href="#entreprises"|homeBizVideo/);
+  assert.doesNotMatch(read("css/home.css") + read("js/home.js"), /home-biz|homeBizVideo/, "aucun style ni script résiduel");
+  /* « Former mon équipe » (hero) et la carte « Je forme mes équipes » mènent au formulaire de devis RÉEL */
+  assert.match(MAIN, /<a class="home-btn home-btn--ghost" href="contact\.html#wisy-contact-form"><span data-i18n="home\.hero_cta2">/);
+  assert.match(MAIN, /<a class="home-path home-path--team[^"]*" href="contact\.html#wisy-contact-form"/);
+  assert.match(read("contact.html"), /id="wisy-contact-form"/);
+  assert.ok(FAQ.items().some((it) => it.id === "faq-entreprises-devis"), "le devis pour les entreprises est une réponse publiée du Centre d'aide");
 });
 
 /* ------------------------------------------------------------------ véracité */
@@ -119,10 +117,10 @@ test("intro du logo : décidée avant l'affichage, une fois par session, jamais 
   assert.match(css, /\.home-still \.home-hero__still \{ display: block; \}|\.home-still \.home-hero__still/, "mouvement réduit : image fixe du logo");
 });
 
-test("vidéos : contrôle lecture / pause accessible et traduit ; aucune lecture automatique hors écran", () => {
+test("vidéo du logo : contrôle lecture / pause accessible et traduit ; aucune lecture automatique hors écran", () => {
   const toggles = [...MAIN.matchAll(/<button class="home-hero__toggle"[^>]*>[\s\S]*?<\/button>/g)].map((m) => m[0]);
-  assert.equal(toggles.length, 2);
-  toggles.forEach((t) => assert.match(t, /<span class="home-sr" data-i18n="home\.video_(pause|play)">/, "nom accessible traduit"));
+  assert.equal(toggles.length, 1, "un seul contrôle : la vidéo du logo");
+  toggles.forEach((t) => assert.match(t, /<span class="home-sr" data-i18n="home\.video_pause">/, "nom accessible traduit"));
   const js = read("js/home.js");
   ["home.video_pause", "home.video_play", "home.video_replay"].forEach((k) => ["fr", "en", "nl", "af", "ar", "bg", "de", "ro", "it", "sl"].forEach((l) => assert.ok(I18N[l][k], l + " " + k)));
   assert.match(js, /else if \(!video\.paused\) video\.pause\(\)/, "pause dès que la vidéo sort de l'écran");

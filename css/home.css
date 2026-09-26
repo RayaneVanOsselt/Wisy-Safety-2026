@@ -20,8 +20,8 @@
    Sommaire
      1. Tokens · 2. Primitives (conteneur, titres, boutons, liens, puces)
      3. Apparitions · 4. Hero + intro du logo · 5. Confiance (logos + chiffres)
-     6. Parcours · 7. Formations · 8. VCA · 9. VCA Entreprise · 10. Pourquoi
-     11. Étapes · 12. Centre + carte · 13. Responsive · 14. RTL · 15. Mouvement réduit
+     6. Parcours · 7. Formations · 8. VCA · 9. Pourquoi · 10. Étapes
+     11. Centre + carte · 12. Responsive · 13. RTL · 14. Mouvement réduit
    ========================================================================= */
 
 /* ---------------------------------------------------------------- 1. Tokens */
@@ -75,7 +75,6 @@
   letter-spacing: .16em; text-transform: uppercase; color: var(--home-primary);
 }
 .home-eyebrow::before { content: ""; width: 26px; height: 2px; border-radius: 2px; background: var(--home-accent); flex: none; }
-.home-eyebrow--light { color: var(--home-accent); }
 
 .home-h2 {
   margin: 0; max-width: 20ch;
@@ -83,16 +82,13 @@
   font-size: clamp(2rem, 1.25rem + 2.3vw, 3.25rem); line-height: 1.07; letter-spacing: -.028em;
   color: var(--home-ink); text-wrap: balance;
 }
-.home-h2--light { color: var(--creme, #F4FAF9); }
 .home-hl { color: var(--home-primary); }
-.home-h2--light .home-hl { color: var(--home-accent); }
 
 .home-lead {
   margin: 1.25rem 0 0; max-width: 58ch;
   font-size: clamp(1.02rem, .95rem + .35vw, 1.18rem); line-height: 1.62; color: var(--home-muted);
   text-wrap: pretty;
 }
-.home-lead--light { color: rgba(244, 250, 249, .78); }
 
 .home-head { display: grid; gap: 1.25rem 3rem; margin-bottom: clamp(2.25rem, 1.5rem + 2.5vw, 3.75rem); }
 .home-head--center { justify-items: center; text-align: center; }
@@ -139,11 +135,6 @@
 .home-btn--ghost::before { background: var(--home-tint); }
 .home-btn--ghost:hover { border-color: var(--home-primary); }
 
-.home-btn--light { background: transparent; color: var(--creme, #F4FAF9); border-color: rgba(244, 250, 249, .38); }
-.home-btn--light::before { background: rgba(244, 250, 249, .1); }
-.home-btn--light:hover { border-color: rgba(244, 250, 249, .8); }
-.home-btn--light:focus-visible, .home-biz .home-btn--primary:focus-visible { outline-color: var(--home-accent); }
-.home-btn svg:not(.home-arrow) { width: 18px; height: 18px; flex: none; }
 
 /* Lien texte avec flèche */
 .home-link {
@@ -577,49 +568,8 @@ html:not(.js) .home-hero__toggle, .home-still .home-hero__toggle { display: none
 .home-article__kicker { font-family: var(--font-titre); font-size: .7rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--home-hover); }
 .home-article__title { margin: 0; font-family: var(--font-titre); font-weight: 600; font-size: 1rem; line-height: 1.35; letter-spacing: -.005em; }
 
-/* ------------------------------------------------------- 9. VCA Entreprise (sombre) */
-.home-biz { color: var(--creme, #F4FAF9); background: var(--home-dark); overflow: clip; }
-.home-biz__bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-.home-biz__bg::before, .home-biz__bg::after { content: ""; position: absolute; border-radius: 50%; filter: blur(80px); }
-.home-biz__bg::before { width: 44rem; height: 44rem; top: -18rem; inset-inline-end: -12rem; background: radial-gradient(circle, rgba(31, 111, 100, .75), transparent 68%); }
-.home-biz__bg::after { width: 34rem; height: 34rem; bottom: -16rem; inset-inline-start: -10rem; background: radial-gradient(circle, rgba(47, 125, 140, .5), transparent 66%); }
-.home-biz__grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: center; }
-.home-biz__copy .home-h2 { max-width: 19ch; }
-.home-biz__list { display: grid; gap: .75rem; margin: 2rem 0 0; padding: 0; list-style: none; }
-.home-biz-row {
-  position: relative; isolation: isolate; overflow: hidden;
-  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 1rem;
-  padding: 1rem 1.15rem; border: 1px solid rgba(244, 250, 249, .12); border-radius: var(--home-radius-md);
-  background: rgba(244, 250, 249, .04); color: var(--creme, #F4FAF9); text-decoration: none; cursor: pointer;
-  transition: background-color var(--home-motion) var(--home-ease), border-color var(--home-motion) var(--home-ease), transform var(--home-motion) var(--home-ease), translate var(--home-motion) var(--home-ease);
-}
-.home-biz-row > * { position: relative; z-index: 1; }
-.home-biz-row:hover { background: rgba(244, 250, 249, .08); border-color: rgba(72, 214, 194, .45); translate: 4px 0; }
-.home-biz-row:focus-visible { outline: 3px solid var(--home-accent); outline-offset: 3px; }
-.home-biz-row__icon { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 13px; background: rgba(72, 214, 194, .14); color: var(--home-accent); }
-.home-biz-row__icon svg { width: 22px; height: 22px; }
-.home-biz-row__title { display: block; font-family: var(--font-titre); font-weight: 600; font-size: 1.02rem; line-height: 1.3; }
-.home-biz-row__text { display: block; margin-top: .2rem; font-size: .9rem; line-height: 1.5; color: rgba(244, 250, 249, .7); }
-.home-biz-row .home-arrow { color: var(--home-accent); }
-.home-biz-row:hover .home-arrow { transform: translateX(4px); }
-.home-biz__actions { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: 2.1rem; }
-.home-biz .home-spot::after { background: radial-gradient(360px circle at var(--mx) var(--my), rgba(72, 214, 194, .14), transparent 62%); }
-
-.home-biz__media { position: relative; }
-.home-biz__frame {
-  position: relative; overflow: hidden; aspect-ratio: 4 / 5; max-height: 40rem; margin-inline-start: auto;
-  border-radius: var(--home-radius-lg); background: #26352f;
-  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .6), 0 0 0 1px rgba(244, 250, 249, .08);
-}
-/* affiche en <img loading="lazy"> (aucun octet avant l'approche de la section, visible sans JavaScript) ; la vidéo ne
-   s'affiche qu'une fois lancée */
-.home-biz__poster, .home-biz__frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%; }
-.home-biz__frame video { opacity: 0; transition: opacity 600ms var(--home-ease); }
-.home-biz__frame video.is-playing { opacity: 1; }
-.home-biz__frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(27, 45, 40, .55) 100%); pointer-events: none; }
-.home-biz__frame .home-hero__toggle { z-index: 2; top: .9rem; bottom: auto; inset-inline-start: auto; inset-inline-end: .9rem; }
-
-/* ------------------------------------------------------------------ 10. Pourquoi */
+/* ------------------------------------------------------------------- 9. Pourquoi */
+.home-why { border-block-start: 1px solid var(--home-border); }
 .home-why__grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: clamp(2.5rem, 6vw, 6.5rem); align-items: start; }
 .home-display {
   margin: 0; max-width: 12ch;
@@ -634,7 +584,7 @@ html:not(.js) .home-hero__toggle, .home-still .home-hero__toggle { display: none
 .home-why__text { margin: .4rem 0 0; font-size: .97rem; line-height: 1.6; color: var(--home-muted); max-width: 52ch; }
 .home-why__more { margin-top: 1.5rem; }
 
-/* ------------------------------------------------------------------- 11. Étapes */
+/* -------------------------------------------------------------------- 10. Étapes */
 .home-steps { background: linear-gradient(180deg, #eef6f4 0%, var(--home-bg) 100%); border-block-start: 1px solid var(--home-border); }
 .home-steps__list { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(.75rem, 1.4vw, 1.25rem); margin: 0; padding: 0; list-style: none; }
 /* Fil qui relie les quatre étapes : rail (::before) + progression tracée à l'apparition (::after) */
@@ -666,7 +616,7 @@ html:not(.js) .home-hero__toggle, .home-still .home-hero__toggle { display: none
 .home-step:hover .home-step__go .home-arrow { transform: translateX(4px); }
 .home-steps__cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .75rem 1.5rem; margin-top: clamp(2rem, 1.5rem + 1.5vw, 3rem); text-align: center; }
 
-/* ------------------------------------------------------------- 12. Centre + carte */
+/* ------------------------------------------------------------- 11. Centre + carte */
 .home-centre { padding-bottom: calc(var(--home-space) * .9); }
 .home-centre__grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: center; }
 .home-centre__info { display: grid; gap: 1.1rem; margin: 2rem 0 0; padding: 0; list-style: none; }
@@ -687,7 +637,7 @@ a.home-centre__value:focus-visible { outline: 3px solid var(--home-primary); out
 .home-map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .home-centre__map .home-link { margin-top: .75rem; }
 
-/* ---------------------------------------------------------------- 13. Responsive */
+/* ---------------------------------------------------------------- 12. Responsive */
 @media (max-width: 1279px) {
   .home-float--vca { inset-inline-start: -1.5rem; }
   .home-float--centre { inset-inline-end: -.75rem; }
@@ -702,10 +652,9 @@ a.home-centre__value:focus-visible { outline: 3px solid var(--home-primary); out
   .home-steps__list::before, .home-steps__list::after { display: none; }
 }
 @media (max-width: 1023px) {
-  .home-proof__grid, .home-vca__grid, .home-biz__grid, .home-why__grid, .home-centre__grid { grid-template-columns: minmax(0, 1fr); }
+  .home-proof__grid, .home-vca__grid, .home-why__grid, .home-centre__grid { grid-template-columns: minmax(0, 1fr); }
   .home-vca__intro { position: static; }
   .home-logos { max-width: 40rem; }
-  .home-biz__frame { aspect-ratio: 16 / 10; margin-inline: 0; max-height: none; }
   .home-display { max-width: 16ch; }
   .home-head--split { grid-template-columns: minmax(0, 1fr); }
 }
@@ -755,10 +704,7 @@ a.home-centre__value:focus-visible { outline: 3px solid var(--home-primary); out
   .home-articles { grid-template-columns: minmax(0, 1fr); }
   .home-article { grid-template-columns: 7.5rem minmax(0, 1fr); grid-template-rows: none; }
   .home-article__media { aspect-ratio: auto; height: 100%; }
-  .home-biz-row { grid-template-columns: auto minmax(0, 1fr); align-items: start; }
-  .home-biz-row .home-arrow { display: none; }
-  .home-biz__actions .home-btn, .home-centre__actions .home-btn { width: 100%; }
-  .home-biz__frame { aspect-ratio: 16 / 10; }
+  .home-centre__actions .home-btn { width: 100%; }
   .home-steps__list { grid-template-columns: minmax(0, 1fr); gap: .65rem; }
   /* étapes compactes : numéro à gauche, texte à droite */
   .home-step { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1rem; row-gap: .3rem; padding: 1.15rem 1.1rem; }
@@ -786,17 +732,16 @@ a.home-centre__value:focus-visible { outline: 3px solid var(--home-primary); out
   .home-logos__col { will-change: auto; }
 }
 
-/* ----------------------------------------------------------------------- 14. RTL */
+/* ----------------------------------------------------------------------- 13. RTL */
 [dir="rtl"] .home-arrow { transform: scaleX(-1); }
 [dir="rtl"] .home-btn:hover .home-arrow, [dir="rtl"] .home-btn:focus-visible .home-arrow,
 [dir="rtl"] .home-link:hover .home-arrow, [dir="rtl"] .home-link:focus-visible .home-arrow,
-[dir="rtl"] .home-tr-row:hover .home-arrow, [dir="rtl"] .home-biz-row:hover .home-arrow,
+[dir="rtl"] .home-tr-row:hover .home-arrow,
 [dir="rtl"] .home-step:hover .home-step__go .home-arrow { transform: scaleX(-1) translateX(4px); }
 [dir="rtl"] .home-path:hover .home-path__cta .home-arrow, [dir="rtl"] .home-path:focus-visible .home-path__cta .home-arrow { transform: scaleX(-1) translateX(6px); }
 [dir="rtl"] .home-float:hover .home-arrow, [dir="rtl"] .home-tr:hover .home-tr__go .home-arrow { transform: scaleX(-1) translateX(3px); }
 [dir="rtl"] .home-btn::before, [dir="rtl"] .home-line--accent .home-line__in::after, [dir="rtl"] .home-intro-skip__bar::after { transform-origin: right center; }
 [dir="rtl"] .home-steps__list::after { transform-origin: right center; background: linear-gradient(270deg, var(--home-primary), var(--home-accent)); }
-[dir="rtl"] .home-biz-row:hover { translate: -4px 0; }
 [dir="rtl"] .home-logos { -webkit-mask-image: linear-gradient(270deg, #000 0%, #000 58%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
   mask-image: linear-gradient(270deg, #000 0%, #000 58%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%); }
 /* le visuel du hero passe à gauche : la lumière et la trame suivent */
@@ -811,7 +756,7 @@ a.home-centre__value:focus-visible { outline: 3px solid var(--home-primary); out
   .home-hero__stage, .home-intro-skip, .home-hero__toggle { display: none !important; }
 }
 
-/* ------------------------------------------------------------- 15. Mouvement réduit */
+/* ------------------------------------------------------------- 14. Mouvement réduit */
 @media (prefers-reduced-motion: reduce) {
   .js .home-reveal, .js .home-hero [data-hero-step], .js .home-hero .home-line__in, .js .home-hero .home-float,
   .js .home-hero:not(.is-revealed) .home-hero__screen {
@@ -821,6 +766,6 @@ a.home-centre__value:focus-visible { outline: 3px solid var(--home-primary); out
   .js .home-steps__list::after { transform: scaleX(1); transition: none; }
   .home-hero__stage, .home-intro-skip { display: none !important; }
   .home-logos__col { transform: none !important; }
-  .home-path:hover, .home-tr:hover, .home-level:hover, .home-article:hover, .home-tr-row:hover, .home-step:hover, .home-float:hover, .home-biz-row:hover { translate: none; }
+  .home-path:hover, .home-tr:hover, .home-level:hover, .home-article:hover, .home-tr-row:hover, .home-step:hover, .home-float:hover { translate: none; }
   .home-tr:hover .home-tr__media img, .home-article:hover .home-article__media img { transform: none; }
 }

@@ -74,26 +74,44 @@ test("images sous la ligne de flottaison : chargement différé (pied de page, p
   assert.deepEqual(bad, []);
 });
 
-test("image LCP des pages : jamais en lazy (nacelles) ; index : affiche vidéo WebP préchargée en priorité haute", () => {
+test("image LCP des pages : jamais en lazy (nacelles) ; index : affiche du logo animé (WebP) préchargée en priorité haute", () => {
   const nac = noScripts(read("formation-nacelles-elevatrices.html"));
   const hero = nac.match(/<img\b[^>]*nacelles-hero-800[^>]*>/)[0];
   assert.doesNotMatch(hero, /loading="lazy"/, "l'image principale n'est pas différée");
   assert.match(hero, /fetchpriority="high"/);
+  /* Accueil : l'élément principal est l'écran de la vidéo du logo — son affiche (1re image) est peinte sans attendre le média. */
   const idx = read("index.html");
-  assert.match(idx, /<link rel="preload" href="assets\/videos\/accueil\/poster\.webp" as="image" type="image\/webp" fetchpriority="high">/);
-  assert.match(idx, /poster="assets\/videos\/accueil\/poster\.webp"/);
-  assert.ok(size("assets/videos/accueil/poster.webp") < 100 * KB, "affiche < 100 Ko");
+  assert.match(idx, /<link rel="preload" href="assets\/videos\/accueil\/logo-animation-debut\.webp" as="image" type="image\/webp" fetchpriority="high">/);
+  assert.match(idx, /poster="assets\/videos\/accueil\/logo-animation-debut\.webp"/);
+  assert.equal((idx.match(/rel="preload"[^>]*as="image"/g) || []).length, 1, "une seule image préchargée");
+  ["logo-animation-debut.webp", "logo-animation-fin.webp", "poster.webp"].forEach((f) => assert.ok(size("assets/videos/accueil/" + f) < 100 * KB, "affiche < 100 Ko : " + f));
+  /* sous 0,05 bit/pixel affiché, Chrome ignore une image « de faible entropie » pour le LCP : l'affiche doit rester au-dessus */
+  assert.ok(size("assets/videos/accueil/logo-animation-debut.webp") * 8 / (960 * 1200) > 0.05, "affiche assez détaillée pour compter comme LCP (écran 2x)");
 });
 
-test("vidéo d'accueil : sources injectées APRÈS le chargement, jamais en mouvement réduit / économie de données", () => {
+test("vidéos d'accueil : jamais préchargées d'office, jamais en mouvement réduit / économie de données, sans son, légères", () => {
   const idx = read("index.html");
-  const tag = idx.match(/<video[^>]*id="heroVideo"[^>]*>/)[0];
-  assert.doesNotMatch(tag, /preload="auto"/, "plus de pré-chargement automatique");
+  /* le choix est fait AVANT le premier affichage par le script du <head> : html.home-still = aucune vidéo */
+  const head = idx.slice(0, idx.indexOf("</head>"));
+  assert.match(head, /prefers-reduced-motion: reduce[^;]*\|\|c\.saveData\)\{r\.classList\.add\("home-still"\);return;\}/, "mouvement réduit / économie de données → image fixe");
+  /* vidéo du logo : l'intro (1re visite de la session) la charge tout de suite — c'est alors le contenu principal ;
+     sinon, ses sources ne sont posées qu'après l'événement load, pour ne pas concurrencer le contenu critique */
+  const tag = idx.match(/<video[^>]*id="homeLogoVideo"[^>]*>/)[0];
+  assert.match(tag, /preload="none"/, "aucun préchargement dans le HTML");
   assert.match(tag, /aria-hidden="true"/); assert.match(tag, /muted/); assert.match(tag, /playsinline/);
-  const script = idx.slice(idx.indexOf("Hero vidéo : l'AFFICHE"), idx.indexOf("})();", idx.indexOf("Hero vidéo : l'AFFICHE")));
-  assert.match(script, /prefers-reduced-motion: reduce/, "respecte la préférence de mouvement réduit");
-  assert.match(script, /saveData/, "respecte l'économie de données");
-  assert.match(script, /addEventListener\('load',start/, "chargement après l'événement load");
+  const script = idx.slice(idx.indexOf("Vidéo du logo : l'AFFICHE"), idx.indexOf("})();", idx.indexOf("Vidéo du logo : l'AFFICHE")));
+  assert.match(script, /classList\.contains\('home-still'\)\)return;/, "rien n'est chargé en mouvement réduit / économie de données");
+  assert.match(script, /addEventListener\('load',start/, "hors intro : chargement après l'événement load");
+  assert.match(script, /logo-animation-480\.mp4/, "petits écrans : version 480 px");
+  /* vidéo « VCA Entreprise » : sans source dans le HTML, posée par js/home.js à l'approche de la section */
+  const biz = idx.match(/<video[^>]*id="homeBizVideo"[^>]*>/)[0];
+  assert.match(biz, /preload="none"/); assert.match(biz, /muted/); assert.match(biz, /playsinline/); assert.doesNotMatch(biz, /\ssrc=/);
+  const js = read("js/home.js");
+  assert.match(js, /biz && !still && hasIO/, "pas de vidéo « entreprise » en mouvement réduit / économie de données");
+  assert.match(js, /rootMargin: "300px 0px"/, "chargée seulement à l'approche de la section");
+  /* poids : versions web du logo animé (8 s, sans piste audio) */
+  assert.ok(size("assets/videos/accueil/logo-animation-720.mp4") < 1000 * KB, "logo animé 720 px < 1 Mo");
+  assert.ok(size("assets/videos/accueil/logo-animation-480.mp4") < 550 * KB, "logo animé 480 px < 550 Ko");
 });
 
 test("iframes : chargement différé, titre accessible et politique de référent", () => {

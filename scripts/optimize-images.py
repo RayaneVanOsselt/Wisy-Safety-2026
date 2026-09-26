@@ -20,6 +20,10 @@ Dépendances : Pillow (WebP). Aucune autre. Sortie déterministe (mêmes options
   partenaires     assets/originaux/partenaires/<nom>.*    → assets/images/partenaires/<nom>-240.webp
   contact         assets/originaux/contact/hero-contact.png → assets/images/contact/hero-contact.webp
   affiche vidéo   assets/originaux/accueil/poster.jpg     → assets/videos/accueil/poster.webp
+  logo animé      assets/originaux/accueil/logo-animation-debut.jpg · logo-animation-fin.jpg
+                  → assets/videos/accueil/logo-animation-debut.webp · logo-animation-fin.webp (affiches de l'accueil)
+                  (la vidéo assets/originaux/accueil/logo-animation.mp4 et ses deux images sont traitées HORS Pillow :
+                   recadrage 4:5, ré-encodage web, extraction des images — commandes dans docs/README-ACCUEIL.md)
   VCA Base        assets/originaux/vca-base/article-*.webp → assets/images/vca-base/article-*-640.webp · -1024.webp
                   (+ miniature de recherche + 3 cartes de partage 1200×630 : page VCA Base et ses 2 articles)
   carte de partage (Open Graph) : `--og <dossier de polices Poppins .ttf>` → assets/images/partage/wisy-safety-1200x630.jpg
@@ -221,6 +225,24 @@ def misc():
         report("affiche vidéo", src, size, f"{im.width}×{im.height}")
 
 
+# --------------------------------------------------------------------------- accueil : affiches du logo animé
+# Deux images de assets/originaux/accueil/logo-animation.mp4, déjà recadrées en 4:5 (720 × 900) :
+#   « debut » = 1re image : affiche pendant le chargement de l'intro, élément LCP de l'accueil ;
+#   « fin »   = image finale (logo complet) : mouvement réduit, économie de données, sans JavaScript.
+LOGO_FRAMES = ("logo-animation-debut", "logo-animation-fin")
+
+
+def accueil():
+    for name in LOGO_FRAMES:
+        src, dst = f"assets/originaux/accueil/{name}.jpg", f"assets/videos/accueil/{name}.webp"
+        if need(dst, src):
+            im = Image.open(src).convert("RGB")
+            # qualité 90 : image très sombre, ~15–25 Ko ; en dessous, Chrome la jugerait « de faible entropie »
+            # (< 0,05 bit/pixel affiché) et ne la retiendrait plus comme élément LCP.
+            size = save_webp(im, dst, quality=90)
+            report(f"affiche {name}", src, size, f"{im.width}×{im.height}")
+
+
 
 # --------------------------------------------------------------------------- VCA Base : articles, miniature, cartes de partage
 # Images des deux articles fournies par le propriétaire (voir docs/image-sources.md). Le WebP fourni est
@@ -315,6 +337,7 @@ if __name__ == "__main__":
     peb()
     partners()
     misc()
+    accueil()
     vca()
     if "--og" in sys.argv:
         og(sys.argv[sys.argv.index("--og") + 1])

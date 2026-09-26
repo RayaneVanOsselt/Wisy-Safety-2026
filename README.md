@@ -24,6 +24,7 @@ et sans rien à installer pour le mettre en ligne.
 
 | Je veux… | Je modifie | Guide |
 |---|---|---|
+| Changer un texte, une section, l'intro ou la vidéo de la page d'accueil | `js/i18n-data-home.js`, `index.html`, `css/home.css`, `js/home.js` | [docs/README-ACCUEIL.md](docs/README-ACCUEIL.md) |
 | Ajouter ou changer une formation ou une page | `js/site-content.js` (puis les commandes ci-dessous) | [docs/README-SEO.md](docs/README-SEO.md) |
 | Changer les questions du Centre d'aide | `js/faq-data.js` | [docs/README-FAQ.md](docs/README-FAQ.md) |
 | Changer le prix, la durée ou les langues de la formation Nacelles | `js/trainings-data.js` | [docs/README-NACELLES.md](docs/README-NACELLES.md) |

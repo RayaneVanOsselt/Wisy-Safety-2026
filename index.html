@@ -31,7 +31,7 @@
 <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/poppins-600-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/poppins-700-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/videos/accueil/poster.webp" as="image" type="image/webp" fetchpriority="high">
+<link rel="preload" href="assets/videos/accueil/logo-animation-debut.webp" as="image" type="image/webp" fetchpriority="high">
 <link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/i18n.css">
 <link rel="stylesheet" href="css/site-header.css">
@@ -143,141 +143,6 @@ ul{margin:0;padding:0;list-style:none}button{font-family:inherit;cursor:pointer;
 .m-actions{margin-top:auto;padding-top:1.5rem;display:flex;flex-direction:column;gap:.75rem}
 .m-actions .btn{width:100%}
 
-/* ==================== HERO VIDÉO ==================== */
-.hero{position:relative;min-height:min(88vh,760px);display:flex;align-items:center;overflow:hidden;background:var(--noir-jais) url("assets/videos/accueil/poster.webp") center/cover no-repeat}   /* affiche = image d'attente ET élément principal (LCP) peint sans attendre le média */
-.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-/* Overlay dégradé charte (Épinette -> Noir de jais), pas d'animation coûteuse */
-.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(140deg,rgba(31,111,100,.62) 0%,rgba(27,45,40,.72) 100%)}
-.hero-inner{position:relative;z-index:2;width:100%;max-width:var(--maxw);margin-inline:auto;padding:clamp(3rem,8vh,6rem) var(--pad-x)}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--font-titre);font-size:var(--fs-micro);font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--turquoise);margin-bottom:1.1rem}
-.hero-eyebrow::before{content:"";width:26px;height:2px;background:var(--turquoise);border-radius:2px}
-.hero-title{font-size:clamp(2.4rem,6vw,4.6rem);color:var(--creme);max-width:16ch;margin:0 0 1.5rem;line-height:1.05}
-.hero-sub{color:rgba(244,250,249,.9);font-size:var(--fs-lead);max-width:52ch;margin:0 0 2.2rem}
-.hero-actions{display:flex;flex-wrap:wrap;gap:1rem}
-/* Entrée au chargement (transform/opacity uniquement) */
-.hero-anim{opacity:0;transform:translateY(20px);animation:heroIn .6s var(--ease-out) forwards}
-.hero-anim.d1{animation-delay:.05s}.hero-anim.d2{animation-delay:.15s}.hero-anim.d3{animation-delay:.25s}.hero-anim.d4{animation-delay:.35s}
-@keyframes heroIn{to{opacity:1;transform:none}}
-.scroll-cue{position:absolute;left:50%;bottom:22px;z-index:2;transform:translateX(-50%);color:rgba(244,250,249,.7);display:grid;place-items:center;gap:.35rem;font-size:var(--fs-micro);letter-spacing:.14em;text-transform:uppercase}
-.scroll-cue svg{width:22px;height:22px;animation:cue 2.2s var(--ease) infinite}
-@keyframes cue{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(5px);opacity:1}}
-
-/* ==================== PARTENAIRES (ruche hexagonale) ==================== */
-.hive-sec{padding:clamp(3.5rem,8vw,6rem) 0;background:var(--creme);position:relative;overflow:hidden;text-align:center;border-bottom:1px solid var(--granit-12)}
-.hive-sec .eyebrow{justify-content:center;color:var(--epinette)}
-.hive{--hex-w:clamp(56px,10vw,116px);display:flex;flex-direction:column;align-items:center;margin:1.5rem auto 0}
-.hive-row{display:flex;justify-content:center}
-.hive-row+.hive-row{margin-top:calc(var(--hex-w) * -0.24)}
-.hex{width:var(--hex-w);height:calc(var(--hex-w) * 1.1547);margin:0 4px;position:relative;
-  filter:drop-shadow(6px 6px 12px rgba(27,45,40,.12)) drop-shadow(-6px -6px 12px rgba(255,255,255,.92))}
-.hex__face{position:absolute;inset:0;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
-  background:linear-gradient(145deg,#ffffff,#e6eeec);display:grid;place-items:center}
-.hex img{width:56%;height:56%;object-fit:contain}
-.hex--logo img{mix-blend-mode:multiply}
-.hex--logo{transition:transform var(--t-fast) var(--ease-out),filter var(--t-fast) var(--ease);cursor:pointer}
-.hex--logo:hover{transform:translateY(-5px);filter:drop-shadow(4px 12px 18px rgba(27,45,40,.18)) drop-shadow(-4px -4px 10px rgba(255,255,255,.9))}
-.hex--hub{filter:drop-shadow(0 10px 24px var(--turquoise-glow)) drop-shadow(-4px -4px 10px rgba(255,255,255,.9))}
-.hex--hub .hex__face{background:linear-gradient(145deg,#ffffff,#e3f7f3)}
-.hex--hub img{mix-blend-mode:normal;width:62%;height:62%}
-.hive-badge{display:inline-flex;align-items:center;gap:.65rem;margin:2.25rem auto 1rem;padding:.8rem 2.1rem;border-radius:var(--radius-pill);
-  background:linear-gradient(135deg,var(--epinette),var(--sarcelle));color:var(--creme);
-  font-family:var(--font-titre);font-weight:700;font-size:clamp(1.25rem,2.6vw,1.7rem);box-shadow:0 16px 32px rgba(31,111,100,.28)}
-.hive-badge .dot{width:12px;height:12px;border-radius:50%;background:var(--turquoise);box-shadow:0 0 0 4px var(--turquoise-glow);flex-shrink:0}
-.hive-sub{color:var(--granit);font-size:var(--fs-lead);max-width:48ch;margin:0 auto}
-@media (prefers-reduced-motion:reduce){.hex--logo:hover{transform:none}}
-/* ==================== SECTIONS ==================== */
-.section{padding:clamp(3.5rem,8vw,6rem) 0}
-.section--alt{background:linear-gradient(160deg,#eef6f5 0%,var(--creme) 60%)}
-.eyebrow{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--font-titre);font-size:var(--fs-micro);font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--turquoise);margin-bottom:1rem}
-.eyebrow::before{content:"";width:26px;height:2px;background:var(--turquoise);border-radius:2px}
-.section__head{max-width:64ch;margin-bottom:2.5rem}
-.section__title{font-size:var(--fs-h2);max-width:22ch}
-.section__lead{font-size:var(--fs-lead);color:var(--granit)}
-
-/* ===== BENTO — présentation des chiffres (façon dashboard) ===== */
-.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem;grid-auto-rows:minmax(110px,auto);margin-top:2.5rem}
-.b-card{border-radius:var(--radius-lg);padding:1.5rem;position:relative;overflow:hidden;display:flex;flex-direction:column;transition:transform var(--t-fast) var(--ease-out),box-shadow var(--t-fast) var(--ease-out)}
-.b-card:hover{transform:translateY(-4px)}
-.b-white{background:#fff;border:1px solid var(--granit-12);box-shadow:var(--shadow-sm)}
-.b-white:hover{box-shadow:var(--shadow-card)}
-.b-dark{background:var(--epinette);color:var(--creme)}
-.b-dark2{background:var(--noir-jais);color:var(--creme)}
-.b-mint{background:linear-gradient(150deg,#d3f0e1,#c3ead6);color:var(--noir-jais)}
-.b-stats{grid-column:span 7;grid-row:span 2}
-.b-hero{grid-column:span 5;grid-row:span 2}
-.b-cert{grid-column:span 4}
-.b-prog{grid-column:span 4}
-.b-exp{grid-column:span 4}
-.b-list{grid-column:span 5;grid-row:span 2}
-.b-up{grid-column:span 3;grid-row:span 2}
-.b-act{grid-column:span 4;grid-row:span 2}
-.b-masked{font-family:var(--font-titre);letter-spacing:.15em;font-size:.8rem;opacity:.7}
-.b-circle{position:absolute;top:1.25rem;right:1.25rem;width:34px;height:34px;border-radius:50%;display:grid;place-items:center}
-.b-mint .b-circle{background:rgba(27,45,40,.1);color:var(--epinette)}
-.b-dark .b-circle,.b-dark2 .b-circle{background:rgba(244,250,249,.16);color:var(--creme)}
-.b-circle svg{width:18px;height:18px}
-.b-num{font-family:var(--font-titre);font-weight:700;font-size:clamp(2rem,4vw,3rem);line-height:1}
-.b-dark .b-num,.b-dark2 .b-num{color:var(--turquoise)}
-.b-label{font-size:var(--fs-small);color:var(--granit)}
-.b-dark .b-label,.b-dark2 .b-label{color:rgba(244,250,249,.75)}
-.b-mint .b-label{color:rgba(27,45,40,.6)}
-.b-title{font-family:var(--font-titre);font-weight:600;font-size:var(--fs-h3)}
-.b-stats__head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
-.b-legends{display:flex;gap:2.5rem;margin-top:1.25rem}
-.b-legend .k{display:inline-flex;align-items:center;gap:.5rem;font-size:var(--fs-small);color:var(--granit)}
-.b-legend .k::before{content:"";width:9px;height:9px;border-radius:50%}
-.b-legend.dark .k::before{background:var(--epinette)}
-.b-legend.mint .k::before{background:#7fd6b4}
-.b-legend .v{font-family:var(--font-titre);font-weight:700;font-size:1.5rem;color:var(--noir-jais);margin-top:.15rem}
-.b-bars{display:flex;align-items:flex-end;gap:8px;height:118px;flex:1}
-.b-bars .bar{flex:1;min-width:8px;border-radius:var(--radius-pill);background:var(--epinette);display:flex;flex-direction:column;justify-content:flex-start}
-.b-bars .bar>span{display:block;width:100%;background:#a9e3c9;border-radius:var(--radius-pill)}
-.b-pill{display:inline-flex;align-items:center;gap:.35rem;align-self:flex-start;background:rgba(27,45,40,.1);color:var(--noir-jais);font-family:var(--font-titre);font-weight:600;font-size:.8rem;padding:.35rem .8rem;border-radius:var(--radius-pill);margin-top:.85rem}
-.b-cert{padding:0}
-.b-cert__top{padding:1.35rem 1.5rem;flex:1;display:flex;flex-direction:column;gap:.4rem}
-.b-cert__foot{background:var(--epinette);color:var(--creme);padding:1rem 1.5rem}
-.b-cert__foot .b-num{color:var(--turquoise);font-size:1.9rem}
-.b-track{height:10px;border-radius:var(--radius-pill);background:rgba(244,250,249,.18);overflow:hidden;margin-top:.75rem}
-.b-track>span{display:block;height:100%;border-radius:var(--radius-pill);background:linear-gradient(90deg,#a9e3c9,var(--turquoise))}
-.b-row{display:flex;align-items:center;gap:.85rem;padding:.8rem 0;border-bottom:1px solid var(--granit-12)}
-.b-row:last-child{border-bottom:none}
-.b-row__ic{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;background:var(--brume-14);color:var(--epinette)}
-.b-row__ic svg{width:18px;height:18px}
-.b-row__t{font-family:var(--font-titre);font-weight:600;font-size:.95rem}
-.b-row__s{font-size:var(--fs-small);color:var(--granit)}
-.b-row__tag{margin-left:auto;font-family:var(--font-titre);font-weight:600;font-size:.75rem;color:var(--epinette);background:var(--brume-14);padding:.25rem .6rem;border-radius:var(--radius-pill)}
-.b-act{gap:.85rem;background:transparent;padding:0;box-shadow:none}
-.b-act:hover{transform:none}
-.b-btn{flex:1;display:flex;align-items:center;justify-content:space-between;gap:.5rem;font-family:var(--font-titre);font-weight:700;padding:1.1rem 1.35rem;border-radius:var(--radius);transition:transform var(--t-fast) var(--ease-out),box-shadow var(--t-fast) var(--ease-out)}
-.b-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
-.b-btn--mint{background:linear-gradient(150deg,#d3f0e1,#c3ead6);color:var(--noir-jais)}
-.b-btn--dark{background:var(--epinette);color:var(--creme)}
-.b-btn__ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:rgba(27,45,40,.12)}
-.b-btn--dark .b-btn__ic{background:rgba(244,250,249,.18)}
-.b-btn__ic svg{width:18px;height:18px}
-@media(max-width:980px){.bento{grid-template-columns:repeat(6,1fr)}.b-stats,.b-hero,.b-list{grid-column:span 6;grid-row:span 2}.b-cert,.b-prog,.b-exp{grid-column:span 3}.b-up,.b-act{grid-column:span 3;grid-row:span 2}}
-@media(max-width:600px){.bento{grid-template-columns:1fr;grid-auto-rows:auto}.bento>.b-card{grid-column:1/-1;grid-row:auto}.b-bars{height:88px}}
-
-/* Fiche établissement */
-.fiche-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,3.5rem);align-items:start;margin-top:2.5rem}
-.badge-loc{display:inline-flex;align-items:center;gap:.5rem;background:#e3eeec;color:var(--epinette);font-family:var(--font-titre);font-weight:600;font-size:var(--fs-small);padding:.4rem .9rem;border-radius:var(--radius-pill);margin-bottom:1rem}
-.badge-loc svg{width:16px;height:16px}
-.info-list{display:flex;flex-direction:column;gap:1.25rem}
-.info-item{display:flex;align-items:flex-start;gap:1rem}
-.info-item__ic{flex-shrink:0;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--brume-14);color:var(--epinette)}
-.info-item__ic svg{width:22px;height:22px}
-.info-item__label{font-size:var(--fs-micro);letter-spacing:.1em;text-transform:uppercase;color:var(--granit);margin-bottom:.15rem}
-.info-item__value{font-family:var(--font-titre);font-weight:600;color:var(--noir-jais)}
-.info-item__value span{display:block;font-family:var(--font-texte);font-weight:400;color:var(--granit);font-size:.92rem}
-.capacity{display:flex;align-items:center;gap:1rem;background:var(--noir-jais);color:var(--creme);border-radius:var(--radius);padding:1.1rem 1.4rem;margin-top:.5rem}
-.capacity__num{font-family:var(--font-titre);font-weight:700;font-size:2rem;color:var(--turquoise);line-height:1}
-.capacity__txt strong{display:block;font-family:var(--font-titre)}
-.capacity__txt span{font-size:var(--fs-small);color:var(--granit-clair)}
-.map-wrapper{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;border-radius:var(--radius);border:1px solid var(--granit-12);box-shadow:var(--shadow-sm)}
-.map-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
-.map-link{display:inline-flex;align-items:center;gap:.4rem;margin-top:1rem;font-family:var(--font-titre);font-weight:600;font-size:.92rem;color:var(--epinette);transition:gap var(--t-fast) var(--ease-out),color var(--t-fast) var(--ease)}
-.map-link:hover{color:var(--brume);gap:.65rem}
-
 /* ==================== FOOTER (validé) ==================== */
 .site-footer{position:relative;overflow:hidden;background:var(--noir-jais);color:var(--creme);isolation:isolate}
 .site-footer::before,.site-footer::after{content:"";position:absolute;z-index:-1;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none}
@@ -332,15 +197,24 @@ a.f-c-value:hover{color:var(--turquoise)}
 
 /* RESPONSIVE */
 @media (max-width:1080px){.main-nav,.header-actions{display:none}.nav-toggle{display:inline-flex}.main-inner{justify-content:space-between}.f-grid{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));row-gap:2.75rem}.f-grid>*:first-child{grid-column:1/-1;max-width:520px}}
-@media (max-width:820px){.fiche-grid{grid-template-columns:1fr}}
 @media (max-width:920px){.util-tag{display:none}.util-contacts{margin-inline:auto}}@media (max-width:640px){.util-bar{font-size:.8rem}.util-contacts{gap:1.1rem}.util-contacts svg{width:14px;height:14px}}@media (max-width:380px){.util-contacts{gap:.7rem;font-size:.72rem}}
-@media (max-width:620px){.f-grid{grid-template-columns:1fr}.f-cta{flex-direction:column;align-items:flex-start}.f-legal{flex-direction:column;text-align:center;justify-content:center}.f-legal__links{justify-content:center}.impact-main{flex-direction:column;align-items:flex-start;text-align:left}}
+@media (max-width:620px){.f-grid{grid-template-columns:1fr}.f-cta{flex-direction:column;align-items:flex-start}.f-legal{flex-direction:column;text-align:center;justify-content:center}.f-legal__links{justify-content:center}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
-  .reveal{opacity:1;transform:none}.hero-anim{opacity:1;transform:none}
-  .marquee__track{animation:none}.scroll-cue svg{animation:none}
+  .reveal{opacity:1;transform:none}
 }
 </style>
+<link rel="stylesheet" href="css/home.css">
+<script>
+/* Accueil — décidé AVANT le premier affichage (aucun flash) : html.js (améliorations actives) ; html.home-intro (intro du
+   logo : 1re visite de la session, sans ancre, hors robots) ; html.home-still (mouvement réduit ou économie de données :
+   image fixe, aucune vidéo). La suite est dans js/home.js. */
+(function(r){r.classList.add("js");var c=navigator.connection||{},k="wisy-home-intro",seen=null;
+if(matchMedia("(prefers-reduced-motion: reduce)").matches||c.saveData){r.classList.add("home-still");return;}
+try{seen=sessionStorage.getItem(k);sessionStorage.setItem(k,"1");}catch(e){seen="1";}
+if(!seen&&!location.hash&&!/bot\b|crawl|spider|slurp|mediapartners|facebookexternalhit|embedly/i.test(navigator.userAgent||""))r.classList.add("home-intro");
+})(document.documentElement);
+</script>
 </head>
 <body>
 
@@ -437,187 +311,392 @@ a.f-c-value:hover{color:var(--turquoise)}
   </div>
 </aside>
 
-<main>
-  <!-- ==================== HERO VIDÉO ==================== -->
-  <section class="hero" aria-labelledby="hero-title">
-    <!-- /* VIDEO À INSÉRER : sources injectées ci-dessous selon l'écran (desktop 1080p / mobile 720p) */ -->
-    <video id="heroVideo" class="hero-video" autoplay muted loop playsinline preload="metadata"
-           poster="assets/videos/accueil/poster.webp" aria-hidden="true" tabindex="-1"></video>
-    <script>
-    (function(){
-      /* Hero vidéo : l'AFFICHE (poster.webp, préchargée) est l'élément visible immédiatement ; les sources vidéo
-         (0,5 à 1,2 Mo) ne se téléchargent qu'APRÈS le chargement de la page, pour ne pas concurrencer le
-         contenu critique — et jamais si le visiteur demande moins de mouvement ou d'économiser ses données. */
-      var v=document.getElementById('heroVideo'),base='assets/videos/accueil/',c=navigator.connection||{};
-      if(!v||matchMedia('(prefers-reduced-motion: reduce)').matches||c.saveData)return;
-      function add(s,t){var e=document.createElement('source');e.src=base+s;e.type=t;v.appendChild(e);}
-      function start(){
-        if(matchMedia('(max-width:768px)').matches){add('hero-720.mp4','video/mp4');}
-        else{add('hero-1080.webm','video/webm');add('hero-1080.mp4','video/mp4');}
-        v.load();
-      }
-      if(document.readyState==='complete')start();else addEventListener('load',start,{once:true});
-    })();
-    </script>
-    <div class="hero-overlay" aria-hidden="true"></div>
-    <div class="hero-inner">
-      <p class="hero-eyebrow hero-anim d1" data-i18n="home.hero_eyebrow">Centre de formation · Anderlecht</p>
-      <h1 class="hero-title hero-anim d2" id="hero-title" data-i18n="home.hero_title">La sécurité comme une référence</h1>
-      <p class="hero-sub hero-anim d3" data-i18n="home.hero_sub">Formez et certifiez vos équipes avec des experts du terrain — VCA, PEB, coordination, premiers secours.</p>
-      <div class="hero-actions hero-anim d4">
-        <a class="btn btn--cta" href="formations.html" data-i18n="home.hero_cta1">Consulter les formations</a>
-        <a class="btn btn--light" href="contact.html" data-i18n="home.hero_cta2">Nous contacter</a>
-      </div>
-    </div>
-    <span class="scroll-cue" aria-hidden="true"><span data-i18n="home.scroll">Découvrir</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
-  </section>
+<main class="home" id="contenu">
+  <!-- Pictogrammes de l'accueil (sprite en ligne, réutilisé par <use>) -->
+  <svg class="home-sprite" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/><path d="m9 12 2 2 4-4"/></g></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></g></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></g></symbol>
+    <symbol id="i-team" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></g></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></g></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></g></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+    <symbol id="i-badge" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></g></symbol>
+    <symbol id="i-tool" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 0 0-5.6 5.6L3 18l3 3 6.1-6.1a4 4 0 0 0 5.6-5.6l-2.5 2.5-2.1-.4-.4-2.1z"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></g></symbol>
+    <symbol id="i-hier" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6M6 21v-6M18 21v-6M6 15a6 6 0 0 1 12 0"/><circle cx="12" cy="9" r="1.4"/></g></symbol>
+    <symbol id="i-fibre" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12c4-6 12-6 16 0M7 12c2.5-3.5 7.5-3.5 10 0"/><circle cx="12" cy="12" r="2"/></g></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v5l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 17l-5-9V3"/><path d="M7.5 14h9"/></g></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></g></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13a1 1 0 0 0 1.5.86l10.2-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path fill="currentColor" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></symbol>
+    <symbol id="i-replay" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></g></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9"/></symbol>
+  </svg>
 
-  <!-- ==================== PARTENAIRES (ruche) ==================== -->
-  <section class="hive-sec" data-i18n-attr="aria-label:home.partners_eyebrow" aria-label="Nos partenaires">
-    <div class="container">
-      <p class="eyebrow" data-i18n="home.partners_eyebrow">Nos partenaires</p>
-      <div class="hive reveal" role="img" data-i18n-attr="aria-label:home.hive_aria" aria-label="Wisy Safety au centre de son réseau de 6 partenaires : Orange, Proximus, Telenet, Constructel, VOO, Unifiber">
-        <div class="hive-row">
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
+  <!-- ==================== HERO + INTRO DU LOGO ==================== -->
+  <section class="home-hero" id="accueil" aria-labelledby="home-hero-title" data-home-hero>
+    <!-- 1er élément du hero dans l'ordre du clavier : visible uniquement pendant l'intro du logo -->
+    <button class="home-intro-skip" type="button" data-intro-skip><span data-i18n="home.intro_skip">Passer l'intro</span><span class="home-intro-skip__bar" aria-hidden="true"></span></button>
+    <div class="home-hero__bg" aria-hidden="true"></div>
+    <div class="home-hero__stage" aria-hidden="true"></div>
+    <div class="home-wrap home-hero__inner">
+      <div class="home-hero__copy">
+        <p class="home-eyebrow home-hero__eyebrow" data-hero-step data-i18n="home.hero_eyebrow">Centre de formation sécurité · Anderlecht, Bruxelles</p>
+        <h1 class="home-hero__title" id="home-hero-title" tabindex="-1">
+          <span class="home-line"><span class="home-line__in" data-i18n="home.hero_l1">Formez-vous.</span></span>
+          <span class="home-line"><span class="home-line__in" data-i18n="home.hero_l2">Travaillez</span></span>
+          <span class="home-line home-line--accent"><span class="home-line__in" data-i18n="home.hero_l3">en sécurité.</span></span>
+        </h1>
+        <p class="home-hero__lead" data-hero-step data-i18n="home.hero_lead">VCA, premiers secours, nacelles élévatrices, certificateur PEB&nbsp;: des formations concrètes, avec des experts du terrain, pour vous comme pour vos équipes.</p>
+        <div class="home-hero__actions" data-hero-step>
+          <a class="home-btn home-btn--primary" href="formations.html"><span data-i18n="home.hero_cta1">Découvrir nos formations</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="home-btn home-btn--ghost" href="#entreprises"><span data-i18n="home.hero_cta2">Former mon équipe</span></a>
         </div>
-        <div class="hive-row">
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/orange-240.webp" width="240" height="240" alt="Orange" loading="lazy"></div></div>
-          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/proximus-240.webp" width="240" height="79" alt="Proximus" loading="lazy"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-        </div>
-        <div class="hive-row">
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/telenet-240.webp" width="240" height="62" alt="Telenet" loading="lazy"></div></div>
-          <div class="hex hex--hub"><div class="hex__face"><img src="assets/images/logo/logo-102.webp" srcset="assets/images/logo/logo-102.webp 102w, assets/images/logo/logo-204.webp 204w" sizes="72px" alt="Wisy Safety" width="102" height="112"></div></div>
-          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/constructel-240.webp" width="200" height="200" alt="Constructel" loading="lazy"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-        </div>
-        <div class="hive-row">
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/voo-240.webp" width="240" height="136" alt="VOO" loading="lazy"></div></div>
-          <div class="hex hex--logo"><div class="hex__face"><img src="assets/images/partenaires/unifiber-240.webp" width="240" height="135" alt="Unifiber" loading="lazy"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-        </div>
-        <div class="hive-row">
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-          <div class="hex hex--empty"><div class="hex__face"></div></div>
-        </div>
-      </div>
-      <div class="hive-badge reveal"><span class="dot" aria-hidden="true"></span><span data-i18n="home.partners_badge">6 partenaires de confiance</span></div>
-      <p class="hive-sub reveal" data-i18n="home.partners_sub">Des acteurs majeurs des télécoms et de la construction forment et certifient leurs équipes avec Wisy Safety.</p>
-    </div>
-  </section>
-
-  <!-- ==================== IMPACT & ÉTABLISSEMENT ==================== -->
-  <section class="section" id="formations" aria-labelledby="impact-title">
-    <div class="container">
-      <div class="section__head reveal">
-        <p class="eyebrow" data-i18n="home.impact_eyebrow">Impact &amp; Établissement</p>
-        <h2 class="section__title" id="impact-title" data-i18n="home.impact_title">Dix ans d'expertise, en chiffres et en détail</h2>
-        <p class="section__lead" data-i18n="home.impact_lead">Des résultats concrets et un centre de formation entièrement équipé à Anderlecht, pour accompagner vos équipes vers l'excellence en matière de sécurité au travail.</p>
+        <ul class="home-hero__assure" data-hero-step>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="home.hero_as1">Inscription en ligne</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="home.hero_as2">Récapitulatif immédiat</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="home.hero_as3">Devis pour les entreprises</span></li>
+        </ul>
       </div>
 
-      <div class="bento">
-
-        <div class="b-card b-white b-stats reveal">
-          <div class="b-stats__head"><h3 class="b-title" data-i18n="home.b_stats">Statistiques</h3></div>
-          <div class="b-bars" aria-hidden="true"><div class="bar" style="height:58%"><span style="height:45%"></span></div><div class="bar" style="height:82%"><span style="height:32%"></span></div><div class="bar" style="height:42%"><span style="height:60%"></span></div><div class="bar" style="height:96%"><span style="height:26%"></span></div><div class="bar" style="height:66%"><span style="height:42%"></span></div><div class="bar" style="height:50%"><span style="height:55%"></span></div><div class="bar" style="height:88%"><span style="height:34%"></span></div><div class="bar" style="height:72%"><span style="height:46%"></span></div></div>
-          <div class="b-legends">
-            <div class="b-legend dark"><span class="k" data-i18n="home.b_specialists">Spécialistes</span><div class="v"><span data-count="5">0</span>+</div></div>
-            <div class="b-legend mint"><span class="k" data-i18n="home.b_nationalities">Nationalités formées</span><div class="v"><span data-count="15">0</span></div></div>
-          </div>
+      <div class="home-hero__media">
+        <div class="home-hero__screen" data-hero-screen>
+          <!-- Animation du logo (assets/originaux/accueil/logo-animation.mp4, recadrée 4:5 et allégée : voir docs/README-ACCUEIL.md).
+               Les sources sont posées par le script ci-dessous (jamais en mouvement réduit ni en économie de données). -->
+          <video class="home-hero__video" id="homeLogoVideo" muted playsinline preload="none" poster="assets/videos/accueil/logo-animation-debut.webp" width="720" height="900" aria-hidden="true" tabindex="-1"></video>
+          <script>
+          (function(){
+            /* Vidéo du logo : l'AFFICHE (1re image, préchargée) est peinte immédiatement ; la vidéo se charge TOUT DE SUITE
+               quand elle sert d'intro (c'est alors le contenu principal), sinon après l'événement load — et jamais en
+               mouvement réduit ni en économie de données (html.home-still : l'image finale remplace la vidéo). */
+            var v=document.getElementById('homeLogoVideo'),r=document.documentElement;
+            if(!v||r.classList.contains('home-still'))return;
+            var h=document.querySelector('.site-header');if(h)r.style.setProperty('--home-hdr',Math.round(h.getBoundingClientRect().height)+'px');
+            function start(){v.src=matchMedia('(max-width: 767px)').matches?'assets/videos/accueil/logo-animation-480.mp4':'assets/videos/accueil/logo-animation-720.mp4';v.load();}
+            if(r.classList.contains('home-intro')){v.preload='auto';start();}
+            else if(document.readyState==='complete')start();else addEventListener('load',start,{once:true});
+          })();
+          </script>
+          <img class="home-hero__still" src="assets/videos/accueil/logo-animation-fin.webp" width="720" height="900" alt="" loading="lazy" decoding="async">
+          <span class="home-hero__tag" data-i18n="home.hero_tag">La sécurité comme une référence</span>
+          <button class="home-hero__toggle" type="button" data-video-toggle data-state="pause">
+            <svg class="i-pause" aria-hidden="true"><use href="#i-pause"/></svg><svg class="i-play" aria-hidden="true"><use href="#i-play"/></svg><svg class="i-replay" aria-hidden="true"><use href="#i-replay"/></svg>
+            <span class="home-sr" data-i18n="home.video_pause">Mettre l'animation en pause</span>
+          </button>
         </div>
-
-        <div class="b-card b-mint b-hero reveal">
-          <span class="b-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18"/></svg></span>
-          <span class="b-masked">**** 2016</span>
-          <div style="margin-top:auto">
-            <div class="b-label" data-i18n="home.b_pros">Professionnels formés</div>
-            <div class="b-num"><span data-count="500">0</span>+</div>
-          </div>
-          <span class="b-pill" data-i18n="home.b_sat_pill">★ 100% de satisfaction</span>
-        </div>
-
-        <div class="b-card b-white b-cert reveal">
-          <div class="b-cert__top"><div class="b-title" data-i18n="home.b_certifications">Certifications</div><span class="b-masked">**** 2016</span></div>
-          <div class="b-cert__foot"><div class="b-label" style="color:rgba(244,250,249,.75)" data-i18n="home.b_delivered">Délivrées</div><div class="b-num"><span data-count="250">0</span>+</div></div>
-        </div>
-
-        <div class="b-card b-dark b-prog reveal">
-          <div class="b-title" style="color:var(--creme)" data-i18n="home.b_client_sat">Satisfaction clients</div>
-          <div style="margin-top:auto">
-            <div class="b-num"><span data-count="100">0</span>%</div>
-            <div class="b-track"><span style="width:100%"></span></div>
-            <div class="b-label" style="margin-top:.55rem" data-i18n="home.b_goal">Objectif atteint</div>
-          </div>
-        </div>
-
-        <div class="b-card b-dark2 b-exp reveal">
-          <span class="b-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18"/></svg></span>
-          <span class="b-masked">**** 2016</span>
-          <div style="margin-top:auto"><div class="b-label" data-i18n="home.b_experience">Années d'expérience</div><div class="b-num"><span data-count="10">0</span></div></div>
-        </div>
-
-        <div class="b-card b-white b-list reveal">
-          <div class="b-title" style="margin-bottom:.35rem" data-i18n="home.b_flagship">Formations phares</div>
-          <div class="b-row"><span class="b-row__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/></svg></span><div><div class="b-row__t" data-i18n="dd.vca_base">VCA de base</div><div class="b-row__s" data-i18n="home.b_site_safety">Sécurité chantier</div></div><span class="b-row__tag" data-i18n="home.b_certifying">Certifiant</span></div>
-          <div class="b-row"><span class="b-row__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21h6v-4H4zM7 17V4l12 3v6"/></svg></span><div><div class="b-row__t" data-i18n="dd.nacelle">Nacelles élévatrices</div><div class="b-row__s" data-i18n="home.b_pemp">Conduite PEMP</div></div><span class="b-row__tag" data-i18n="home.b_certifying">Certifiant</span></div>
-          <div class="b-row"><span class="b-row__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c-4-2.5-7-6-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 4-3 7.5-7 10z"/><path d="M12 9v4M10 11h4"/></svg></span><div><div class="b-row__t" data-i18n="dd.beps">BEPS — Premier secours</div><div class="b-row__s" data-i18n="home.b_firstaid">Secourisme</div></div><span class="b-row__tag" data-i18n="home.b_certifying">Certifiant</span></div>
-        </div>
-
-        <div class="b-card b-white b-up reveal">
-          <div class="b-label" data-i18n="home.b_partners">Partenaires</div>
-          <div class="b-num" style="color:var(--epinette);margin:.5rem 0"><span data-count="6">0</span></div>
-          <div class="b-row__s" data-i18n="home.b_partners_desc">Acteurs majeurs des télécoms &amp; de la construction.</div>
-        </div>
-
-        <div class="b-card b-act reveal">
-          <a class="b-btn b-btn--mint" href="inscription.html"><span data-i18n="header.register">S'inscrire</span> <span class="b-btn__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
-          <a class="b-btn b-btn--dark" href="contact.html"><span data-i18n="home.hero_cta2">Nous contacter</span> <span class="b-btn__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
-        </div>
-
+        <a class="home-float home-float--centre" href="#centre">
+          <span class="home-float__icon" aria-hidden="true"><svg><use href="#i-pin"/></svg></span>
+          <span class="home-float__body"><span class="home-float__title" data-i18n="home.float_centre">Centre d'Anderlecht</span><span class="home-float__meta"><span data-i18n="home.float_days">Lun. – Jeu.</span> · 10:00 – 16:00</span></span>
+        </a>
+        <a class="home-float home-float--vca" href="formation-vca-base.html">
+          <span class="home-float__icon" aria-hidden="true"><svg><use href="#i-shield"/></svg></span>
+          <span class="home-float__body"><span class="home-float__title" data-i18n="dd.vca_base">VCA de base</span><span class="home-float__meta"><span data-i18n="dd.vca_base_dur">1 jour</span> · <span data-i18n="dd.vca_base_exam">Examen inclus</span></span></span>
+          <svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </a>
       </div>
-
     </div>
   </section>
 
-  <!-- ==================== FICHE DE L'ÉTABLISSEMENT ==================== -->
-  <section class="section section--alt" id="contact" aria-labelledby="fiche-title">
-    <div class="container">
-      <div class="section__head reveal">
-        <span class="badge-loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg><span data-i18n="home.fiche_badge">Centre Anderlecht</span></span>
-        <p class="eyebrow" style="color:var(--epinette)" data-i18n="home.fiche_eyebrow">Fiche de l'établissement</p>
-        <h2 class="section__title" id="fiche-title" data-i18n="home.fiche_title">Formez-vous à la sécurité</h2>
-        <p class="section__lead" data-i18n="home.fiche_lead">Un établissement de formation professionnel aux installations modernes et entièrement équipées, dédié à l'excellence en matière de sécurité au travail.</p>
+  <!-- ==================== CONFIANCE : PARTENAIRES + CHIFFRES ==================== -->
+  <section class="home-proof" id="confiance" aria-labelledby="home-proof-title">
+    <div class="home-wrap home-proof__grid">
+      <div class="home-proof__copy">
+        <p class="home-eyebrow home-reveal" data-i18n="home.proof_eyebrow">Ils nous font confiance</p>
+        <h2 class="home-h2 home-reveal" id="home-proof-title" data-i18n="home.proof_title">Des acteurs majeurs des télécoms et de la construction forment leurs équipes avec nous.</h2>
+        <dl class="home-stats" data-stagger>
+          <div class="home-stat home-reveal"><dt data-i18n="home.stat_years">ans d'expérience</dt><dd><span data-count="10">10</span><small>+</small></dd></div>
+          <div class="home-stat home-reveal"><dt data-i18n="home.stat_trained">professionnels formés</dt><dd><span data-count="500">500</span><small>+</small></dd></div>
+          <div class="home-stat home-reveal"><dt data-i18n="home.stat_certs">certifications délivrées</dt><dd><span data-count="250">250</span><small>+</small></dd></div>
+          <div class="home-stat home-reveal"><dt data-i18n="home.stat_satisfaction">de satisfaction</dt><dd><span data-count="100">100</span><small>%</small></dd></div>
+        </dl>
+        <a class="home-link home-reveal" href="avis.html"><span data-i18n="home.proof_reviews">Lire les avis de nos participants</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
-
-      <div class="fiche-grid">
-        <div class="reveal">
-          <div class="info-list">
-            <div class="info-item"><span class="info-item__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span><div><div class="info-item__label" data-i18n="footer.label_address">Adresse</div><div class="info-item__value">Avenue d'Itterbeek 378<span data-i18n="home.addr_city">1070 Anderlecht, Belgique</span></div></div></div>
-            <div class="info-item"><span class="info-item__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16M8 3v4M16 3v4M7 19l-2 2M17 19l2 2"/><circle cx="8.5" cy="15" r="1"/><circle cx="15.5" cy="15" r="1"/></svg></span><div><div class="info-item__label" data-i18n="home.info_access">Accessibilité</div><div class="info-item__value"><span data-i18n="home.info_access_val">Transports en commun</span><span data-i18n="home.info_access_sub">Accessible en bus &amp; en train</span></div></div></div>
-            <div class="info-item"><span class="info-item__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><div class="info-item__label" data-i18n="footer.col_hours">Heures d'ouverture</div><div class="info-item__value"><span data-i18n="home.info_hours_val">Lundi → Jeudi : 10h00 – 16h00</span><span data-i18n="home.info_hours_sub">Vendredi → Dimanche : Fermé</span></div></div></div>
-          </div>
-          <div class="capacity"><span class="capacity__num">15</span><div class="capacity__txt"><strong data-i18n="home.capacity_txt">participants</strong><span data-i18n="home.capacity_sub">Capacité maximale par session</span></div></div>
+      <div class="home-logos" role="group" data-i18n-attr="aria-label:home.logos_aria" aria-label="Nos partenaires&nbsp;: Orange, Proximus, Telenet, Constructel, VOO, Unifiber" data-stagger data-logo-cloud>
+        <div class="home-logos__col" data-depth="-16">
+          <div class="home-logo home-reveal" style="--s:.9"><img src="assets/images/partenaires/orange-240.webp" width="240" height="240" alt="Orange" loading="lazy" decoding="async"></div>
+          <div class="home-logo home-reveal" style="--s:1.12"><img src="assets/images/partenaires/telenet-240.webp" width="240" height="62" alt="Telenet" loading="lazy" decoding="async"></div>
         </div>
+        <div class="home-logos__col" data-depth="12">
+          <div class="home-logo home-reveal" style="--s:1.9"><img src="assets/images/partenaires/proximus-240.webp" width="240" height="79" alt="Proximus" loading="lazy" decoding="async"></div>
+          <div class="home-logo home-logo--hub home-reveal"><img src="assets/images/logo/logo-102.webp" srcset="assets/images/logo/logo-102.webp 102w, assets/images/logo/logo-204.webp 204w" sizes="96px" width="102" height="112" alt="Wisy Safety" loading="lazy" decoding="async"></div>
+          <div class="home-logo home-reveal" style="--s:1.2"><img src="assets/images/partenaires/voo-240.webp" width="240" height="136" alt="VOO" loading="lazy" decoding="async"></div>
+        </div>
+        <div class="home-logos__col" data-depth="-22">
+          <div class="home-logo home-reveal" style="--s:1.3"><img src="assets/images/partenaires/constructel-240.webp" width="200" height="200" alt="Constructel" loading="lazy" decoding="async"></div>
+          <div class="home-logo home-reveal" style="--s:1.04"><img src="assets/images/partenaires/unifiber-240.webp" width="240" height="135" alt="Unifiber" loading="lazy" decoding="async"></div>
+          <div class="home-logo home-logo--ghost home-reveal" aria-hidden="true"></div>
+        </div>
+        <div class="home-logos__col" data-depth="18" aria-hidden="true">
+          <div class="home-logo home-logo--ghost home-reveal"></div>
+          <div class="home-logo home-logo--ghost home-reveal"></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="reveal">
-          <div class="map-wrapper" data-consent-gate>
-            <iframe src="about:blank" data-consent-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2519.793116555751!2d4.276270977152576!3d50.834995871668056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c3c6c0d4b22ebf%3A0xc34a5df237b263cf!2sAv.%20d'Itterbeek%20378%2C%201070%20Anderlecht!5e0!3m2!1sfr!2sbe!4v1789299970751!5m2!1sfr!2sbe"
-              allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-              data-i18n-attr="title:home.map_title" title="Localisation du centre de formation Wisy Safety, Avenue d'Itterbeek 378, 1070 Anderlecht"></iframe>
-            <div class="wcc-gate">
-              <span class="wcc-gate__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3.2v5.1c0 4.6-3 8.7-7 9.9-4-1.2-7-5.3-7-9.9V6.2L12 3z"/></svg></span>
-              <p class="wcc-gate__text" data-i18n="cookies.gate_text">Ce contenu nécessite votre autorisation.</p>
-              <button type="button" class="btn btn--outline" data-wcc-open data-i18n="cookies.gate_btn">Modifier mes préférences</button>
+  <!-- ==================== CHOIX DU PARCOURS ==================== -->
+  <section class="home-section home-paths" id="parcours" aria-labelledby="home-paths-title">
+    <div class="home-wrap">
+      <header class="home-head home-head--center">
+        <p class="home-eyebrow home-reveal" data-i18n="home.paths_eyebrow">Votre parcours</p>
+        <h2 class="home-h2 home-reveal" id="home-paths-title" data-i18n="home.paths_title">Par où commencer&nbsp;?</h2>
+        <p class="home-lead home-reveal" data-i18n="home.paths_lead">Que vous vous formiez vous-même ou que vous formiez vos équipes, chaque parcours mène à la bonne formation.</p>
+      </header>
+      <div class="home-paths__grid" data-stagger>
+        <a class="home-path home-spot home-reveal" href="formations.html" aria-labelledby="path1-title path1-cta" aria-describedby="path1-text">
+          <div class="home-path__top"><span class="home-path__kicker" data-i18n="home.path1_kicker">Particulier · Participant</span><span class="home-path__icon" aria-hidden="true"><svg><use href="#i-user"/></svg></span></div>
+          <h3 class="home-path__title" id="path1-title" data-i18n="home.path1_title">Je me forme</h3>
+          <p class="home-path__text" id="path1-text" data-i18n="home.path1_text">Choisissez votre formation, inscrivez-vous en ligne et rejoignez une session.</p>
+          <ul class="home-path__list">
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="home.path1_li1">Une ou plusieurs formations en une inscription</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="home.path1_li2">Sessions publiées dans l'agenda</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="home.path1_li3">Une équipe pour vous conseiller</span></li>
+          </ul>
+          <span class="home-path__cta" id="path1-cta"><span data-i18n="home.path1_cta">Découvrir les formations</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+        </a>
+        <a class="home-path home-path--team home-spot home-reveal" href="#entreprises" aria-labelledby="path2-title path2-cta" aria-describedby="path2-text">
+          <div class="home-path__top"><span class="home-path__kicker" data-i18n="home.path2_kicker">Entreprise · Organisation</span><span class="home-path__icon" aria-hidden="true"><svg><use href="#i-team"/></svg></span></div>
+          <h3 class="home-path__title" id="path2-title" data-i18n="home.path2_title">Je forme mes équipes</h3>
+          <p class="home-path__text" id="path2-text" data-i18n="home.path2_text">Inscrivez plusieurs collaborateurs, demandez un devis ou une formation dédiée à votre entreprise.</p>
+          <ul class="home-path__list">
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="home.path2_li1">Plusieurs participants par formation</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="home.path2_li2">Devis adapté à votre besoin</span></li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg><span data-i18n="home.path2_li3">Formation dédiée ou sur site, sur demande</span></li>
+          </ul>
+          <span class="home-path__cta" id="path2-cta"><span data-i18n="home.path2_cta">Découvrir VCA Entreprise</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FORMATIONS ==================== -->
+  <section class="home-section home-trainings" id="formations" aria-labelledby="home-trainings-title">
+    <div class="home-wrap">
+      <header class="home-head home-head--split">
+        <div>
+          <p class="home-eyebrow home-reveal" data-i18n="home.tr_eyebrow">Formations</p>
+          <h2 class="home-h2 home-reveal" id="home-trainings-title" data-i18n="home.tr_title">Des formations concrètes, pensées pour le terrain.</h2>
+        </div>
+        <div class="home-head__side home-reveal">
+          <p class="home-lead" data-i18n="home.tr_lead">Sécurité, premiers secours, technique et management&nbsp;: découvrez nos formations et leurs modalités.</p>
+          <a class="home-link" href="formations.html"><span data-i18n="nav.all_formations">Voir toutes les formations</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </header>
+
+      <div class="home-tr-grid" data-stagger>
+        <a class="home-tr home-tr--feature home-reveal" href="formation-vca-base.html" aria-labelledby="tr-vca-title" aria-describedby="tr-vca-desc tr-vca-facts">
+          <span class="home-tr__media"><img src="assets/images/formations/vca-base.webp" width="720" height="540" alt="" loading="lazy" decoding="async"></span>
+          <span class="home-tr__cat" data-i18n="search.cat_securite">Sécurité</span>
+          <div class="home-tr__body">
+            <h3 class="home-tr__title" id="tr-vca-title" data-i18n="dd.vca_base">VCA de base</h3>
+            <p class="home-tr__desc" id="tr-vca-desc" data-i18n="dd.vca_base_desc">Les fondamentaux de la sécurité chantier</p>
+            <div class="home-tr__foot">
+              <span class="home-chips" id="tr-vca-facts"><span class="home-chip"><svg aria-hidden="true"><use href="#i-clock"/></svg><span data-i18n="dd.vca_base_dur">1 jour</span></span><span class="home-chip"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="dd.vca_base_fmt">Présentiel</span></span><span class="home-chip"><svg aria-hidden="true"><use href="#i-badge"/></svg><span data-i18n="dd.vca_base_exam">Examen inclus</span></span></span>
+              <span class="home-tr__go" aria-hidden="true"><svg class="home-arrow"><use href="#i-arrow"/></svg></span>
             </div>
           </div>
-          <a class="map-link" href="https://maps.google.com/?q=Avenue+d'Itterbeek+378,+1070+Anderlecht" target="_blank" rel="noopener"><span data-i18n="home.map_link">Voir sur Google Maps</span> <span aria-hidden="true">↗</span></a>
+        </a>
+        <a class="home-tr home-tr--half home-spot home-reveal" href="formation-nacelles-elevatrices.html" aria-labelledby="tr-nac-title" aria-describedby="tr-nac-desc tr-nac-facts">
+          <span class="home-tr__media"><img src="assets/images/nacelles/nacelle-ciseaux-640.webp" width="640" height="427" alt="" loading="lazy" decoding="async"></span>
+          <span class="home-tr__cat" data-i18n="search.cat_technique">Technique</span>
+          <div class="home-tr__body">
+            <h3 class="home-tr__title" id="tr-nac-title" data-i18n="dd.nacelle">Nacelles élévatrices</h3>
+            <p class="home-tr__desc" id="tr-nac-desc" data-i18n="dd.nacelle_desc">Conduite en sécurité des PEMP</p>
+            <div class="home-tr__foot">
+              <span class="home-chips" id="tr-nac-facts"><span class="home-chip"><svg aria-hidden="true"><use href="#i-clock"/></svg><span data-i18n="dd.nacelle_dur">1 jour</span></span><span class="home-chip"><svg aria-hidden="true"><use href="#i-tool"/></svg><span data-i18n="dd.nacelle_fmt">Théorie + pratique</span></span></span>
+              <span class="home-tr__go" aria-hidden="true"><svg class="home-arrow"><use href="#i-arrow"/></svg></span>
+            </div>
+          </div>
+        </a>
+        <a class="home-tr home-tr--half home-spot home-reveal" href="formation-beps-premiers-secours.html" aria-labelledby="tr-beps-title" aria-describedby="tr-beps-desc tr-beps-facts">
+          <span class="home-tr__media"><img src="assets/images/formations/beps.webp" width="1024" height="684" alt="" loading="lazy" decoding="async"></span>
+          <span class="home-tr__cat" data-i18n="search.cat_secours">Premiers secours</span>
+          <div class="home-tr__body">
+            <h3 class="home-tr__title" id="tr-beps-title" data-i18n="dd.beps">BEPS — Premier secours</h3>
+            <p class="home-tr__desc" id="tr-beps-desc" data-i18n="dd.beps_desc">Les gestes qui sauvent</p>
+            <div class="home-tr__foot">
+              <span class="home-chips" id="tr-beps-facts"><span class="home-chip"><svg aria-hidden="true"><use href="#i-clock"/></svg><span data-i18n="dd.beps_dur">15 heures</span></span><span class="home-chip"><svg aria-hidden="true"><use href="#i-tool"/></svg><span data-i18n="dd.beps_fmt">Essentiellement pratique</span></span></span>
+              <span class="home-tr__go" aria-hidden="true"><svg class="home-arrow"><use href="#i-arrow"/></svg></span>
+            </div>
+          </div>
+        </a>
+        <a class="home-tr home-tr--wide home-spot home-reveal" href="peb-wallonie-bruxelles.html" aria-labelledby="tr-peb-title" aria-describedby="tr-peb-desc">
+          <span class="home-tr__media"><img src="assets/images/peb/peb-cles-immeuble-900.webp" width="900" height="900" alt="" loading="lazy" decoding="async"></span>
+          <span class="home-tr__cat" data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</span>
+          <div class="home-tr__body">
+            <h3 class="home-tr__title" id="tr-peb-title" data-i18n="search.page_peb_t">Devenez certificateur PEB</h3>
+            <p class="home-tr__desc" id="tr-peb-desc" data-i18n="search.page_peb_d">Formation, examen et agrément en Wallonie et à Bruxelles</p>
+            <div class="home-tr__foot">
+              <span class="home-chips"><span class="home-chip"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="nav.peb">PEB Wallonie &amp; Bruxelles</span></span></span>
+              <span class="home-tr__go" aria-hidden="true"><svg class="home-arrow"><use href="#i-arrow"/></svg></span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="home-tr-more">
+        <p class="home-kicker home-reveal" data-i18n="home.tr_more">Également au catalogue</p>
+        <ul class="home-tr-list" data-stagger>
+          <li class="home-reveal"><a class="home-tr-row home-spot" href="formations.html#vca-hierarchique"><span class="home-tr-row__icon" aria-hidden="true"><svg><use href="#i-hier"/></svg></span><span class="home-tr-row__body"><span class="home-tr-row__title" data-i18n="dd.vca_hier">VCA ligne hiérarchique</span><span class="home-tr-row__meta"><span data-i18n="search.cat_management">Management</span> · <span data-i18n="home.dur_2d">2 jours</span></span></span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+          <li class="home-reveal"><a class="home-tr-row home-spot" href="formations.html#fibre-optique"><span class="home-tr-row__icon" aria-hidden="true"><svg><use href="#i-fibre"/></svg></span><span class="home-tr-row__body"><span class="home-tr-row__title" data-i18n="dd.fibre">Fibre optique</span><span class="home-tr-row__meta"><span data-i18n="search.cat_technique">Technique</span> · <span data-i18n="home.dur_3d">3 jours</span></span></span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+          <li class="home-reveal"><a class="home-tr-row home-spot" href="formations.html#diisocyanates"><span class="home-tr-row__icon" aria-hidden="true"><svg><use href="#i-flask"/></svg></span><span class="home-tr-row__body"><span class="home-tr-row__title" data-i18n="dd.diiso">Diisocyanates &amp; substances dangereuses</span><span class="home-tr-row__meta"><span data-i18n="search.cat_securite">Sécurité</span> · <span data-i18n="home.dur_1d">1 jour</span></span></span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== VCA ==================== -->
+  <section class="home-section home-vca" id="vca" aria-labelledby="home-vca-title">
+    <div class="home-wrap home-vca__grid">
+      <div class="home-vca__intro">
+        <p class="home-eyebrow home-reveal" data-i18n="home.vca_eyebrow">VCA</p>
+        <h2 class="home-h2 home-reveal" id="home-vca-title" data-i18n="home.vca_title">Préparez votre VCA avec méthode.</h2>
+        <p class="home-lead home-reveal" data-i18n="dd.vca_base_summary">Maîtrisez les règles fondamentales de sécurité au travail et préparez votre examen VCA Base, en présentiel à Anderlecht (Bruxelles), examen inclus.</p>
+        <ul class="home-chips home-reveal">
+          <li class="home-chip"><svg aria-hidden="true"><use href="#i-clock"/></svg><span data-i18n="dd.vca_base_dur">1 jour</span></li>
+          <li class="home-chip"><svg aria-hidden="true"><use href="#i-pin"/></svg><span data-i18n="dd.vca_base_fmt">Présentiel</span></li>
+          <li class="home-chip"><svg aria-hidden="true"><use href="#i-badge"/></svg><span data-i18n="dd.vca_base_exam">Examen inclus</span></li>
+          <li class="home-chip"><svg aria-hidden="true"><use href="#i-tag"/></svg><span data-i18n="home.vca_price">225 € / personne</span></li>
+        </ul>
+        <div class="home-actions home-reveal">
+          <a class="home-btn home-btn--primary" href="formation-vca-base.html"><span data-i18n="home.vca_cta">Découvrir la formation VCA Base</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </div>
+      </div>
+      <div class="home-vca__side">
+        <div>
+          <p class="home-kicker home-reveal" data-i18n="home.vca_lead_kicker">Vous encadrez une équipe&nbsp;?</p>
+          <a class="home-level home-spot home-reveal" href="formations.html#vca-hierarchique" aria-labelledby="vca-hier-title" aria-describedby="vca-hier-text">
+            <span class="home-level__icon" aria-hidden="true"><svg><use href="#i-hier"/></svg></span>
+            <div>
+              <h3 class="home-level__title" id="vca-hier-title" data-i18n="dd.vca_hier">VCA ligne hiérarchique</h3>
+              <p class="home-level__text" id="vca-hier-text" data-i18n="home.vca_hier_for">Pour les cadres et responsables opérationnels qui encadrent des équipes.</p>
+              <span class="home-level__meta"><span class="home-chip"><svg aria-hidden="true"><use href="#i-clock"/></svg><span data-i18n="home.dur_2d">2 jours</span></span><span class="home-chip"><svg aria-hidden="true"><use href="#i-hier"/></svg><span data-i18n="search.cat_management">Management</span></span></span>
+            </div>
+            <span class="home-tr__go" aria-hidden="true"><svg class="home-arrow"><use href="#i-arrow"/></svg></span>
+          </a>
+        </div>
+        <div>
+          <p class="home-kicker home-reveal" data-i18n="home.vca_resources">Conseils &amp; ressources</p>
+          <div class="home-articles" data-stagger>
+            <a class="home-article home-reveal" href="article-vca-cout-financement.html" aria-labelledby="art-cost-title">
+              <span class="home-article__media"><img src="assets/images/vca-base/article-cout-financement-640.webp" width="640" height="427" alt="" loading="lazy" decoding="async"></span>
+              <div class="home-article__body"><span class="home-article__kicker" data-i18n="home.art_kicker">Article</span><h3 class="home-article__title" id="art-cost-title" data-i18n="search.page_art_cost_t">Combien coûte une formation VCA et qui peut la financer ?</h3></div>
+            </a>
+            <a class="home-article home-reveal" href="article-vca-erreurs-examen.html" aria-labelledby="art-exam-title">
+              <span class="home-article__media"><img src="assets/images/vca-base/article-erreurs-examen-640.webp" width="640" height="427" alt="" loading="lazy" decoding="async"></span>
+              <div class="home-article__body"><span class="home-article__kicker" data-i18n="home.art_kicker">Article</span><h3 class="home-article__title" id="art-exam-title" data-i18n="search.page_art_exam_t">Les erreurs fréquentes à l'examen VCA et comment les éviter</h3></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== VCA ENTREPRISE ==================== -->
+  <section class="home-section home-biz" id="entreprises" aria-labelledby="home-biz-title">
+    <div class="home-biz__bg" aria-hidden="true"></div>
+    <div class="home-wrap home-biz__grid">
+      <div class="home-biz__copy">
+        <p class="home-eyebrow home-eyebrow--light home-reveal" data-i18n="nav.vca_entreprise">VCA Entreprise</p>
+        <h2 class="home-h2 home-h2--light home-reveal" id="home-biz-title" data-i18n-html="home.biz_title">Vous représentez une entreprise&nbsp;? <span class="home-hl">Formez vos équipes</span> avec nous.</h2>
+        <p class="home-lead home-lead--light home-reveal" data-i18n="home.biz_lead">Inscription groupée, devis, formation dédiée&nbsp;: nous adaptons l'organisation à votre entreprise.</p>
+        <ul class="home-biz__list" data-stagger>
+          <li class="home-reveal"><a class="home-biz-row home-spot" href="faq.html#faq-entreprises-plusieurs"><span class="home-biz-row__icon" aria-hidden="true"><svg><use href="#i-team"/></svg></span><span><span class="home-biz-row__title" data-i18n="home.biz_r1_t">Inscrivez plusieurs collaborateurs</span><span class="home-biz-row__text" data-i18n="home.biz_r1_d">Précisez le nombre de participants pour chaque formation, dans une seule inscription en ligne.</span></span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+          <li class="home-reveal"><a class="home-biz-row home-spot" href="faq.html#faq-entreprises-devis"><span class="home-biz-row__icon" aria-hidden="true"><svg><use href="#i-doc"/></svg></span><span><span class="home-biz-row__title" data-i18n="home.biz_r2_t">Recevez un devis adapté</span><span class="home-biz-row__text" data-i18n="home.biz_r2_d">Formation souhaitée, nombre de participants, échéance&nbsp;: nous vous transmettons une proposition.</span></span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+          <li class="home-reveal"><a class="home-biz-row home-spot" href="faq.html#faq-entreprises-sur-site"><span class="home-biz-row__icon" aria-hidden="true"><svg><use href="#i-building"/></svg></span><span><span class="home-biz-row__title" data-i18n="home.biz_r3_t">Une formation dédiée à votre entreprise</span><span class="home-biz-row__text" data-i18n="home.biz_r3_d">Session réservée à vos équipes ou intervention sur site&nbsp;: étudions votre besoin ensemble.</span></span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        </ul>
+        <div class="home-biz__actions home-reveal">
+          <a class="home-btn home-btn--primary" href="contact.html#wisy-contact-form"><span data-i18n="home.biz_cta">Demander un devis</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="home-btn home-btn--light" href="tel:+3223188659"><svg aria-hidden="true"><use href="#i-phone"/></svg><span>+32 2 318 86 59</span></a>
+        </div>
+      </div>
+      <div class="home-biz__media home-reveal">
+        <div class="home-biz__frame">
+          <img class="home-biz__poster" src="assets/videos/accueil/poster.webp" width="1280" height="720" alt="" loading="lazy" decoding="async">
+          <video id="homeBizVideo" muted loop playsinline preload="none" width="1280" height="720" aria-hidden="true" tabindex="-1"></video>
+          <button class="home-hero__toggle" type="button" data-video-toggle data-state="play" hidden>
+            <svg class="i-pause" aria-hidden="true"><use href="#i-pause"/></svg><svg class="i-play" aria-hidden="true"><use href="#i-play"/></svg><svg class="i-replay" aria-hidden="true"><use href="#i-replay"/></svg>
+            <span class="home-sr" data-i18n="home.video_play">Lire l'animation</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== POURQUOI WISY SAFETY ==================== -->
+  <section class="home-section home-why" aria-labelledby="home-why-title">
+    <div class="home-wrap home-why__grid">
+      <div class="home-why__statement">
+        <p class="home-eyebrow home-reveal" data-i18n="home.why_eyebrow">Pourquoi Wisy Safety</p>
+        <h2 class="home-display home-reveal" id="home-why-title" data-i18n-html="home.why_title">La sécurité <span class="home-hl">comme une référence.</span></h2>
+        <p class="home-lead home-reveal" data-i18n="home.why_lead">Notre objectif&nbsp;: que chaque participant reparte avec les bons réflexes, et chaque entreprise avec des équipes mieux préparées.</p>
+        <a class="home-link home-why__more home-reveal" href="faq.html"><span data-i18n="home.why_more">Consulter le Centre d'aide</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+      <ol class="home-why__list" data-stagger>
+        <li class="home-why__item home-reveal"><span class="home-why__num" aria-hidden="true">01</span><div><h3 class="home-why__title" data-i18n="home.why1_t">Des experts du terrain</h3><p class="home-why__text" data-i18n="home.why1_d">Nos formations sont animées par des professionnels qui connaissent les réalités du terrain.</p></div></li>
+        <li class="home-why__item home-reveal"><span class="home-why__num" aria-hidden="true">02</span><div><h3 class="home-why__title" data-i18n="home.why2_t">Théorie et mise en pratique</h3><p class="home-why__text" data-i18n="home.why2_d">Nos formations associent généralement la théorie et la mise en pratique, selon le programme de chacune.</p></div></li>
+        <li class="home-why__item home-reveal"><span class="home-why__num" aria-hidden="true">03</span><div><h3 class="home-why__title" data-i18n="home.why3_t">Un centre à Anderlecht</h3><p class="home-why__text" data-i18n="home.why3_d">Un établissement de formation équipé, accessible en transports en commun.</p></div></li>
+        <li class="home-why__item home-reveal"><span class="home-why__num" aria-hidden="true">04</span><div><h3 class="home-why__title" data-i18n="home.why4_t">Une équipe à votre écoute</h3><p class="home-why__text" data-i18n="home.why4_d">Joignable du lundi au jeudi, de 10&nbsp;h à 16&nbsp;h, par téléphone ou par e-mail, avec un Centre d'aide en ligne.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ==================== COMMENT ÇA MARCHE ==================== -->
+  <section class="home-section home-steps" id="etapes" aria-labelledby="home-steps-title">
+    <div class="home-wrap">
+      <header class="home-head home-head--split">
+        <div>
+          <p class="home-eyebrow home-reveal" data-i18n="home.steps_eyebrow">Comment ça marche</p>
+          <h2 class="home-h2 home-reveal" id="home-steps-title" data-i18n="home.steps_title">Votre inscription en quatre étapes.</h2>
+        </div>
+        <p class="home-lead home-reveal" data-i18n="home.steps_lead">L'inscription se fait en ligne. Vous préférez être accompagné&nbsp;? Notre équipe finalise l'inscription avec vous.</p>
+      </header>
+      <ol class="home-steps__list" data-stagger data-steps>
+        <li class="home-reveal"><a class="home-step home-spot" href="formations.html"><span class="home-step__num" aria-hidden="true">01</span><h3 class="home-step__title" data-i18n="home.step1_t">Choisissez</h3><p class="home-step__text" data-i18n="home.step1_d">Parcourez le catalogue et trouvez la formation adaptée à votre objectif.</p><span class="home-step__go"><span data-i18n="home.step1_go">Voir les formations</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></li>
+        <li class="home-reveal"><a class="home-step home-spot" href="inscription.html"><span class="home-step__num" aria-hidden="true">02</span><h3 class="home-step__title" data-i18n="home.step2_t">Composez</h3><p class="home-step__text" data-i18n="home.step2_d">Ajoutez une ou plusieurs formations et le nombre de participants&nbsp;: le prix se calcule automatiquement.</p><span class="home-step__go"><span data-i18n="home.step2_go">Ouvrir l'inscription</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></li>
+        <li class="home-reveal"><a class="home-step home-spot" href="faq.html#faq-inscription-informations"><span class="home-step__num" aria-hidden="true">03</span><h3 class="home-step__title" data-i18n="home.step3_t">Complétez</h3><p class="home-step__text" data-i18n="home.step3_d">Participants, coordonnées et facturation&nbsp;: ces informations figurent sur votre confirmation et votre facture.</p><span class="home-step__go"><span data-i18n="home.step3_go">Informations demandées</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></li>
+        <li class="home-reveal"><a class="home-step home-spot" href="agenda.html"><span class="home-step__num" aria-hidden="true">04</span><h3 class="home-step__title" data-i18n="home.step4_t">Participez</h3><p class="home-step__text" data-i18n="home.step4_d">Les sessions confirmées sont publiées dans l'agenda, avec leurs horaires.</p><span class="home-step__go"><span data-i18n="home.step4_go">Consulter l'agenda</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></li>
+      </ol>
+      <div class="home-steps__cta home-reveal">
+        <a class="home-btn home-btn--primary" href="inscription.html"><span data-i18n="home.steps_cta">Commencer mon inscription</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== LE CENTRE (CTA FINAL) ==================== -->
+  <section class="home-section home-centre" id="centre" aria-labelledby="home-centre-title">
+    <div class="home-wrap home-centre__grid">
+      <div class="home-centre__copy">
+        <p class="home-eyebrow home-reveal" data-i18n="home.centre_eyebrow">Le centre</p>
+        <h2 class="home-h2 home-reveal" id="home-centre-title" data-i18n="home.centre_title">Une question&nbsp;? Parlons-en.</h2>
+        <p class="home-lead home-reveal" data-i18n="home.centre_lead">Notre équipe vous aide à choisir la formation adaptée à votre situation, pour vous ou pour vos équipes.</p>
+        <ul class="home-centre__info" data-stagger>
+          <li class="home-reveal"><span class="home-centre__ic" aria-hidden="true"><svg><use href="#i-pin"/></svg></span><span><span class="home-centre__label" data-i18n="footer.label_address">Adresse</span><span class="home-centre__value">Avenue d'Itterbeek 378, 1070 Anderlecht</span></span></li>
+          <li class="home-reveal"><span class="home-centre__ic" aria-hidden="true"><svg><use href="#i-clock"/></svg></span><span><span class="home-centre__label" data-i18n="footer.col_hours">Heures d'ouverture</span><span class="home-centre__value"><span data-i18n="home.hours_days">Du lundi au jeudi</span> · 10:00 – 16:00</span></span></li>
+          <li class="home-reveal"><span class="home-centre__ic" aria-hidden="true"><svg><use href="#i-phone"/></svg></span><span><span class="home-centre__label" data-i18n="footer.label_phone">Téléphone</span><a class="home-centre__value" href="tel:+3223188659">+32 2 318 86 59</a></span></li>
+          <li class="home-reveal"><span class="home-centre__ic" aria-hidden="true"><svg><use href="#i-mail"/></svg></span><span><span class="home-centre__label" data-i18n="footer.label_email">E-mail</span><a class="home-centre__value" href="mailto:info@wisysafety.be">info@wisysafety.be</a></span></li>
+        </ul>
+        <div class="home-centre__actions home-reveal">
+          <a class="home-btn home-btn--primary" href="contact.html"><span data-i18n="home.centre_cta">Nous contacter</span><svg class="home-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="home-btn home-btn--ghost" href="faq.html"><span data-i18n="footer.faq">Centre d'aide</span></a>
+        </div>
+      </div>
+      <div class="home-centre__map home-reveal">
+        <div class="home-map" data-consent-gate>
+          <iframe src="about:blank" data-consent-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2519.793116555751!2d4.276270977152576!3d50.834995871668056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c3c6c0d4b22ebf%3A0xc34a5df237b263cf!2sAv.%20d'Itterbeek%20378%2C%201070%20Anderlecht!5e0!3m2!1sfr!2sbe!4v1789299970751!5m2!1sfr!2sbe"
+            allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+            data-i18n-attr="title:home.map_title" title="Localisation du centre de formation Wisy Safety, Avenue d'Itterbeek 378, 1070 Anderlecht"></iframe>
+          <div class="wcc-gate">
+            <span class="wcc-gate__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3.2v5.1c0 4.6-3 8.7-7 9.9-4-1.2-7-5.3-7-9.9V6.2L12 3z"/></svg></span>
+            <p class="wcc-gate__text" data-i18n="cookies.gate_text">Ce contenu nécessite votre autorisation.</p>
+            <button type="button" class="btn btn--outline" data-wcc-open data-i18n="cookies.gate_btn">Modifier mes préférences</button>
+          </div>
+        </div>
+        <a class="home-link" href="https://maps.google.com/?q=Avenue+d'Itterbeek+378,+1070+Anderlecht" target="_blank" rel="noopener"><span data-i18n="home.map_link">Voir sur Google Maps</span><svg class="home-arrow" aria-hidden="true"><use href="#i-external"/></svg></a>
       </div>
     </div>
   </section>
@@ -713,26 +792,10 @@ a.f-c-value:hover{color:var(--turquoise)}
   if(tg){tg.addEventListener("click",oM);cb.addEventListener("click",cM);sr.addEventListener("click",cM);addEventListener("keydown",function(e){if(e.key==="Escape"&&pn.classList.contains("is-open"))cM();});}
   document.querySelectorAll(".m-acc__trigger").forEach(function(b){var p=b.nextElementSibling;b.addEventListener("click",function(){var o=b.getAttribute("aria-expanded")==="true";b.setAttribute("aria-expanded",String(!o));p.classList.toggle("is-open",!o);});});
 
-  /* Hero vidéo : pause hors viewport (économie de ressources) */
-  var hv=document.getElementById("heroVideo");
-  if(hv&&"IntersectionObserver" in window){
-    var vio=new IntersectionObserver(function(es){es.forEach(function(e){
-      if(e.isIntersecting){var p=hv.play();if(p&&p.catch)p.catch(function(){});}else{hv.pause();}
-    });},{threshold:.15});
-    vio.observe(hv);
-  }
-
-  /* Reveal au scroll */
+  /* Reveal au scroll (pied de page) */
   var rv=document.querySelectorAll(".reveal");
   if(reduce||!("IntersectionObserver" in window)){rv.forEach(function(e){e.classList.add("in");});}
   else{var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:.12,rootMargin:"0px 0px -6% 0px"});rv.forEach(function(e){io.observe(e);});}
-
-  /* Compteurs animés (une seule fois) */
-  function cnt(el){var t=parseFloat(el.getAttribute("data-count"));if(reduce){el.textContent=t.toLocaleString("fr-BE");return;}
-    var d=1600,s=null;function st(ts){if(!s)s=ts;var p=Math.min((ts-s)/d,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(t*e).toLocaleString("fr-BE");if(p<1)requestAnimationFrame(st);}requestAnimationFrame(st);}
-  var cs=document.querySelectorAll("[data-count]");
-  if(!("IntersectionObserver" in window)){cs.forEach(cnt);}
-  else{var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){cnt(e.target);cio.unobserve(e.target);}});},{threshold:.6});cs.forEach(function(e){cio.observe(e);});}
 
   /* Horaires + statut temps réel (traduit, re-calculé au changement de langue) */
   var SCH={1:[600,960],2:[600,960],3:[600,960],4:[600,960],5:null,6:null,0:null};
@@ -751,5 +814,7 @@ a.f-c-value:hover{color:var(--turquoise)}
   var yy=document.querySelector("[data-year]");if(yy)yy.textContent=String(Math.max(2026,now.getFullYear()));
 })();
 </script>
+<!-- Page d'accueil : intro du logo, entrées, apparitions, vidéos (voir js/home.js) -->
+<script src="js/home.js"></script>
 </body>
 </html>

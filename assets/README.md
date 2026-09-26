@@ -21,7 +21,7 @@ assets/
 │   ├── partenaires/  Logos des partenaires (bandeau de l'accueil)
 │   └── vca-base/     Photos des deux articles VCA Base + miniature de recherche
 ├── videos/
-│   └── accueil/      Vidéo de l'accueil (3 versions) + image affichée pendant le chargement
+│   └── accueil/      Vidéos de l'accueil : animation du logo (2 versions + 2 affiches) et vidéo de chantier (3 versions + affiche)
 └── originaux/        Photos et logos d'ORIGINE — jamais chargés par les pages
 ```
 
@@ -59,4 +59,4 @@ s'ils échouent, ils indiquent le fichier en cause.
 | `images/contact/` | `contact.html` |
 | `images/partage/` | aperçu des liens partagés (balises générées par `scripts/build-seo.js`) |
 | `images/logo/`, `icons/` | en-tête, pied de page, onglet du navigateur, données envoyées à Google |
-| `videos/accueil/` | fond de l'accueil (`index.html`) |
+| `videos/accueil/` | `index.html` : animation du logo (hero + intro) et vidéo de la section VCA Entreprise — voir [docs/README-ACCUEIL.md](../docs/README-ACCUEIL.md) |

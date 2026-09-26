@@ -16,7 +16,7 @@ import { SITE_CONTACT, SITE_FORMATIONS, SITE_PAGES, SITE_PATHS } from "./site.ge
 
 export interface Entry {
   id: string;
-  type: "formation" | "page" | "contact" | "faq";
+  type: "formation" | "page" | "article" | "contact" | "faq";
   title: string;
   url: string;
   duration?: string;

@@ -70,7 +70,7 @@
   "use strict";
 
   /* Date de dernière vérification du contenu face aux données du site. */
-  var VERIFIED_AT = "2026-09-20";
+  var VERIFIED_AT = "2026-09-26";
 
   /* ---------------------------------------------------------------------
      Coordonnées réelles (en-tête, pied de page, contact.html).
@@ -106,6 +106,7 @@
     contact:     { label: "Contacter l'équipe",              href: "contact.html" },
     agenda:      { label: "Consulter l'agenda",              href: "agenda.html" },
     nacelle:     { label: "Découvrir la formation Nacelles", href: "formation-nacelles-elevatrices.html" },
+    vca:         { label: "Découvrir la formation VCA Base", href: "formation-vca-base.html" },
     assistant:   { label: "Poser la question à l'assistant", href: null }
   };
 
@@ -254,7 +255,7 @@
       id: "faq-inscription-dates",
       category: "inscription",
       question: "Puis-je choisir la date de ma formation ?",
-      answer: "Les dates et horaires des sessions ne sont pas encore publiés en ligne : la page Agenda les accueillera prochainement. En attendant, contactez-nous pour connaître les prochaines disponibilités.",
+      answer: "Les sessions sont publiées dans l'agenda et sur la page de chaque formation dès qu'elles sont confirmées, chacune avec son lien d'inscription. Si aucune session n'y figure encore pour la formation qui vous intéresse, contactez-nous pour connaître les prochaines disponibilités.",
       keywords: ["dates", "session", "sessions", "calendrier", "agenda", "planning", "quand", "prochaine", "disponibilités", "délai"],
       synonyms: ["prochaines dates", "agenda", "horaires de la formation", "à quelle date", "délais", "date de début", "jour de la formation", "urgent", "rapidement"],
       relatedQuestions: ["faq-inscription-confirmation", "faq-deroulement-duree", "faq-contact-horaires"],
@@ -291,7 +292,7 @@
       category: "tarifs",
       featured: true,
       question: "Quels sont les tarifs des formations ?",
-      answer: "Les tarifs varient selon la formation et le contexte (participant individuel ou entreprise). Une partie des tarifs est indiquée au moment de l'inscription en ligne ; certaines formations sont proposées sur devis.\n\n" +
+      answer: "Les tarifs varient selon la formation et le contexte (participant individuel ou entreprise). Le tarif figure sur la page de la formation et dans l'inscription en ligne lorsqu'il est confirmé ; certaines formations sont proposées sur devis.\n\n" +
         "Pour un tarif adapté à votre besoin, contactez-nous.",
       keywords: ["tarif", "tarifs", "prix", "coût", "combien", "devis"],
       synonyms: ["combien ça coûte", "budget", "montant", "euros", "cher", "prix de la formation", "grille tarifaire", "coût par participant", "gratuit"],
@@ -302,7 +303,8 @@
       id: "faq-tarifs-tva",
       category: "tarifs",
       question: "Les prix affichés incluent-ils la TVA ?",
-      answer: "Les tarifs indiqués sont exprimés hors TVA (HT). Le taux de TVA applicable n'est pas encore affiché dans le parcours d'inscription en ligne : pour connaître le montant TTC, contactez-nous.",
+      answer: "Cela dépend de la formation. Le tarif de la formation Nacelles élévatrices est indiqué hors TVA (HT). Pour les autres tarifs publiés, le statut TVA (HT ou TTC) n'est pas précisé en ligne : contactez-nous pour connaître le montant TTC applicable.\n\n" +
+        "Le taux de TVA n'est pas encore affiché dans le parcours d'inscription en ligne.",
       keywords: ["tva", "ht", "ttc", "hors taxe"],
       synonyms: ["taxe", "prix ttc", "montant ttc", "taux de tva", "toutes taxes comprises", "hors tva"],
       relatedQuestions: ["faq-tarifs-prix", "faq-tarifs-paiement", "faq-tarifs-financement"],
@@ -398,8 +400,8 @@
       category: "attestations",
       featured: true,
       question: "Que vais-je recevoir après ma formation ?",
-      answer: "Cela dépend de la formation suivie. Plusieurs de nos formations débouchent sur une reconnaissance officielle :\n" +
-        "- la VCA Base inclut un examen agréé ;\n" +
+      answer: "Cela dépend de la formation suivie :\n" +
+        "- la VCA Base inclut l'examen VCA : la certification VCA est délivrée après réussite de l'examen ;\n" +
         "- le BEPS prépare au brevet européen de premiers secours.\n\n" +
         "Pour savoir précisément ce qui vous est remis à l'issue d'une formation donnée, contactez-nous.",
       keywords: ["attestation", "certificat", "certification", "diplôme", "brevet", "reconnaissance"],
@@ -411,11 +413,14 @@
       id: "faq-attestations-vca-examen",
       category: "attestations",
       question: "La formation VCA débouche-t-elle sur un examen ?",
-      answer: "Oui : la VCA Base inclut un examen agréé. Pour les modalités de l'examen (déroulé, langue, conditions), contactez-nous.",
-      keywords: ["examen", "vca", "agréé", "test", "évaluation"],
-      synonyms: ["passer l'examen", "examen vca", "examen agréé", "qcm", "réussite", "échec", "repasser l'examen", "note"],
+      /* Chiffres OFFICIELS (BeSaCC-VCA, matrice d'évaluation B-VCA v2.0) : ceux du registre js/trainings-data.js
+         (VCA Base → official.exam). Le statut de centre d'examen de Wisy Safety n'est jamais affirmé. */
+      answer: "Oui : la formation VCA Base inclut l'examen. D'après les documents officiels de BeSaCC-VCA, l'examen VCA Base compte 40 questions, dure 60 minutes et se réussit à partir de 64,5 % de bonnes réponses ; la certification VCA est délivrée après réussite de l'examen.\n\n" +
+        "Pour les modalités pratiques (langue, conditions), contactez-nous.",
+      keywords: ["examen", "vca", "test", "évaluation", "certification"],
+      synonyms: ["passer l'examen", "examen vca", "qcm", "réussite", "échec", "repasser l'examen", "note"],
       relatedQuestions: ["faq-attestations-recevoir", "faq-choisir-vca-difference", "faq-contact-contact"],
-      action: "contact"
+      action: "vca"
     },
     {
       id: "faq-attestations-nacelle",

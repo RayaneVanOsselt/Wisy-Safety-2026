@@ -9,7 +9,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const ROOT = path.join(__dirname, "..");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda", "peb-wallonie-bruxelles"].map((n) => n + ".html");
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda", "peb-wallonie-bruxelles", "formation-beps-premiers-secours", "formation-vca-base", "article-vca-cout-financement", "article-vca-erreurs-examen"].map((n) => n + ".html");
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 const size = (f) => fs.statSync(path.join(ROOT, f)).size;
 const noScripts = (html) => html.replace(/<!--[\s\S]*?-->/g, "").replace(/<script\b[\s\S]*?<\/script>/gi, "").replace(/<style\b[\s\S]*?<\/style>/gi, "");
@@ -107,7 +107,9 @@ test("iframes : chargement différé, titre accessible et politique de référen
 });
 
 test("JS et CSS partagés : budgets non minifiés (chemin critique de chaque page)", () => {
-  const budget = { "js/site-content.js": 16, "js/search.js": 42, "js/i18n.js": 8, "js/trainings-data.js": 14, "js/assistant/launcher.js": 30, "css/search.css": 17, "css/site-header.css": 12, "css/assistant.css": 18, "css/fonts.css": 6 };
+  /* site-content (+ 2 articles, VCA Base) 16 → 20 Ko ; trainings-data (+ fiche VCA Base : programme, sources officielles) 14 → 18 Ko ;
+     search.js 42 → 46 Ko (groupes Articles / Sessions, suggestions, état de chargement). */
+  const budget = { "js/site-content.js": 20, "js/search.js": 46, "js/i18n.js": 8, "js/trainings-data.js": 18, "js/assistant/launcher.js": 30, "css/search.css": 17, "css/site-header.css": 12, "css/assistant.css": 18, "css/fonts.css": 6 };
   Object.keys(budget).forEach((f) => assert.ok(size(f) <= budget[f] * KB, f + " : " + Math.round(size(f) / KB) + " Ko > " + budget[f] + " Ko"));
   /* le FAQ (37 Ko) n'est JAMAIS sur le chemin critique : il ne se charge qu'à la première utilisation de la recherche */
   PAGES.filter((f) => f !== "faq.html").forEach((f) => assert.doesNotMatch(read(f), /<script[^>]+js\/faq-data\.js/, f + " : faq-data.js chargé d'emblée"));

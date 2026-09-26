@@ -113,7 +113,14 @@ test("miroir serveur (Edge Function) : la nacelle du fichier généré .ts = reg
   assert.match(n.content, /AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer/, "consigne d'interdiction");
   assert.doesNotMatch(n.content.replace(/AUCUNE certification[^.]*\./i, ""), /caces|certifi/i, "aucune affirmation non confirmée");
   assert.doesNotMatch(n.keywords.join(" "), /caces|certifi/i, "mots-clés");
-  formations.filter((f) => f.id !== "nacelle" && f.id !== "beps").forEach((f) => assert.ok(!("priceLabel" in f), "pas de prix inventé : " + f.id));
+  formations.filter((f) => !["nacelle", "beps", "vca-base"].includes(f.id)).forEach((f) => assert.ok(!("priceLabel" in f), "pas de prix inventé : " + f.id));
+  /* VCA Base : tarif du registre, statut TVA non précisé → la consigne interdit d'écrire « HT » / « TTC » ; agrément non affirmé */
+  const v = formations.find((f) => f.id === "vca-base"), V = Trainings.vcaBase;
+  assert.ok(v, "entrée VCA Base trouvée"); assert.equal(v.priceLabel, Trainings.formatPrice(V.price)); assert.equal(v.url, V.url);
+  assert.match(v.content, /Le statut TVA \(HT ou TTC\) du tarif n'est PAS précisé/);
+  assert.match(v.content, /L'examen est inclus/);
+  assert.match(v.content, new RegExp(V.official.exam.questions + " questions, " + V.official.exam.minutes + " minutes"));
+  assert.match(v.content, /NON CONFIRMÉ \(ne jamais l'affirmer\) : agréé/);
 });
 
 test("inscription : le prix de la nacelle vient du registre (plus de valeur figée)", () => {

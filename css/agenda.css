@@ -252,6 +252,43 @@
 .ag-cal__head { max-width: 48rem; margin-bottom: clamp(2rem, 4vw, 3rem); }
 .ag-cal__head h2:focus { outline: none; }
 
+/* ---- Sessions publiées (liste dynamique — js/agenda.js) ---- */
+.ag-sessions { margin-bottom: clamp(1.5rem, 3vw, 2.25rem); }
+.ag-sessions__filters { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.1rem; }
+.ag-chipbtn {
+  min-height: 44px; padding: .55rem 1rem; border: 1px solid var(--ag-line); border-radius: 999px; background: #fff; color: var(--noir-jais);
+  font: 600 .92rem/1.2 var(--font-titre); cursor: pointer;
+}
+.ag-chipbtn[aria-pressed="true"] { background: var(--epinette); border-color: var(--epinette); color: #fff; }
+.ag-sessions__state { margin: 0; padding: 1.25rem 0; color: var(--granit); }
+.ag-sessions__list { list-style: none; margin: 0; padding: 0; display: grid; gap: .9rem; }
+.ag-sess-card {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.1rem 1.4rem; padding: 1.1rem clamp(1rem, 2.2vw, 1.5rem);
+  background: #fff; border: 1px solid var(--ag-line); border-radius: var(--radius-lg);
+  box-shadow: 0 1px 2px rgba(27, 45, 40, .04), 0 14px 30px -24px rgba(27, 45, 40, .22);
+}
+.ag-sess-card__date { display: grid; place-items: center; align-content: center; width: 68px; height: 68px; border-radius: 16px; background: var(--epinette); color: #fff; text-align: center; }
+.ag-sess-card__date b { font: 700 1.55rem/1 var(--font-titre); }
+.ag-sess-card__date span { margin-top: .15rem; font: 600 .74rem/1 var(--font-titre); letter-spacing: .1em; text-transform: uppercase; }
+.ag-sess-card.is-full .ag-sess-card__date { background: var(--granit); }
+.ag-sess-card__title { margin: 0 0 .2rem; font-size: 1.08rem; color: var(--noir-jais); }
+.ag-sess-card__when { margin: 0; font-weight: 600; color: var(--epinette); }
+.ag-sess-card__meta, .ag-sess-card__seats { margin: .2rem 0 0; color: var(--granit); font-size: .94rem; }
+.ag-sess-card__seats { font-weight: 600; color: var(--noir-jais); }
+.ag-sess-card__seats.is-full { color: var(--granit); }
+.ag-sess-card__actions { display: grid; justify-items: end; gap: .1rem; }
+.ag-sessions__empty { padding: clamp(1.25rem, 3vw, 2rem); background: #fff; border: 1px dashed var(--ag-line); border-radius: var(--radius-lg); }
+.ag-sessions__empty h3 { margin: 0 0 .5rem; font-size: 1.15rem; }
+.ag-sessions__empty p { margin: 0 0 1.1rem; max-width: 62ch; color: var(--granit); }
+.ag-sessions__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.5rem; }
+.ag-sessions [hidden] { display: none !important; }
+.agenda-page :focus-visible.ag-chipbtn { outline-offset: 2px; }
+@media (max-width: 720px) {
+  .ag-sess-card { grid-template-columns: auto 1fr; }
+  .ag-sess-card__actions { grid-column: 1 / -1; justify-items: stretch; }
+  .ag-sess-card__actions .btn { justify-content: center; }
+}
+
 .agc {
   background: #fff; border: 1px solid var(--ag-line); border-radius: var(--radius-lg);
   box-shadow: 0 1px 2px rgba(27, 45, 40, .04), 0 18px 40px -26px rgba(27, 45, 40, .20); overflow: hidden;

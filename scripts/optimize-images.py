@@ -20,11 +20,13 @@ Dépendances : Pillow (WebP). Aucune autre. Sortie déterministe (mêmes options
   partenaires     assets/originaux/partenaires/<nom>.*    → assets/images/partenaires/<nom>-240.webp
   contact         assets/originaux/contact/hero-contact.png → assets/images/contact/hero-contact.webp
   affiche vidéo   assets/originaux/accueil/poster.jpg     → assets/videos/accueil/poster.webp
+  VCA Base        assets/originaux/vca-base/article-*.webp → assets/images/vca-base/article-*-640.webp · -1024.webp
+                  (+ miniature de recherche + 3 cartes de partage 1200×630 : page VCA Base et ses 2 articles)
   carte de partage (Open Graph) : `--og <dossier de polices Poppins .ttf>` → assets/images/partage/wisy-safety-1200x630.jpg
 """
 import os
 import sys
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
@@ -219,6 +221,52 @@ def misc():
         report("affiche vidéo", src, size, f"{im.width}×{im.height}")
 
 
+
+# --------------------------------------------------------------------------- VCA Base : articles, miniature, cartes de partage
+# Images des deux articles fournies par le propriétaire (voir docs/image-sources.md). Le WebP fourni est
+# l'original : on en dérive une carte (640 px) et un visuel d'en-tête d'article (1024 px).
+VCA_ARTICLES = {
+    "article-cout-financement": "assets/originaux/vca-base/article-cout-financement.webp",
+    "article-erreurs-examen":   "assets/originaux/vca-base/article-erreurs-examen.webp",
+}
+VCA_PHOTO = "assets/images/formations/vca-base.webp"          # photo VCA Base du site (720 × 540, pas d'original séparé)
+
+
+def photo_card(src, dst, focus=(0.5, 0.45)):
+    """Carte de partage 1200×630 : la photo entière au centre, prolongée à gauche et à droite par son propre
+    flou assombri (même principe que la carte de la formation Nacelles). Aucun texte, aucune promesse."""
+    W, H = 1200, 630
+    if not FORCE and os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src):
+        return
+    im = to_rgb(Image.open(src)).convert("RGB")
+    bg = ImageOps.fit(im, (W, H), Image.LANCZOS, centering=focus).filter(ImageFilter.GaussianBlur(30))
+    bg = Image.blend(bg, Image.new("RGB", (W, H), PALETTE["jais"]), 0.42)
+    fg = ImageOps.contain(im, (W, H), Image.LANCZOS)
+    bg.paste(fg, ((W - fg.width) // 2, (H - fg.height) // 2))
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    bg.save(dst, "JPEG", quality=78, optimize=True, progressive=True)
+    report("carte de partage " + os.path.basename(dst), src, os.path.getsize(dst), f"{W}×{H}")
+
+
+def vca():
+    for name, src in VCA_ARTICLES.items():
+        if not os.path.exists(src):
+            continue
+        for w in (640, 1024):
+            dst = f"assets/images/vca-base/{name}-{w}.webp"
+            if need(dst, src):
+                im = fit_width(to_rgb(Image.open(src)), w)
+                size = save_webp(im, dst, quality=72)
+                report(f"vca {name} {w}", src, size, f"{im.width}×{im.height}")
+        photo_card(src, f"assets/images/partage/{name}-1200x630.jpg", focus=(0.5, 0.35))
+    if os.path.exists(VCA_PHOTO):
+        dst = "assets/images/vca-base/vca-base-thumb-192.webp"
+        if need(dst, VCA_PHOTO):
+            im = fit_width(to_rgb(Image.open(VCA_PHOTO)), 192)
+            size = save_webp(im, dst, quality=78)
+            report("vca thumb", VCA_PHOTO, size, f"{im.width}×{im.height}")
+        photo_card(VCA_PHOTO, "assets/images/partage/formation-vca-base-1200x630.jpg")
+
 # --------------------------------------------------------------------------- carte de partage 1200×630
 def og(font_dir):
     """Carte Open Graph de marque (charte : crème, épinette, jais). Texte = celui du site (aucune promesse)."""
@@ -267,6 +315,7 @@ if __name__ == "__main__":
     peb()
     partners()
     misc()
+    vca()
     if "--og" in sys.argv:
         og(sys.argv[sys.argv.index("--og") + 1])
     print("Terminé.")

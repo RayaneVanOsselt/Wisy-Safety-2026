@@ -32,5 +32,14 @@ window.WISY_CONFIG = {
 
   /* ---- Cloudflare Turnstile (facultatif, anti-spam) -------------------- */
   /* Laissé vide = widget non affiché. Voir docs/README-AVIS.md.             */
-  TURNSTILE_SITE_KEY: ""
+  TURNSTILE_SITE_KEY: "",
+
+  /* ---- Sessions de formation (dates) ------------------------------------ */
+  /* "data" (défaut) : les sessions viennent de js/sessions-data.js — un fichier à éditer, vide = aucune
+                       session publiée (les pages affichent « Consultez les prochaines disponibilités »).
+     "supabase"      : elles viennent de la table `training_sessions` (voir supabase/sessions.sql) : une
+                       ligne ajoutée dans Supabase apparaît sur le site sans toucher au code. Si la table
+                       est injoignable, le site retombe sur js/sessions-data.js.
+     Guide pas à pas : docs/README-SESSIONS.md.                                                         */
+  SESSIONS_SOURCE: "data"
 };

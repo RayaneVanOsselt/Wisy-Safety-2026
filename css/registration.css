@@ -347,6 +347,9 @@
 .reg-line__node { grid-row: 1 / span 3; position: relative; width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; background: var(--epinette); color: var(--creme); margin-top: .1rem; }
 .reg-line__node svg { width: 17px; height: 17px; }
 .reg-line:not(:last-child) .reg-line__node::after { content: ""; position: absolute; left: 50%; top: 40px; height: calc(100% + .85rem); width: 2px; transform: translateX(-50%); background: repeating-linear-gradient(var(--brume) 0 4px, transparent 4px 8px); }
+.reg-line__session { grid-column: 2; display: flex; align-items: flex-start; gap: .4rem; margin-top: .15rem; font-size: .82rem; line-height: 1.35; color: var(--epinette); }
+.reg-line__session svg { flex: none; width: 15px; height: 15px; margin-top: 2px; }
+.reg-line__session b { font-weight: 600; }
 .reg-line__ref { grid-column: 2; font-family: var(--reg-mono); font-size: .64rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--granit-clair); }
 .reg-line__name { grid-column: 2; font-family: var(--font-titre); font-weight: 600; font-size: .96rem; color: var(--noir-jais); line-height: 1.25; }
 .reg-line__meta { grid-column: 2; display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; margin-top: .2rem; }

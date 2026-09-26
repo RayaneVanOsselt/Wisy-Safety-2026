@@ -46,6 +46,7 @@ WisyFAQ.register("af", {
   "contact": "Kontak die span",
   "agenda": "Raadpleeg die agenda",
   "nacelle": "Ontdek die Hoogwerker-opleiding",
+  "vca": "Ontdek die VCA Basis-opleiding",
   "assistant": "Stel die vraag aan die assistent"
  },
  "popular": [
@@ -278,7 +279,7 @@ WisyFAQ.register("af", {
   },
   "faq-inscription-dates": {
    "question": "Kan ek die datum van my opleiding kies?",
-   "answer": "Die datums en tye van die sessies is nog nie aanlyn gepubliseer nie: die agenda-bladsy sal dit binnekort bevat. Kontak ons intussen om die eersvolgende beskikbaarheid te verneem.",
+   "answer": "Die sessies word in die agenda en op die bladsy van elke opleiding gepubliseer sodra hulle bevestig is, elk met sy eie inskrywingskakel. As daar nog geen sessie vir die opleiding wat u interesseer gelys is nie, kontak ons om die eersvolgende beskikbaarheid te verneem.",
    "keywords": [
     "datums",
     "sessie",
@@ -346,7 +347,7 @@ WisyFAQ.register("af", {
   },
   "faq-tarifs-prix": {
    "question": "Wat is die tariewe van die opleidings?",
-   "answer": "Die tariewe wissel volgens die opleiding en die konteks (individuele deelnemer of maatskappy). 'n Deel van die tariewe word aangedui by aanlyn inskrywing; sommige opleidings word op aanvraag aangebied.\n\nKontak ons vir 'n tarief wat by u behoefte pas.",
+   "answer": "Die tariewe wissel volgens die opleiding en die konteks (individuele deelnemer of maatskappy). Die tarief verskyn op die bladsy van die opleiding en in die aanlyn inskrywing sodra dit bevestig is; sommige opleidings word op aanvraag aangebied.\n\nKontak ons vir 'n tarief wat by u behoefte pas.",
    "keywords": [
     "tarief",
     "tariewe",
@@ -370,7 +371,7 @@ WisyFAQ.register("af", {
   },
   "faq-tarifs-tva": {
    "question": "Sluit die getoonde pryse BTW in?",
-   "answer": "Die aangeduide tariewe is uitgedruk eksklusief BTW. Die toepaslike BTW-koers word nog nie in die aanlyn inskrywingsproses vertoon nie: kontak ons om die bedrag insluitend BTW te verneem.",
+   "answer": "Dit hang af van die opleiding. Die tarief van die Hoogwerker-opleiding word eksklusief BTW aangedui. Vir die ander gepubliseerde tariewe is die BTW-status (eksklusief of insluitend BTW) nie aanlyn gespesifiseer nie: kontak ons om die toepaslike bedrag insluitend BTW te verneem.\n\nDie BTW-koers word nog nie in die aanlyn inskrywingsproses vertoon nie.",
    "keywords": [
     "btw",
     "eks. btw",
@@ -541,7 +542,7 @@ WisyFAQ.register("af", {
   },
   "faq-attestations-recevoir": {
    "question": "Wat sal ek ná my opleiding ontvang?",
-   "answer": "Dit hang af van die opleiding wat gevolg is. Verskeie van ons opleidings lei tot amptelike erkenning:\n- VCA Basis sluit 'n erkende eksamen in;\n- BEPS berei voor vir die Europese noodhulpsertifikaat.\n\nKontak ons om presies te weet wat u aan die einde van 'n bepaalde opleiding ontvang.",
+   "answer": "Dit hang af van die opleiding wat gevolg is:\n- VCA Basis sluit die VCA-eksamen in: die VCA-sertifisering word uitgereik nadat die eksamen geslaag is;\n- BEPS berei voor vir die Europese noodhulpsertifikaat.\n\nKontak ons om presies te weet wat u aan die einde van 'n bepaalde opleiding ontvang.",
    "keywords": [
     "getuigskrif",
     "sertifikaat",
@@ -567,18 +568,17 @@ WisyFAQ.register("af", {
   },
   "faq-attestations-vca-examen": {
    "question": "Lei die VCA-opleiding tot 'n eksamen?",
-   "answer": "Ja: VCA Basis sluit 'n erkende eksamen in. Kontak ons vir die modaliteite van die eksamen (verloop, taal, voorwaardes).",
+   "answer": "Ja: die VCA Basis-opleiding sluit die eksamen in. Volgens die amptelike dokumente van BeSaCC-VCA het die VCA Basis-eksamen 40 vrae, duur dit 60 minute en slaag u vanaf 64,5 % korrekte antwoorde; die VCA-sertifisering word uitgereik nadat die eksamen geslaag is.\n\nKontak ons vir die praktiese modaliteite (taal, voorwaardes).",
    "keywords": [
     "eksamen",
     "vca",
-    "erken",
     "toets",
-    "evaluering"
+    "evaluering",
+    "sertifisering"
    ],
    "synonyms": [
     "die eksamen aflê",
     "vca-eksamen",
-    "erkende eksamen",
     "veelvuldigekeuse",
     "slaag",
     "druip",

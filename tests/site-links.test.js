@@ -11,7 +11,7 @@ const Site = require("../js/site-content.js");
 const FAQ = require("../js/faq-data.js");
 
 const ROOT = path.join(__dirname, "..");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "inscription", "contact", "avis", "faq", "agenda"].map((n) => n + ".html").concat(["admin/avis.html"]);
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "article-vca-cout-financement", "article-vca-erreurs-examen", "inscription", "contact", "avis", "faq", "agenda"].map((n) => n + ".html").concat(["admin/avis.html"]);
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 
 /* Existence sensible à la casse. Renvoie true, false, ou le vrai nom si seule la casse diffère. */
@@ -145,7 +145,13 @@ test("aucun lien javascript: ni href/src vide ; mailto: et tel: bien formés", (
 test("target=_blank : toujours rel=noopener ; liens sortants limités aux domaines attendus", () => {
   const ALLOWED = new Set(["maps.google.com", "www.google.com", "cdn.jsdelivr.net", "www.wisysafety.be",
     /* Sources réglementaires officielles citées par peb-wallonie-bruxelles.html (voir docs/README-PEB.md) */
-    "www.wallonie.be", "energie.wallonie.be", "environnement.brussels", "examen.environnement.brussels"]);
+    "www.wallonie.be", "energie.wallonie.be", "environnement.brussels", "examen.environnement.brussels",
+    /* Sources officielles citées par formation-vca-base.html et ses deux articles (voir docs/README-VCA.md) :
+       BeSaCC-VCA (organisme belge du VCA) et son registre central des diplômes, SPF Emploi, Constructiv,
+       services publics de l'emploi et de la formation (Actiris, Bruxelles Formation, Forem, VDAB),
+       matrice d'évaluation officielle et examen blanc. */
+    "www.besacc-vca.be", "csm-examen.be", "vcabesacc.wordpress.com", "www.ssvv.nl", "emploi.belgique.be", "constructiv.be",
+    "www.actiris.brussels", "www.bruxellesformation.brussels", "www.leforem.be", "www.vdab.be"]);
   PAGES.forEach((f) => {
     refs(f).forEach(({ url, a, tag }) => {
       if (a.target === "_blank") assert.match(a.rel || "", /noopener/, f + " : target=_blank sans noopener : " + url);

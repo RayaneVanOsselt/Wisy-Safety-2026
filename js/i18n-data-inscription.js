@@ -150,7 +150,12 @@
     "reg.aria_filter": "Filtrer par catégorie",
     "reg.aria_summary": "Récapitulatif de l'inscription",
     "reg.aria_overview": "Résumé de l'inscription",
-    "reg.aria_detail": "Détail de votre inscription"
+    "reg.aria_detail": "Détail de votre inscription",
+    "reg.session_label": "Session",
+    "reg.session_remove": "Retirer la session",
+    "reg.session_note_ok": "Session sélectionnée : {date}. Elle figure dans votre récapitulatif.",
+    "reg.session_note_gone": "La session demandée n'est plus disponible. Vous pouvez poursuivre votre inscription : l'équipe Wisy Safety vous proposera une date.",
+    "reg.a11y_session_removed": "Session retirée."
   });
 
   /* ------------------------------ ENGLISH ----------------------------- */
@@ -278,7 +283,12 @@
     "reg.aria_filter": "Filter by category",
     "reg.aria_summary": "Registration summary",
     "reg.aria_overview": "Registration overview",
-    "reg.aria_detail": "Details of your registration"
+    "reg.aria_detail": "Details of your registration",
+    "reg.session_label": "Session",
+    "reg.session_remove": "Remove the session",
+    "reg.session_note_ok": "Selected session: {date}. It appears in your summary.",
+    "reg.session_note_gone": "The requested session is no longer available. You can continue your registration: the Wisy Safety team will suggest a date.",
+    "reg.a11y_session_removed": "Session removed."
   });
 
   /* ---------------------------- NEDERLANDS ---------------------------- */
@@ -406,7 +416,12 @@
     "reg.aria_filter": "Filteren op categorie",
     "reg.aria_summary": "Overzicht van de inschrijving",
     "reg.aria_overview": "Samenvatting van de inschrijving",
-    "reg.aria_detail": "Details van uw inschrijving"
+    "reg.aria_detail": "Details van uw inschrijving",
+    "reg.session_label": "Sessie",
+    "reg.session_remove": "Sessie verwijderen",
+    "reg.session_note_ok": "Gekozen sessie: {date}. Ze staat in uw overzicht.",
+    "reg.session_note_gone": "De gevraagde sessie is niet meer beschikbaar. U kunt uw inschrijving voortzetten: het team van Wisy Safety stelt u een datum voor.",
+    "reg.a11y_session_removed": "Sessie verwijderd."
   });
 
   /* ---------------------------- AFRIKAANS ----------------------------- */
@@ -534,7 +549,12 @@
     "reg.aria_filter": "Filtreer volgens kategorie",
     "reg.aria_summary": "Opsomming van die inskrywing",
     "reg.aria_overview": "Oorsig van die inskrywing",
-    "reg.aria_detail": "Besonderhede van u inskrywing"
+    "reg.aria_detail": "Besonderhede van u inskrywing",
+    "reg.session_label": "Sessie",
+    "reg.session_remove": "Verwyder die sessie",
+    "reg.session_note_ok": "Gekose sessie: {date}. Dit verskyn in u opsomming.",
+    "reg.session_note_gone": "Die versoekte sessie is nie meer beskikbaar nie. U kan u inskrywing voortsit: die Wisy Safety-span sal 'n datum voorstel.",
+    "reg.a11y_session_removed": "Sessie verwyder."
   });
 
   /* ---------------------------- العربية (RTL) ---------------------------- */
@@ -672,7 +692,12 @@
     "reg.aria_filter": "التصفية حسب الفئة",
     "reg.aria_summary": "ملخص التسجيل",
     "reg.aria_overview": "نظرة عامة على التسجيل",
-    "reg.aria_detail": "تفاصيل تسجيلك"
+    "reg.aria_detail": "تفاصيل تسجيلك",
+    "reg.session_label": "الجلسة",
+    "reg.session_remove": "إزالة الجلسة",
+    "reg.session_note_ok": "الجلسة المختارة: {date}. وهي مدرجة في ملخص تسجيلك.",
+    "reg.session_note_gone": "الجلسة المطلوبة لم تعد متاحة. يمكنك متابعة تسجيلك: سيقترح عليك فريق Wisy Safety موعدًا.",
+    "reg.a11y_session_removed": "تمت إزالة الجلسة."
   });
 
   /* ---------------------------- БЪЛГАРСКИ ----------------------------- */
@@ -800,7 +825,12 @@
     "reg.aria_filter": "Филтриране по категория",
     "reg.aria_summary": "Обобщение на записването",
     "reg.aria_overview": "Преглед на записването",
-    "reg.aria_detail": "Подробности за записването ви"
+    "reg.aria_detail": "Подробности за записването ви",
+    "reg.session_label": "Сесия",
+    "reg.session_remove": "Премахване на сесията",
+    "reg.session_note_ok": "Избрана сесия: {date}. Тя е включена в обобщението ви.",
+    "reg.session_note_gone": "Заявената сесия вече не е налична. Можете да продължите записването: екипът на Wisy Safety ще ви предложи дата.",
+    "reg.a11y_session_removed": "Сесията е премахната."
   });
 
   /* ------------------------------ DEUTSCH ------------------------------ */
@@ -928,7 +958,12 @@
     "reg.aria_filter": "Nach Kategorie filtern",
     "reg.aria_summary": "Übersicht der Anmeldung",
     "reg.aria_overview": "Zusammenfassung der Anmeldung",
-    "reg.aria_detail": "Details Ihrer Anmeldung"
+    "reg.aria_detail": "Details Ihrer Anmeldung",
+    "reg.session_label": "Termin",
+    "reg.session_remove": "Termin entfernen",
+    "reg.session_note_ok": "Gewählter Termin: {date}. Er steht in Ihrer Übersicht.",
+    "reg.session_note_gone": "Der gewünschte Termin ist nicht mehr verfügbar. Sie können Ihre Anmeldung fortsetzen: Das Wisy Safety-Team schlägt Ihnen einen Termin vor.",
+    "reg.a11y_session_removed": "Termin entfernt."
   });
 
   /* ------------------------------ ROMÂNĂ ------------------------------- */
@@ -1060,7 +1095,12 @@
     "reg.aria_filter": "Filtrați după categorie",
     "reg.aria_summary": "Sumarul înscrierii",
     "reg.aria_overview": "Prezentarea generală a înscrierii",
-    "reg.aria_detail": "Detaliile înscrierii dvs."
+    "reg.aria_detail": "Detaliile înscrierii dvs.",
+    "reg.session_label": "Sesiune",
+    "reg.session_remove": "Eliminați sesiunea",
+    "reg.session_note_ok": "Sesiune selectată: {date}. Apare în recapitularea dumneavoastră.",
+    "reg.session_note_gone": "Sesiunea solicitată nu mai este disponibilă. Puteți continua înscrierea: echipa Wisy Safety vă va propune o dată.",
+    "reg.a11y_session_removed": "Sesiune eliminată."
   });
 
   /* ------------------------------ ITALIANO ----------------------------- */
@@ -1188,7 +1228,12 @@
     "reg.aria_filter": "Filtra per categoria",
     "reg.aria_summary": "Riepilogo dell'iscrizione",
     "reg.aria_overview": "Panoramica dell'iscrizione",
-    "reg.aria_detail": "Dettaglio della tua iscrizione"
+    "reg.aria_detail": "Dettaglio della tua iscrizione",
+    "reg.session_label": "Sessione",
+    "reg.session_remove": "Rimuovi la sessione",
+    "reg.session_note_ok": "Sessione selezionata: {date}. È indicata nel tuo riepilogo.",
+    "reg.session_note_gone": "La sessione richiesta non è più disponibile. Puoi proseguire con l'iscrizione: il team Wisy Safety ti proporrà una data.",
+    "reg.a11y_session_removed": "Sessione rimossa."
   });
 
   /* ---------------------------- SLOVENŠČINA ---------------------------- */
@@ -1322,6 +1367,11 @@
     "reg.aria_filter": "Filtriraj po kategoriji",
     "reg.aria_summary": "Povzetek prijave",
     "reg.aria_overview": "Pregled prijave",
-    "reg.aria_detail": "Podrobnosti vaše prijave"
+    "reg.aria_detail": "Podrobnosti vaše prijave",
+    "reg.session_label": "Izvedba",
+    "reg.session_remove": "Odstrani izvedbo",
+    "reg.session_note_ok": "Izbrana izvedba: {date}. Prikazana je v vašem povzetku.",
+    "reg.session_note_gone": "Zahtevana izvedba ni več na voljo. Prijavo lahko nadaljujete: ekipa Wisy Safety vam bo predlagala datum.",
+    "reg.a11y_session_removed": "Izvedba odstranjena."
   });
 })();

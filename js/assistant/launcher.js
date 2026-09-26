@@ -77,6 +77,9 @@
     "js/site-content.js",                   // registre commun pages / catégories / formations
     "js/faq-data.js",
     "js/faq-search.js",
+    "js/supabase-config.js",                // configuration PUBLIQUE (source des sessions) — ignorée si déjà chargée
+    "js/sessions-data.js",                  // sessions publiées (fichier)
+    "js/sessions.js",                       // WisySessions : source unique des dates (jamais recopiées dans l'assistant)
     "js/assistant/knowledge.js",
     "js/assistant/retrieval.js",
     "js/assistant/validation.js",
@@ -385,6 +388,9 @@
       case "js/site-content.js": return !!root.WisySite;
       case "js/faq-data.js": return !!(root.WisyFAQ && root.WisyFAQ.CATEGORIES);
       case "js/faq-search.js": return !!(root.WisyFAQ && root.WisyFAQ.search);
+      case "js/supabase-config.js": return !!root.WISY_CONFIG;
+      case "js/sessions-data.js": return !!root.WISY_SESSIONS;
+      case "js/sessions.js": return !!root.WisySessions;
       case "js/assistant/knowledge.js": return !!A.Knowledge;
       case "js/assistant/retrieval.js": return !!A.Retrieval;
       case "js/assistant/validation.js": return !!A.Validation;

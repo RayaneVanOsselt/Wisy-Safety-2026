@@ -35,7 +35,8 @@ const LANGS = ["fr", "en", "nl", "af", "ar", "bg", "de", "ro", "it", "sl"];
 
 /* Pages publiques (le HTML doit être intégralement traduisible). */
 const PAGES = ["index", "formations", "contact", "avis", "inscription", "faq", "agenda",
-  "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "404"].map((n) => n + ".html");
+  "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles",
+  "formation-vca-base", "article-vca-cout-financement", "article-vca-erreurs-examen", "404"].map((n) => n + ".html");
 
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 

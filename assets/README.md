@@ -18,7 +18,8 @@ assets/
 │   ├── nacelles/     Photos de la page Formation Nacelles
 │   ├── peb/          Photos de la page Certificateur PEB (Wallonie & Bruxelles)
 │   ├── partage/      Images affichées quand on partage un lien (Facebook, LinkedIn, WhatsApp…)
-│   └── partenaires/  Logos des partenaires (bandeau de l'accueil)
+│   ├── partenaires/  Logos des partenaires (bandeau de l'accueil)
+│   └── vca-base/     Photos des deux articles VCA Base + miniature de recherche
 ├── videos/
 │   └── accueil/      Vidéo de l'accueil (3 versions) + image affichée pendant le chargement
 └── originaux/        Photos et logos d'ORIGINE — jamais chargés par les pages
@@ -53,6 +54,7 @@ s'ils échouent, ils indiquent le fichier en cause.
 | `images/nacelles/` | `formation-nacelles-elevatrices.html` (et l'aperçu dans la recherche) |
 | `images/beps/` | `formation-beps-premiers-secours.html` (et l'aperçu dans la recherche) |
 | `images/peb/` | `peb-wallonie-bruxelles.html` |
+| `images/vca-base/` | `article-vca-cout-financement.html`, `article-vca-erreurs-examen.html`, cartes de la page VCA Base, aperçu dans la recherche (la photo principale de la page est `images/formations/vca-base.webp`) |
 | `images/partenaires/` | bandeau des partenaires de `index.html` |
 | `images/contact/` | `contact.html` |
 | `images/partage/` | aperçu des liens partagés (balises générées par `scripts/build-seo.js`) |

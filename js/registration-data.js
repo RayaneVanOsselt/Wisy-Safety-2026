@@ -47,6 +47,8 @@
   var NACELLE = (window.WisyTrainings && window.WisyTrainings.nacelles) || null;
   /* Idem pour le BEPS (voir js/trainings-data.js) : 70 € — jamais de prix inventé si le registre manque. */
   var BEPS = (window.WisyTrainings && window.WisyTrainings.beps) || null;
+  /* Idem pour la VCA Base : 225 € / personne vient du registre central (jamais de prix inventé si le registre manque). */
+  var VCA_BASE = (window.WisyTrainings && window.WisyTrainings.vcaBase) || null;
 
   /* Catégories — clé stable => libellé i18n (résolu dans registration.js) */
   var CATEGORIES = [
@@ -64,7 +66,8 @@
     {
       id: "vca-base",
       code: "VCA-B",
-      priceCents: 22500,
+      priceCents: VCA_BASE ? VCA_BASE.price.amountCents : null,   /* 225 € — registre central */
+      onQuote: !VCA_BASE,
       unit: "participant",
       category: "certification",
       icon: "shield",
@@ -74,16 +77,16 @@
         bg: "VCA основи", de: "VCA Grundlagen", ro: "VCA de bază", it: "VCA base", sl: "VCA osnovni"
       },
       description: {
-        fr: "Sécurité de base — examen agréé inclus",
-        en: "Basic safety — accredited exam included",
-        nl: "Basisveiligheid — erkend examen inbegrepen",
-        af: "Basiese veiligheid — erkende eksamen ingesluit",
-        ar: "السلامة الأساسية — الامتحان المعتمد مشمول",
-        bg: "Основна безопасност — включен акредитиран изпит",
-        de: "Grundlegende Sicherheit — anerkannte Prüfung inklusive",
-        ro: "Securitate de bază — examen acreditat inclus",
-        it: "Sicurezza di base — esame accreditato incluso",
-        sl: "Osnovna varnost — akreditiran izpit vključen"
+        fr: "Sécurité de base — examen inclus",
+        en: "Basic safety — exam included",
+        nl: "Basisveiligheid — examen inbegrepen",
+        af: "Basiese veiligheid — eksamen ingesluit",
+        ar: "السلامة الأساسية — الامتحان مشمول",
+        bg: "Основна безопасност — включен изпит",
+        de: "Grundlegende Sicherheit — Prüfung inklusive",
+        ro: "Securitate de bază — examen inclus",
+        it: "Sicurezza di base — esame incluso",
+        sl: "Osnovna varnost — izpit vključen"
       }
     },
     {

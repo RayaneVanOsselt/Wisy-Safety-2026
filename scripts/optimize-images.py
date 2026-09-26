@@ -10,7 +10,7 @@ Pourquoi : les originaux pèsent jusqu'à 800 Ko (JPEG CMYK, PNG de 1 400 px pou
 assets/originaux/ (les pages ne les chargent jamais). Pour changer une photo : remplacez son
 original dans assets/originaux/, relancez ce script, vérifiez le rendu.
 
-Dépendances : Pillow (WebP). Aucune autre. Sortie déterministe (mêmes options à chaque exécution).
+Dépendances : Pillow (WebP + AVIF). Aucune autre. Sortie déterministe (mêmes options à chaque exécution).
 
   logo            assets/images/logo/logo.png             → assets/images/logo/logo-102.webp · logo-204.webp
   icônes          assets/images/logo/logo.png             → assets/icons/* · favicon.ico
@@ -28,6 +28,10 @@ Dépendances : Pillow (WebP). Aucune autre. Sortie déterministe (mêmes options
                   hero de l'accueil, plus chargée par le site (son affiche poster.webp reste générée ci-dessous)
   VCA Base        assets/originaux/vca-base/article-*.webp → assets/images/vca-base/article-*-640.webp · -1024.webp
                   (+ miniature de recherche + 3 cartes de partage 1200×630 : page VCA Base et ses 2 articles)
+  VCA Entreprise  assets/originaux/vca-entreprise/poster-frame.jpg → assets/images/vca-entreprise/poster-{640,1024,1600}.{avif,webp}
+                  assets/originaux/vca-entreprise/mascotte.png → assets/images/vca-entreprise/mascotte-{240,480}.{avif,webp}
+                  (+ carte de partage 1200×630 ; les 2 versions MP4 du film se font avec scripts/encode-video.swift,
+                   voir docs/README-VCA-ENTREPRISE.md)
   carte de partage (Open Graph) : `--og <dossier de polices Poppins .ttf>` → assets/images/partage/wisy-safety-1200x630.jpg
 """
 import os
@@ -44,6 +48,13 @@ PALETTE = {"epinette": "#1F6F64", "sarcelle": "#2F7D8C", "creme": "#F4FAF9", "gr
 def save_webp(im, dst, quality=80, **kw):
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     im.save(dst, "WEBP", quality=quality, method=6, **kw)
+    return os.path.getsize(dst)
+
+
+def save_avif(im, dst, quality=58, **kw):
+    """AVIF (Pillow ≥ 11.3) : ~40 % plus léger que le WebP à qualité visuelle égale ; toujours servi avec un repli WebP."""
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    im.save(dst, "AVIF", quality=quality, speed=4, **kw)
     return os.path.getsize(dst)
 
 
@@ -291,6 +302,64 @@ def vca():
             report("vca thumb", VCA_PHOTO, size, f"{im.width}×{im.height}")
         photo_card(VCA_PHOTO, "assets/images/partage/formation-vca-base-1200x630.jpg")
 
+# --------------------------------------------------------------------------- VCA Entreprise : affiche du film, mascotte, carte de partage
+# Master de l'affiche = image du film à 12 s (assets/originaux/vca-entreprise/poster-frame.jpg, 1920 × 1080), extraite du film
+# source. L'URL « wisysafety.be » est incrustée dans le bas du film à partir de 10 s : on recadre la partie haute en 16:9 (aucune
+# déformation) pour qu'elle n'apparaisse pas sur l'affiche ; le recadrage est calé à droite pour garder l'excavatrice entière.
+VCAE_DIR = "assets/originaux/vca-entreprise"
+VCAE_OUT = "assets/images/vca-entreprise"
+VCAE_POSTER = VCAE_DIR + "/poster-frame.jpg"
+VCAE_MASCOT = VCAE_DIR + "/mascotte.png"
+
+
+def vcae_poster_crop(im):
+    w, h = im.size
+    ch = round(h * 0.849)                    # 917 px sur 1080 : au-dessus du texte incrusté (≈ 941 → 1038 px)
+    cw = round(ch * 16 / 9)
+    x0 = max(0, w - cw - 60)
+    return im.crop((x0, 0, x0 + cw, ch))
+
+
+def vcae_card(im, dst, src):
+    """Carte de partage 1200×630 : l'affiche entière au centre, prolongée par son propre flou assombri (même principe que
+    photo_card). Aucun texte."""
+    W, H = 1200, 630
+    if not need(dst, src):
+        return
+    bg = ImageOps.fit(im, (W, H), Image.LANCZOS, centering=(0.5, 0.4)).filter(ImageFilter.GaussianBlur(30))
+    bg = Image.blend(bg, Image.new("RGB", (W, H), PALETTE["jais"]), 0.42)
+    fg = ImageOps.contain(im, (W, H), Image.LANCZOS)
+    bg.paste(fg, ((W - fg.width) // 2, (H - fg.height) // 2))
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    bg.save(dst, "JPEG", quality=80, optimize=True, progressive=True)
+    report("carte de partage " + os.path.basename(dst), src, os.path.getsize(dst), f"{W}×{H}")
+
+
+def vca_entreprise():
+    if os.path.exists(VCAE_POSTER):
+        crop = vcae_poster_crop(Image.open(VCAE_POSTER).convert("RGB"))
+        for w in (640, 1024, 1600):
+            im = fit_width(crop, w)
+            for ext, save, q in (("webp", save_webp, 80), ("avif", save_avif, 56)):
+                dst = f"{VCAE_OUT}/poster-{w}.{ext}"
+                if need(dst, VCAE_POSTER):
+                    size = save(im, dst, quality=q)
+                    report(f"affiche VCA Entreprise {w} {ext}", VCAE_POSTER, size, f"{im.width}×{im.height}")
+        vcae_card(crop, "assets/images/partage/vca-entreprise-1200x630.jpg", VCAE_POSTER)
+    if os.path.exists(VCAE_MASCOT):
+        mascot = Image.open(VCAE_MASCOT).convert("RGBA")
+        # marges transparentes retirées : la mise en page se cale sur le personnage, pas sur le fichier
+        box = mascot.getchannel("A").point(lambda a: 255 if a > 8 else 0).getbbox()
+        mascot = mascot.crop((max(0, box[0] - 2), max(0, box[1] - 2), min(mascot.width, box[2] + 2), min(mascot.height, box[3] + 2)))
+        for w in (240, 480):
+            im = fit_width(mascot, w)
+            for ext, save, opts in (("webp", save_webp, dict(quality=88, alpha_quality=92)), ("avif", save_avif, dict(quality=66))):
+                dst = f"{VCAE_OUT}/mascotte-{w}.{ext}"
+                if need(dst, VCAE_MASCOT):
+                    size = save(im, dst, **opts)
+                    report(f"mascotte VCA Entreprise {w} {ext}", VCAE_MASCOT, size, f"{im.width}×{im.height}")
+
+
 # --------------------------------------------------------------------------- carte de partage 1200×630
 def og(font_dir):
     """Carte Open Graph de marque (charte : crème, épinette, jais). Texte = celui du site (aucune promesse)."""
@@ -341,6 +410,7 @@ if __name__ == "__main__":
     misc()
     accueil()
     vca()
+    vca_entreprise()
     if "--og" in sys.argv:
         og(sys.argv[sys.argv.index("--og") + 1])
     print("Terminé.")

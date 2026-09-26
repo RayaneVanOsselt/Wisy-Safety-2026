@@ -34,14 +34,14 @@ test("noms propres : minuscules, chiffres, tirets — sans espace, sans accent, 
 
 test("dossiers connus : chaque image est rangée dans un dossier prévu (voir assets/README.md)", () => {
   const TOP = ["fonts", "icons", "images", "videos", "originaux"];
-  const IMAGES = ["assistant", "beps", "contact", "faq", "formations", "logo", "nacelles", "partage", "partenaires", "peb", "vca-base"];
+  const IMAGES = ["assistant", "beps", "contact", "faq", "formations", "logo", "nacelles", "partage", "partenaires", "peb", "vca-base", "vca-entreprise"];
   const bad = [];
   FILES.forEach((f) => {
     const [, a, b] = f.split("/");
     if (f === "assets/README.md") return;
     if (!TOP.includes(a)) bad.push(f + "   (dossier « " + a + " » inconnu : " + TOP.join(", ") + ")");
     else if (a === "images" && !IMAGES.includes(b)) bad.push(f + "   (assets/images/" + b + " inconnu : " + IMAGES.join(", ") + ")");
-    else if (a === "videos" && b !== "accueil") bad.push(f + "   (vidéos : seulement assets/videos/accueil/)");
+    else if (a === "videos" && !["accueil", "vca-entreprise"].includes(b)) bad.push(f + "   (vidéos : seulement assets/videos/accueil/ ou assets/videos/vca-entreprise/)");
   });
   assert.deepEqual(bad, []);
 });
@@ -70,9 +70,9 @@ test("aucun fichier orphelin : tout fichier hors « originaux » est utilisé pa
 });
 
 test("originaux : chacun est cité par l'outil de génération ou par le guide d'une page dédiée", () => {
-  const cited = read("scripts/optimize-images.py") + "\n" + read("docs/README-NACELLES.md") + "\n" + read("docs/README-BEPS.md");
+  const cited = read("scripts/optimize-images.py") + "\n" + read("docs/README-NACELLES.md") + "\n" + read("docs/README-BEPS.md") + "\n" + read("docs/README-VCA-ENTREPRISE.md");
   const bad = FILES.filter((f) => f.startsWith("assets/originaux/") && !cited.includes(path.basename(f)));
-  assert.deepEqual(bad, [], "original que ni scripts/optimize-images.py ni docs/README-NACELLES.md ni docs/README-BEPS.md ne mentionne");
+  assert.deepEqual(bad, [], "original que ni scripts/optimize-images.py ni docs/README-NACELLES.md ni docs/README-BEPS.md ni docs/README-VCA-ENTREPRISE.md ne mentionne");
 });
 
 test("l'outil de génération lit et écrit aux BONS endroits (tous les chemins qu'il cite existent)", () => {

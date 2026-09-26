@@ -49,6 +49,9 @@
   var BEPS = (window.WisyTrainings && window.WisyTrainings.beps) || null;
   /* Idem pour la VCA Base : 225 € / personne vient du registre central (jamais de prix inventé si le registre manque). */
   var VCA_BASE = (window.WisyTrainings && window.WisyTrainings.vcaBase) || null;
+  /* VCA Entreprise — SERVICE d'accompagnement (ni formation, ni VCA Base) : 590 € par participant, tarif indicatif, statut TVA
+     non précisé — lu dans le registre central js/trainings-data.js (jamais recopié ici ; « Sur devis » si le registre manque). */
+  var VCA_ENTREPRISE = (window.WisyTrainings && window.WisyTrainings.vcaEntreprise) || null;
 
   /* Catégories — clé stable => libellé i18n (résolu dans registration.js) */
   var CATEGORIES = [
@@ -56,11 +59,12 @@
     { id: "securite",      i18n: "reg.cat_securite" },
     { id: "secours",       i18n: "reg.cat_secours" },
     { id: "engins",        i18n: "reg.cat_engins" },
-    { id: "telecom",       i18n: "reg.cat_telecom" }
+    { id: "telecom",       i18n: "reg.cat_telecom" },
+    { id: "accompagnement", i18n: "reg.cat_accompagnement" }
   ];
 
   /* ----------------------------------------------------------------------
-     Catalogue — 6 formations (source unique)
+     Catalogue — 6 formations + 1 service d'accompagnement d'entreprise (source unique)
      ---------------------------------------------------------------------- */
   var CATALOGUE = [
     {
@@ -113,6 +117,33 @@
         ro: "Cadre de conducere & responsabili operaționali",
         it: "Dirigenti e responsabili operativi",
         sl: "Vodstveni kader in operativni vodje"
+      }
+    },
+    {
+      id: "vca-entreprise",
+      code: "VCA-E",
+      priceCents: VCA_ENTREPRISE ? VCA_ENTREPRISE.price.amountCents : null,   /* 590 € / participant (indicatif) — registre central */
+      onQuote: !VCA_ENTREPRISE,
+      unit: "participant",
+      category: "accompagnement",
+      icon: "building",
+      image: "assets/images/vca-entreprise/poster-640.webp",
+      /* Même appellation que le menu (clé nav.vca_entreprise) : partout le même nom, dans les 10 langues. */
+      name: {
+        fr: "VCA Entreprise", en: "VCA for Companies", nl: "VCA Bedrijven", af: "VCA vir Maatskappye", ar: "VCA للشركات",
+        bg: "VCA за фирми", de: "VCA für Unternehmen", ro: "VCA pentru companii", it: "VCA aziende", sl: "VCA za podjetja"
+      },
+      description: {
+        fr: "Accompagnement à la certification VCA de votre entreprise",
+        en: "Support towards your company's VCA certification",
+        nl: "Begeleiding naar de VCA-certificering van uw bedrijf",
+        af: "Ondersteuning vir die VCA-sertifisering van jou maatskappy",
+        ar: "مرافقة شركتكم نحو شهادة VCA",
+        bg: "Съдействие за VCA сертифицирането на вашата фирма",
+        de: "Begleitung zur VCA-Zertifizierung Ihres Unternehmens",
+        ro: "Sprijin pentru certificarea VCA a companiei dumneavoastră",
+        it: "Supporto per la certificazione VCA della vostra azienda",
+        sl: "Podpora pri certificiranju VCA vašega podjetja"
       }
     },
     {
@@ -233,11 +264,12 @@
 
   /* Paramètre d'URL `?formation=` (cartes du catalogue, recherche, assistant) → identifiant du catalogue
      d'inscription. Accepte l'identifiant du site (registre js/site-content.js : « vca-hierarchique »,
-     « nacelle »…) ou celui du catalogue. Renvoie null si la formation est inconnue. */
+     « nacelle », le service « vca-entreprise »…) ou celui du catalogue. Renvoie null si la formation est inconnue. */
   function resolveTrainingId(param) {
     var wanted = String(param == null ? "" : param);
     if (!wanted) return null;
     var site = (window.WisySite && window.WisySite.formations) ? window.WisySite.formations() : [];
+    if (window.WisySite && window.WisySite.services) site = site.concat(window.WisySite.services());
     for (var i = 0; i < site.length; i++) {
       if (site[i].id === wanted && site[i].registrationId) { wanted = site[i].registrationId; break; }
     }

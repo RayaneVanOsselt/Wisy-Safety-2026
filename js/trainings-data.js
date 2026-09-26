@@ -1,9 +1,11 @@
 /* =========================================================================
-   WISY SAFETY — Registre des formations dotées d'une page dédiée
+   WISY SAFETY — Registre des formations dotées d'une page dédiée (+ le service VCA Entreprise)
    -------------------------------------------------------------------------
    SOURCE UNIQUE DES FAITS des formations à page dédiée (VCA Base, Nacelles
    Élévatrices, BEPS) : route, prix, durée, langues, format, public, mots-clés,
-   visuels.
+   visuels. Le SERVICE « VCA Entreprise » (accompagnement à la certification d'une
+   entreprise — ni formation, ni VCA Base) y est décrit à part (`vcaEntreprise`) :
+   il n'entre PAS dans `all()` / `get()` (pas de durée, pas d'examen).
 
    Consommé par : recherche globale (js/search.js), assistant
    (js/assistant/knowledge.js), parcours d'inscription
@@ -28,7 +30,7 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  var VERIFIED_AT = "2026-09-19";
+  var VERIFIED_AT = "2026-09-26";
   var IMG = "assets/images/nacelles/";
 
   var NACELLES = {
@@ -304,6 +306,135 @@
       "financement / aides applicables à cette formation"]
   };
 
+  /* ---------------------------------------------------------------------
+     VCA Entreprise — SERVICE d'accompagnement à la certification VCA (LSC) d'une ENTREPRISE
+     (page vca-entreprise.html, refonte du 2026-09-26).
+
+     ⚠ Ce n'est NI la formation individuelle « VCA Base » (diplôme d'une personne, examen), NI l'organisme
+       certificateur : le certificat d'entreprise est délivré par un organisme de certification reconnu, après audit.
+       Wisy Safety propose l'ACCOMPAGNEMENT. Les deux produits ont des identifiants, des routes, des textes et des
+       lignes de panier distincts — ne jamais les mélanger.
+
+     Trois sortes de faits, jamais mélangées :
+       1. CONFIRMÉS par Wisy Safety : ligne du bordereau d'inscription publié sur wisysafety.be/sinscrire/ (lue le
+          2026-09-26) — « VCA Entreprise · Accompagnement à la certification LSC · 590 € / pers. », sous la mention
+          « Tarifs indicatifs par participant » ; le statut TVA n'y est pas précisé → `vatIncluded: null`.
+       2. OFFICIELS (`official`) : niveaux, validité, audits de suivi, organisme certificateur — SSVV (propriétaire du
+          schéma VCA), BeSaCC-VCA, Prévention et Intérim ; chacun avec sa source et sa date de vérification.
+       3. INDICATIFS (`indicative`) : repris de l'ancienne page wisysafety.be/wisy-vca/ (« 2 à 6 mois selon le niveau
+          visé et la préparation ») — affichés comme une INDICATION, à faire confirmer par Wisy Safety.
+     Jamais affichés : « 1200+ certifiés », « 98 % de réussite » (ancienne page : aucune source vérifiable) — voir
+     `unconfirmedClaims`.
+     --------------------------------------------------------------------- */
+  var IMG_VCAE = "assets/images/vca-entreprise/";
+  var VID_VCAE = "assets/videos/vca-entreprise/";
+
+  var VCA_ENTREPRISE = {
+    id: "vca-entreprise",
+    registrationId: "vca-entreprise",
+    slug: "vca-entreprise",
+    kind: "service",
+
+    url: "vca-entreprise.html",
+    signupUrl: "inscription.html?formation=vca-entreprise",
+    contactUrl: "contact.html?subject=vca-entreprise",
+
+    /* Libellés français de référence. L'appellation TRADUITE (menu, panier, recherche, assistant) est celle de la clé
+       `nav.vca_entreprise` — « VCA for Companies », « VCA Bedrijven »… — pour que tout le site nomme le service pareil. */
+    title: "VCA Entreprise",
+    fullTitle: "VCA Entreprise — accompagnement à la certification VCA de votre entreprise",
+    summary: "Wisy Safety accompagne votre entreprise dans sa démarche de certification VCA (LSC), au niveau VCA*, VCA** ou VCA-P : le certificat est délivré par un organisme de certification reconnu, après audit.",
+    objective: "Aider une entreprise à préparer sa certification VCA (LSC) et à choisir le niveau qui correspond à son activité.",
+    titleKey: "nav.vca_entreprise",
+    fullTitleKey: "dd.vca_entreprise_full",
+    summaryKey: "dd.vca_entreprise_summary",
+    taglineKey: "dd.vca_entreprise_desc",
+
+    /* Faits confirmés — 590 € par participant, tarif INDICATIF (bordereau). Ni HT ni TTC : non précisé. */
+    price: { amountCents: 59000, currency: "EUR", vatIncluded: null },
+    priceUnit: "participant",
+    priceIndicative: true,
+
+    /* Public visé : reprend l'ancienne page (sous-traitants et prestataires, BTP, énergie, maintenance industrielle,
+       pétrochimie) et le critère officiel des niveaux (recours ou non à des sous-traitants). */
+    audience: [
+      "entreprises qui exécutent des travaux à risque chez des donneurs d'ordre",
+      "sous-traitants et prestataires",
+      "entrepreneurs principaux qui font appel à des sous-traitants",
+      "entreprises actives dans la pétrochimie"
+    ],
+    sectors: ["construction", "industrie", "maintenance industrielle", "énergie", "pétrochimie", "sous-traitance"],
+
+    /* Les trois niveaux du référentiel VCA — CRITÈRE OFFICIEL (SSVV, BeSaCC-VCA) : recours ou non à des sous-traitants,
+       activité pétrochimique. Ce n'est PAS la taille de l'entreprise (l'ancienne page disait « grandes entreprises » pour
+       VCA** : inexact). `levelFor()` sert au guide « Quel niveau ? » de la page et à l'assistant. */
+    levels: [
+      { id: "star1", label: "VCA*",  stars: 1, subcontractors: false, petrochemical: false },
+      { id: "star2", label: "VCA**", stars: 2, subcontractors: true,  petrochemical: false },
+      { id: "petro", label: "VCA-P", stars: 0, subcontractors: null,  petrochemical: true }
+    ],
+
+    /* Faits OFFICIELS, avec source (vérifiés le 2026-09-26 par lecture directe des pages citées). */
+    official: {
+      verifiedAt: "2026-09-26",
+      certificateValidityYears: 3,          /* le certificat d'entreprise est valable 3 ans… */
+      followUpAudit: "annual",              /* … avec un audit de suivi (intermédiaire) chaque année */
+      issuedBy: "certification-body",       /* organisme de certification reconnu — jamais Wisy Safety */
+      sources: {
+        ssvv:   "https://ssvv.nl/vca/",
+        besacc: "https://www.besacc-vca.be/fr/vca-info/",
+        pi:     "https://www.p-i.be/fr/themes/partenaires-en-matiere-de-securite/vca"
+      }
+    },
+
+    /* INDICATIF — ancienne page wisysafety.be/wisy-vca/ : « 2 à 6 mois selon le niveau visé et la préparation de
+       l'entreprise ». À faire confirmer par Wisy Safety avant d'en faire un engagement. */
+    indicative: { monthsMin: 2, monthsMax: 6, source: "wisysafety.be/wisy-vca/ (2026-09-26)" },
+
+    /* Recherche et assistant : titre, synonymes, niveaux, termes métier, dans les 10 langues (sans accents, minuscules).
+       Le mot « vca » SEUL n'y figure pas : « vca » désigne d'abord la formation VCA Base. */
+    keywords: [
+      "vca entreprise", "vca entreprises", "certification vca entreprise", "certification vca entreprises", "certification entreprise",
+      "certifier mon entreprise", "certifier une entreprise", "certification vca", "accompagnement vca", "accompagnement certification vca",
+      "accompagnement certification", "securite entreprise", "lsc", "certification lsc", "vca lsc", "scc", "donneur d'ordre",
+      "vca*", "vca **", "vca**", "vca *", "vca 1 etoile", "vca 2 etoiles", "vca etoile", "vca p", "vca-p", "vcap", "vca petrochimie",
+      "vca petrochemical", "vca petrochemie", "vca petrochimique", "petrochimie", "petrochemical",
+      "vca company", "vca companies", "vca for companies", "company certification", "certify my company",
+      "vca bedrijf", "vca bedrijven", "bedrijf certificeren", "vca maatskappy", "vca maatskappye", "vca unternehmen", "vca firma",
+      "unternehmen zertifizieren", "vca azienda", "vca aziende", "certificare azienda", "vca companie", "vca companii",
+      "vca podjetje", "vca podjetja", "certifikacija podjetja", "vca фирма", "vca фирми", "vca компания", "vca شركة", "vca شركات",
+      "checklist aannemers", "checklist contractors"
+    ],
+    /* Mots de la RECHERCHE du site uniquement (prix) — l'assistant les traite à part (voir GENERIC_KEYWORD). */
+    searchExtra: ["prix", "tarif", "590", "combien coute", "price", "cost", "prijs", "kosten", "preis", "prezzo", "pret", "cena", "prys", "цена", "سعر", "ثمن"],
+
+    /* Visuels : dérivés de assets/originaux/vca-entreprise/ (scripts/optimize-images.py) ; film : 2 versions MP4 AVEC SON
+       (scripts/encode-video.swift), chargées seulement au clic sur « lecture ». */
+    images: {
+      poster: IMG_VCAE + "poster-1024.webp",
+      thumb:  IMG_VCAE + "thumb-192.webp",
+      og:     "assets/images/partage/vca-entreprise-1200x630.jpg"
+    },
+    imageAlt: "Chantier au coucher du soleil : grues et excavatrice devant un bâtiment en construction",
+    video: {
+      durationSeconds: 19, hasAudio: true,
+      sources: { 720: VID_VCAE + "vca-entreprise-720.mp4", 1080: VID_VCAE + "vca-entreprise-1080.mp4" }
+    },
+
+    /* Affirmations à ne PAS faire tant que Wisy Safety ne les a pas confirmées. */
+    unconfirmedClaims: ["organisme certificateur", "agréé", "accrédité", "certification reconnue internationalement", "conformité garantie",
+      "1200 entreprises certifiées", "98 % de réussite", "statut HT ou TTC du tarif", "durée exacte de l'accompagnement",
+      "VCA** réservé aux grandes entreprises"]
+  };
+
+  /* Niveau VCA correspondant à une situation (critères OFFICIELS : sous-traitants, pétrochimie). Sert au guide « Quel niveau ? »
+     de la page et à l'assistant — une INDICATION : le niveau exigé dépend surtout des donneurs d'ordre. */
+  function vcaLevelFor(situation) {
+    var s = situation || {};
+    if (s.petrochemical === true) return "petro";
+    return s.subcontractors === true ? "star2" : "star1";
+  }
+
   /* Toutes les formations à page dédiée (extensible : ajouter une entrée). */
   var TRAININGS = { "vca-base": VCA_BASE, nacelle: NACELLES, beps: BEPS };
 
@@ -343,6 +474,8 @@
     hasDedicatedPage: hasDedicatedPage,
     nacelles: NACELLES,
     beps: BEPS,
-    vcaBase: VCA_BASE
+    vcaBase: VCA_BASE,
+    vcaEntreprise: VCA_ENTREPRISE,
+    vcaLevelFor: vcaLevelFor
   };
 });

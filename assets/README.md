@@ -19,9 +19,11 @@ assets/
 │   ├── peb/          Photos de la page Certificateur PEB (Wallonie & Bruxelles)
 │   ├── partage/      Images affichées quand on partage un lien (Facebook, LinkedIn, WhatsApp…)
 │   ├── partenaires/  Logos des partenaires (bandeau de l'accueil)
-│   └── vca-base/     Photos des deux articles VCA Base + miniature de recherche
+│   ├── vca-base/     Photos des deux articles VCA Base + miniature de recherche
+│   └── vca-entreprise/  Page VCA Entreprise : affiche du film (3 tailles × AVIF/WebP) + mascotte détourée (2 tailles × AVIF/WebP)
 ├── videos/
-│   └── accueil/      Vidéo de l'accueil : animation du logo (2 versions + 2 affiches) ; poster.webp (affiche de l'ancienne vidéo)
+│   ├── accueil/      Vidéo de l'accueil : animation du logo (2 versions + 2 affiches) ; poster.webp (affiche de l'ancienne vidéo)
+│   └── vca-entreprise/  Film de présentation VCA Entreprise AVEC SON : 720p (6,5 Mo) et 1080p (9,8 Mo), chargés seulement au clic sur « lecture »
 └── originaux/        Photos et logos d'ORIGINE — jamais chargés par les pages
 ```
 
@@ -35,7 +37,9 @@ affichées par le site (ne pas les modifier à la main).
   (et non `Nacelle cisaaux .jpg` ou `Photo 1 (copie).png`).
 - Un nom qui dit ce que montre l'image ; pour une version dimensionnée, la largeur en suffixe :
   `logo-204.webp`, `nacelle-araignee-960.webp`.
-- Formats : WebP pour ce que le site affiche ; JPEG ou PNG pour les originaux.
+- Formats : AVIF + WebP pour ce que le site affiche (WebP seul pour les petites images) ; JPEG, PNG ou MP4 pour les originaux.
+- **Vidéos** : jamais l'original dans `videos/`. Le fichier d'origine (souvent 30 Mo et plus) va dans `originaux/<thème>/`, et
+  `scripts/encode-video.swift` en fabrique des versions web légères (voir docs/README-VCA-ENTREPRISE.md).
 
 ## Ajouter ou remplacer une photo
 
@@ -60,3 +64,4 @@ s'ils échouent, ils indiquent le fichier en cause.
 | `images/partage/` | aperçu des liens partagés (balises générées par `scripts/build-seo.js`) |
 | `images/logo/`, `icons/` | en-tête, pied de page, onglet du navigateur, données envoyées à Google |
 | `videos/accueil/` | `index.html` : animation du logo (hero + intro) — voir [docs/README-ACCUEIL.md](../docs/README-ACCUEIL.md) |
+| `videos/vca-entreprise/`, `images/vca-entreprise/` | `vca-entreprise.html` : film (avec son), affiche et mascotte — voir [docs/README-VCA-ENTREPRISE.md](../docs/README-VCA-ENTREPRISE.md) |

@@ -3,8 +3,8 @@
    et formations)
    -------------------------------------------------------------------------
    Ce fichier décrit, UNE SEULE FOIS, ce que le site propose : ses pages, ses
-   catégories et ses six formations (route, ancre, clés i18n, mots-clés, faits
-   de fiche). Il alimente :
+   catégories, ses six formations et son SERVICE d'accompagnement d'entreprise
+   « VCA Entreprise » (route, ancre, clés i18n, mots-clés, faits de fiche). Il alimente :
 
      1. la recherche du site            (js/search.js)
      2. l'assistant Wisy                (js/assistant/knowledge.js, validation.js)
@@ -146,6 +146,33 @@
   var GENERIC_KEYWORD = /\b(formations?|securite|prix|tarifs?)\b/;
 
   /* ---------------------------------------------------------------------
+     Services — accompagnement d'ENTREPRISE (« VCA Entreprise »). Ni une « formation » (pas de durée, pas d'examen : ne jamais la
+     confondre avec la VCA Base) ni une page ordinaire : une page dédiée + un produit du parcours d'inscription + un groupe propre
+     dans la recherche + un type propre pour l'assistant. TOUS ses faits viennent de js/trainings-data.js (`vcaEntreprise`) ;
+     sans registre chargé, la liste est simplement vide.
+     --------------------------------------------------------------------- */
+  function fromService(S) {
+    var off = S.official || {};
+    return {
+      id: S.id, kind: "service", registrationId: S.registrationId,
+      title: S.title, fullTitle: S.fullTitle,
+      titleKey: S.titleKey, fullTitleKey: S.fullTitleKey, taglineKey: S.taglineKey, summaryKey: S.summaryKey, descKey: S.summaryKey,
+      url: S.url, signupUrl: S.signupUrl, contactUrl: S.contactUrl,
+      description: S.summary, objective: S.objective,
+      price: S.price, priceLabel: Trainings.formatPrice(S.price), priceUnit: S.priceUnit, priceIndicative: S.priceIndicative === true,
+      audience: S.audience.slice(), sectors: S.sectors.slice(),
+      levels: S.levels.map(function (l) { return l.label; }),
+      searchKeywords: S.keywords.concat(S.searchExtra || []),
+      keywords: S.keywords.filter(function (k) { return !GENERIC_KEYWORD.test(k); }),
+      thumb: S.images.thumb, image: S.images.poster, imageAlt: S.imageAlt,
+      official: { verifiedAt: off.verifiedAt, certificateValidityYears: off.certificateValidityYears, followUpAudit: off.followUpAudit, issuedBy: off.issuedBy },
+      indicative: S.indicative ? { monthsMin: S.indicative.monthsMin, monthsMax: S.indicative.monthsMax } : null,
+      unconfirmedClaims: S.unconfirmedClaims.slice(),
+      dedicatedPage: true
+    };
+  }
+
+  /* ---------------------------------------------------------------------
      Pages publiques (l'ordre = celui de la recherche et du plan du site)
      --------------------------------------------------------------------- */
   var PAGES = [
@@ -223,24 +250,28 @@
     }).filter(Boolean);
   }
   var FORMATIONS = buildFormations();
+  var SERVICES = (Trainings && Trainings.vcaEntreprise ? [Trainings.vcaEntreprise] : []).map(fromService);
 
   function categories() { return CATEGORIES.map(clone); }
   function category(id) { return CATEGORIES.filter(function (c) { return c.id === id; }).map(clone)[0] || null; }
   function formations() { return FORMATIONS.map(clone); }
   function formation(id) { return FORMATIONS.filter(function (f) { return f.id === id; }).map(clone)[0] || null; }
   function formationsByCategory(cat) { return FORMATIONS.filter(function (f) { return f.category === cat; }).map(clone); }
+  function services() { return SERVICES.map(clone); }
+  function service(id) { return SERVICES.filter(function (x) { return x.id === id; }).map(clone)[0] || null; }
   function pages() { return PAGES.map(clone); }
   function page(id) { return PAGES.filter(function (p) { return p.id === id; }).map(clone)[0] || null; }
 
   /* Chemin (sans ancre ni requête) d'une URL interne. */
   function pathOf(url) { return String(url || "").split("#")[0].split("?")[0]; }
 
-  /* Tous les chemins de pages HTML publiques : pages + pages dédiées de formation.
+  /* Tous les chemins de pages HTML publiques : pages + pages dédiées de formation + pages de services.
      (Sert d'allow-list à l'assistant et de base au sitemap.) */
   function publicPaths() {
     var seen = {}, out = [];
     PAGES.map(function (p) { return p.url; })
       .concat(FORMATIONS.filter(function (f) { return f.dedicatedPage; }).map(function (f) { return pathOf(f.url); }))
+      .concat(SERVICES.map(function (x) { return pathOf(x.url); }))
       .forEach(function (u) { if (!seen[u]) { seen[u] = 1; out.push(u); } });
     return out;
   }
@@ -260,6 +291,8 @@
     formations: formations,
     formation: formation,
     formationsByCategory: formationsByCategory,
+    services: services,
+    service: service,
     pages: pages,
     page: page,
     publicPaths: publicPaths,

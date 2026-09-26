@@ -46,6 +46,7 @@ WisyFAQ.register("sl", {
   "contact": "Kontaktirajte ekipo",
   "agenda": "Oglejte si urnik",
   "nacelle": "Odkrijte usposabljanje za dvižne ploščadi",
+  "vca": "Odkrijte usposabljanje VCA osnovni",
   "assistant": "Vprašanje postavite asistentu"
  },
  "popular": [
@@ -278,7 +279,7 @@ WisyFAQ.register("sl", {
   },
   "faq-inscription-dates": {
    "question": "Ali lahko izberem datum svojega usposabljanja?",
-   "answer": "Datumi in ure izvedb še niso objavljeni na spletu: stran Urnik jih bo kmalu vsebovala. Do takrat nas kontaktirajte, če želite izvedeti za najbližje proste termine.",
+   "answer": "Izvedbe so objavljene v urniku in na strani posameznega usposabljanja takoj, ko so potrjene, vsaka s svojo povezavo za prijavo. Če za usposabljanje, ki vas zanima, še ni navedene nobene izvedbe, nas kontaktirajte, če želite izvedeti za najbližje proste termine.",
    "keywords": [
     "datumi",
     "izvedba",
@@ -347,7 +348,7 @@ WisyFAQ.register("sl", {
   },
   "faq-tarifs-prix": {
    "question": "Kakšne so cene usposabljanj?",
-   "answer": "Cene se razlikujejo glede na usposabljanje in okoliščine (posamezni udeleženec ali podjetje). Del cen je naveden ob spletni prijavi; nekatera usposabljanja so na voljo na podlagi ponudbe.\n\nZa ceno, prilagojeno vaši potrebi, nas kontaktirajte.",
+   "answer": "Cene se razlikujejo glede na usposabljanje in okoliščine (posamezni udeleženec ali podjetje). Cena je navedena na strani usposabljanja in v spletni prijavi, ko je potrjena; nekatera usposabljanja so na voljo na podlagi ponudbe.\n\nZa ceno, prilagojeno vaši potrebi, nas kontaktirajte.",
    "keywords": [
     "cena",
     "cene",
@@ -371,7 +372,7 @@ WisyFAQ.register("sl", {
   },
   "faq-tarifs-tva": {
    "question": "Ali navedene cene vključujejo DDV?",
-   "answer": "Navedene cene so izražene brez DDV. Veljavna stopnja DDV v postopku spletne prijave še ni prikazana: če želite izvedeti znesek z DDV, nas kontaktirajte.",
+   "answer": "Odvisno od usposabljanja. Cena usposabljanja za dvižne ploščadi je navedena brez DDV. Pri drugih objavljenih cenah spletno ni navedeno, ali vključujejo DDV ali ne: nas kontaktirajte, če želite izvedeti veljavni znesek z DDV.\n\nStopnja DDV v postopku spletne prijave še ni prikazana.",
    "keywords": [
     "ddv",
     "brez ddv",
@@ -541,7 +542,7 @@ WisyFAQ.register("sl", {
   },
   "faq-attestations-recevoir": {
    "question": "Kaj bom prejel po usposabljanju?",
-   "answer": "Odvisno od opravljenega usposabljanja. Več naših usposabljanj vodi do uradnega priznanja:\n- VCA osnovni vključuje odobren izpit;\n- BEPS pripravlja na evropsko potrdilo o prvi pomoči.\n\nČe želite natančno izvedeti, kaj vam je izročeno ob koncu posameznega usposabljanja, nas kontaktirajte.",
+   "answer": "Odvisno od opravljenega usposabljanja:\n- VCA osnovni vključuje izpit VCA: potrdilo VCA se izda po uspešno opravljenem izpitu;\n- BEPS pripravlja na evropsko potrdilo o prvi pomoči.\n\nČe želite natančno izvedeti, kaj vam je izročeno ob koncu posameznega usposabljanja, nas kontaktirajte.",
    "keywords": [
     "potrdilo",
     "certifikat",
@@ -567,18 +568,17 @@ WisyFAQ.register("sl", {
   },
   "faq-attestations-vca-examen": {
    "question": "Ali usposabljanje VCA vodi do izpita?",
-   "answer": "Da: VCA osnovni vključuje odobren izpit. Za podrobnosti izpita (potek, jezik, pogoji) nas kontaktirajte.",
+   "answer": "Da: usposabljanje VCA osnovni vključuje izpit. Po uradnih dokumentih BeSaCC-VCA ima izpit VCA osnovni 40 vprašanj, traja 60 minut in je opravljen pri vsaj 64,5 % pravilnih odgovorov; potrdilo VCA se izda po uspešno opravljenem izpitu.\n\nZa praktične podrobnosti (jezik, pogoji) nas kontaktirajte.",
    "keywords": [
     "izpit",
     "vca",
-    "odobren",
     "test",
-    "ocenjevanje"
+    "ocenjevanje",
+    "certificiranje"
    ],
    "synonyms": [
     "opravljanje izpita",
     "izpit vca",
-    "odobren izpit",
     "izbirni test",
     "uspeh",
     "neuspeh",

@@ -50,7 +50,12 @@
     "footer.fri": "Vendredi", "footer.sat": "Samedi", "footer.sun": "Dimanche", "footer.closed": "Fermé",
     "footer.status_open": "ACTUELLEMENT OUVERT", "footer.status_closed": "ACTUELLEMENT FERMÉ",
     "footer.legal_mentions": "Mentions légales", "footer.legal_privacy": "Politique de confidentialité",
-    "footer.legal_terms": "Conditions générales", "footer.rights": "Tous droits réservés."
+    "footer.legal_terms": "Conditions générales", "footer.rights": "Tous droits réservés.",
+    "dd.vca_base_full": "Formation VCA Base",
+    "dd.vca_base_summary": "Maîtrisez les règles fondamentales de sécurité au travail et préparez votre examen VCA Base, en présentiel à Anderlecht (Bruxelles), examen inclus.",
+    "dd.vca_base_dur": "1 jour",
+    "dd.vca_base_fmt": "Présentiel",
+    "dd.vca_base_exam": "Examen inclus"
   });
 
   /* ---------------- ENGLISH ---------------- */
@@ -86,7 +91,12 @@
     "footer.fri": "Friday", "footer.sat": "Saturday", "footer.sun": "Sunday", "footer.closed": "Closed",
     "footer.status_open": "CURRENTLY OPEN", "footer.status_closed": "CURRENTLY CLOSED",
     "footer.legal_mentions": "Legal notice", "footer.legal_privacy": "Privacy policy",
-    "footer.legal_terms": "Terms & conditions", "footer.rights": "All rights reserved."
+    "footer.legal_terms": "Terms & conditions", "footer.rights": "All rights reserved.",
+    "dd.vca_base_full": "VCA Basic course",
+    "dd.vca_base_summary": "Master the fundamental workplace safety rules and prepare for your VCA Basic exam, in person in Anderlecht (Brussels), exam included.",
+    "dd.vca_base_dur": "1 day",
+    "dd.vca_base_fmt": "In person",
+    "dd.vca_base_exam": "Exam included"
   });
 
   /* ---------------- NEDERLANDS ---------------- */
@@ -122,7 +132,12 @@
     "footer.fri": "Vrijdag", "footer.sat": "Zaterdag", "footer.sun": "Zondag", "footer.closed": "Gesloten",
     "footer.status_open": "NU GEOPEND", "footer.status_closed": "NU GESLOTEN",
     "footer.legal_mentions": "Wettelijke vermeldingen", "footer.legal_privacy": "Privacybeleid",
-    "footer.legal_terms": "Algemene voorwaarden", "footer.rights": "Alle rechten voorbehouden."
+    "footer.legal_terms": "Algemene voorwaarden", "footer.rights": "Alle rechten voorbehouden.",
+    "dd.vca_base_full": "Opleiding VCA Basis",
+    "dd.vca_base_summary": "Beheers de basisregels van veiligheid op het werk en bereid uw examen VCA Basis voor, op locatie in Anderlecht (Brussel), examen inbegrepen.",
+    "dd.vca_base_dur": "1 dag",
+    "dd.vca_base_fmt": "Op locatie",
+    "dd.vca_base_exam": "Examen inbegrepen"
   });
 
   /* ---------------- AFRIKAANS ---------------- */
@@ -158,7 +173,12 @@
     "footer.fri": "Vrydag", "footer.sat": "Saterdag", "footer.sun": "Sondag", "footer.closed": "Gesluit",
     "footer.status_open": "TANS OOP", "footer.status_closed": "TANS GESLUIT",
     "footer.legal_mentions": "Regskennisgewing", "footer.legal_privacy": "Privaatheidsbeleid",
-    "footer.legal_terms": "Algemene voorwaardes", "footer.rights": "Alle regte voorbehou."
+    "footer.legal_terms": "Algemene voorwaardes", "footer.rights": "Alle regte voorbehou.",
+    "dd.vca_base_full": "VCA Basis-opleiding",
+    "dd.vca_base_summary": "Bemeester die grondliggende werkplekveiligheidsreëls en berei voor vir u VCA Basis-eksamen, in persoon in Anderlecht (Brussel), eksamen ingesluit.",
+    "dd.vca_base_dur": "1 dag",
+    "dd.vca_base_fmt": "In persoon",
+    "dd.vca_base_exam": "Eksamen ingesluit"
   });
 
   /* ---------------- العربية (RTL) ---------------- */
@@ -194,7 +214,12 @@
     "footer.fri": "الجمعة", "footer.sat": "السبت", "footer.sun": "الأحد", "footer.closed": "مغلق",
     "footer.status_open": "مفتوح الآن", "footer.status_closed": "مغلق الآن",
     "footer.legal_mentions": "الإشعارات القانونية", "footer.legal_privacy": "سياسة الخصوصية",
-    "footer.legal_terms": "الشروط والأحكام", "footer.rights": "جميع الحقوق محفوظة."
+    "footer.legal_terms": "الشروط والأحكام", "footer.rights": "جميع الحقوق محفوظة.",
+    "dd.vca_base_full": "دورة VCA الأساسي",
+    "dd.vca_base_summary": "أتقن قواعد السلامة الأساسية في العمل واستعدّ لامتحان VCA الأساسي حضورياً في أندرلخت (بروكسل)، والامتحان مشمول.",
+    "dd.vca_base_dur": "يوم واحد",
+    "dd.vca_base_fmt": "حضوري",
+    "dd.vca_base_exam": "الامتحان مشمول"
   });
 
   /* ---------------- БЪЛГАРСКИ ---------------- */
@@ -230,7 +255,12 @@
     "footer.fri": "Петък", "footer.sat": "Събота", "footer.sun": "Неделя", "footer.closed": "Затворено",
     "footer.status_open": "В МОМЕНТА ОТВОРЕНО", "footer.status_closed": "В МОМЕНТА ЗАТВОРЕНО",
     "footer.legal_mentions": "Правна информация", "footer.legal_privacy": "Политика за поверителност",
-    "footer.legal_terms": "Общи условия", "footer.rights": "Всички права запазени."
+    "footer.legal_terms": "Общи условия", "footer.rights": "Всички права запазени.",
+    "dd.vca_base_full": "Обучение VCA основи",
+    "dd.vca_base_summary": "Овладейте основните правила за безопасност на работното място и се подгответе за изпита VCA основи, присъствено в Андерлехт (Брюксел), изпитът е включен.",
+    "dd.vca_base_dur": "1 ден",
+    "dd.vca_base_fmt": "Присъствено",
+    "dd.vca_base_exam": "Включен изпит"
   });
 
   /* ---------------- DEUTSCH ---------------- */
@@ -266,7 +296,12 @@
     "footer.fri": "Freitag", "footer.sat": "Samstag", "footer.sun": "Sonntag", "footer.closed": "Geschlossen",
     "footer.status_open": "JETZT GEÖFFNET", "footer.status_closed": "JETZT GESCHLOSSEN",
     "footer.legal_mentions": "Impressum", "footer.legal_privacy": "Datenschutzerklärung",
-    "footer.legal_terms": "AGB", "footer.rights": "Alle Rechte vorbehalten."
+    "footer.legal_terms": "AGB", "footer.rights": "Alle Rechte vorbehalten.",
+    "dd.vca_base_full": "Schulung VCA Grundlagen",
+    "dd.vca_base_summary": "Beherrschen Sie die grundlegenden Regeln der Arbeitssicherheit und bereiten Sie sich auf Ihre Prüfung VCA Grundlagen vor – in Präsenz in Anderlecht (Brüssel), Prüfung inklusive.",
+    "dd.vca_base_dur": "1 Tag",
+    "dd.vca_base_fmt": "In Präsenz",
+    "dd.vca_base_exam": "Prüfung inklusive"
   });
 
   /* ---------------- ROMÂNĂ ---------------- */
@@ -302,7 +337,12 @@
     "footer.fri": "Vineri", "footer.sat": "Sâmbătă", "footer.sun": "Duminică", "footer.closed": "Închis",
     "footer.status_open": "DESCHIS ACUM", "footer.status_closed": "ÎNCHIS ACUM",
     "footer.legal_mentions": "Mențiuni legale", "footer.legal_privacy": "Politica de confidențialitate",
-    "footer.legal_terms": "Termeni și condiții", "footer.rights": "Toate drepturile rezervate."
+    "footer.legal_terms": "Termeni și condiții", "footer.rights": "Toate drepturile rezervate.",
+    "dd.vca_base_full": "Curs VCA de bază",
+    "dd.vca_base_summary": "Stăpâniți regulile fundamentale de siguranță la locul de muncă și pregătiți-vă pentru examenul VCA de bază, cu prezență fizică la Anderlecht (Bruxelles), examen inclus.",
+    "dd.vca_base_dur": "1 zi",
+    "dd.vca_base_fmt": "Față în față",
+    "dd.vca_base_exam": "Examen inclus"
   });
 
   /* ---------------- ITALIANO ---------------- */
@@ -338,7 +378,12 @@
     "footer.fri": "Venerdì", "footer.sat": "Sabato", "footer.sun": "Domenica", "footer.closed": "Chiuso",
     "footer.status_open": "ATTUALMENTE APERTO", "footer.status_closed": "ATTUALMENTE CHIUSO",
     "footer.legal_mentions": "Note legali", "footer.legal_privacy": "Informativa sulla privacy",
-    "footer.legal_terms": "Termini e condizioni", "footer.rights": "Tutti i diritti riservati."
+    "footer.legal_terms": "Termini e condizioni", "footer.rights": "Tutti i diritti riservati.",
+    "dd.vca_base_full": "Corso VCA base",
+    "dd.vca_base_summary": "Padroneggia le regole fondamentali di sicurezza sul lavoro e preparati all'esame VCA base, in presenza ad Anderlecht (Bruxelles), esame incluso.",
+    "dd.vca_base_dur": "1 giorno",
+    "dd.vca_base_fmt": "In presenza",
+    "dd.vca_base_exam": "Esame incluso"
   });
 
   /* ---------------- SLOVENŠČINA ---------------- */
@@ -374,7 +419,12 @@
     "footer.fri": "Petek", "footer.sat": "Sobota", "footer.sun": "Nedelja", "footer.closed": "Zaprto",
     "footer.status_open": "TRENUTNO ODPRTO", "footer.status_closed": "TRENUTNO ZAPRTO",
     "footer.legal_mentions": "Pravno obvestilo", "footer.legal_privacy": "Politika zasebnosti",
-    "footer.legal_terms": "Splošni pogoji", "footer.rights": "Vse pravice pridržane."
+    "footer.legal_terms": "Splošni pogoji", "footer.rights": "Vse pravice pridržane.",
+    "dd.vca_base_full": "Usposabljanje VCA osnovni",
+    "dd.vca_base_summary": "Osvojite temeljna pravila varnosti pri delu in se pripravite na izpit VCA osnovni, v živo v Anderlechtu (Bruselj), izpit vključen.",
+    "dd.vca_base_dur": "1 dan",
+    "dd.vca_base_fmt": "V živo",
+    "dd.vca_base_exam": "Izpit vključen"
   });
 
   /* Centre d'aide (FAQ) — libellé du lien vers faq.html (pied de page + menu mobile). */

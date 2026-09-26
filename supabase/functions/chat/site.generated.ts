@@ -7,7 +7,7 @@
 
 export interface SiteEntry {
   id: string;
-  type: "formation" | "page";
+  type: "formation" | "page" | "article";
   title: string;
   url: string;
   category?: string;
@@ -42,22 +42,42 @@ export const SITE_FORMATIONS: SiteEntry[] = [
     "type": "formation",
     "title": "VCA Base",
     "category": "securite",
-    "url": "formations.html#vca-base",
+    "url": "formation-vca-base.html",
     "signupUrl": "inscription.html?formation=vca-base",
     "duration": "1 jour",
     "level": "Base",
-    "content": "Formation sécurité de base pour tous les secteurs professionnels. Certification reconnue au niveau national.",
+    "priceLabel": "225 €",
+    "format": "Présentiel",
+    "audience": [
+      "ouvriers et personnel opérationnel",
+      "techniciens de maintenance",
+      "intérimaires",
+      "collaborateurs de chantier",
+      "sous-traitants",
+      "toute personne travaillant dans un environnement présentant des risques"
+    ],
+    "content": "Maîtrisez les règles fondamentales de sécurité au travail et préparez votre examen VCA Base, en présentiel à Anderlecht (Bruxelles), examen inclus. Objectif : Acquérir les règles fondamentales de sécurité au travail et se préparer à l'examen VCA Base, dans un cadre professionnel. Le tarif est indiqué par personne. Le statut TVA (HT ou TTC) du tarif n'est PAS précisé : ne jamais écrire « HT », « TTC » ni « hors TVA ». L'examen est inclus dans le tarif. Examen officiel (source BeSaCC-VCA, vérifié le 2026-09-26) : 40 questions, 60 minutes, seuil de réussite 64,5 %. Un diplôme de sécurité de base est considéré comme valable s'il date de moins de 10 ans à compter de la date de l'examen. Certification VCA après réussite de l'examen. La formation se déroule au centre Wisy Safety d'Anderlecht. NON CONFIRMÉ (ne jamais l'affirmer) : agréé ; agrément ; accrédité ; reconnu internationalement ; centre d'examen reconnu ; langues FR/NL/EN ; 8 heures ; horaires de la journée ; 12 participants maximum ; taux de réussite ; financement / aides applicables à cette formation.",
     "keywords": [
       "vca",
-      "base",
+      "vca base",
+      "vca de base",
       "b-vca",
-      "securite",
-      "chantier",
-      "fondamentaux",
-      "certification",
-      "national",
-      "safety",
+      "bvca",
+      "vca basis",
+      "basisveiligheid",
       "veiligheid",
+      "vca bruxelles",
+      "vca anderlecht",
+      "vca belgique",
+      "certificat vca",
+      "diplome vca",
+      "certification vca",
+      "examen vca",
+      "chantier",
+      "sous-traitant",
+      "interimaire",
+      "scc",
+      "safety",
       "sicherheit"
     ]
   },
@@ -213,7 +233,7 @@ export const SITE_FORMATIONS: SiteEntry[] = [
       "Malaises & brûlures",
       "Alerter le 112"
     ],
-    "content": "Apprendre, en 15 heures, à protéger, alerter le 112 et secourir une victime en attendant les professionnels : réanimation, défibrillation, position latérale de sécurité, hémorragies, étouffement, malaises et brûlures. Objectif : Rendre chaque participant capable d'intervenir efficacement dès les premières minutes d'une urgence, dans le bon ordre et sans se mettre en danger. AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer.",
+    "content": "Apprendre, en 15 heures, à protéger, alerter le 112 et secourir une victime en attendant les professionnels : réanimation, défibrillation, position latérale de sécurité, hémorragies, étouffement, malaises et brûlures. Objectif : Rendre chaque participant capable d'intervenir efficacement dès les premières minutes d'une urgence, dans le bon ordre et sans se mettre en danger. Le statut TVA (HT ou TTC) du tarif n'est PAS précisé : ne jamais écrire « HT », « TTC » ni « hors TVA ». AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer.",
     "keywords": [
       "beps",
       "premiers secours",
@@ -367,7 +387,7 @@ export const SITE_PAGES: SiteEntry[] = [
     "type": "page",
     "title": "Agenda des formations",
     "url": "agenda.html",
-    "content": "Agenda des formations Wisy Safety : la page qui accueillera les prochaines sessions, leurs horaires et leurs disponibilités. L'agenda en ligne arrive prochainement : aucune date n'y est publiée pour le moment.",
+    "content": "Agenda des formations Wisy Safety : la liste des sessions publiées, avec leurs horaires et leurs disponibilités. Une session y apparaît dès qu'elle est confirmée ; sans session publiée, la page renvoie vers l'équipe pour connaître les prochaines disponibilités.",
     "keywords": [
       "agenda",
       "calendrier",
@@ -390,6 +410,65 @@ export const SITE_PAGES: SiteEntry[] = [
       "urnik",
       "program",
       "datum"
+    ]
+  },
+  {
+    "id": "page-article-vca-cout",
+    "type": "article",
+    "title": "Combien coûte une formation VCA et qui peut la financer ?",
+    "url": "article-vca-cout-financement.html",
+    "content": "Article : ce qu'il faut vérifier avant de comparer le prix d'une formation VCA, et où se renseigner sur les aides possibles en Belgique (employeur, Constructiv, Actiris, Bruxelles Formation). Tarif Wisy Safety : 225 € par personne, examen inclus.",
+    "keywords": [
+      "cout",
+      "prix",
+      "tarif",
+      "combien",
+      "financement",
+      "financer",
+      "aide",
+      "aides",
+      "subvention",
+      "prise en charge",
+      "employeur",
+      "constructiv",
+      "actiris",
+      "bruxelles formation",
+      "demandeur d'emploi",
+      "vca",
+      "article",
+      "conseil",
+      "kosten",
+      "financiering",
+      "cost",
+      "funding"
+    ]
+  },
+  {
+    "id": "page-article-vca-examen",
+    "type": "article",
+    "title": "Les erreurs fréquentes à l'examen VCA et comment les éviter",
+    "url": "article-vca-erreurs-examen.html",
+    "content": "Article : le format officiel de l'examen VCA Base (40 questions, 60 minutes, 64,5 % pour réussir) et les pièges à éviter pour le préparer sereinement.",
+    "keywords": [
+      "examen",
+      "erreurs",
+      "erreur",
+      "reussir",
+      "echec",
+      "piege",
+      "pieges",
+      "preparer",
+      "preparation",
+      "conseils",
+      "stress",
+      "temps",
+      "questions",
+      "64,5",
+      "vca",
+      "article",
+      "exam",
+      "fouten",
+      "examen vca"
     ]
   },
   {
@@ -437,7 +516,10 @@ export const SITE_PATHS: string[] = [
   "inscription.html",
   "faq.html",
   "agenda.html",
+  "article-vca-cout-financement.html",
+  "article-vca-erreurs-examen.html",
   "peb-wallonie-bruxelles.html",
+  "formation-vca-base.html",
   "formation-nacelles-elevatrices.html",
   "formation-beps-premiers-secours.html"
 ];

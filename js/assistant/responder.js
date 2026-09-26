@@ -70,6 +70,17 @@
     var p = Knowledge.byId("page-agenda");
     return p ? navigationCard(p) : null;
   }
+  /* Article « Conseils & ressources VCA » (page réelle du registre) — proposé en complément de certaines réponses. */
+  function articleCard(id) {
+    var p = Knowledge.byId(id);
+    return p && p.type === "article" ? navigationCard(p) : null;
+  }
+  /* Réponse FAQ → article qui la prolonge (mêmes sujets, sources officielles citées dans l'article). */
+  var FAQ_ARTICLE = {
+    "faq-tarifs-financement": "page-article-vca-cout",
+    "faq-tarifs-prix": "page-article-vca-cout",
+    "faq-attestations-vca-examen": "page-article-vca-examen"
+  };
   function cardsOf() { return Array.prototype.slice.call(arguments).filter(Boolean); }
   function contactCard() {
     return {
@@ -110,13 +121,16 @@
     if (a === "contact") return [contactCard()];
     if (a === "agenda") { var ag = agendaCard(); return ag ? [ag] : undefined; }
     if (a === "nacelle") { var n = Knowledge.byId("nacelle"); return n ? [trainingCard(n)] : undefined; }
+    if (a === "vca") { var v = Knowledge.byId("vca-base"); return v ? [trainingCard(v)] : undefined; }
     p = Knowledge.byId(a === "formations" ? "page-formations" : a === "inscription" ? "page-inscription" : "");
     return p ? [navigationCard(p)] : undefined;
   }
   function faqResponse(it, res) {
+    var cards = actionCards(it), art = FAQ_ARTICLE[it.id] ? articleCard(FAQ_ARTICLE[it.id]) : null;
+    if (art) cards = (cards || []).concat([art]).slice(0, 3);
     return {
       message: Faq.plainAnswer(it),
-      cards: actionCards(it),
+      cards: cards,
       suggestions: relatedQuestions(it.id, 3),
       sources: [{ title: it.question, url: "faq.html#" + it.id }],
       meta: { intent: "faq", faqId: it.id, confidence: res ? res.confidence : "exact" }
@@ -172,7 +186,7 @@
   }
   function isPrice(q) {
     // « combien de temps / de jours / d'heures » = une question de DURÉE, pas de prix
-    if (/combien (de|d'?) ?(temps|jour|jours|heure|heures)/.test(q)) return false;
+    if (/combien (de|d'?) ?(temps|jour|jours|heure|heures|questions?|points?|minutes?|annees?|ans|participants?|places?)/.test(q)) return false;
     return has(q, ["prix", "tarif", "tarifs", "cout", "combien", "coute", "coutent", "devis", "budget", "euro", "euros", "gratuit"]);
   }
   function isContactWanted(q) {
@@ -199,6 +213,18 @@
   function isTypes(q) { return has(q, ["type", "types", "sorte", "sortes", "modele", "modeles", "ciseaux", "araignee", "telescopique", "articulee", "camion", "verticale", "automotrice"]); }
   function isWhere(q) { return has(q, ["ou trouver", "ou puis", "ou voir", "ou est", "ou se", "lien", "fiche", "detail", "details", "page"]); }
   function isCertification(q) { return has(q, ["caces", "r486", "certifi", "agree", "agrement", "reconnu", "reconnue", "reconnaissance", "obligatoire", "attestation", "diplome", "homologu"]); }
+  /* Détecteurs « formation à examen » (VCA Base). L'apostrophe droite d'un « l'examen » colle deux mots :
+     on la remplace par une espace avant de chercher. */
+  function apos(q) { return q.replace(/'/g, " "); }
+  function isExam(q) { return has(apos(q), ["examen", "examens", "exam", "qcm", "seuil", "reussir", "reussite", "echouer", "echec", "repasser", "combien de questions"]); }
+  /* Mots de PRIX explicites (« combien » seul ne suffit pas : « combien de temps est valable le diplôme ? »). */
+  function hasPriceWord(q) { return has(q, ["prix", "tarif", "tarifs", "cout", "coute", "coutent", "euro", "euros", "devis"]); }
+  function isDiploma(q) { return has(apos(q), ["diplom", "certifi", "attestation", "valable", "validite", "expir", "registre", "verifier", "verification"]); }
+  /* Agrément / accréditation / reconnaissance : jamais affirmés sans confirmation de Wisy Safety. */
+  function isAccreditation(q) { return has(apos(q), ["agree", "agrement", "accredit", "reconnu", "reconnue", "reconnaissance", "homologu", "centre d examen", "officiellement"]); }
+  function isLocation(q) {
+    return has(apos(q), ["ou a lieu", "ou ont lieu", "ou se deroule", "ou se passe", "ou se donne", "ou se trouve", "ou etes", "adresse", "lieu", "localisation", "situe", "venir", "itineraire", "presentiel"]);
+  }
 
   /* « a, b et c » */
   function joinList(items) {
@@ -207,18 +233,68 @@
   }
   function lower(s) { return String(s).charAt(0).toLowerCase() + String(s).slice(1); }
 
-  /* Formation dont le public visé recoupe le message (« je travaille dans la maintenance… »). */
-  function audienceMatch(rawMessage) {
-    var tokens = Retrieval.tokenize(rawMessage);
-    var found = null;
+  /* Phrase de prix : l'unité (« par personne ») et le statut TVA ne sont dits QUE s'ils sont confirmés dans le
+     registre — sinon on le reconnaît honnêtement (jamais « hors TVA » par défaut). */
+  function priceSentence(f) {
+    var vat = f.price && f.price.vatIncluded;
+    var s = "La formation « " + f.title + " » est proposée à " + f.priceLabel + (f.priceUnit === "participant" ? " par personne" : "") +
+      (f.exam && f.exam.included ? ", examen inclus" : "") + ".";
+    if (vat !== true && vat !== false) s += " Le statut TVA (HT ou TTC) n’est pas précisé sur le site : contactez l’équipe Wisy Safety pour le confirmer.";
+    return s + " Pour toute question sur les modalités (dates, groupe, entreprise), contactez l’équipe Wisy Safety.";
+  }
+
+  /* Formations dont le public visé recoupe le message (toutes, pas seulement la première). */
+  function audienceMatches(rawMessage) {
+    var tokens = Retrieval.tokenize(rawMessage), found = [];
     Knowledge.formations().forEach(function (f) {
-      if (found || !f.audience) return;
+      if (!f.audience) return;
       var hay = " " + Retrieval.normalize(f.audience.join(" ")) + " ";
       for (var i = 0; i < tokens.length; i++) {
-        if (tokens[i].length >= 5 && hay.indexOf(" " + tokens[i]) !== -1) { found = f; return; }
+        if (tokens[i].length >= 5 && hay.indexOf(" " + tokens[i]) !== -1) { found.push(f); return; }
       }
     });
     return found;
+  }
+
+  /* Sessions : fournies par la page (WisySessions, source unique) via `opts.sessions` — jamais écrites ici.
+     Le moteur ne fait que les mettre en phrase ; sans session, il renvoie vers l'agenda et l'équipe. */
+  function sessionsFor(opts, formation) {
+    var list = (opts && Array.isArray(opts.sessions)) ? opts.sessions : [];
+    return list.filter(function (s) { return !formation || s.training === formation.id; });
+  }
+  function frDate(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s.date), d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 12));
+    var out = new Intl.DateTimeFormat("fr-BE", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(d);
+    return out.charAt(0).toUpperCase() + out.slice(1);
+  }
+  function sessionLine(s) {
+    var f = Knowledge.byId(s.training), parts = [frDate(s)];
+    if (s.startTime) parts.push(s.endTime ? s.startTime + " – " + s.endTime : s.startTime);
+    if (f) parts.push(f.title);
+    if (s.language) parts.push("langue : " + s.language.toUpperCase());
+    if (s.status === "full" || s.seatsLeft === 0) parts.push("complet");
+    else if (s.seatsLeft != null) parts.push(s.seatsLeft + " place" + (s.seatsLeft > 1 ? "s" : "") + " disponible" + (s.seatsLeft > 1 ? "s" : ""));
+    return "• " + parts.join(" · ");
+  }
+  function sessionsResponse(list, mentioned) {
+    var shown = list.slice(0, 3), open = shown.filter(function (s) { return s.status === "open" && (s.seatsLeft == null || s.seatsLeft > 0); });
+    var cards = open.slice(0, 2).map(function (s) {
+      var f = Knowledge.byId(s.training);
+      return { type: "navigation", title: "S’inscrire à la session du " + frDate(s).replace(/^\S+ /, ""), description: f ? f.title : "",
+        url: s.signupUrl || ("inscription.html?formation=" + encodeURIComponent(s.training) + "&session=" + encodeURIComponent(s.id)) };
+    });
+    var ag = agendaCard(); if (ag) cards.push(ag);
+    cards.push(contactCard());
+    var fx = faqExtras("faq-inscription-dates");
+    return {
+      message: (mentioned ? "À propos de la formation « " + mentioned.title + " » :\n" : "") +
+        (shown.length > 1 ? "Voici les prochaines sessions publiées :\n" : "Voici la prochaine session publiée :\n") + shown.map(sessionLine).join("\n") +
+        "\nLes horaires, la langue et les places sont ceux de la session : pour toute autre question, contactez l’équipe Wisy Safety.",
+      cards: cards.slice(0, 4),
+      suggestions: fx.related.length ? fx.related : ["Voir les formations disponibles", "Comment m’inscrire ?"],
+      sources: fx.sources.concat([{ title: "Agenda", url: "agenda.html" }]),
+      meta: { intent: "sessions_available", faqId: fx.sources.length ? "faq-inscription-dates" : undefined }
+    };
   }
 
   /* Faits complémentaires d'une fiche (uniquement ceux qui existent). */
@@ -247,6 +323,9 @@
         if (f.priceLabel && f.subtypes) {
           /* fiche riche (tarif + types de nacelles connus) : questions les plus utiles d'abord */
           suggestions = ["Quel est le tarif ?", "Durée de cette formation", "Quels types de nacelles ?", "Comment m’inscrire ?"];
+        } else if (f.priceLabel && f.exam && f.exam.included) {
+          /* fiche à examen inclus (VCA Base) : tarif, examen, prochaines sessions, inscription */
+          suggestions = ["Quel est le tarif ?", "L’examen est-il inclus ?", "Prochaines sessions", "Comment m’inscrire ?"];
         }
       }
     } else if (ctx.page === "formations") {
@@ -329,6 +408,21 @@
       };
     }
 
+    /* 2d) Agrément / accréditation / reconnaissance d'une formation à « affirmations non confirmées »
+       (VCA Base) : jamais affirmés. On dit ce qui est établi (examen inclus, certification après réussite)
+       et on renvoie à l'équipe pour le statut de Wisy Safety. */
+    if (mentioned && mentioned.unconfirmedClaims && isAccreditation(q)) {
+      return {
+        message: "Je ne peux pas affirmer d’agrément, d’accréditation ou de reconnaissance particulière pour cette formation sans confirmation de l’équipe Wisy Safety. " +
+          "Ce qui est établi : la formation « " + mentioned.title + " » inclut l’examen, et la certification est délivrée après réussite de l’examen. " +
+          "Pour le statut de Wisy Safety, contactez l’équipe.",
+        cards: [trainingCard(mentioned), contactCard()],
+        suggestions: ["L’examen est-il inclus ?", "Comment m’inscrire ?"],
+        sources: [{ title: mentioned.title, url: mentioned.url }, { title: "Contact", url: C.contactUrl }],
+        meta: { intent: "certification_unconfirmed" }
+      };
+    }
+
     /* 2c) Journée / soirée / week-end : formats NON confirmés par le site → page Agenda + contact,
        jamais une promesse (et jamais les horaires d'ouverture de l'équipe pris pour ceux des formations). */
     if (isScheduleFormat(q) && !isPrice(q)) {
@@ -346,7 +440,7 @@
     /* 3a) Prix CONNU pour cette formation (confirmé par Wisy Safety) */
     if (isPrice(q) && mentioned && mentioned.priceLabel) {
       return {
-        message: "La formation « " + mentioned.title + " » est proposée à " + mentioned.priceLabel + " (hors TVA). Pour toute question sur les modalités (dates, groupe, entreprise), contactez l’équipe Wisy Safety.",
+        message: priceSentence(mentioned),
         cards: [trainingCard(mentioned), contactCard()],
         suggestions: ["Comment m’inscrire ?", "Durée de cette formation", "Voir d’autres formations"],
         sources: [{ title: mentioned.title, url: mentioned.url }],
@@ -372,10 +466,14 @@
     /* 4) Dates / sessions — NON présent sur le site → contact */
     if (isSchedule(q) && !isDuration(q)) {
       /* « Où voir l'agenda ? » : on répond à la question posée (l'emplacement), sans jamais annoncer une date. */
-      if (has(q, ["agenda", "agendas", "calendrier"]) && isWhere(q)) {
+      var asksAgendaPlace = has(q, ["agenda", "agendas", "calendrier"]) && isWhere(q);
+      /* Sessions PUBLIÉES (fournies par la page) : on les cite telles quelles — jamais une date inventée. */
+      var published = asksAgendaPlace ? [] : sessionsFor(opts, mentioned);
+      if (published.length && !isScheduleFormat(q)) return sessionsResponse(published, mentioned);
+      if (asksAgendaPlace) {
         var lx = faqExtras("faq-inscription-dates");
         return {
-          message: "L’agenda des formations se trouve sur la page Agenda. L’agenda en ligne arrive prochainement : aucune session n’y est publiée pour le moment. Contactez l’équipe Wisy Safety pour connaître les prochaines disponibilités.",
+          message: "L’agenda des formations se trouve sur la page Agenda : les sessions y sont publiées dès qu’elles sont confirmées. Si aucune n’y figure encore pour la formation qui vous intéresse, contactez l’équipe Wisy Safety pour connaître les prochaines disponibilités.",
           cards: cardsOf(agendaCard(), contactCard()),
           suggestions: lx.related.length ? lx.related : ["Voir les formations disponibles", "Comment m’inscrire ?"],
           sources: lx.sources,
@@ -426,13 +524,15 @@
 
     /* 5c) Public visé — « je travaille dans la maintenance, est-ce pour moi ? » */
     if (isAudience(q) && !mentioned) {
-      var aud = audienceMatch(rawMessage);
-      if (aud) {
+      var auds = audienceMatches(rawMessage);
+      if (auds.length) {
         return {
-          message: "Cela peut vous concerner : la formation « " + aud.title + " » s’adresse aux " + joinList(aud.audience.map(lower)) + ".",
-          cards: [trainingCard(aud)],
+          message: "Cela peut vous concerner :\n" + auds.slice(0, 3).map(function (a) {
+            return "• la formation « " + a.title + " » s’adresse aux " + joinList(a.audience.map(lower)) + ".";
+          }).join("\n"),
+          cards: auds.slice(0, 3).map(trainingCard),
           suggestions: ["Comment m’inscrire ?", "Quel est le tarif ?", "Voir d’autres formations"],
-          sources: [{ title: aud.title, url: aud.url }],
+          sources: auds.slice(0, 3).map(function (a) { return { title: a.title, url: a.url }; }),
           meta: { intent: "formation_audience" }
         };
       }
@@ -454,6 +554,47 @@
         suggestions: cat ? ["Voir toutes les formations", "Comment m’inscrire ?"] : ["Formations sécurité", "Premiers secours", "Voir le catalogue complet"],
         sources: [{ title: "Toutes les formations", url: "formations.html" }],
         meta: { intent: "list_formations" }
+      };
+    }
+
+    /* 6b) Examen : seule une formation à examen INCLUS (registre) en parle ; sans formation nommée, on n'y répond
+       que s'il n'en existe qu'une (VCA Base). Faits OFFICIELS du registre — jamais un agrément. */
+    var examFormations = Knowledge.formations().filter(function (f) { return f.exam && f.exam.included && f.official && f.official.exam; });
+    var examTarget = (mentioned && mentioned.exam && mentioned.exam.included && mentioned.official) ? mentioned
+      : (!mentioned && examFormations.length === 1 ? examFormations[0] : null);
+    if (examTarget && isExam(q) && !hasPriceWord(q)) {
+      var ox = examTarget.official.exam;
+      return {
+        message: "L’examen est inclus dans la formation « " + examTarget.title + " ». D’après les documents officiels de BeSaCC-VCA (vérifiés le 26 septembre 2026), l’examen compte " + ox.questions +
+          " questions, dure " + ox.minutes + " minutes et se réussit à partir de " + String(ox.passPercent).replace(".", ",") + " % de bonnes réponses. " +
+          (examTarget.certification ? examTarget.certification + ". " : "") + "Pour les modalités pratiques (langue, conditions), contactez l’équipe Wisy Safety.",
+        cards: [trainingCard(examTarget), contactCard()],
+        suggestions: ["Quel est le tarif ?", "Prochaines sessions", "Comment m’inscrire ?"],
+        sources: [{ title: examTarget.title, url: examTarget.url + "#examen" }].concat(faqExtras("faq-attestations-vca-examen").sources),
+        meta: { intent: "formation_exam", faqId: faqExtras("faq-attestations-vca-examen").sources.length ? "faq-attestations-vca-examen" : undefined }
+      };
+    }
+    /* Diplôme / certificat / validité : faits officiels du registre (durée de validité, registre central). */
+    if (mentioned && mentioned.official && mentioned.official.diplomaValidityYears && isDiploma(q) && !hasPriceWord(q)) {
+      return {
+        message: "Pour la formation « " + mentioned.title + " » : " + (mentioned.certification ? mentioned.certification + ". " : "") +
+          "Selon BeSaCC-VCA, un diplôme de sécurité de base est considéré comme valable s’il date de moins de " + mentioned.official.diplomaValidityYears +
+          " ans à compter de la date de l’examen, et son authenticité peut être vérifiée dans le registre central des diplômes VCA. Pour toute question sur le document remis, contactez l’équipe Wisy Safety.",
+        cards: [trainingCard(mentioned), contactCard()],
+        suggestions: ["L’examen est-il inclus ?", "Comment m’inscrire ?"],
+        sources: [{ title: mentioned.title, url: mentioned.url + "#examen" }],
+        meta: { intent: "formation_certification" }
+      };
+    }
+    /* Lieu : uniquement pour une formation dont le lieu est confirmé (registre → `venue`). */
+    if (mentioned && mentioned.venue === "centre" && isLocation(q)) {
+      return {
+        message: "La formation « " + mentioned.title + " » se déroule " + (mentioned.format ? "en " + lower(mentioned.format) + " " : "") + "au centre Wisy Safety : " +
+          C.street + ", " + C.postalCode + " " + C.city + " (" + C.region + ").",
+        cards: [trainingCard(mentioned), contactCard()],
+        suggestions: ["Prochaines sessions", "Comment m’inscrire ?"],
+        sources: [{ title: mentioned.title, url: mentioned.url }, { title: "Contact", url: C.contactUrl }],
+        meta: { intent: "formation_venue" }
       };
     }
 
@@ -592,6 +733,20 @@
           meta: { intent: "formation_detail" }
         };
       }
+    }
+
+    /* 10a) Article : uniquement sur une correspondance FORTE (au moins deux mots du titre / des mots-clés),
+       jamais sur un mot courant (« comment ») — voir knowledge.js. */
+    var arts = Retrieval.search(rawMessage, { limit: 1, types: ["article"], minScore: 8 });
+    if (arts.length && arts[0].strong >= 2) {
+      var art = arts[0].entry;
+      return {
+        message: "L’article « " + art.title + " » peut vous aider : " + (art.content || ""),
+        cards: [navigationCard(art)],
+        suggestions: ["Voir les formations disponibles", "Contacter Wisy Safety"],
+        sources: [{ title: art.title, url: art.url }],
+        meta: { intent: "article" }
+      };
     }
 
     /* 10b) Dernière chance avant d'avouer : correspondance FAQ de confiance moyenne */

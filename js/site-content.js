@@ -65,15 +65,9 @@
        keywords   mots-clés de recherche et de l'assistant (sans accents, minuscules)
      --------------------------------------------------------------------- */
   var CATALOGUE = [
-    {
-      id: "vca-base", registrationId: "vca-base", category: "securite",
-      title: "VCA Base", titleKey: "dd.vca_base", taglineKey: "dd.vca_base_desc", descKey: "fo.f1_desc",
-      url: "formations.html#vca-base", signupUrl: "inscription.html?formation=vca-base",
-      duration: "1 jour", level: "Base",
-      description: "Formation sécurité de base pour tous les secteurs professionnels. Certification reconnue au niveau national.",
-      features: ["Certification reconnue", "Formateur expert", "Support complet"],
-      keywords: ["vca", "base", "b-vca", "securite", "chantier", "fondamentaux", "certification", "national", "safety", "veiligheid", "sicherheit"]
-    },
+    /* VCA Base : page dédiée formation-vca-base.html — construite depuis le registre js/trainings-data.js
+       (voir plus bas), comme la nacelle et le BEPS. */
+    { id: "vca-base", fromTrainings: true },
     {
       id: "vca-hierarchique", registrationId: "vca-ligne-hierarchique", category: "management",
       title: "VCA Ligne hiérarchique", titleKey: "dd.vca_hier", taglineKey: "dd.vca_hier_desc", descKey: "fo.f2_desc",
@@ -111,32 +105,45 @@
   /* Formation à page dédiée : TOUS ses faits viennent du registre js/trainings-data.js
      (aucun n'est recopié ici). Sans registre chargé, l'entrée est simplement omise. */
   function fromTrainings(T) {
-    return {
+    var langs = T.languageLabels ? T.languageLabels.slice() : null;
+    var e = {
       id: T.id, registrationId: T.registrationId, category: T.category,
       title: T.title, fullTitle: T.fullTitle,
-      titleKey: T.titleKey, fullTitleKey: T.fullTitleKey, taglineKey: "dd." + T.id + "_desc", summaryKey: T.summaryKey, descKey: T.summaryKey,
+      titleKey: T.titleKey, fullTitleKey: T.fullTitleKey, taglineKey: "dd." + T.id.replace(/-/g, "_") + "_desc", summaryKey: T.summaryKey, descKey: T.summaryKey,
       url: T.url, signupUrl: T.signupUrl,
       duration: T.durationDays != null ? Trainings.formatDuration(T.durationDays) : Trainings.formatDurationHours(T.durationHours),
       level: T.level || "Spécialisée",
       description: T.summary, objective: T.objective,
       price: T.price, priceLabel: Trainings.formatPrice(T.price),
-      format: T.formatLabel, languages: T.languageLabels.slice(), audience: T.audience.slice(),
-      subtypes: T.types.map(function (t) { return t.name; }),
-      unconfirmed: T.unconfirmed.slice(),
-      features: [T.formatLabel, "Approche orientée sécurité", T.languageLabels.join(", ")],
+      format: T.formatLabel, audience: T.audience.slice(),
+      features: [T.formatLabel, "Approche orientée sécurité"].concat(T.exam && T.exam.included ? ["Examen inclus"] : [], langs ? [langs.join(", ")] : []),
       /* Mots-clés bruts (avec « formation nacelle », « securite nacelle »…) : utiles à la recherche du
          site, qui traite les mots génériques à part. `keywords` (assistant) n'en garde que les
          termes discriminants — voir GENERIC_KEYWORD. */
-      searchKeywords: T.keywords.slice(),
+      searchKeywords: T.keywords.concat(T.searchExtra || []),
       keywords: T.keywords.filter(function (k) { return !GENERIC_KEYWORD.test(k); }),
       thumb: T.images.thumb, image: T.images.card, imageAlt: T.imageAlt,
-      factKeys: ["dd." + T.id + "_dur", "dd." + T.id + "_fmt", "dd." + T.id + "_langs"],
+      factKeys: ["dur", "fmt", langs ? "langs" : (T.exam && T.exam.included ? "exam" : null)].filter(Boolean)
+        .map(function (k) { return "dd." + T.id.replace(/-/g, "_") + "_" + k; }),
       dedicatedPage: true
     };
+    /* Champs FACULTATIFS : absents = jamais affichés ni affirmés (langues non confirmées, pas de sous-types,
+       pas de liste d'interdits) — un tableau vide serait « vrai » côté assistant, on ne pose donc rien. */
+    if (langs) { e.languages = langs; }
+    if (T.types && T.types.length) { e.subtypes = T.types.map(function (t) { return t.name; }); }
+    if (T.unconfirmed) { e.unconfirmed = T.unconfirmed.slice(); }
+    if (T.unconfirmedClaims) { e.unconfirmedClaims = T.unconfirmedClaims.slice(); }
+    if (T.priceUnit) { e.priceUnit = T.priceUnit; }
+    if (T.venue) { e.venue = T.venue; }
+    if (T.exam) { e.exam = { included: T.exam.included === true }; }
+    if (T.certification) { e.certification = T.certification; }
+    if (T.official) { e.official = { verifiedAt: T.official.verifiedAt, exam: T.official.exam, diplomaValidityYears: T.official.diplomaValidityYears, worksiteTrainingMinHours: T.official.worksiteTrainingMinHours }; }
+    return e;
   }
-  /* Mots trop génériques pour discriminer UNE formation (« une formation », « sécurité ») :
-     les garder ferait matcher n'importe quelle demande sur la nacelle. */
-  var GENERIC_KEYWORD = /\b(formations?|securite)\b/;
+  /* Mots trop génériques pour discriminer UNE formation (« une formation », « sécurité », « prix ») :
+     les garder ferait matcher n'importe quelle demande sur cette formation (« Quel est le tarif ? » ne
+     désigne pas la VCA Base). */
+  var GENERIC_KEYWORD = /\b(formations?|securite|prix|tarifs?)\b/;
 
   /* ---------------------------------------------------------------------
      Pages publiques (l'ordre = celui de la recherche et du plan du site)
@@ -174,8 +181,22 @@
     },
     {
       id: "agenda", url: "agenda.html", title: "Agenda des formations", titleKey: "search.page_agenda_t", descKey: "search.page_agenda_d",
-      content: "Agenda des formations Wisy Safety : la page qui accueillera les prochaines sessions, leurs horaires et leurs disponibilités. L'agenda en ligne arrive prochainement : aucune date n'y est publiée pour le moment.",
+      content: "Agenda des formations Wisy Safety : la liste des sessions publiées, avec leurs horaires et leurs disponibilités. Une session y apparaît dès qu'elle est confirmée ; sans session publiée, la page renvoie vers l'équipe pour connaître les prochaines disponibilités.",
       keywords: ["agenda", "calendrier", "dates", "date", "sessions", "session", "prochaines", "prochaine", "horaires", "planning", "quand", "disponibilites", "calendar", "schedule", "upcoming", "termine", "kalender", "calendario", "urnik", "program", "datum"]
+    },
+    /* Articles « Conseils & ressources VCA » (refonte VCA Base, 2026-09-26) — `kind: "article"` : la recherche
+       les range dans le groupe « Articles ». Sources officielles citées dans chaque article. */
+    {
+      id: "article-vca-cout", kind: "article", published: "2026-09-26", modified: "2026-09-26", url: "article-vca-cout-financement.html", title: "Combien coûte une formation VCA et qui peut la financer ?",
+      titleKey: "search.page_art_cost_t", descKey: "search.page_art_cost_d",
+      content: "Article : ce qu'il faut vérifier avant de comparer le prix d'une formation VCA, et où se renseigner sur les aides possibles en Belgique (employeur, Constructiv, Actiris, Bruxelles Formation). Tarif Wisy Safety : 225 € par personne, examen inclus.",
+      keywords: ["cout", "prix", "tarif", "combien", "financement", "financer", "aide", "aides", "subvention", "prise en charge", "employeur", "constructiv", "actiris", "bruxelles formation", "demandeur d'emploi", "vca", "article", "conseil", "kosten", "financiering", "cost", "funding"]
+    },
+    {
+      id: "article-vca-examen", kind: "article", published: "2026-09-26", modified: "2026-09-26", url: "article-vca-erreurs-examen.html", title: "Les erreurs fréquentes à l'examen VCA et comment les éviter",
+      titleKey: "search.page_art_exam_t", descKey: "search.page_art_exam_d",
+      content: "Article : le format officiel de l'examen VCA Base (40 questions, 60 minutes, 64,5 % pour réussir) et les pièges à éviter pour le préparer sereinement.",
+      keywords: ["examen", "erreurs", "erreur", "reussir", "echec", "piege", "pieges", "preparer", "preparation", "conseils", "stress", "temps", "questions", "64,5", "vca", "article", "exam", "fouten", "examen vca"]
     },
     {
       id: "peb", url: "peb-wallonie-bruxelles.html", title: "Devenez certificateur PEB", titleKey: "search.page_peb_t", descKey: "search.page_peb_d",

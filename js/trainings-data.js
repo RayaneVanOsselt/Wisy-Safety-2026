@@ -1,8 +1,9 @@
 /* =========================================================================
    WISY SAFETY — Registre des formations dotées d'une page dédiée
    -------------------------------------------------------------------------
-   SOURCE UNIQUE DES FAITS de la « Formation Nacelles Élévatrices » :
-   route, prix, durée, langues, format, public, mots-clés, visuels.
+   SOURCE UNIQUE DES FAITS des formations à page dédiée (VCA Base, Nacelles
+   Élévatrices, BEPS) : route, prix, durée, langues, format, public, mots-clés,
+   visuels.
 
    Consommé par : recherche globale (js/search.js), assistant
    (js/assistant/knowledge.js), parcours d'inscription
@@ -178,8 +179,133 @@
     unconfirmed: ["CACES", "certification officielle", "agrément", "agréé", "accrédité", "accréditation", "obligatoire", "diplôme d'état"]
   };
 
+  /* ---------------------------------------------------------------------
+     VCA Base — page dédiée formation-vca-base.html (refonte du 2026-09-26).
+
+     Trois sortes de faits, jamais mélangées :
+       1. CONFIRMÉS par Wisy Safety : brief du propriétaire (225 € / personne, présentiel, examen inclus,
+          centre d'Anderlecht, « certification VCA après réussite de l'examen ») + durée « 1 jour » déjà
+          publiée par le site (FAQ, catalogue). Adresse / téléphone / horaires : js/faq-data.js (CONTACT).
+       2. OFFICIELS (`official`) : organisation VCA belge (Contractor Safety Management / BeSaCC-VCA) et
+          SPF Emploi, chacun avec sa source et sa date de vérification. Ce ne sont PAS des engagements de
+          Wisy Safety : la page les présente comme « règles officielles ».
+       3. NON CONFIRMÉS (`unconfirmedClaims`) : ne jamais afficher comme un fait tant que Wisy Safety ne
+          les a pas confirmés (agrément, langues, horaires, effectifs, chiffres de réussite…).
+     Programme = structure OFFICIELLE de l'examen B-VCA (matrice d'évaluation, version 2.0 du 01/09/2017).
+     --------------------------------------------------------------------- */
+  var IMG_VCA = "assets/images/vca-base/";
+
+  var VCA_BASE = {
+    id: "vca-base",
+    registrationId: "vca-base",
+    slug: "vca-base",
+    category: "securite",
+
+    url: "formation-vca-base.html",
+    signupUrl: "inscription.html?formation=vca-base",
+    catalogueUrl: "formations.html#vca-base",
+
+    title: "VCA Base",
+    fullTitle: "Formation VCA Base",
+    summary: "Maîtrisez les règles fondamentales de sécurité au travail et préparez votre examen VCA Base, en présentiel à Anderlecht (Bruxelles), examen inclus.",
+    objective: "Acquérir les règles fondamentales de sécurité au travail et se préparer à l'examen VCA Base, dans un cadre professionnel.",
+    titleKey: "dd.vca_base",
+    fullTitleKey: "dd.vca_base_full",
+    summaryKey: "dd.vca_base_summary",
+
+    /* Faits confirmés */
+    durationDays: 1,
+    /* 225 € / personne — le statut TVA n'est pas précisé dans le brief : on n'invente ni HT ni TTC. */
+    price: { amountCents: 22500, currency: "EUR", vatIncluded: null },
+    priceUnit: "participant",
+    format: "in-person",
+    formatLabel: "Présentiel",
+    /* Lieu : « centre » = le centre de formation Wisy Safety (adresse = FAQ.CONTACT) — confirmé par Wisy Safety. */
+    venue: "centre",
+    level: "Base",
+    exam: { included: true },
+    /* Langues : NON confirmées (l'ancienne page citait FR / EN / NL, sans que cela soit vérifié) — la page
+       affiche « précisée pour chaque session » ; renseigner ici quand Wisy Safety les confirme. */
+    languages: null,
+    languageLabels: null,
+    audience: [
+      "ouvriers et personnel opérationnel",
+      "techniciens de maintenance",
+      "intérimaires",
+      "collaborateurs de chantier",
+      "sous-traitants",
+      "toute personne travaillant dans un environnement présentant des risques"
+    ],
+    certification: "Certification VCA après réussite de l'examen",
+
+    /* Programme : 4 chapitres / 12 sujets de l'examen B-VCA (matrice officielle) — nombre de questions
+       par sujet, total 40. Les libellés affichés sont traduits (clés vca.prog_*). */
+    programme: [
+      { id: "A", subjects: [{ id: "A.01", questions: 3 }, { id: "A.02", questions: 1 }, { id: "A.03", questions: 2 }] },
+      { id: "B", subjects: [{ id: "B.01", questions: 4 }, { id: "B.02", questions: 4 }, { id: "B.03", questions: 6 }, { id: "B.04", questions: 7 }] },
+      { id: "C", subjects: [{ id: "C.01", questions: 5 }, { id: "C.02", questions: 3 }, { id: "C.03", questions: 3 }] },
+      { id: "D", subjects: [{ id: "D.01", questions: 1 }, { id: "D.02", questions: 1 }] }
+    ],
+
+    /* Faits OFFICIELS, avec source. Vérifiés le 2026-09-26 (lecture directe des documents, pas de résumé). */
+    official: {
+      verifiedAt: "2026-09-26",
+      /* Examen B-VCA : matrice d'évaluation officielle v2.0 (01/09/2017) + règlement général des examens
+         VCA v2018-03 (art. 31.2, 32.1, 35.5). */
+      exam: { questions: 40, minutes: 60, passPercent: 64.5 },
+      /* Diplôme « sécurité de base » : moins de 10 ans, à compter de la date de l'examen (BeSaCC-VCA,
+         checklist VCA, question 3.2). */
+      diplomaValidityYears: 10,
+      /* Formation de base en sécurité sur les chantiers temporaires ou mobiles : au moins 8 heures
+         (SPF Emploi ; AR du 7 avril 2023). Une formation VCA n'y est acceptée que si l'examen est réussi
+         (FAQ SPF Emploi, version du 2 juin 2026). */
+      worksiteTrainingMinHours: 8,
+      sources: {
+        besacc: { fr: "https://www.besacc-vca.be/fr/basisveiligheid-b-vca/", nl: "https://www.besacc-vca.be/basisveiligheid-b-vca/", en: "https://www.besacc-vca.be/en/basisveiligheid-b-vca/" },
+        registre: "https://csm-examen.be/cdr",
+        reglement: "https://www.besacc-vca.be/wp-content/uploads/2023/09/Reglement-General-Examens-VCA-2018-03.pdf",
+        spf: "https://emploi.belgique.be/fr/themes/bien-etre-au-travail/lieux-de-travail/chantiers-temporaires-ou-mobiles/formation-de-base-en",
+        constructiv: "https://constructiv.be/fr/regles-et-legislation/faq-formation-securite-de-base/"
+      }
+    },
+
+    /* Recherche : titre, synonymes, termes métier (sans accents, minuscules) */
+    keywords: [
+      "vca", "vca base", "vca de base", "b-vca", "bvca", "vca basis", "basisveiligheid", "veiligheid",
+      "securite de base", "formation vca", "formation vca base", "formation vca bruxelles", "vca bruxelles",
+      "vca anderlecht", "vca belgique", "certificat vca", "diplome vca", "certification vca", "examen vca",
+      "chantier", "sous-traitant", "interimaire", "scc", "safety", "sicherheit"
+    ],
+
+    /* Mots-clés de la RECHERCHE du site uniquement (mots génériques de prix / d'examen : ils ne doivent pas
+       désigner la VCA Base pour l'assistant — voir GENERIC_KEYWORD dans site-content.js). */
+    searchExtra: [
+      "prix", "prix vca", "tarif", "tarif vca", "cout", "combien coute", "225", "examen", "examen inclus", "diplome", "certificat", "adresse",
+      "price", "cost", "fee", "exam", "exam included", "certificate", "diploma",
+      "prijs", "kosten", "tarief", "preis", "prufung", "zertifikat", "prezzo", "costo", "esame", "pret", "cena", "izpit", "prys", "eksamen",
+      "цена", "изпит", "сертификат", "سعر", "ثمن", "تكلفة", "امتحان", "اختبار", "شهادة"
+    ],
+
+    /* Visuels. hero = photo VCA Base existante du site (720 × 540) : pour la remplacer, déposer une
+       nouvelle photo dans assets/originaux/vca-base/ puis relancer scripts/optimize-images.py (voir
+       docs/README-VCA.md). */
+    images: {
+      hero:  "assets/images/formations/vca-base.webp",
+      card:  "assets/images/formations/vca-base.webp",
+      thumb: IMG_VCA + "vca-base-thumb-192.webp",
+      og:    "assets/images/partage/formation-vca-base-1200x630.jpg"
+    },
+    imageAlt: "Trois professionnels en tenue de sécurité haute visibilité sur un site industriel",
+
+    /* Affirmations à ne PAS faire tant que Wisy Safety ne les a pas confirmées (≠ `unconfirmed`, réservé
+       aux formations dont même la « certification » n'est pas confirmée : voir assistant/responder.js). */
+    unconfirmedClaims: ["agréé", "agrément", "accrédité", "reconnu internationalement", "centre d'examen reconnu",
+      "langues FR/NL/EN", "8 heures", "horaires de la journée", "12 participants maximum", "taux de réussite",
+      "financement / aides applicables à cette formation"]
+  };
+
   /* Toutes les formations à page dédiée (extensible : ajouter une entrée). */
-  var TRAININGS = { nacelle: NACELLES, beps: BEPS };
+  var TRAININGS = { "vca-base": VCA_BASE, nacelle: NACELLES, beps: BEPS };
 
   /* ---------------------------------------------------------------------
      Formatage (FR) — l'i18n de l'interface passe par les clés `dd.*`.
@@ -216,6 +342,7 @@
     pagePath: pagePath,
     hasDedicatedPage: hasDedicatedPage,
     nacelles: NACELLES,
-    beps: BEPS
+    beps: BEPS,
+    vcaBase: VCA_BASE
   };
 });

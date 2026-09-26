@@ -136,9 +136,12 @@ test("garde-fou nacelles : la réponse dédiée ne présente pas la formation co
 });
 
 test("garde-fou : aucun prix chiffré, aucun taux de TVA, aucune promesse chiffrée dans les réponses", () => {
+  /* Seule exception : le seuil de réussite OFFICIEL de l'examen B-VCA (BeSaCC-VCA), lu dans le registre
+     (VCA Base → official.exam.passPercent). Tout autre pourcentage reste interdit. */
+  const OFFICIAL_PASS = String(require("../js/trainings-data.js").vcaBase.official.exam.passPercent).replace(".", ",") + " %";
   FAQ.items().forEach((it) => {
     assert.doesNotMatch(it.answer, /€|\beur\b|\beuros?\b/i, "aucun prix codé en dur (registre d'inscription = source des prix) : " + it.id);
-    assert.doesNotMatch(it.answer, /\d\s?%/, "aucun pourcentage / taux de TVA inventé : " + it.id);
+    assert.doesNotMatch(it.answer.split(OFFICIAL_PASS).join(""), /\d\s?%/, "aucun pourcentage / taux de TVA inventé : " + it.id);
     assert.doesNotMatch(it.answer, /garanti|100 ?%|satisfait ou remboursé|\bgratuit\b/i, "aucune garantie commerciale : " + it.id);
   });
 });

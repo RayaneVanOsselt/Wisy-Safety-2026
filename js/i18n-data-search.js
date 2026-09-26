@@ -49,7 +49,24 @@
     "search.page_agenda_t": "Agenda des formations",
     "search.page_agenda_d": "Prochaines sessions, horaires et lieux",
     "search.page_peb_t": "Devenez certificateur PEB",
-    "search.page_peb_d": "Formation, examen et agrément en Wallonie et à Bruxelles"
+    "search.page_peb_d": "Formation, examen et agrément en Wallonie et à Bruxelles",
+    "search.page_art_cost_t": "Combien coûte une formation VCA et qui peut la financer ?",
+    "search.page_art_cost_d": "Ce qu'il faut vérifier avant de comparer les prix, et où se renseigner sur les aides possibles en Belgique.",
+    "search.page_art_exam_t": "Les erreurs fréquentes à l'examen VCA et comment les éviter",
+    "search.page_art_exam_d": "Le format officiel de l'examen et les pièges à éviter pour le préparer sereinement.",
+    "search.group_articles": "Articles",
+    "search.group_sessions": "Prochaines sessions",
+    "search.session_seats": "Places disponibles : {n}",
+    "search.session_full": "Complet",
+    "search.sessions_all": "Voir toutes les sessions",
+    "search.loading": "Chargement des résultats…",
+    "search.popular": "Accès rapides",
+    "search.pop_vca": "VCA Base",
+    "search.pop_price": "Prix",
+    "search.pop_dates": "Dates des sessions",
+    "search.pop_exam": "Examen VCA",
+    "search.pop_address": "Adresse",
+    "search.per_person": "/ personne"
   });
 
   /* ---------------- ENGLISH ---------------- */
@@ -92,7 +109,24 @@
     "search.page_agenda_t": "Training schedule",
     "search.page_agenda_d": "Upcoming sessions, times and venues",
     "search.page_peb_t": "Become a PEB certifier",
-    "search.page_peb_d": "Training, exam and approval in Wallonia and Brussels"
+    "search.page_peb_d": "Training, exam and approval in Wallonia and Brussels",
+    "search.page_art_cost_t": "How much does a VCA course cost and who can fund it?",
+    "search.page_art_cost_d": "What to check before comparing prices, and where to find out about possible funding in Belgium.",
+    "search.page_art_exam_t": "Common mistakes in the VCA exam and how to avoid them",
+    "search.page_art_exam_d": "The official exam format and the pitfalls to avoid so you can prepare calmly.",
+    "search.group_articles": "Articles",
+    "search.group_sessions": "Upcoming sessions",
+    "search.session_seats": "Places available: {n}",
+    "search.session_full": "Full",
+    "search.sessions_all": "See all sessions",
+    "search.loading": "Loading results…",
+    "search.popular": "Quick links",
+    "search.pop_vca": "VCA Basic",
+    "search.pop_price": "Price",
+    "search.pop_dates": "Session dates",
+    "search.pop_exam": "VCA exam",
+    "search.pop_address": "Address",
+    "search.per_person": "/ person"
   });
 
   /* ---------------- NEDERLANDS ---------------- */
@@ -135,7 +169,24 @@
     "search.page_agenda_t": "Opleidingsagenda",
     "search.page_agenda_d": "Komende sessies, uren en locaties",
     "search.page_peb_t": "Word PEB-certificeerder",
-    "search.page_peb_d": "Opleiding, examen en erkenning in Wallonië en Brussel"
+    "search.page_peb_d": "Opleiding, examen en erkenning in Wallonië en Brussel",
+    "search.page_art_cost_t": "Hoeveel kost een VCA-opleiding en wie kan ze financieren?",
+    "search.page_art_cost_d": "Wat u moet controleren voor u prijzen vergelijkt, en waar u terecht kunt voor mogelijke steun in België.",
+    "search.page_art_exam_t": "Veelgemaakte fouten bij het VCA-examen en hoe u ze vermijdt",
+    "search.page_art_exam_d": "Het officiële examenformaat en de valkuilen die u best vermijdt om u rustig voor te bereiden.",
+    "search.group_articles": "Artikels",
+    "search.group_sessions": "Komende sessies",
+    "search.session_seats": "Beschikbare plaatsen: {n}",
+    "search.session_full": "Volzet",
+    "search.sessions_all": "Bekijk alle sessies",
+    "search.loading": "Resultaten laden…",
+    "search.popular": "Snelle links",
+    "search.pop_vca": "VCA Basis",
+    "search.pop_price": "Prijs",
+    "search.pop_dates": "Sessiedata",
+    "search.pop_exam": "VCA-examen",
+    "search.pop_address": "Adres",
+    "search.per_person": "/ persoon"
   });
 
   /* ---------------- AFRIKAANS ---------------- */
@@ -178,7 +229,24 @@
     "search.page_agenda_t": "Opleidingsagenda",
     "search.page_agenda_d": "Komende sessies, tye en plekke",
     "search.page_peb_t": "Word 'n PEB-sertifiseerder",
-    "search.page_peb_d": "Opleiding, eksamen en erkenning in Wallonië en Brussel"
+    "search.page_peb_d": "Opleiding, eksamen en erkenning in Wallonië en Brussel",
+    "search.page_art_cost_t": "Hoeveel kos 'n VCA-opleiding en wie kan dit befonds?",
+    "search.page_art_cost_d": "Wat om te kontroleer voordat u pryse vergelyk, en waar om uit te vind oor moontlike bystand in België.",
+    "search.page_art_exam_t": "Algemene foute in die VCA-eksamen en hoe om dit te vermy",
+    "search.page_art_exam_d": "Die amptelike eksamenformaat en die slaggate om te vermy sodat u kalm kan voorberei.",
+    "search.group_articles": "Artikels",
+    "search.group_sessions": "Komende sessies",
+    "search.session_seats": "Beskikbare plekke: {n}",
+    "search.session_full": "Vol",
+    "search.sessions_all": "Sien alle sessies",
+    "search.loading": "Resultate word gelaai…",
+    "search.popular": "Vinnige skakels",
+    "search.pop_vca": "VCA Basis",
+    "search.pop_price": "Prys",
+    "search.pop_dates": "Sessiedatums",
+    "search.pop_exam": "VCA-eksamen",
+    "search.pop_address": "Adres",
+    "search.per_person": "/ persoon"
   });
 
   /* ---------------- العربية (RTL) ---------------- */
@@ -221,7 +289,24 @@
     "search.page_agenda_t": "جدول الدورات التدريبية",
     "search.page_agenda_d": "الدورات القادمة والمواعيد والأماكن",
     "search.page_peb_t": "كن مُصدِر شهادات PEB معتمدًا",
-    "search.page_peb_d": "التدريب والامتحان والاعتماد في والونيا وبروكسل"
+    "search.page_peb_d": "التدريب والامتحان والاعتماد في والونيا وبروكسل",
+    "search.page_art_cost_t": "كم تكلّف دورة VCA ومن يمكنه تمويلها؟",
+    "search.page_art_cost_d": "ما ينبغي التحقق منه قبل مقارنة الأسعار، وأين تستعلم عن المساعدات الممكنة في بلجيكا.",
+    "search.page_art_exam_t": "الأخطاء الشائعة في امتحان VCA وكيفية تجنّبها",
+    "search.page_art_exam_d": "الصيغة الرسمية للامتحان والمزالق التي ينبغي تجنّبها للاستعداد بهدوء.",
+    "search.group_articles": "مقالات",
+    "search.group_sessions": "الجلسات القادمة",
+    "search.session_seats": "الأماكن المتاحة: {n}",
+    "search.session_full": "مكتملة",
+    "search.sessions_all": "عرض كل الجلسات",
+    "search.loading": "جارٍ تحميل النتائج…",
+    "search.popular": "روابط سريعة",
+    "search.pop_vca": "VCA الأساسي",
+    "search.pop_price": "السعر",
+    "search.pop_dates": "مواعيد الجلسات",
+    "search.pop_exam": "امتحان VCA",
+    "search.pop_address": "العنوان",
+    "search.per_person": "/ للشخص"
   });
 
   /* ---------------- БЪЛГАРСКИ ---------------- */
@@ -264,7 +349,24 @@
     "search.page_agenda_t": "График на обученията",
     "search.page_agenda_d": "Предстоящи сесии, часове и места",
     "search.page_peb_t": "Станете PEB сертификатор",
-    "search.page_peb_d": "Обучение, изпит и одобрение във Валония и Брюксел"
+    "search.page_peb_d": "Обучение, изпит и одобрение във Валония и Брюксел",
+    "search.page_art_cost_t": "Колко струва обучение по VCA и кой може да го финансира?",
+    "search.page_art_cost_d": "Какво да проверите, преди да сравнявате цени, и къде да се информирате за възможните помощи в Белгия.",
+    "search.page_art_exam_t": "Честите грешки на изпита VCA и как да ги избегнете",
+    "search.page_art_exam_d": "Официалният формат на изпита и клопките, които да избегнете, за да се подготвите спокойно.",
+    "search.group_articles": "Статии",
+    "search.group_sessions": "Предстоящи сесии",
+    "search.session_seats": "Свободни места: {n}",
+    "search.session_full": "Пълна",
+    "search.sessions_all": "Вижте всички сесии",
+    "search.loading": "Зареждане на резултатите…",
+    "search.popular": "Бързи връзки",
+    "search.pop_vca": "VCA основи",
+    "search.pop_price": "Цена",
+    "search.pop_dates": "Дати на сесиите",
+    "search.pop_exam": "Изпит VCA",
+    "search.pop_address": "Адрес",
+    "search.per_person": "/ човек"
   });
 
   /* ---------------- DEUTSCH ---------------- */
@@ -307,7 +409,24 @@
     "search.page_agenda_t": "Schulungstermine",
     "search.page_agenda_d": "Kommende Termine, Zeiten und Orte",
     "search.page_peb_t": "PEB-Zertifizierer werden",
-    "search.page_peb_d": "Ausbildung, Prüfung und Zulassung in Wallonien und Brüssel"
+    "search.page_peb_d": "Ausbildung, Prüfung und Zulassung in Wallonien und Brüssel",
+    "search.page_art_cost_t": "Was kostet eine VCA-Schulung und wer kann sie finanzieren?",
+    "search.page_art_cost_d": "Was Sie vor einem Preisvergleich prüfen sollten und wo Sie sich in Belgien über mögliche Förderungen informieren können.",
+    "search.page_art_exam_t": "Häufige Fehler bei der VCA-Prüfung und wie Sie sie vermeiden",
+    "search.page_art_exam_d": "Das offizielle Prüfungsformat und die Fallstricke, die Sie vermeiden sollten, um sich in Ruhe vorzubereiten.",
+    "search.group_articles": "Artikel",
+    "search.group_sessions": "Nächste Termine",
+    "search.session_seats": "Freie Plätze: {n}",
+    "search.session_full": "Ausgebucht",
+    "search.sessions_all": "Alle Termine ansehen",
+    "search.loading": "Ergebnisse werden geladen…",
+    "search.popular": "Schnellzugriff",
+    "search.pop_vca": "VCA Grundlagen",
+    "search.pop_price": "Preis",
+    "search.pop_dates": "Termine",
+    "search.pop_exam": "VCA-Prüfung",
+    "search.pop_address": "Adresse",
+    "search.per_person": "/ Person"
   });
 
   /* ---------------- ROMÂNĂ ---------------- */
@@ -350,7 +469,24 @@
     "search.page_agenda_t": "Calendarul cursurilor",
     "search.page_agenda_d": "Sesiuni viitoare, ore și locații",
     "search.page_peb_t": "Deveniți certificator PEB",
-    "search.page_peb_d": "Formare, examen și aprobare în Valonia și Bruxelles"
+    "search.page_peb_d": "Formare, examen și aprobare în Valonia și Bruxelles",
+    "search.page_art_cost_t": "Cât costă un curs VCA și cine îl poate finanța?",
+    "search.page_art_cost_d": "Ce trebuie verificat înainte de a compara prețurile și unde vă puteți informa despre ajutoarele posibile în Belgia.",
+    "search.page_art_exam_t": "Greșelile frecvente la examenul VCA și cum le puteți evita",
+    "search.page_art_exam_d": "Formatul oficial al examenului și capcanele de evitat pentru a vă pregăti cu calm.",
+    "search.group_articles": "Articole",
+    "search.group_sessions": "Următoarele sesiuni",
+    "search.session_seats": "Locuri disponibile: {n}",
+    "search.session_full": "Complet",
+    "search.sessions_all": "Vedeți toate sesiunile",
+    "search.loading": "Se încarcă rezultatele…",
+    "search.popular": "Acces rapid",
+    "search.pop_vca": "VCA de bază",
+    "search.pop_price": "Preț",
+    "search.pop_dates": "Datele sesiunilor",
+    "search.pop_exam": "Examen VCA",
+    "search.pop_address": "Adresă",
+    "search.per_person": "/ persoană"
   });
 
   /* ---------------- ITALIANO ---------------- */
@@ -393,7 +529,24 @@
     "search.page_agenda_t": "Calendario dei corsi",
     "search.page_agenda_d": "Prossime sessioni, orari e sedi",
     "search.page_peb_t": "Diventa certificatore PEB",
-    "search.page_peb_d": "Formazione, esame e abilitazione in Vallonia e Bruxelles"
+    "search.page_peb_d": "Formazione, esame e abilitazione in Vallonia e Bruxelles",
+    "search.page_art_cost_t": "Quanto costa un corso VCA e chi può finanziarlo?",
+    "search.page_art_cost_d": "Cosa verificare prima di confrontare i prezzi e dove informarsi sugli aiuti possibili in Belgio.",
+    "search.page_art_exam_t": "Gli errori frequenti all'esame VCA e come evitarli",
+    "search.page_art_exam_d": "Il formato ufficiale dell'esame e le trappole da evitare per prepararsi con serenità.",
+    "search.group_articles": "Articoli",
+    "search.group_sessions": "Prossime sessioni",
+    "search.session_seats": "Posti disponibili: {n}",
+    "search.session_full": "Al completo",
+    "search.sessions_all": "Vedi tutte le sessioni",
+    "search.loading": "Caricamento dei risultati…",
+    "search.popular": "Accesso rapido",
+    "search.pop_vca": "VCA base",
+    "search.pop_price": "Prezzo",
+    "search.pop_dates": "Date delle sessioni",
+    "search.pop_exam": "Esame VCA",
+    "search.pop_address": "Indirizzo",
+    "search.per_person": "/ persona"
   });
 
   /* ---------------- SLOVENŠČINA ---------------- */
@@ -436,7 +589,24 @@
     "search.page_agenda_t": "Urnik usposabljanj",
     "search.page_agenda_d": "Prihajajoče izvedbe, ure in lokacije",
     "search.page_peb_t": "Postanite certifikator PEB",
-    "search.page_peb_d": "Usposabljanje, izpit in pooblastilo v Valoniji in Bruslju"
+    "search.page_peb_d": "Usposabljanje, izpit in pooblastilo v Valoniji in Bruslju",
+    "search.page_art_cost_t": "Koliko stane usposabljanje VCA in kdo ga lahko financira?",
+    "search.page_art_cost_d": "Kaj preveriti, preden primerjate cene, in kje se pozanimati o možnih pomočeh v Belgiji.",
+    "search.page_art_exam_t": "Pogoste napake pri izpitu VCA in kako se jim izogniti",
+    "search.page_art_exam_d": "Uradna oblika izpita in pasti, ki se jim je treba izogniti za mirno pripravo.",
+    "search.group_articles": "Članki",
+    "search.group_sessions": "Prihajajoče izvedbe",
+    "search.session_seats": "Prosta mesta: {n}",
+    "search.session_full": "Zasedeno",
+    "search.sessions_all": "Poglejte vse izvedbe",
+    "search.loading": "Nalaganje zadetkov …",
+    "search.popular": "Hitre povezave",
+    "search.pop_vca": "VCA osnovni",
+    "search.pop_price": "Cena",
+    "search.pop_dates": "Termini izvedb",
+    "search.pop_exam": "Izpit VCA",
+    "search.pop_address": "Naslov",
+    "search.per_person": "/ osebo"
   });
 
   /* ---- Forme au singulier (compteur = 1), pour « 1 formation » vs « 2 formations » ---- */

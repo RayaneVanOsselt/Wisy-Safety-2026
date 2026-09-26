@@ -317,7 +317,9 @@ test("Centre d'aide : la réponse « dates » renvoie vers la page Agenda (actio
   const it = FAQ.get("faq-inscription-dates");
   assert.equal(it.action, "agenda");
   assert.deepEqual(FAQ.ACTIONS.agenda, { label: "Consulter l'agenda", href: "agenda.html" });
-  assert.match(it.answer, /page Agenda/); assert.match(it.answer, /pas encore publiés/);
+  /* Réponse INDÉPENDANTE de l'état des sessions (avec ou sans session publiée, elle reste vraie) */
+  assert.match(it.answer, /dans l'agenda et sur la page de chaque formation dès qu'elles sont confirmées/);
+  assert.doesNotMatch(it.answer, /pas encore publiés|accueillera prochainement|arrive prochainement/);
   assert.doesNotMatch(it.answer, /\b20\d\d\b/);
-  assert.ok(read("supabase/functions/chat/faq.generated.ts").includes("la page Agenda les accueillera prochainement"), "miroir Edge régénéré (npm : node scripts/sync-faq-edge.js)");
+  assert.ok(read("supabase/functions/chat/faq.generated.ts").includes("dès qu'elles sont confirmées"), "miroir Edge régénéré (npm : node scripts/sync-faq-edge.js)");
 });

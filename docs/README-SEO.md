@@ -67,3 +67,14 @@ Données structurées (chacune reprend un fait **déjà affiché** sur la page ;
   Certificat » : `href="#"` (pages à créer avec un contenu fourni par Wisy Safety). `tests/site-links.test.js` fige cette
   liste : toute *nouvelle* destination morte fait échouer les tests.
 - En-têtes HTTP (cache long, `Content-Security-Policy`, `X-Content-Type-Options`, HSTS) : à configurer chez l'hébergeur.
+
+
+## Pages ajoutées le 2026-09-26 (VCA Base et articles)
+
+- `formation-vca-base.html` : nœuds JSON-LD `organization` + `breadcrumb` + `course` (prix du registre ; **aucune** `inLanguage`
+  ni `hasCourseInstance` tant que langues et sessions ne sont pas confirmées).
+- `article-vca-cout-financement.html` et `article-vca-erreurs-examen.html` : `og:type` « article », nœud `Article`
+  (titre = H1 affiché, dates `published` / `modified` lues dans `js/site-content.js` **et** affichées sur la page,
+  auteur et éditeur = l'organisation Wisy Safety — aucune personne inventée), image de partage propre à chaque article.
+- Ajouter un article : entrée `kind: "article"` (+ `published`) dans `PAGES` de `js/site-content.js`, entrée dans `DOCS` de
+  `scripts/build-seo.js` (`ogType: "article"`, `image`), puis `node scripts/build-seo.js && node scripts/sync-edge.js`.

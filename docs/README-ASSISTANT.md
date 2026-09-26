@@ -285,3 +285,24 @@ cœur local.
 - **Accessibilité** : launcher = vrai `<button>` nommé (§4 quater), panneau `role="dialog"`
   (non modal sur desktop, modal sur mobile), `Escape` ferme, focus géré et restauré,
   `aria-live="polite"`, respect de `prefers-reduced-motion`.
+
+
+## Mise à jour « VCA Base » (2026-09-26)
+
+- **Nouvelles réponses**, toutes tirées du registre `js/trainings-data.js` (rien n'est écrit dans l'assistant) :
+  tarif (« 225 € par personne, examen inclus », **sans** « HT »/« TTC » tant que le statut TVA n'est pas confirmé),
+  examen (40 questions, 60 minutes, seuil 64,5 % — source BeSaCC-VCA), validité du diplôme (moins de 10 ans), lieu
+  (présentiel au centre d'Anderlecht), public visé (toutes les formations concernées, pas seulement la première).
+- **Jamais affirmés** : agrément, accréditation, reconnaissance, centre d'examen reconnu, taux de réussite. La demande
+  reçoit « Je ne peux pas affirmer d'agrément… » + le contact (intention `certification_unconfirmed`).
+- **Sessions** : l'assistant reçoit les sessions publiées (`WisySessions`, via `assistant.js`), les cite telles quelles
+  (date, horaire, langue, places) et propose l'inscription à *cette* session. Sans session : Centre d'aide + agenda +
+  contact, jamais une date. Le moteur les charge à la demande (`ENGINE_FILES` de `launcher.js`).
+- **Articles** : type `article` à part ; proposés seulement sur une correspondance forte, ou en complément d'une
+  réponse du Centre d'aide (financement, tarifs, examen).
+- **Fonction serveur optionnelle** (`supabase/functions/chat/`) : toujours **inactive** tant que `ASSISTANT_API_URL`
+  n'est pas défini — **aucune intégration payante n'a été branchée**. Son contenu et son prompt sont régénérés
+  (`node scripts/sync-edge.js`) : mêmes faits, mêmes interdits ; les dates ne sont jamais données par le modèle (page
+  Agenda / page de la formation).
+- **Langues** : l'interface du panneau est traduite en 10 langues ; les **réponses** du moteur restent en français
+  (le panneau le dit : `assistant.role_note`). Les traduire demanderait un moteur de réponses multilingue.

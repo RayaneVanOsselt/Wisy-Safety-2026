@@ -35,6 +35,8 @@
     CATEGORIES[f.category].count++;
     return {
       id: f.id, cat: f.category, url: f.url,
+      /* Tarif du registre (jamais recopié) : affiché dans les résultats seulement s'il est « par personne » confirmé. */
+      priceLabel: f.priceLabel, priceUnit: f.priceUnit,
       /* Fiche riche (page dédiée) : titre complet, résumé, miniature et faits clés ; sinon accroche courte. */
       titleKey: f.fullTitleKey || f.titleKey, descKey: f.summaryKey || f.taglineKey,
       kw: f.searchKeywords || f.keywords,
@@ -42,9 +44,21 @@
     };
   });
 
-  var PAGES = Site.pages().map(function (p) {
-    return { id: p.id, url: p.url, titleKey: p.titleKey, descKey: p.descKey, kw: p.keywords };
+  /* Pages du site — les ARTICLES (`kind: "article"`) forment leur propre groupe de résultats. */
+  var PAGES = [], ARTICLES = [];
+  Site.pages().forEach(function (p) {
+    (p.kind === "article" ? ARTICLES : PAGES).push({ id: p.id, url: p.url, titleKey: p.titleKey, descKey: p.descKey, kw: p.keywords, article: p.kind === "article" });
   });
+
+  /* Accès rapides (état vide) : la fiche VCA Base (ancres de sa page) + l'adresse. */
+  var VCA = Site.formation("vca-base");
+  var QUICK = VCA ? [
+    { id: "pop_vca",     labelKey: "search.pop_vca",     icon: "vca-base",     href: VCA.url },
+    { id: "pop_price",   labelKey: "search.pop_price",   icon: "quick-price",  href: VCA.url + "#apercu" },
+    { id: "pop_dates",   labelKey: "search.pop_dates",   icon: "page_agenda",  href: VCA.url + "#disponibilites" },
+    { id: "pop_exam",    labelKey: "search.pop_exam",    icon: "quick-exam",   href: VCA.url + "#examen" },
+    { id: "pop_address", labelKey: "search.pop_address", icon: "info-address", href: "contact.html" }
+  ] : [];
 
   var FEATURED = ["vca-base", "beps", "nacelle", "fibre-optique"]; // suggestions (état vide)
 
@@ -101,7 +115,59 @@
         kw: ["horaires", "heures", "ouverture", "ouvert", "open", "opening", "hours", "openingstijden", "oeffnungszeiten", "orari", "program", "lundi", "jeudi"] });
     }
   }
-  function purgeCaches() { FORMATIONS.concat(PAGES, FAQS, INFOS).forEach(function (e) { e._hay = null; }); }
+  function purgeCaches() { FORMATIONS.concat(PAGES, ARTICLES, FAQS, INFOS, SESSIONS).forEach(function (e) { e._hay = null; }); }
+
+  /* -----------------------------------------------------------------------
+     Sessions PUBLIÉES (js/sessions.js, source unique des dates) : chargées À LA DEMANDE au premier usage de la
+     barre — jamais sur le chemin critique. Aucune date n'est écrite ici : sans session, le groupe n'existe pas.
+     ----------------------------------------------------------------------- */
+  var SESSIONS = [];             // entrées { id, session, title, sub, url, kw } (langue courante)
+  var sessionsState = "idle";    // idle | loading | ready | failed
+  var MAX_SESSIONS = 3;
+  function buildSessions() {
+    var W = window.WisySessions;
+    SESSIONS = [];
+    if (!W) return;
+    var lg = lang();
+    W.upcoming(W.peek()).slice(0, 30).forEach(function (s) {
+      var f = FORMATIONS.filter(function (x) { return x.id === s.training; })[0];
+      var fmt = W.format(s, lg), full = s.status === "full" || s.seatsLeft === 0;
+      var seats = full ? t("search.session_full") : (s.seatsLeft != null ? t("search.session_seats").replace("{n}", s.seatsLeft) : "");
+      SESSIONS.push({
+        id: "sess-" + s.id, session: s,
+        title: (f ? t(f.titleKey) : s.training) + " — " + fmt.dateLong,
+        sub: [fmt.time, fmt.language, seats].filter(Boolean).join(" · "),
+        /* inscription directe (formation + session) ; session complète → agenda */
+        url: full ? "agenda.html" : W.signupUrl(s, s.training),
+        kw: [t("search.group_sessions"), "session", "sessions", "date", "dates", "agenda", "calendrier", "prochaine", "prochaines", "planning", "inscription", s.date, fmt.dateShort, fmt.weekday, fmt.time]
+      });
+    });
+    purgeCaches();
+  }
+  function ensureSessions() {
+    if (sessionsState !== "idle") return;
+    sessionsState = "loading";
+    var wanted = [];
+    if (!window.WISY_CONFIG) wanted.push("js/supabase-config.js");
+    if (!window.WISY_SESSIONS) wanted.push("js/sessions-data.js");
+    if (!window.WisySessions) wanted.push("js/sessions.js");
+    var left = wanted.length, failed = false;
+    function done() {
+      if (failed || !window.WisySessions) { sessionsState = "failed"; return; }
+      window.WisySessions.load().then(function () {
+        buildSessions(); sessionsState = "ready";
+        if (root && root.classList.contains("is-open")) render(input.value.trim());
+      });
+    }
+    if (!left) { done(); return; }
+    wanted.forEach(function (src) {
+      var el = document.createElement("script");
+      el.src = src; el.async = false;
+      el.onload = function () { if (!--left) done(); };
+      el.onerror = function () { failed = true; if (!--left) done(); };
+      document.head.appendChild(el);
+    });
+  }
   function ensureExtras() {
     if (extras !== "idle") return;
     if (window.WisyFAQ && window.WisyFAQ.items) { extras = "loading"; ensureFaqPack(function () { buildExtras(); extras = "ready"; purgeCaches(); if (root && root.classList.contains("is-open")) render(input.value.trim()); }); return; }
@@ -150,7 +216,12 @@
     "info-address":   '<path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
     "info-phone":     '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/>',
     "info-email":     '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>',
-    "info-hours":     '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'
+    "info-hours":     '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    // articles, sessions, accès rapides
+    page_article:     '<path d="M6 2h8l4 4v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M14 2v5h5M8 13h8M8 17h5"/>',
+    session:          '<rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18M9 15l2 2 4-4.5"/>',
+    "quick-price":    '<path d="M18 7a6 6 0 0 0-5-3 6 6 0 0 0 0 16 6 6 0 0 0 5-3M4 10h9M4 14h9"/>',
+    "quick-exam":     '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/>'
   };
   function svg(inner) {
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + "</svg>";
@@ -260,7 +331,8 @@
     var cats = CAT_ORDER.map(function (id) {
       return Object.assign({ id: id, isCat: true }, CATEGORIES[id], { titleKey: CATEGORIES[id].labelKey });
     });
-    return { formations: collect(FORMATIONS), categories: collect(cats), pages: collect(PAGES),
+    return { formations: collect(FORMATIONS), categories: collect(cats), pages: collect(PAGES), articles: collect(ARTICLES),
+      sessions: collect(SESSIONS).slice(0, MAX_SESSIONS),
       infos: collect(INFOS), faqs: collect(FAQS).slice(0, MAX_FAQ), terms: terms };
   }
 
@@ -373,9 +445,12 @@
       "</span>" + meta +
     "</" + tag + ">";
   }
+  var grpSeq = 0;
+  /* Groupe de résultats nommé pour les lecteurs d'écran (aria-labelledby → en-tête du groupe). */
   function groupHTML(titleText, itemsHTML, extraHeadHTML) {
-    return '<div class="wsy-search__group" role="group">' +
-      '<div class="wsy-search__grouphd">' + esc(titleText) + (extraHeadHTML || "") + "</div>" +
+    var gid = "wsy-grp-" + (++grpSeq);
+    return '<div class="wsy-search__group" role="group" aria-labelledby="' + gid + '">' +
+      '<div class="wsy-search__grouphd" id="' + gid + '">' + esc(titleText) + (extraHeadHTML || "") + "</div>" +
       itemsHTML + "</div>";
   }
   // Page dédiée si la formation en a une (registre central), sinon ancre du catalogue
@@ -390,14 +465,16 @@
         meta: t(CATEGORIES[f.cat].labelKey),
         href: fUrl(f),
         thumb: f.thumb,
-        // faits clés (durée · format · langues) — uniquement pour les fiches qui en ont
-        facts: f.factKeys ? f.factKeys.map(function (k) { return esc(t(k)); }).join(" · ") : ""
+        // faits clés (durée · format · langues) — uniquement pour les fiches qui en ont ; le tarif (registre) s'y ajoute
+        // seulement s'il est confirmé « par personne » (aucune mention HT / TTC inventée)
+        facts: f.factKeys ? f.factKeys.map(function (k) { return esc(t(k)); })
+          .concat(f.priceLabel && f.priceUnit === "participant" ? [esc(f.priceLabel + " " + t("search.per_person"))] : []).join(" · ") : ""
       });
     }).join("");
   }
 
   function render(query) {
-    optSeq = 0;
+    optSeq = 0; grpSeq = 0;
     currentQuery = query;
     var terms = fold(query).split(/\s+/).filter(Boolean);
     var html = "";
@@ -412,6 +489,12 @@
         var clearBtnHTML = ' <button type="button" class="wsy-search__recent-clear" data-clear-recent style="margin-inline-start:auto;font:inherit;font-size:var(--fs-micro,.75rem);letter-spacing:normal;text-transform:none;color:var(--epinette,#1F6F64);cursor:pointer">' + esc(t("search.recent_clear")) + "</button>";
         html += groupHTML(t("search.recent"), recItems, clearBtnHTML);
       }
+      // Accès rapides : chaque lien est une OPTION (navigable aux flèches), pas un bouton hors du clavier
+      if (QUICK.length) {
+        html += groupHTML(t("search.popular"), QUICK.map(function (q) {
+          return itemHTML({ icon: IC[q.icon], title: esc(t(q.labelKey)), href: q.href });
+        }).join(""));
+      }
       var feat = FEATURED.map(function (id) {
         return FORMATIONS.filter(function (f) { return f.id === id; })[0];
       }).filter(Boolean);
@@ -425,8 +508,16 @@
 
     // ---- Résultats ----
     var res = runSearch(query);
-    var total = res.formations.length + res.categories.length + res.pages.length + res.infos.length + res.faqs.length;
+    var total = res.formations.length + res.categories.length + res.pages.length + res.articles.length + res.sessions.length + res.infos.length + res.faqs.length;
 
+    if (!total && (extras === "loading" || sessionsState === "loading")) {
+      // Les contenus à la demande (Centre d'aide, sessions) arrivent : on le dit plutôt que d'annoncer « aucun résultat ».
+      listbox.innerHTML = '<div class="wsy-search__empty" role="status"><div class="wsy-search__empty-tt">' + esc(t("search.loading")) + "</div></div>";
+      announce(t("search.loading"));
+      collectOptions();
+      setActive(-1);
+      return;
+    }
     if (!total) {
       html = '<div class="wsy-search__empty">' +
         '<div class="wsy-search__empty-ic">' + svg(IC.search) + "</div>" +
@@ -448,6 +539,17 @@
 
     if (res.formations.length) {
       html += groupHTML(t("search.group_formations"), renderFormationItems(res.formations, res.terms));
+    }
+    if (res.sessions.length) {
+      // Sessions publiées (dates lues dans js/sessions.js) : titre = formation + date ; lien = inscription à CETTE session
+      html += groupHTML(t("search.group_sessions"), res.sessions.map(function (e) {
+        return itemHTML({ icon: IC.session, title: highlight(e.title, res.terms), sub: highlight(e.sub, res.terms), href: e.url });
+      }).join("") + itemHTML({ icon: IC.page_agenda, title: esc(t("search.sessions_all")), href: "agenda.html" }));
+    }
+    if (res.articles.length) {
+      html += groupHTML(t("search.group_articles"), res.articles.map(function (p) {
+        return itemHTML({ icon: IC.page_article, title: highlight(t(p.titleKey), res.terms), sub: highlight(t(p.descKey), res.terms), href: p.url });
+      }).join(""));
     }
     if (res.categories.length) {
       html += groupHTML(t("search.group_categories"), res.categories.map(function (c) {
@@ -626,7 +728,7 @@
 
   function wire() {
     input.addEventListener("input", onInput);
-    input.addEventListener("focus", function () { ensureExtras(); open(); render(input.value.trim()); });
+    input.addEventListener("focus", function () { ensureExtras(); ensureSessions(); open(); render(input.value.trim()); });
 
     input.addEventListener("keydown", function (e) {
       switch (e.key) {
@@ -688,7 +790,8 @@
 
     // Re-rendu à chaud lors d'un changement de langue
     document.addEventListener("i18n:changed", function () {
-      // purge le cache d'index (les libellés ont changé)
+      // purge le cache d'index (les libellés ont changé) ; les sessions sont recomposées dans la nouvelle langue
+      if (sessionsState === "ready") buildSessions();
       purgeCaches();
       refreshStatic();
       if (root.classList.contains("is-open")) render(input.value.trim());

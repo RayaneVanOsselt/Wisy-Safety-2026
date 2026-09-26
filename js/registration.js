@@ -10,6 +10,10 @@
    Dépend de : window.WisyRegistrationData (registration-data.js) et,
    pour les libellés, de window.WisyI18N (i18n.js). Fonctionne en repli si
    l'i18n n'est pas prêt (textes français par défaut).
+   Sessions : `inscription.html?formation=<id>&session=<id>` — la session est VÉRIFIÉE auprès de
+   window.WisySessions (js/sessions.js, source unique des dates) : jamais une date lue dans l'adresse.
+   Événements d'analyse (bus `wisy:analytics`, consentement géré par js/cookie-consent.js) :
+   vca_registration_start (arrivée avec la VCA Base) · vca_registration_complete (commande initialisée).
    ========================================================================= */
 (function () {
   "use strict";
@@ -55,6 +59,74 @@
   }
 
   /* ======================================================================
+     0 bis. Sessions (window.WisySessions — source unique des dates) + analytics
+     ====================================================================== */
+  var Sessions = window.WisySessions || null;
+  var pendingSession = null;      /* { trainingId, sessionId } demandé par l'adresse, à vérifier */
+  var sessionNote = null;         /* { kind: "ok" | "gone", sessionId } — message affiché sous l'en-tête */
+
+  /* Événements de conversion : bus du site (js/cookie-consent.js ne les relaie qu'avec le consentement). */
+  function track(name, detail) {
+    try { document.dispatchEvent(new CustomEvent("wisy:analytics", { detail: Object.assign({ event: name, lang: lang() }, detail || {}) })); } catch (e) { /* silencieux */ }
+  }
+  var startTracked = false;
+  function trackStart(trainingId, via) {
+    if (trainingId !== "vca-base" || startTracked) return;
+    startTracked = true;
+    track("vca_registration_start", { via: via, session: !!(state.sessions[trainingId] || pendingSession) });
+  }
+
+  function findSession(id) {
+    var found = null;
+    if (Sessions) Sessions.peek().forEach(function (s) { if (s.id === id) found = s; });
+    return found;
+  }
+  function sessionOf(trainingId) { return state.sessions[trainingId] ? findSession(state.sessions[trainingId]) : null; }
+  /* « Jeudi 5 novembre 2026 · 09:00 – 16:30 · Français » (Intl, langue du site) */
+  function sessionText(s) {
+    var f = Sessions.format(s, lang()), parts = [f.dateLong];
+    if (f.time) parts.push(f.time);
+    if (f.language) parts.push(f.language);
+    if (s.location) parts.push(s.location);
+    return parts.join(" · ");
+  }
+  function renderSessionNote() {
+    var box = document.getElementById("reg-session-note");
+    if (!box) return;
+    var txt = box.querySelector("[data-session-note-text]");
+    if (!sessionNote || !txt) { box.hidden = true; return; }
+    var s = sessionNote.kind === "ok" ? findSession(sessionNote.sessionId) : null;
+    txt.textContent = sessionNote.kind === "ok" && s
+      ? t("reg.session_note_ok", "Session sélectionnée : {date}. Elle figure dans votre récapitulatif.").replace("{date}", sessionText(s))
+      : t("reg.session_note_gone", "La session demandée n'est plus disponible. Vous pouvez poursuivre votre inscription : l'équipe Wisy Safety vous proposera une date.");
+    box.hidden = false;
+  }
+  /* Vérifie la session demandée par l'adresse et les sessions déjà mémorisées : une session inconnue, passée,
+     complète ou annulée est retirée (jamais affichée comme réservée). */
+  function initSessions() {
+    if (!Sessions || (!pendingSession && !Object.keys(state.sessions).length)) return;
+    Sessions.load().then(function () {
+      var dropped = false;
+      if (pendingSession) {
+        var s = findSession(pendingSession.sessionId);
+        if (s && Sessions.isBookable(s) && DATA.resolveTrainingId(s.training) === pendingSession.trainingId && state.trainings[pendingSession.trainingId]) {
+          state.sessions[pendingSession.trainingId] = s.id;
+          sessionNote = { kind: "ok", sessionId: s.id };
+        } else { sessionNote = { kind: "gone" }; }
+        pendingSession = null;
+      }
+      Object.keys(state.sessions).forEach(function (id) {
+        var s2 = findSession(state.sessions[id]);
+        if (!s2 || !Sessions.isBookable(s2)) { delete state.sessions[id]; dropped = true; }
+      });
+      if (dropped && !sessionNote) sessionNote = { kind: "gone" };
+      save();
+      renderSessionNote();
+      renderAll();
+    });
+  }
+
+  /* ======================================================================
      1. Registre d'icônes (SVG linéaire personnalisé)
      ====================================================================== */
   var P = { fill: "none", sw: "1.8" };
@@ -89,7 +161,8 @@
     up: '<path d="M6 15l6-6 6 6"/>',
     close: '<path d="M6 6l12 12M18 6L6 18"/>',
     sparkle: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/>',
-    clip2: '<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 3h6v4H9zM8 12h8M8 16h5"/>'
+    clip2: '<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 3h6v4H9zM8 12h8M8 16h5"/>',
+    calendar: '<rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/>'
   };
   function icon(name, cls) {
     var inner = ICONS[name] || ICONS.info;
@@ -113,9 +186,11 @@
       participantsLater: {},  /* { id: bool } */
       customer: { firstName: "", lastName: "", email: "", phone: "" },
       billing: { company: "", vat: "", address: "", zip: "", city: "", country: "BE" },
-      consent: false
+      consent: false,
+      sessions: {}            /* { id formation: id session } — la session choisie (lien ?session=…) */
     };
   }
+  var SESSION_ID_RE = /^[a-z0-9][a-z0-9-]{2,63}$/;
   var state = emptyState();
   var restored = false;
   var bannerDismissed = false;
@@ -154,6 +229,11 @@
     if (parsed.customer) fresh.customer = Object.assign(fresh.customer, parsed.customer);
     if (parsed.billing) fresh.billing = Object.assign(fresh.billing, parsed.billing);
     fresh.consent = !!parsed.consent;
+    if (parsed.sessions && typeof parsed.sessions === "object") {
+      Object.keys(parsed.sessions).forEach(function (id) {
+        if (trainings[id] && SESSION_ID_RE.test(String(parsed.sessions[id]))) fresh.sessions[id] = String(parsed.sessions[id]);
+      });
+    }
     /* On revient toujours à l'étape 1 au chargement (parcours guidé). */
     fresh.step = 1;
     state = fresh;
@@ -181,6 +261,7 @@
     delete state.trainings[id];
     delete state.participants[id];
     delete state.participantsLater[id];
+    delete state.sessions[id];
     save();
   }
   function updateQuantity(id, quantity) {
@@ -493,6 +574,7 @@
         '<span class="reg-line__node">' + icon(tr.icon) + "</span>" +
         '<span class="reg-line__ref">' + escapeHtml(tr.code || "") + "</span>" +
         '<span class="reg-line__name">' + escapeHtml(loc(tr.name)) + "</span>" +
+        (sessionOf(id) ? '<span class="reg-line__session">' + icon("calendar") + '<span><b>' + t("reg.session_label", "Session") + "</b> · " + escapeHtml(sessionText(sessionOf(id))) + "</span></span>" : "") +
         '<span class="reg-line__meta">' +
           '<span class="reg-line__calc">' + (priced ? money(tr.priceCents) + " × " + qty : qty + " × " + t("reg.on_quote", "Sur devis")) + "</span>" +
           '<span class="reg-line__total">' + (priced ? money(lineTotalCents(id)) : t("reg.on_quote", "Sur devis")) + "</span>" +
@@ -503,6 +585,7 @@
             '<span class="reg-line__qtyval" aria-hidden="true">' + qty + "</span>" +
             '<button type="button" class="reg-line__qtybtn" data-qty="inc" data-id="' + id + '"' + (qty >= CONFIG.maxQuantity ? " disabled" : "") + ' aria-label="' + t("reg.increase", "Augmenter") + '">' + icon("plus") + "</button>" +
           "</span>" +
+          (sessionOf(id) ? '<button type="button" class="reg-line__mini" data-remove-session="' + id + '">' + icon("calendar") + t("reg.session_remove", "Retirer la session") + "</button>" : "") +
           '<button type="button" class="reg-line__mini reg-line__mini--danger" data-remove="' + id + '">' + icon("trash") + t("reg.remove", "Retirer") + "</button>" +
         "</span>" +
       "</div>";
@@ -596,7 +679,7 @@
         '<div class="reg-block__head">' +
           '<span class="reg-block__ic">' + icon(tr.icon) + "</span>" +
           "<div><h3 class=\"reg-block__title\">" + escapeHtml(loc(tr.name)) + "</h3>" +
-          '<p class="reg-block__sub">' + qty + " " + participantsWord(qty) + "</p></div>" +
+          '<p class="reg-block__sub">' + qty + " " + participantsWord(qty) + (sessionOf(id) ? " · " + escapeHtml(sessionText(sessionOf(id))) : "") + "</p></div>" +
           '<span class="reg-block__ref">' + escapeHtml(tr.code || "") + "</span>" +
         "</div>" +
         '<label class="reg-toggle"><input type="checkbox" data-later="' + id + '"' + (later ? " checked" : "") + '>' +
@@ -689,7 +772,7 @@
     var src = order || state;
     var items = selectedIds().map(function (id) {
       var tr = DATA.getTraining(id);
-      return { id: id, quantity: state.trainings[id], unitPriceCents: tr.priceCents };
+      return { id: id, quantity: state.trainings[id], unitPriceCents: tr.priceCents, sessionId: state.sessions[id] || null };
     });
     var totals = computeTotals();
     var payload = {
@@ -742,6 +825,9 @@
       announce(t("reg.payment_soon", "Le paiement en ligne sera prochainement disponible."));
       return;
     }
+    /* Commande initialisée avec un prestataire réel : la conversion VCA Base est comptée ici (jamais avant :
+       tant que le paiement est un emplacement, l'inscription n'est pas « terminée »). */
+    if (res.order.items.some(function (it) { return it.id === "vca-base"; })) track("vca_registration_complete", { session: res.order.items.some(function (it) { return it.id === "vca-base" && it.sessionId; }) });
     /* (Futur) : PaymentProvider.createSession(res.order) puis redirection. */
   }
 
@@ -784,8 +870,18 @@
     if ((el = e.target.closest("[data-add]"))) {
       var id = el.getAttribute("data-add");
       addTraining(id, 1);
+      trackStart(id, "catalogue");
       var tr = DATA.getTraining(id);
       afterCartChange(t("reg.a11y_added", "Formation ajoutée :") + " " + loc(tr.name) + ". " + t("reg.a11y_total", "Total") + " : " + money(computeTotals().totalCents));
+      return;
+    }
+    if ((el = e.target.closest("[data-remove-session]"))) {
+      delete state.sessions[el.getAttribute("data-remove-session")];
+      save();
+      renderSummary();
+      if (state.step === 2) renderParticipants();
+      if (state.step === 4) renderFinalSummary();
+      announce(t("reg.a11y_session_removed", "Session retirée."));
       return;
     }
     if ((el = e.target.closest("[data-remove]"))) {
@@ -954,10 +1050,14 @@
   /* Lien profond `inscription.html?formation=<id>` : la formation choisie est présélectionnée (1 participant).
      Sans effet si elle l'est déjà (inscription restaurée) ou si l'identifiant est inconnu. */
   function preselectFromUrl() {
-    var wanted;
-    try { wanted = new URLSearchParams(location.search).get("formation"); } catch (e) { return; }
+    var wanted, sess;
+    try { var qs = new URLSearchParams(location.search); wanted = qs.get("formation"); sess = qs.get("session"); } catch (e) { return; }
     var id = wanted && DATA.resolveTrainingId ? DATA.resolveTrainingId(wanted) : null;
-    if (!id || state.trainings[id]) return;
+    if (!id) return;
+    /* `session` : simple identifiant, VÉRIFIÉ ensuite auprès de WisySessions (initSessions) — jamais une date. */
+    if (sess && SESSION_ID_RE.test(sess)) pendingSession = { trainingId: id, sessionId: sess };
+    trackStart(id, "link");
+    if (state.trainings[id]) return;
     state.trainings[id] = clampQty(1);
     save();
   }
@@ -965,6 +1065,7 @@
   function init() {
     load();
     preselectFromUrl();
+    initSessions();
     /* Bannière « inscription restaurée » (affichée seulement à l'étape 1) */
     if (restored) {
       updateRestoredBanner();
@@ -985,6 +1086,7 @@
 
     /* Re-rendu complet au changement de langue (libellés + montants) */
     document.addEventListener("i18n:changed", function () {
+      renderSessionNote();
       renderAll();
       if (state.step === 3) fillBillingInputs();
     });

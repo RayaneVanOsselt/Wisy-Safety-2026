@@ -38,22 +38,21 @@ faits clés), l'**assistant** (`knowledge.js` + copie serveur générée `site.g
 ## Modifier le contenu
 
 - **Durée, tarif, langues, gestes enseignés** : `js/trainings-data.js` (`TRAININGS.beps`), puis
-  le texte affiché dans `formation-beps-premiers-secours.html` (contenu en français uniquement,
-  voir plus bas) — les tests signalent tout écart de tarif/URL/registre.
+  le texte affiché dans `formation-beps-premiers-secours.html` (puis sa traduction dans
+  `js/i18n-data-beps.js`, voir plus bas) — les tests signalent tout écart de tarif/URL/registre.
 - **FAQ** : les 7 questions/réponses de la section `#faq` sont la SEULE source du schéma
   `FAQPage` — celui-ci est injecté à l'exécution par `initFaqSchema()` dans
   `js/formation-beps.js` (jamais dupliqué à la main dans le `<head>`, comme `faq.html` /
   `js/faq-page.js`).
 
-## i18n : page en français uniquement (comme le Centre d'aide)
+## i18n : page traduite dans les 10 langues
 
-Contrairement à la page Nacelles (traduite intégralement via `js/i18n-data-nacelles.js`), le
-contenu propre à cette page (hero, chaîne des secours, gestes, programme, méthode, FAQ…) est
-rédigé **en français uniquement** — même choix que `faq.html` (voir `docs/README-FAQ.md`).
-Seul le chrome partagé (header, footer, recherche, assistant) reste traduit dans les 10 langues
-via le système i18n existant. Les clés `dd.beps_full/_summary/_dur/_fmt/_langs` (10 langues,
-`js/i18n-data-common.js`) restent nécessaires car elles alimentent la recherche, la carte
-catalogue et l'assistant sur **toutes** les pages, pas seulement celle-ci.
+Tout le contenu de la page (hero, chaîne des secours, gestes, programme, méthode, FAQ, appel à
+l'action) est traduit : `data-i18n` dans le HTML + `js/i18n-data-beps.js` (clés `beps.*`, français =
+miroir du HTML). Modifier un texte = le modifier dans le HTML **et** dans les 10 langues du dictionnaire
+(voir `docs/README-I18N.md`). Les clés `dd.beps_full/_summary/_dur/_fmt/_langs` (`js/i18n-data-common.js`)
+alimentent en plus la recherche, la carte catalogue et l'assistant sur **toutes** les pages. Le schéma
+`FAQPage` (JSON-LD) est construit depuis le texte affiché : il suit la langue choisie.
 
 ## Règle de véracité
 

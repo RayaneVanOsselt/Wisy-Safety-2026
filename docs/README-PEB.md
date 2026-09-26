@@ -100,13 +100,19 @@ réglementaire.
   option du gabarit existant, voir `contact.html` → `#wf-subject`). Le résultat affiché reste
   toujours qualifié d'indicatif (`tests/peb.test.js` le protège).
 
-## i18n : page en français uniquement (comme le Centre d'aide, l'Agenda et BEPS)
+## i18n : page traduite dans les 10 langues
 
-Le contenu propre à cette page (hero, parcours, programme, conditions, examen, tarifs, comparaison,
-FAQ…) est rédigé **en français uniquement**. Seul le chrome partagé (header, footer, recherche,
-assistant) reste traduit dans les 10 langues via le système i18n existant. Les clés
-`search.page_peb_t/_d` (10 langues, `js/i18n-data-search.js`) restent nécessaires car elles
-alimentent la recherche du site sur **toutes** les pages, pas seulement celle-ci.
+Le contenu de la page (hero, parcours, programme, conditions, examen, tarifs, comparaison, FAQ, vérificateur
+d'éligibilité) est traduit : `data-i18n` dans le HTML + `js/i18n-data-peb.js` (clés `peb.*`, français = miroir
+du HTML). Le registre `js/peb-data.js` reste en français : c'est la **source des faits** (tests, sitemap, JSON-LD),
+il n'est pas lu par le navigateur pour l'affichage. **Quand un fait change** (durée, montant, seuil, autorité…) :
+`js/peb-data.js` → HTML français → les 10 langues de `js/i18n-data-peb.js` ; `node scripts/check-i18n.js` vérifie
+que **les chiffres** (2 ans, 6 mois, 50 €, 40 jours, 15/30…) sont identiques dans toutes les langues.
+- Noms propres jamais traduits : Bruxelles Environnement, SPW Énergie, Certibru-RES, Homegrade, Certinergie Academy, IFAPME.
+- Glossaire et règle de véracité (Wisy Safety n'est jamais « agréé/reconnu ») : en-tête de `js/i18n-data-peb.js`.
+- `js/peb.js` : libellés de Région (`peb.region_*`), texte du vérificateur (`peb.quiz_*`, accord du nombre d'années avec
+  `Intl.PluralRules`) et JSON-LD `FAQPage` suivent la langue. Le courriel envoyé à l'équipe reste en français (avec la
+  langue du visiteur). Clés `search.page_peb_t/_d` (`js/i18n-data-search.js`) : fiche de la recherche du site.
 
 ## Images
 

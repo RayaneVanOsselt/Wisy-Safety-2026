@@ -28,10 +28,14 @@
   const canHover = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   const currentLang = () => (window.WisyI18N && window.WisyI18N.current()) || "fr";
-  const tr = (key, fallback) => {
-    const v = window.WisyI18N ? window.WisyI18N.get(currentLang(), key) : null;
+  /* Textes lus dans le dictionnaire de la page (js/i18n-data-peb.js) ; le français reste le repli. */
+  const trIn = (lang, key, fallback) => {
+    const v = window.WisyI18N ? window.WisyI18N.get(lang, key) : null;
     return v != null ? v : fallback;
   };
+  const tr = (key, fallback) => trIn(currentLang(), key, fallback);
+  /* Variables des phrases traduites : « {region} », « {years} », « {n} » */
+  const fmt = (tpl, vars) => String(tpl).replace(/\{(\w+)\}/g, (m, k) => (vars[k] != null ? vars[k] : m));
 
   /* Même compte / gabarit EmailJS que contact.html (champs user_name/user_email/user_phone/
      subject/message/time ; « Certification PEB » = option déjà proposée par ce gabarit). Valeurs
@@ -246,27 +250,40 @@
   /* FAQPage — données structurées injectées à l'exécution, depuis les Q/R réellement
      affichées dans l'accordéon (jamais dupliquées à la main dans le <head>). Quand une
      question a deux réponses régionales visibles, les deux sont concaténées (texte
-     réellement lu par le visiteur). */
+     réellement lu par le visiteur, avec la Région en préfixe). Reconstruites à chaque
+     changement de langue : le JSON-LD suit le texte affiché. */
   function initFaqSchema() {
-    const items = $$(".peb-acc--faq .peb-acc__item").map((item) => {
-      const q = ($(".peb-acc__t", item) || {}).textContent || "";
-      const paras = $$(".peb-acc__inner p", item).map((p) => p.textContent.trim()).filter(Boolean);
-      return { q: q.trim(), a: paras.join(" ") };
-    }).filter((it) => it.q && it.a);
-    if (!items.length) return;
-    try {
-      const ld = document.createElement("script");
-      ld.type = "application/ld+json";
-      ld.textContent = JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: items.map((it) => ({
-          "@type": "Question", name: it.q,
-          acceptedAnswer: { "@type": "Answer", text: it.a }
-        }))
-      });
-      document.head.appendChild(ld);
-    } catch (e) { /* silencieux */ }
+    let node = null;
+    const build = () => {
+      const items = $$(".peb-acc--faq .peb-acc__item").map((item) => {
+        const q = ($(".peb-acc__t", item) || {}).textContent || "";
+        const paras = $$(".peb-acc__inner p", item).map((p) => {
+          const text = p.textContent.trim();
+          const tag = $(".peb-acc__region-tag", p);
+          return tag ? tag.textContent.trim() + " : " + text.slice(tag.textContent.trim().length).trim() : text;
+        }).filter(Boolean);
+        return { q: q.trim(), a: paras.join(" ") };
+      }).filter((it) => it.q && it.a);
+      if (!items.length) return;
+      try {
+        if (!node) {
+          node = document.createElement("script");
+          node.type = "application/ld+json";
+          document.head.appendChild(node);
+        }
+        node.textContent = JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          inLanguage: currentLang(),
+          mainEntity: items.map((it) => ({
+            "@type": "Question", name: it.q,
+            acceptedAnswer: { "@type": "Answer", text: it.a }
+          }))
+        });
+      } catch (e) { /* silencieux */ }
+    };
+    build();
+    document.addEventListener("i18n:changed", build);
   }
 
   /* =======================================================================
@@ -284,6 +301,7 @@
     const switches = $$("[data-region-switch]");
     const panels = $$("[data-region-panel]");
     const labels = $$("[data-region-label]");
+    const authorities = $$("[data-region-authority]");
     if (!switches.length && !panels.length) return;
 
     function readInitial() {
@@ -310,6 +328,8 @@
         });
       });
       labels.forEach((el) => { el.textContent = region === "brussels" ? tr("peb.region_brussels", "Bruxelles") : tr("peb.region_wallonia", "Wallonie"); });
+      /* Autorité compétente de la Région : noms propres, identiques dans toutes les langues */
+      authorities.forEach((el) => { el.textContent = region === "brussels" ? "Bruxelles Environnement" : "SPW Énergie"; });
       document.documentElement.setAttribute("data-peb-region", region);
       try { sessionStorage.setItem(REGION_KEY, region); } catch (e) { /* silencieux */ }
       if (!silent) track("peb_region_selected", { region });
@@ -326,6 +346,7 @@
     });
 
     apply(current, { silent: true });
+    document.addEventListener("i18n:changed", () => apply(current, { silent: true }));
   }
 
   /* =======================================================================
@@ -441,36 +462,63 @@
       if (e.target.closest(".peb-quiz__step--shake")) e.target.closest("[data-quiz-step]").classList.remove("peb-quiz__step--shake");
     });
 
-    function indicativeResult() {
+    /* Résultat indicatif : affiché dans la langue choisie, mais TRANSMIS en français à l'équipe
+       (indicativeResult("fr")). Le nombre d'années s'accorde selon la langue (Intl.PluralRules). */
+    const NUMBER_LOCALES = { fr: "fr-BE", en: "en-GB", nl: "nl-BE", af: "af-ZA", ar: "ar-u-nu-latn", bg: "bg-BG", de: "de-DE", ro: "ro-RO", it: "it-IT", sl: "sl-SI" };
+    function yearsText(n, lang) {
+      let category = "other";
+      try { category = new Intl.PluralRules(lang).select(n); } catch (e) { /* repli : forme « autres » */ }
+      const tpl = (category !== "other" && trIn(lang, "peb.years_" + category, null)) || trIn(lang, "peb.years", "{n} ans");
+      let shown = String(n);
+      try { shown = new Intl.NumberFormat(NUMBER_LOCALES[lang] || lang).format(n); } catch (e) { /* repli : nombre brut */ }
+      return fmt(tpl, { n: shown });
+    }
+    function regionIn(lang) {
+      return state.region === "brussels"
+        ? trIn(lang, "peb.region_in_brussels", "en Région bruxelloise")
+        : trIn(lang, "peb.region_in_wallonia", "en Région wallonne");
+    }
+    function indicativeResult(lang) {
       const diplomaProfiles = ["architecte", "ingenieur-architecte", "ingenieur-civil", "bio-ingenieur", "ingenieur-industriel", "gradue-construction", "autre-diplome-energie"];
       if (diplomaProfiles.indexOf(state.profile) !== -1) {
-        return tr("peb.quiz_result_diploma", "Sur la base du diplôme indiqué, la condition de diplôme applicable en " + regionLabel() + " semble a priori remplie.");
+        return fmt(trIn(lang, "peb.quiz_result_diploma", "Sur la base du diplôme indiqué, la condition de diplôme applicable {region} semble a priori remplie."), { region: regionIn(lang) });
       }
       if (state.profile === "experience") {
         const years = parseFloat(state.years);
         if (Number.isFinite(years) && years >= 2) {
-          return tr("peb.quiz_result_exp_ok", "Avec " + state.years + " ans d'expérience liée aux aspects énergétiques des bâtiments, la condition d'expérience semble a priori remplie en " + regionLabel() + ".");
+          return fmt(trIn(lang, "peb.quiz_result_exp_ok", "Avec {years} d'expérience liée aux aspects énergétiques des bâtiments, la condition d'expérience semble a priori remplie {region}."), { years: yearsText(years, lang), region: regionIn(lang) });
         }
-        return tr("peb.quiz_result_exp_low", "L'expérience indiquée est inférieure au seuil habituellement demandé (2 ans concernant les aspects énergétiques des bâtiments). Contactez-nous pour un avis personnalisé.");
+        return trIn(lang, "peb.quiz_result_exp_low", "L'expérience indiquée est inférieure au seuil habituellement demandé (2 ans concernant les aspects énergétiques des bâtiments). Contactez-nous pour un avis personnalisé.");
       }
-      return tr("peb.quiz_result_other", "Votre profil nécessite une vérification personnalisée : contactez-nous pour faire le point.");
+      return trIn(lang, "peb.quiz_result_other", "Votre profil nécessite une vérification personnalisée : contactez-nous pour faire le point.");
     }
-    function regionLabel() { return state.region === "brussels" ? "Région bruxelloise" : "Région wallonne"; }
+    /* Libellé de Région pour le courriel envoyé à l'équipe (toujours en français) */
+    function regionLabelFr() { return state.region === "brussels" ? "Région bruxelloise" : "Région wallonne"; }
+
+    /* Texte du résultat et message d'envoi : retraduits si la langue change alors qu'ils sont affichés */
+    const resultBox = $("[data-quiz-result-text]", root);
+    const statusEl = $("[data-quiz-status]", root);
+    let resultShown = false;
+    let statusMsg = null; // { key, fallback }
+    const setStatus = (key, fallback) => { statusMsg = { key, fallback }; if (statusEl) statusEl.textContent = tr(key, fallback); };
+    document.addEventListener("i18n:changed", () => {
+      if (resultShown && resultBox) resultBox.textContent = indicativeResult(currentLang());
+      if (statusMsg && statusEl) statusEl.textContent = tr(statusMsg.key, statusMsg.fallback);
+    });
 
     if (form) {
       form.addEventListener("submit", (e) => {
         e.preventDefault();
         if (!form.checkValidity()) { form.reportValidity(); return; }
 
-        const resultBox = $("[data-quiz-result-text]", root);
-        if (resultBox) resultBox.textContent = indicativeResult();
+        resultShown = true;
+        if (resultBox) resultBox.textContent = indicativeResult(currentLang());
         goTo("result");
         track("peb_eligibility_completed", { region: state.region, profile: state.profile });
 
         const submitBtn = $('[type="submit"]', form);
-        const statusEl = $("[data-quiz-status]", root);
         if (!window.emailjs) {
-          if (statusEl) statusEl.textContent = tr("peb.quiz_sent_offline", "Merci ! Pour aller plus vite, écrivez-nous directement à info@wisysafety.be.");
+          setStatus("peb.quiz_sent_offline", "Merci ! Pour aller plus vite, écrivez-nous directement à info@wisysafety.be.");
           return;
         }
         if (submitBtn) submitBtn.disabled = true;
@@ -479,15 +527,16 @@
           user_email: (form.querySelector('[name="quiz-email"]') || {}).value || "",
           user_phone: (form.querySelector('[name="quiz-phone"]') || {}).value || "Non renseigné",
           subject: "Certification PEB",
-          message: "Vérification d'éligibilité PEB — Région : " + regionLabel() + " · Profil : " + (state.profile || "-") +
+          message: "Vérification d'éligibilité PEB — Région : " + regionLabelFr() + " · Profil : " + (state.profile || "-") +
             (state.profile === "experience" ? " · Expérience : " + (state.years || "-") + " an(s)" : "") +
-            " · Résultat indicatif transmis : " + indicativeResult(),
+            " · Langue du visiteur : " + currentLang() +
+            " · Résultat indicatif transmis : " + indicativeResult("fr"),
           time: new Date().toLocaleString("fr-BE", { dateStyle: "long", timeStyle: "short" })
         };
         try { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); } catch (e2) { /* déjà initialisé ailleurs : ignoré */ }
         emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
-          .then(() => { if (statusEl) statusEl.textContent = tr("peb.quiz_sent_ok", "Merci ! Notre équipe revient vers vous sous 24 h ouvrées."); })
-          .catch(() => { if (statusEl) statusEl.textContent = tr("peb.quiz_sent_err", "L'envoi a échoué. Écrivez-nous directement à info@wisysafety.be."); })
+          .then(() => setStatus("peb.quiz_sent_ok", "Merci ! Notre équipe revient vers vous sous 24 h ouvrées."))
+          .catch(() => setStatus("peb.quiz_sent_err", "L'envoi a échoué. Écrivez-nous directement à info@wisysafety.be."))
           .finally(() => { if (submitBtn) submitBtn.disabled = false; });
       });
     }

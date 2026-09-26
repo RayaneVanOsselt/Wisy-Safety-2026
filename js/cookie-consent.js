@@ -144,6 +144,23 @@
   var reduceMotion = root.matchMedia && root.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ------------------------------------------------------------------ */
+  /* Langue : textes dans js/i18n-data-common.js (clés « cookies.* »).     */
+  /* Le français ci-dessous reste le repli ; les nœuds portent data-i18n,  */
+  /* donc le moteur (js/i18n.js) les réécrit à chaque changement de langue. */
+  /* ------------------------------------------------------------------ */
+  function t(key, fallback) {
+    var i = root.WisyI18N, v = i && i.get(i.current(), key);
+    return v != null ? v : fallback;
+  }
+  function esc(str) {
+    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  /** `<tag class="…" data-i18n="clé">texte courant</tag>` */
+  function tx(tag, cls, key, fallback) {
+    return "<" + tag + (cls ? ' class="' + cls + '"' : "") + ' data-i18n="' + key + '">' + esc(t(key, fallback)) + "</" + tag + ">";
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Icônes (même style que le reste du site : trait, 24x24, currentColor) */
   /* ------------------------------------------------------------------ */
   var ICON_SHIELD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3.2v5.1c0 4.6-3 8.7-7 9.9-4-1.2-7-5.3-7-9.9V6.2L12 3z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg>';
@@ -187,18 +204,18 @@
   /* ------------------------------------------------------------------ */
   function bannerHTML() {
     return (
-      '<div class="wcc-banner" role="region" aria-label="Consentement aux cookies" tabindex="-1">' +
+      '<div class="wcc-banner" role="region" data-i18n-attr="aria-label:cookies.banner_aria" aria-label="' + esc(t("cookies.banner_aria", "Consentement aux cookies")) + '" tabindex="-1">' +
         '<div class="wcc-banner__inner">' +
           '<span class="wcc-icon">' + ICON_SHIELD + '</span>' +
           '<div class="wcc-banner__body">' +
-            '<p class="wcc-banner__title">Votre vie privée, votre choix</p>' +
-            '<p class="wcc-banner__text">Nous utilisons des cookies nécessaires au bon fonctionnement de Wisy Safety. Avec votre accord, nous pouvons également utiliser des cookies de mesure d’audience et d’autres technologies afin d’améliorer votre expérience.</p>' +
-            '<a class="wcc-banner__link" href="#" data-i18n="cookies.privacy_link">En savoir plus sur notre politique de confidentialité</a>' +
+            tx("p", "wcc-banner__title", "cookies.banner_title", "Votre vie privée, votre choix") +
+            tx("p", "wcc-banner__text", "cookies.banner_text", "Nous utilisons des cookies nécessaires au bon fonctionnement de Wisy Safety. Avec votre accord, nous pouvons également utiliser des cookies de mesure d’audience et d’autres technologies afin d’améliorer votre expérience.") +
+            '<a class="wcc-banner__link" href="#" data-i18n="cookies.privacy_link">' + esc(t("cookies.privacy_link", "En savoir plus sur notre politique de confidentialité")) + '</a>' +
           '</div>' +
           '<div class="wcc-banner__actions">' +
-            '<button type="button" class="btn btn--outline wcc-btn" data-wcc-action="reject">Tout refuser</button>' +
-            '<button type="button" class="wcc-btn--text" data-wcc-action="customize">Personnaliser</button>' +
-            '<button type="button" class="btn btn--cta wcc-btn" data-wcc-action="accept">Tout accepter</button>' +
+            '<button type="button" class="btn btn--outline wcc-btn" data-wcc-action="reject" data-i18n="cookies.reject">' + esc(t("cookies.reject", "Tout refuser")) + '</button>' +
+            '<button type="button" class="wcc-btn--text" data-wcc-action="customize" data-i18n="cookies.customize">' + esc(t("cookies.customize", "Personnaliser")) + '</button>' +
+            '<button type="button" class="btn btn--cta wcc-btn" data-wcc-action="accept" data-i18n="cookies.accept">' + esc(t("cookies.accept", "Tout accepter")) + '</button>' +
           '</div>' +
         '</div>' +
       '</div>'
@@ -258,9 +275,9 @@
     return (
       '<div class="wcc-cat">' +
         '<div class="wcc-cat__text">' +
-          '<p class="wcc-cat__title" id="wcc-cat-' + cat.id + '-title">' + cat.title + '</p>' +
-          '<p class="wcc-cat__desc">' + cat.desc + '</p>' +
-          (locked ? '<span class="wcc-cat__locked-tag">' + ICON_LOCK + ' Toujours actif</span>' : '') +
+          '<p class="wcc-cat__title" id="wcc-cat-' + cat.id + '-title" data-i18n="cookies.cat_' + cat.id + '_title">' + esc(t("cookies.cat_" + cat.id + "_title", cat.title)) + '</p>' +
+          '<p class="wcc-cat__desc" data-i18n="cookies.cat_' + cat.id + '_desc">' + esc(t("cookies.cat_" + cat.id + "_desc", cat.desc)) + '</p>' +
+          (locked ? '<span class="wcc-cat__locked-tag">' + ICON_LOCK + ' ' + tx("span", "", "cookies.always_on", "Toujours actif") + '</span>' : '') +
         '</div>' +
         '<div class="wcc-cat__control">' +
           '<label class="wcc-switch">' +
@@ -280,17 +297,17 @@
       '<div class="wcc-scrim" data-wcc-scrim></div>' +
       '<div class="wcc-modal" role="dialog" aria-modal="true" aria-labelledby="wcc-modal-title" tabindex="-1">' +
         '<div class="wcc-modal__head">' +
-          '<h2 class="wcc-modal__title" id="wcc-modal-title">Préférences de confidentialité</h2>' +
-          '<button type="button" class="wcc-modal__close" data-wcc-close aria-label="Fermer">' + ICON_CLOSE + '</button>' +
+          '<h2 class="wcc-modal__title" id="wcc-modal-title" data-i18n="cookies.modal_title">' + esc(t("cookies.modal_title", "Préférences de confidentialité")) + '</h2>' +
+          '<button type="button" class="wcc-modal__close" data-wcc-close data-i18n-attr="aria-label:cookies.close" aria-label="' + esc(t("cookies.close", "Fermer")) + '">' + ICON_CLOSE + '</button>' +
         '</div>' +
         '<div class="wcc-modal__body">' +
-          '<p class="wcc-modal__intro">Choisissez les catégories de cookies que vous souhaitez autoriser. Les cookies strictement nécessaires au fonctionnement du site restent toujours actifs.</p>' +
+          tx("p", "wcc-modal__intro", "cookies.modal_intro", "Choisissez les catégories de cookies que vous souhaitez autoriser. Les cookies strictement nécessaires au fonctionnement du site restent toujours actifs.") +
           rows +
         '</div>' +
         '<div class="wcc-modal__foot">' +
-          '<button type="button" class="btn btn--outline wcc-btn" data-wcc-action="reject">Tout refuser</button>' +
-          '<button type="button" class="btn btn--cta wcc-btn" data-wcc-action="save">Enregistrer mes choix</button>' +
-          '<button type="button" class="btn btn--outline wcc-btn" data-wcc-action="accept">Tout accepter</button>' +
+          '<button type="button" class="btn btn--outline wcc-btn" data-wcc-action="reject" data-i18n="cookies.reject">' + esc(t("cookies.reject", "Tout refuser")) + '</button>' +
+          '<button type="button" class="btn btn--cta wcc-btn" data-wcc-action="save" data-i18n="cookies.save">' + esc(t("cookies.save", "Enregistrer mes choix")) + '</button>' +
+          '<button type="button" class="btn btn--outline wcc-btn" data-wcc-action="accept" data-i18n="cookies.accept">' + esc(t("cookies.accept", "Tout accepter")) + '</button>' +
         '</div>' +
       '</div>'
     );
@@ -417,7 +434,8 @@
       btn.type = "button";
       btn.className = "wcc-footer-link";
       btn.setAttribute("data-wcc-open", "");
-      btn.textContent = "Préférences cookies";
+      btn.setAttribute("data-i18n", "cookies.footer_link");
+      btn.textContent = t("cookies.footer_link", "Préférences cookies");
       nav.appendChild(btn);
     });
   }

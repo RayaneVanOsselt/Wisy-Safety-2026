@@ -58,6 +58,26 @@ const words = (s) => (String(s).match(/\p{L}{2,}/gu) || []);
 /* Traductions légitimement identiques au français (noms propres, sigles, formes internationales). */
 const SAME_OK = /^(?:[\p{Lu}\d\s·+&\-–—/().,:;'’"«»…|%€×]|Wisy Safety|VCA|BEPS|PEB|CACES|REACH|PEMP|MEWP|Contact|Agenda|Coordination|Certificat|Certificate|Information|Format|Description|Type|Note|Source|Page|Message|Total|Sécurité|Secours|Management|Nacelle|Nacelles|Fibre|Contact|Mail|E-mail|Email|Photo|Standard|Base|Profil|Programme|Module|Modules|Session|Sessions|Site|Public|Test|Officiel|Article|Vidéo|Musique|Général)+$/u;
 
+/* Nombres d'un texte (prix, durées, seuils, dates…) sous forme canonique : « 1 050 », « 1.050 » et « 1,050 » valent 1050 ;
+   « 2,5 » vaut 2.5 ; chiffres arabo-indiens ramenés en chiffres latins. */
+function numbersOf(s) {
+  const t = String(s).replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ")
+    .replace(/[٠-٩]/g, (c) => String(c.charCodeAt(0) - 0x0660)).replace(/[۰-۹]/g, (c) => String(c.charCodeAt(0) - 0x06f0));
+  const found = t.replace(/(\d{1,2})\s?[hu:]\s?00\b/gi, "$1").match(/\d{1,3}(?:[ \u00a0\u202f.,]\d{3})+(?:[.,]\d+)?|\d+(?:[.,]\d+)?/g) || [];
+  return found.map((x) => x.replace(/(\d)[ \u00a0\u202f.,](?=\d{3}(?!\d))/g, "$1").replace(",", ".")).sort();
+}
+/* Nombres écrits en toutes lettres dans certaines langues (duel arabe « سنتان », « une fois »…) : « 1 » et « 2 » peuvent
+   manquer dans la traduction ; tout AUTRE chiffre manquant ou ajouté est une erreur (montant, durée ou seuil altéré). */
+const SPELLABLE = new Set(["1", "2"]);
+
+/* Formes IDENTIQUES au français, relues une à une : c'est bien le mot de la langue (« Examen » en néerlandais et en roumain,
+   « Menu mobile » en italien) ou une étiquette technique (« Audit VCA »). Clé : « fichier|langue|clé ». */
+const SAME_REVIEWED = new Set([
+  "js/i18n-data-common.js|it|aria.mobile_menu",
+  "js/i18n-data-contact.js|ro|ct.team_badge4", "js/i18n-data-contact.js|it|ct.team_badge4",
+  "js/i18n-data-peb.js|nl|peb.hero_li2", "js/i18n-data-peb.js|ro|peb.hero_li2"
+]);
+
 /* Formes de pluriel FACULTATIVES (slovène, roumain, arabe…) : « reg.participants_few » n'a pas besoin
    d'exister en français ni dans les autres langues — seule sa clé de base « reg.participants » compte. */
 const PLURAL_VARIANT = /_(zero|two|few|many)$/;
@@ -85,13 +105,21 @@ function dictionaryChecks(out) {
         if (l === "fr" || !(k in fr)) return;
         const src = fr[k];
         const va = (src.match(VARS) || []).sort().join("¦"), vb = (v.match(VARS) || []).sort().join("¦");
-        if (va !== vb) out.errors.push(`[dictionnaire] ${f} · ${l} · ${k} : variables différentes du français (« ${va} » ≠ « ${vb} »)`);
+        /* Formes de pluriel (« _one », « _two »…) : le nombre peut être écrit en toutes lettres (« سنة واحدة ») ;
+           les variables de la traduction doivent alors rester un SOUS-ENSEMBLE de celles du français. */
+        const spelledOut = /_(zero|one|two|few|many)$/.test(k) && (v.match(VARS) || []).every((x) => (src.match(VARS) || []).includes(x));
+        if (va !== vb && !spelledOut) out.errors.push(`[dictionnaire] ${f} · ${l} · ${k} : variables différentes du français (« ${va} » ≠ « ${vb} »)`);
         if (src.includes("<") || v.includes("<")) {
           if (tagNames(src) !== tagNames(v)) out.errors.push(`[dictionnaire] ${f} · ${l} · ${k} : balises HTML différentes du français (${tagNames(src)} ≠ ${tagNames(v)})`);
           else if (classesOf(src) !== classesOf(v)) out.errors.push(`[dictionnaire] ${f} · ${l} · ${k} : classes HTML différentes du français`);
         }
+        const na = numbersOf(src), nb = numbersOf(v);
+        const rest = nb.slice(); const missing = [];
+        na.forEach((x) => { const i = rest.indexOf(x); if (i >= 0) rest.splice(i, 1); else missing.push(x); });
+        const lost = missing.filter((x) => !SPELLABLE.has(x));
+        if (lost.length || rest.length) out.errors.push(`[dictionnaire] ${f} · ${l} · ${k} : chiffres différents du français (manquants : ${lost.join(", ") || "—"} · en trop : ${rest.join(", ") || "—"})`);
         if (src.split("|").length !== v.split("|").length) out.errors.push(`[dictionnaire] ${f} · ${l} · ${k} : nombre d'éléments « | » différent du français (${src.split("|").length} ≠ ${v.split("|").length})`);
-        if (v === src && words(src).length >= 2 && !SAME_OK.test(src)) out.warnings.push(`[identique au français] ${f} · ${l} · ${k} : « ${src.slice(0, 60)} »`);
+        if (v === src && words(src).length >= 2 && !SAME_OK.test(src) && !SAME_REVIEWED.has(`${f}|${l}|${k}`)) out.warnings.push(`[identique au français] ${f} · ${l} · ${k} : « ${src.slice(0, 60)} »`);
       });
     });
   });
@@ -141,7 +169,7 @@ function scanHtml(html) {
       const attrs = parseAttrs(m[6] || "");
       const self = m[7] === "/" || VOID.has(tag);
       /* Bandeau de recherche : ses libellés sont posés à l'exécution par js/search.js (clés search.*, testées à part). */
-      const el = { tag, attrs, i18nText: attrs["data-i18n"] != null || attrs["data-i18n-html"] != null, skip: attrs.translate === "no" || /(^|\s)wsy-search(\s|$)/.test(attrs.class || "") };
+      const el = { tag, attrs, i18nText: attrs["data-i18n"] != null || attrs["data-i18n-html"] != null, skip: attrs.translate === "no" || attrs["data-region-label"] != null || attrs["data-region-authority"] != null || /(^|\s)wsy-search(\s|$)/.test(attrs.class || "") };
       if (attrs["data-i18n"]) out.keys.add(attrs["data-i18n"]);
       if (attrs["data-i18n-html"]) out.keys.add(attrs["data-i18n-html"]);
       const covAttr = {};

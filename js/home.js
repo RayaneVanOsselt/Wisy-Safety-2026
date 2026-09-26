@@ -1,6 +1,6 @@
 /* =========================================================================
    WISY SAFETY — Page d'accueil : intro du logo, entrée du hero, apparitions,
-   compteurs, halo au pointeur, parallaxe légère, vidéos pilotées.
+   compteurs, halo au pointeur, parallaxe légère, vidéo pilotée.
    -------------------------------------------------------------------------
    Chargé uniquement par index.html (après le socle en ligne : en-tête, pied de
    page). Aucune dépendance. Tout est progressif : sans ce fichier, la page reste
@@ -77,10 +77,10 @@
   }
   /* Lecture seulement quand la vidéo est visible (économie de batterie et de processeur). La source peut arriver
      après coup (posée après l'événement load) : on retente dès que la vidéo est prête. */
-  function playWhenVisible(video, ctl, threshold, allowReplay) {
+  function playWhenVisible(video, ctl, threshold) {
     var visible = !hasIO;
     function attempt() {
-      if (visible && video.paused && video.readyState >= 2 && (!ctl || !ctl.isUserPaused()) && (!video.ended || allowReplay)) play(video);
+      if (visible && video.paused && !video.ended && video.readyState >= 2 && (!ctl || !ctl.isUserPaused())) play(video);
     }
     video.addEventListener("canplay", attempt);
     if (!hasIO) { attempt(); return; }
@@ -110,7 +110,7 @@
   } else {
     root.classList.remove("home-intro");
     raf2(revealHero);                                            // l'état initial est peint, puis l'entrée se joue
-    if (video && !still) playWhenVisible(video, heroCtl, 0.35, false);
+    if (video && !still) playWhenVisible(video, heroCtl, 0.35);
   }
 
   function runIntro() {
@@ -159,7 +159,7 @@
       }
       if (hadFocus) { var h1 = hero.querySelector("h1"); if (h1) h1.focus({ preventScroll: true }); }
       if (video.paused && !video.ended) play(video);
-      playWhenVisible(video, heroCtl, 0.35, false);
+      playWhenVisible(video, heroCtl, 0.35);
     });
 
     function tick() {
@@ -301,30 +301,5 @@
         else win.removeEventListener("scroll", onScroll);
       });
     }).observe(cloud);
-  }
-
-  /* ================================================ VIDÉO « VCA ENTREPRISE » (chargée à l'approche, jamais en mouvement réduit) */
-  var biz = doc.getElementById("homeBizVideo");
-  if (biz && !still && hasIO) {
-    var bizBtn = biz.parentNode.querySelector("[data-video-toggle]");
-    var bizCtl = null;
-    var near = new IntersectionObserver(function (entries) {
-      if (!entries.some(function (e) { return e.isIntersecting; })) return;
-      near.disconnect();
-      var base = "assets/videos/accueil/";
-      var large = win.matchMedia("(min-width: 900px)").matches && (win.devicePixelRatio || 1) > 1;
-      if (large) {
-        [["hero-1080.webm", "video/webm"], ["hero-1080.mp4", "video/mp4"]].forEach(function (s) {
-          var src = doc.createElement("source"); src.src = base + s[0]; src.type = s[1]; biz.appendChild(src);
-        });
-      } else {
-        var one = doc.createElement("source"); one.src = base + "hero-720.mp4"; one.type = "video/mp4"; biz.appendChild(one);
-      }
-      biz.load();
-      biz.addEventListener("playing", function () { biz.classList.add("is-playing"); }, { once: true });
-      if (bizBtn) { bizBtn.hidden = false; bizCtl = videoToggle(biz, bizBtn); }
-      playWhenVisible(biz, bizCtl, 0.35, true);
-    }, { rootMargin: "300px 0px" });
-    near.observe(biz);
   }
 })();

@@ -89,7 +89,7 @@ test("image LCP des pages : jamais en lazy (nacelles) ; index : affiche du logo 
   assert.ok(size("assets/videos/accueil/logo-animation-debut.webp") * 8 / (960 * 1200) > 0.05, "affiche assez détaillée pour compter comme LCP (écran 2x)");
 });
 
-test("vidéos d'accueil : jamais préchargées d'office, jamais en mouvement réduit / économie de données, sans son, légères", () => {
+test("vidéo d'accueil (logo animé) : jamais préchargée d'office, jamais en mouvement réduit / économie de données, sans son, légère", () => {
   const idx = read("index.html");
   /* le choix est fait AVANT le premier affichage par le script du <head> : html.home-still = aucune vidéo */
   const head = idx.slice(0, idx.indexOf("</head>"));
@@ -103,12 +103,7 @@ test("vidéos d'accueil : jamais préchargées d'office, jamais en mouvement ré
   assert.match(script, /classList\.contains\('home-still'\)\)return;/, "rien n'est chargé en mouvement réduit / économie de données");
   assert.match(script, /addEventListener\('load',start/, "hors intro : chargement après l'événement load");
   assert.match(script, /logo-animation-480\.mp4/, "petits écrans : version 480 px");
-  /* vidéo « VCA Entreprise » : sans source dans le HTML, posée par js/home.js à l'approche de la section */
-  const biz = idx.match(/<video[^>]*id="homeBizVideo"[^>]*>/)[0];
-  assert.match(biz, /preload="none"/); assert.match(biz, /muted/); assert.match(biz, /playsinline/); assert.doesNotMatch(biz, /\ssrc=/);
-  const js = read("js/home.js");
-  assert.match(js, /biz && !still && hasIO/, "pas de vidéo « entreprise » en mouvement réduit / économie de données");
-  assert.match(js, /rootMargin: "300px 0px"/, "chargée seulement à l'approche de la section");
+  assert.equal((idx.match(/<video\b/g) || []).length, 1, "une seule vidéo sur l'accueil (le logo animé)");
   /* poids : versions web du logo animé (8 s, sans piste audio) */
   assert.ok(size("assets/videos/accueil/logo-animation-720.mp4") < 1000 * KB, "logo animé 720 px < 1 Mo");
   assert.ok(size("assets/videos/accueil/logo-animation-480.mp4") < 550 * KB, "logo animé 480 px < 550 Ko");

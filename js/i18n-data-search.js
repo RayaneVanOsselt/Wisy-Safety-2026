@@ -675,4 +675,17 @@
   m("ro", { "search.fx_try": "Căutați „{q}”", "search.fx_list": "VCA de bază|preț VCA|nacele elevatoare|prim ajutor|sesiuni viitoare|certificator PEB|coordonare securitate", "search.go": "Mergeți la primul rezultat" });
   m("it", { "search.fx_try": "Cerca «{q}»", "search.fx_list": "VCA base|prezzo VCA|piattaforme elevatrici|primo soccorso|prossime sessioni|certificatore PEB|coordinamento sicurezza", "search.go": "Vai al primo risultato" });
   m("sl", { "search.fx_try": "Iščite „{q}“", "search.fx_list": "VCA osnovni|cena VCA|dvižne ploščadi|prva pomoč|prihajajoče izvedbe|certifikator PEB|koordinacija varnosti", "search.go": "Na prvi zadetek" });
+
+  /* ---- Mode « Spotlight » (d'après Apple Spotlight, 21st.dev) : filtre « Tout », boutons de l'aperçu, libellé des
+     pastilles « Essayez » à côté de la barre (les pastilles reprennent les 4 premières suggestions de search.fx_list). ---- */
+  m("fr", { "search.scope_all": "Tout", "search.pv_open": "Voir le détail", "search.pv_call": "Appeler", "search.pv_mail": "Écrire un e-mail", "search.try": "Essayez" });
+  m("en", { "search.scope_all": "All", "search.pv_open": "View details", "search.pv_call": "Call", "search.pv_mail": "Send an email", "search.try": "Try" });
+  m("nl", { "search.scope_all": "Alles", "search.pv_open": "Details bekijken", "search.pv_call": "Bellen", "search.pv_mail": "E-mail sturen", "search.try": "Probeer" });
+  m("af", { "search.scope_all": "Alles", "search.pv_open": "Bekyk besonderhede", "search.pv_call": "Bel", "search.pv_mail": "Stuur 'n e-pos", "search.try": "Probeer" });
+  m("ar", { "search.scope_all": "الكل", "search.pv_open": "عرض التفاصيل", "search.pv_call": "اتصال", "search.pv_mail": "إرسال بريد إلكتروني", "search.try": "جرّبوا" });
+  m("bg", { "search.scope_all": "Всички", "search.pv_open": "Вижте подробностите", "search.pv_call": "Обадете се", "search.pv_mail": "Изпратете имейл", "search.try": "Опитайте" });
+  m("de", { "search.scope_all": "Alle", "search.pv_open": "Details ansehen", "search.pv_call": "Anrufen", "search.pv_mail": "E-Mail schreiben", "search.try": "Probieren Sie" });
+  m("ro", { "search.scope_all": "Toate", "search.pv_open": "Vedeți detaliile", "search.pv_call": "Sunați", "search.pv_mail": "Trimiteți un e-mail", "search.try": "Încercați" });
+  m("it", { "search.scope_all": "Tutto", "search.pv_open": "Vedi i dettagli", "search.pv_call": "Chiama", "search.pv_mail": "Scrivi un'e-mail", "search.try": "Prova" });
+  m("sl", { "search.scope_all": "Vse", "search.pv_open": "Oglejte si podrobnosti", "search.pv_call": "Pokličite", "search.pv_mail": "Pošljite e-pošto", "search.try": "Poskusite" });
 })();

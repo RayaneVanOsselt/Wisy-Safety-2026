@@ -13,6 +13,9 @@
    • Barre « suggestive », d'après « Placeholders And Vanish Input » (Aceternity UI, 21st.dev) : de vraies
      recherches du site défilent dans le champ vide, bouton d'envoi rond, et le texte saisi « se dissout » en
      particules à l'envoi (Entrée / bouton) avant d'ouvrir le premier résultat. Rien en mouvement réduit.
+   • Mode « Spotlight » (d'après Apple Spotlight, 21st.dev) : à l'ouverture, la page s'estompe derrière un voile
+     flouté ; filtres par type (Tout · Formations · Sessions…) et APERÇU du résultat actif (photo, faits, tarif
+     confirmé, boutons « Voir le détail » / « S'inscrire »). Pastilles « Essayez » à côté de la barre (grand écran).
    ========================================================================= */
 (function () {
   "use strict";
@@ -43,7 +46,7 @@
       /* Fiche riche (page dédiée) : titre complet, résumé, miniature et faits clés ; sinon accroche courte. */
       titleKey: f.fullTitleKey || f.titleKey, descKey: f.summaryKey || f.taglineKey,
       kw: f.searchKeywords || f.keywords,
-      thumb: f.thumb, factKeys: f.factKeys
+      thumb: f.thumb, factKeys: f.factKeys, image: f.image, signupUrl: f.signupUrl
     };
   });
 
@@ -51,7 +54,7 @@
      diplôme individuel, VCA Entreprise un accompagnement à la certification d'une entreprise). Tout vient du registre (`Site.services()`). */
   var SERVICES = (Site.services ? Site.services() : []).map(function (s) {
     return { id: s.id, url: s.url, titleKey: s.titleKey, descKey: s.taglineKey, kw: s.searchKeywords, thumb: s.thumb,
-      levels: s.levels, priceLabel: s.priceLabel, priceUnit: s.priceUnit, priceIndicative: s.priceIndicative };
+      levels: s.levels, priceLabel: s.priceLabel, priceUnit: s.priceUnit, priceIndicative: s.priceIndicative, image: s.image, signupUrl: s.signupUrl };
   });
 
   /* Pages du site — les ARTICLES (`kind: "article"`) forment leur propre groupe de résultats. */
@@ -102,7 +105,7 @@
       var fr = L !== "fr" && F.get ? F.get(it.id) : null;   // + mots-clés français : une saisie en français reste comprise
       var kw = (it.keywords || []).concat(it.synonyms || []);
       if (fr) kw = kw.concat(fr.keywords || [], fr.synonyms || []);
-      return { id: it.id, title: it.question, url: "faq.html#" + it.id, kw: kw };
+      return { id: it.id, title: it.question, answer: String(it.answer || "").replace(/\s+/g, " ").slice(0, 280), url: "faq.html#" + it.id, kw: kw };
     });
     var C = F.CONTACT;
     if (!C) return;
@@ -145,7 +148,7 @@
       var fmt = W.format(s, lg), full = s.status === "full" || s.seatsLeft === 0;
       var seats = full ? t("search.session_full") : (s.seatsLeft != null ? t("search.session_seats").replace("{n}", s.seatsLeft) : "");
       SESSIONS.push({
-        id: "sess-" + s.id, session: s,
+        id: "sess-" + s.id, session: s, full: full,
         title: (f ? t(f.titleKey) : s.training) + " — " + fmt.dateLong,
         sub: [fmt.time, fmt.language, seats].filter(Boolean).join(" · "),
         /* inscription directe (formation + session) ; session complète → agenda */
@@ -203,6 +206,7 @@
     clear:  '<path d="M6 6l12 12M18 6L6 18"/>',
     clock:  '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     go:     '<path class="wsy-search__shaft" d="M5 12h14"/><path d="m13 18 6-6"/><path d="m13 6 6 6"/>',
+    arrow:  '<path d="M5 12h14M13 6l6 6-6 6"/>',
     // formations (reprises du méga-menu du header)
     "vca-base":         '<path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/>',
     "vca-hierarchique": '<path d="M12 3v6M6 21v-6M18 21v-6M6 15a6 6 0 0 1 12 0"/><circle cx="12" cy="9" r="1.4"/>',
@@ -376,7 +380,7 @@
   /* -----------------------------------------------------------------------
      Construction du composant + injection dans le header sticky
      ----------------------------------------------------------------------- */
-  var root, box, input, clearBtn, goBtn, fx, kbd, panel, listbox, live, currentQuery = "", options = [], activeIdx = -1, optSeq = 0;
+  var root, box, input, clearBtn, goBtn, fx, kbd, panel, listbox, live, tries, scopes, preview, scrim, currentQuery = "", options = [], activeIdx = -1, optSeq = 0;
 
   /* Contenu de la bande. Il est AUSSI écrit tel quel dans l'en-tête de chaque page (rendu dès le premier
      affichage : ni saut de mise en page, ni barre qui « apparaît » après 2 à 3 s sur réseau lent). Ce script
@@ -384,6 +388,7 @@
      (placeholder, aria-label…) sont posés/traduits par refreshStatic(). */
   function bandHTML() {
     return '<div class="wsy-search__wrap"><div class="wsy-search__inner">' +
+      '<div class="wsy-search__tries"></div>' +
       '<div class="wsy-search__box" role="search">' +
         '<span class="wsy-search__icon">' + svg(IC.search) + "</span>" +
         '<input class="wsy-search__input" type="search" role="combobox" aria-autocomplete="list" ' +
@@ -395,7 +400,11 @@
         '<button class="wsy-search__go" type="button" disabled>' + svg(IC.go) + "</button>" +
       "</div>" +
       '<div class="wsy-search__panel">' +
-        '<div class="wsy-search__results" id="wsy-search-listbox" role="listbox"></div>' +
+        '<div class="wsy-search__scopes"></div>' +
+        '<div class="wsy-search__main">' +
+          '<div class="wsy-search__results" id="wsy-search-listbox" role="listbox"></div>' +
+          '<div class="wsy-search__preview"></div>' +
+        "</div>" +
         '<div class="wsy-search__foot"></div>' +
       "</div>" +
       '<span class="wsy-search__live" aria-live="polite"></span>' +
@@ -421,6 +430,15 @@
     kbd      = root.querySelector(".wsy-search__kbd");
     panel    = root.querySelector(".wsy-search__panel");
     listbox  = root.querySelector(".wsy-search__results");
+    tries    = root.querySelector(".wsy-search__tries");
+    scopes   = root.querySelector(".wsy-search__scopes");
+    preview  = root.querySelector(".wsy-search__preview");
+    /* Voile du mode Spotlight : au niveau du <body> (la bande a un backdrop-filter, qui piégerait un position:fixed) ;
+       l'en-tête collant (z-index 1000) reste net au-dessus. */
+    scrim = document.createElement("div");
+    scrim.className = "wsy-search-scrim";
+    scrim.setAttribute("aria-hidden", "true");
+    document.body.appendChild(scrim);
     live     = root.querySelector(".wsy-search__live");
 
     refreshStatic();
@@ -440,6 +458,12 @@
     if (goBtn) goBtn.setAttribute("aria-label", t("search.go"));
     fxList = t("search.fx_list").split("|").filter(function (x) { return x.trim(); });
     if (fx) fx.textContent = fxText();
+    if (tries) {
+      tries.setAttribute("role", "group");
+      tries.setAttribute("aria-labelledby", "wsy-try-lbl");
+      tries.innerHTML = '<span class="wsy-search__tries-lbl" id="wsy-try-lbl">' + esc(t("search.try")) + "</span>" +
+        fxList.slice(0, 4).map(function (q) { return '<button type="button" class="wsy-search__try" data-q="' + esc(q) + '">' + esc(q) + "</button>"; }).join("");
+    }
     var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
     kbd.textContent = isMac ? "⌘K" : "Ctrl K";
     root.querySelector(".wsy-search__foot").innerHTML =
@@ -456,7 +480,8 @@
     optSeq++;
     var id = "wsy-opt-" + optSeq;
     var meta = opts.meta ? '<span class="wsy-search__meta">' + esc(opts.meta) + "</span>" : "";
-    var attrs = 'id="' + id + '" role="option" aria-selected="false" class="wsy-search__item' + (opts.facts ? " wsy-search__item--rich" : "") + (opts.faq ? " wsy-search__item--faq" : "") + '"';
+    var attrs = 'id="' + id + '" role="option" aria-selected="false" class="wsy-search__item' + (opts.facts ? " wsy-search__item--rich" : "") + (opts.faq ? " wsy-search__item--faq" : "") + '"' +
+      (opts.pv ? ' data-pv="' + (pvList.push(opts.pv) - 1) + '"' : "");
     var data = opts.recent ? ' data-recent="' + esc(opts.recent) + '"' : ' href="' + esc(opts.href) + '"';
     var tag = opts.recent ? "div" : "a";
     // Résultat riche : miniature (décorative : le titre porte le sens) à la place du pictogramme
@@ -483,6 +508,45 @@
   // Page dédiée si la formation en a une (registre central), sinon ancre du catalogue
   function fUrl(f) { return f.url || "formations.html#" + f.id; }
 
+  /* -----------------------------------------------------------------------
+     APERÇU (panneau de droite) : ce que l'option active contient — photo, faits, tarif CONFIRMÉ (mêmes règles que la
+     liste : « par personne » seulement, « indicatif » signalé), boutons « Voir le détail » / « S'inscrire ».
+     ----------------------------------------------------------------------- */
+  var pvList = [], pvDefault = null, pvShown = -2;
+  function perPerson(x) {
+    return x.priceLabel && x.priceUnit === "participant" ? x.priceLabel + " " + t("search.per_person") + (x.priceIndicative ? " · " + t("search.indicative") : "") : "";
+  }
+  function pvFormation(f) {
+    return { label: t(CATEGORIES[f.cat].labelKey), title: t(f.titleKey), desc: t(f.descKey), img: f.image, icon: IC[f.id] || IC.page_formations,
+      facts: (f.factKeys || []).map(t), price: perPerson(f), href: fUrl(f), signup: f.signupUrl };
+  }
+  function pvService(x) {
+    return { label: t("search.group_services"), title: t(x.titleKey), desc: t(x.descKey), img: x.image, icon: IC.service,
+      facts: x.levels, price: perPerson(x), href: x.url, signup: x.signupUrl };
+  }
+  function pvHTML(p) {
+    var btn = function (href, label, ghost) {
+      return '<a class="wsy-search__pv-btn' + (ghost ? " wsy-search__pv-btn--ghost" : "") + '" href="' + esc(href) + '">' + esc(label) + (ghost ? "" : svg(IC.arrow)) + "</a>";
+    };
+    return '<div class="wsy-search__pv">' +
+      (p.img ? '<span class="wsy-search__pv-media"><img src="' + esc(p.img) + '" alt="" width="640" height="400" decoding="async"></span>'
+             : '<span class="wsy-search__pv-media wsy-search__pv-media--ic">' + svg(p.icon || IC.search) + "</span>") +
+      (p.label ? '<span class="wsy-search__pv-kicker">' + esc(p.label) + "</span>" : "") +
+      '<span class="wsy-search__pv-title">' + esc(p.title) + "</span>" +
+      (p.desc ? '<span class="wsy-search__pv-desc">' + esc(p.desc) + "</span>" : "") +
+      (p.facts && p.facts.length ? '<span class="wsy-search__pv-facts">' + p.facts.map(function (x) { return "<span>" + esc(x) + "</span>"; }).join("") + "</span>" : "") +
+      (p.price ? '<span class="wsy-search__pv-price">' + esc(p.price) + "</span>" : "") +
+      (p.href || p.signup ? '<span class="wsy-search__pv-cta">' + (p.href ? btn(p.href, p.cta || t("search.pv_open")) : "") + (p.signup ? btn(p.signup, t("header.register"), true) : "") + "</span>" : "") +
+    "</div>";
+  }
+  function showPreview(i) {
+    if (!preview) return;
+    var el = options[i], k = el && el.hasAttribute("data-pv") ? +el.getAttribute("data-pv") : -1, p = k >= 0 ? pvList[k] : pvDefault;
+    if (k === pvShown) return;
+    pvShown = k;
+    preview.innerHTML = p ? pvHTML(p) : "";
+  }
+
   function renderFormationItems(list, terms) {
     return list.map(function (f) {
       return itemHTML({
@@ -492,6 +556,7 @@
         meta: t(CATEGORIES[f.cat].labelKey),
         href: fUrl(f),
         thumb: f.thumb,
+        pv: pvFormation(f),
         // faits clés (durée · format · langues) — uniquement pour les fiches qui en ont ; le tarif (registre) s'y ajoute
         // seulement s'il est confirmé « par personne » (aucune mention HT / TTC inventée)
         facts: f.factKeys ? f.factKeys.map(function (k) { return esc(t(k)); })
@@ -510,14 +575,16 @@
         sub: highlight(t(x.descKey), terms),
         href: x.url,
         thumb: x.thumb,
+        pv: pvService(x),
         facts: x.levels.map(esc)
           .concat(x.priceLabel && x.priceUnit === "participant" ? [esc(x.priceLabel + " " + t("search.per_person") + (x.priceIndicative ? " · " + t("search.indicative") : ""))] : []).join(" · ")
       });
     }).join("");
   }
 
+  var scope = "all";                       // filtre actif : all | formations | services | sessions | pages | help
   function render(query) {
-    optSeq = 0; grpSeq = 0;
+    optSeq = 0; grpSeq = 0; pvList = []; pvShown = -2; pvDefault = null;
     currentQuery = query;
     var terms = fold(query).split(/\s+/).filter(Boolean);
     var html = "";
@@ -527,7 +594,7 @@
       var rec = recents();
       if (rec.length) {
         var recItems = rec.map(function (q) {
-          return itemHTML({ icon: IC.clock, title: esc(q), recent: q });
+          return itemHTML({ icon: IC.clock, title: esc(q), recent: q, pv: { label: t("search.recent"), title: q, icon: IC.clock } });
         }).join("");
         var clearBtnHTML = ' <button type="button" class="wsy-search__recent-clear" data-clear-recent style="margin-inline-start:auto;font:inherit;font-size:var(--fs-micro,.75rem);letter-spacing:normal;text-transform:none;color:var(--epinette,#1F6F64);cursor:pointer">' + esc(t("search.recent_clear")) + "</button>";
         html += groupHTML(t("search.recent"), recItems, clearBtnHTML);
@@ -535,7 +602,7 @@
       // Accès rapides : chaque lien est une OPTION (navigable aux flèches), pas un bouton hors du clavier
       if (QUICK.length) {
         html += groupHTML(t("search.popular"), QUICK.map(function (q) {
-          return itemHTML({ icon: IC[q.icon], title: esc(t(q.labelKey)), href: q.href });
+          return itemHTML({ icon: IC[q.icon], title: esc(t(q.labelKey)), href: q.href, pv: { label: t("search.popular"), title: t(q.labelKey), href: q.href, icon: IC[q.icon] } });
         }).join(""));
       }
       var feat = FEATURED.map(function (id) {
@@ -543,6 +610,8 @@
       }).filter(Boolean);
       html += groupHTML(t("search.suggestions"), renderFormationItems(feat, []));
       if (SERVICES.length) html += groupHTML(t("search.group_services"), renderServiceItems(SERVICES, []));
+      if (scopes) scopes.innerHTML = "";
+      pvDefault = feat.length ? pvFormation(feat[0]) : null;       // aperçu d'accueil : la formation phare
       listbox.innerHTML = html;
       announce("");
       collectOptions();
@@ -553,6 +622,7 @@
     // ---- Résultats ----
     var res = runSearch(query);
     var total = res.formations.length + res.services.length + res.categories.length + res.pages.length + res.articles.length + res.sessions.length + res.infos.length + res.faqs.length;
+    if (scopes) scopes.innerHTML = "";          // filtres reposés plus bas s'il y a des résultats
 
     if (!total && (extras === "loading" || sessionsState === "loading")) {
       // Les contenus à la demande (Centre d'aide, sessions) arrivent : on le dit plutôt que d'annoncer « aucun résultat ».
@@ -581,49 +651,70 @@
       return;
     }
 
+    /* Filtres par type (pastilles au-dessus des résultats) : seuls les types présents, avec leur nombre. */
+    var counts = { all: total, formations: res.formations.length + res.categories.length, services: res.services.length,
+      sessions: res.sessions.length, pages: res.pages.length + res.articles.length + res.infos.length, help: res.faqs.length };
+    var SCOPE_LABEL = { all: "search.scope_all", formations: "search.group_formations", services: "search.group_services",
+      sessions: "search.group_sessions", pages: "search.group_pages", help: "search.group_faq" };
+    if (!counts[scope]) scope = "all";
+    if (scopes) scopes.innerHTML = Object.keys(SCOPE_LABEL).filter(function (k) { return counts[k]; }).map(function (k) {
+      return '<button type="button" class="wsy-search__scope" data-scope="' + k + '" aria-pressed="' + (k === scope) + '">' +
+        esc(t(SCOPE_LABEL[k])) + '<span class="wsy-search__scope-n">' + counts[k] + "</span></button>";
+    }).join("");
+    var show = function (k) { return scope === "all" || scope === k; };
+
     /* Formations et services : deux groupes distincts, dans l'ordre de pertinence (voir runSearch). */
-    var frmHTML = res.formations.length ? groupHTML(t("search.group_formations"), renderFormationItems(res.formations, res.terms)) : "";
-    var svcHTML = res.services.length ? groupHTML(t("search.group_services"), renderServiceItems(res.services, res.terms)) : "";
+    var frmHTML = res.formations.length && show("formations") ? groupHTML(t("search.group_formations"), renderFormationItems(res.formations, res.terms)) : "";
+    var svcHTML = res.services.length && show("services") ? groupHTML(t("search.group_services"), renderServiceItems(res.services, res.terms)) : "";
     html += res.servicesFirst ? svcHTML + frmHTML : frmHTML + svcHTML;
-    if (res.sessions.length) {
+    if (res.sessions.length && show("sessions")) {
       // Sessions publiées (dates lues dans js/sessions.js) : titre = formation + date ; lien = inscription à CETTE session
       html += groupHTML(t("search.group_sessions"), res.sessions.map(function (e) {
-        return itemHTML({ icon: IC.session, title: highlight(e.title, res.terms), sub: highlight(e.sub, res.terms), href: e.url });
-      }).join("") + itemHTML({ icon: IC.page_agenda, title: esc(t("search.sessions_all")), href: "agenda.html" }));
+        return itemHTML({ icon: IC.session, title: highlight(e.title, res.terms), sub: highlight(e.sub, res.terms), href: e.url,
+          pv: { label: t("search.group_sessions"), title: e.title, desc: e.sub, href: e.url, icon: IC.session, cta: e.full ? "" : t("header.register") } });
+      }).join("") + itemHTML({ icon: IC.page_agenda, title: esc(t("search.sessions_all")), href: "agenda.html",
+        pv: { label: t("search.group_sessions"), title: t("search.sessions_all"), desc: t("search.page_agenda_d"), href: "agenda.html", icon: IC.page_agenda } }));
     }
-    if (res.articles.length) {
+    if (res.articles.length && show("pages")) {
       html += groupHTML(t("search.group_articles"), res.articles.map(function (p) {
-        return itemHTML({ icon: IC.page_article, title: highlight(t(p.titleKey), res.terms), sub: highlight(t(p.descKey), res.terms), href: p.url });
+        return itemHTML({ icon: IC.page_article, title: highlight(t(p.titleKey), res.terms), sub: highlight(t(p.descKey), res.terms), href: p.url,
+          pv: { label: t("search.group_articles"), title: t(p.titleKey), desc: t(p.descKey), href: p.url, icon: IC.page_article } });
       }).join(""));
     }
-    if (res.categories.length) {
+    if (res.categories.length && show("formations")) {
       html += groupHTML(t("search.group_categories"), res.categories.map(function (c) {
         return itemHTML({
           icon: IC["cat_" + c.id],
           title: highlight(t(c.labelKey), res.terms),
           sub: c.count + " " + t(c.count === 1 ? "search.formation_word" : "search.formations_word"),
-          href: "formations.html?cat=" + c.filter
+          href: "formations.html?cat=" + c.filter,
+          pv: { label: t("search.group_categories"), title: t(c.labelKey), desc: c.count + " " + t(c.count === 1 ? "search.formation_word" : "search.formations_word"),
+            href: "formations.html?cat=" + c.filter, icon: IC["cat_" + c.id] }
         });
       }).join(""));
     }
-    if (res.pages.length) {
+    if (res.pages.length && show("pages")) {
       html += groupHTML(t("search.group_pages"), res.pages.map(function (p) {
         return itemHTML({
           icon: IC["page_" + p.id],
           title: highlight(t(p.titleKey), res.terms),
           sub: highlight(t(p.descKey), res.terms),
-          href: p.url
+          href: p.url,
+          pv: { label: t("search.group_pages"), title: t(p.titleKey), desc: t(p.descKey), href: p.url, icon: IC["page_" + p.id] }
         });
       }).join(""));
     }
-    if (res.infos.length) {
+    if (res.infos.length && show("pages")) {
       html += groupHTML(t("search.group_info"), res.infos.map(function (e) {
-        return itemHTML({ icon: IC[e.id], title: highlight(titleOf(e), res.terms), sub: highlight(subOf(e), res.terms), href: e.url });
+        return itemHTML({ icon: IC[e.id], title: highlight(titleOf(e), res.terms), sub: highlight(subOf(e), res.terms), href: e.url,
+          pv: { label: t("search.group_info"), title: titleOf(e), desc: subOf(e), href: e.url, icon: IC[e.id],
+            cta: e.id === "info-phone" ? t("search.pv_call") : e.id === "info-email" ? t("search.pv_mail") : "" } });
       }).join(""));
     }
-    if (res.faqs.length) {
+    if (res.faqs.length && show("help")) {
       html += groupHTML(t("search.group_faq"), res.faqs.map(function (e) {
-        return itemHTML({ icon: IC.page_faq, title: highlight(e.title, res.terms), href: e.url, faq: true });
+        return itemHTML({ icon: IC.page_faq, title: highlight(e.title, res.terms), href: e.url, faq: true,
+          pv: { label: t("search.group_faq"), title: e.title, desc: e.answer, href: e.url, icon: IC.page_faq } });
       }).join(""));
     }
 
@@ -648,6 +739,7 @@
       options[activeIdx].setAttribute("aria-selected", "false");
     }
     activeIdx = i;
+    showPreview(i);
     if (i < 0 || !options[i]) { input.removeAttribute("aria-activedescendant"); return; }
     var el = options[i];
     el.classList.add("is-active");
@@ -668,6 +760,7 @@
   function open() {
     if (root.classList.contains("is-open")) return;
     root.classList.add("is-open", "is-entering");   // résultats en cascade, seulement à l'ouverture
+    scrim.classList.add("is-on");
     clearTimeout(enterTimer);
     enterTimer = setTimeout(function () { root.classList.remove("is-entering"); }, 600);
     input.setAttribute("aria-expanded", "true");
@@ -675,6 +768,8 @@
   function close() {
     if (!root.classList.contains("is-open")) return;
     root.classList.remove("is-open");
+    scrim.classList.remove("is-on");
+    scope = "all";
     input.setAttribute("aria-expanded", "false");
     input.removeAttribute("aria-activedescendant");
     activeIdx = -1;
@@ -864,9 +959,10 @@
     debounceTimer = setTimeout(function () { render(v.trim()); }, 110);
   }
 
+  var quietFocus = false;
   function wire() {
     input.addEventListener("input", onInput);
-    input.addEventListener("focus", function () { ensureExtras(); ensureSessions(); open(); render(input.value.trim()); fxStart(); });
+    input.addEventListener("focus", function () { ensureExtras(); ensureSessions(); if (quietFocus) { quietFocus = false; return; } open(); render(input.value.trim()); fxStart(); });
 
     input.addEventListener("keydown", function (e) {
       switch (e.key) {
@@ -880,7 +976,7 @@
           else if (input.value) { input.value = ""; syncText(); render(""); }
           else { input.blur(); }
           break;
-        case "Tab": close(); break;
+        case "Tab": if (e.shiftKey || !scopes || !scopes.firstChild) close(); break;
       }
     });
 
@@ -888,7 +984,20 @@
     panel.addEventListener("mousedown", function (e) {
       if (e.target.closest("a, button, [role=option]")) e.preventDefault();
     });
+    /* Échap depuis un filtre ou un bouton de l'aperçu : ferme et rend le focus au champ (sans le rouvrir) */
+    root.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && e.target !== input && root.classList.contains("is-open")) { close(); quietFocus = true; input.focus(); }
+    });
+    if (tries) tries.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-q]");
+      if (!b) return;
+      input.value = b.getAttribute("data-q"); syncText();
+      quietFocus = document.activeElement !== input; input.focus(); quietFocus = false;
+      ensureExtras(); ensureSessions(); open(); render(input.value.trim());
+    });
     panel.addEventListener("click", function (e) {
+      var sc = e.target.closest("[data-scope]");
+      if (sc) { scope = sc.getAttribute("data-scope"); render(input.value.trim()); return; }
       var clearR = e.target.closest("[data-clear-recent]");
       if (clearR) { clearRecents(); render(""); input.focus(); return; }
       var chip = e.target.closest(".wsy-search__chip");
@@ -919,9 +1028,11 @@
     root.addEventListener("focusout", function (e) {
       if (!root.contains(e.relatedTarget)) close();
     });
-    // Ferme au clic à l'extérieur
+    // Ferme au clic à l'extérieur. composedPath() : chemin figé au moment du clic — un bouton du panneau remplacé
+    // pendant le clic (filtres, « Effacer » des récents) n'est plus dans le document mais bien DANS le composant.
     document.addEventListener("click", function (e) {
-      if (!root.contains(e.target)) close();
+      var path = e.composedPath ? e.composedPath() : [e.target];
+      if (path.indexOf(root) < 0 && !root.contains(e.target)) close();
     });
 
     // Raccourcis globaux : ⌘K / Ctrl+K, et « / » (hors saisie)

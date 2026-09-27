@@ -55,7 +55,7 @@ test("accès rapides (état vide) : VCA Base, prix, dates, examen, adresse — d
     LANGS.forEach((l) => assert.ok(I18N[l]["search." + k], l + " " + k));
   });
   [["#apercu", "apercu"], ["#disponibilites", "disponibilites"], ["#examen", "examen"]].forEach(([a, id]) => { assert.ok(SRC.includes('"' + a + '"'), a); assert.match(vca, new RegExp('id="' + id + '"')); });
-  assert.match(SRC, /itemHTML\(\{ icon: IC\[q\.icon\], title: esc\(t\(q\.labelKey\)\), href: q\.href \}\)/, "chaque accès rapide est une option (role=option)");
+  assert.match(SRC, /itemHTML\(\{ icon: IC\[q\.icon\], title: esc\(t\(q\.labelKey\)\), href: q\.href[,}]/, "chaque accès rapide est une option (role=option)");
 });
 
 test("tarif : affiché dans les résultats depuis le registre, uniquement « par personne » confirmé — jamais une mention HT / TTC inventée", () => {

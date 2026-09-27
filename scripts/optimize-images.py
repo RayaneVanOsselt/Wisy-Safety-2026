@@ -29,6 +29,7 @@ Dépendances : Pillow (WebP + AVIF). Aucune autre. Sortie déterministe (mêmes 
   VCA Base        assets/originaux/vca-base/article-*.webp → assets/images/vca-base/article-*-640.webp · -1024.webp
                   (+ miniature de recherche + 3 cartes de partage 1200×630 : page VCA Base et ses 2 articles)
   VCA Entreprise  assets/originaux/vca-entreprise/poster-frame.jpg → assets/images/vca-entreprise/poster-{640,1024,1600}.{avif,webp}
+                  + thumb-192.webp (miniature des résultats de recherche, comme VCA Base / BEPS)
                   assets/originaux/vca-entreprise/mascotte.png → assets/images/vca-entreprise/mascotte-{240,480}.{avif,webp}
                   (+ carte de partage 1200×630 ; les 2 versions MP4 du film se font avec scripts/encode-video.swift,
                    voir docs/README-VCA-ENTREPRISE.md)
@@ -365,6 +366,13 @@ def vca_entreprise():
                     size = save(im, dst, quality=q)
                     report(f"affiche VCA Entreprise {w} {ext}", VCAE_POSTER, size, f"{im.width}×{im.height}")
         vcae_card(crop, "assets/images/partage/vca-entreprise-1200x630.jpg", VCAE_POSTER)
+        # Miniature des résultats de recherche (registre js/trainings-data.js → vcaEntreprise.thumb) — même traitement que
+        # VCA Base / BEPS. Elle manquait : la recherche affichait une image cassée pour « VCA Entreprise ».
+        dst = f"{VCAE_OUT}/thumb-192.webp"
+        if need(dst, VCAE_POSTER):
+            im = fit_width(crop, 192)
+            size = save_webp(im, dst, quality=78)
+            report("miniature VCA Entreprise", VCAE_POSTER, size, f"{im.width}×{im.height}")
     if os.path.exists(VCAE_MASCOT):
         mascot = Image.open(VCAE_MASCOT).convert("RGBA")
         # marges transparentes retirées : la mise en page se cale sur le personnage, pas sur le fichier

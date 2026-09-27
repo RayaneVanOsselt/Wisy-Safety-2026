@@ -10,6 +10,9 @@
      téléphone, e-mail, horaires) : chargés À LA DEMANDE (js/faq-data.js) au premier usage de
      la barre — jamais sur le chemin critique de la page.
    • Combobox accessible (WAI-ARIA), navigation clavier, ⌘K / Ctrl+K, i18n live.
+   • Barre « suggestive », d'après « Placeholders And Vanish Input » (Aceternity UI, 21st.dev) : de vraies
+     recherches du site défilent dans le champ vide, bouton d'envoi rond, et le texte saisi « se dissout » en
+     particules à l'envoi (Entrée / bouton) avant d'ouvrir le premier résultat. Rien en mouvement réduit.
    ========================================================================= */
 (function () {
   "use strict";
@@ -199,6 +202,7 @@
     search: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
     clear:  '<path d="M6 6l12 12M18 6L6 18"/>',
     clock:  '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    go:     '<path class="wsy-search__shaft" d="M5 12h14"/><path d="m13 18 6-6"/><path d="m13 6 6 6"/>',
     // formations (reprises du méga-menu du header)
     "vca-base":         '<path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/>',
     "vca-hierarchique": '<path d="M12 3v6M6 21v-6M18 21v-6M6 15a6 6 0 0 1 12 0"/><circle cx="12" cy="9" r="1.4"/>',
@@ -372,7 +376,7 @@
   /* -----------------------------------------------------------------------
      Construction du composant + injection dans le header sticky
      ----------------------------------------------------------------------- */
-  var root, box, input, clearBtn, kbd, panel, listbox, live, currentQuery = "", options = [], activeIdx = -1, optSeq = 0;
+  var root, box, input, clearBtn, goBtn, fx, kbd, panel, listbox, live, currentQuery = "", options = [], activeIdx = -1, optSeq = 0;
 
   /* Contenu de la bande. Il est AUSSI écrit tel quel dans l'en-tête de chaque page (rendu dès le premier
      affichage : ni saut de mise en page, ni barre qui « apparaît » après 2 à 3 s sur réseau lent). Ce script
@@ -385,8 +389,10 @@
         '<input class="wsy-search__input" type="search" role="combobox" aria-autocomplete="list" ' +
           'aria-expanded="false" aria-haspopup="listbox" aria-controls="wsy-search-listbox" ' +
           'autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />' +
+        '<span class="wsy-search__fx" aria-hidden="true"></span>' +
         '<kbd class="wsy-search__kbd"></kbd>' +
         '<button class="wsy-search__clear" type="button" tabindex="-1">' + svg(IC.clear) + "</button>" +
+        '<button class="wsy-search__go" type="button" disabled>' + svg(IC.go) + "</button>" +
       "</div>" +
       '<div class="wsy-search__panel">' +
         '<div class="wsy-search__results" id="wsy-search-listbox" role="listbox"></div>' +
@@ -410,6 +416,8 @@
     box      = root.querySelector(".wsy-search__box");
     input    = root.querySelector(".wsy-search__input");
     clearBtn = root.querySelector(".wsy-search__clear");
+    goBtn    = root.querySelector(".wsy-search__go");
+    fx       = root.querySelector(".wsy-search__fx");
     kbd      = root.querySelector(".wsy-search__kbd");
     panel    = root.querySelector(".wsy-search__panel");
     listbox  = root.querySelector(".wsy-search__results");
@@ -417,6 +425,8 @@
 
     refreshStatic();
     wire();
+    syncText();                              // valeur restaurée par le navigateur (retour arrière) : état cohérent
+    if (fx && !reduceMotion) { root.classList.add("is-fx"); fxStart(); }
     return true;
   }
 
@@ -427,6 +437,9 @@
     input.setAttribute("aria-label", t("search.aria_label"));
     box.setAttribute("aria-label", t("search.aria_label"));
     clearBtn.setAttribute("aria-label", t("search.clear"));
+    if (goBtn) goBtn.setAttribute("aria-label", t("search.go"));
+    fxList = t("search.fx_list").split("|").filter(function (x) { return x.trim(); });
+    if (fx) fx.textContent = fxText();
     var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
     kbd.textContent = isMac ? "⌘K" : "Ctrl K";
     root.querySelector(".wsy-search__foot").innerHTML =
@@ -627,6 +640,7 @@
      ----------------------------------------------------------------------- */
   function collectOptions() {
     options = Array.prototype.slice.call(listbox.querySelectorAll('[role="option"]'));
+    options.slice(0, 10).forEach(function (o, i) { o.style.setProperty("--i", i); });
   }
   function setActive(i) {
     if (options[activeIdx]) {
@@ -650,9 +664,12 @@
   /* -----------------------------------------------------------------------
      Ouverture / fermeture
      ----------------------------------------------------------------------- */
+  var enterTimer = null;
   function open() {
     if (root.classList.contains("is-open")) return;
-    root.classList.add("is-open");
+    root.classList.add("is-open", "is-entering");   // résultats en cascade, seulement à l'ouverture
+    clearTimeout(enterTimer);
+    enterTimer = setTimeout(function () { root.classList.remove("is-entering"); }, 600);
     input.setAttribute("aria-expanded", "true");
   }
   function close() {
@@ -735,15 +752,103 @@
     var recent = el.getAttribute("data-recent");
     if (recent != null) {
       input.value = recent;
-      root.classList.toggle("has-text", recent.trim().length > 0);
+      syncText();
       render(recent); input.focus(); return;
     }
     var href = el.getAttribute("href");
     if (href) go(href);
   }
-  function selectActive() {
+  /* Entrée ou bouton d'envoi : l'option active, sinon le premier résultat. Le texte saisi se dissout d'abord. */
+  function submit() {
+    var q = input.value.trim();
+    if (q && q !== currentQuery) { clearTimeout(debounceTimer); render(q); }   // la liste suit la dernière frappe
     var el = options[activeIdx] || options[0];
-    selectByEl(el);
+    if (!el) { open(); input.focus(); return; }                                // aucun résultat : le panneau l'explique
+    if (!q || el.getAttribute("data-recent") != null) { selectByEl(el); return; }
+    vanish(function () { selectByEl(el); });
+  }
+
+  /* -----------------------------------------------------------------------
+     Dissolution (d'après « Placeholders And Vanish Input », Aceternity UI) : le texte est dessiné sur un canvas,
+     échantillonné en particules, puis balayé de la fin vers le début du texte — ~0,6 s, puis la suite.
+     ----------------------------------------------------------------------- */
+  var dust = null, vanishing = false;
+  function vanish(done) {
+    if (vanishing) return;
+    var text = input.value, cs = getComputedStyle(input), S = 2, W = input.clientWidth, H = input.clientHeight;
+    if (reduceMotion || !text.trim() || !W) { done(); return; }
+    var pts = [], rtl = cs.direction === "rtl", ctx;
+    try {
+      if (!dust) { dust = document.createElement("canvas"); dust.className = "wsy-search__dust"; dust.setAttribute("aria-hidden", "true"); box.appendChild(dust); }
+      dust.width = W * S; dust.height = H * S; dust.style.width = W + "px"; dust.style.height = H + "px";
+      ctx = dust.getContext("2d");
+      ctx.font = cs.fontWeight + " " + parseFloat(cs.fontSize) * S + "px " + cs.fontFamily;
+      ctx.fillStyle = cs.color; ctx.textBaseline = "middle"; ctx.textAlign = rtl ? "right" : "left";
+      ctx.fillText(text, (rtl ? dust.width : 0) - input.scrollLeft * S, dust.height / 2);   // champ défilé : même décalage
+      var d = ctx.getImageData(0, 0, dust.width, dust.height).data;
+      for (var y = 0; y < dust.height; y += S) for (var x = 0; x < dust.width; x += S) {
+        var i = (y * dust.width + x) * 4;
+        if (d[i + 3] > 80) pts.push({ x: x, y: y, r: S, c: "rgba(" + d[i] + "," + d[i + 1] + "," + d[i + 2] + "," + (d[i + 3] / 255).toFixed(2) + ")" });
+      }
+    } catch (e) { pts = []; }
+    if (!pts.length) { done(); return; }
+    vanishing = true;
+    root.classList.add("is-vanishing");                        // le vrai texte s'efface, les particules prennent le relais
+    var edge = pts.reduce(function (m, p) { return rtl ? Math.min(m, p.x) : Math.max(m, p.x); }, rtl ? Infinity : 0);
+    var step = (rtl ? 1 : -1) * Math.max(16, dust.width / 28), t0 = performance.now(), ended = false;
+    function finish() {                                       // une seule fois : fin d'animation OU filet de sécurité
+      if (ended) return;
+      ended = true; clearTimeout(safety);
+      ctx.clearRect(0, 0, dust.width, dust.height);
+      vanishing = false;
+      input.value = ""; root.classList.remove("is-vanishing"); syncText();
+      done();
+    }
+    var safety = setTimeout(finish, 1100);                    // onglet masqué : requestAnimationFrame suspendu, on n'attend pas
+    (function frame(now) {
+      if (ended) return;
+      ctx.clearRect(0, 0, dust.width, dust.height);
+      pts = pts.filter(function (p) {
+        if (rtl ? p.x <= edge : p.x >= edge) { p.x += Math.random() > .5 ? S : -S; p.y += Math.random() > .5 ? S : -S; p.r -= .16 * Math.random() * S; }
+        if (p.r <= 0) return false;
+        ctx.fillStyle = p.c; ctx.fillRect(p.x, p.y, p.r, p.r);
+        return true;
+      });
+      edge += step;
+      if (pts.length && now - t0 < 900) requestAnimationFrame(frame); else finish();
+    })(t0);
+  }
+
+  /* -----------------------------------------------------------------------
+     Suggestions animées : de vraies recherches du site (search.fx_list) défilent dans le champ vide toutes les 3 s —
+     deux tours après le chargement, puis tant que le champ a le focus. Mouvement réduit : texte fixe (placeholder natif).
+     ----------------------------------------------------------------------- */
+  var fxList = [], fxI = -1, fxTimer = 0, fxTurns = 0;
+  function fxText() { return fxI < 0 || !fxList.length ? t("search.placeholder") : t("search.fx_try").replace("{q}", fxList[fxI % fxList.length]); }
+  function fxSwap() {
+    fx.classList.add("is-out");
+    setTimeout(function () {
+      fx.textContent = fxText();
+      fx.classList.remove("is-out"); fx.classList.add("is-in");
+      void fx.offsetWidth;
+      fx.classList.remove("is-in");
+    }, 280);
+  }
+  function fxTick() {
+    if (document.hidden || root.classList.contains("has-text")) return;
+    if (document.activeElement !== input && fxTurns >= 2) { fxStop(); return; }
+    fxI = (fxI + 1) % fxList.length;
+    if (fxI === fxList.length - 1) fxTurns++;
+    fxSwap();
+  }
+  function fxStart() { if (fx && !reduceMotion && fxList.length && !fxTimer) fxTimer = setInterval(fxTick, 3000); }
+  function fxStop() { clearInterval(fxTimer); fxTimer = 0; if (fxI >= 0) { fxI = -1; fxSwap(); } }
+
+  /* État « texte saisi » : croix d'effacement, bouton d'envoi, suggestions masquées */
+  function syncText() {
+    var has = input.value.trim().length > 0;
+    root.classList.toggle("has-text", has);
+    if (goBtn) goBtn.disabled = !has;
   }
 
   /* -----------------------------------------------------------------------
@@ -752,7 +857,8 @@
   var debounceTimer = null;
   function onInput() {
     var v = input.value;
-    root.classList.toggle("has-text", v.trim().length > 0);
+    if (vanishing) return;
+    syncText();
     open();
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(function () { render(v.trim()); }, 110);
@@ -760,18 +866,18 @@
 
   function wire() {
     input.addEventListener("input", onInput);
-    input.addEventListener("focus", function () { ensureExtras(); ensureSessions(); open(); render(input.value.trim()); });
+    input.addEventListener("focus", function () { ensureExtras(); ensureSessions(); open(); render(input.value.trim()); fxStart(); });
 
     input.addEventListener("keydown", function (e) {
       switch (e.key) {
         case "ArrowDown": e.preventDefault(); open(); move(1); break;
         case "ArrowUp":   e.preventDefault(); open(); move(-1); break;
         case "Enter":
-          if (root.classList.contains("is-open") && options.length) { e.preventDefault(); selectActive(); }
+          if (root.classList.contains("is-open") && options.length) { e.preventDefault(); submit(); }
           break;
         case "Escape":
           if (root.classList.contains("is-open")) { e.preventDefault(); close(); }
-          else if (input.value) { input.value = ""; root.classList.remove("has-text"); render(""); }
+          else if (input.value) { input.value = ""; syncText(); render(""); }
           else { input.blur(); }
           break;
         case "Tab": close(); break;
@@ -802,8 +908,12 @@
 
     clearBtn.addEventListener("mousedown", function (e) { e.preventDefault(); });
     clearBtn.addEventListener("click", function () {
-      input.value = ""; root.classList.remove("has-text"); render(""); input.focus();
+      input.value = ""; syncText(); render(""); input.focus();
     });
+    if (goBtn) {
+      goBtn.addEventListener("mousedown", function (e) { e.preventDefault(); });   // le focus reste dans le champ
+      goBtn.addEventListener("click", function () { open(); submit(); });
+    }
 
     // Ferme si le focus quitte complètement le composant (Tab sortant)
     root.addEventListener("focusout", function (e) {

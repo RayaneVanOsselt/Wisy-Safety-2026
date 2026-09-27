@@ -38,6 +38,10 @@ WisyFAQ.register("de", {
   "contact": {
    "label": "Kontakt & Unterstützung",
    "tagline": "Uns erreichen, Öffnungszeiten und Online-Assistent"
+  },
+  "coordination": {
+   "label": "Sicherheits- und Gesundheitskoordination",
+   "tagline": "Aufträge, Sicherheits- und Gesundheitsplan, Dokumentation für spätere Eingriffe und Koordinationsanfrage"
   }
  },
  "actions": {
@@ -47,7 +51,8 @@ WisyFAQ.register("de", {
   "agenda": "Termine ansehen",
   "nacelle": "Schulung Hubarbeitsbühnen entdecken",
   "vca": "Schulung VCA Grundlagen entdecken",
-  "assistant": "Frage an den Assistenten stellen"
+  "assistant": "Frage an den Assistenten stellen",
+  "coordination": "WiSy Coordination entdecken"
  },
  "popular": [
   {
@@ -735,6 +740,91 @@ WisyFAQ.register("de", {
     "virtueller assistent",
     "wisy",
     "bot"
+   ]
+  },
+  "faq-coordination-quest-ce-que": {
+   "question": "Was ist WiSy Coordination?",
+   "answer": "WiSy Coordination ist der Bereich von Wisy Safety, der sich der Sicherheits- und Gesundheitskoordination auf zeitlich begrenzten oder ortsveränderlichen Baustellen widmet.\n\nWir begleiten Bauherren, Architekten und Unternehmen bei der Organisation der Prävention: Sicherheits- und Gesundheitsplan, Koordination der Beteiligten, Baustellenbesuche und Dokumentation für spätere Eingriffe zum Projektabschluss.\n\nDie vollständige Vorgehensweise finden Sie auf der Seite WiSy Coordination.",
+   "keywords": [
+    "wisy coordination",
+    "koordination",
+    "sicherheits und gesundheitskoordination",
+    "was ist wisy coordination"
+   ],
+   "synonyms": [
+    "was ist wisy coordination",
+    "wisy coordination vorstellen",
+    "baustellenkoordination"
+   ]
+  },
+  "faq-coordination-pss": {
+   "question": "Was ist ein Sicherheits- und Gesundheitsplan?",
+   "answer": "Der Sicherheits- und Gesundheitsplan erfasst die Risiken einer Baustelle und die umzusetzenden Präventionsmaßnahmen, bereits ab der Planungsphase des Projekts.\n\nEr wird vom Sicherheits- und Gesundheitskoordinator gemeinsam mit dem Bauherrn und den Beteiligten erstellt und aktualisiert und während der gesamten Bauzeit weiterverfolgt.\n\nRechtsgrundlage: der belgische Königliche Erlass vom 25. Januar 2001 über zeitlich begrenzte oder ortsveränderliche Baustellen.",
+   "keywords": [
+    "sicherheits und gesundheitsplan",
+    "was ist ein sicherheitsplan",
+    "gesundheitsplan baustelle"
+   ],
+   "synonyms": [
+    "definition sicherheitsplan",
+    "was bedeutet der sicherheitsplan",
+    "risikoplan baustelle"
+   ]
+  },
+  "faq-coordination-diu": {
+   "question": "Was ist eine Dokumentation für spätere Eingriffe (DIU)?",
+   "answer": "Die Dokumentation für spätere Eingriffe fasst am Ende der Bauarbeiten die Informationen zusammen, die für die Sicherheit künftiger Arbeiten am Bauwerk erforderlich sind: Instandhaltung, Reparatur, Umbau oder Abriss.\n\nSie wird vom Sicherheits- und Gesundheitskoordinator erstellt und dem Bauherrn übergeben, der sie aufbewahren und an jeden künftigen Beteiligten weitergeben muss.\n\nWie der Sicherheits- und Gesundheitsplan ist sie im belgischen Königlichen Erlass vom 25. Januar 2001 über zeitlich begrenzte oder ortsveränderliche Baustellen vorgesehen.",
+   "keywords": [
+    "dokumentation für spätere eingriffe",
+    "was ist eine diu",
+    "diu dokument"
+   ],
+   "synonyms": [
+    "definition diu dokumentation",
+    "was bedeutet diu",
+    "dokument künftige arbeiten"
+   ]
+  },
+  "faq-coordination-demander": {
+   "question": "Wie beantrage ich eine Sicherheits- und Gesundheitskoordination?",
+   "answer": "Beschreiben Sie Ihr Projekt (Art, Standort, Phase) über das Formular auf der Seite WiSy Coordination oder kontaktieren Sie uns per Telefon oder E-Mail: +32 2 318 86 59 / info@wisysafety.be.\n\nUnser Team meldet sich bei Ihnen, um den passenden Koordinationsauftrag für Ihre Baustelle festzulegen.",
+   "keywords": [
+    "koordination beantragen",
+    "koordination anfragen",
+    "kontakt koordination"
+   ],
+   "synonyms": [
+    "wie kontaktiere ich sie für eine koordination",
+    "koordinator anfragen",
+    "koordinator anfordern"
+   ]
+  },
+  "faq-coordination-quand-obligatoire": {
+   "question": "Wann ist eine Sicherheits- und Gesundheitskoordination verpflichtend?",
+   "answer": "In Belgien muss ein Sicherheits- und Gesundheitskoordinator bestellt werden, sobald auf einer zeitlich begrenzten oder ortsveränderlichen Baustelle mehrere Unternehmen tätig sind, gleichzeitig oder nacheinander — das legt der Königliche Erlass vom 25. Januar 2001 in Anwendung des Gesetzes vom 4. August 1996 über das Wohlbefinden der Arbeitnehmer fest.\n\nDer Auftrag umfasst eine Phase „Planung“ (bereits ab der Konzeption, mit dem Sicherheits- und Gesundheitsplan) und eine Phase „Ausführung“ (Baustellenbegleitung), die je nach Umfang und Komplexität des Projekts einem Koordinator der Stufe A oder B anvertraut wird.\n\nWir unterstützen Sie bei der Anwendung der für Ihr Projekt geltenden Koordinationspflichten: Kontaktieren Sie uns für eine Einschätzung Ihres Falls.",
+   "keywords": [
+    "verpflichtend",
+    "wann koordination",
+    "koordinationspflicht"
+   ],
+   "synonyms": [
+    "brauche ich einen koordinator",
+    "braucht meine baustelle eine koordination",
+    "ist koordination verpflichtend"
+   ]
+  },
+  "faq-coordination-niveau-a-b": {
+   "question": "Was ist der Unterschied zwischen einem Koordinator der Stufe A und der Stufe B?",
+   "answer": "Sicherheits- und Gesundheitskoordinatoren werden in zwei Qualifikationsstufen eingeteilt, die im Königlichen Erlass vom 25. Januar 2001 festgelegt sind: Stufe A ist für die größten oder komplexesten Projekte erforderlich, Stufe B für die übrigen koordinationspflichtigen Baustellen.\n\nDie erforderliche Stufe hängt von Größe, Dauer und Art des Projekts ab — nicht von der Wahl des Bauherrn.\n\nUm zu erfahren, welche Stufe für Ihr Projekt gilt, beschreiben Sie es uns über die Seite WiSy Coordination.",
+   "keywords": [
+    "stufe a",
+    "stufe b",
+    "unterschied stufe"
+   ],
+   "synonyms": [
+    "welche koordinationsstufe",
+    "stufe a oder b",
+    "qualifikationsstufe koordinator"
    ]
   }
  }

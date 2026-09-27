@@ -2,36 +2,14 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "wisy-static-preview",
-      "runtimeExecutable": "python3",
+      "name": "wisy-coordination-preview",
+      "runtimeExecutable": "node",
       "runtimeArgs": [
-        "-m",
-        "http.server",
-        "8080"
+        "/private/tmp/claude-501/-Users-rayanevanosselt-Desktop-Wisy-Safety-2026--claude-worktrees-wisy-coordination-redesign-d648cf/a790f15d-5b7f-4ffe-846d-fd5f1f7c97b3/scratchpad/serve.js",
+        "/Users/rayanevanosselt/Desktop/Wisy Safety 2026/.claude/worktrees/wisy-coordination-redesign-d648cf",
+        "4190"
       ],
-      "port": 8080
-    },
-    {
-      "name": "wisy-merge-check",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": [
-        "-m",
-        "http.server",
-        "8091",
-        "--directory",
-        "/private/tmp/claude-501/-Users-rayanevanosselt-Desktop-Wisy-Safety-2026/43e5b9ab-1974-42bc-aa98-5fd95fd4ecb0/scratchpad/wt"
-      ],
-      "port": 8091
-    },
-    {
-      "name": "wisy-vcae",
-      "runtimeExecutable": "/Users/rayanevanosselt/.local/node/bin/node",
-      "runtimeArgs": [
-        "/private/tmp/claude-501/-Users-rayanevanosselt-Desktop-Wisy-Safety-2026--claude-worktrees-vca-entreprise-redesign-0c3328/f3b409f6-c4d2-4e78-91ea-d69b43e63a71/scratchpad/serve.js",
-        "/Users/rayanevanosselt/Desktop/Wisy Safety 2026/.claude/worktrees/vca-entreprise-redesign-0c3328",
-        "4180"
-      ],
-      "port": 4180
+      "port": 4190
     }
   ]
 }

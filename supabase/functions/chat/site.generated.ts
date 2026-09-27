@@ -504,6 +504,40 @@ export const SITE_PAGES: SiteEntry[] = [
       "energieprestatie",
       "energy performance certificate"
     ]
+  },
+  {
+    "id": "page-coordination",
+    "type": "page",
+    "title": "WiSy Coordination",
+    "url": "coordination.html",
+    "content": "Coordination sécurité-santé de chantier (niveaux A et B) : plan de sécurité et de santé (PSS), coordination des intervenants, visites de chantier, dossier d'intervention ultérieure (DIU), conseil en prévention et accompagnement réglementaire pour maîtres d'ouvrage, architectes et entreprises. Cadre légal belge : loi du 4 août 1996 relative au bien-être des travailleurs et arrêté royal du 25 janvier 2001 concernant les chantiers temporaires ou mobiles.",
+    "keywords": [
+      "coordination",
+      "coordination securite sante",
+      "coordination securite",
+      "coordinateur",
+      "coordinateur securite sante",
+      "coordinateur securite",
+      "coordinateur chantier",
+      "coordinateur niveau a",
+      "coordinateur niveau b",
+      "niveau a",
+      "niveau b",
+      "pss",
+      "plan de securite et de sante",
+      "diu",
+      "dossier d'intervention ulterieure",
+      "conseiller en prevention",
+      "audit securite",
+      "chantier temporaire",
+      "chantier mobile",
+      "chantier temporaire ou mobile",
+      "maitre d'ouvrage",
+      "bien etre au travail",
+      "wisy coordination",
+      "demander une coordination",
+      "securite chantier"
+    ]
   }
 ];
 
@@ -519,7 +553,9 @@ export const SITE_PATHS: string[] = [
   "article-vca-cout-financement.html",
   "article-vca-erreurs-examen.html",
   "peb-wallonie-bruxelles.html",
+  "coordination.html",
   "formation-vca-base.html",
   "formation-nacelles-elevatrices.html",
-  "formation-beps-premiers-secours.html"
+  "formation-beps-premiers-secours.html",
+  "vca-entreprise.html"
 ];

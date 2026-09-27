@@ -11,7 +11,7 @@ const Site = require("../js/site-content.js");
 const FAQ = require("../js/faq-data.js");
 
 const ROOT = path.join(__dirname, "..");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "vca-entreprise", "article-vca-cout-financement", "article-vca-erreurs-examen", "inscription", "contact", "avis", "faq", "agenda"].map((n) => n + ".html").concat(["admin/avis.html"]);
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "vca-entreprise", "coordination", "article-vca-cout-financement", "article-vca-erreurs-examen", "inscription", "contact", "avis", "faq", "agenda"].map((n) => n + ".html").concat(["admin/avis.html"]);
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 
 /* Existence sensible à la casse. Renvoie true, false, ou le vrai nom si seule la casse diffère. */
@@ -117,7 +117,7 @@ test("url() des feuilles de style et chemins d'images cités dans le JS existent
 test("aucune NOUVELLE destination morte « # » : seules les entrées de menu et mentions légales connues (à créer)", () => {
   /* Dette connue et VISIBLE : ces liens n'ont pas encore de page (voir le rapport d'audit). Toute autre
      ancre « # » nue est une régression. Quand une page est créée, retirez sa clé de cette liste. */
-  const KNOWN = new Set(["nav.coordination", "nav.certificat",
+  const KNOWN = new Set(["nav.certificat",
     "footer.legal_mentions", "footer.legal_privacy", "footer.legal_terms"]);
   const bad = [];
   PAGES.forEach((f) => {

@@ -38,6 +38,10 @@ WisyFAQ.register("ro", {
   "contact": {
    "label": "Contact și asistență",
    "tagline": "Cum ne puteți contacta, program și asistent online"
+  },
+  "coordination": {
+   "label": "Coordonare securitate și sănătate",
+   "tagline": "Misiuni, plan de securitate și sănătate, dosar de intervenție ulterioară și cerere de coordonare"
   }
  },
  "actions": {
@@ -47,7 +51,8 @@ WisyFAQ.register("ro", {
   "agenda": "Consultați programul",
   "nacelle": "Descoperiți formarea nacele elevatoare",
   "vca": "Descoperiți formarea VCA de bază",
-  "assistant": "Puneți întrebarea asistentului"
+  "assistant": "Puneți întrebarea asistentului",
+  "coordination": "Descoperiți WiSy Coordination"
  },
  "popular": [
   {
@@ -734,6 +739,91 @@ WisyFAQ.register("ro", {
     "asistent virtual",
     "wisy",
     "bot"
+   ]
+  },
+  "faq-coordination-quest-ce-que": {
+   "question": "Ce este WiSy Coordination?",
+   "answer": "WiSy Coordination este departamentul Wisy Safety dedicat coordonării securității și sănătății pe șantiere temporare sau mobile.\n\nÎnsoțim beneficiarii, arhitecții și antreprenorii în organizarea prevenirii: planul de securitate și sănătate, coordonarea intervenienților, vizitele de șantier și dosarul de intervenție ulterioară la finalizarea proiectului.\n\nDescoperiți demersul complet pe pagina WiSy Coordination.",
+   "keywords": [
+    "wisy coordination",
+    "coordonare",
+    "coordonare securitate si sanatate",
+    "ce este wisy coordination"
+   ],
+   "synonyms": [
+    "ce este wisy coordination",
+    "prezentati wisy coordination",
+    "coordonare santier"
+   ]
+  },
+  "faq-coordination-pss": {
+   "question": "Ce este un plan de securitate și sănătate?",
+   "answer": "Planul de securitate și sănătate identifică riscurile unui șantier și măsurile de prevenire de pus în aplicare, încă din faza de proiectare.\n\nEste întocmit și actualizat de coordonatorul de securitate și sănătate, în colaborare cu beneficiarul și intervenienții, apoi urmărit pe toată durata șantierului.\n\nBaza legală: Decretul regal belgian din 25 ianuarie 2001 privind șantierele temporare sau mobile.",
+   "keywords": [
+    "plan de securitate si sanatate",
+    "ce este un plan de securitate",
+    "definitie plan"
+   ],
+   "synonyms": [
+    "definitie plan de securitate",
+    "ce inseamna planul de securitate",
+    "plan risc santier"
+   ]
+  },
+  "faq-coordination-diu": {
+   "question": "Ce este un dosar de intervenție ulterioară?",
+   "answer": "Dosarul de intervenție ulterioară reunește, la finalizarea șantierului, informațiile necesare securității lucrărilor viitoare asupra construcției: întreținere, reparație, transformare sau demolare.\n\nEste întocmit de coordonatorul de securitate și sănătate și predat beneficiarului, care trebuie să îl păstreze și să îl transmită oricărui viitor intervenient.\n\nCa și planul de securitate și sănătate, este prevăzut de Decretul regal belgian din 25 ianuarie 2001 privind șantierele temporare sau mobile.",
+   "keywords": [
+    "dosar de interventie ulterioara",
+    "ce este un dosar de interventie",
+    "definitie dosar"
+   ],
+   "synonyms": [
+    "definitie dosar interventie ulterioara",
+    "ce inseamna dosarul de interventie",
+    "dosar lucrari viitoare"
+   ]
+  },
+  "faq-coordination-demander": {
+   "question": "Cum solicit o coordonare de securitate și sănătate?",
+   "answer": "Descrieți-vă proiectul (tip, localizare, fază) prin formularul de pe pagina WiSy Coordination sau contactați-ne prin telefon ori e-mail: +32 2 318 86 59 / info@wisysafety.be.\n\nEchipa noastră vă va contacta pentru a stabili misiunea de coordonare adaptată șantierului dumneavoastră.",
+   "keywords": [
+    "solicitare coordonare",
+    "cerere de coordonare",
+    "contact coordonare"
+   ],
+   "synonyms": [
+    "cum va pot contacta pentru o coordonare",
+    "solicitati un coordonator",
+    "solicitati un coordonator de securitate"
+   ]
+  },
+  "faq-coordination-quand-obligatoire": {
+   "question": "Când este obligatorie coordonarea de securitate și sănătate?",
+   "answer": "În Belgia, un coordonator de securitate și sănătate trebuie desemnat de îndată ce un șantier temporar sau mobil reunește mai mulți antreprenori, simultan sau succesiv — acest cadru este stabilit prin Decretul regal din 25 ianuarie 2001, în aplicarea Legii din 4 august 1996 privind bunăstarea lucrătorilor.\n\nMisiunea cuprinde o fază „de proiect” (încă din faza de concepție, cu planul de securitate și sănătate) și o fază „de realizare” (urmărirea șantierului), încredințate unui coordonator de nivel A sau B în funcție de amploarea și complexitatea proiectului.\n\nVă însoțim în aplicarea obligațiilor de coordonare aplicabile proiectului dumneavoastră: contactați-ne pentru un aviz asupra cazului dumneavoastră.",
+   "keywords": [
+    "obligatorie",
+    "cand coordonare",
+    "obligatie coordonare"
+   ],
+   "synonyms": [
+    "am nevoie de un coordonator",
+    "santierul meu are nevoie de coordonare",
+    "coordonarea este obligatorie"
+   ]
+  },
+  "faq-coordination-niveau-a-b": {
+   "question": "Care este diferența dintre un coordonator de nivel A și nivel B?",
+   "answer": "Coordonatorii de securitate și sănătate sunt împărțiți în două niveluri de calificare, definite de Decretul regal din 25 ianuarie 2001: nivelul A este necesar pentru proiectele cele mai ample sau complexe, nivelul B pentru celelalte șantiere supuse coordonării.\n\nNivelul necesar depinde de dimensiunea, durata și natura proiectului — nu de alegerea beneficiarului.\n\nPentru a afla ce nivel se aplică proiectului dumneavoastră, descrieți-ni-l prin pagina WiSy Coordination.",
+   "keywords": [
+    "nivel a",
+    "nivel b",
+    "diferenta nivel"
+   ],
+   "synonyms": [
+    "ce nivel de coordonare",
+    "nivel a sau b",
+    "nivel de calificare coordonator"
    ]
   }
  }

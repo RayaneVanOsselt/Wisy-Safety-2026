@@ -134,6 +134,7 @@
     else if (path === "inscription.html") page = "inscription";
     else if (path === "avis.html") page = "avis";
     else if (path === "faq.html") page = "faq";
+    else if (path === "coordination.html") page = "coordination";
 
     var fid = null;
     var hash = (location.hash || "").replace(/^#/, "");

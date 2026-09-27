@@ -38,6 +38,10 @@ WisyFAQ.register("nl", {
   "contact": {
    "label": "Contact & ondersteuning",
    "tagline": "Ons bereiken, openingsuren en onlineassistent"
+  },
+  "coordination": {
+   "label": "Coördinatie veiligheid en gezondheid",
+   "tagline": "Opdrachten, veiligheids- en gezondheidsplan, postinterventiedossier en coördinatieaanvraag"
   }
  },
  "actions": {
@@ -47,7 +51,8 @@ WisyFAQ.register("nl", {
   "agenda": "De agenda raadplegen",
   "nacelle": "Ontdek de opleiding Hoogwerker",
   "vca": "Ontdek de opleiding VCA Basis",
-  "assistant": "De vraag aan de assistent stellen"
+  "assistant": "De vraag aan de assistent stellen",
+  "coordination": "Ontdek WiSy Coordination"
  },
  "popular": [
   {
@@ -734,6 +739,94 @@ WisyFAQ.register("nl", {
     "virtuele assistent",
     "wisy",
     "bot"
+   ]
+  },
+  "faq-coordination-quest-ce-que": {
+   "question": "Wat is WiSy Coordination?",
+   "answer": "WiSy Coordination is de afdeling van Wisy Safety die zich toelegt op de coördinatie veiligheid en gezondheid op tijdelijke of mobiele bouwplaatsen.\n\nWij begeleiden bouwheren, architecten en aannemers bij de organisatie van de preventie: het veiligheids- en gezondheidsplan, de coördinatie van de tussenkomende partijen, werfbezoeken en het postinterventiedossier bij de oplevering.\n\nOntdek de volledige aanpak op de pagina WiSy Coordination.",
+   "keywords": [
+    "wisy coordination",
+    "coördinatie",
+    "coördinatie veiligheid en gezondheid",
+    "wat is wisy coordination"
+   ],
+   "synonyms": [
+    "wat is wisy coordination",
+    "stel wisy coordination voor",
+    "coördinatie bouwplaats"
+   ]
+  },
+  "faq-coordination-pss": {
+   "question": "Wat is een veiligheids- en gezondheidsplan (VGP)?",
+   "answer": "Het veiligheids- en gezondheidsplan brengt de risico's van een bouwplaats en de te nemen preventiemaatregelen in kaart, al vanaf de ontwerpfase van het project.\n\nHet wordt opgesteld en bijgewerkt door de coördinator veiligheid en gezondheid, in overleg met de bouwheer en de tussenkomende partijen, en vervolgens opgevolgd tijdens de volledige werf.\n\nWettelijke basis: het koninklijk besluit van 25 januari 2001 betreffende de tijdelijke of mobiele bouwplaatsen.",
+   "keywords": [
+    "veiligheids- en gezondheidsplan",
+    "vgp",
+    "wat is een vgp"
+   ],
+   "synonyms": [
+    "wat is een veiligheidsplan",
+    "risicoplan werf",
+    "definitie vgp"
+   ]
+  },
+  "faq-coordination-diu": {
+   "question": "Wat is een postinterventiedossier (PID)?",
+   "answer": "Het postinterventiedossier verzamelt, bij de oplevering, de informatie die nodig is voor de veiligheid van toekomstige werken aan het bouwwerk: onderhoud, herstelling, verbouwing of afbraak.\n\nHet wordt opgesteld door de coördinator veiligheid en gezondheid en overhandigd aan de bouwheer, die het moet bewaren en doorgeven aan elke toekomstige tussenkomende partij.\n\nZoals het VGP is het voorzien door het koninklijk besluit van 25 januari 2001 betreffende de tijdelijke of mobiele bouwplaatsen.",
+   "keywords": [
+    "postinterventiedossier",
+    "pid",
+    "wat is een pid"
+   ],
+   "synonyms": [
+    "wat is een postinterventiedossier",
+    "dossier toekomstige werken",
+    "definitie postinterventiedossier"
+   ]
+  },
+  "faq-coordination-demander": {
+   "question": "Hoe vraag ik een coördinatie veiligheid en gezondheid aan?",
+   "answer": "Beschrijf uw project (type, locatie, fase) via het formulier op de pagina WiSy Coordination, of contacteer ons per telefoon of e-mail: +32 2 318 86 59 / info@wisysafety.be.\n\nOns team neemt contact met u op om de coördinatieopdracht af te stemmen op uw bouwplaats.",
+   "keywords": [
+    "coördinatie aanvragen",
+    "coördinatie vragen",
+    "contact coördinatie"
+   ],
+   "synonyms": [
+    "hoe contacteer ik u voor een coördinatie",
+    "coördinator aanvragen",
+    "coördinator aanvragen"
+   ]
+  },
+  "faq-coordination-quand-obligatoire": {
+   "question": "Wanneer is coördinatie veiligheid en gezondheid verplicht?",
+   "answer": "In België moet een coördinator veiligheid en gezondheid worden aangesteld zodra op een tijdelijke of mobiele bouwplaats meerdere aannemers samenwerken, gelijktijdig of opeenvolgend — dat is vastgelegd in het koninklijk besluit van 25 januari 2001, in uitvoering van de wet van 4 augustus 1996 betreffende het welzijn van de werknemers.\n\nDe opdracht omvat een fase «ontwerp» (vanaf de conceptie, met het VGP) en een fase «verwezenlijking» (opvolging van de werf), toevertrouwd aan een coördinator van niveau A of B naargelang de omvang en de complexiteit van het project.\n\nWij begeleiden u bij de toepassing van de coördinatieverplichtingen die op uw project van toepassing zijn: contacteer ons voor advies over uw situatie.",
+   "keywords": [
+    "verplicht",
+    "wanneer coördinatie",
+    "coördinatieverplichting",
+    "meerdere aannemers"
+   ],
+   "synonyms": [
+    "heb ik een coördinator nodig",
+    "heeft mijn werf coördinatie nodig",
+    "coördinatie verplicht"
+   ]
+  },
+  "faq-coordination-niveau-a-b": {
+   "question": "Wat is het verschil tussen een coördinator niveau A en niveau B?",
+   "answer": "Coördinatoren veiligheid en gezondheid worden ingedeeld in twee kwalificatieniveaus, bepaald door het koninklijk besluit van 25 januari 2001: niveau A is vereist voor de grootste of meest complexe projecten, niveau B voor de overige bouwplaatsen die aan coördinatie onderworpen zijn.\n\nHet vereiste niveau hangt af van de omvang, de duur en de aard van het project — niet van een keuze van de bouwheer.\n\nOm te weten welk niveau op uw project van toepassing is, beschrijft u het ons via de pagina WiSy Coordination.",
+   "keywords": [
+    "niveau a",
+    "niveau b",
+    "coördinator niveau a",
+    "coördinator niveau b",
+    "verschil niveau"
+   ],
+   "synonyms": [
+    "welk coördinatieniveau",
+    "niveau a of b",
+    "coördinator kwalificatieniveau"
    ]
   }
  }

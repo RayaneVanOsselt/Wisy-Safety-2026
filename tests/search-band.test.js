@@ -108,3 +108,18 @@ test("mouvement et robustesse : rien d'animé en mouvement réduit, suggestions 
   assert.match(src, /if \(document\.hidden \|\| root\.classList\.contains\("has-text"\)\) return;/, "pause quand l'onglet est masqué ou que l'on tape");
   assert.match(read("css/search.css"), /\.wsy-search\.is-entering \.wsy-search__item \{ animation: none; \}/, "cascade coupée en mouvement réduit");
 });
+
+test("mode Spotlight : filtres, aperçu et pastilles « Essayez » dans la bande ; voile au niveau du <body> ; tarif de l'aperçu = règles de la liste", () => {
+  const src = read("js/search.js");
+  PAGES.forEach((f) => {
+    const band = staticBand(read(f));
+    ["wsy-search__tries", "wsy-search__scopes", "wsy-search__main", "wsy-search__preview"].forEach((c) => assert.ok(band.includes('<div class="' + c + '">'), f + " : " + c));
+  });
+  assert.match(src, /document\.body\.appendChild\(scrim\)/, "voile hors de la bande (son backdrop-filter piégerait un position:fixed)");
+  assert.match(src, /x\.priceLabel && x\.priceUnit === "participant" \?/, "aperçu : tarif « par personne » confirmé seulement");
+  assert.match(src, /x\.priceIndicative \? " · " \+ t\("search\.indicative"\)/, "aperçu : « tarif indicatif » signalé");
+  assert.match(src, /var path = e\.composedPath \? e\.composedPath\(\) : \[e\.target\];/, "clic sur un filtre re-rendu : le panneau reste ouvert");
+  LANGS.forEach((l) => ["search.scope_all", "search.pv_open", "search.pv_call", "search.pv_mail", "search.try"].forEach((k) =>
+    assert.ok(I18N_ALL[l][k] && I18N_ALL[l][k].trim(), l + " : " + k)));
+});
+

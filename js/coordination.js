@@ -5,6 +5,10 @@
    js/site-chrome.js (partagé). Ce fichier n'ajoute que ce qui est propre à
    cette page :
 
+     initHero()              équerres du hero qui se dessinent au chargement + léger parallaxe.
+     initPillars()            rail de piliers qui s'ouvre au clic (un seul à la fois).
+     initTimelineProgress()   ligne de la timeline « mission » qui se remplit au scroll.
+     initControlSequence()    allumage séquentiel de « Coordination Control » (une fois, à l'entrée).
      initModals()   système de fenêtres modales (piliers/services/domaines) :
                      ouverture/fermeture, piège de focus, arrière-plan inert,
                      verrouillage du scroll, retour du focus, Échap.
@@ -22,6 +26,96 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   const Chrome = window.WisyChrome || { track() {}, tr: (k, f) => f, currentLang: () => "fr" };
+  const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* --------------------------------------------------------------------- */
+  /* Hero : dessin des équerres au chargement + parallaxe léger au scroll   */
+  /* (désactivé en mouvement réduit — jamais de scroll-jacking, juste une   */
+  /* translation de quelques pixels de l'image derrière le texte).          */
+  /* --------------------------------------------------------------------- */
+  function initHero() {
+    const hero = $(".co-hero");
+    if (!hero) return;
+    requestAnimationFrame(() => hero.classList.add("is-ready"));
+    if (reducedMotion()) return;
+    const img = $("[data-parallax] img", hero);
+    if (!img) return;
+    let ticking = false;
+    function update() {
+      ticking = false;
+      const r = hero.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > window.innerHeight) return;
+      img.style.setProperty("--py", Math.round(r.top * -0.12) + "px");
+    }
+    update();
+    window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Piliers : rail qui s'ouvre au clic/Entrée (un seul ouvert à la fois),  */
+  /* pattern accordéon accessible identique à celui du menu mobile du site  */
+  /* (aria-expanded sur le déclencheur, panneau démasqué par la grille CSS).*/
+  /* --------------------------------------------------------------------- */
+  function initPillars() {
+    const triggers = $$("[data-pillar-toggle]");
+    if (!triggers.length) return;
+    triggers.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        triggers.forEach((b) => b.setAttribute("aria-expanded", "false"));
+        btn.setAttribute("aria-expanded", String(!isOpen));
+      });
+    });
+    // Le premier pilier démarre ouvert : la section n'a pas l'air vide au premier coup d'œil.
+    triggers[0].setAttribute("aria-expanded", "true");
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Mission : la ligne du rail se remplit progressivement pendant que la   */
+  /* section défile (jamais de scroll-jacking : le scroll natif reste seul  */
+  /* maître, on ne fait que lire sa position pour ajuster une hauteur CSS). */
+  /* --------------------------------------------------------------------- */
+  function initTimelineProgress() {
+    const list = $("[data-timeline]"), fill = $("[data-timeline-fill]");
+    if (!list || !fill) return;
+    let ticking = false;
+    function update() {
+      ticking = false;
+      const r = list.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const total = r.height - vh * 0.45;
+      const done = (vh * 0.75) - r.top;
+      const pct = total > 0 ? Math.max(0, Math.min(1, done / total)) : 0;
+      fill.style.height = (pct * 100) + "%";
+    }
+    update();
+    window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener("resize", update);
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Coordination Control : allumage séquentiel des étapes, une seule fois, */
+  /* quand la section entre dans le viewport (composant éditorial — voir    */
+  /* le texte affiché juste au-dessus : jamais un vrai statut de chantier). */
+  /* --------------------------------------------------------------------- */
+  function initControlSequence() {
+    const rail = $("[data-control-rail]");
+    if (!rail) return;
+    const items = $$("li", rail);
+    if (!("IntersectionObserver" in window) || reducedMotion()) {
+      items.forEach((li) => li.classList.add("is-on"));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        rail.classList.add("is-live");
+        items.forEach((li) => li.classList.add("is-on"));
+        io.unobserve(rail);
+      });
+    }, { threshold: 0.4 });
+    io.observe(rail);
+  }
 
   /* --------------------------------------------------------------------- */
   /* Modals (piliers, services, domaines)                                   */
@@ -227,7 +321,7 @@
     });
   }
 
-  const boot = () => { initModals(); initTeam(); initForm(); };
+  const boot = () => { initHero(); initPillars(); initTimelineProgress(); initControlSequence(); initModals(); initTeam(); initForm(); };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
 })();

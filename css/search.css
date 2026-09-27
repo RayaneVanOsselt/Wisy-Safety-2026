@@ -1,6 +1,9 @@
 /* =========================================================================
    WISY SAFETY — Recherche globale (barre + panneau d'autocomplétion)
    Charte 2026 · réutilise les tokens du site (épinette, brume, turquoise…)
+   Barre « suggestive » d'après « Placeholders And Vanish Input » (Aceternity UI,
+   21st.dev) : pilule, suggestions qui défilent, bouton d'envoi rond, texte qui
+   se dissout à l'envoi (voir js/search.js).
    S'insère dans le header sticky : la barre suit le header, le panneau
    se déploie juste en dessous. Aucune dépendance externe.
    ========================================================================= */
@@ -62,37 +65,47 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
 }
 
 /* --------------------------------------------------------------------------
-   2. CHAMP — calqué sur les champs de formulaire du site (.ins-input)
+   2. CHAMP — pilule : icône | champ (+ suggestions animées, + particules) | ⌘K | effacer | envoyer
+   Grille à zones nommées : le champ, le calque des suggestions et le canvas de dissolution se
+   superposent exactement (même zone « field ») ; l'ordre s'inverse seul en arabe (RTL).
    -------------------------------------------------------------------------- */
 .wsy-search__box {
-  display: flex;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+  grid-template-areas: "icon field kbd clear go";
   align-items: center;
-  gap: .6rem;
   height: 48px;
-  padding-inline: .9rem;
+  padding-inline: 1.15rem .3rem;
   background: #fff;
   border: 1.5px solid var(--granit-20, rgba(94, 109, 106, .20));
-  border-radius: 12px;
-  box-shadow: var(--shadow-sm, 0 2px 10px rgba(27, 45, 40, .06));
+  border-radius: var(--radius-pill, 999px);
+  box-shadow: 0 1px 2px rgba(27, 45, 40, .05), 0 6px 18px rgba(27, 45, 40, .06);
   transition: border-color var(--t-fast, .3s) var(--ease, cubic-bezier(.4, 0, .2, 1)),
               box-shadow var(--t-fast, .3s) var(--ease, cubic-bezier(.4, 0, .2, 1));
 }
+.wsy-search__box:hover { border-color: var(--brume, #3FA69B); }
+/* Focus : anneau dégradé de la charte (turquoise → sarcelle → épinette) + halo doux */
 .wsy-search__box:focus-within {
-  border-color: var(--epinette, #1F6F64);
-  box-shadow: 0 0 0 3px var(--brume-14, rgba(63, 166, 155, .14));
+  border-color: transparent;
+  background: linear-gradient(#fff, #fff) padding-box,
+              linear-gradient(120deg, var(--turquoise, #48D6C2), var(--sarcelle, #2F7D8C) 55%, var(--epinette, #1F6F64)) border-box;
+  box-shadow: 0 0 0 4px rgba(72, 214, 194, .16), 0 14px 34px rgba(31, 111, 100, .16);
 }
 .wsy-search__icon {
-  flex-shrink: 0;
+  grid-area: icon;
   width: 20px;
   height: 20px;
+  margin-inline-end: .7rem;
   color: var(--granit, #5E6D6A);
   transition: color var(--t-fast, .3s) var(--ease, ease);
 }
 .wsy-search__box:focus-within .wsy-search__icon { color: var(--epinette, #1F6F64); }
 
 .wsy-search__input {
-  flex: 1;
+  grid-area: field;
   min-width: 0;
+  width: 100%;
   height: 100%;
   border: none;
   outline: none;
@@ -103,13 +116,39 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
   letter-spacing: 0;
 }
 .wsy-search__input::placeholder { color: var(--granit-clair, #9AA8A4); opacity: 1; }
+
+/* Suggestions animées : calque posé sur le champ vide (le placeholder natif reste pour les lecteurs d'écran) */
+.wsy-search__fx {
+  grid-area: field;
+  display: none;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  font-family: var(--font-texte, "Inter", system-ui, sans-serif);
+  font-size: 1rem;
+  color: var(--granit-clair, #9AA8A4);
+  transition: opacity .28s linear, transform .28s var(--ease-out, cubic-bezier(.16, 1, .3, 1));
+}
+.wsy-search.is-fx .wsy-search__fx { display: block; }
+.wsy-search.is-fx .wsy-search__input::placeholder { color: transparent; }
+.wsy-search.has-text .wsy-search__fx { visibility: hidden; }
+.wsy-search__fx.is-out { opacity: 0; transform: translateY(-12px); }
+.wsy-search__fx.is-in { opacity: 0; transform: translateY(6px); transition: none; }
+.wsy-search__box:focus-within .wsy-search__fx { color: var(--granit, #5E6D6A); }
+
+/* Dissolution : le vrai texte s'efface, le canvas (même zone) dessine les particules */
+.wsy-search__dust { grid-area: field; align-self: center; pointer-events: none; }
+.wsy-search.is-vanishing .wsy-search__input { color: transparent; caret-color: transparent; }
 /* Retire la croix native de certains navigateurs (on gère la nôtre) */
 .wsy-search__input::-webkit-search-decoration,
 .wsy-search__input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
 
 /* Raccourci clavier (⌘K / Ctrl K) — masqué dès qu'on interagit */
 .wsy-search__kbd {
-  flex-shrink: 0;
+  grid-area: kbd;
+  margin-inline: .6rem .45rem;
   display: inline-flex;
   align-items: center;
   gap: .15rem;
@@ -129,7 +168,8 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
 
 /* Bouton effacer */
 .wsy-search__clear {
-  flex-shrink: 0;
+  grid-area: clear;
+  margin-inline-end: .3rem;
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -148,6 +188,32 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
   color: var(--epinette, #1F6F64);
 }
 .wsy-search.has-text .wsy-search__clear { display: inline-flex; }
+
+/* Bouton d'envoi rond : gris tant que le champ est vide ; la tige de la flèche se dessine dès la saisie */
+.wsy-search__go {
+  grid-area: go;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--creme, #F4FAF9);
+  background: var(--epinette, #1F6F64);
+  transition: background-color var(--t-fast, .3s) var(--ease, ease), color var(--t-fast, .3s) var(--ease, ease),
+              transform var(--t-fast, .3s) var(--ease-out, cubic-bezier(.16, 1, .3, 1)), box-shadow var(--t-fast, .3s) var(--ease, ease);
+}
+.wsy-search__go svg { width: 18px; height: 18px; }
+.wsy-search__go:disabled { background: var(--brume-08, rgba(63, 166, 155, .08)); color: var(--granit-clair, #9AA8A4); cursor: default; }
+.wsy-search__go:not(:disabled):hover,
+.wsy-search__go:not(:disabled):focus-visible {
+  background: var(--turquoise, #48D6C2);
+  color: var(--noir-jais, #1B2D28);
+  transform: translateX(2px);
+  box-shadow: 0 6px 16px rgba(31, 111, 100, .25);
+}
+.wsy-search__shaft { stroke-dasharray: 14; stroke-dashoffset: 14; transition: stroke-dashoffset .3s linear; }
+.wsy-search.has-text .wsy-search__shaft { stroke-dashoffset: 0; }
+[dir="rtl"] .wsy-search__go svg { transform: scaleX(-1); }
 
 /* --------------------------------------------------------------------------
    3. PANNEAU — déploiement sous le champ (mêmes codes que .dropdown du header)
@@ -220,6 +286,11 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
 .wsy-search__item:hover,
 .wsy-search__item.is-active {
   background: var(--brume-14, rgba(63, 166, 155, .14));
+}
+@keyframes wsy-in { from { opacity: 0; transform: translateY(6px); } }
+.wsy-search.is-entering .wsy-search__item {
+  animation: wsy-in .34s var(--ease-out, cubic-bezier(.16, 1, .3, 1)) both;
+  animation-delay: calc(var(--i, 9) * 26ms);
 }
 .wsy-search__ic {
   flex-shrink: 0;
@@ -431,7 +502,7 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
   .site-header { --wsy-search-h: calc(1px + 1rem + 50px); }         /* même calcul que la bande mobile */
   .wsy-search__wrap { padding-block: .5rem; }
   .wsy-search__inner { max-width: none; }
-  .wsy-search__box { height: 50px; }               /* zone tactile confortable */
+  .wsy-search__box { height: 50px; padding-inline: 1rem .3rem; }   /* zone tactile confortable */
   .wsy-search__results { max-height: min(62dvh, 26rem); }
 }
 @media (max-width: 640px) {
@@ -456,8 +527,11 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
   .wsy-search__item,
   .wsy-search__ic,
   .wsy-search__chip,
-  .wsy-search__clear {
+  .wsy-search__clear,
+  .wsy-search__go,
+  .wsy-search__shaft {
     transition-duration: .001ms !important;
   }
   .wsy-search__panel { transform: none !important; }
+  .wsy-search.is-entering .wsy-search__item { animation: none; }
 }

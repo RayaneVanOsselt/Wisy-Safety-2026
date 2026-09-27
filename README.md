@@ -34,6 +34,7 @@ et sans rien à installer pour le mettre en ligne.
 | Changer les faits PEB (Wallonie/Bruxelles), le tarif ou les sessions | `js/peb-data.js` | [docs/README-PEB.md](docs/README-PEB.md) |
 | Changer les services, l'équipe ou les affirmations non confirmées de **WiSy Coordination** | `js/coordination-data.js` | [docs/README-COORDINATION.md](docs/README-COORDINATION.md) |
 | Configurer les avis clients (Supabase, e-mail, anti-spam) | `js/supabase-config.js` | [docs/README-AVIS.md](docs/README-AVIS.md) |
+| Changer les **suggestions animées de la barre de recherche** (« Rechercher « VCA de base » »…) | `js/i18n-data-search.js` (`search.fx_list`, 7 recherches séparées par « \| » dans chaque langue — chacune doit renvoyer au moins un résultat) ; comportement dans `js/search.js`, style dans `css/search.css` | — |
 | Corriger une traduction, ajouter un texte ou une page traduite | `js/i18n-data-*.js` (+ le HTML) | [docs/README-I18N.md](docs/README-I18N.md) |
 | Comprendre ou activer l'assistant virtuel | `js/assistant/` | [docs/README-ASSISTANT.md](docs/README-ASSISTANT.md) |
 

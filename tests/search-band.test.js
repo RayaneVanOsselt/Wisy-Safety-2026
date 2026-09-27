@@ -71,3 +71,40 @@ test("js/search.js anime la bande existante (sans doublon) et ne l'injecte qu'en
   /* la réserve d'espace CSS reste un filet pour toute page future sans bande statique */
   assert.match(read("css/search.css"), /body:not\(\.faqc-page\) \.site-header:not\(:has\(\.wsy-search\)\)::after/);
 });
+
+/* ------------------------------------------------------------------ barre « suggestive » (d'après Aceternity UI, 21st.dev) */
+const I18N_ALL = (() => {
+  const ctx = { window: {} }; ctx.window.I18N = {}; vm.createContext(ctx);
+  ["common", "search"].forEach((n) => vm.runInContext(read("js/i18n-data-" + n + ".js"), ctx));
+  return ctx.window.I18N;
+})();
+const LANGS = ["fr", "en", "nl", "af", "ar", "bg", "de", "ro", "it", "sl"];
+
+test("suggestions animées : 7 vraies recherches par langue, gabarit {q}, nom du bouton d'envoi — dans les 10 langues", () => {
+  LANGS.forEach((l) => {
+    const d = I18N_ALL[l], list = d["search.fx_list"].split("|");
+    assert.equal(list.length, 7, l + " : 7 suggestions");
+    list.forEach((q) => assert.ok(q.trim() && q.trim() === q && q.length <= 40, l + " : suggestion propre et courte « " + q + " »"));
+    assert.equal(new Set(list).size, 7, l + " : aucune suggestion en double");
+    assert.ok(d["search.fx_try"].includes("{q}"), l + " : gabarit avec {q}");
+    assert.ok(d["search.go"] && d["search.go"].trim(), l + " : nom accessible du bouton d'envoi");
+  });
+});
+
+test("bande : calque des suggestions masqué aux lecteurs d'écran, bouton d'envoi désactivé tant que le champ est vide", () => {
+  PAGES.forEach((f) => {
+    const band = staticBand(read(f));
+    assert.ok(band.includes('<span class="wsy-search__fx" aria-hidden="true"></span>'), f + " : calque des suggestions");
+    assert.ok(band.includes('<button class="wsy-search__go" type="button" disabled aria-label="' + fr["search.go"] + '">'), f + " : bouton d'envoi nommé, désactivé au départ");
+  });
+});
+
+test("mouvement et robustesse : rien d'animé en mouvement réduit, suggestions limitées à 2 tours hors focus, navigation jamais bloquée", () => {
+  const src = read("js/search.js");
+  assert.match(src, /if \(fx && !reduceMotion\) \{ root\.classList\.add\("is-fx"\); fxStart\(\); \}/, "suggestions animées seulement sans mouvement réduit");
+  assert.match(src, /if \(reduceMotion \|\| !text\.trim\(\) \|\| !W\) \{ done\(\); return; \}/, "dissolution ignorée en mouvement réduit");
+  assert.match(src, /document\.activeElement !== input && fxTurns >= 2\) \{ fxStop\(\); return; \}/, "pas de défilement infini hors focus");
+  assert.match(src, /setTimeout\(finish, 1100\)/, "filet de sécurité : la navigation a lieu même si requestAnimationFrame est suspendu");
+  assert.match(src, /if \(document\.hidden \|\| root\.classList\.contains\("has-text"\)\) return;/, "pause quand l'onglet est masqué ou que l'on tape");
+  assert.match(read("css/search.css"), /\.wsy-search\.is-entering \.wsy-search__item \{ animation: none; \}/, "cascade coupée en mouvement réduit");
+});

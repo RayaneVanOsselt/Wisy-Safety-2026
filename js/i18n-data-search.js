@@ -660,4 +660,19 @@
   m("ro", { "search.formation_word": "formare" });
   m("it", { "search.formation_word": "corso" });
   m("sl", { "search.formation_word": "usposabljanje" });
+
+  /* ---- Barre « suggestive » (suggestions animées + bouton d'envoi), d'après « Placeholders And Vanish Input »
+     (Aceternity UI, 21st.dev) — voir js/search.js. search.fx_list : de VRAIES recherches du site séparées par « | »,
+     7 par langue, chacune vérifiée : elle renvoie au moins un résultat dans sa langue (noms officiels des pages et
+     formations). search.fx_try : gabarit affiché dans le champ vide ({q} = la suggestion). ---- */
+  m("fr", { "search.fx_try": "Rechercher « {q} »", "search.fx_list": "VCA de base|prix VCA|nacelle élévatrice|premiers secours|prochaines sessions|certificateur PEB|coordination sécurité-santé", "search.go": "Aller au premier résultat" });
+  m("en", { "search.fx_try": "Search “{q}”", "search.fx_list": "VCA Basic|VCA price|aerial work platform|first aid|upcoming sessions|PEB certifier|health & safety coordination", "search.go": "Go to the top result" });
+  m("nl", { "search.fx_try": "Zoek “{q}”", "search.fx_list": "VCA Basis|prijs VCA|hoogwerkers|eerste hulp|komende sessies|PEB-certificeerder|coördinatie veiligheid", "search.go": "Naar het eerste resultaat" });
+  m("af", { "search.fx_try": "Soek “{q}”", "search.fx_list": "VCA Basis|prys VCA|hoogwerkers|noodhulp|komende sessies|PEB-sertifiseerder|koördinering van veiligheid", "search.go": "Gaan na die eerste resultaat" });
+  m("ar", { "search.fx_try": "ابحث عن «{q}»", "search.fx_list": "VCA الأساسي|سعر VCA|منصات العمل المرتفعة|الإسعافات الأولية|الدورات القادمة|مُصدِر شهادات PEB|تنسيق السلامة والصحة", "search.go": "الانتقال إلى النتيجة الأولى" });
+  m("bg", { "search.fx_try": "Търсете „{q}“", "search.fx_list": "VCA основи|цена VCA|автовишки|първа помощ|предстоящи сесии|PEB сертификатор|координация по безопасност", "search.go": "Към първия резултат" });
+  m("de", { "search.fx_try": "„{q}“ suchen", "search.fx_list": "VCA Grundlagen|Preis VCA|Hubarbeitsbühnen|Erste Hilfe|kommende Termine|PEB-Zertifizierer|Koordination Baustelle", "search.go": "Zum ersten Ergebnis" });
+  m("ro", { "search.fx_try": "Căutați „{q}”", "search.fx_list": "VCA de bază|preț VCA|nacele elevatoare|prim ajutor|sesiuni viitoare|certificator PEB|coordonare securitate", "search.go": "Mergeți la primul rezultat" });
+  m("it", { "search.fx_try": "Cerca «{q}»", "search.fx_list": "VCA base|prezzo VCA|piattaforme elevatrici|primo soccorso|prossime sessioni|certificatore PEB|coordinamento sicurezza", "search.go": "Vai al primo risultato" });
+  m("sl", { "search.fx_try": "Iščite „{q}“", "search.fx_list": "VCA osnovni|cena VCA|dvižne ploščadi|prva pomoč|prihajajoče izvedbe|certifikator PEB|koordinacija varnosti", "search.go": "Na prvi zadetek" });
 })();

@@ -121,8 +121,9 @@ test("iframes : chargement différé, titre accessible et politique de référen
 
 test("JS et CSS partagés : budgets non minifiés (chemin critique de chaque page)", () => {
   /* site-content (+ 2 articles, VCA Base) 16 → 20 Ko, (+ services : VCA Entreprise) 20 → 22 Ko ; trainings-data (+ fiche VCA Base : programme, sources officielles) 14 → 18 Ko, (+ service VCA Entreprise : niveaux, faits officiels, mots-clés en 10 langues) 18 → 28 Ko ;
-     search.js 42 → 46 Ko (groupes Articles / Sessions, suggestions, état de chargement). */
-  const budget = { "js/site-content.js": 22, "js/search.js": 46, "js/i18n.js": 8, "js/trainings-data.js": 28, "js/assistant/launcher.js": 30, "css/search.css": 17, "css/site-header.css": 12, "css/assistant.css": 18, "css/fonts.css": 6 };
+     search.js 42 → 46 Ko (groupes Articles / Sessions, suggestions, état de chargement), 46 → 53 Ko et search.css 17 → 20 Ko
+     (barre « suggestive » : suggestions animées, bouton d'envoi, dissolution du texte à l'envoi — d'après Aceternity UI). */
+  const budget = { "js/site-content.js": 22, "js/search.js": 53, "js/i18n.js": 8, "js/trainings-data.js": 28, "js/assistant/launcher.js": 30, "css/search.css": 20, "css/site-header.css": 12, "css/assistant.css": 18, "css/fonts.css": 6 };
   Object.keys(budget).forEach((f) => assert.ok(size(f) <= budget[f] * KB, f + " : " + Math.round(size(f) / KB) + " Ko > " + budget[f] + " Ko"));
   /* le FAQ (37 Ko) n'est JAMAIS sur le chemin critique : il ne se charge qu'à la première utilisation de la recherche */
   PAGES.filter((f) => f !== "faq.html").forEach((f) => assert.doesNotMatch(read(f), /<script[^>]+js\/faq-data\.js/, f + " : faq-data.js chargé d'emblée"));

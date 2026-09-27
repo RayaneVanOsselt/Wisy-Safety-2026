@@ -328,23 +328,34 @@ a.f-c-value:hover{color:var(--turquoise)}
   <symbol id="ci-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></symbol>
   <symbol id="ci-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></g></symbol>
   <symbol id="ci-external" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9"/></symbol>
+  <symbol id="ci-chevron" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="ci-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14"/></symbol>
 </svg>
 
-<!-- ==================== HERO ==================== -->
-<section class="co-hero">
-  <div class="container">
-    <nav class="co-crumbs" data-i18n-attr="aria-label:coord.crumbs_label" aria-label="Fil d'Ariane">
+<!-- ==================== HERO — pleine bande, image duotone en bord perdu ==================== -->
+<section class="co-hero" id="co-hero-top">
+  <span class="co-hero__rail" aria-hidden="true"><span data-i18n="coord.hero_fiche_ref_value">COORDINATION</span></span>
+  <div class="co-hero__visual" data-parallax>
+    <picture>
+      <source srcset="assets/images/coordination/coordination-hero-equipements-securite-1400.avif" type="image/avif">
+      <img src="assets/images/coordination/coordination-hero-equipements-securite-1400.webp" alt="Casque, gants, lunettes de protection, protections auditives, gilet haute visibilité et chaussures de sécurité posés sur un établi" width="1400" height="933" fetchpriority="high" data-i18n-attr="alt:coord.hero_image_alt">
+    </picture>
+    <svg class="co-hero__brackets" data-draw viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <path class="co-hero__bracket" d="M4,20 L4,4 L20,4"/>
+      <path class="co-hero__bracket" d="M96,80 L96,96 L80,96"/>
+    </svg>
+  </div>
+  <div class="container co-hero__inner">
+    <nav class="co-crumbs co-crumbs--onhero" data-i18n-attr="aria-label:coord.crumbs_label" aria-label="Fil d'Ariane">
       <ol><li><a data-i18n="coord.crumb_home" href="index.html">Accueil</a></li><li data-i18n="coord.crumb_current" aria-current="page">WiSy Coordination</li></ol>
     </nav>
-  </div>
-  <div class="container co-hero__grid">
     <div class="co-hero__col">
       <p class="co-eyebrow reveal"><span class="co-eyebrow__dot" aria-hidden="true"></span><span data-i18n="coord.hero_eyebrow">WiSy Coordination · Sécurité &amp; santé</span></p>
       <h1 class="co-hero__title reveal" style="--d:.05s" data-i18n="coord.hero_title">La sécurité chantier, coordonnée de la conception à la réception.</h1>
       <p class="co-hero__lead reveal" style="--d:.1s" data-i18n="coord.hero_lead">WiSy Coordination accompagne maîtres d'ouvrage, architectes et entreprises dans l'organisation, la prévention et le suivi sécurité de leurs projets.</p>
       <div class="co-hero__actions reveal" style="--d:.15s">
         <a class="btn btn--cta" href="#co-cta" data-co-track="cta_hero"><span data-i18n="coord.hero_cta1">Demander une coordination</span><span class="btn__arrow" aria-hidden="true">↗</span></a>
-        <a class="btn btn--outline" href="#co-process"><span data-i18n="coord.hero_cta2">Découvrir notre méthode</span></a>
+        <a class="btn btn--light" href="#co-process"><span data-i18n="coord.hero_cta2">Découvrir notre méthode</span></a>
       </div>
       <ul class="co-trust reveal" style="--d:.2s">
         <li><svg aria-hidden="true"><use href="#ci-check"/></svg><span data-i18n="coord.hero_trust1">Coordination sécurité-santé</span></li>
@@ -353,73 +364,95 @@ a.f-c-value:hover{color:var(--turquoise)}
         <li><svg aria-hidden="true"><use href="#ci-check"/></svg><span data-i18n="coord.hero_trust4">Cadre légal belge</span></li>
       </ul>
     </div>
-    <div class="co-hero__visual reveal" style="--d:.12s">
-      <div class="co-hero__frame">
-        <picture>
-          <source srcset="assets/images/coordination/coordination-hero-equipements-securite-1400.avif" type="image/avif">
-          <img src="assets/images/coordination/coordination-hero-equipements-securite-1400.webp" alt="Casque, gants, lunettes de protection, protections auditives, gilet haute visibilité et chaussures de sécurité posés sur un établi" width="1400" height="933" fetchpriority="high" data-i18n-attr="alt:coord.hero_image_alt">
-        </picture>
-        <span class="co-hero__corner co-hero__corner--tl" aria-hidden="true"></span>
-        <span class="co-hero__corner co-hero__corner--br" aria-hidden="true"></span>
-      </div>
-      <div class="co-hero__fiche" aria-hidden="true">
-        <span class="co-hero__fiche-row"><b data-i18n="coord.hero_fiche_ref_label">Dossier</b><span data-i18n="coord.hero_fiche_ref_value">COORDINATION</span></span>
-        <span class="co-hero__fiche-row"><b data-i18n="coord.hero_fiche_phase_label">Phase</b><span data-i18n="coord.hero_fiche_phase_value">Projet → Réalisation</span></span>
-        <span class="co-hero__fiche-row"><b data-i18n="coord.hero_fiche_status_label">Statut</b><span data-i18n="coord.hero_fiche_status_value">Suivi terrain</span></span>
-        <span class="co-hero__fiche-row"><b data-i18n="coord.hero_fiche_scope_label">Cadre</b><span data-i18n="coord.hero_fiche_scope_value">Belgique · AR 25/01/2001</span></span>
-      </div>
+    <div class="co-hero__fiche reveal" style="--d:.25s" aria-hidden="true">
+      <span class="co-hero__fiche-row"><b data-i18n="coord.hero_fiche_ref_label">Dossier</b><span data-i18n="coord.hero_fiche_ref_value">COORDINATION</span></span>
+      <span class="co-hero__fiche-row"><b data-i18n="coord.hero_fiche_phase_label">Phase</b><span data-i18n="coord.hero_fiche_phase_value">Projet → Réalisation</span></span>
+      <span class="co-hero__fiche-row"><b data-i18n="coord.hero_fiche_status_label">Statut</b><span data-i18n="coord.hero_fiche_status_value">Suivi terrain</span></span>
+      <span class="co-hero__fiche-row"><b data-i18n="coord.hero_fiche_scope_label">Cadre</b><span data-i18n="coord.hero_fiche_scope_value">Belgique · AR 25/01/2001</span></span>
     </div>
   </div>
+  <a class="co-hero__scroll" href="#co-why" aria-hidden="true" tabindex="-1"><svg><use href="#ci-chevron"/></svg></a>
 </section>
 
-<!-- ==================== POURQUOI WISY COORDINATION (4 piliers) ==================== -->
+<!-- ==================== POURQUOI WISY COORDINATION — rail interactif qui s'ouvre au survol/focus ==================== -->
 <section class="co-why" id="co-why">
+  <span class="co-ghost" aria-hidden="true">01</span>
   <div class="container">
     <div class="co-sec-head reveal">
       <span class="co-kicker" data-i18n="coord.why_kicker">01 · Notre approche</span>
       <h2 data-i18n="coord.why_title">Une coordination qui ne s'arrête pas aux documents.</h2>
     </div>
-    <div class="co-pillars" data-stagger>
-      <button class="co-pillar reveal" type="button" data-modal-open="modal-pillar-expertise" aria-haspopup="dialog">
-        <span class="co-pillar__num">01</span>
-        <span class="co-pillar__ic"><svg aria-hidden="true"><use href="#ci-shield"/></svg></span>
-        <span class="co-pillar__tt" data-i18n="coord.pillar1_title">Expertise</span>
-        <span class="co-pillar__tx" data-i18n="coord.pillar1_text">Le cadre légal des chantiers temporaires ou mobiles, traduit en actions concrètes sur le terrain.</span>
-        <span class="co-pillar__more"><span data-i18n="coord.pillar_more">Voir le détail</span> <svg aria-hidden="true"><use href="#ci-arrow"/></svg></span>
-      </button>
-      <button class="co-pillar reveal" type="button" data-modal-open="modal-pillar-accompagnement" aria-haspopup="dialog">
-        <span class="co-pillar__num">02</span>
-        <span class="co-pillar__ic"><svg aria-hidden="true"><use href="#ci-team"/></svg></span>
-        <span class="co-pillar__tt" data-i18n="coord.pillar2_title">Accompagnement</span>
-        <span class="co-pillar__tx" data-i18n="coord.pillar2_text">De la première esquisse à la réception du chantier, un interlocuteur pour toute la mission sécurité.</span>
-        <span class="co-pillar__more"><span data-i18n="coord.pillar_more">Voir le détail</span> <svg aria-hidden="true"><use href="#ci-arrow"/></svg></span>
-      </button>
-      <button class="co-pillar reveal" type="button" data-modal-open="modal-pillar-conformite" aria-haspopup="dialog">
-        <span class="co-pillar__num">03</span>
-        <span class="co-pillar__ic"><svg aria-hidden="true"><use href="#ci-check-doc"/></svg></span>
-        <span class="co-pillar__tt" data-i18n="coord.pillar3_title">Conformité</span>
-        <span class="co-pillar__tx" data-i18n="coord.pillar3_text">Vous accompagner dans l'application des obligations de coordination propres à votre projet.</span>
-        <span class="co-pillar__more"><span data-i18n="coord.pillar_more">Voir le détail</span> <svg aria-hidden="true"><use href="#ci-arrow"/></svg></span>
-      </button>
-      <button class="co-pillar reveal" type="button" data-modal-open="modal-pillar-prevention" aria-haspopup="dialog">
-        <span class="co-pillar__num">04</span>
-        <span class="co-pillar__ic"><svg aria-hidden="true"><use href="#ci-eye"/></svg></span>
-        <span class="co-pillar__tt" data-i18n="coord.pillar4_title">Prévention</span>
-        <span class="co-pillar__tx" data-i18n="coord.pillar4_text">Anticiper les risques plutôt que les subir : visites de chantier et mesures suivies dans la durée.</span>
-        <span class="co-pillar__more"><span data-i18n="coord.pillar_more">Voir le détail</span> <svg aria-hidden="true"><use href="#ci-arrow"/></svg></span>
-      </button>
-    </div>
+    <ul class="co-pillars reveal">
+      <li class="co-pillar">
+        <button class="co-pillar__head" type="button" aria-expanded="false" data-pillar-toggle>
+          <span class="co-pillar__num">01</span>
+          <span class="co-pillar__ic"><svg aria-hidden="true"><use href="#ci-shield"/></svg></span>
+          <span class="co-pillar__tt" data-i18n="coord.pillar1_title">Expertise</span>
+          <svg class="co-pillar__chev" aria-hidden="true"><use href="#ci-plus"/></svg>
+        </button>
+        <div class="co-pillar__body">
+          <div class="co-pillar__bodyin">
+            <p class="co-pillar__tx" data-i18n="coord.pillar1_text">Le cadre légal des chantiers temporaires ou mobiles, traduit en actions concrètes sur le terrain.</p>
+            <button class="co-pillar__more" type="button" data-modal-open="modal-pillar-expertise" aria-haspopup="dialog"><span data-i18n="coord.pillar_more">Voir le détail</span> <svg aria-hidden="true"><use href="#ci-arrow"/></svg></button>
+          </div>
+        </div>
+      </li>
+      <li class="co-pillar">
+        <button class="co-pillar__head" type="button" aria-expanded="false" data-pillar-toggle>
+          <span class="co-pillar__num">02</span>
+          <span class="co-pillar__ic"><svg aria-hidden="true"><use href="#ci-team"/></svg></span>
+          <span class="co-pillar__tt" data-i18n="coord.pillar2_title">Accompagnement</span>
+          <svg class="co-pillar__chev" aria-hidden="true"><use href="#ci-plus"/></svg>
+        </button>
+        <div class="co-pillar__body">
+          <div class="co-pillar__bodyin">
+            <p class="co-pillar__tx" data-i18n="coord.pillar2_text">De la première esquisse à la réception du chantier, un interlocuteur pour toute la mission sécurité.</p>
+            <button class="co-pillar__more" type="button" data-modal-open="modal-pillar-accompagnement" aria-haspopup="dialog"><span data-i18n="coord.pillar_more">Voir le détail</span> <svg aria-hidden="true"><use href="#ci-arrow"/></svg></button>
+          </div>
+        </div>
+      </li>
+      <li class="co-pillar">
+        <button class="co-pillar__head" type="button" aria-expanded="false" data-pillar-toggle>
+          <span class="co-pillar__num">03</span>
+          <span class="co-pillar__ic"><svg aria-hidden="true"><use href="#ci-check-doc"/></svg></span>
+          <span class="co-pillar__tt" data-i18n="coord.pillar3_title">Conformité</span>
+          <svg class="co-pillar__chev" aria-hidden="true"><use href="#ci-plus"/></svg>
+        </button>
+        <div class="co-pillar__body">
+          <div class="co-pillar__bodyin">
+            <p class="co-pillar__tx" data-i18n="coord.pillar3_text">Vous accompagner dans l'application des obligations de coordination propres à votre projet.</p>
+            <button class="co-pillar__more" type="button" data-modal-open="modal-pillar-conformite" aria-haspopup="dialog"><span data-i18n="coord.pillar_more">Voir le détail</span> <svg aria-hidden="true"><use href="#ci-arrow"/></svg></button>
+          </div>
+        </div>
+      </li>
+      <li class="co-pillar">
+        <button class="co-pillar__head" type="button" aria-expanded="false" data-pillar-toggle>
+          <span class="co-pillar__num">04</span>
+          <span class="co-pillar__ic"><svg aria-hidden="true"><use href="#ci-eye"/></svg></span>
+          <span class="co-pillar__tt" data-i18n="coord.pillar4_title">Prévention</span>
+          <svg class="co-pillar__chev" aria-hidden="true"><use href="#ci-plus"/></svg>
+        </button>
+        <div class="co-pillar__body">
+          <div class="co-pillar__bodyin">
+            <p class="co-pillar__tx" data-i18n="coord.pillar4_text">Anticiper les risques plutôt que les subir : visites de chantier et mesures suivies dans la durée.</p>
+            <button class="co-pillar__more" type="button" data-modal-open="modal-pillar-prevention" aria-haspopup="dialog"><span data-i18n="coord.pillar_more">Voir le détail</span> <svg aria-hidden="true"><use href="#ci-arrow"/></svg></button>
+          </div>
+        </div>
+      </li>
+    </ul>
   </div>
 </section>
 
-<!-- ==================== MISSION TIMELINE ==================== -->
+<!-- ==================== MISSION TIMELINE — ligne de progression animée au scroll ==================== -->
 <section class="co-mission" id="co-mission">
+  <span class="co-ghost co-ghost--l" aria-hidden="true">02</span>
   <div class="container">
     <div class="co-sec-head reveal">
       <span class="co-kicker" data-i18n="coord.mission_kicker">02 · La mission</span>
       <h2 data-i18n="coord.mission_title">Une mission continue, du premier risque identifié au dossier final.</h2>
     </div>
-    <ol class="co-timeline" data-stagger>
+    <ol class="co-timeline" data-timeline>
+      <li class="co-timeline__rail" aria-hidden="true"><span class="co-timeline__fill" data-timeline-fill></span></li>
       <li class="co-timeline__item reveal">
         <span class="co-timeline__num">01</span>
         <div class="co-timeline__body"><h3 data-i18n="coord.mission1_title">Analyse des risques</h3><p data-i18n="coord.mission1_text">Identification des risques liés au projet et aux interactions entre intervenants, dès la phase de conception.</p></div>
@@ -452,24 +485,28 @@ a.f-c-value:hover{color:var(--turquoise)}
   </div>
 </section>
 
-<!-- ==================== CADRE RÉGLEMENTAIRE ==================== -->
+<!-- ==================== CADRE RÉGLEMENTAIRE — citation éditoriale ==================== -->
 <section class="co-legal" id="co-legal">
+  <span class="co-ghost co-ghost--dark" aria-hidden="true">03</span>
   <div class="container co-legal__grid">
     <div class="co-sec-head reveal">
       <span class="co-kicker co-kicker--light" data-i18n="coord.legal_kicker">03 · Cadre réglementaire</span>
       <h2 data-i18n="coord.legal_title">Quand la coordination sécurité-santé intervient-elle ?</h2>
-      <p class="co-legal__lead reveal" data-i18n="coord.legal_lead">Nous vous accompagnons dans l'application des obligations de coordination applicables à votre projet.</p>
     </div>
+    <p class="co-legal__quote reveal" data-i18n="coord.legal_lead">Nous vous accompagnons dans l'application des obligations de coordination applicables à votre projet.</p>
     <div class="co-legal__cards" data-stagger>
       <div class="co-legal__card reveal">
+        <span class="co-legal__cardnum">01</span>
         <h3 data-i18n="coord.legal_card1_title">Le déclencheur</h3>
         <p data-i18n="coord.legal_card1_text">Dès qu'un chantier temporaire ou mobile réunit plusieurs entrepreneurs — simultanément ou successivement — un coordinateur sécurité-santé doit être désigné.</p>
       </div>
       <div class="co-legal__card reveal">
+        <span class="co-legal__cardnum">02</span>
         <h3 data-i18n="coord.legal_card2_title">Deux phases</h3>
         <p data-i18n="coord.legal_card2_text">Une phase « projet », dès la conception (PSS), et une phase « réalisation », pendant le chantier (suivi, DIU).</p>
       </div>
       <div class="co-legal__card reveal">
+        <span class="co-legal__cardnum">03</span>
         <h3 data-i18n="coord.legal_card3_title">Niveaux A et B</h3>
         <p data-i18n="coord.legal_card3_text">Le niveau de qualification requis pour le coordinateur dépend de l'ampleur et de la complexité du projet, pas d'un choix du maître d'ouvrage.</p>
       </div>
@@ -483,33 +520,38 @@ a.f-c-value:hover{color:var(--turquoise)}
   </div>
 </section>
 
-<!-- ==================== SERVICES ==================== -->
+<!-- ==================== SERVICES — grille bento asymétrique ==================== -->
 <section class="co-services" id="co-services">
+  <span class="co-ghost" aria-hidden="true">04</span>
   <div class="container">
     <div class="co-sec-head reveal">
       <span class="co-kicker" data-i18n="coord.services_kicker">04 · Services</span>
       <h2 data-i18n="coord.services_title">Quatre missions, un même fil conducteur : la sécurité de votre chantier.</h2>
     </div>
     <div class="co-services__grid" data-stagger>
-      <button class="co-service reveal" type="button" data-modal-open="modal-service-css" aria-haspopup="dialog">
+      <button class="co-service co-service--lg reveal" type="button" data-modal-open="modal-service-css" aria-haspopup="dialog">
+        <span class="co-service__num">01</span>
         <span class="co-service__ic"><svg aria-hidden="true"><use href="#ci-shield"/></svg></span>
         <span class="co-service__tt" data-i18n="coord.service1_title">Coordination Sécurité-Santé A &amp; B</span>
         <span class="co-service__tx" data-i18n="coord.service1_text">Mission de coordination projet et réalisation, PSS et DIU inclus.</span>
         <span class="co-service__more"><span data-i18n="coord.pillar_more">Voir le détail</span> <svg aria-hidden="true"><use href="#ci-arrow"/></svg></span>
       </button>
       <button class="co-service reveal" type="button" data-modal-open="modal-service-conseiller" aria-haspopup="dialog">
+        <span class="co-service__num">02</span>
         <span class="co-service__ic"><svg aria-hidden="true"><use href="#ci-briefcase"/></svg></span>
         <span class="co-service__tt" data-i18n="coord.service2_title">Conseiller en Prévention</span>
         <span class="co-service__tx" data-i18n="coord.service2_text">Appui à la politique de prévention interne de votre organisation.</span>
         <span class="co-service__more"><span data-i18n="coord.pillar_more">Voir le détail</span> <svg aria-hidden="true"><use href="#ci-arrow"/></svg></span>
       </button>
       <button class="co-service reveal" type="button" data-modal-open="modal-service-audit" aria-haspopup="dialog">
+        <span class="co-service__num">03</span>
         <span class="co-service__ic"><svg aria-hidden="true"><use href="#ci-search"/></svg></span>
         <span class="co-service__tt" data-i18n="coord.service3_title">Audit Sécurité &amp; Accompagnement</span>
         <span class="co-service__tx" data-i18n="coord.service3_text">État des lieux sécurité d'un chantier ou d'une organisation, avec plan d'action.</span>
         <span class="co-service__more"><span data-i18n="coord.pillar_more">Voir le détail</span> <svg aria-hidden="true"><use href="#ci-arrow"/></svg></span>
       </button>
       <button class="co-service reveal" type="button" data-modal-open="modal-service-documents" aria-haspopup="dialog">
+        <span class="co-service__num">04</span>
         <span class="co-service__ic"><svg aria-hidden="true"><use href="#ci-archive"/></svg></span>
         <span class="co-service__tt" data-i18n="coord.service4_title">Documents &amp; dossiers sécurité</span>
         <span class="co-service__tx" data-i18n="coord.service4_text">Rédaction et mise à jour du PSS, du DIU et des dossiers de sécurité du projet.</span>
@@ -519,7 +561,7 @@ a.f-c-value:hover{color:var(--turquoise)}
   </div>
 </section>
 
-<!-- ==================== COORDINATION CONTROL (éditorial) ==================== -->
+<!-- ==================== COORDINATION CONTROL — allumage séquentiel au scroll (éditorial) ==================== -->
 <section class="co-control">
   <div class="container">
     <div class="co-sec-head reveal">
@@ -527,19 +569,20 @@ a.f-c-value:hover{color:var(--turquoise)}
       <h2 data-i18n="coord.control_title">Coordination Control</h2>
       <p class="co-control__note reveal" data-i18n="coord.control_note">Représentation éditoriale du déroulé d'une mission — pas un suivi en temps réel de votre chantier.</p>
     </div>
-    <ol class="co-control__rail reveal">
-      <li><span data-i18n="coord.control1">Conception</span></li>
-      <li><span data-i18n="coord.control2">Analyse</span></li>
-      <li><span data-i18n="coord.control3">Planification</span></li>
-      <li><span data-i18n="coord.control4">Chantier</span></li>
-      <li><span data-i18n="coord.control5">Suivi</span></li>
-      <li><span data-i18n="coord.control6">Dossier final</span></li>
+    <ol class="co-control__rail" data-control-rail>
+      <li style="--i:0"><span data-i18n="coord.control1">Conception</span></li>
+      <li style="--i:1"><span data-i18n="coord.control2">Analyse</span></li>
+      <li style="--i:2"><span data-i18n="coord.control3">Planification</span></li>
+      <li style="--i:3"><span data-i18n="coord.control4">Chantier</span></li>
+      <li style="--i:4"><span data-i18n="coord.control5">Suivi</span></li>
+      <li style="--i:5"><span data-i18n="coord.control6">Dossier final</span></li>
     </ol>
   </div>
 </section>
 
-<!-- ==================== DOMAINES D'INTERVENTION ==================== -->
+<!-- ==================== DOMAINES D'INTERVENTION — mosaïque texturée (même photo, traitement duoton) ==================== -->
 <section class="co-domains" id="co-domains">
+  <span class="co-ghost co-ghost--l" aria-hidden="true">06</span>
   <div class="container">
     <div class="co-sec-head reveal">
       <span class="co-kicker" data-i18n="coord.domains_kicker">06 · Domaines d'intervention</span>
@@ -547,26 +590,32 @@ a.f-c-value:hover{color:var(--turquoise)}
     </div>
     <div class="co-domains__grid" data-stagger>
       <button class="co-domain reveal" type="button" data-modal-open="modal-domain-residentiel" aria-haspopup="dialog">
+        <span class="co-domain__bg" aria-hidden="true"></span>
         <svg aria-hidden="true"><use href="#ci-building"/></svg>
         <span data-i18n="coord.domain1_title">Bâtiment résidentiel</span>
       </button>
       <button class="co-domain reveal" type="button" data-modal-open="modal-domain-genie-civil" aria-haspopup="dialog">
+        <span class="co-domain__bg" aria-hidden="true"></span>
         <svg aria-hidden="true"><use href="#ci-road"/></svg>
         <span data-i18n="coord.domain2_title">Génie civil</span>
       </button>
       <button class="co-domain reveal" type="button" data-modal-open="modal-domain-renovation" aria-haspopup="dialog">
+        <span class="co-domain__bg" aria-hidden="true"></span>
         <svg aria-hidden="true"><use href="#ci-tools"/></svg>
         <span data-i18n="coord.domain3_title">Rénovation &amp; transformation</span>
       </button>
       <button class="co-domain reveal" type="button" data-modal-open="modal-domain-infra" aria-haspopup="dialog">
+        <span class="co-domain__bg" aria-hidden="true"></span>
         <svg aria-hidden="true"><use href="#ci-pin"/></svg>
         <span data-i18n="coord.domain4_title">Infrastructures publiques</span>
       </button>
       <button class="co-domain reveal" type="button" data-modal-open="modal-domain-industriel" aria-haspopup="dialog">
+        <span class="co-domain__bg" aria-hidden="true"></span>
         <svg aria-hidden="true"><use href="#ci-factory"/></svg>
         <span data-i18n="coord.domain5_title">Environnements industriels</span>
       </button>
       <button class="co-domain reveal" type="button" data-modal-open="modal-domain-specifiques" aria-haspopup="dialog">
+        <span class="co-domain__bg" aria-hidden="true"></span>
         <svg aria-hidden="true"><use href="#ci-puzzle"/></svg>
         <span data-i18n="coord.domain6_title">Projets spécifiques</span>
       </button>
@@ -576,6 +625,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 
 <!-- ==================== PROCESSUS ==================== -->
 <section class="co-process" id="co-process">
+  <span class="co-ghost" aria-hidden="true">07</span>
   <div class="container">
     <div class="co-sec-head reveal">
       <span class="co-kicker" data-i18n="coord.process_kicker">07 · Notre méthode</span>
@@ -611,22 +661,16 @@ a.f-c-value:hover{color:var(--turquoise)}
   </div>
 </section>
 
-<!-- ==================== ÉQUIPE ==================== -->
+<!-- ==================== ÉQUIPE — état vide, honnête et assumé (pas un placeholder) ==================== -->
 <section class="co-team" id="co-team">
+  <span class="co-ghost" aria-hidden="true">08</span>
   <div class="container">
-    <div class="co-sec-head reveal">
+    <div class="co-team__empty reveal" data-team-empty>
       <span class="co-kicker" data-i18n="coord.team_kicker">08 · Équipe</span>
       <h2 data-i18n="coord.team_title">Une mission suivie par des personnes, pas un formulaire.</h2>
-    </div>
-    <div class="co-team__empty reveal" data-team-empty>
-      <span class="co-team__empty-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ci-team"/></svg></span>
-      <div>
-        <h3 data-i18n="coord.team_empty_title">Les profils de l'équipe seront présentés ici</h3>
-        <p data-i18n="coord.team_empty_text">Nous complétons cette page avec les coordinateurs réellement impliqués dans vos projets. En attendant, contactez-nous pour échanger directement avec l'équipe.</p>
-        <div class="co-cta-row">
-          <a class="btn btn--outline" href="contact.html"><span data-i18n="coord.team_empty_cta">Contacter l'équipe</span></a>
-        </div>
-      </div>
+      <p class="co-team__empty-sub" data-i18n="coord.team_empty_title">Les profils de l'équipe seront présentés ici</p>
+      <p data-i18n="coord.team_empty_text">Nous complétons cette page avec les coordinateurs réellement impliqués dans vos projets. En attendant, contactez-nous pour échanger directement avec l'équipe.</p>
+      <a class="btn btn--outline" href="contact.html"><span data-i18n="coord.team_empty_cta">Contacter l'équipe</span> <span class="btn__arrow" aria-hidden="true">↗</span></a>
     </div>
     <div class="co-team__grid" data-team-list hidden></div>
   </div>
@@ -634,6 +678,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 
 <!-- ==================== CTA + FORMULAIRE ==================== -->
 <section class="co-cta" id="co-cta">
+  <span class="co-ghost co-ghost--dark" aria-hidden="true">09</span>
   <div class="container co-cta__grid">
     <div class="co-sec-head reveal">
       <span class="co-kicker co-kicker--light" data-i18n="coord.cta_kicker">09 · Contact</span>

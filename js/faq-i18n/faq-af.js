@@ -38,6 +38,10 @@ WisyFAQ.register("af", {
   "contact": {
    "label": "Kontak & ondersteuning",
    "tagline": "Bereik ons, kantoorure en aanlyn-assistent"
+  },
+  "coordination": {
+   "label": "Koördinering van veiligheid en gesondheid",
+   "tagline": "Opdragte, veiligheidsplan, na-intervensiedossier en versoek om koördinering"
   }
  },
  "actions": {
@@ -47,7 +51,8 @@ WisyFAQ.register("af", {
   "agenda": "Raadpleeg die agenda",
   "nacelle": "Ontdek die Hoogwerker-opleiding",
   "vca": "Ontdek die VCA Basis-opleiding",
-  "assistant": "Stel die vraag aan die assistent"
+  "assistant": "Stel die vraag aan die assistent",
+  "coordination": "Ontdek WiSy Coordination"
  },
  "popular": [
   {
@@ -734,6 +739,92 @@ WisyFAQ.register("af", {
     "virtuele assistent",
     "wisy",
     "bot"
+   ]
+  },
+  "faq-coordination-quest-ce-que": {
+   "question": "Wat is WiSy Coordination?",
+   "answer": "WiSy Coordination is die afdeling van Wisy Safety wat toegespits is op die koördinering van veiligheid en gesondheid op tydelike of mobiele bouwerwe.\n\nOns begelei bouheers, argitekte en aannemers met die organisering van voorkoming: die veiligheids- en gesondheidsplan, koördinering van die betrokke partye, werfbesoeke en die na-intervensiedossier by voltooiing van die projek.\n\nOntdek die volledige benadering op die WiSy Coordination-bladsy.",
+   "keywords": [
+    "wisy coordination",
+    "koördinering",
+    "koördinering veiligheid en gesondheid",
+    "wat is wisy coordination"
+   ],
+   "synonyms": [
+    "wat is wisy coordination",
+    "stel wisy coordination voor",
+    "koördinering boubereke"
+   ]
+  },
+  "faq-coordination-pss": {
+   "question": "Wat is 'n veiligheids- en gesondheidsplan?",
+   "answer": "Die veiligheids- en gesondheidsplan identifiseer die risiko's van 'n bouwerf en die voorkomingsmaatreëls wat getref moet word, reeds vanaf die ontwerpfase van die projek.\n\nDit word opgestel en bygewerk deur die koördineerder van veiligheid en gesondheid, in oorleg met die bouheer en die betrokke partye, en daarna dwarsdeur die bouproses opgevolg.\n\nWetlike grondslag: die koninklike besluit van 25 Januarie 2001 betreffende tydelike of mobiele bouwerwe.",
+   "keywords": [
+    "veiligheids- en gesondheidsplan",
+    "wat is 'n veiligheidsplan",
+    "gesondheidsplan bouwerf"
+   ],
+   "synonyms": [
+    "wat is 'n gesondheidsplan",
+    "risikoplan werf",
+    "definisie veiligheidsplan"
+   ]
+  },
+  "faq-coordination-diu": {
+   "question": "Wat is 'n na-intervensiedossier?",
+   "answer": "Die na-intervensiedossier bring, by voltooiing van die bouproses, die inligting saam wat nodig is vir die veiligheid van toekomstige werk aan die bouwerk: onderhoud, herstelwerk, verbouing of sloping.\n\nDit word saamgestel deur die koördineerder van veiligheid en gesondheid en aan die bouheer oorhandig, wat dit moet bewaar en aan enige toekomstige betrokke party moet oordra.\n\nSoos die veiligheids- en gesondheidsplan, word dit voorgeskryf deur die koninklike besluit van 25 Januarie 2001 betreffende tydelike of mobiele bouwerwe.",
+   "keywords": [
+    "na-intervensiedossier",
+    "wat is 'n na-intervensiedossier",
+    "dossier bouwerk"
+   ],
+   "synonyms": [
+    "dossier toekomstige werk",
+    "definisie na-intervensiedossier",
+    "inligting toekomstige werk"
+   ]
+  },
+  "faq-coordination-demander": {
+   "question": "Hoe versoek ek 'n koördinering van veiligheid en gesondheid?",
+   "answer": "Beskryf u projek (tipe, ligging, fase) via die vorm op die WiSy Coordination-bladsy, of kontak ons per telefoon of e-pos: +32 2 318 86 59 / info@wisysafety.be.\n\nOns span kontak u om die koördineringsopdrag wat by u bouwerf pas, te bepaal.",
+   "keywords": [
+    "koördinering versoek",
+    "koördinering vra",
+    "kontak koördinering"
+   ],
+   "synonyms": [
+    "hoe kontak ek u vir 'n koördinering",
+    "versoek 'n koördineerder",
+    "vra 'n koördineerder"
+   ]
+  },
+  "faq-coordination-quand-obligatoire": {
+   "question": "Wanneer is koördinering van veiligheid en gesondheid verpligtend?",
+   "answer": "In België moet 'n koördineerder van veiligheid en gesondheid aangestel word sodra 'n tydelike of mobiele bouwerf verskeie aannemers saambring, hetsy gelyktydig of opeenvolgend — dit word bepaal deur die koninklike besluit van 25 Januarie 2001, ter uitvoering van die wet van 4 Augustus 1996 betreffende die welsyn van werknemers.\n\nDie opdrag omvat 'n «ontwerp»-fase (vanaf die konsepsie, met die veiligheids- en gesondheidsplan) en 'n «uitvoerings»-fase (opvolging van die werf), toevertrou aan 'n koördineerder van vlak A of B na gelang van die omvang en kompleksiteit van die projek.\n\nOns begelei u by die toepassing van die koördineringsverpligtinge wat op u projek van toepassing is: kontak ons vir advies oor u geval.",
+   "keywords": [
+    "verpligtend",
+    "wanneer koördinering",
+    "koördineringsverpligting"
+   ],
+   "synonyms": [
+    "het ek 'n koördineerder nodig",
+    "het my werf koördinering nodig",
+    "koördinering verpligtend"
+   ]
+  },
+  "faq-coordination-niveau-a-b": {
+   "question": "Wat is die verskil tussen 'n koördineerder vlak A en vlak B?",
+   "answer": "Koördineerders van veiligheid en gesondheid word in twee kwalifikasievlakke ingedeel, soos bepaal deur die koninklike besluit van 25 Januarie 2001: vlak A word vereis vir die grootste of mees komplekse projekte, vlak B vir die ander bouwerwe wat aan koördinering onderworpe is.\n\nDie vereiste vlak hang af van die grootte, duur en aard van die projek — nie van 'n keuse van die bouheer nie.\n\nOm te weet watter vlak op u projek van toepassing is, beskryf dit vir ons via die WiSy Coordination-bladsy.",
+   "keywords": [
+    "vlak a",
+    "vlak b",
+    "koördineerder vlak a",
+    "koördineerder vlak b"
+   ],
+   "synonyms": [
+    "watter koördineringsvlak",
+    "vlak a of b",
+    "koördineerder kwalifikasievlak"
    ]
   }
  }

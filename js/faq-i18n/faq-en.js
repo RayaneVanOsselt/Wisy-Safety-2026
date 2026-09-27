@@ -38,6 +38,10 @@ WisyFAQ.register("en", {
   "contact": {
    "label": "Contact & support",
    "tagline": "Reach us, opening hours and online assistant"
+  },
+  "coordination": {
+   "label": "Health & safety coordination",
+   "tagline": "Assignments, safety plan, post-intervention file and coordination requests"
   }
  },
  "actions": {
@@ -47,7 +51,8 @@ WisyFAQ.register("en", {
   "agenda": "View the schedule",
   "nacelle": "Discover the Aerial work platform course",
   "vca": "Discover the VCA Basic course",
-  "assistant": "Ask the assistant"
+  "assistant": "Ask the assistant",
+  "coordination": "Discover WiSy Coordination"
  },
  "popular": [
   {
@@ -737,6 +742,97 @@ WisyFAQ.register("en", {
     "virtual assistant",
     "wisy",
     "bot"
+   ]
+  },
+  "faq-coordination-quest-ce-que": {
+   "question": "What is WiSy Coordination?",
+   "answer": "WiSy Coordination is Wisy Safety's division dedicated to health & safety coordination on temporary or mobile construction sites.\n\nWe support project owners, architects and contractors in organising prevention: the safety and health plan, coordination of the parties involved, site visits, and the post-intervention file at project completion.\n\nSee the full approach on the WiSy Coordination page.",
+   "keywords": [
+    "wisy coordination",
+    "coordination",
+    "health and safety coordination",
+    "what is wisy coordination",
+    "coordination overview"
+   ],
+   "synonyms": [
+    "what is wisy coordination",
+    "introduce wisy coordination",
+    "construction site coordination",
+    "health and safety coordination"
+   ]
+  },
+  "faq-coordination-pss": {
+   "question": "What is a safety and health plan (PSS)?",
+   "answer": "The safety and health plan identifies a construction site's risks and the prevention measures to implement, from the project's design phase onward.\n\nIt is drawn up and kept up to date by the health & safety coordinator, together with the project owner and the parties involved, and is then followed throughout the works.\n\nIts legal basis: the Belgian Royal Decree of 25 January 2001 on temporary or mobile construction sites.",
+   "keywords": [
+    "safety and health plan",
+    "pss",
+    "what is a pss",
+    "prevention plan"
+   ],
+   "synonyms": [
+    "what is a safety and health plan",
+    "site risk plan",
+    "safety plan definition"
+   ]
+  },
+  "faq-coordination-diu": {
+   "question": "What is a post-intervention file (DIU)?",
+   "answer": "The post-intervention file gathers, at the end of the works, the information needed for the safety of future work on the building: maintenance, repair, alteration or demolition.\n\nIt is drawn up by the health & safety coordinator and handed to the project owner, who must keep it and pass it on to any future party working on the building.\n\nLike the safety and health plan, it is required under the Belgian Royal Decree of 25 January 2001 on temporary or mobile construction sites.",
+   "keywords": [
+    "post-intervention file",
+    "diu",
+    "what is a diu"
+   ],
+   "synonyms": [
+    "what is a post-intervention file",
+    "future works file",
+    "post-intervention file definition"
+   ]
+  },
+  "faq-coordination-demander": {
+   "question": "How do I request a health & safety coordination?",
+   "answer": "Describe your project (type, location, phase) via the form on the WiSy Coordination page, or contact us by phone or e-mail: +32 2 318 86 59 / info@wisysafety.be.\n\nOur team will get back to you to define the coordination assignment suited to your site.",
+   "keywords": [
+    "request coordination",
+    "ask for coordination",
+    "contact coordination"
+   ],
+   "synonyms": [
+    "how to contact you for a coordination",
+    "request a coordinator",
+    "ask for a coordinator"
+   ]
+  },
+  "faq-coordination-quand-obligatoire": {
+   "question": "When is health & safety coordination mandatory?",
+   "answer": "In Belgium, a health & safety coordinator must be appointed as soon as a temporary or mobile construction site brings together several contractors, whether at the same time or at different times — this is set out in the Royal Decree of 25 January 2001, under the Act of 4 August 1996 on the wellbeing of workers.\n\nThe assignment includes a “design” phase (from the outset, with the safety and health plan) and an “execution” phase (site follow-up), entrusted to a level A or level B coordinator depending on the scale and complexity of the project.\n\nWe help you apply the coordination obligations that apply to your project: contact us for an opinion on your case.",
+   "keywords": [
+    "mandatory",
+    "when coordination",
+    "coordination obligation",
+    "several contractors"
+   ],
+   "synonyms": [
+    "do i need a coordinator",
+    "does my site need coordination",
+    "is a coordinator mandatory"
+   ]
+  },
+  "faq-coordination-niveau-a-b": {
+   "question": "What is the difference between a level A and level B coordinator?",
+   "answer": "Health & safety coordinators are split into two qualification levels, defined by the Royal Decree of 25 January 2001: level A is required for the largest or most complex projects, level B for the other sites subject to coordination.\n\nThe level required depends on the size, duration and nature of the project — not on the project owner's choice.\n\nTo find out which level applies to your project, describe it to us via the WiSy Coordination page.",
+   "keywords": [
+    "level a",
+    "level b",
+    "level a coordinator",
+    "level b coordinator",
+    "difference level"
+   ],
+   "synonyms": [
+    "which coordinator level",
+    "level a or b",
+    "coordinator qualification levels"
    ]
   }
  }

@@ -33,6 +33,9 @@ Dépendances : Pillow (WebP + AVIF). Aucune autre. Sortie déterministe (mêmes 
                   (+ carte de partage 1200×630 ; les 2 versions MP4 du film se font avec scripts/encode-video.swift,
                    voir docs/README-VCA-ENTREPRISE.md)
   carte de partage (Open Graph) : `--og <dossier de polices Poppins .ttf>` → assets/images/partage/wisy-safety-1200x630.jpg
+  Coordination    assets/originaux/coordination/coordination-hero-equipements-securite.webp
+                  → assets/images/coordination/coordination-hero-equipements-securite-1400.{avif,webp}
+                  (photo fournie par le propriétaire, déjà au format WebP : elle sert directement d'original)
 """
 import os
 import sys
@@ -238,6 +241,22 @@ def misc():
         report("affiche vidéo", src, size, f"{im.width}×{im.height}")
 
 
+# --------------------------------------------------------------------------- coordination : photo hero (fournie par le propriétaire)
+def coordination():
+    src = "assets/originaux/coordination/coordination-hero-equipements-securite.webp"
+    if not os.path.exists(src):
+        return
+    im = fit_width(to_rgb(Image.open(src)), 1400)
+    dst = "assets/images/coordination/coordination-hero-equipements-securite-1400.webp"
+    if need(dst, src):
+        size = save_webp(im, dst, quality=82)
+        report("coordination hero", src, size, f"{im.width}×{im.height}")
+    dst = "assets/images/coordination/coordination-hero-equipements-securite-1400.avif"
+    if need(dst, src):
+        size = save_avif(im, dst, quality=60)
+        report("coordination hero (avif)", src, size, f"{im.width}×{im.height}")
+
+
 # --------------------------------------------------------------------------- accueil : affiches du logo animé
 # Deux images de assets/originaux/accueil/logo-animation.mp4, déjà recadrées en 4:5 (720 × 900) :
 #   « debut » = 1re image : affiche pendant le chargement de l'intro, élément LCP de l'accueil ;
@@ -408,6 +427,7 @@ if __name__ == "__main__":
     peb()
     partners()
     misc()
+    coordination()
     accueil()
     vca()
     vca_entreprise()

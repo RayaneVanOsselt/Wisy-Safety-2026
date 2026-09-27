@@ -38,6 +38,10 @@ WisyFAQ.register("it", {
   "contact": {
    "label": "Contatti e assistenza",
    "tagline": "Come raggiungerci, orari e assistente online"
+  },
+  "coordination": {
+   "label": "Coordinamento sicurezza e salute",
+   "tagline": "Incarichi, piano di sicurezza e salute, fascicolo per interventi successivi e richiesta di coordinamento"
   }
  },
  "actions": {
@@ -47,7 +51,8 @@ WisyFAQ.register("it", {
   "agenda": "Consulta il calendario",
   "nacelle": "Scopri il corso piattaforma elevatrice",
   "vca": "Scopri il corso VCA base",
-  "assistant": "Fai la domanda all'assistente"
+  "assistant": "Fai la domanda all'assistente",
+  "coordination": "Scopri WiSy Coordination"
  },
  "popular": [
   {
@@ -735,6 +740,91 @@ WisyFAQ.register("it", {
     "assistente virtuale",
     "wisy",
     "bot"
+   ]
+  },
+  "faq-coordination-quest-ce-que": {
+   "question": "Cos'è WiSy Coordination?",
+   "answer": "WiSy Coordination è il polo di Wisy Safety dedicato al coordinamento sicurezza e salute nei cantieri temporanei o mobili.\n\nAccompagniamo committenti, architetti e imprese nell'organizzazione della prevenzione: piano di sicurezza e salute, coordinamento degli intervenienti, visite di cantiere e fascicolo per interventi successivi alla chiusura del progetto.\n\nScopri l'approccio completo sulla pagina WiSy Coordination.",
+   "keywords": [
+    "wisy coordination",
+    "coordinamento",
+    "coordinamento sicurezza e salute",
+    "cos'e wisy coordination"
+   ],
+   "synonyms": [
+    "cos'e wisy coordination",
+    "presentate wisy coordination",
+    "coordinamento cantiere"
+   ]
+  },
+  "faq-coordination-pss": {
+   "question": "Cos'è un piano di sicurezza e salute?",
+   "answer": "Il piano di sicurezza e salute individua i rischi di un cantiere e le misure di prevenzione da attuare, già dalla fase di progettazione.\n\nÈ redatto e aggiornato dal coordinatore per la sicurezza e la salute, in accordo con il committente e gli intervenienti, e viene poi seguito per tutta la durata del cantiere.\n\nBase legale: il regio decreto belga del 25 gennaio 2001 relativo ai cantieri temporanei o mobili.",
+   "keywords": [
+    "piano di sicurezza e salute",
+    "cos'e un piano di sicurezza",
+    "definizione piano"
+   ],
+   "synonyms": [
+    "definizione piano di sicurezza",
+    "cosa significa il piano di sicurezza",
+    "piano rischio cantiere"
+   ]
+  },
+  "faq-coordination-diu": {
+   "question": "Cos'è il fascicolo per interventi successivi?",
+   "answer": "Il fascicolo per interventi successivi raccoglie, al termine del cantiere, le informazioni utili alla sicurezza dei lavori futuri sull'opera: manutenzione, riparazione, trasformazione o demolizione.\n\nÈ redatto dal coordinatore per la sicurezza e la salute e consegnato al committente, che deve conservarlo e trasmetterlo a ogni futuro interveniente.\n\nCome il piano di sicurezza e salute, è previsto dal regio decreto belga del 25 gennaio 2001 relativo ai cantieri temporanei o mobili.",
+   "keywords": [
+    "fascicolo per interventi successivi",
+    "cos'e il fascicolo",
+    "definizione fascicolo"
+   ],
+   "synonyms": [
+    "definizione fascicolo interventi successivi",
+    "cosa significa il fascicolo",
+    "fascicolo lavori futuri"
+   ]
+  },
+  "faq-coordination-demander": {
+   "question": "Come si richiede un coordinamento sicurezza e salute?",
+   "answer": "Descrivi il tuo progetto (tipo, ubicazione, fase) tramite il modulo sulla pagina WiSy Coordination, oppure contattaci per telefono o e-mail: +32 2 318 86 59 / info@wisysafety.be.\n\nIl nostro team ti ricontatterà per definire l'incarico di coordinamento adatto al tuo cantiere.",
+   "keywords": [
+    "richiesta coordinamento",
+    "richiedere coordinamento",
+    "contatto coordinamento"
+   ],
+   "synonyms": [
+    "come vi contatto per un coordinamento",
+    "richiedere un coordinatore",
+    "richiedere un coordinatore per la sicurezza"
+   ]
+  },
+  "faq-coordination-quand-obligatoire": {
+   "question": "Quando è obbligatorio il coordinamento sicurezza e salute?",
+   "answer": "In Belgio, un coordinatore per la sicurezza e la salute deve essere designato non appena un cantiere temporaneo o mobile riunisce più imprese, contemporaneamente o successivamente — questo quadro è fissato dal regio decreto del 25 gennaio 2001, in applicazione della legge del 4 agosto 1996 sul benessere dei lavoratori.\n\nL'incarico comprende una fase «di progetto» (fin dalla progettazione, con il piano di sicurezza e salute) e una fase «di realizzazione» (monitoraggio del cantiere), affidate a un coordinatore di livello A o B a seconda dell'ampiezza e della complessità del progetto.\n\nVi accompagniamo nell'applicazione degli obblighi di coordinamento applicabili al vostro progetto: contattateci per un parere sul vostro caso.",
+   "keywords": [
+    "obbligatorio",
+    "quando coordinamento",
+    "obbligo coordinamento"
+   ],
+   "synonyms": [
+    "ho bisogno di un coordinatore",
+    "il mio cantiere ha bisogno di coordinamento",
+    "il coordinamento e obbligatorio"
+   ]
+  },
+  "faq-coordination-niveau-a-b": {
+   "question": "Qual è la differenza tra un coordinatore di livello A e di livello B?",
+   "answer": "I coordinatori per la sicurezza e la salute sono suddivisi in due livelli di qualificazione, definiti dal regio decreto del 25 gennaio 2001: il livello A è richiesto per i progetti più vasti o complessi, il livello B per gli altri cantieri soggetti a coordinamento.\n\nIl livello richiesto dipende dalle dimensioni, dalla durata e dalla natura del progetto — non da una scelta del committente.\n\nPer sapere quale livello si applica al vostro progetto, descrivetecelo tramite la pagina WiSy Coordination.",
+   "keywords": [
+    "livello a",
+    "livello b",
+    "differenza livello"
+   ],
+   "synonyms": [
+    "quale livello di coordinamento",
+    "livello a o b",
+    "livello di qualifica del coordinatore"
    ]
   }
  }

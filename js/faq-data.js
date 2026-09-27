@@ -107,7 +107,8 @@
     agenda:      { label: "Consulter l'agenda",              href: "agenda.html" },
     nacelle:     { label: "Découvrir la formation Nacelles", href: "formation-nacelles-elevatrices.html" },
     vca:         { label: "Découvrir la formation VCA Base", href: "formation-vca-base.html" },
-    assistant:   { label: "Poser la question à l'assistant", href: null }
+    assistant:   { label: "Poser la question à l'assistant", href: null },
+    coordination: { label: "Découvrir WiSy Coordination",    href: "coordination.html" }
   };
 
   /* ---------------------------------------------------------------------
@@ -121,7 +122,8 @@
     { id: "deroulement",  label: "Organisation des formations",   tagline: "Durée, format, lieu et accessibilité",          icon: "steps" },
     { id: "attestations", label: "Attestations & certifications", tagline: "Ce qui vous est remis à l'issue",               icon: "award" },
     { id: "entreprises",  label: "Entreprises & équipes",         tagline: "Former plusieurs collaborateurs",               icon: "team" },
-    { id: "contact",      label: "Contact & assistance",          tagline: "Nous joindre, horaires et assistant en ligne",  icon: "chat" }
+    { id: "contact",      label: "Contact & assistance",          tagline: "Nous joindre, horaires et assistant en ligne",  icon: "chat" },
+    { id: "coordination", label: "Coordination sécurité-santé",   tagline: "Missions, PSS, DIU et demande de coordination", icon: "shield" }
   ];
 
   /* ---------------------------------------------------------------------
@@ -501,6 +503,82 @@
       synonyms: ["robot", "aide en ligne", "discuter", "conversation", "assistant virtuel", "wisy", "bot"],
       relatedQuestions: ["faq-contact-contact", "faq-choisir-adaptee", "faq-inscription-comment"],
       action: "assistant"
+    },
+    /* ==== Coordination sécurité-santé (WiSy Coordination) =================
+       Faits vérifiés : loi du 4 août 1996 relative au bien-être des travailleurs et arrêté royal du
+       25 janvier 2001 concernant les chantiers temporaires ou mobiles (voir js/coordination-data.js
+       → REGULATORY_SOURCES). Aucun fait propre à Wisy Safety (agrément, niveau couvert, zone) n'est
+       affirmé ici : voir js/coordination-data.js → UNCONFIRMED_CLAIMS. */
+    {
+      id: "faq-coordination-quest-ce-que",
+      category: "coordination",
+      question: "Qu'est-ce que WiSy Coordination ?",
+      answer: "WiSy Coordination est le pôle de Wisy Safety dédié à la coordination sécurité-santé sur les chantiers temporaires ou mobiles.\n\n" +
+        "Nous accompagnons maîtres d'ouvrage, architectes et entreprises dans l'organisation de la prévention : plan de sécurité et de santé (PSS), coordination des intervenants, visites de chantier et dossier d'intervention ultérieure (DIU) à la clôture du projet.\n\n" +
+        "Retrouvez la démarche complète sur la page WiSy Coordination.",
+      keywords: ["wisy coordination", "coordination", "coordination securite sante", "c'est quoi wisy coordination", "presentation coordination"],
+      synonyms: ["wisy coordination c'est quoi", "presentez wisy coordination", "coordination securite chantier", "coordination sante securite"],
+      relatedQuestions: ["faq-coordination-pss", "faq-coordination-diu", "faq-coordination-demander"],
+      action: "coordination"
+    },
+    {
+      id: "faq-coordination-pss",
+      category: "coordination",
+      question: "Qu'est-ce qu'un PSS (Plan de Sécurité et de Santé) ?",
+      answer: "Le Plan de Sécurité et de Santé (PSS) identifie les risques d'un chantier et les mesures de prévention à mettre en œuvre, dès la phase de conception du projet.\n\n" +
+        "Il est établi et actualisé par le coordinateur sécurité-santé, en concertation avec le maître d'ouvrage et les intervenants, puis suivi tout au long du chantier.\n\n" +
+        "Sa base légale : l'arrêté royal du 25 janvier 2001 concernant les chantiers temporaires ou mobiles.",
+      keywords: ["pss", "plan de securite et de sante", "plan de securite", "definition pss"],
+      synonyms: ["c'est quoi un pss", "a quoi sert le pss", "plan securite sante"],
+      relatedQuestions: ["faq-coordination-diu", "faq-coordination-quand-obligatoire", "faq-coordination-quest-ce-que"],
+      action: "coordination"
+    },
+    {
+      id: "faq-coordination-diu",
+      category: "coordination",
+      question: "Qu'est-ce qu'un DIU (Dossier d'Intervention Ultérieure) ?",
+      answer: "Le Dossier d'Intervention Ultérieure (DIU) rassemble, à la fin du chantier, les informations utiles à la sécurité des travaux futurs sur l'ouvrage : entretien, réparation, transformation ou démolition.\n\n" +
+        "Il est constitué par le coordinateur sécurité-santé et remis au maître d'ouvrage, qui doit le conserver et le transmettre à tout futur intervenant.\n\n" +
+        "Comme le PSS, il est prévu par l'arrêté royal du 25 janvier 2001 concernant les chantiers temporaires ou mobiles.",
+      keywords: ["diu", "dossier d'intervention ulterieure", "dossier intervention ulterieure"],
+      synonyms: ["c'est quoi un diu", "a quoi sert le diu", "definition du diu"],
+      relatedQuestions: ["faq-coordination-pss", "faq-coordination-quest-ce-que"],
+      action: "coordination"
+    },
+    {
+      id: "faq-coordination-demander",
+      category: "coordination",
+      question: "Comment demander une coordination sécurité-santé ?",
+      answer: "Décrivez votre projet (type, localisation, phase) via le formulaire de la page WiSy Coordination, ou contactez-nous par téléphone ou e-mail : " + CONTACT.phone + " / " + CONTACT.email + ".\n\n" +
+        "Notre équipe revient vers vous pour définir la mission de coordination adaptée à votre chantier.",
+      keywords: ["demander une coordination", "demande de coordination", "contacter coordination"],
+      synonyms: ["comment vous contacter pour une coordination", "demander un coordinateur", "solliciter une coordination"],
+      relatedQuestions: ["faq-coordination-quest-ce-que", "faq-coordination-quand-obligatoire"],
+      action: "coordination"
+    },
+    {
+      id: "faq-coordination-quand-obligatoire",
+      category: "coordination",
+      question: "Quand la coordination sécurité-santé est-elle obligatoire ?",
+      answer: "En Belgique, un coordinateur sécurité-santé doit être désigné dès qu'un chantier temporaire ou mobile réunit plusieurs entrepreneurs, simultanément ou successivement — c'est l'arrêté royal du 25 janvier 2001 qui fixe ce cadre, en application de la loi du 4 août 1996 relative au bien-être des travailleurs.\n\n" +
+        "La mission comprend une phase « projet » (dès la conception, avec le PSS) et une phase « réalisation » (suivi de chantier), confiées à un coordinateur de niveau A ou B selon l'ampleur et la complexité du projet.\n\n" +
+        "Nous vous accompagnons dans l'application des obligations de coordination applicables à votre projet : contactez-nous pour un avis sur votre cas.",
+      keywords: ["obligatoire", "quand coordination", "obligation coordination", "plusieurs entrepreneurs"],
+      synonyms: ["ai-je besoin d'un coordinateur", "mon chantier a-t-il besoin d'une coordination", "coordination obligatoire chantier"],
+      relatedQuestions: ["faq-coordination-niveau-a-b", "faq-coordination-quest-ce-que"],
+      action: "coordination"
+    },
+    {
+      id: "faq-coordination-niveau-a-b",
+      category: "coordination",
+      question: "Quelle est la différence entre un coordinateur niveau A et niveau B ?",
+      answer: "Les coordinateurs sécurité-santé sont répartis en deux niveaux de qualification, définis par l'arrêté royal du 25 janvier 2001 : le niveau A est requis pour les projets les plus vastes ou complexes, le niveau B pour les autres chantiers soumis à coordination.\n\n" +
+        "Le niveau requis dépend de la taille, de la durée et de la nature du projet — pas d'un choix du maître d'ouvrage.\n\n" +
+        "Pour savoir quel niveau s'applique à votre projet, décrivez-le-nous via la page WiSy Coordination.",
+      keywords: ["niveau a", "niveau b", "coordinateur niveau a", "coordinateur niveau b", "difference niveau"],
+      synonyms: ["quel niveau de coordinateur", "niveau a ou b", "difference entre niveau a et b"],
+      relatedQuestions: ["faq-coordination-quand-obligatoire", "faq-coordination-quest-ce-que"],
+      action: "coordination"
     }
   ];
 

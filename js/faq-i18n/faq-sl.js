@@ -38,6 +38,10 @@ WisyFAQ.register("sl", {
   "contact": {
    "label": "Stik in pomoč",
    "tagline": "Kako nas dosežete, delovni čas in spletni asistent"
+  },
+  "coordination": {
+   "label": "Koordinacija varnosti in zdravja",
+   "tagline": "Naloge, načrt varnosti in zdravja, dosje za poznejše posege in zahteva za koordinacijo"
   }
  },
  "actions": {
@@ -47,7 +51,8 @@ WisyFAQ.register("sl", {
   "agenda": "Oglejte si urnik",
   "nacelle": "Odkrijte usposabljanje za dvižne ploščadi",
   "vca": "Odkrijte usposabljanje VCA osnovni",
-  "assistant": "Vprašanje postavite asistentu"
+  "assistant": "Vprašanje postavite asistentu",
+  "coordination": "Odkrijte WiSy Coordination"
  },
  "popular": [
   {
@@ -735,6 +740,91 @@ WisyFAQ.register("sl", {
     "virtualni asistent",
     "wisy",
     "bot"
+   ]
+  },
+  "faq-coordination-quest-ce-que": {
+   "question": "Kaj je WiSy Coordination?",
+   "answer": "WiSy Coordination je enota podjetja Wisy Safety, namenjena koordinaciji varnosti in zdravja na začasnih ali premičnih gradbiščih.\n\nSpremljamo naročnike, arhitekte in podjetja pri organizaciji preventive: načrt varnosti in zdravja, koordinacija udeležencev, obiski gradbišča in dosje za poznejše posege ob zaključku projekta.\n\nCeloten pristop si oglejte na strani WiSy Coordination.",
+   "keywords": [
+    "wisy coordination",
+    "koordinacija",
+    "koordinacija varnosti in zdravja",
+    "kaj je wisy coordination"
+   ],
+   "synonyms": [
+    "kaj je wisy coordination",
+    "predstavite wisy coordination",
+    "koordinacija gradbišče"
+   ]
+  },
+  "faq-coordination-pss": {
+   "question": "Kaj je načrt varnosti in zdravja?",
+   "answer": "Načrt varnosti in zdravja opredeli tveganja na gradbišču in preventivne ukrepe, ki jih je treba izvesti, že od faze zasnove projekta.\n\nPripravi in posodablja ga koordinator za varnost in zdravje, v dogovoru z naročnikom in udeleženci, nato pa se spremlja skozi celoten potek gradnje.\n\nPravna podlaga: belgijski kraljevi odlok z dne 25. januarja 2001 o začasnih ali premičnih gradbiščih.",
+   "keywords": [
+    "načrt varnosti in zdravja",
+    "kaj je načrt varnosti",
+    "opredelitev načrta"
+   ],
+   "synonyms": [
+    "definicija načrta varnosti",
+    "kaj pomeni načrt varnosti",
+    "načrt tveganja gradbišče"
+   ]
+  },
+  "faq-coordination-diu": {
+   "question": "Kaj je dosje za poznejše posege?",
+   "answer": "Dosje za poznejše posege ob zaključku gradbišča združuje informacije, potrebne za varnost prihodnjih del na objektu: vzdrževanje, popravilo, spremembo ali rušenje.\n\nPripravi ga koordinator za varnost in zdravje in ga preda naročniku, ki ga mora hraniti in posredovati vsakemu prihodnjemu udeležencu.\n\nTako kot načrt varnosti in zdravja ga predpisuje belgijski kraljevi odlok z dne 25. januarja 2001 o začasnih ali premičnih gradbiščih.",
+   "keywords": [
+    "dosje za poznejše posege",
+    "kaj je dosje",
+    "opredelitev dosjeja"
+   ],
+   "synonyms": [
+    "definicija dosjeja za poznejše posege",
+    "kaj pomeni dosje",
+    "dosje prihodnja dela"
+   ]
+  },
+  "faq-coordination-demander": {
+   "question": "Kako naročim koordinacijo varnosti in zdravja?",
+   "answer": "Opišite svoj projekt (vrsto, lokacijo, fazo) prek obrazca na strani WiSy Coordination ali nas kontaktirajte po telefonu ali e-pošti: +32 2 318 86 59 / info@wisysafety.be.\n\nNaša ekipa vas bo kontaktirala, da opredelimo nalogo koordinacije, prilagojeno vašemu gradbišču.",
+   "keywords": [
+    "naročilo koordinacije",
+    "zahteva koordinacija",
+    "kontakt koordinacija"
+   ],
+   "synonyms": [
+    "kako vas kontaktirati za koordinacijo",
+    "naročite koordinatorja",
+    "naročite koordinatorja za varnost"
+   ]
+  },
+  "faq-coordination-quand-obligatoire": {
+   "question": "Kdaj je koordinacija varnosti in zdravja obvezna?",
+   "answer": "V Belgiji je treba imenovati koordinatorja za varnost in zdravje, takoj ko je na začasnem ali premičnem gradbišču prisotnih več izvajalcev, sočasno ali zaporedno — to določa kraljevi odlok z dne 25. januarja 2001, na podlagi zakona z dne 4. avgusta 1996 o dobrem počutju delavcev.\n\nNaloga obsega fazo „zasnove“ (že od začetka, z načrtom varnosti in zdravja) in fazo „izvedbe“ (spremljanje gradbišča), zaupano koordinatorju stopnje A ali B glede na obseg in zahtevnost projekta.\n\nPomagamo vam pri izpolnjevanju obveznosti koordinacije, ki veljajo za vaš projekt: kontaktirajte nas za mnenje o vašem primeru.",
+   "keywords": [
+    "obvezna",
+    "kdaj koordinacija",
+    "obveznost koordinacije"
+   ],
+   "synonyms": [
+    "ali potrebujem koordinatorja",
+    "ali moje gradbišče potrebuje koordinacijo",
+    "je koordinacija obvezna"
+   ]
+  },
+  "faq-coordination-niveau-a-b": {
+   "question": "Kakšna je razlika med koordinatorjem stopnje A in stopnje B?",
+   "answer": "Koordinatorji za varnost in zdravje so razdeljeni v dve stopnji usposobljenosti, opredeljeni s kraljevim odlokom z dne 25. januarja 2001: stopnja A je potrebna za najobsežnejše ali najbolj zapletene projekte, stopnja B za ostala gradbišča, ki so predmet koordinacije.\n\nZahtevana stopnja je odvisna od velikosti, trajanja in narave projekta — ne od izbire naročnika.\n\nČe želite izvedeti, katera stopnja velja za vaš projekt, nam ga opišite prek strani WiSy Coordination.",
+   "keywords": [
+    "stopnja a",
+    "stopnja b",
+    "razlika stopnja"
+   ],
+   "synonyms": [
+    "katera stopnja koordinacije",
+    "stopnja a ali b",
+    "stopnja usposobljenosti koordinatorja"
    ]
   }
  }

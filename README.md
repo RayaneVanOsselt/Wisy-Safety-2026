@@ -10,7 +10,7 @@ et sans rien à installer pour le mettre en ligne.
 
 | Élément | Rôle |
 |---|---|
-| `index.html`, `formations.html`, `formation-vca-base.html`, `formation-nacelles-elevatrices.html`, `formation-beps-premiers-secours.html`, `peb-wallonie-bruxelles.html`, `article-vca-cout-financement.html`, `article-vca-erreurs-examen.html`, `inscription.html`, `contact.html`, `avis.html`, `faq.html`, `agenda.html`, `404.html` | Les pages du site. **Elles restent à la racine** : leurs adresses (`/formations.html`…) en dépendent, les déplacer changerait les URL et le référencement. |
+| `index.html`, `formations.html`, `formation-vca-base.html`, `formation-nacelles-elevatrices.html`, `formation-beps-premiers-secours.html`, `peb-wallonie-bruxelles.html`, `coordination.html`, `article-vca-cout-financement.html`, `article-vca-erreurs-examen.html`, `inscription.html`, `contact.html`, `avis.html`, `faq.html`, `agenda.html`, `404.html` | Les pages du site. **Elles restent à la racine** : leurs adresses (`/formations.html`…) en dépendent, les déplacer changerait les URL et le référencement. |
 | `sitemap.xml`, `robots.txt`, `favicon.ico` | Fichiers que les moteurs de recherche et les navigateurs cherchent à la racine (les deux premiers sont **générés**, voir plus bas). |
 | `css/`, `js/` | Styles et scripts. |
 | `assets/` | Polices, images, icônes, vidéo et `originaux/` (photos d'origine). Rangement expliqué dans [assets/README.md](assets/README.md). |
@@ -32,6 +32,7 @@ et sans rien à installer pour le mettre en ligne.
 | **Publier une date de session** (VCA Base, agenda, inscription, recherche, assistant) | `js/sessions-data.js` (ou la table Supabase `supabase/sessions.sql`) | [docs/README-SESSIONS.md](docs/README-SESSIONS.md) |
 | Brancher le calendrier Outlook | l'attribut `data-calendar-url` dans `agenda.html` | [docs/README-AGENDA.md](docs/README-AGENDA.md) |
 | Changer les faits PEB (Wallonie/Bruxelles), le tarif ou les sessions | `js/peb-data.js` | [docs/README-PEB.md](docs/README-PEB.md) |
+| Changer les services, l'équipe ou les affirmations non confirmées de **WiSy Coordination** | `js/coordination-data.js` | [docs/README-COORDINATION.md](docs/README-COORDINATION.md) |
 | Configurer les avis clients (Supabase, e-mail, anti-spam) | `js/supabase-config.js` | [docs/README-AVIS.md](docs/README-AVIS.md) |
 | Corriger une traduction, ajouter un texte ou une page traduite | `js/i18n-data-*.js` (+ le HTML) | [docs/README-I18N.md](docs/README-I18N.md) |
 | Comprendre ou activer l'assistant virtuel | `js/assistant/` | [docs/README-ASSISTANT.md](docs/README-ASSISTANT.md) |

@@ -54,6 +54,8 @@ const OG_VCAE = { file: VE.images.og, width: 1200, height: 630, alt: VE.imageAlt
 /* Articles « Conseils & ressources VCA » : image de partage propre à chaque article (photo de l'article + logo). */
 const OG_ART_COST = { file: "assets/images/partage/article-cout-financement-1200x630.jpg", width: 1200, height: 630, alt: "Équipe en gilets de sécurité réunie autour d'une table de travail, avec des documents et un panneau d'évaluation des risques" };
 const OG_ART_EXAM = { file: "assets/images/partage/article-erreurs-examen-1200x630.jpg", width: 1200, height: 630, alt: "Homme casqué en gilet haute visibilité qui prend des notes sur un chantier" };
+/* Coordination : pas de carte de partage dédiée (aucun visuel de chantier fourni pour l'instant) —
+   repli volontaire sur OG_DEFAULT, comme agenda.html / contact.html / avis.html / faq.html. */
 
 /* Pages indexables. `graph` = nœuds JSON-LD ; `breadcrumb` = fil d'Ariane AFFICHÉ sur la page (les
    données structurées ne décrivent que ce que le visiteur voit). */
@@ -76,6 +78,11 @@ const DOCS = [
   { file: "agenda.html", graph: ["organization", "breadcrumb"], breadcrumb: [["Accueil", "index.html"], ["Agenda", "agenda.html"]] },
   { file: "peb-wallonie-bruxelles.html", graph: ["organization", "breadcrumb", "pebCourses"],
     breadcrumb: [["Accueil", "index.html"], ["Certificateur PEB", "peb-wallonie-bruxelles.html"]] },
+  /* WiSy Coordination : SERVICE de coordination sécurité-santé de chantier (nœud dédié `coordinationService`,
+     pas le `service` générique ci-dessus qui reste propre à VCA Entreprise). Aucun tarif, aucune zone
+     géographique : rien n'est affiché sur la page à ce sujet, donc rien dans les données structurées. */
+  { file: "coordination.html", graph: ["organization", "breadcrumb", "coordinationService"],
+    breadcrumb: [["Accueil", "index.html"], ["WiSy Coordination", "coordination.html"]] },
   /* Articles : og:type « article », dates lues dans le registre (js/site-content.js → `published` / `modified`). */
   { file: "article-vca-cout-financement.html", graph: ["organization", "breadcrumb", "article"], image: OG_ART_COST, ogType: "article",
     breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["VCA Base", "formation-vca-base.html"], ["Coût et financement d'une formation VCA", "article-vca-cout-financement.html"]] },
@@ -177,6 +184,17 @@ const NODES = {
       }
     };
   },
+  /* WiSy Coordination — service générique décrit sur la page, aucun fait propre à Wisy Safety
+     (agrément, niveau A/B couvert, zone) n'est encore confirmé : ni `offers`, ni `areaServed`, ni `audience`. */
+  coordinationService: (doc, meta) => ({
+    "@type": "Service",
+    "@id": Site.absoluteUrl(doc.file) + "#service",
+    name: "WiSy Coordination",
+    serviceType: "Coordination sécurité-santé de chantiers temporaires ou mobiles",
+    description: meta.description,
+    url: Site.absoluteUrl(doc.file),
+    provider: { "@id": ORG_ID }
+  }),
   /* Article : titre = H1 affiché, dates = celles du registre ET affichées sur la page, auteur/éditeur =
      l'organisation Wisy (aucune personne inventée). */
   article: (doc, meta) => {

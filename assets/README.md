@@ -12,6 +12,7 @@ assets/
 │   ├── assistant/    Mascotte de l'assistant virtuel
 │   ├── beps/         Photo + illustrations d'accent de la page Formation BEPS
 │   ├── contact/      Photo de la page Contact
+│   ├── coordination/ Photo hero de la page WiSy Coordination
 │   ├── faq/          Décor du Centre d'aide
 │   ├── formations/   Photos des 6 formations (catalogue + inscription)
 │   ├── logo/         Logo Wisy Safety (voir ci-dessous)
@@ -61,6 +62,7 @@ s'ils échouent, ils indiquent le fichier en cause.
 | `images/vca-base/` | `article-vca-cout-financement.html`, `article-vca-erreurs-examen.html`, cartes de la page VCA Base, aperçu dans la recherche (la photo principale de la page est `images/formations/vca-base.webp`) |
 | `images/partenaires/` | bandeau des partenaires de `index.html` |
 | `images/contact/` | `contact.html` |
+| `images/coordination/` | `coordination.html` |
 | `images/partage/` | aperçu des liens partagés (balises générées par `scripts/build-seo.js`) |
 | `images/logo/`, `icons/` | en-tête, pied de page, onglet du navigateur, données envoyées à Google |
 | `videos/accueil/` | `index.html` : animation du logo (hero + intro) — voir [docs/README-ACCUEIL.md](../docs/README-ACCUEIL.md) |

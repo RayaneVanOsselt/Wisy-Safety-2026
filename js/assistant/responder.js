@@ -338,6 +338,9 @@
       intro = "Bonjour,\nje suis l’Assistant Wisy. Je réponds à partir des mêmes informations que le Centre d’aide : posez votre question ou choisissez une suggestion.";
       var starters = starterQuestions(4);
       if (starters.length) suggestions = starters;
+    } else if (ctx.page === "coordination") {
+      intro = "Bonjour,\nje suis l’Assistant Wisy. Je peux vous expliquer la coordination sécurité-santé (PSS, DIU, niveaux A et B) ou vous aider à demander une mission pour votre chantier.";
+      suggestions = ["Qu’est-ce que WiSy Coordination ?", "Qu’est-ce qu’un PSS ?", "Qu’est-ce qu’un DIU ?", "Comment demander une coordination ?"];
     }
 
     return {

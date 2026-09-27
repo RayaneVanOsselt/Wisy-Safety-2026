@@ -53,6 +53,9 @@
     "footer.legal_terms": "Conditions générales", "footer.rights": "Tous droits réservés.",
     "dd.vca_base_full": "Formation VCA Base",
     "dd.vca_base_summary": "Maîtrisez les règles fondamentales de sécurité au travail et préparez votre examen VCA Base, en présentiel à Anderlecht (Bruxelles), examen inclus.",
+    "dd.vca_entreprise_desc": "Accompagnement à la certification VCA de votre entreprise",
+    "dd.vca_entreprise_full": "VCA Entreprise — accompagnement à la certification VCA de votre entreprise",
+    "dd.vca_entreprise_summary": "Wisy Safety accompagne votre entreprise dans sa démarche de certification VCA (LSC), au niveau VCA*, VCA** ou VCA-P : le certificat est délivré par un organisme de certification reconnu, après audit.",
     "dd.vca_base_dur": "1 jour",
     "dd.vca_base_fmt": "Présentiel",
     "dd.vca_base_exam": "Examen inclus"
@@ -94,6 +97,9 @@
     "footer.legal_terms": "Terms & conditions", "footer.rights": "All rights reserved.",
     "dd.vca_base_full": "VCA Basic course",
     "dd.vca_base_summary": "Master the fundamental workplace safety rules and prepare for your VCA Basic exam, in person in Anderlecht (Brussels), exam included.",
+    "dd.vca_entreprise_desc": "Support towards your company's VCA certification",
+    "dd.vca_entreprise_full": "VCA for Companies — support towards your company's VCA certification",
+    "dd.vca_entreprise_summary": "Wisy Safety supports your company in its VCA certification process, at level VCA*, VCA** or VCA-P: the certificate is issued by a recognised certification body, after an audit.",
     "dd.vca_base_dur": "1 day",
     "dd.vca_base_fmt": "In person",
     "dd.vca_base_exam": "Exam included"
@@ -135,6 +141,9 @@
     "footer.legal_terms": "Algemene voorwaarden", "footer.rights": "Alle rechten voorbehouden.",
     "dd.vca_base_full": "Opleiding VCA Basis",
     "dd.vca_base_summary": "Beheers de basisregels van veiligheid op het werk en bereid uw examen VCA Basis voor, op locatie in Anderlecht (Brussel), examen inbegrepen.",
+    "dd.vca_entreprise_desc": "Begeleiding naar de VCA-certificering van uw bedrijf",
+    "dd.vca_entreprise_full": "VCA Bedrijven — begeleiding naar de VCA-certificering van uw bedrijf",
+    "dd.vca_entreprise_summary": "Wisy Safety begeleidt uw bedrijf bij zijn VCA-certificering, op niveau VCA*, VCA** of VCA-P: het certificaat wordt na een audit afgegeven door een erkende certificatie-instelling.",
     "dd.vca_base_dur": "1 dag",
     "dd.vca_base_fmt": "Op locatie",
     "dd.vca_base_exam": "Examen inbegrepen"
@@ -176,6 +185,9 @@
     "footer.legal_terms": "Algemene voorwaardes", "footer.rights": "Alle regte voorbehou.",
     "dd.vca_base_full": "VCA Basis-opleiding",
     "dd.vca_base_summary": "Bemeester die grondliggende werkplekveiligheidsreëls en berei voor vir u VCA Basis-eksamen, in persoon in Anderlecht (Brussel), eksamen ingesluit.",
+    "dd.vca_entreprise_desc": "Ondersteuning vir die VCA-sertifisering van jou maatskappy",
+    "dd.vca_entreprise_full": "VCA vir Maatskappye — ondersteuning vir die VCA-sertifisering van jou maatskappy",
+    "dd.vca_entreprise_summary": "Wisy Safety ondersteun jou maatskappy met sy VCA-sertifisering, op vlak VCA*, VCA** of VCA-P: die sertifikaat word ná 'n oudit deur 'n erkende sertifiseringsliggaam uitgereik.",
     "dd.vca_base_dur": "1 dag",
     "dd.vca_base_fmt": "In persoon",
     "dd.vca_base_exam": "Eksamen ingesluit"
@@ -217,6 +229,9 @@
     "footer.legal_terms": "الشروط والأحكام", "footer.rights": "جميع الحقوق محفوظة.",
     "dd.vca_base_full": "دورة VCA الأساسي",
     "dd.vca_base_summary": "أتقن قواعد السلامة الأساسية في العمل واستعدّ لامتحان VCA الأساسي حضورياً في أندرلخت (بروكسل)، والامتحان مشمول.",
+    "dd.vca_entreprise_desc": "مرافقة شركتكم نحو شهادة VCA",
+    "dd.vca_entreprise_full": "VCA للشركات — مرافقة شركتكم نحو شهادة VCA",
+    "dd.vca_entreprise_summary": "ترافق Wisy Safety شركتكم في مسار الحصول على شهادة VCA بمستوى \u2066VCA*\u2069 أو \u2066VCA**\u2069 أو \u2066VCA-P\u2069: وتصدر الشهادة هيئة معترف بها لمنح الشهادات بعد التدقيق.",
     "dd.vca_base_dur": "يوم واحد",
     "dd.vca_base_fmt": "حضوري",
     "dd.vca_base_exam": "الامتحان مشمول"
@@ -258,6 +273,9 @@
     "footer.legal_terms": "Общи условия", "footer.rights": "Всички права запазени.",
     "dd.vca_base_full": "Обучение VCA основи",
     "dd.vca_base_summary": "Овладейте основните правила за безопасност на работното място и се подгответе за изпита VCA основи, присъствено в Андерлехт (Брюксел), изпитът е включен.",
+    "dd.vca_entreprise_desc": "Съдействие за VCA сертифицирането на вашата фирма",
+    "dd.vca_entreprise_full": "VCA за фирми — съдействие за VCA сертифицирането на вашата фирма",
+    "dd.vca_entreprise_summary": "Wisy Safety съдейства на вашата фирма в процеса на VCA сертифициране на ниво VCA*, VCA** или VCA-P: сертификатът се издава от признат сертифициращ орган след одит.",
     "dd.vca_base_dur": "1 ден",
     "dd.vca_base_fmt": "Присъствено",
     "dd.vca_base_exam": "Включен изпит"
@@ -299,6 +317,9 @@
     "footer.legal_terms": "AGB", "footer.rights": "Alle Rechte vorbehalten.",
     "dd.vca_base_full": "Schulung VCA Grundlagen",
     "dd.vca_base_summary": "Beherrschen Sie die grundlegenden Regeln der Arbeitssicherheit und bereiten Sie sich auf Ihre Prüfung VCA Grundlagen vor – in Präsenz in Anderlecht (Brüssel), Prüfung inklusive.",
+    "dd.vca_entreprise_desc": "Begleitung zur VCA-Zertifizierung Ihres Unternehmens",
+    "dd.vca_entreprise_full": "VCA für Unternehmen — Begleitung zur VCA-Zertifizierung Ihres Unternehmens",
+    "dd.vca_entreprise_summary": "Wisy Safety begleitet Ihr Unternehmen bei der VCA-Zertifizierung auf Stufe VCA*, VCA** oder VCA-P: Das Zertifikat wird nach einem Audit von einer anerkannten Zertifizierungsstelle ausgestellt.",
     "dd.vca_base_dur": "1 Tag",
     "dd.vca_base_fmt": "In Präsenz",
     "dd.vca_base_exam": "Prüfung inklusive"
@@ -340,6 +361,9 @@
     "footer.legal_terms": "Termeni și condiții", "footer.rights": "Toate drepturile rezervate.",
     "dd.vca_base_full": "Curs VCA de bază",
     "dd.vca_base_summary": "Stăpâniți regulile fundamentale de siguranță la locul de muncă și pregătiți-vă pentru examenul VCA de bază, cu prezență fizică la Anderlecht (Bruxelles), examen inclus.",
+    "dd.vca_entreprise_desc": "Sprijin pentru certificarea VCA a companiei dumneavoastră",
+    "dd.vca_entreprise_full": "VCA pentru companii — sprijin pentru certificarea VCA a companiei dumneavoastră",
+    "dd.vca_entreprise_summary": "Wisy Safety sprijină compania dumneavoastră în procesul de certificare VCA la nivelul VCA*, VCA** sau VCA-P: certificatul este eliberat de un organism de certificare recunoscut, după un audit.",
     "dd.vca_base_dur": "1 zi",
     "dd.vca_base_fmt": "Față în față",
     "dd.vca_base_exam": "Examen inclus"
@@ -381,6 +405,9 @@
     "footer.legal_terms": "Termini e condizioni", "footer.rights": "Tutti i diritti riservati.",
     "dd.vca_base_full": "Corso VCA base",
     "dd.vca_base_summary": "Padroneggia le regole fondamentali di sicurezza sul lavoro e preparati all'esame VCA base, in presenza ad Anderlecht (Bruxelles), esame incluso.",
+    "dd.vca_entreprise_desc": "Supporto per la certificazione VCA della vostra azienda",
+    "dd.vca_entreprise_full": "VCA aziende — supporto per la certificazione VCA della vostra azienda",
+    "dd.vca_entreprise_summary": "Wisy Safety accompagna la vostra azienda nel percorso di certificazione VCA ai livelli VCA*, VCA** o VCA-P: il certificato è rilasciato da un organismo di certificazione riconosciuto, dopo un audit.",
     "dd.vca_base_dur": "1 giorno",
     "dd.vca_base_fmt": "In presenza",
     "dd.vca_base_exam": "Esame incluso"
@@ -422,6 +449,9 @@
     "footer.legal_terms": "Splošni pogoji", "footer.rights": "Vse pravice pridržane.",
     "dd.vca_base_full": "Usposabljanje VCA osnovni",
     "dd.vca_base_summary": "Osvojite temeljna pravila varnosti pri delu in se pripravite na izpit VCA osnovni, v živo v Anderlechtu (Bruselj), izpit vključen.",
+    "dd.vca_entreprise_desc": "Podpora pri certificiranju VCA vašega podjetja",
+    "dd.vca_entreprise_full": "VCA za podjetja — podpora pri certificiranju VCA vašega podjetja",
+    "dd.vca_entreprise_summary": "Wisy Safety podpira vaše podjetje pri certifikaciji VCA na ravni VCA*, VCA** ali VCA-P: certifikat izda priznani certifikacijski organ po presoji.",
     "dd.vca_base_dur": "1 dan",
     "dd.vca_base_fmt": "V živo",
     "dd.vca_base_exam": "Izpit vključen"

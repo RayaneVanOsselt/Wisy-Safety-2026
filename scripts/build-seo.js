@@ -49,6 +49,8 @@ const B = Trainings.beps;
 const OG_BEPS = { file: B.images.og, width: 1200, height: 630, alt: "Wisy Safety — La sécurité comme une référence. Formations sécurité à Anderlecht, Bruxelles" };
 const V = Trainings.vcaBase;
 const OG_VCA = { file: V.images.og, width: 1200, height: 630, alt: V.imageAlt };
+const VE = Trainings.vcaEntreprise;
+const OG_VCAE = { file: VE.images.og, width: 1200, height: 630, alt: VE.imageAlt };
 /* Articles « Conseils & ressources VCA » : image de partage propre à chaque article (photo de l'article + logo). */
 const OG_ART_COST = { file: "assets/images/partage/article-cout-financement-1200x630.jpg", width: 1200, height: 630, alt: "Équipe en gilets de sécurité réunie autour d'une table de travail, avec des documents et un panneau d'évaluation des risques" };
 const OG_ART_EXAM = { file: "assets/images/partage/article-erreurs-examen-1200x630.jpg", width: 1200, height: 630, alt: "Homme casqué en gilet haute visibilité qui prend des notes sur un chantier" };
@@ -60,6 +62,9 @@ const DOCS = [
   { file: "formations.html", graph: ["organization", "courseList"] },
   { file: "formation-vca-base.html", graph: ["organization", "breadcrumb", "course"], image: OG_VCA,
     breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["VCA Base", "formation-vca-base.html"]] },
+  /* VCA Entreprise : SERVICE d'accompagnement (nœud `service`, jamais `course`) — le tarif du registre y figure parce qu'il est affiché sur la page. */
+  { file: "vca-entreprise.html", graph: ["organization", "breadcrumb", "service"], image: OG_VCAE,
+    breadcrumb: [["Accueil", "index.html"], ["VCA Entreprise", "vca-entreprise.html"]] },
   { file: "formation-nacelles-elevatrices.html", graph: ["organization", "breadcrumb", "course"], image: OG_NACELLES,
     breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["Nacelles élévatrices", "formation-nacelles-elevatrices.html"]] },
   { file: "formation-beps-premiers-secours.html", graph: ["organization", "breadcrumb", "course"], image: OG_BEPS,
@@ -150,6 +155,27 @@ const NODES = {
     node.provider = providerOf();
     node.offers = { "@type": "Offer", url: Site.absoluteUrl(doc.file), price: String(t.price.amountCents / 100), priceCurrency: t.price.currency, priceSpecification: priceSpec };
     return node;
+  },
+  /* Service « VCA Entreprise » — faits du registre js/trainings-data.js (`vcaEntreprise`), tous affichés sur la page. Le prix est
+     celui du registre (« tarif indicatif » par participant, statut TVA non précisé : jamais de `valueAddedTaxIncluded`). Aucun
+     `areaServed`, aucune note, aucun avis : rien qui ne soit établi. */
+  service: (doc, meta) => {
+    const S = Trainings.vcaEntreprise;
+    return {
+      "@type": "Service",
+      "@id": Site.absoluteUrl(doc.file) + "#service",
+      name: S.fullTitle,
+      serviceType: "Accompagnement à la certification VCA (LSC) d'une entreprise",
+      description: meta.description,
+      url: Site.absoluteUrl(doc.file),
+      image: ORIGIN + "/" + S.images.og,
+      provider: { "@id": ORG_ID },
+      audience: { "@type": "BusinessAudience", audienceType: "Entreprises qui interviennent chez des donneurs d'ordre" },
+      offers: {
+        "@type": "Offer", url: Site.absoluteUrl(doc.file), price: String(S.price.amountCents / 100), priceCurrency: S.price.currency,
+        priceSpecification: { "@type": "UnitPriceSpecification", price: String(S.price.amountCents / 100), priceCurrency: S.price.currency, unitText: "participant" }
+      }
+    };
   },
   /* Article : titre = H1 affiché, dates = celles du registre ET affichées sur la page, auteur/éditeur =
      l'organisation Wisy (aucune personne inventée). */

@@ -36,7 +36,7 @@ const LANGS = ["fr", "en", "nl", "af", "ar", "bg", "de", "ro", "it", "sl"];
 /* Pages publiques (le HTML doit être intégralement traduisible). */
 const PAGES = ["index", "formations", "contact", "avis", "inscription", "faq", "agenda",
   "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles",
-  "formation-vca-base", "article-vca-cout-financement", "article-vca-erreurs-examen", "404"].map((n) => n + ".html");
+  "formation-vca-base", "vca-entreprise", "article-vca-cout-financement", "article-vca-erreurs-examen", "404"].map((n) => n + ".html");
 
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 
@@ -201,7 +201,10 @@ const NAMES_OF_LANGS = ["Français", "English", "Nederlands", "Afrikaans", "ال
 const ALLOW_EXACT = new Set([].concat(NAMES_OF_LANGS, LANGS.map((l) => l.toUpperCase()), [
   "Wisy Safety", "Wisy Safety ·", "info@wisysafety.be", "+32 2 318 86 59", "Avenue d'Itterbeek 378", "Avenue d'Itterbeek 378, 1070 Anderlecht", "Av. d'Itterbeek 378, 1070 Anderlecht",
   "Orange", "Proximus", "Telenet", "Constructel", "VOO", "Unifiber", "VCA", "BEPS", "PEB", "112", "Certibru-RES", "IA",
-  "WS · 2026", "RESP", "FACT", "Stripe", "Mollie", "PayPal", "BE0123.456.789"
+  "WS · 2026", "RESP", "FACT", "Stripe", "Mollie", "PayPal", "BE0123.456.789",
+  /* Page VCA Entreprise : niveaux du référentiel (sigles officiels), code de produit du parcours d'inscription et noms des
+     organismes cités comme sources officielles — des noms propres, jamais traduits. */
+  "VCA*", "VCA**", "VCA-P", "VCA-E", "SSVV", "BeSaCC-VCA", "Prévention et Intérim"
 ]));
 const ALLOW_PATTERNS = [
   /^[^\p{L}]*$/u,                                           // uniquement chiffres / ponctuation / symboles

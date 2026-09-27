@@ -44,6 +44,13 @@
     };
   });
 
+  /* Services d'entreprise (« VCA Entreprise ») : leur propre groupe de résultats — jamais mélangés aux formations (la VCA Base est un
+     diplôme individuel, VCA Entreprise un accompagnement à la certification d'une entreprise). Tout vient du registre (`Site.services()`). */
+  var SERVICES = (Site.services ? Site.services() : []).map(function (s) {
+    return { id: s.id, url: s.url, titleKey: s.titleKey, descKey: s.taglineKey, kw: s.searchKeywords, thumb: s.thumb,
+      levels: s.levels, priceLabel: s.priceLabel, priceUnit: s.priceUnit, priceIndicative: s.priceIndicative };
+  });
+
   /* Pages du site — les ARTICLES (`kind: "article"`) forment leur propre groupe de résultats. */
   var PAGES = [], ARTICLES = [];
   Site.pages().forEach(function (p) {
@@ -54,6 +61,7 @@
   var VCA = Site.formation("vca-base");
   var QUICK = VCA ? [
     { id: "pop_vca",     labelKey: "search.pop_vca",     icon: "vca-base",     href: VCA.url },
+    { id: "pop_vcae",    labelKey: SERVICES.length ? SERVICES[0].titleKey : "nav.vca_entreprise", icon: "service", href: SERVICES.length ? SERVICES[0].url : "vca-entreprise.html" },
     { id: "pop_price",   labelKey: "search.pop_price",   icon: "quick-price",  href: VCA.url + "#apercu" },
     { id: "pop_dates",   labelKey: "search.pop_dates",   icon: "page_agenda",  href: VCA.url + "#disponibilites" },
     { id: "pop_exam",    labelKey: "search.pop_exam",    icon: "quick-exam",   href: VCA.url + "#examen" },
@@ -115,7 +123,7 @@
         kw: ["horaires", "heures", "ouverture", "ouvert", "open", "opening", "hours", "openingstijden", "oeffnungszeiten", "orari", "program", "lundi", "jeudi"] });
     }
   }
-  function purgeCaches() { FORMATIONS.concat(PAGES, ARTICLES, FAQS, INFOS, SESSIONS).forEach(function (e) { e._hay = null; }); }
+  function purgeCaches() { FORMATIONS.concat(SERVICES, PAGES, ARTICLES, FAQS, INFOS, SESSIONS).forEach(function (e) { e._hay = null; }); }
 
   /* -----------------------------------------------------------------------
      Sessions PUBLIÉES (js/sessions.js, source unique des dates) : chargées À LA DEMANDE au premier usage de la
@@ -203,6 +211,7 @@
     cat_secours:    '<path d="M12 21c-4-2.5-7-6-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 4-3 7.5-7 10z"/><path d="M12 9v4M10 11h4"/>',
     cat_technique:  '<path d="M14.5 6a3.5 3.5 0 0 0-4.8 4.8L3 17.5V21h3.5l6.7-6.7A3.5 3.5 0 0 0 18 9.5"/><path d="m14.5 6 1.8-1.8a3.5 3.5 0 0 1 3.5 3.5L18 9.5"/>',
     cat_management: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/>',
+    service:          '<path d="M4 21V9l8-5 8 5v12M9 21v-6h6v6M8 11h.01M12 11h.01M16 11h.01"/>',
     // pages
     page_home:        '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
     page_formations:  '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
@@ -322,16 +331,21 @@
   function runSearch(query) {
     var lg = lang();
     var terms = fold(query).split(/\s+/).filter(Boolean);
-    function collect(list) {
+    function collectScored(list) {
       return list.map(function (e) { return { e: e, s: score(e, terms, lg) }; })
         .filter(function (r) { return r.s >= 0; })
-        .sort(function (a, b) { return b.s - a.s || titleOf(a.e).localeCompare(titleOf(b.e)); })
-        .map(function (r) { return r.e; });
+        .sort(function (a, b) { return b.s - a.s || titleOf(a.e).localeCompare(titleOf(b.e)); });
     }
+    function collect(list) { return collectScored(list).map(function (r) { return r.e; }); }
     var cats = CAT_ORDER.map(function (id) {
       return Object.assign({ id: id, isCat: true }, CATEGORIES[id], { titleKey: CATEGORIES[id].labelKey });
     });
-    return { formations: collect(FORMATIONS), categories: collect(cats), pages: collect(PAGES), articles: collect(ARTICLES),
+    /* Formations ET services : le service passe DEVANT seulement s'il est nettement plus pertinent (« vca entreprise », « vca** », « certification
+       entreprise »). Sur une requête ambiguë (« vca », « certification vca »), la formation VCA Base reste en tête : marge de 3 points. */
+    var frm = collectScored(FORMATIONS), svc = collectScored(SERVICES);
+    var servicesFirst = svc.length > 0 && (!frm.length || svc[0].s >= frm[0].s + 3);
+    return { formations: frm.map(function (r) { return r.e; }), services: svc.map(function (r) { return r.e; }), servicesFirst: servicesFirst,
+      categories: collect(cats), pages: collect(PAGES), articles: collect(ARTICLES),
       sessions: collect(SESSIONS).slice(0, MAX_SESSIONS),
       infos: collect(INFOS), faqs: collect(FAQS).slice(0, MAX_FAQ), terms: terms };
   }
@@ -473,6 +487,22 @@
     }).join("");
   }
 
+  /* Ligne d'un SERVICE : miniature, accroche, niveaux (VCA*, VCA**, VCA-P) et tarif du registre — « par personne · tarif indicatif »,
+     jamais une mention HT / TTC inventée. */
+  function renderServiceItems(list, terms) {
+    return list.map(function (x) {
+      return itemHTML({
+        icon: IC.service,
+        title: highlight(t(x.titleKey), terms),
+        sub: highlight(t(x.descKey), terms),
+        href: x.url,
+        thumb: x.thumb,
+        facts: x.levels.map(esc)
+          .concat(x.priceLabel && x.priceUnit === "participant" ? [esc(x.priceLabel + " " + t("search.per_person") + (x.priceIndicative ? " · " + t("search.indicative") : ""))] : []).join(" · ")
+      });
+    }).join("");
+  }
+
   function render(query) {
     optSeq = 0; grpSeq = 0;
     currentQuery = query;
@@ -499,6 +529,7 @@
         return FORMATIONS.filter(function (f) { return f.id === id; })[0];
       }).filter(Boolean);
       html += groupHTML(t("search.suggestions"), renderFormationItems(feat, []));
+      if (SERVICES.length) html += groupHTML(t("search.group_services"), renderServiceItems(SERVICES, []));
       listbox.innerHTML = html;
       announce("");
       collectOptions();
@@ -508,7 +539,7 @@
 
     // ---- Résultats ----
     var res = runSearch(query);
-    var total = res.formations.length + res.categories.length + res.pages.length + res.articles.length + res.sessions.length + res.infos.length + res.faqs.length;
+    var total = res.formations.length + res.services.length + res.categories.length + res.pages.length + res.articles.length + res.sessions.length + res.infos.length + res.faqs.length;
 
     if (!total && (extras === "loading" || sessionsState === "loading")) {
       // Les contenus à la demande (Centre d'aide, sessions) arrivent : on le dit plutôt que d'annoncer « aucun résultat ».
@@ -537,9 +568,10 @@
       return;
     }
 
-    if (res.formations.length) {
-      html += groupHTML(t("search.group_formations"), renderFormationItems(res.formations, res.terms));
-    }
+    /* Formations et services : deux groupes distincts, dans l'ordre de pertinence (voir runSearch). */
+    var frmHTML = res.formations.length ? groupHTML(t("search.group_formations"), renderFormationItems(res.formations, res.terms)) : "";
+    var svcHTML = res.services.length ? groupHTML(t("search.group_services"), renderServiceItems(res.services, res.terms)) : "";
+    html += res.servicesFirst ? svcHTML + frmHTML : frmHTML + svcHTML;
     if (res.sessions.length) {
       // Sessions publiées (dates lues dans js/sessions.js) : titre = formation + date ; lien = inscription à CETTE session
       html += groupHTML(t("search.group_sessions"), res.sessions.map(function (e) {

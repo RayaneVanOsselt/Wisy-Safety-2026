@@ -70,10 +70,13 @@
     try { document.dispatchEvent(new CustomEvent("wisy:analytics", { detail: Object.assign({ event: name, lang: lang() }, detail || {}) })); } catch (e) { /* silencieux */ }
   }
   var startTracked = false;
+  /* Un événement PAR produit : la VCA Base (formation individuelle) et VCA Entreprise (accompagnement) ne se mélangent jamais. */
+  var START_EVENT = { "vca-base": "vca_registration_start", "vca-entreprise": "vcae_registration_start" };
+  var COMPLETE_EVENT = { "vca-base": "vca_registration_complete", "vca-entreprise": "vcae_registration_complete" };
   function trackStart(trainingId, via) {
-    if (trainingId !== "vca-base" || startTracked) return;
+    if (!START_EVENT[trainingId] || startTracked) return;
     startTracked = true;
-    track("vca_registration_start", { via: via, session: !!(state.sessions[trainingId] || pendingSession) });
+    track(START_EVENT[trainingId], { via: via, session: !!(state.sessions[trainingId] || pendingSession) });
   }
 
   function findSession(id) {
@@ -827,7 +830,9 @@
     }
     /* Commande initialisée avec un prestataire réel : la conversion VCA Base est comptée ici (jamais avant :
        tant que le paiement est un emplacement, l'inscription n'est pas « terminée »). */
-    if (res.order.items.some(function (it) { return it.id === "vca-base"; })) track("vca_registration_complete", { session: res.order.items.some(function (it) { return it.id === "vca-base" && it.sessionId; }) });
+    Object.keys(COMPLETE_EVENT).forEach(function (pid) {
+      if (res.order.items.some(function (it) { return it.id === pid; })) track(COMPLETE_EVENT[pid], { session: res.order.items.some(function (it) { return it.id === pid && it.sessionId; }) });
+    });
     /* (Futur) : PaymentProvider.createSession(res.order) puis redirection. */
   }
 
@@ -1047,18 +1052,20 @@
   /* ======================================================================
      17. INITIALISATION
      ====================================================================== */
-  /* Lien profond `inscription.html?formation=<id>` : la formation choisie est présélectionnée (1 participant).
-     Sans effet si elle l'est déjà (inscription restaurée) ou si l'identifiant est inconnu. */
+  /* Lien profond `inscription.html?formation=<id>[&qty=<n>]` : la formation choisie est présélectionnée (1 participant, ou `qty`
+     participants : entier de 1 à 99, borné). Sans effet si elle l'est déjà (inscription restaurée : la ligne existante et sa
+     quantité sont conservées — jamais de doublon) ou si l'identifiant est inconnu. */
   function preselectFromUrl() {
-    var wanted, sess;
-    try { var qs = new URLSearchParams(location.search); wanted = qs.get("formation"); sess = qs.get("session"); } catch (e) { return; }
+    var wanted, sess, qty;
+    try { var qs = new URLSearchParams(location.search); wanted = qs.get("formation"); sess = qs.get("session"); qty = qs.get("qty"); } catch (e) { return; }
     var id = wanted && DATA.resolveTrainingId ? DATA.resolveTrainingId(wanted) : null;
     if (!id) return;
     /* `session` : simple identifiant, VÉRIFIÉ ensuite auprès de WisySessions (initSessions) — jamais une date. */
     if (sess && SESSION_ID_RE.test(sess)) pendingSession = { trainingId: id, sessionId: sess };
     trackStart(id, "link");
     if (state.trainings[id]) return;
-    state.trainings[id] = clampQty(1);
+    state.trainings[id] = clampQty(qty && /^\d{1,2}$/.test(qty) ? qty : 1);
+    syncParticipants(id);
     save();
   }
 

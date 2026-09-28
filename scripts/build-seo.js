@@ -83,6 +83,8 @@ const DOCS = [
      géographique : rien n'est affiché sur la page à ce sujet, donc rien dans les données structurées. */
   { file: "coordination.html", graph: ["organization", "breadcrumb", "coordinationService"],
     breadcrumb: [["Accueil", "index.html"], ["WiSy Coordination", "coordination.html"]] },
+  { file: "mentions-legales.html", graph: ["organization", "breadcrumb"],
+    breadcrumb: [["Accueil", "index.html"], ["Mentions légales", "mentions-legales.html"]] },
   /* Articles : og:type « article », dates lues dans le registre (js/site-content.js → `published` / `modified`). */
   { file: "article-vca-cout-financement.html", graph: ["organization", "breadcrumb", "article"], image: OG_ART_COST, ogType: "article",
     breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["VCA Base", "formation-vca-base.html"], ["Coût et financement d'une formation VCA", "article-vca-cout-financement.html"]] },

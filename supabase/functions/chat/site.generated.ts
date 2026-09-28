@@ -538,6 +538,30 @@ export const SITE_PAGES: SiteEntry[] = [
       "demander une coordination",
       "securite chantier"
     ]
+  },
+  {
+    "id": "page-mentions-legales",
+    "type": "page",
+    "title": "Mentions légales",
+    "url": "mentions-legales.html",
+    "content": "Mentions légales de Wisy Safety ASBL : éditeur et responsable de publication, coordonnées, numéro d'entreprise et numéro de TVA, propriété intellectuelle, protection des données (RGPD), cookies et droit applicable.",
+    "keywords": [
+      "mentions legales",
+      "mentions legales wisy safety",
+      "informations legales",
+      "editeur du site",
+      "responsable de publication",
+      "numero d'entreprise",
+      "numero bce",
+      "numero de tva",
+      "propriete intellectuelle",
+      "protection des donnees",
+      "rgpd",
+      "cookies",
+      "droit applicable",
+      "conditions d'utilisation",
+      "wisy safety asbl"
+    ]
   }
 ];
 
@@ -554,6 +578,7 @@ export const SITE_PATHS: string[] = [
   "article-vca-erreurs-examen.html",
   "peb-wallonie-bruxelles.html",
   "coordination.html",
+  "mentions-legales.html",
   "formation-vca-base.html",
   "formation-nacelles-elevatrices.html",
   "formation-beps-premiers-secours.html",

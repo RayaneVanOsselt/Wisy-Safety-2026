@@ -11,7 +11,7 @@ const Site = require("../js/site-content.js");
 const FAQ = require("../js/faq-data.js");
 
 const ROOT = path.join(__dirname, "..");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "vca-entreprise", "coordination", "article-vca-cout-financement", "article-vca-erreurs-examen", "inscription", "contact", "avis", "faq", "agenda"].map((n) => n + ".html").concat(["admin/avis.html"]);
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "vca-entreprise", "coordination", "mentions-legales", "article-vca-cout-financement", "article-vca-erreurs-examen", "inscription", "contact", "avis", "faq", "agenda"].map((n) => n + ".html").concat(["admin/avis.html"]);
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 
 /* Existence sensible à la casse. Renvoie true, false, ou le vrai nom si seule la casse diffère. */
@@ -118,7 +118,7 @@ test("aucune NOUVELLE destination morte « # » : seules les entrées de menu et
   /* Dette connue et VISIBLE : ces liens n'ont pas encore de page (voir le rapport d'audit). Toute autre
      ancre « # » nue est une régression. Quand une page est créée, retirez sa clé de cette liste. */
   const KNOWN = new Set(["nav.certificat",
-    "footer.legal_mentions", "footer.legal_privacy", "footer.legal_terms"]);
+    "footer.legal_privacy", "footer.legal_terms"]);
   const bad = [];
   PAGES.forEach((f) => {
     for (const m of bodyHtml(f).matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
@@ -154,7 +154,9 @@ test("target=_blank : toujours rel=noopener ; liens sortants limités aux domain
     "www.actiris.brussels", "www.bruxellesformation.brussels", "www.leforem.be", "www.vdab.be",
     /* Sources officielles citées par vca-entreprise.html (voir docs/README-VCA-ENTREPRISE.md) : SSVV (propriétaire du schéma VCA),
        BeSaCC-VCA (déjà ci-dessus) et Prévention et Intérim (organisme sectoriel belge). */
-    "ssvv.nl", "www.p-i.be"]);
+    "ssvv.nl", "www.p-i.be",
+    /* Autorité de protection des données (APD/GBA), citée par mentions-legales.html pour le droit de réclamation RGPD. */
+    "www.autoriteprotectiondonnees.be"]);
   PAGES.forEach((f) => {
     refs(f).forEach(({ url, a, tag }) => {
       if (a.target === "_blank") assert.match(a.rel || "", /noopener/, f + " : target=_blank sans noopener : " + url);

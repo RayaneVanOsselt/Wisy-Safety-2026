@@ -212,10 +212,10 @@ const ALLOW_PATTERNS = [
   /^[\w.+-]+@[\w-]+(\.[\w-]+)+$/,                           // e-mail
   /^https?:\/\/\S+$/,                                       // URL
   /^[\d\s:–-]+$/,                                           // horaires « 10:00 – 16:00 »
-  /^(BE\s?)?0[\dX.\s]{8,}$/,
+  /^(BE\s?)?\d{4}\.?\d{3}\.?\d{3}$/,                         // numéro d'entreprise / de TVA (BE 1027.725.391, avec ou sans préfixe/points)
   /^WS-\d{3,4}(-[X\d]+)?$/,                                 // références (WS-001, WS-2026-XXXXX)
   /^[A-Z]{2,3}$/,                                            // initiales d'avatar, sigles (VR, PEB, VCA)
-  /^N\d(\s*·\s*(N\d|PEB|VCA))+$/,                            // « N1 · N2 · PEB · VCA » (niveaux et sigles officiels)                                // numéro d'entreprise / de TVA (BE0XXX.XXX.XXX)
+  /^N\d(\s*·\s*(N\d|PEB|VCA))+$/,                            // « N1 · N2 · PEB · VCA » (niveaux et sigles officiels)
   /^!DOCTYPE/i
 ];
 const isLetters = (t) => /\p{L}{2}/u.test(t);

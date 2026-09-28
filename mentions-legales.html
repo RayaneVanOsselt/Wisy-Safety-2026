@@ -304,6 +304,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 </aside>
 
 <main class="lg-main" id="contenu">
+<div class="lg-progress" aria-hidden="true"><span class="lg-progress__bar" data-progress-bar></span></div>
 <svg class="lg-sprite" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <symbol id="li-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z"/><path d="m9 12 2 2 4-4"/></g></symbol>
   <symbol id="li-doc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6M9 9h2"/></g></symbol>
@@ -325,7 +326,16 @@ a.f-c-value:hover{color:var(--turquoise)}
     <nav class="lg-crumbs" data-i18n-attr="aria-label:legal.crumbs_label" aria-label="Fil d'Ariane">
       <ol><li><a href="index.html" data-i18n="legal.crumb_home">Accueil</a></li><li data-i18n="legal.crumb_current" aria-current="page">Mentions légales</li></ol>
     </nav>
-    <p class="lg-eyebrow reveal"><span class="lg-eyebrow__dot" aria-hidden="true"></span><span data-i18n="legal.hero_eyebrow">Document juridique · Réf. ML 2026</span></p>
+    <div class="lg-eyebrow-row">
+      <p class="lg-eyebrow reveal"><span class="lg-eyebrow__dot" aria-hidden="true"></span><span data-i18n="legal.hero_eyebrow">Document juridique · Réf. ML 2026</span></p>
+      <span class="lg-seal reveal" style="--d:.03s">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path class="lg-seal__path" d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path class="lg-seal__check" d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="lg-seal__text" data-i18n="legal.seal_text">Informations vérifiées · 28/09/2026</span>
+      </span>
+    </div>
     <h1 class="lg-hero__title reveal" style="--d:.05s" data-i18n="legal.hero_title">Mentions légales</h1>
     <p class="lg-hero__lead reveal" style="--d:.1s" data-i18n="legal.hero_lead">Les informations réglementaires, droits et conditions encadrant l'utilisation des services numériques de Wisy Safety.</p>
     <div class="lg-hero__meta reveal" style="--d:.15s">
@@ -339,42 +349,42 @@ a.f-c-value:hover{color:var(--turquoise)}
 <section class="lg-card-sec container">
   <div class="lg-card reveal">
     <div class="lg-card__head"><span class="lg-card__ic"><svg><use href="#li-shield"/></svg></span><h2 data-i18n="legal.card_title">Fiche d'identité de l'association</h2></div>
-    <dl class="lg-card__grid">
-      <div class="lg-card__item">
+    <dl class="lg-card__grid" data-stagger>
+      <div class="lg-card__item reveal">
         <dt data-i18n="legal.card_denomination_label">Dénomination</dt>
         <dd>Wisy Safety ASBL</dd>
       </div>
-      <div class="lg-card__item">
+      <div class="lg-card__item reveal">
         <dt data-i18n="legal.card_forme_label">Forme juridique</dt>
         <dd data-i18n="legal.card_forme_value">ASBL (association sans but lucratif)</dd>
       </div>
-      <div class="lg-card__item lg-card__item--wide">
+      <div class="lg-card__item lg-card__item--wide reveal">
         <dt data-i18n="legal.card_siege_label">Siège social</dt>
-        <dd><span data-copy="Avenue d'Itterbeek 378, 1070 Anderlecht, Belgique">Avenue d'Itterbeek 378, 1070 Anderlecht</span><button type="button" class="lg-copy" data-copy-btn data-i18n-attr="aria-label:legal.copy_aria" aria-label="Copier cette information"><svg><use href="#li-copy"/></svg></button></dd>
+        <dd><span data-copy="Avenue d'Itterbeek 378, 1070 Anderlecht, Belgique">Avenue d'Itterbeek 378, 1070 Anderlecht</span><button type="button" class="lg-copy" data-copy-btn data-i18n-attr="aria-label:legal.copy_aria" aria-label="Copier cette information"><svg class="li-ic-copy"><use href="#li-copy"/></svg><svg class="li-ic-check"><use href="#li-check"/></svg></button></dd>
       </div>
-      <div class="lg-card__item">
+      <div class="lg-card__item reveal">
         <dt data-i18n="legal.card_entreprise_label">Numéro d'entreprise (BCE)</dt>
-        <dd><span data-copy="1027.725.391">1027.725.391</span><button type="button" class="lg-copy" data-copy-btn data-i18n-attr="aria-label:legal.copy_aria" aria-label="Copier cette information"><svg><use href="#li-copy"/></svg></button></dd>
+        <dd><span data-copy="1027.725.391">1027.725.391</span><button type="button" class="lg-copy" data-copy-btn data-i18n-attr="aria-label:legal.copy_aria" aria-label="Copier cette information"><svg class="li-ic-copy"><use href="#li-copy"/></svg><svg class="li-ic-check"><use href="#li-check"/></svg></button></dd>
       </div>
-      <div class="lg-card__item">
+      <div class="lg-card__item reveal">
         <dt data-i18n="legal.card_tva_label">Numéro de TVA</dt>
-        <dd><span data-copy="BE 1027.725.391">BE 1027.725.391</span><button type="button" class="lg-copy" data-copy-btn data-i18n-attr="aria-label:legal.copy_aria" aria-label="Copier cette information"><svg><use href="#li-copy"/></svg></button></dd>
+        <dd><span data-copy="BE 1027.725.391">BE 1027.725.391</span><button type="button" class="lg-copy" data-copy-btn data-i18n-attr="aria-label:legal.copy_aria" aria-label="Copier cette information"><svg class="li-ic-copy"><use href="#li-copy"/></svg><svg class="li-ic-check"><use href="#li-check"/></svg></button></dd>
       </div>
-      <div class="lg-card__item">
+      <div class="lg-card__item reveal">
         <dt data-i18n="legal.card_responsable_label">Responsable de publication</dt>
         <dd>Rayane Van Osselt</dd>
       </div>
-      <div class="lg-card__item">
+      <div class="lg-card__item reveal">
         <dt data-i18n="legal.card_fonction_label">Fonction</dt>
         <dd>Coordinateur · Wisy Safety ASBL</dd>
       </div>
-      <div class="lg-card__item">
+      <div class="lg-card__item reveal">
         <dt data-i18n="legal.card_email_label">E-mail</dt>
-        <dd><a href="mailto:info@wisysafety.be" data-copy="info@wisysafety.be">info@wisysafety.be</a><button type="button" class="lg-copy" data-copy-btn data-i18n-attr="aria-label:legal.copy_aria" aria-label="Copier cette information"><svg><use href="#li-copy"/></svg></button></dd>
+        <dd><a href="mailto:info@wisysafety.be" data-copy="info@wisysafety.be">info@wisysafety.be</a><button type="button" class="lg-copy" data-copy-btn data-i18n-attr="aria-label:legal.copy_aria" aria-label="Copier cette information"><svg class="li-ic-copy"><use href="#li-copy"/></svg><svg class="li-ic-check"><use href="#li-check"/></svg></button></dd>
       </div>
-      <div class="lg-card__item">
+      <div class="lg-card__item reveal">
         <dt data-i18n="legal.card_telephone_label">Téléphone</dt>
-        <dd><a href="tel:+3223188659" data-copy="+32 2 318 86 59">+32 2 318 86 59</a><button type="button" class="lg-copy" data-copy-btn data-i18n-attr="aria-label:legal.copy_aria" aria-label="Copier cette information"><svg><use href="#li-copy"/></svg></button></dd>
+        <dd><a href="tel:+3223188659" data-copy="+32 2 318 86 59">+32 2 318 86 59</a><button type="button" class="lg-copy" data-copy-btn data-i18n-attr="aria-label:legal.copy_aria" aria-label="Copier cette information"><svg class="li-ic-copy"><use href="#li-copy"/></svg><svg class="li-ic-check"><use href="#li-check"/></svg></button></dd>
       </div>
     </dl>
   </div>
@@ -384,6 +394,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 <section class="lg-body container">
   <nav class="lg-toc reveal" data-toc data-i18n-attr="aria-label:legal.toc_title" aria-label="Sommaire">
     <span class="lg-toc__title" data-i18n="legal.toc_title">Sommaire</span>
+    <span class="lg-toc__indicator" data-toc-indicator aria-hidden="true"></span>
     <ol>
       <li><a href="#editeur" data-toc-link data-i18n="legal.toc_01">Éditeur</a></li>
       <li><a href="#coordonnees" data-toc-link data-i18n="legal.toc_02">Coordonnées</a></li>
@@ -396,52 +407,52 @@ a.f-c-value:hover{color:var(--turquoise)}
 
   <div class="lg-sections">
 
-    <section class="lg-sec reveal" id="editeur" data-toc-target tabindex="-1">
+    <section class="lg-sec" id="editeur" data-toc-target data-stagger tabindex="-1">
       <span class="lg-sec__ghost" aria-hidden="true">01</span>
-      <p class="lg-kicker" data-i18n="legal.s1_eyebrow">01 · Identification</p>
-      <h2 data-i18n="legal.s1_title">Éditeur &amp; responsable de publication</h2>
-      <p data-i18n-html="legal.s1_p1_html">Le présent site est édité par <strong>Wisy Safety ASBL</strong>. La responsabilité de la publication est assurée par Rayane Van Osselt, coordinateur de l'association. Pour toute question relative au contenu du site, contactez-nous à <a href="mailto:info@wisysafety.be">info@wisysafety.be</a>.</p>
-      <dl class="lg-minigrid">
+      <p class="lg-kicker reveal" data-i18n="legal.s1_eyebrow">01 · Identification</p>
+      <h2 class="reveal" data-i18n="legal.s1_title">Éditeur &amp; responsable de publication</h2>
+      <p class="reveal" data-i18n-html="legal.s1_p1_html">Le présent site est édité par <strong>Wisy Safety ASBL</strong>. La responsabilité de la publication est assurée par Rayane Van Osselt, coordinateur de l'association. Pour toute question relative au contenu du site, contactez-nous à <a href="mailto:info@wisysafety.be">info@wisysafety.be</a>.</p>
+      <dl class="lg-minigrid reveal">
         <div><dt data-i18n="legal.s1_responsable_label">Responsable</dt><dd>Rayane Van Osselt</dd></div>
         <div><dt data-i18n="legal.s1_fonction_label">Fonction</dt><dd>Coordinateur · Wisy Safety ASBL</dd></div>
         <div><dt data-i18n="legal.s1_contact_label">Contact</dt><dd><a href="mailto:info@wisysafety.be">info@wisysafety.be</a></dd></div>
       </dl>
     </section>
 
-    <section class="lg-sec reveal" id="coordonnees" data-toc-target tabindex="-1">
+    <section class="lg-sec" id="coordonnees" data-toc-target data-stagger tabindex="-1">
       <span class="lg-sec__ghost" aria-hidden="true">02</span>
-      <p class="lg-kicker" data-i18n="legal.s2_eyebrow">02 · Contact</p>
-      <h2 data-i18n="legal.s2_title">Coordonnées</h2>
-      <p data-i18n="legal.s2_lead">Vous pouvez joindre l'association par les moyens suivants :</p>
+      <p class="lg-kicker reveal" data-i18n="legal.s2_eyebrow">02 · Contact</p>
+      <h2 class="reveal" data-i18n="legal.s2_title">Coordonnées</h2>
+      <p class="reveal" data-i18n="legal.s2_lead">Vous pouvez joindre l'association par les moyens suivants :</p>
       <ul class="lg-contactcards">
-        <li><span class="lg-cc__badge"><svg><use href="#li-pin"/></svg></span><div><span class="lg-cc__label" data-i18n="legal.s2_adresse_label">Adresse</span><span class="lg-cc__value">Avenue d'Itterbeek 378, 1070 Anderlecht</span></div></li>
-        <li><span class="lg-cc__badge"><svg><use href="#li-mail"/></svg></span><div><span class="lg-cc__label" data-i18n="legal.s2_email_label">E-mail</span><a class="lg-cc__value" href="mailto:info@wisysafety.be">info@wisysafety.be</a></div></li>
-        <li><span class="lg-cc__badge"><svg><use href="#li-phone"/></svg></span><div><span class="lg-cc__label" data-i18n="legal.s2_telephone_label">Téléphone</span><a class="lg-cc__value" href="tel:+3223188659">+32 2 318 86 59</a></div></li>
+        <li class="reveal"><span class="lg-cc__badge"><svg><use href="#li-pin"/></svg></span><div><span class="lg-cc__label" data-i18n="legal.s2_adresse_label">Adresse</span><span class="lg-cc__value">Avenue d'Itterbeek 378, 1070 Anderlecht</span></div></li>
+        <li class="reveal"><span class="lg-cc__badge"><svg><use href="#li-mail"/></svg></span><div><span class="lg-cc__label" data-i18n="legal.s2_email_label">E-mail</span><a class="lg-cc__value" href="mailto:info@wisysafety.be">info@wisysafety.be</a></div></li>
+        <li class="reveal"><span class="lg-cc__badge"><svg><use href="#li-phone"/></svg></span><div><span class="lg-cc__label" data-i18n="legal.s2_telephone_label">Téléphone</span><a class="lg-cc__value" href="tel:+3223188659">+32 2 318 86 59</a></div></li>
       </ul>
-      <a class="btn btn--outline" href="https://www.google.com/maps/dir/?api=1&#38;destination=Avenue%20d%27Itterbeek%20378%2C%201070%20Anderlecht" target="_blank" rel="noopener noreferrer"><svg class="lg-btn-ic" aria-hidden="true"><use href="#li-external"/></svg><span data-i18n="legal.s2_route_btn">Itinéraire</span></a>
+      <a class="btn btn--outline reveal" href="https://www.google.com/maps/dir/?api=1&#38;destination=Avenue%20d%27Itterbeek%20378%2C%201070%20Anderlecht" target="_blank" rel="noopener noreferrer"><svg class="lg-btn-ic" aria-hidden="true"><use href="#li-external"/></svg><span data-i18n="legal.s2_route_btn">Itinéraire</span></a>
     </section>
 
-    <section class="lg-sec reveal" id="propriete-intellectuelle" data-toc-target tabindex="-1">
+    <section class="lg-sec" id="propriete-intellectuelle" data-toc-target data-stagger tabindex="-1">
       <span class="lg-sec__ghost" aria-hidden="true">03</span>
-      <p class="lg-kicker" data-i18n="legal.s3_eyebrow">03 · Droits</p>
-      <h2 data-i18n="legal.s3_title">Propriété intellectuelle</h2>
-      <p data-i18n="legal.s3_p1">L'ensemble des contenus de ce site — textes, visuels, logos et éléments graphiques — est la propriété de Wisy Safety ASBL, sauf mention contraire. Toute reproduction ou réutilisation, totale ou partielle, est soumise à autorisation préalable écrite.</p>
-      <dl class="lg-minigrid">
+      <p class="lg-kicker reveal" data-i18n="legal.s3_eyebrow">03 · Droits</p>
+      <h2 class="reveal" data-i18n="legal.s3_title">Propriété intellectuelle</h2>
+      <p class="reveal" data-i18n="legal.s3_p1">L'ensemble des contenus de ce site — textes, visuels, logos et éléments graphiques — est la propriété de Wisy Safety ASBL, sauf mention contraire. Toute reproduction ou réutilisation, totale ou partielle, est soumise à autorisation préalable écrite.</p>
+      <dl class="lg-minigrid reveal">
         <div><dt data-i18n="legal.s3_content_label">Contenu</dt><dd data-i18n="legal.s3_content_value">© Wisy Safety ASBL — Tous droits réservés</dd></div>
         <div><dt data-i18n="legal.s3_marque_label">Marque</dt><dd data-i18n="legal.s3_marque_value">Wisy Safety® — nom commercial de l'association</dd></div>
       </dl>
     </section>
 
-    <section class="lg-sec reveal" id="protection-des-donnees" data-toc-target tabindex="-1">
+    <section class="lg-sec" id="protection-des-donnees" data-toc-target data-stagger tabindex="-1">
       <span class="lg-sec__ghost" aria-hidden="true">04</span>
-      <p class="lg-kicker" data-i18n="legal.s4_eyebrow">04 · RGPD</p>
-      <h2 data-i18n="legal.s4_title">Protection des données</h2>
-      <p data-i18n="legal.s4_p1">Conformément au Règlement général sur la protection des données (RGPD — Règlement (UE) 2016/679), vous disposez d'un droit d'accès, de rectification, d'effacement et d'opposition concernant vos données à caractère personnel.</p>
-      <p data-i18n="legal.s4_p2">Ce site traite les données personnelles suivantes, uniquement lorsque vous les transmettez vous-même :</p>
+      <p class="lg-kicker reveal" data-i18n="legal.s4_eyebrow">04 · RGPD</p>
+      <h2 class="reveal" data-i18n="legal.s4_title">Protection des données</h2>
+      <p class="reveal" data-i18n="legal.s4_p1">Conformément au Règlement général sur la protection des données (RGPD — Règlement (UE) 2016/679), vous disposez d'un droit d'accès, de rectification, d'effacement et d'opposition concernant vos données à caractère personnel.</p>
+      <p class="reveal" data-i18n="legal.s4_p2">Ce site traite les données personnelles suivantes, uniquement lorsque vous les transmettez vous-même :</p>
       <ul class="lg-datalist">
-        <li><strong data-i18n="legal.s4_item1_title">Formulaire de contact</strong><span data-i18n="legal.s4_item1_text">Nom, téléphone (facultatif), e-mail et message, transmis via notre prestataire d'e-mail transactionnel afin de traiter votre demande.</span></li>
-        <li><strong data-i18n="legal.s4_item2_title">Formulaire d'avis</strong><span data-i18n="legal.s4_item2_text">Prénom et e-mail, ainsi que nom, entreprise et fonction si vous les renseignez ; votre e-mail n'est jamais affiché publiquement.</span></li>
-        <li><strong data-i18n="legal.s4_item3_title">Mesure d'audience</strong><span data-i18n="legal.s4_item3_text">Aucun outil de mesure d'audience n'est activé sur ce site à ce jour (voir la section Cookies ci-dessous).</span></li>
+        <li class="reveal"><strong data-i18n="legal.s4_item1_title">Formulaire de contact</strong><span data-i18n="legal.s4_item1_text">Nom, téléphone (facultatif), e-mail et message, transmis via notre prestataire d'e-mail transactionnel afin de traiter votre demande.</span></li>
+        <li class="reveal"><strong data-i18n="legal.s4_item2_title">Formulaire d'avis</strong><span data-i18n="legal.s4_item2_text">Prénom et e-mail, ainsi que nom, entreprise et fonction si vous les renseignez ; votre e-mail n'est jamais affiché publiquement.</span></li>
+        <li class="reveal"><strong data-i18n="legal.s4_item3_title">Mesure d'audience</strong><span data-i18n="legal.s4_item3_text">Aucun outil de mesure d'audience n'est activé sur ce site à ce jour (voir la section Cookies ci-dessous).</span></li>
       </ul>
       <p class="lg-sublabel" data-i18n="legal.s4_processors_title">Prestataires techniques</p>
       <ul class="lg-taglist">
@@ -452,25 +463,25 @@ a.f-c-value:hover{color:var(--turquoise)}
       <p data-i18n-html="legal.s4_rights_p_html">Pour exercer vos droits, adressez votre demande à <a href="mailto:info@wisysafety.be">info@wisysafety.be</a>. Vous disposez également du droit d'introduire une réclamation auprès de l'<a href="https://www.autoriteprotectiondonnees.be" target="_blank" rel="noopener">Autorité de protection des données (APD)</a>.</p>
     </section>
 
-    <section class="lg-sec reveal" id="cookies" data-toc-target tabindex="-1">
+    <section class="lg-sec" id="cookies" data-toc-target data-stagger tabindex="-1">
       <span class="lg-sec__ghost" aria-hidden="true">05</span>
-      <p class="lg-kicker" data-i18n="legal.s5_eyebrow">05 · Cookies</p>
-      <h2 data-i18n="legal.s5_title">Cookies</h2>
-      <p data-i18n="legal.s5_p1">Ce site utilise un système de gestion des cookies vous permettant d'accepter, de refuser ou de personnaliser leur usage à tout moment.</p>
+      <p class="lg-kicker reveal" data-i18n="legal.s5_eyebrow">05 · Cookies</p>
+      <h2 class="reveal" data-i18n="legal.s5_title">Cookies</h2>
+      <p class="reveal" data-i18n="legal.s5_p1">Ce site utilise un système de gestion des cookies vous permettant d'accepter, de refuser ou de personnaliser leur usage à tout moment.</p>
       <ul class="lg-cookiecats">
-        <li><h3 data-i18n="cookies.cat_necessary_title">Cookies nécessaires</h3><p data-i18n="cookies.cat_necessary_desc">Indispensables au fonctionnement, à la sécurité et aux fonctionnalités essentielles du site.</p></li>
-        <li><h3 data-i18n="cookies.cat_analytics_title">Mesure d'audience</h3><p data-i18n="cookies.cat_analytics_desc">Nous aide à comprendre comment le site est utilisé afin d'améliorer ses performances et son contenu.</p></li>
-        <li><h3 data-i18n="cookies.cat_functional_title">Fonctionnalités</h3><p data-i18n="cookies.cat_functional_desc">Permet d'activer certaines fonctionnalités supplémentaires et de mémoriser vos préférences.</p></li>
+        <li class="reveal"><h3 data-i18n="cookies.cat_necessary_title">Cookies nécessaires</h3><p data-i18n="cookies.cat_necessary_desc">Indispensables au fonctionnement, à la sécurité et aux fonctionnalités essentielles du site.</p></li>
+        <li class="reveal"><h3 data-i18n="cookies.cat_analytics_title">Mesure d'audience</h3><p data-i18n="cookies.cat_analytics_desc">Nous aide à comprendre comment le site est utilisé afin d'améliorer ses performances et son contenu.</p></li>
+        <li class="reveal"><h3 data-i18n="cookies.cat_functional_title">Fonctionnalités</h3><p data-i18n="cookies.cat_functional_desc">Permet d'activer certaines fonctionnalités supplémentaires et de mémoriser vos préférences.</p></li>
       </ul>
-      <p data-i18n="legal.s5_none">Aucun cookie publicitaire ni de personnalisation marketing n'est utilisé sur ce site.</p>
-      <button type="button" class="btn btn--outline" data-wcc-open><svg class="lg-btn-ic" aria-hidden="true"><use href="#li-shield"/></svg><span data-i18n="legal.s5_manage_btn">Gérer mes préférences cookies</span></button>
+      <p class="reveal" data-i18n="legal.s5_none">Aucun cookie publicitaire ni de personnalisation marketing n'est utilisé sur ce site.</p>
+      <button type="button" class="btn btn--outline reveal" data-wcc-open><svg class="lg-btn-ic" aria-hidden="true"><use href="#li-shield"/></svg><span data-i18n="legal.s5_manage_btn">Gérer mes préférences cookies</span></button>
     </section>
 
-    <section class="lg-sec reveal" id="droit-applicable" data-toc-target tabindex="-1">
+    <section class="lg-sec" id="droit-applicable" data-toc-target data-stagger tabindex="-1">
       <span class="lg-sec__ghost" aria-hidden="true">06</span>
-      <p class="lg-kicker" data-i18n="legal.s6_eyebrow">06 · Juridiction</p>
-      <h2 data-i18n="legal.s6_title">Droit applicable</h2>
-      <p data-i18n="legal.s6_p1">Le présent site et les présentes mentions légales sont régis par le droit belge. Tout litige relatif à leur interprétation ou leur exécution relève de la compétence exclusive des tribunaux de l'arrondissement judiciaire de Bruxelles.</p>
+      <p class="lg-kicker reveal" data-i18n="legal.s6_eyebrow">06 · Juridiction</p>
+      <h2 class="reveal" data-i18n="legal.s6_title">Droit applicable</h2>
+      <p class="reveal" data-i18n="legal.s6_p1">Le présent site et les présentes mentions légales sont régis par le droit belge. Tout litige relatif à leur interprétation ou leur exécution relève de la compétence exclusive des tribunaux de l'arrondissement judiciaire de Bruxelles.</p>
     </section>
 
     <div class="lg-print no-print">

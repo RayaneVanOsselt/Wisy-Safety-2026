@@ -2,16 +2,14 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "wisy-coordination-preview",
-      "runtimeExecutable": "python3",
+      "name": "wisy-legal-preview",
+      "runtimeExecutable": "node",
       "runtimeArgs": [
-        "-m",
-        "http.server",
-        "4191",
-        "--directory",
-        "/Users/rayanevanosselt/Desktop/Wisy-Safety-2026/.claude/worktrees/coordination-page-interactive-cbfe02"
+        "/private/tmp/claude-501/-Users-rayanevanosselt-Desktop-Wisy-Safety-2026--claude-worktrees-wisy-coordination-redesign-d648cf/a790f15d-5b7f-4ffe-846d-fd5f1f7c97b3/scratchpad/serve.js",
+        "/Users/rayanevanosselt/Desktop/Wisy Safety 2026/.claude/worktrees/wisy-coordination-redesign-d648cf",
+        "4192"
       ],
-      "port": 4191
+      "port": 4192
     }
   ]
 }

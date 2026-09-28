@@ -326,16 +326,7 @@ a.f-c-value:hover{color:var(--turquoise)}
     <nav class="lg-crumbs" data-i18n-attr="aria-label:legal.crumbs_label" aria-label="Fil d'Ariane">
       <ol><li><a href="index.html" data-i18n="legal.crumb_home">Accueil</a></li><li data-i18n="legal.crumb_current" aria-current="page">Mentions légales</li></ol>
     </nav>
-    <div class="lg-eyebrow-row">
-      <p class="lg-eyebrow reveal"><span class="lg-eyebrow__dot" aria-hidden="true"></span><span data-i18n="legal.hero_eyebrow">Document juridique · Réf. ML 2026</span></p>
-      <span class="lg-seal reveal" style="--d:.03s">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path class="lg-seal__path" d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          <path class="lg-seal__check" d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span class="lg-seal__text" data-i18n="legal.seal_text">Informations vérifiées · 28/09/2026</span>
-      </span>
-    </div>
+    <p class="lg-eyebrow reveal"><span class="lg-eyebrow__dot" aria-hidden="true"></span><span data-i18n="legal.hero_eyebrow">Document juridique · Réf. ML 2026</span></p>
     <h1 class="lg-hero__title reveal" style="--d:.05s" data-i18n="legal.hero_title">Mentions légales</h1>
     <p class="lg-hero__lead reveal" style="--d:.1s" data-i18n="legal.hero_lead">Les informations réglementaires, droits et conditions encadrant l'utilisation des services numériques de Wisy Safety.</p>
     <div class="lg-hero__meta reveal" style="--d:.15s">
@@ -348,7 +339,17 @@ a.f-c-value:hover{color:var(--turquoise)}
 <!-- ==================== FICHE D'IDENTITÉ ==================== -->
 <section class="lg-card-sec container">
   <div class="lg-card reveal">
-    <div class="lg-card__head"><span class="lg-card__ic"><svg><use href="#li-shield"/></svg></span><h2 data-i18n="legal.card_title">Fiche d'identité de l'association</h2></div>
+    <div class="lg-card__head">
+      <span class="lg-card__ic"><svg><use href="#li-shield"/></svg></span>
+      <h2 data-i18n="legal.card_title">Fiche d'identité de l'association</h2>
+      <span class="lg-seal">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path class="lg-seal__path" d="M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path class="lg-seal__check" d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="lg-seal__text" data-i18n="legal.seal_text">Informations vérifiées · 28/09/2026</span>
+      </span>
+    </div>
     <dl class="lg-card__grid" data-stagger>
       <div class="lg-card__item reveal">
         <dt data-i18n="legal.card_denomination_label">Dénomination</dt>

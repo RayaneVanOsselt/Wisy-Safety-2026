@@ -680,4 +680,32 @@
   m("ro", { "search.formation_word": "formare" });
   m("it", { "search.formation_word": "corso" });
   m("sl", { "search.formation_word": "usposabljanje" });
+
+  /* ---- Barre « suggestive » (suggestions animées + bouton d'envoi), d'après « Placeholders And Vanish Input »
+     (Aceternity UI, 21st.dev) — voir js/search.js. search.fx_list : de VRAIES recherches du site séparées par « | »,
+     7 par langue, chacune vérifiée : elle renvoie au moins un résultat dans sa langue (noms officiels des pages et
+     formations). search.fx_try : gabarit affiché dans le champ vide ({q} = la suggestion). ---- */
+  m("fr", { "search.fx_try": "Rechercher « {q} »", "search.fx_list": "VCA de base|prix VCA|nacelle élévatrice|premiers secours|prochaines sessions|certificateur PEB|coordination sécurité-santé", "search.go": "Aller au premier résultat" });
+  m("en", { "search.fx_try": "Search “{q}”", "search.fx_list": "VCA Basic|VCA price|aerial work platform|first aid|upcoming sessions|PEB certifier|health & safety coordination", "search.go": "Go to the top result" });
+  m("nl", { "search.fx_try": "Zoek “{q}”", "search.fx_list": "VCA Basis|prijs VCA|hoogwerkers|eerste hulp|komende sessies|PEB-certificeerder|coördinatie veiligheid", "search.go": "Naar het eerste resultaat" });
+  m("af", { "search.fx_try": "Soek “{q}”", "search.fx_list": "VCA Basis|prys VCA|hoogwerkers|noodhulp|komende sessies|PEB-sertifiseerder|koördinering van veiligheid", "search.go": "Gaan na die eerste resultaat" });
+  m("ar", { "search.fx_try": "ابحث عن «{q}»", "search.fx_list": "VCA الأساسي|سعر VCA|منصات العمل المرتفعة|الإسعافات الأولية|الدورات القادمة|مُصدِر شهادات PEB|تنسيق السلامة والصحة", "search.go": "الانتقال إلى النتيجة الأولى" });
+  m("bg", { "search.fx_try": "Търсете „{q}“", "search.fx_list": "VCA основи|цена VCA|автовишки|първа помощ|предстоящи сесии|PEB сертификатор|координация по безопасност", "search.go": "Към първия резултат" });
+  m("de", { "search.fx_try": "„{q}“ suchen", "search.fx_list": "VCA Grundlagen|Preis VCA|Hubarbeitsbühnen|Erste Hilfe|kommende Termine|PEB-Zertifizierer|Koordination Baustelle", "search.go": "Zum ersten Ergebnis" });
+  m("ro", { "search.fx_try": "Căutați „{q}”", "search.fx_list": "VCA de bază|preț VCA|nacele elevatoare|prim ajutor|sesiuni viitoare|certificator PEB|coordonare securitate", "search.go": "Mergeți la primul rezultat" });
+  m("it", { "search.fx_try": "Cerca «{q}»", "search.fx_list": "VCA base|prezzo VCA|piattaforme elevatrici|primo soccorso|prossime sessioni|certificatore PEB|coordinamento sicurezza", "search.go": "Vai al primo risultato" });
+  m("sl", { "search.fx_try": "Iščite „{q}“", "search.fx_list": "VCA osnovni|cena VCA|dvižne ploščadi|prva pomoč|prihajajoče izvedbe|certifikator PEB|koordinacija varnosti", "search.go": "Na prvi zadetek" });
+
+  /* ---- Mode « Spotlight » (d'après Apple Spotlight, 21st.dev) : filtre « Tout », boutons de l'aperçu, libellé des
+     pastilles « Essayez » à côté de la barre (les pastilles reprennent les 4 premières suggestions de search.fx_list). ---- */
+  m("fr", { "search.scope_all": "Tout", "search.pv_open": "Voir le détail", "search.pv_call": "Appeler", "search.pv_mail": "Écrire un e-mail", "search.try": "Essayez" });
+  m("en", { "search.scope_all": "All", "search.pv_open": "View details", "search.pv_call": "Call", "search.pv_mail": "Send an email", "search.try": "Try" });
+  m("nl", { "search.scope_all": "Alles", "search.pv_open": "Details bekijken", "search.pv_call": "Bellen", "search.pv_mail": "E-mail sturen", "search.try": "Probeer" });
+  m("af", { "search.scope_all": "Alles", "search.pv_open": "Bekyk besonderhede", "search.pv_call": "Bel", "search.pv_mail": "Stuur 'n e-pos", "search.try": "Probeer" });
+  m("ar", { "search.scope_all": "الكل", "search.pv_open": "عرض التفاصيل", "search.pv_call": "اتصال", "search.pv_mail": "إرسال بريد إلكتروني", "search.try": "جرّبوا" });
+  m("bg", { "search.scope_all": "Всички", "search.pv_open": "Вижте подробностите", "search.pv_call": "Обадете се", "search.pv_mail": "Изпратете имейл", "search.try": "Опитайте" });
+  m("de", { "search.scope_all": "Alle", "search.pv_open": "Details ansehen", "search.pv_call": "Anrufen", "search.pv_mail": "E-Mail schreiben", "search.try": "Probieren Sie" });
+  m("ro", { "search.scope_all": "Toate", "search.pv_open": "Vedeți detaliile", "search.pv_call": "Sunați", "search.pv_mail": "Trimiteți un e-mail", "search.try": "Încercați" });
+  m("it", { "search.scope_all": "Tutto", "search.pv_open": "Vedi i dettagli", "search.pv_call": "Chiama", "search.pv_mail": "Scrivi un'e-mail", "search.try": "Prova" });
+  m("sl", { "search.scope_all": "Vse", "search.pv_open": "Oglejte si podrobnosti", "search.pv_call": "Pokličite", "search.pv_mail": "Pošljite e-pošto", "search.try": "Poskusite" });
 })();

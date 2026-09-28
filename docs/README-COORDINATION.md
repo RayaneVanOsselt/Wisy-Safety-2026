@@ -11,18 +11,44 @@ amélioration cosmétique de l'ancien lien mort du menu.
 |---|---|
 | Page (header/footer/CSS de base **réutilisés** des autres pages) | `coordination.html` |
 | Styles propres à la page | `css/coordination.css` |
-| Logique propre : système de modals (piliers/services/domaines), état vide de l'équipe, formulaire + EmailJS | `js/coordination.js` |
+| Logique propre : loupe du hero, rail de chapitres, explorateur de piliers, simulateur du déclencheur, panneaux de services, méthode pas à pas, état vide de l'équipe, formulaire + EmailJS | `js/coordination.js` |
 | Header/footer/menu mobile/apparitions au scroll (**partagé**, comme la page VCA Base) | `js/site-chrome.js` |
 | Données propres à la page (équipe — VIDE volontairement, sources réglementaires vérifiées) | `js/coordination-data.js` |
 | Entrée dans le registre du site (recherche, assistant, sitemap) | `js/site-content.js` → `PAGES` (`id: "coordination"`) |
 | Libellés traduits de la recherche (10 langues) | `js/i18n-data-search.js` (`search.page_coordination_t/_d`) |
 | Nœud JSON-LD `Service` dédié (jamais le nœud `service` générique, propre à VCA Entreprise) | `scripts/build-seo.js` (`NODES.coordinationService`) |
-| Traductions de la page (10 langues, 178 clés `coord.*`) | `js/i18n-data-coordination.js` |
+| Traductions de la page (10 langues, 153 clés : `meta.title` + `coord.*`) | `js/i18n-data-coordination.js` |
+| Tests propres à la page (sections retirées, chapitres, sans-JS, simulateur, « rien d'inventé ») | `tests/coordination.test.js` |
 | 6 questions ajoutées au Centre d'aide (catégorie `coordination`) | `js/faq-data.js` (source FR) + `js/faq-i18n/faq-<langue>.js` (9 traductions) |
 
 Le registre alimente : la page, la **recherche globale** (`js/search.js`), l'**assistant**
 (`knowledge.js` dérive `PAGES` + la FAQ, donc répond sur WiSy Coordination automatiquement), le
 **sitemap/SEO** (`scripts/build-seo.js`).
+
+## Structure de la page (v3, 2026-09-27) — une interaction différente par chapitre
+
+Retour du propriétaire sur la v2 : sections « trop simples », pas assez d'envie d'aller plus loin.
+Les sections **« La mission » (frise), « Vue d'ensemble / Coordination Control » et « Domaines
+d'intervention »** ont été **retirées à sa demande** (HTML, CSS, JS, modals et traductions) —
+`tests/coordination.test.js` échoue si elles reviennent. Seul vestige volontaire : les intitulés
+des domaines restent les options du champ **« Type de projet »** du formulaire (clés renommées
+`coord.form_type_*`), à retirer aussi si le propriétaire le souhaite.
+
+| Chapitre | Interaction (souris · clavier · tactile) |
+|---|---|
+| Hero | Loupe « inspection » : la photo reprend ses vraies couleurs dans un viseur qui suit la souris (souris uniquement, jamais en mouvement réduit ; même image que le hero — `currentSrc`, aucune requête en plus). **Sommaire du dossier** : 6 liens vers les chapitres. |
+| Rail (≥ 1200 px) | Pastilles 01 → 06 fixées dans la marge : chapitre courant, progression, libellé affiché au changement. Doublon visuel du sommaire → `aria-hidden` et hors tabulation. |
+| 01 · Notre approche | Explorateur des 4 piliers : onglets WAI-ARIA (clic, survol, flèches, Début/Fin) + fiche sombre + « Suivant ». Mobile : ruban de pastilles défilant. |
+| 02 · Cadre réglementaire | **Simulateur du déclencheur** : nombre d'entreprises (1 → 6) × « simultanément / successivement » → frise et verdict. Il n'illustre QUE le texte légal vérifié affiché juste au-dessus (plusieurs entrepreneurs, simultanément ou successivement) et affiche en permanence « pas un avis juridique ». Aucun seuil, niveau A/B ou délai n'y est calculé. Règle revérifiée le 2026-09-27 sur la page du SPF « La coordination pour chantiers temporaires ou mobiles » (https://emploi.belgique.be/fr/themes/bien-etre-au-travail/lieux-de-travail/chantiers-temporaires-ou-mobiles/la-coordination-pour) : coordinateurs requis dès que deux entrepreneurs ou plus interviennent, simultanément ou successivement. |
+| 03 · Services | Grand écran : 4 panneaux côte à côte, celui survolé/cliqué s'élargit (détail + livrables + « Demander ce service »). Mobile : accordéon. |
+| 04 · Notre méthode | Frise des 5 étapes + fiche + précédent/suivant ; à la dernière étape, « Demander une coordination ». |
+| 05 · Équipe | État vide honnête (inchangé sur le fond). |
+| 06 · Contact | « Services souhaités » : cases cochées automatiquement par « Demander ce service » (section 03) et reprises dans le message envoyé. |
+
+**Sans JavaScript**, tout reste lisible : fiches des piliers et étapes empilées, services
+dépliés, simulateur masqué (le texte légal reste). Chaque composant pose `.is-ready` quand le JS
+prend la main. **Aucune animation infinie**, halo/loupe/parallaxe désactivés en mouvement réduit
+ou au toucher. Arabe : mise en page miroir (propriétés logiques CSS, flèches retournées).
 
 ## RÈGLE D'OR — ce fichier ne remplace pas une vérification humaine
 
@@ -64,9 +90,10 @@ la coordination chantier : la photo d'équipements de protection individuelle, d
 `scripts/optimize-images.py` (fonction `coordination()`). Les **6 autres** fichiers (bague de
 fiançailles, data center, setup de développeur, deux photos immobilières) n'ont aucun rapport avec
 la coordination sécurité-santé de chantier : ils ont été retirés de `assets/` (jamais utilisés sur
-le site) et mis de côté pour vérification par le propriétaire plutôt que supprimés. Les sections
-qui bénéficieraient de photos réelles (domaines d'intervention, équipe) utilisent un traitement
-graphique éditorial (dégradés, trame technique) en attendant de vraies photos de chantier/équipe.
+le site) et mis de côté pour vérification par le propriétaire plutôt que supprimés. Cette photo
+est la seule de la page (la loupe du hero en réutilise le fichier déjà chargé) ; l'équipe et les
+fiches utilisent un traitement graphique éditorial (dégradés, trame technique, pictogrammes) en
+attendant de vraies photos de chantier/équipe.
 
 ## Modifier le contenu
 
@@ -83,15 +110,22 @@ graphique éditorial (dégradés, trame technique) en attendant de vraies photos
   uniquement si le backend est réellement capable de traiter les fichiers »). Pour un gabarit
   EmailJS dédié (mise en forme différente), créez-le dans le tableau de bord EmailJS et remplacez
   `EMAILJS_TEMPLATE_ID` dans `js/coordination.js`.
-- **Modals** : chaque pilier/service/domaine a son propre `<div class="co-modal" id="modal-…">`
-  statique dans `coordination.html` (piège de focus, `inert` sur l'arrière-plan, verrouillage du
-  scroll, Échap, retour du focus — voir `js/coordination.js` → `initModals()`). Pour en ajouter un,
-  dupliquer un bloc existant et un déclencheur `data-modal-open="modal-…"`.
+- **Piliers, services, étapes** : plus de modals — le détail est dans la page (meilleur pour la
+  lecture et le référencement). Ajouter un pilier = un bouton `data-explore-tab` + une fiche
+  `data-explore-panel` (même ordre) ; une étape = `data-steps-tab` + `data-steps-panel` ; un service
+  = un `<article data-svc-item>` + une case `name="services"` dont la `value` égale son
+  `data-svc-pick` (vérifié par `tests/coordination.test.js`). Les largeurs des panneaux de services
+  ouverts dépendent de leur `flex-grow` (2,7 ; 2,2 entre 1100 et 1299 px) : garder la fraction
+  correspondante dans `.co-svc__bodyin` (`css/coordination.css`).
 
 ## i18n : page traduite dans les 10 langues
 
 Contenu de la page : `data-i18n`/`data-i18n-attr` dans le HTML + `js/i18n-data-coordination.js`
-(178 clés `coord.*`, français = miroir exact du HTML — `tests/i18n-static.test.js`). Les 6
+(153 clés, français = miroir exact du HTML — `tests/i18n-static.test.js`, où la page est désormais
+inscrite, comme dans `scripts/check-i18n.js`, `tests/header.test.js`, `tests/search-band.test.js`
+et `tests/perf-budget.test.js`). Les intertitres (`coord.*_kicker`) ne contiennent plus le numéro
+de chapitre (il est dans le HTML). Le verdict du simulateur est posé par le script, qui met aussi à
+jour l'attribut `data-i18n` : un changement de langue le retraduit correctement. Les 6
 nouvelles questions du Centre d'aide sont traduites séparément dans les 9 paquets
 `js/faq-i18n/faq-<langue>.js` (même mécanisme que le reste du Centre d'aide).
 

@@ -1,51 +1,54 @@
 /* =========================================================================
-   WISY SAFETY — Recherche globale (barre + panneau d'autocomplétion)
+   WISY SAFETY — Recherche globale « Spotlight » (barre + panneau)
    Charte 2026 · réutilise les tokens du site (épinette, brume, turquoise…)
-   S'insère dans le header sticky : la barre suit le header, le panneau
-   se déploie juste en dessous. Aucune dépendance externe.
+   Barre « suggestive » d'après « Placeholders And Vanish Input » (Aceternity UI,
+   21st.dev) et panneau d'après « Apple Spotlight » (21st.dev) : pilule à liseré
+   dégradé, suggestions qui défilent, pastilles « Essayez », voile flouté sur la
+   page, filtres par type et APERÇU du résultat actif (voir js/search.js).
    ========================================================================= */
 
 /* --------------------------------------------------------------------------
    1. BANDE — sous la navigation, dans le header sticky
    -------------------------------------------------------------------------- */
 .wsy-search {
-  /* Empilement : la bande de recherche est un frère inséré APRÈS .main-bar
-     dans .site-header. .main-bar crée un contexte d'empilement (backdrop-filter)
-     qui « piège » les menus déroulants du header (leur z-index élevé n'a alors
-     plus d'effet vers l'extérieur). On ordonne donc explicitement les deux
-     bandes sœurs : la recherche en dessous (1), la nav au-dessus (2, ci-dessous). */
+  /* Empilement : la bande de recherche est un frère inséré APRÈS .main-bar dans .site-header. .main-bar crée un
+     contexte d'empilement (backdrop-filter) qui « piège » les menus déroulants du header : la recherche en dessous
+     (1), la nav au-dessus (2). */
   position: relative;
   z-index: 1;
   border-top: 1px solid var(--granit-12, rgba(94, 109, 106, .12));
-  background: rgba(244, 250, 249, .92);
+  background: rgba(244, 250, 249, .94);
   -webkit-backdrop-filter: saturate(1.4) blur(12px);
   backdrop-filter: saturate(1.4) blur(12px);
 }
-
-/* La barre de navigation principale (et ses menus déroulants Formations / langue,
-   piégés dans son contexte d'empilement) doit se peindre PAR-DESSUS la bande de
-   recherche. Sélecteur plus spécifique que le `.main-bar` inline des pages
-   (0,2,0 > 0,1,0) → priorité garantie quel que soit l'ordre des feuilles. */
-.site-header .main-bar {
-  position: relative;
-  z-index: 2;
+/* Fine ligne d'accent sous la bande (signature discrète, visible sur toutes les pages) */
+.wsy-search::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(72, 214, 194, .6) 30%, rgba(47, 125, 140, .45) 70%, transparent);
+  pointer-events: none;
 }
+.site-header .main-bar { position: relative; z-index: 2; }
 .wsy-search__wrap {
   max-width: var(--maxw, 1560px);
   margin-inline: auto;
-  padding: .6rem var(--pad-x, clamp(1.25rem, 4vw, 3rem));
+  padding: .5rem var(--pad-x, clamp(1.25rem, 4vw, 3rem));
 }
 .wsy-search__inner {
   position: relative;
-  max-width: 820px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  max-width: 1240px;
   margin-inline: auto;
 }
 
-/* Espace réservé — la bande est injectée par js/search.js APRÈS le premier rendu. Sans réserve, tout
-   le contenu de la page descendait d'environ 68 px à cet instant (décalage de mise en page, CLS ≈ 0,07).
-   On réserve exactement sa hauteur tant qu'elle n'existe pas (:has() : navigateurs récents ; ailleurs,
-   comportement d'origine). Aucune réserve sur le Centre d'aide, qui masque cette bande. */
-.site-header { --wsy-search-h: calc(1px + 1.2rem + 48px); }        /* bordure + marges + champ (desktop) */
+/* Espace réservé — si une page n'a pas la bande statique, js/search.js l'injecte après le premier rendu : on réserve
+   sa hauteur pour éviter le décalage de mise en page (CLS). Aucune réserve sur le Centre d'aide, qui masque la bande. */
+.site-header { --wsy-search-h: calc(1px + 1rem + 52px); }
 body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
   content: "";
   display: block;
@@ -62,37 +65,54 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
 }
 
 /* --------------------------------------------------------------------------
-   2. CHAMP — calqué sur les champs de formulaire du site (.ins-input)
+   2. BARRE — pilule : pastille loupe | champ (+ suggestions animées, + particules) | ⌘K | effacer | envoyer
+   Grille à zones nommées : le champ, le calque des suggestions et le canvas de dissolution se superposent
+   exactement (zone « field ») ; l'ordre s'inverse seul en arabe (RTL).
    -------------------------------------------------------------------------- */
 .wsy-search__box {
-  display: flex;
+  position: relative;
+  flex: 1 1 520px;
+  min-width: 0;
+  max-width: 820px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+  grid-template-areas: "icon field kbd clear go";
   align-items: center;
-  gap: .6rem;
-  height: 48px;
-  padding-inline: .9rem;
-  background: #fff;
-  border: 1.5px solid var(--granit-20, rgba(94, 109, 106, .20));
-  border-radius: 12px;
-  box-shadow: var(--shadow-sm, 0 2px 10px rgba(27, 45, 40, .06));
-  transition: border-color var(--t-fast, .3s) var(--ease, cubic-bezier(.4, 0, .2, 1)),
-              box-shadow var(--t-fast, .3s) var(--ease, cubic-bezier(.4, 0, .2, 1));
+  height: 52px;
+  padding-inline: .4rem .35rem;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-pill, 999px);
+  /* liseré dégradé permanent (turquoise → sarcelle → granit) : la barre se distingue au premier regard */
+  background: linear-gradient(#fff, #fff) padding-box,
+              linear-gradient(120deg, rgba(72, 214, 194, .75), rgba(47, 125, 140, .38) 45%, rgba(94, 109, 106, .2)) border-box;
+  box-shadow: 0 1px 2px rgba(27, 45, 40, .05), 0 8px 24px rgba(27, 45, 40, .07);
+  transition: box-shadow var(--t-fast, .3s) var(--ease, cubic-bezier(.4, 0, .2, 1));
 }
+.wsy-search__box:hover { box-shadow: 0 1px 2px rgba(27, 45, 40, .05), 0 12px 30px rgba(31, 111, 100, .13); }
 .wsy-search__box:focus-within {
-  border-color: var(--epinette, #1F6F64);
-  box-shadow: 0 0 0 3px var(--brume-14, rgba(63, 166, 155, .14));
+  background: linear-gradient(#fff, #fff) padding-box,
+              linear-gradient(120deg, var(--turquoise, #48D6C2), var(--sarcelle, #2F7D8C) 55%, var(--epinette, #1F6F64)) border-box;
+  box-shadow: 0 0 0 4px rgba(72, 214, 194, .18), 0 16px 40px rgba(31, 111, 100, .2);
 }
+/* Pastille loupe (dégradé de la charte) */
 .wsy-search__icon {
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  color: var(--granit, #5E6D6A);
-  transition: color var(--t-fast, .3s) var(--ease, ease);
+  grid-area: icon;
+  width: 38px;
+  height: 38px;
+  margin-inline-end: .75rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(145deg, var(--brume, #3FA69B), var(--epinette, #1F6F64));
+  box-shadow: 0 4px 12px rgba(31, 111, 100, .28);
 }
-.wsy-search__box:focus-within .wsy-search__icon { color: var(--epinette, #1F6F64); }
+.wsy-search__icon svg { width: 18px; height: 18px; }
 
 .wsy-search__input {
-  flex: 1;
+  grid-area: field;
   min-width: 0;
+  width: 100%;
   height: 100%;
   border: none;
   outline: none;
@@ -107,84 +127,241 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
 .wsy-search__input::-webkit-search-decoration,
 .wsy-search__input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
 
+/* Suggestions animées : calque posé sur le champ vide (le placeholder natif reste pour les lecteurs d'écran) */
+.wsy-search__fx {
+  grid-area: field;
+  display: none;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  font-family: var(--font-texte, "Inter", system-ui, sans-serif);
+  font-size: 1rem;
+  color: var(--granit, #5E6D6A);
+  transition: opacity .28s linear, transform .28s var(--ease-out, cubic-bezier(.16, 1, .3, 1));
+}
+.wsy-search.is-fx .wsy-search__fx { display: block; }
+.wsy-search.is-fx .wsy-search__input::placeholder { color: transparent; }
+.wsy-search.has-text .wsy-search__fx { visibility: hidden; }
+.wsy-search__fx.is-out { opacity: 0; transform: translateY(-12px); }
+.wsy-search__fx.is-in { opacity: 0; transform: translateY(6px); transition: none; }
+
+/* Dissolution : le vrai texte s'efface, le canvas (même zone) dessine les particules */
+.wsy-search__dust { grid-area: field; align-self: center; pointer-events: none; }
+.wsy-search.is-vanishing .wsy-search__input { color: transparent; caret-color: transparent; }
+
 /* Raccourci clavier (⌘K / Ctrl K) — masqué dès qu'on interagit */
 .wsy-search__kbd {
-  flex-shrink: 0;
+  grid-area: kbd;
+  margin-inline: .6rem .5rem;
   display: inline-flex;
   align-items: center;
-  gap: .15rem;
-  padding: .18rem .45rem;
+  padding: .2rem .5rem;
   font-family: var(--font-titre, "Poppins", system-ui, sans-serif);
   font-size: var(--fs-micro, .75rem);
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.2;
   color: var(--granit, #5E6D6A);
-  background: var(--brume-08, rgba(63, 166, 155, .08));
+  background: #fff;
   border: 1px solid var(--granit-20, rgba(94, 109, 106, .20));
-  border-radius: 6px;
+  border-radius: 7px;
+  box-shadow: inset 0 -2px 0 rgba(94, 109, 106, .12);
   white-space: nowrap;
-  transition: opacity var(--t-fast, .3s) var(--ease, ease);
 }
 .wsy-search__box:focus-within .wsy-search__kbd { display: none; }
 
 /* Bouton effacer */
 .wsy-search__clear {
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
+  grid-area: clear;
+  margin-inline-end: .3rem;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: none;
   align-items: center;
   justify-content: center;
   color: var(--granit, #5E6D6A);
   background: transparent;
-  transition: background-color var(--t-fast, .3s) var(--ease, ease),
-              color var(--t-fast, .3s) var(--ease, ease);
+  transition: background-color var(--t-fast, .3s) var(--ease, ease), color var(--t-fast, .3s) var(--ease, ease);
 }
 .wsy-search__clear svg { width: 16px; height: 16px; }
 .wsy-search__clear:hover,
-.wsy-search__clear:focus-visible {
-  background: var(--brume-14, rgba(63, 166, 155, .14));
-  color: var(--epinette, #1F6F64);
-}
+.wsy-search__clear:focus-visible { background: var(--brume-14, rgba(63, 166, 155, .14)); color: var(--epinette, #1F6F64); }
 .wsy-search.has-text .wsy-search__clear { display: inline-flex; }
 
+/* Bouton d'envoi rond : discret tant que le champ est vide ; la tige de la flèche se dessine dès la saisie */
+.wsy-search__go {
+  grid-area: go;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--creme, #F4FAF9);
+  background: var(--epinette, #1F6F64);
+  box-shadow: 0 4px 12px rgba(31, 111, 100, .25);
+  transition: background-color var(--t-fast, .3s) var(--ease, ease), color var(--t-fast, .3s) var(--ease, ease),
+              transform var(--t-fast, .3s) var(--ease-out, cubic-bezier(.16, 1, .3, 1)), box-shadow var(--t-fast, .3s) var(--ease, ease);
+}
+.wsy-search__go svg { width: 18px; height: 18px; }
+.wsy-search__go:disabled { background: var(--brume-08, rgba(63, 166, 155, .08)); color: var(--granit-clair, #9AA8A4); box-shadow: none; cursor: default; }
+.wsy-search__go:not(:disabled):hover,
+.wsy-search__go:not(:disabled):focus-visible {
+  background: var(--turquoise, #48D6C2);
+  color: var(--noir-jais, #1B2D28);
+  transform: translateX(2px);
+}
+.wsy-search__shaft { stroke-dasharray: 14; stroke-dashoffset: 14; transition: stroke-dashoffset .3s linear; }
+.wsy-search.has-text .wsy-search__shaft { stroke-dashoffset: 0; }
+[dir="rtl"] .wsy-search__go svg,
+[dir="rtl"] .wsy-search__pv-btn svg { transform: scaleX(-1); }
+
+/* Pastilles « Essayez » à côté de la barre (grand écran) : un clic lance la recherche */
+.wsy-search__tries {
+  display: none;
+  order: 2;
+  flex: 0 1 auto;
+  min-width: 0;
+  align-items: center;
+  gap: .45rem;
+}
+.wsy-search__tries-lbl {
+  flex: none;
+  margin-inline-end: .15rem;
+  font-family: var(--font-titre, "Poppins", system-ui, sans-serif);
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--granit, #5E6D6A);
+}
+.wsy-search__try {
+  flex: none;
+  height: 32px;
+  padding: 0 .85rem;
+  border-radius: var(--radius-pill, 999px);
+  border: 1px solid var(--granit-20, rgba(94, 109, 106, .20));
+  background: rgba(255, 255, 255, .75);
+  font-family: var(--font-titre, "Poppins", system-ui, sans-serif);
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--epinette, #1F6F64);
+  white-space: nowrap;
+  transition: background-color var(--t-fast, .3s) var(--ease, ease), border-color var(--t-fast, .3s) var(--ease, ease),
+              color var(--t-fast, .3s) var(--ease, ease), transform var(--t-fast, .3s) var(--ease-out, ease);
+}
+.wsy-search__try:hover,
+.wsy-search__try:focus-visible { background: var(--epinette, #1F6F64); border-color: var(--epinette, #1F6F64); color: var(--creme, #F4FAF9); transform: translateY(-1px); }
+@media (min-width: 1280px) { .wsy-search__tries { display: flex; } }
+@media (min-width: 1280px) and (max-width: 1439px) { .wsy-search__try:nth-of-type(4) { display: none; } }
+
 /* --------------------------------------------------------------------------
-   3. PANNEAU — déploiement sous le champ (mêmes codes que .dropdown du header)
+   3. VOILE (mode Spotlight) — ajouté au <body> par js/search.js, sous l'en-tête collant (z-index 1000)
+   -------------------------------------------------------------------------- */
+.wsy-search-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(15, 28, 24, .42);
+  -webkit-backdrop-filter: blur(6px) saturate(.9);
+  backdrop-filter: blur(6px) saturate(.9);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .28s var(--ease, ease), visibility 0s linear .28s;
+}
+.wsy-search-scrim.is-on { opacity: 1; visibility: visible; transition-delay: 0s; }
+body.faqc-page .wsy-search-scrim { display: none; }
+
+/* --------------------------------------------------------------------------
+   4. PANNEAU SPOTLIGHT — filtres | résultats + aperçu | indications clavier
    -------------------------------------------------------------------------- */
 .wsy-search__panel {
   position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  right: 0;
+  top: calc(100% + 12px);
+  left: 50%;
   z-index: 60;
-  background: var(--creme, #F4FAF9);
-  border: 1px solid var(--granit-20, rgba(94, 109, 106, .20));
-  border-radius: var(--radius, 16px);
-  box-shadow: var(--shadow-drop, 0 22px 50px rgba(27, 45, 40, .16));
+  width: min(1040px, calc(100vw - 2 * var(--pad-x, 1.25rem)));
+  background: #fff;
+  border: 1px solid rgba(94, 109, 106, .14);
+  border-radius: 22px;
+  box-shadow: 0 50px 100px -30px rgba(15, 28, 24, .45), 0 20px 40px -20px rgba(15, 28, 24, .25);
   overflow: hidden;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(-6px);
-  transition: opacity var(--t-fast, .3s) var(--ease-out, cubic-bezier(.16, 1, .3, 1)),
-              transform var(--t-fast, .3s) var(--ease-out, cubic-bezier(.16, 1, .3, 1)),
-              visibility var(--t-fast, .3s);
+  transform: translate(-50%, -8px) scale(.985);
+  transform-origin: 50% 0;
+  transition: opacity .26s var(--ease-out, cubic-bezier(.16, 1, .3, 1)),
+              transform .32s var(--ease-out, cubic-bezier(.16, 1, .3, 1)),
+              visibility .26s;
 }
 .wsy-search.is-open .wsy-search__panel {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: translate(-50%, 0);
 }
 
+/* Filtres par type (n'apparaissent qu'avec des résultats) */
+.wsy-search__scopes {
+  display: flex;
+  gap: .4rem;
+  padding: .8rem 1rem .75rem;
+  border-bottom: 1px solid var(--granit-12, rgba(94, 109, 106, .12));
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.wsy-search__scopes::-webkit-scrollbar { display: none; }
+.wsy-search__scopes:empty { display: none; }
+.wsy-search__scope {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  height: 32px;
+  padding: 0 .55rem 0 .85rem;
+  border-radius: var(--radius-pill, 999px);
+  border: 1px solid transparent;
+  background: var(--brume-08, rgba(63, 166, 155, .08));
+  font-family: var(--font-titre, "Poppins", system-ui, sans-serif);
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--granit, #5E6D6A);
+  transition: background-color var(--t-fast, .3s) var(--ease, ease), color var(--t-fast, .3s) var(--ease, ease), border-color var(--t-fast, .3s) var(--ease, ease);
+}
+.wsy-search__scope:hover { color: var(--epinette, #1F6F64); border-color: var(--granit-20, rgba(94, 109, 106, .20)); }
+.wsy-search__scope[aria-pressed="true"] { background: var(--noir-jais, #1B2D28); color: #fff; }
+.wsy-search__scope-n {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 .35rem;
+  display: inline-grid;
+  place-items: center;
+  border-radius: var(--radius-pill, 999px);
+  font-size: .7rem;
+  background: rgba(94, 109, 106, .14);
+}
+.wsy-search__scope[aria-pressed="true"] .wsy-search__scope-n { background: var(--turquoise, #48D6C2); color: var(--noir-jais, #1B2D28); }
+
+/* Deux colonnes : résultats | aperçu du résultat actif */
+.wsy-search__main { display: grid; grid-template-columns: minmax(0, 1fr) 340px; }
+.wsy-search__main:has(.wsy-search__preview:empty) { grid-template-columns: minmax(0, 1fr); }
 .wsy-search__results {
-  max-height: min(62vh, 30rem);
+  max-height: min(60vh, 32rem);
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: .5rem;
   -webkit-overflow-scrolling: touch;
 }
+.wsy-search__preview {
+  max-height: min(60vh, 32rem);
+  overflow-y: auto;
+  padding: 1.1rem;
+  border-inline-start: 1px solid var(--granit-12, rgba(94, 109, 106, .12));
+  background: linear-gradient(180deg, #F6FBFA, #fff 60%);
+}
+.wsy-search__preview:empty { display: none; }
 
 /* En-tête de groupe (Formations / Catégories / Pages) */
 .wsy-search__grouphd {
@@ -204,22 +381,36 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
   margin-top: .3rem;
 }
 
-/* Élément de résultat */
+/* Élément de résultat : liseré turquoise quand il est actif (souris ou clavier) */
 .wsy-search__item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: .85rem;
   min-height: 44px;
-  padding: .55rem .7rem;
-  border-radius: var(--radius-sm, 8px);
+  padding: .55rem .75rem;
+  border-radius: 12px;
   color: var(--noir-jais, #1B2D28);
   cursor: pointer;
   scroll-margin: .5rem;
   transition: background-color var(--t-fast, .3s) var(--ease, ease);
 }
 .wsy-search__item:hover,
-.wsy-search__item.is-active {
-  background: var(--brume-14, rgba(63, 166, 155, .14));
+.wsy-search__item.is-active { background: var(--brume-14, rgba(63, 166, 155, .14)); }
+.wsy-search__item.is-active::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--turquoise, #48D6C2);
+}
+@keyframes wsy-in { from { opacity: 0; transform: translateY(6px); } }
+.wsy-search.is-entering .wsy-search__item {
+  animation: wsy-in .34s var(--ease-out, cubic-bezier(.16, 1, .3, 1)) both;
+  animation-delay: calc(var(--i, 9) * 26ms);
 }
 .wsy-search__ic {
   flex-shrink: 0;
@@ -230,17 +421,14 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
   place-items: center;
   background: var(--brume-14, rgba(63, 166, 155, .14));
   color: var(--epinette, #1F6F64);
-  transition: background-color var(--t-fast, .3s) var(--ease, ease),
-              color var(--t-fast, .3s) var(--ease, ease);
+  transition: background-color var(--t-fast, .3s) var(--ease, ease), color var(--t-fast, .3s) var(--ease, ease);
 }
 .wsy-search__ic svg { width: 20px; height: 20px; }
 .wsy-search__item:hover .wsy-search__ic,
-.wsy-search__item.is-active .wsy-search__ic {
-  background: var(--epinette, #1F6F64);
-  color: var(--creme, #F4FAF9);
-}
+.wsy-search__item.is-active .wsy-search__ic { background: var(--epinette, #1F6F64); color: var(--creme, #F4FAF9); }
 .wsy-search__body { min-width: 0; flex: 1; }
 .wsy-search__tt {
+  display: block;                                  /* sans quoi « … » (text-overflow) ne s'applique pas */
   font-family: var(--font-titre, "Poppins", system-ui, sans-serif);
   font-weight: 600;
   font-size: .95rem;
@@ -260,37 +448,18 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
   text-overflow: ellipsis;
 }
 .wsy-search__tt mark,
-.wsy-search__ds mark {
-  background: transparent;
-  color: var(--epinette, #1F6F64);
-  font-weight: 700;
-}
+.wsy-search__ds mark { background: transparent; color: var(--epinette, #1F6F64); font-weight: 700; }
 .wsy-search__ds mark { font-weight: 600; }
 
-/* Résultat « riche » (fiche avec page dédiée) : miniature, description sur 2 lignes,
-   faits clés (durée · format · langues). Même langage visuel que les autres résultats. */
+/* Résultat « riche » (fiche avec page dédiée) : miniature, description sur 2 lignes, faits clés */
 .wsy-search__item--rich { align-items: flex-start; padding-block: .7rem; }
-.wsy-search__ic--thumb {
-  width: 48px;
-  height: 48px;
-  overflow: hidden;
-  background: var(--granit-12, rgba(94, 109, 106, .12));
-}
+.wsy-search__ic--thumb { width: 48px; height: 48px; overflow: hidden; background: var(--granit-12, rgba(94, 109, 106, .12)); }
 .wsy-search__ic--thumb img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; display: block; }
 .wsy-search__item:hover .wsy-search__ic--thumb,
 .wsy-search__item.is-active .wsy-search__ic--thumb { background: var(--granit-12, rgba(94, 109, 106, .12)); }
 /* Une question de FAQ est une phrase : elle passe à la ligne (2 lignes max) au lieu d'être tronquée. */
-.wsy-search__item--faq .wsy-search__tt {
-  white-space: normal;
-  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2;
-}
-.wsy-search__ds--wrap {
-  white-space: normal;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  margin-top: .15rem;
-}
+.wsy-search__item--faq .wsy-search__tt { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+.wsy-search__ds--wrap { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-top: .15rem; }
 .wsy-search__facts {
   display: block;
   margin-top: .3rem;
@@ -298,17 +467,14 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
   font-size: var(--fs-micro, .75rem);
   font-weight: 500;
   line-height: 1.4;
-  letter-spacing: .01em;
   color: var(--epinette, #1F6F64);
 }
-
-/* Puce méta (catégorie / durée) à droite */
+/* Puce méta (catégorie) à droite */
 .wsy-search__meta {
   flex-shrink: 0;
   font-family: var(--font-titre, "Poppins", system-ui, sans-serif);
   font-size: var(--fs-micro, .75rem);
   font-weight: 600;
-  letter-spacing: .02em;
   color: var(--granit, #5E6D6A);
   background: var(--brume-08, rgba(63, 166, 155, .08));
   border: 1px solid var(--granit-12, rgba(94, 109, 106, .12));
@@ -318,12 +484,92 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
 }
 
 /* --------------------------------------------------------------------------
-   4. ÉTAT VIDE / AUCUN RÉSULTAT
+   5. APERÇU — photo, type, titre, description, faits, tarif confirmé, boutons
    -------------------------------------------------------------------------- */
-.wsy-search__empty {
-  padding: 2.2rem 1.5rem 1.8rem;
-  text-align: center;
+@keyframes wsy-pv { from { opacity: 0; transform: translateY(6px); } }
+.wsy-search__pv { display: flex; flex-direction: column; gap: .55rem; animation: wsy-pv .3s var(--ease-out, cubic-bezier(.16, 1, .3, 1)) both; }
+.wsy-search__pv-media {
+  display: block;
+  aspect-ratio: 16 / 10;
+  margin-bottom: .3rem;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--granit-12, rgba(94, 109, 106, .12));
+  box-shadow: 0 10px 24px rgba(27, 45, 40, .12);
 }
+.wsy-search__pv-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wsy-search__pv-media--ic {
+  display: grid;
+  place-items: center;
+  color: var(--epinette, #1F6F64);
+  background: radial-gradient(circle at 25% 20%, rgba(72, 214, 194, .35), transparent 60%),
+              linear-gradient(145deg, var(--brume-14, rgba(63, 166, 155, .14)), rgba(47, 125, 140, .1));
+  box-shadow: none;
+}
+.wsy-search__pv-media--ic svg { width: 46px; height: 46px; }
+.wsy-search__pv-kicker {
+  font-family: var(--font-titre, "Poppins", system-ui, sans-serif);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--brume, #3FA69B);
+}
+.wsy-search__pv-title {
+  font-family: var(--font-titre, "Poppins", system-ui, sans-serif);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1.25;
+  color: var(--noir-jais, #1B2D28);
+}
+.wsy-search__pv-desc {
+  font-size: .88rem;
+  line-height: 1.55;
+  color: var(--granit, #5E6D6A);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.wsy-search__pv-facts { display: flex; flex-wrap: wrap; gap: .35rem; }
+.wsy-search__pv-facts span {
+  padding: .2rem .6rem;
+  border-radius: var(--radius-pill, 999px);
+  border: 1px solid var(--granit-12, rgba(94, 109, 106, .12));
+  background: var(--brume-08, rgba(63, 166, 155, .08));
+  font-family: var(--font-titre, "Poppins", system-ui, sans-serif);
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--epinette, #1F6F64);
+}
+.wsy-search__pv-price { font-family: var(--font-titre, "Poppins", system-ui, sans-serif); font-weight: 700; font-size: 1.05rem; color: var(--noir-jais, #1B2D28); }
+.wsy-search__pv-cta { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .35rem; }
+.wsy-search__pv-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  height: 40px;
+  padding: 0 1rem;
+  border-radius: var(--radius-btn, 12px);
+  border: 1.5px solid var(--epinette, #1F6F64);
+  background: var(--epinette, #1F6F64);
+  font-family: var(--font-titre, "Poppins", system-ui, sans-serif);
+  font-size: .86rem;
+  font-weight: 600;
+  color: #fff;
+  transition: background-color var(--t-fast, .3s) var(--ease, ease), border-color var(--t-fast, .3s) var(--ease, ease), color var(--t-fast, .3s) var(--ease, ease);
+}
+.wsy-search__pv-btn svg { width: 16px; height: 16px; }
+.wsy-search__pv-btn:hover,
+.wsy-search__pv-btn:focus-visible { background: var(--noir-jais, #1B2D28); border-color: var(--noir-jais, #1B2D28); }
+.wsy-search__pv-btn--ghost { background: transparent; border-color: var(--granit-20, rgba(94, 109, 106, .20)); color: var(--epinette, #1F6F64); }
+.wsy-search__pv-btn--ghost:hover,
+.wsy-search__pv-btn--ghost:focus-visible { background: var(--brume-14, rgba(63, 166, 155, .14)); border-color: var(--brume, #3FA69B); color: var(--epinette, #1F6F64); }
+
+/* --------------------------------------------------------------------------
+   6. ÉTAT VIDE / AUCUN RÉSULTAT
+   -------------------------------------------------------------------------- */
+.wsy-search__empty { padding: 2.2rem 1.5rem 1.8rem; text-align: center; }
 .wsy-search__empty-ic {
   width: 54px;
   height: 54px;
@@ -335,26 +581,9 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
   background: var(--brume-14, rgba(63, 166, 155, .14));
 }
 .wsy-search__empty-ic svg { width: 26px; height: 26px; }
-.wsy-search__empty-tt {
-  font-family: var(--font-titre, "Poppins", system-ui, sans-serif);
-  font-weight: 600;
-  font-size: 1.05rem;
-  color: var(--noir-jais, #1B2D28);
-  margin-bottom: .3rem;
-}
-.wsy-search__empty-tx {
-  font-size: var(--fs-small, .875rem);
-  color: var(--granit, #5E6D6A);
-  max-width: 42ch;
-  margin: 0 auto 1.1rem;
-  line-height: 1.5;
-}
-.wsy-search__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .5rem;
-  justify-content: center;
-}
+.wsy-search__empty-tt { font-family: var(--font-titre, "Poppins", system-ui, sans-serif); font-weight: 600; font-size: 1.05rem; color: var(--noir-jais, #1B2D28); margin-bottom: .3rem; }
+.wsy-search__empty-tx { font-size: var(--fs-small, .875rem); color: var(--granit, #5E6D6A); max-width: 42ch; margin: 0 auto 1.1rem; line-height: 1.5; }
+.wsy-search__chips { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }
 .wsy-search__chip {
   display: inline-flex;
   align-items: center;
@@ -368,26 +597,20 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
   padding: .45rem .95rem;
   border-radius: var(--radius-pill, 999px);
   cursor: pointer;
-  transition: background-color var(--t-fast, .3s) var(--ease, ease),
-              border-color var(--t-fast, .3s) var(--ease, ease),
-              color var(--t-fast, .3s) var(--ease, ease);
+  transition: background-color var(--t-fast, .3s) var(--ease, ease), border-color var(--t-fast, .3s) var(--ease, ease), color var(--t-fast, .3s) var(--ease, ease);
 }
 .wsy-search__chip:hover,
 .wsy-search__chip:focus-visible,
-.wsy-search__chip.is-active {
-  background: var(--brume-14, rgba(63, 166, 155, .14));
-  border-color: var(--brume, #3FA69B);
-  color: var(--epinette, #1F6F64);
-}
+.wsy-search__chip.is-active { background: var(--brume-14, rgba(63, 166, 155, .14)); border-color: var(--brume, #3FA69B); color: var(--epinette, #1F6F64); }
 
 /* --------------------------------------------------------------------------
-   5. PIED — indications clavier
+   7. PIED — indications clavier
    -------------------------------------------------------------------------- */
 .wsy-search__foot {
   display: flex;
   align-items: center;
   gap: 1.1rem;
-  padding: .6rem .9rem;
+  padding: .6rem 1rem;
   border-top: 1px solid var(--granit-12, rgba(94, 109, 106, .12));
   background: rgba(94, 109, 106, .03);
   font-size: var(--fs-micro, .75rem);
@@ -413,9 +636,8 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
 }
 
 /* --------------------------------------------------------------------------
-   5b. ATTERRISSAGE DES ANCRES — les résultats « formation » pointent vers
-   formations.html#id. On décale sous le header sticky : valeur généreuse pour
-   le scroll natif (chargement de page), puis JS recale précisément (landOn).
+   8. ATTERRISSAGE DES ANCRES — les résultats « formation » pointent vers formations.html#id : décalage sous le
+   header sticky (valeur généreuse pour le scroll natif, puis js/search.js recale précisément).
    -------------------------------------------------------------------------- */
 .fo-card,
 #formations { scroll-margin-top: 200px; }
@@ -425,39 +647,55 @@ body:not(.faqc-page) .site-header:not(:has(.wsy-search))::after {
 }
 
 /* --------------------------------------------------------------------------
-   6. RESPONSIVE / TACTILE
+   9. RESPONSIVE / TACTILE
    -------------------------------------------------------------------------- */
 @media (max-width: 860px) {
-  .site-header { --wsy-search-h: calc(1px + 1rem + 50px); }         /* même calcul que la bande mobile */
-  .wsy-search__wrap { padding-block: .5rem; }
+  .site-header { --wsy-search-h: calc(1px + 1rem + 50px); }
   .wsy-search__inner { max-width: none; }
-  .wsy-search__box { height: 50px; }               /* zone tactile confortable */
-  .wsy-search__results { max-height: min(62dvh, 26rem); }
+  .wsy-search__box { max-width: none; height: 50px; }
+  /* panneau pleine largeur, sans aperçu (liste seule), voile sans flou (fluidité) */
+  .wsy-search__panel { left: 0; width: 100%; transform: translateY(-6px); border-radius: 18px; }
+  .wsy-search.is-open .wsy-search__panel { transform: none; }
+  .wsy-search__main { grid-template-columns: minmax(0, 1fr); }
+  .wsy-search__preview { display: none; }
+  .wsy-search__results { max-height: min(60dvh, 26rem); }
+  .wsy-search-scrim { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(15, 28, 24, .5); }
 }
 @media (max-width: 640px) {
   .wsy-search__kbd { display: none; }              /* pas de raccourci au doigt */
   .wsy-search__foot { display: none; }             /* indications clavier inutiles */
   .wsy-search__ds { white-space: normal; }         /* description sur 2 lignes ok */
-  .wsy-search__results { max-height: min(58dvh, 24rem); }
+  .wsy-search__tt { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+  .wsy-search__meta { display: none; }             /* la place va au titre (la catégorie est dans l'aperçu) */
+  .wsy-search__results { max-height: min(56dvh, 24rem); }
+  .wsy-search__icon { width: 34px; height: 34px; margin-inline-end: .6rem; }
 }
-
 /* Le raccourci ⌘K n'a de sens qu'avec un clavier physique */
 @media (hover: none), (pointer: coarse) {
   .wsy-search__kbd { display: none; }
 }
 
 /* --------------------------------------------------------------------------
-   7. MOUVEMENT RÉDUIT
+   10. MOUVEMENT RÉDUIT
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .wsy-search__box,
-  .wsy-search__icon,
   .wsy-search__panel,
   .wsy-search__item,
   .wsy-search__ic,
   .wsy-search__chip,
-  .wsy-search__clear {
+  .wsy-search__clear,
+  .wsy-search__go,
+  .wsy-search__shaft,
+  .wsy-search__try,
+  .wsy-search__scope,
+  .wsy-search-scrim {
     transition-duration: .001ms !important;
   }
+  .wsy-search__panel { transform: translateX(-50%) !important; }
+  .wsy-search.is-entering .wsy-search__item { animation: none; }
+  .wsy-search__pv { animation: none; }
+}
+@media (prefers-reduced-motion: reduce) and (max-width: 860px) {
   .wsy-search__panel { transform: none !important; }
 }

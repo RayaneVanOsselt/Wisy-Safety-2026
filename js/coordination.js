@@ -3,22 +3,32 @@
    -------------------------------------------------------------------------
    En-tête, menu mobile, pied de page et apparitions au scroll viennent de
    js/site-chrome.js (partagé). Ce fichier n'ajoute que ce qui est propre à
-   cette page :
+   cette page — une interaction différente par chapitre :
 
-     initHero()              équerres du hero qui se dessinent au chargement + léger parallaxe.
-     initPillars()            rail de piliers qui s'ouvre au clic (un seul à la fois).
-     initTimelineProgress()   ligne de la timeline « mission » qui se remplit au scroll.
-     initControlSequence()    allumage séquentiel de « Coordination Control » (une fois, à l'entrée).
-     initModals()   système de fenêtres modales (piliers/services/domaines) :
-                     ouverture/fermeture, piège de focus, arrière-plan inert,
-                     verrouillage du scroll, retour du focus, Échap.
-     initTeam()     affiche les fiches de js/coordination-data.js (TEAM) ou,
-                     tant que ce tableau est vide, laisse l'état « équipe à
-                     venir » déjà présent dans le HTML (aucune donnée inventée).
-     initForm()     validation native + anti-spam (piège à robots) + envoi
-                     EmailJS (même compte que contact.html / peb-wallonie-
-                     bruxelles.html) ; jamais de pièce jointe (le compte
-                     EmailJS ne le permet pas).
+     initHero()          équerres dessinées au chargement, léger parallaxe, loupe
+                         « inspection » (souris uniquement : la photo en couleurs
+                         apparaît dans un cercle qui suit le pointeur).
+     initRail()          rail de chapitres (grand écran) : chapitre courant,
+                         progression, libellé qui s'affiche au changement.
+     initGhosts()        numéros fantômes qui glissent légèrement au scroll.
+     initSpotlight()     halo qui suit la souris sur les cartes [data-spot].
+     initExplore()       01 · piliers en onglets (clic, survol, flèches, « Suivant »).
+     initSimulator()     02 · « le déclencheur » : nombre d'entreprises × mode
+                         (simultané / successif) → illustration du principe légal
+                         général, jamais un avis juridique (texte affiché).
+     initServices()      03 · panneaux qui s'élargissent (survol / clic / clavier)
+                         sur grand écran, accordéon sur mobile.
+     initSteps()         04 · méthode pas à pas (frise, précédent / suivant).
+     initServicePicks()  « Demander ce service » coche le service dans le formulaire.
+     initTeam()          fiches de js/coordination-data.js (TEAM) ou, tant que ce
+                         tableau est vide, l'état « équipe à venir » du HTML.
+     initForm()          validation native + anti-spam + envoi EmailJS (même compte
+                         que contact.html / peb-wallonie-bruxelles.html), sans pièce jointe.
+     initTracking()      clics [data-co-track] → bus `wisy:analytics` (aucune donnée perso).
+
+   Amélioration progressive : sans JavaScript, tout est lisible (fiches empilées,
+   accordéons ouverts). Chaque composant pose `.is-ready` quand il prend la main.
+   Mouvement réduit : pas de loupe, pas de parallaxe (les changements d'état restent).
    ========================================================================= */
 (() => {
   "use strict";
@@ -27,187 +37,427 @@
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   const Chrome = window.WisyChrome || { track() {}, tr: (k, f) => f, currentLang: () => "fr" };
   const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finePointer = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const isRtl = () => document.documentElement.getAttribute("dir") === "rtl";
+  const pad = (n) => String(n).padStart(2, "0");
+
+  /* Un seul écouteur scroll/resize pour toute la page, cadencé par requestAnimationFrame. */
+  const onFrame = (() => {
+    const jobs = [];
+    let ticking = false;
+    const run = () => { ticking = false; jobs.forEach((fn) => fn()); };
+    const schedule = () => { if (!ticking) { ticking = true; requestAnimationFrame(run); } };
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return (fn) => { jobs.push(fn); fn(); };
+  })();
+
+  /* Texte traduit posé par le script : l'attribut data-i18n suit la clé, pour qu'un
+     changement de langue ultérieur (js/i18n.js) retraduise le bon texte. */
+  function setText(el, key) {
+    if (!el) return;
+    el.setAttribute("data-i18n", key);
+    const v = Chrome.tr(key, null);
+    if (v != null) el.textContent = v;
+  }
 
   /* --------------------------------------------------------------------- */
-  /* Hero : dessin des équerres au chargement + parallaxe léger au scroll   */
-  /* (désactivé en mouvement réduit — jamais de scroll-jacking, juste une   */
-  /* translation de quelques pixels de l'image derrière le texte).          */
+  /* Hero                                                                  */
   /* --------------------------------------------------------------------- */
   function initHero() {
     const hero = $(".co-hero");
     if (!hero) return;
     requestAnimationFrame(() => hero.classList.add("is-ready"));
     if (reducedMotion()) return;
-    const img = $("[data-parallax] img", hero);
-    if (!img) return;
-    let ticking = false;
-    function update() {
-      ticking = false;
+    const visual = $("[data-parallax]", hero);
+    if (!visual) return;
+    onFrame(() => {
       const r = hero.getBoundingClientRect();
       if (r.bottom < 0 || r.top > window.innerHeight) return;
-      img.style.setProperty("--py", Math.round(r.top * -0.12) + "px");
-    }
-    update();
-    window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
-  }
-
-  /* --------------------------------------------------------------------- */
-  /* Piliers : rail qui s'ouvre au clic/Entrée (un seul ouvert à la fois),  */
-  /* pattern accordéon accessible identique à celui du menu mobile du site  */
-  /* (aria-expanded sur le déclencheur, panneau démasqué par la grille CSS).*/
-  /* --------------------------------------------------------------------- */
-  function initPillars() {
-    const triggers = $$("[data-pillar-toggle]");
-    if (!triggers.length) return;
-    triggers.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const isOpen = btn.getAttribute("aria-expanded") === "true";
-        triggers.forEach((b) => b.setAttribute("aria-expanded", "false"));
-        btn.setAttribute("aria-expanded", String(!isOpen));
-      });
+      visual.style.setProperty("--py", Math.round(r.top * -0.12) + "px");
     });
-    // Le premier pilier démarre ouvert : la section n'a pas l'air vide au premier coup d'œil.
-    triggers[0].setAttribute("aria-expanded", "true");
+    if (finePointer()) initLens(hero, visual);
   }
 
-  /* --------------------------------------------------------------------- */
-  /* Mission : la ligne du rail se remplit progressivement pendant que la   */
-  /* section défile (jamais de scroll-jacking : le scroll natif reste seul  */
-  /* maître, on ne fait que lire sa position pour ajuster une hauteur CSS). */
-  /* --------------------------------------------------------------------- */
-  function initTimelineProgress() {
-    const list = $("[data-timeline]"), fill = $("[data-timeline-fill]");
-    if (!list || !fill) return;
-    let ticking = false;
-    function update() {
-      ticking = false;
-      const r = list.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const total = r.height - vh * 0.45;
-      const done = (vh * 0.75) - r.top;
-      const pct = total > 0 ? Math.max(0, Math.min(1, done / total)) : 0;
-      fill.style.height = (pct * 100) + "%";
+  /* Loupe : la même image (currentSrc : AVIF ou WebP déjà téléchargé, aucune requête en plus),
+     sans filtre, masquée par un disque qui suit la souris avec un léger amorti. */
+  function initLens(hero, visual) {
+    const img = $("img", visual);
+    if (!img) return;
+    const lens = document.createElement("div");
+    lens.className = "co-hero__lens";
+    lens.setAttribute("aria-hidden", "true");
+    const ring = document.createElement("div");
+    ring.className = "co-hero__ring";
+    ring.setAttribute("aria-hidden", "true");
+    const setSrc = () => {
+      const src = img.currentSrc || img.src;
+      if (src) lens.style.backgroundImage = 'url("' + src.replace(/["\\]/g, "") + '")';
+    };
+    if (img.complete) setSrc(); else img.addEventListener("load", setSrc, { once: true });
+    visual.insertBefore(lens, $(".co-hero__brackets", visual));
+    visual.appendChild(ring);
+
+    let tx = 0, ty = 0, x = 0, y = 0, raf = 0, inside = false;
+    function paint() {
+      x += (tx - x) * 0.2; y += (ty - y) * 0.2;
+      const vr = visual.getBoundingClientRect(), lr = lens.getBoundingClientRect();
+      /* disque du masque : coordonnées locales de la couche (elle est translatée et agrandie comme la photo) */
+      const sx = lens.offsetWidth / (lr.width || 1), sy = lens.offsetHeight / (lr.height || 1);
+      visual.style.setProperty("--lx", ((x + vr.left - lr.left) * sx).toFixed(1) + "px");
+      visual.style.setProperty("--ly", ((y + vr.top - lr.top) * sy).toFixed(1) + "px");
+      visual.style.setProperty("--rx", x.toFixed(1) + "px");
+      visual.style.setProperty("--ry", y.toFixed(1) + "px");
+      raf = (Math.abs(tx - x) > 0.4 || Math.abs(ty - y) > 0.4) ? requestAnimationFrame(paint) : 0;
     }
-    update();
-    window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
-    window.addEventListener("resize", update);
+    hero.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse") return;
+      const vr = visual.getBoundingClientRect();
+      tx = e.clientX - vr.left; ty = e.clientY - vr.top;
+      if (!inside) { inside = true; x = tx; y = ty; hero.classList.add("is-lens"); }
+      if (!raf) raf = requestAnimationFrame(paint);
+    });
+    hero.addEventListener("pointerleave", () => { inside = false; hero.classList.remove("is-lens"); });
   }
 
   /* --------------------------------------------------------------------- */
-  /* Coordination Control : allumage séquentiel des étapes, une seule fois, */
-  /* quand la section entre dans le viewport (composant éditorial — voir    */
-  /* le texte affiché juste au-dessus : jamais un vrai statut de chantier). */
+  /* Rail de chapitres (grand écran)                                       */
   /* --------------------------------------------------------------------- */
-  function initControlSequence() {
-    const rail = $("[data-control-rail]");
+  function initRail() {
+    const rail = $("[data-rail]");
     if (!rail) return;
-    const items = $$("li", rail);
-    if (!("IntersectionObserver" in window) || reducedMotion()) {
-      items.forEach((li) => li.classList.add("is-on"));
-      return;
-    }
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        rail.classList.add("is-live");
-        items.forEach((li) => li.classList.add("is-on"));
-        io.unobserve(rail);
-      });
-    }, { threshold: 0.4 });
-    io.observe(rail);
+    const links = $$("[data-rail-link]", rail);
+    const sections = links.map((a) => document.getElementById(a.getAttribute("href").slice(1)));
+    if (!sections.length || sections.some((s) => !s)) return;
+    const hero = $(".co-hero");
+    const wide = window.matchMedia("(min-width: 1200px)");      // = css/coordination.css : rail masqué en dessous
+    let current = -1, flashTimer = 0;
+    onFrame(() => {
+      if (!wide.matches) return;
+      const vh = window.innerHeight, mid = vh * 0.5;          // = hauteur du rail : sa teinte suit la section qu'il survole
+      const heroBottom = hero ? hero.getBoundingClientRect().bottom : 0;
+      const last = sections[sections.length - 1].getBoundingClientRect();
+      rail.classList.toggle("is-visible", heroBottom < vh * 0.4 && last.bottom > vh * 0.35);
+      let idx = -1;
+      sections.forEach((s, i) => { if (s.getBoundingClientRect().top <= mid) idx = i; });
+      if (idx !== current) {
+        current = idx;
+        links.forEach((a, i) => { a.classList.toggle("is-current", i === idx); a.classList.toggle("is-past", i < idx); a.classList.remove("is-flash"); });
+        rail.classList.toggle("is-dark", idx >= 0 && sections[idx].getAttribute("data-tone") === "dark");
+        clearTimeout(flashTimer);
+        if (idx >= 0 && rail.classList.contains("is-visible")) {
+          links[idx].classList.add("is-flash");
+          flashTimer = setTimeout(() => links[idx] && links[idx].classList.remove("is-flash"), 1600);
+        }
+      }
+      const top = sections[0].getBoundingClientRect().top;
+      const span = last.bottom - top - vh;
+      const p = span > 0 ? Math.max(0, Math.min(1, (mid - top) / (span + mid))) : 1;
+      rail.style.setProperty("--progress", p.toFixed(3));
+    });
   }
 
   /* --------------------------------------------------------------------- */
-  /* Modals (piliers, services, domaines)                                   */
+  /* Numéros fantômes : glissement vertical de quelques dizaines de pixels  */
   /* --------------------------------------------------------------------- */
-  function initModals() {
-    const scrim = $("[data-modal-scrim]");
-    const openers = $$("[data-modal-open]");
-    if (!scrim || !openers.length) return;
-
-    const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-    let current = null;      // modal DOM actuellement ouvert
-    let lastTrigger = null;  // élément qui a ouvert le modal (retour du focus)
-
-    function focusables(container) {
-      return $$(FOCUSABLE, container).filter((el) => el.offsetParent !== null || el === document.activeElement);
-    }
-
-    function onKeydown(e) {
-      if (!current) return;
-      if (e.key === "Escape") { e.preventDefault(); close(); return; }
-      if (e.key !== "Tab") return;
-      const items = focusables(current);
-      if (!items.length) { e.preventDefault(); current.focus(); return; }
-      const first = items[0], last = items[items.length - 1], active = document.activeElement;
-      if (!current.contains(active)) { e.preventDefault(); first.focus(); }
-      else if (e.shiftKey && (active === first)) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && active === last) { e.preventDefault(); first.focus(); }
-    }
-
-    function setBackgroundInert(on) {
-      $$("body > header, body > main, body > footer").forEach((el) => {
-        if (on) { el.setAttribute("inert", ""); el.setAttribute("aria-hidden", "true"); }
-        else { el.removeAttribute("inert"); el.removeAttribute("aria-hidden"); }
+  function initGhosts() {
+    if (reducedMotion()) return;
+    const ghosts = $$(".co-ghost");
+    if (!ghosts.length) return;
+    onFrame(() => {
+      const vh = window.innerHeight;
+      ghosts.forEach((g) => {
+        const r = g.parentElement.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        const p = (vh - r.top) / (vh + r.height);           // 0 → 1 pendant la traversée de l'écran
+        g.style.setProperty("--gy", ((0.5 - p) * 70).toFixed(1) + "px");
       });
-    }
-
-    function lockScroll(on) {
-      if (on) {
-        const sw = window.innerWidth - document.documentElement.clientWidth;
-        document.documentElement.style.setProperty("--co-scrollbar", sw + "px");
-        document.body.style.overflow = "hidden";
-        document.body.style.paddingRight = sw ? sw + "px" : "";
-      } else {
-        document.body.style.overflow = "";
-        document.body.style.paddingRight = "";
-      }
-    }
-
-    function open(id, trigger) {
-      const modal = document.getElementById(id);
-      if (!modal) return;
-      if (current) close(true);
-      current = modal;
-      lastTrigger = trigger || null;
-      modal.hidden = false;
-      // reflow avant d'ajouter la classe : garantit la transition d'ouverture
-      void modal.offsetWidth;
-      modal.classList.add("is-open");
-      scrim.hidden = false;
-      void scrim.offsetWidth;
-      scrim.classList.add("is-open");
-      setBackgroundInert(true);
-      lockScroll(true);
-      document.addEventListener("keydown", onKeydown, true);
-      const items = focusables(modal);
-      (items[0] || modal).focus({ preventScroll: true });
-      Chrome.track("coord_modal_open", { modal: id });
-    }
-
-    function close(skipFocusReturn) {
-      if (!current) return;
-      const modal = current;
-      modal.classList.remove("is-open");
-      scrim.classList.remove("is-open");
-      setBackgroundInert(false);
-      lockScroll(false);
-      document.removeEventListener("keydown", onKeydown, true);
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const finish = () => { modal.hidden = true; scrim.hidden = true; };
-      if (reduced) finish(); else setTimeout(finish, 320);
-      if (!skipFocusReturn && lastTrigger && document.contains(lastTrigger)) lastTrigger.focus({ preventScroll: true });
-      current = null; lastTrigger = null;
-    }
-
-    openers.forEach((btn) => {
-      btn.addEventListener("click", () => open(btn.getAttribute("data-modal-open"), btn));
     });
-    $$("[data-modal-close]").forEach((btn) => btn.addEventListener("click", (e) => {
-      if (btn.tagName === "A") { /* laisse le lien #co-cta naviguer après fermeture */ }
-      close();
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Halo qui suit la souris                                               */
+  /* --------------------------------------------------------------------- */
+  function initSpotlight() {
+    if (!finePointer()) return;
+    $$("[data-spot]").forEach((el) => {
+      el.addEventListener("pointermove", (e) => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty("--mx", (e.clientX - r.left).toFixed(0) + "px");
+        el.style.setProperty("--my", (e.clientY - r.top).toFixed(0) + "px");
+      });
+    });
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Onglets accessibles (motif WAI-ARIA « tabs », activation automatique)  */
+  /* partagés par l'explorateur de piliers et la méthode pas à pas.         */
+  /* --------------------------------------------------------------------- */
+  function wireTabs(list, tabs, panels, labelledBy, onSelect, vertical) {
+    list.setAttribute("role", "tablist");
+    if (labelledBy) list.setAttribute("aria-labelledby", labelledBy);
+    tabs.forEach((t, i) => {
+      const p = panels[i];
+      t.id = t.id || p.id + "-tab";
+      t.setAttribute("role", "tab");
+      t.setAttribute("aria-controls", p.id);
+      p.setAttribute("role", "tabpanel");
+      p.setAttribute("aria-labelledby", t.id);
+      t.addEventListener("click", () => onSelect(i, { track: true }));
+      t.addEventListener("keydown", (e) => {
+        const next = isRtl() ? "ArrowLeft" : "ArrowRight", prev = isRtl() ? "ArrowRight" : "ArrowLeft";
+        let n = null;
+        if (e.key === next || (vertical && e.key === "ArrowDown")) n = (i + 1) % tabs.length;
+        else if (e.key === prev || (vertical && e.key === "ArrowUp")) n = (i - 1 + tabs.length) % tabs.length;
+        else if (e.key === "Home") n = 0;
+        else if (e.key === "End") n = tabs.length - 1;
+        if (n === null) return;
+        e.preventDefault();
+        onSelect(n, { focus: true, track: true });
+      });
+    });
+  }
+  function showTab(tabs, panels, i) {
+    tabs.forEach((t, k) => { const on = k === i; t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1; });
+    panels.forEach((p, k) => { const on = k === i; p.classList.toggle("is-active", on); p.inert = !on; });
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* 01 · Explorateur des piliers                                          */
+  /* --------------------------------------------------------------------- */
+  function initExplore() {
+    $$("[data-explore]").forEach((root) => {
+      const list = $("[data-explore-tabs]", root);
+      const tabs = $$("[data-explore-tab]", root), panels = $$("[data-explore-panel]", root);
+      if (!list || !tabs.length || tabs.length !== panels.length) return;
+      const stage = $(".co-explore__stage", root);
+      const behavior = () => (reducedMotion() ? "auto" : "smooth");
+      let current = -1, hover = 0;
+      function select(i, opts = {}) {
+        i = (i + tabs.length) % tabs.length;
+        if (i === current) return;
+        current = i;
+        showTab(tabs, panels, i);
+        if (opts.focus) tabs[i].focus();
+        if (opts.reveal) reveal(tabs[i]);
+        if (opts.track) Chrome.track("coord_pillar_view", { pillar: i + 1 });
+      }
+      /* « Suivant » (mobile surtout) : pastille active centrée dans le ruban (défilement horizontal seul),
+         et haut de la nouvelle fiche ramené sous l'en-tête si on l'avait dépassé en lisant. */
+      function reveal(tab) {
+        if (list.scrollWidth > list.clientWidth) {
+          const delta = tab.getBoundingClientRect().left - list.getBoundingClientRect().left - (list.clientWidth - tab.offsetWidth) / 2;
+          list.scrollBy({ left: delta, behavior: behavior() });
+        }
+        const offset = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-offset")) || 120;
+        const top = stage ? stage.getBoundingClientRect().top : 0;
+        if (top < offset) window.scrollBy({ top: top - offset - 12, behavior: behavior() });
+      }
+      wireTabs(list, tabs, panels, "co-why-title", select, true);
+      tabs.forEach((t, i) => {
+        t.addEventListener("mouseenter", () => {
+          if (!finePointer()) return;
+          clearTimeout(hover);
+          hover = setTimeout(() => select(i), 140);        // survol : pas d'événement de mesure (seulement clic / clavier)
+        });
+        t.addEventListener("mouseleave", () => clearTimeout(hover));
+      });
+      $$("[data-explore-next]", root).forEach((b) => {
+        b.hidden = false;
+        b.addEventListener("click", () => {
+          select(current + 1, { track: true, reveal: true });
+          const nb = $("[data-explore-next]", panels[current]);
+          if (nb) nb.focus({ preventScroll: true });            // le panneau quitté devient inerte
+        });
+      });
+      root.classList.add("is-ready");
+      select(0);
+    });
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* 02 · Simulateur « le déclencheur »                                    */
+  /* Illustration du texte légal affiché juste au-dessus (plusieurs         */
+  /* entrepreneurs, simultanément OU successivement) — rien de plus.        */
+  /* --------------------------------------------------------------------- */
+  function initSimulator() {
+    const sim = $("[data-sim]");
+    if (!sim) return;
+    const MIN = 1, MAX = 6;
+    const rowsBox = $("[data-sim-rows]", sim), count = $("[data-sim-count]", sim);
+    const badge = $("[data-sim-badge]", sim), text = $("[data-sim-text]", sim);
+    const minus = $('[data-sim-step="-1"]', sim), plus = $('[data-sim-step="1"]', sim);
+    const modes = $$("[data-sim-mode]", sim);
+    if (!rowsBox || !count || !minus || !plus || modes.length !== 2) return;
+    /* Interventions simultanées : périodes qui se chevauchent (fractions de la durée du chantier) */
+    const OVERLAP = [[0.04, 0.7], [0.14, 0.9], [0.08, 0.6], [0.26, 0.97], [0.18, 0.78], [0.34, 0.88]];
+    const bars = [];
+    for (let i = 0; i < MAX; i++) {
+      const row = document.createElement("div");
+      row.className = "co-sim__row";
+      row.innerHTML = '<span class="co-sim__who">' + (i + 1) + '</span><span class="co-sim__track"><span class="co-sim__bar"></span></span>';
+      rowsBox.appendChild(row);
+      bars.push(row);
+    }
+    let n = 2, mode = "sim";
+    function render() {
+      count.textContent = String(n);
+      minus.disabled = n <= MIN;
+      plus.disabled = n >= MAX;
+      modes.forEach((b) => {
+        const on = b.getAttribute("data-sim-mode") === mode;
+        b.setAttribute("aria-checked", String(on));
+        b.tabIndex = on ? 0 : -1;
+      });
+      bars.forEach((row, i) => {
+        const on = i < n;
+        row.classList.toggle("is-off", !on);
+        let s, w;
+        if (n === 1) { s = 0.05; w = 0.9; }
+        else if (mode === "succ") { const seg = 1 / n; s = i * seg; w = Math.max(seg - 0.012, 0.02); }
+        else { s = OVERLAP[i][0]; w = OVERLAP[i][1] - OVERLAP[i][0]; }
+        if (!on) { s = 0; w = 0; }
+        const bar = row.lastElementChild.firstElementChild;
+        bar.style.setProperty("--s", (s * 100).toFixed(2) + "%");
+        bar.style.setProperty("--w", (w * 100).toFixed(2) + "%");
+      });
+      const many = n >= 2;
+      sim.setAttribute("data-state", many ? "many" : "one");
+      setText(badge, many ? "coord.sim_yes" : "coord.sim_no");
+      setText(text, !many ? "coord.sim_one" : mode === "succ" ? "coord.sim_many_succ" : "coord.sim_many_sim");
+    }
+    function bump() { count.classList.remove("is-bump"); void count.offsetWidth; count.classList.add("is-bump"); }
+    [minus, plus].forEach((b) => b.addEventListener("click", () => {
+      const next = Math.max(MIN, Math.min(MAX, n + Number(b.getAttribute("data-sim-step"))));
+      if (next === n) return;
+      n = next;
+      render(); bump();
+      if (b.disabled) (b === minus ? plus : minus).focus();   // ne jamais laisser le focus sur un bouton désactivé
+      Chrome.track("coord_sim_change", { companies: n, mode });
     }));
-    scrim.addEventListener("click", () => close());
+    modes.forEach((b, i) => {
+      b.addEventListener("click", () => {
+        if (mode === b.getAttribute("data-sim-mode")) return;
+        mode = b.getAttribute("data-sim-mode");
+        render();
+        Chrome.track("coord_sim_change", { companies: n, mode });
+      });
+      b.addEventListener("keydown", (e) => {           // groupe radio : les flèches changent la sélection
+        if (!/^Arrow(Left|Right|Up|Down)$/.test(e.key)) return;
+        e.preventDefault();
+        const other = modes[1 - i];
+        other.focus();
+        other.click();
+      });
+    });
+    sim.hidden = false;
+    render();
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* 03 · Services : panneaux (grand écran) / accordéon (mobile)            */
+  /* --------------------------------------------------------------------- */
+  function initServices() {
+    const root = $("[data-svc]");
+    if (!root) return;
+    const items = $$("[data-svc-item]", root);
+    const heads = items.map((it) => $("[data-svc-head]", it));
+    const bodies = items.map((it) => $(".co-svc__body", it));
+    if (!items.length || heads.some((h) => !h)) return;
+    const wide = window.matchMedia("(min-width: 1100px)");
+    let open = -1, hover = 0;
+    function set(i, opts = {}) {
+      if (i === open) return;
+      open = i;
+      items.forEach((it, k) => {
+        const on = k === i;
+        it.classList.toggle("is-open", on);
+        heads[k].setAttribute("aria-expanded", String(on));
+        bodies[k].inert = !on;                             // contenu replié : hors de la tabulation
+      });
+      if (opts.track && i >= 0) Chrome.track("coord_service_view", { service: i + 1 });
+    }
+    heads.forEach((h, i) => h.addEventListener("click", () => {
+      if (!wide.matches && open === i) set(-1);           // mobile : un clic referme
+      else set(i, { track: true });
+    }));
+    items.forEach((it, i) => {
+      it.addEventListener("click", (e) => {              // grand écran : tout le panneau replié est cliquable
+        if (wide.matches && open !== i && !e.target.closest("[data-svc-head]")) set(i, { track: true });
+      });
+      it.addEventListener("mouseenter", () => {
+        if (!wide.matches || !finePointer()) return;
+        clearTimeout(hover);
+        hover = setTimeout(() => set(i), 120);
+      });
+      it.addEventListener("mouseleave", () => clearTimeout(hover));
+    });
+    const onChange = () => { if (wide.matches && open < 0) set(0); };
+    if (wide.addEventListener) wide.addEventListener("change", onChange); else if (wide.addListener) wide.addListener(onChange);
+    root.classList.add("is-ready");
+    set(0);
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* 04 · Méthode pas à pas                                                */
+  /* --------------------------------------------------------------------- */
+  function initSteps() {
+    const root = $("[data-steps]");
+    if (!root) return;
+    const track = $("[data-steps-track]", root), nav = $("[data-steps-nav]", root);
+    const tabs = $$("[data-steps-tab]", root), panels = $$("[data-steps-panel]", root);
+    const fill = $("[data-steps-fill]", root), cur = $("[data-steps-current]", root);
+    const prev = $("[data-steps-prev]", root), next = $("[data-steps-next]", root), done = $("[data-steps-done]", root);
+    if (!track || !nav || !tabs.length || tabs.length !== panels.length || !prev || !next || !done) return;
+    let current = -1;
+    function select(i, opts = {}) {
+      i = Math.max(0, Math.min(tabs.length - 1, i));
+      if (i === current) return;
+      const old = panels[current];
+      root.style.setProperty("--dir", i > current ? "1" : "-1");
+      if (old) {
+        old.classList.add("is-leaving");
+        setTimeout(() => old.classList.remove("is-leaving"), 560);
+      }
+      current = i;
+      showTab(tabs, panels, i);
+      tabs.forEach((t, k) => t.classList.toggle("is-done", k < i));
+      if (fill) fill.style.setProperty("--p", String(tabs.length > 1 ? i / (tabs.length - 1) : 1));
+      if (cur) cur.textContent = pad(i + 1);
+      prev.disabled = i === 0;
+      const last = i === tabs.length - 1;
+      const hadFocus = document.activeElement === next || document.activeElement === prev;
+      next.hidden = last;
+      done.hidden = !last;
+      if (hadFocus && last) done.focus();
+      else if (hadFocus && prev.disabled) next.focus();
+      if (opts.focus) tabs[i].focus();
+      if (opts.track) Chrome.track("coord_step_view", { step: i + 1 });
+    }
+    wireTabs(track, tabs, panels, "co-process-title", select, false);
+    prev.addEventListener("click", () => select(current - 1, { track: true }));
+    next.addEventListener("click", () => select(current + 1, { track: true }));
+    nav.hidden = false;
+    root.classList.add("is-ready");
+    select(0);
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* « Demander ce service » → coche le service dans le formulaire          */
+  /* (le lien #co-cta fait ensuite défiler jusqu'au formulaire)             */
+  /* --------------------------------------------------------------------- */
+  function initServicePicks() {
+    const form = $("#co-form");
+    if (!form) return;
+    $$("[data-svc-pick]").forEach((a) => a.addEventListener("click", () => {
+      const value = a.getAttribute("data-svc-pick");
+      const box = $$('input[name="services"]', form).find((b) => b.value === value);
+      if (!box) return;
+      box.checked = true;
+      const pick = box.closest(".co-pick");
+      if (pick) { pick.classList.remove("is-flash"); void pick.offsetWidth; pick.classList.add("is-flash"); }
+      Chrome.track("coord_service_pick", { service: value });
+    }));
   }
 
   /* --------------------------------------------------------------------- */
@@ -221,6 +471,7 @@
     const team = (window.WISY_COORDINATION && Array.isArray(window.WISY_COORDINATION.TEAM)) ? window.WISY_COORDINATION.TEAM : [];
     if (!team.length) return; // l'état vide déjà présent dans le HTML suffit
 
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     empty.hidden = true;
     list.hidden = false;
     list.innerHTML = "";
@@ -229,11 +480,11 @@
       const card = document.createElement("article");
       card.className = "co-team__card";
       const photo = (p.photo && p.photo.webp)
-        ? `<img src="${p.photo.webp}" alt="${p.photo.alt ? String(p.photo.alt).replace(/"/g, "&quot;") : ""}" width="240" height="240" loading="lazy">`
+        ? `<img src="${esc(p.photo.webp)}" alt="${p.photo.alt ? esc(p.photo.alt) : ""}" width="240" height="240" loading="lazy">`
         : "";
       const quals = Array.isArray(p.qualifications) && p.qualifications.length
-        ? `<ul class="co-team__quals">${p.qualifications.map((q) => `<li>${String(q)}</li>`).join("")}</ul>` : "";
-      card.innerHTML = `${photo}<h3>${String(p.name)}</h3><p>${String(p.role)}</p>${quals}`;
+        ? `<ul class="co-team__quals">${p.qualifications.map((q) => `<li>${esc(q)}</li>`).join("")}</ul>` : "";
+      card.innerHTML = `${photo}<h3>${esc(p.name)}</h3><p>${esc(p.role)}</p>${quals}`;
       list.appendChild(card);
     });
   }
@@ -250,7 +501,6 @@
     const EMAILJS_PUBLIC_KEY = "k2JkXtD2RO8TkoO77";
     const EMAILJS_SERVICE_ID = "service_k348qw9";
     const EMAILJS_TEMPLATE_ID = "template_0p9dah6"; // même gabarit que contact.html / peb.js (champs user_name/user_email/user_phone/subject/message)
-    const configured = window.emailjs && EMAILJS_PUBLIC_KEY && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID;
     let initialized = false;
 
     function setStatus(text, state) {
@@ -278,8 +528,10 @@
       const v = (name) => (form.querySelector(`[name="${name}"]`) || {}).value || "";
       const typeSelect = form.querySelector('[name="type_projet"]');
       const phaseSelect = form.querySelector('[name="phase_projet"]');
+      const services = $$('input[name="services"]:checked', form).map((b) => (b.closest("label") || b).textContent.trim()).filter(Boolean);
       const messageParts = [
         "Demande de coordination sécurité-santé — WiSy Coordination",
+        "Services souhaités : " + (services.join(", ") || "—"),
         "Société : " + (v("societe") || "—"),
         "Type de projet : " + (fieldLabel(typeSelect, v("type_projet")) || "—"),
         "Phase du projet : " + (fieldLabel(phaseSelect, v("phase_projet")) || "—"),
@@ -299,7 +551,8 @@
         time: new Date().toLocaleString("fr-BE", { timeZone: "Europe/Brussels" })
       };
 
-      if (!configured) {
+      // EmailJS est chargé en `defer` : on le lit au moment de l'envoi, jamais au démarrage.
+      if (!window.emailjs) {
         setStatus(Chrome.tr("coord.form_fallback", "L'envoi automatique n'est pas disponible pour le moment : écrivez-nous directement à info@wisysafety.be."), "error");
         return;
       }
@@ -312,7 +565,7 @@
         .then(() => {
           form.reset();
           setStatus(Chrome.tr("coord.form_sent", "Votre demande a bien été envoyée. Notre équipe revient vers vous rapidement."), "ok");
-          Chrome.track("coord_form_submit", {});
+          Chrome.track("coord_form_submit", { services: services.length });
         })
         .catch(() => {
           setStatus(Chrome.tr("coord.form_error", "L'envoi a échoué. Vous pouvez nous écrire directement à info@wisysafety.be."), "error");
@@ -321,7 +574,21 @@
     });
   }
 
-  const boot = () => { initHero(); initPillars(); initTimelineProgress(); initControlSequence(); initModals(); initTeam(); initForm(); };
+  /* --------------------------------------------------------------------- */
+  /* Mesure d'audience : clics des appels à l'action marqués data-co-track  */
+  /* --------------------------------------------------------------------- */
+  function initTracking() {
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest && e.target.closest("[data-co-track]");
+      if (a) Chrome.track("coord_cta_click", { from: a.getAttribute("data-co-track") });
+    });
+  }
+
+  const boot = () => {
+    initHero(); initRail(); initGhosts(); initSpotlight();
+    initExplore(); initSimulator(); initServices(); initSteps();
+    initServicePicks(); initTeam(); initForm(); initTracking();
+  };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
 })();

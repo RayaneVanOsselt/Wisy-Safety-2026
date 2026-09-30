@@ -11,7 +11,7 @@ const Site = require("../js/site-content.js");
 const FAQ = require("../js/faq-data.js");
 
 const ROOT = path.join(__dirname, "..");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "vca-entreprise", "coordination", "mentions-legales", "article-vca-cout-financement", "article-vca-erreurs-examen", "inscription", "contact", "avis", "faq", "agenda"].map((n) => n + ".html").concat(["admin/avis.html"]);
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "vca-entreprise", "coordination", "mentions-legales", "politique-de-confidentialite", "conditions-generales-utilisation", "article-vca-cout-financement", "article-vca-erreurs-examen", "inscription", "contact", "avis", "faq", "agenda"].map((n) => n + ".html").concat(["admin/avis.html"]);
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 
 /* Existence sensible à la casse. Renvoie true, false, ou le vrai nom si seule la casse diffère. */
@@ -114,19 +114,18 @@ test("url() des feuilles de style et chemins d'images cités dans le JS existent
 });
 
 /* ------------------------------------------------------------------ destinations mortes */
-test("aucune NOUVELLE destination morte « # » : seules les entrées de menu et mentions légales connues (à créer)", () => {
-  /* Dette connue et VISIBLE : ces liens n'ont pas encore de page (voir le rapport d'audit). Toute autre
-     ancre « # » nue est une régression. Quand une page est créée, retirez sa clé de cette liste. */
-  const KNOWN = new Set(["nav.certificat",
-    "footer.legal_privacy", "footer.legal_terms"]);
+test("aucune NOUVELLE destination morte « # » : seule l'entrée de menu « Certificat » reste connue (page à créer)", () => {
+  /* Dette connue et VISIBLE : ce lien n'a pas encore de page (voir le rapport d'audit). Toute autre ancre « # »
+     nue est une régression. Depuis le 2026-09-30, les liens « Politique de confidentialité » et « Conditions
+     générales » (pied de page, formulaire de contact) mènent à leurs pages : ils ne sont plus tolérés en « # ». */
+  const KNOWN = new Set(["nav.certificat"]);
   const bad = [];
   PAGES.forEach((f) => {
     for (const m of bodyHtml(f).matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
       const a = attrs(m[1]);
       if (a.href !== "#") continue;
       const key = a["data-i18n"] || ((m[2].match(/data-i18n="([^"]+)"/) || [])[1]);
-      const text = m[2].replace(/<[^>]+>/g, "").trim().toLowerCase();
-      if (!KNOWN.has(key) && !(f === "contact.html" && text === "politique de confidentialité")) bad.push(f + " : <a href=\"#\"> « " + m[2].replace(/<[^>]+>/g, "").trim().slice(0, 40) + " » (" + (key || "sans clé") + ")");
+      if (!KNOWN.has(key)) bad.push(f + " : <a href=\"#\"> « " + m[2].replace(/<[^>]+>/g, "").trim().slice(0, 40) + " » (" + (key || "sans clé") + ")");
     }
   });
   assert.deepEqual(bad, []);
@@ -156,7 +155,10 @@ test("target=_blank : toujours rel=noopener ; liens sortants limités aux domain
        BeSaCC-VCA (déjà ci-dessus) et Prévention et Intérim (organisme sectoriel belge). */
     "ssvv.nl", "www.p-i.be",
     /* Autorité de protection des données (APD/GBA), citée par mentions-legales.html pour le droit de réclamation RGPD. */
-    "www.autoriteprotectiondonnees.be"]);
+    "www.autoriteprotectiondonnees.be",
+    /* Politique de confidentialité : politiques de confidentialité des prestataires techniques réellement utilisés
+       (EmailJS, Supabase, jsDelivr, Google Maps) — voir docs/LEGAL_PRIVACY_CGU_REPORT.md. */
+    "www.emailjs.com", "supabase.com", "www.jsdelivr.com", "policies.google.com"]);
   PAGES.forEach((f) => {
     refs(f).forEach(({ url, a, tag }) => {
       if (a.target === "_blank") assert.match(a.rel || "", /noopener/, f + " : target=_blank sans noopener : " + url);

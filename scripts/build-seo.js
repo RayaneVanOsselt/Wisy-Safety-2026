@@ -85,6 +85,12 @@ const DOCS = [
     breadcrumb: [["Accueil", "index.html"], ["WiSy Coordination", "coordination.html"]] },
   { file: "mentions-legales.html", graph: ["organization", "breadcrumb"],
     breadcrumb: [["Accueil", "index.html"], ["Mentions légales", "mentions-legales.html"]] },
+  /* Pages juridiques (suite « Documents juridiques ») : mêmes nœuds que les mentions légales — aucune donnée
+     structurée inventée (pas de type « PrivacyPolicy » non standard), seulement l'organisation et le fil d'Ariane affiché. */
+  { file: "politique-de-confidentialite.html", graph: ["organization", "breadcrumb"],
+    breadcrumb: [["Accueil", "index.html"], ["Politique de confidentialité", "politique-de-confidentialite.html"]] },
+  { file: "conditions-generales-utilisation.html", graph: ["organization", "breadcrumb"],
+    breadcrumb: [["Accueil", "index.html"], ["Conditions générales d'utilisation", "conditions-generales-utilisation.html"]] },
   /* Articles : og:type « article », dates lues dans le registre (js/site-content.js → `published` / `modified`). */
   { file: "article-vca-cout-financement.html", graph: ["organization", "breadcrumb", "article"], image: OG_ART_COST, ogType: "article",
     breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["VCA Base", "formation-vca-base.html"], ["Coût et financement d'une formation VCA", "article-vca-cout-financement.html"]] },

@@ -75,17 +75,24 @@
   var PROCESSORS = [
     { name: "EmailJS", role: "Acheminement des e-mails transactionnels (formulaire de contact, notification admin optionnelle sur nouvel avis)", evidence: "contact.html, avis.html, js/reviews.js, js/peb.js, js/coordination.js — cdn.jsdelivr.net/npm/@emailjs/browser, clé publique dans js/supabase-config.js" },
     { name: "Supabase", role: "Hébergement de la base de données des avis clients (avis.html) ; l'e-mail du déposant n'est jamais exposé par la vue publique (Row Level Security)", evidence: "js/supabase-config.js, js/reviews.js" },
-    { name: "Google Maps (embed)", role: "Carte intégrée en page d'accueil UNIQUEMENT, chargée seulement après consentement « Fonctionnalités » (sinon iframe src=\"about:blank\")", evidence: "index.html data-consent-src, js/cookie-consent.js applyConsent()" }
+    { name: "Google Maps (embed)", role: "Carte intégrée en page d'accueil UNIQUEMENT, chargée seulement après consentement « Fonctionnalités » (sinon iframe src=\"about:blank\")", evidence: "index.html data-consent-src, js/cookie-consent.js applyConsent()" },
+    /* Ajout du 2026-09-30 (audit de la politique de confidentialité) : oublié dans la liste d'origine. */
+    { name: "jsDelivr (CDN)", role: "Fournit les bibliothèques EmailJS et Supabase ; reçoit l'adresse IP du visiteur au téléchargement", evidence: "contact.html, avis.html, coordination.html, peb-wallonie-bruxelles.html — balises <script src=\"https://cdn.jsdelivr.net/…\"> (SRI)" }
   ];
 
-  /* Stockage navigateur RÉEL (grep de tout le dépôt, 2026-09-28) — 5 clés au total, toutes de même
-     origine (jamais transmises à un tiers), aucune n'est un traceur publicitaire. */
+  /* Stockage navigateur RÉEL (grep de tout le dépôt, revérifié le 2026-09-30) — 9 clés au total, toutes de même
+     origine (jamais transmises à un tiers), aucune n'est un traceur publicitaire. La liste publique, avec l'état
+     en direct de l'appareil du visiteur, est le tableau de politique-de-confidentialite.html#cookies. */
   var STORAGE_KEYS = [
-    { key: "wisy-consent", file: "js/cookie-consent.js", role: "Le choix de cookies lui-même (nécessaire à son propre fonctionnement)" },
-    { key: "(langue préférée)", file: "js/i18n.js", role: "Langue d'affichage choisie" },
-    { key: "(région PEB, sessionStorage)", file: "js/peb.js", role: "Région choisie dans le simulateur PEB — le temps de la session uniquement" },
-    { key: "(brouillon d'inscription)", file: "js/registration.js", role: "Poursuite du parcours d'inscription en 4 étapes après un rafraîchissement" },
-    { key: "(recherches récentes)", file: "js/search.js", role: "5 dernières recherches sur le site, pour affichage rapide" }
+    { key: "wisy-consent", area: "local", file: "js/cookie-consent.js", role: "Le choix de cookies lui-même (nécessaire à son propre fonctionnement) — sans date d'expiration dans le code (voir le rapport)" },
+    { key: "wisy-lang", area: "local", file: "js/i18n.js", role: "Langue d'affichage choisie" },
+    { key: "wisy-recent-search", area: "local", file: "js/search.js", role: "5 dernières recherches sur le site, pour affichage rapide" },
+    { key: "wisy-registration-v1", area: "local", file: "js/registration.js", role: "Brouillon du parcours d'inscription (contient les données saisies : participants, coordonnées, facturation)" },
+    { key: "wisy-peb-region", area: "session", file: "js/peb.js", role: "Région choisie sur la page PEB — le temps de la session uniquement" },
+    { key: "wisy-home-intro", area: "session", file: "index.html (script du <head>)", role: "Animation d'accueil jouée une fois par session" },
+    { key: "wisyAssistantIntroSeen", area: "session", file: "js/assistant/launcher.js", role: "Bulle de présentation de l'Assistant déjà vue" },
+    { key: "wisyAssistantEngaged", area: "session", file: "js/assistant/launcher.js", role: "Assistant déjà utilisé : plus de présentation" },
+    { key: "wisyAssistantCues", area: "session", file: "js/assistant/launcher.js", role: "Compteur des animations d'invitation (max 3 par session)" }
   ];
 
   /* Sources officielles consultées pour le cadrage réglementaire général (brief §6) — obligations

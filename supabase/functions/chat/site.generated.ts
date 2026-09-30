@@ -555,12 +555,55 @@ export const SITE_PAGES: SiteEntry[] = [
       "numero bce",
       "numero de tva",
       "propriete intellectuelle",
-      "protection des donnees",
-      "rgpd",
-      "cookies",
       "droit applicable",
-      "conditions d'utilisation",
       "wisy safety asbl"
+    ]
+  },
+  {
+    "id": "page-politique-confidentialite",
+    "type": "page",
+    "title": "Politique de confidentialité",
+    "url": "politique-de-confidentialite.html",
+    "content": "Politique de confidentialité de Wisy Safety ASBL, rédigée à partir du fonctionnement réel du site : données traitées par les formulaires (contact, demande de coordination, test d'éligibilité PEB, avis clients), bases juridiques, prestataires techniques (EmailJS, Supabase, jsDelivr, Google Maps uniquement après consentement), transferts hors UE, durées de conservation, cookies et stockage du navigateur (inventaire complet, visible et effaçable sur votre appareil), droits RGPD (accès, rectification, effacement, limitation, portabilité, opposition, retrait du consentement) avec un modèle de demande prêt à envoyer, et réclamation auprès de l'Autorité de protection des données. Les questions posées à l'Assistant Wisy et les recherches sont traitées dans le navigateur et ne sont pas transmises.",
+    "keywords": [
+      "politique de confidentialite",
+      "confidentialite",
+      "privee",
+      "donnees personnelles",
+      "rgpd",
+      "gdpr",
+      "cookies",
+      "cookie",
+      "traceurs",
+      "droits rgpd",
+      "supprimer mes donnees",
+      "effacer mes donnees",
+      "rectification",
+      "portabilite",
+      "consentement",
+      "dpo",
+      "apd",
+      "sous-traitants",
+      "privacy",
+      "privacybeleid",
+      "datenschutz"
+    ]
+  },
+  {
+    "id": "page-conditions-utilisation",
+    "type": "page",
+    "title": "Conditions générales d'utilisation",
+    "url": "conditions-generales-utilisation.html",
+    "content": "Conditions générales d'utilisation (CGU) du site Wisy Safety : accès gratuit sans compte, informations publiées à titre général, outils interactifs (recherche, Assistant Wisy, test d'éligibilité PEB, guide du niveau VCA, parcours d'inscription) et leurs limites, règles de publication et de modération des avis clients, propriété intellectuelle, usages interdits, liens externes, responsabilité, droit belge. Les conditions d'achat d'une formation relèvent de conditions générales de vente distinctes, en préparation ; le paiement en ligne n'est pas encore disponible.",
+    "keywords": [
+      "conditions generales d'utilisation",
+      "conditions d'utilisation",
+      "cgu",
+      "moderation",
+      "usages interdits",
+      "terms of use",
+      "gebruiksvoorwaarden",
+      "nutzungsbedingungen"
     ]
   }
 ];
@@ -579,6 +622,8 @@ export const SITE_PATHS: string[] = [
   "peb-wallonie-bruxelles.html",
   "coordination.html",
   "mentions-legales.html",
+  "politique-de-confidentialite.html",
+  "conditions-generales-utilisation.html",
   "formation-vca-base.html",
   "formation-nacelles-elevatrices.html",
   "formation-beps-premiers-secours.html",

@@ -241,7 +241,20 @@
     {
       id: "mentions-legales", url: "mentions-legales.html", title: "Mentions légales", titleKey: "search.page_mentions_t", descKey: "search.page_mentions_d",
       content: "Mentions légales de Wisy Safety ASBL : éditeur et responsable de publication, coordonnées, numéro d'entreprise et numéro de TVA, propriété intellectuelle, protection des données (RGPD), cookies et droit applicable.",
-      keywords: ["mentions legales", "mentions legales wisy safety", "informations legales", "editeur du site", "responsable de publication", "numero d'entreprise", "numero bce", "numero de tva", "propriete intellectuelle", "protection des donnees", "rgpd", "cookies", "droit applicable", "conditions d'utilisation", "wisy safety asbl"]
+      /* RGPD, cookies et conditions d'utilisation ont leurs propres pages (ci-dessous) : l'assistant et la recherche y envoient. */
+      keywords: ["mentions legales", "mentions legales wisy safety", "informations legales", "editeur du site", "responsable de publication", "numero d'entreprise", "numero bce", "numero de tva", "propriete intellectuelle", "droit applicable", "wisy safety asbl"]
+    },
+    {
+      id: "politique-confidentialite", url: "politique-de-confidentialite.html", title: "Politique de confidentialité", titleKey: "search.page_privacy_t", descKey: "search.page_privacy_d",
+      content: "Politique de confidentialité de Wisy Safety ASBL, rédigée à partir du fonctionnement réel du site : données traitées par les formulaires (contact, demande de coordination, test d'éligibilité PEB, avis clients), bases juridiques, prestataires techniques (EmailJS, Supabase, jsDelivr, Google Maps uniquement après consentement), transferts hors UE, durées de conservation, cookies et stockage du navigateur (inventaire complet, visible et effaçable sur votre appareil), droits RGPD (accès, rectification, effacement, limitation, portabilité, opposition, retrait du consentement) avec un modèle de demande prêt à envoyer, et réclamation auprès de l'Autorité de protection des données. Les questions posées à l'Assistant Wisy et les recherches sont traitées dans le navigateur et ne sont pas transmises.",
+      /* Mots-clés volontairement SANS mots courants du métier (« vie », « accès », « protection », « local », « plainte »…) :
+         l'assistant compte chaque mot d'un mot-clé — « vie privée » faisait répondre cette page à « Quel est le sens de la vie ? ». */
+      keywords: ["politique de confidentialite", "confidentialite", "privee", "donnees personnelles", "rgpd", "gdpr", "cookies", "cookie", "traceurs", "droits rgpd", "supprimer mes donnees", "effacer mes donnees", "rectification", "portabilite", "consentement", "dpo", "apd", "sous-traitants", "privacy", "privacybeleid", "datenschutz"]
+    },
+    {
+      id: "conditions-utilisation", url: "conditions-generales-utilisation.html", title: "Conditions générales d'utilisation", titleKey: "search.page_terms_t", descKey: "search.page_terms_d",
+      content: "Conditions générales d'utilisation (CGU) du site Wisy Safety : accès gratuit sans compte, informations publiées à titre général, outils interactifs (recherche, Assistant Wisy, test d'éligibilité PEB, guide du niveau VCA, parcours d'inscription) et leurs limites, règles de publication et de modération des avis clients, propriété intellectuelle, usages interdits, liens externes, responsabilité, droit belge. Les conditions d'achat d'une formation relèvent de conditions générales de vente distinctes, en préparation ; le paiement en ligne n'est pas encore disponible.",
+      keywords: ["conditions generales d'utilisation", "conditions d'utilisation", "cgu", "moderation", "usages interdits", "terms of use", "gebruiksvoorwaarden", "nutzungsbedingungen"]
     }
   ];
 

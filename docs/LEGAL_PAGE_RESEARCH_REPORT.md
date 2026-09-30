@@ -130,7 +130,7 @@ Testé réellement (pas seulement en théorie) via le navigateur intégré, à 3
 - Ancres réelles dans l'URL (`#protection-des-donnees`, etc.), navigables au clavier, focus visible (`:focus-visible` du système de design existant).
 - Boutons « Copier » avec `aria-label`, confirmation visuelle ET textuelle (pas seulement une couleur).
 - Le bouton « Gérer mes préférences cookies » réutilise le vrai système modal existant (piège de focus, `inert`, Échap, retour du focus au déclencheur) — rien de nouveau à auditer ici, c'est le même composant que sur les autres pages.
-- `prefers-reduced-motion` respecté (hérité du socle commun + règle dédiée dans `css/mentions-legales.css`).
+- `prefers-reduced-motion` respecté (hérité du socle commun + règle dédiée dans `css/legal.css` (anciennement `css/mentions-legales.css`, renommé le 2026-09-30 : socle commun des pages juridiques)).
 - Cibles tactiles : boutons Copier 30×30px avec zone de clic élargie par le padding du conteneur — un peu petit dans l'absolu (WCAG recommande 24×24px minimum, donc conforme, mais 44px serait plus confortable) ; acceptable pour une action secondaire répétée, pas un point bloquant.
 
 Non testé dans cette mission : lecteur d'écran réel (VoiceOver/NVDA), zoom navigateur au-delà de 200 %, Safari/Firefox — mêmes limites que les sessions précédentes sur ce projet.
@@ -140,7 +140,7 @@ Non testé dans cette mission : lecteur d'écran réel (VoiceOver/NVDA), zoom na
 ## I. Performance
 
 - **Aucune nouvelle image** : contrairement à `coordination.html` ou `peb-wallonie-bruxelles.html`, cette page est entièrement typographique (grille, icônes SVG en sprite inline, dégradés CSS) — aucun pipeline d'optimisation d'image à maintenir, aucun risque de photo hors-sujet.
-- JS de page (`js/mentions-legales.js`) : ~2 Ko non minifié, aucune dépendance, 3 fonctions (sommaire actif, copier, imprimer).
+- JS de page (`js/legal.js` (anciennement `js/mentions-legales.js`, renommé le 2026-09-30 : socle commun des pages juridiques)) : ~2 Ko non minifié, aucune dépendance, 3 fonctions (sommaire actif, copier, imprimer).
 - `js/site-content.js` a grossi de 22 → 23 Ko avec la nouvelle entrée du registre (budget de test mis à jour en conséquence, avec justification documentée dans le commentaire du test — même pratique que les ajouts précédents).
 - Aucune police, script ou feuille de style supplémentaire chargée : la page réutilise à 100 % le socle commun déjà mis en cache par les autres pages du site.
 

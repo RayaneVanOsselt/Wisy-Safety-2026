@@ -10,7 +10,7 @@ et sans rien à installer pour le mettre en ligne.
 
 | Élément | Rôle |
 |---|---|
-| `index.html`, `formations.html`, `formation-vca-base.html`, `formation-nacelles-elevatrices.html`, `formation-beps-premiers-secours.html`, `peb-wallonie-bruxelles.html`, `coordination.html`, `article-vca-cout-financement.html`, `article-vca-erreurs-examen.html`, `inscription.html`, `contact.html`, `avis.html`, `faq.html`, `agenda.html`, `404.html` | Les pages du site. **Elles restent à la racine** : leurs adresses (`/formations.html`…) en dépendent, les déplacer changerait les URL et le référencement. |
+| `index.html`, `formations.html`, `formation-vca-base.html`, `formation-nacelles-elevatrices.html`, `formation-beps-premiers-secours.html`, `peb-wallonie-bruxelles.html`, `coordination.html`, `article-vca-cout-financement.html`, `article-vca-erreurs-examen.html`, `inscription.html`, `contact.html`, `avis.html`, `faq.html`, `agenda.html`, `mentions-legales.html`, `politique-de-confidentialite.html`, `conditions-generales-utilisation.html`, `404.html` | Les pages du site. **Elles restent à la racine** : leurs adresses (`/formations.html`…) en dépendent, les déplacer changerait les URL et le référencement. |
 | `sitemap.xml`, `robots.txt`, `favicon.ico` | Fichiers que les moteurs de recherche et les navigateurs cherchent à la racine (les deux premiers sont **générés**, voir plus bas). |
 | `css/`, `js/` | Styles et scripts. |
 | `assets/` | Polices, images, icônes, vidéo et `originaux/` (photos d'origine). Rangement expliqué dans [assets/README.md](assets/README.md). |
@@ -37,6 +37,7 @@ et sans rien à installer pour le mettre en ligne.
 | Changer les **suggestions animées de la barre de recherche** (« Rechercher « VCA de base » »…) et les pastilles « Essayez » (les 4 premières) | `js/i18n-data-search.js` (`search.fx_list`, 7 recherches séparées par « \| » dans chaque langue — chacune doit renvoyer au moins un résultat) ; comportement dans `js/search.js`, style dans `css/search.css` | — |
 | Corriger une traduction, ajouter un texte ou une page traduite | `js/i18n-data-*.js` (+ le HTML) | [docs/README-I18N.md](docs/README-I18N.md) |
 | Comprendre ou activer l'assistant virtuel | `js/assistant/` | [docs/README-ASSISTANT.md](docs/README-ASSISTANT.md) |
+| Compléter ou modifier les **pages juridiques** (mentions légales, politique de confidentialité, CGU) — dont les mentions « [À COMPLÉTER] » | le HTML de la page + `js/i18n-data-privacy.js` / `js/i18n-data-cgu.js` / `js/i18n-data-legal.js` (10 langues) ; style et comportements communs : `css/legal.css`, `js/legal.js` | [docs/LEGAL_PRIVACY_CGU_REPORT.md](docs/LEGAL_PRIVACY_CGU_REPORT.md) |
 
 Les coordonnées, les horaires et la position sur la carte sont dans `js/faq-data.js` (`CONTACT`) ; le pied de
 page de chaque page les affiche aussi en dur. Les textes traduits sont dans `js/i18n-data-*.js`.

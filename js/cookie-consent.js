@@ -197,7 +197,11 @@
       jour où un outil sera choisi : il ne recevra alors QUE ce qui est autorisé. */
   function relayAnalyticsEvent(evt) { /* voir commentaire ci-dessus */ }
 
-  function persist(cats) { writeRecord(storage, cats); hasDecided = true; applyConsent(cats); }
+  function persist(cats) {
+    writeRecord(storage, cats); hasDecided = true; applyConsent(cats);
+    // Signale le nouveau choix (la politique de confidentialité affiche l'état courant, voir js/legal.js)
+    try { document.dispatchEvent(new CustomEvent("wisy:consent", { detail: Object.assign({ necessary: true }, cats) })); } catch (e) { /* silencieux */ }
+  }
 
   /* ------------------------------------------------------------------ */
   /* Bandeau                                                              */
@@ -210,7 +214,7 @@
           '<div class="wcc-banner__body">' +
             tx("p", "wcc-banner__title", "cookies.banner_title", "Votre vie privée, votre choix") +
             tx("p", "wcc-banner__text", "cookies.banner_text", "Nous utilisons des cookies nécessaires au bon fonctionnement de Wisy Safety. Avec votre accord, nous pouvons également utiliser des cookies de mesure d’audience et d’autres technologies afin d’améliorer votre expérience.") +
-            '<a class="wcc-banner__link" href="#" data-i18n="cookies.privacy_link">' + esc(t("cookies.privacy_link", "En savoir plus sur notre politique de confidentialité")) + '</a>' +
+            '<a class="wcc-banner__link" href="politique-de-confidentialite.html#cookies" data-i18n="cookies.privacy_link">' + esc(t("cookies.privacy_link", "En savoir plus sur notre politique de confidentialité")) + '</a>' +
           '</div>' +
           '<div class="wcc-banner__actions">' +
             '<button type="button" class="btn btn--outline wcc-btn" data-wcc-action="reject" data-i18n="cookies.reject">' + esc(t("cookies.reject", "Tout refuser")) + '</button>' +

@@ -36,7 +36,8 @@ const LANGS = ["fr", "en", "nl", "af", "ar", "bg", "de", "ro", "it", "sl"];
 /* Pages publiques (le HTML doit être intégralement traduisible). */
 const PAGES = ["index", "formations", "contact", "avis", "inscription", "faq", "agenda",
   "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles",
-  "formation-vca-base", "vca-entreprise", "article-vca-cout-financement", "article-vca-erreurs-examen", "coordination", "404"].map((n) => n + ".html");
+  "formation-vca-base", "vca-entreprise", "article-vca-cout-financement", "article-vca-erreurs-examen", "coordination",
+  "politique-de-confidentialite", "conditions-generales-utilisation", "404"].map((n) => n + ".html");
 
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 
@@ -76,7 +77,11 @@ const SPELLABLE = new Set(["1", "2"]);
 const SAME_REVIEWED = new Set([
   "js/i18n-data-common.js|it|aria.mobile_menu",
   "js/i18n-data-contact.js|ro|ct.team_badge4", "js/i18n-data-contact.js|it|ct.team_badge4",
-  "js/i18n-data-peb.js|nl|peb.hero_li2", "js/i18n-data-peb.js|ro|peb.hero_li2"
+  "js/i18n-data-peb.js|nl|peb.hero_li2", "js/i18n-data-peb.js|ro|peb.hero_li2",
+  /* Pages juridiques : « Page Contact / Coordination » est aussi l'anglais ; « RGPD » est le sigle roumain officiel ;
+     l'adresse de l'Autorité de protection des données reste son adresse postale officielle (Rue de la Presse). */
+  "js/i18n-data-privacy.js|en|pp.contact_where_html", "js/i18n-data-privacy.js|en|pp.coord_where_html",
+  "js/i18n-data-privacy.js|ro|pp.b1_ref", "js/i18n-data-privacy.js|ro|pp.apd_address", "js/i18n-data-privacy.js|it|pp.apd_address"
 ]);
 
 /* Formes de pluriel FACULTATIVES (slovène, roumain, arabe…) : « reg.participants_few » n'a pas besoin
@@ -202,6 +207,8 @@ const ALLOW_EXACT = new Set([].concat(NAMES_OF_LANGS, LANGS.map((l) => l.toUpper
   "Wisy Safety", "Wisy Safety ·", "info@wisysafety.be", "+32 2 318 86 59", "Avenue d'Itterbeek 378", "Avenue d'Itterbeek 378, 1070 Anderlecht", "Av. d'Itterbeek 378, 1070 Anderlecht",
   "Orange", "Proximus", "Telenet", "Constructel", "VOO", "Unifiber", "VCA", "BEPS", "PEB", "112", "Certibru-RES", "IA",
   "WS · 2026", "RESP", "FACT", "Stripe", "Mollie", "PayPal", "BE0123.456.789",
+  /* Pages juridiques : dénomination légale, prestataires et identifiants techniques (balisés translate="no" dans le HTML) */
+  "Wisy Safety ASBL",
   /* Page VCA Entreprise : niveaux du référentiel (sigles officiels), code de produit du parcours d'inscription et noms des
      organismes cités comme sources officielles — des noms propres, jamais traduits. */
   "VCA*", "VCA**", "VCA-P", "VCA-E", "SSVV", "BeSaCC-VCA", "Prévention et Intérim"

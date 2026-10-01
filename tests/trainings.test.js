@@ -221,3 +221,15 @@ test("i18n : titre complet et résumé de la formation traduits dans les 10 lang
     });
   });
 });
+
+test("inscription : VCA Ligne hiérarchique, diisocyanates et fibre optique « Sur devis » tant qu'aucun tarif n'est confirmé", () => {
+  const reg = read("js/registration-data.js");
+  [["vcaLigneHierarchique", "vca-hierarchique"], ["diisocyanates", "diisocyanates"], ["fibreOptique", "fibre-optique"]].forEach(([key, id]) => {
+    assert.match(reg, new RegExp('priceCents: registryPriceCents\\("' + key + '"\\)'), key + " : prix lu dans le registre");
+    assert.match(reg, new RegExp('onQuote: !registryPriceCents\\("' + key + '"\\)'), key + " : « Sur devis » sans prix");
+    assert.equal(Trainings.get(id).price, null, id + " : aucun tarif confirmé dans le registre");
+  });
+  /* plus aucune valeur de l'ancien bordereau, contredite par les pages de l'ancien site */
+  assert.doesNotMatch(reg, /priceCents:\s*(29500|9500|65000)\b/);
+  assert.doesNotMatch(reg, /Formation obligatoire \(REACH\)/, "pas d'« obligatoire » sans nuance");
+});

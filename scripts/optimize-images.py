@@ -34,6 +34,9 @@ Dépendances : Pillow (WebP + AVIF). Aucune autre. Sortie déterministe (mêmes 
                   (+ carte de partage 1200×630 ; les 2 versions MP4 du film se font avec scripts/encode-video.swift,
                    voir docs/README-VCA-ENTREPRISE.md)
   carte de partage (Open Graph) : `--og <dossier de polices Poppins .ttf>` → assets/images/partage/wisy-safety-1200x630.jpg
+  Fiches formation (VCA Ligne hiérarchique, Diisocyanates, Fibre optique)
+                  assets/originaux/<thème>/<nom>.{webp,jpg} → assets/images/<thème>/<nom>-{480,960,1600}.{avif,webp}
+                  + miniatures de recherche 192 px + cartes de partage 1200×630 (visuels générés par IA, voir docs/images-manifest.md)
   Coordination    assets/originaux/coordination/coordination-hero-equipements-securite.webp
                   → assets/images/coordination/coordination-hero-equipements-securite-1400.{avif,webp}
                   (photo fournie par le propriétaire, déjà au format WebP : elle sert directement d'original)
@@ -388,6 +391,56 @@ def vca_entreprise():
 
 
 # --------------------------------------------------------------------------- carte de partage 1200×630
+# --------------------------------------------------------------------------- Fiches formation : VCA Ligne hiérarchique, Diisocyanates, Fibre optique
+# Visuels des articles (« Ressources ») fournis par le propriétaire le 01/10/2026 (commit ca4dfdd), tous GÉNÉRÉS PAR IA
+# (même série que les fichiers « Firefly_… » de l'ancien site) : à remplacer par de vraies photos (docs/images-manifest.md).
+# Original 2304 × 1792 → WebP + AVIF en 480 / 960 / 1600 px (cartes, modale de lecture, écrans haute densité), sans métadonnées.
+FICHES = {
+    "vca-ligne-hierarchique": ["vca-lh-briefing-equipe.webp", "vca-lh-encadrants-chantier.webp", "vca-lh-session-formation.webp"],
+    "diisocyanates": ["diisocyanates-laboratoire-flacons.jpg", "diisocyanates-salle-formation-pictogrammes.webp", "substances-dangereuses-futs-combinaisons.webp"],
+    "fibre-optique": ["fibre-technicien-casque-reseau.webp", "fibre-technicienne-coffret-cables.webp"],
+}
+# Conservé dans les originaux mais NON publié : il illustrait l'article « Optimisation des réseaux fibre optique », jugé non
+# publiable (docs/articles-fact-check/optimisation-reseaux-fibre-optique.md) — aucune version web n'est générée.
+FICHE_UNUSED = "assets/originaux/fibre-optique/fibre-reseau-urbain-illustration.webp"
+# Miniature de recherche + carte de partage 1200 × 630 de chaque page (et des 2 pages d'articles fibre).
+FICHE_THUMBS = {
+    "assets/images/vca-ligne-hierarchique/vca-lh-thumb-192.webp": "assets/originaux/formations/vca-hierarchique.jpg",
+    "assets/images/diisocyanates/diisocyanates-thumb-192.webp": "assets/originaux/diisocyanates/diisocyanates-laboratoire-flacons.jpg",
+    "assets/images/fibre-optique/fibre-optique-thumb-192.webp": "assets/originaux/formations/fibre-optique.jpg",
+}
+FICHE_CARDS = {
+    "assets/images/partage/formation-vca-ligne-hierarchique-1200x630.jpg": "assets/originaux/formations/vca-hierarchique.jpg",
+    "assets/images/partage/formation-diisocyanates-1200x630.jpg": "assets/originaux/diisocyanates/diisocyanates-laboratoire-flacons.jpg",
+    "assets/images/partage/formation-fibre-optique-1200x630.jpg": "assets/originaux/formations/fibre-optique.jpg",
+    "assets/images/partage/article-fibre-parcours-1200x630.jpg": "assets/originaux/fibre-optique/fibre-technicien-casque-reseau.webp",
+    "assets/images/partage/article-fibre-expert-1200x630.jpg": "assets/originaux/fibre-optique/fibre-technicienne-coffret-cables.webp",
+}
+
+
+def fiches():
+    for theme, names in FICHES.items():
+        for filename in names:
+            src, name = f"assets/originaux/{theme}/{filename}", os.path.splitext(filename)[0]
+            if not os.path.exists(src):
+                continue
+            for w in (480, 960, 1600):
+                for ext, save, q in (("webp", save_webp, 76), ("avif", save_avif, 56)):
+                    dst = f"assets/images/{theme}/{name}-{w}.{ext}"
+                    if need(dst, src):
+                        im = fit_width(to_rgb(Image.open(src)), w)      # nouvelle image : aucune métadonnée (EXIF, GPS) recopiée
+                        size = save(im, dst, quality=q)
+                        report(f"{name} {w} {ext}", src, size, f"{im.width}×{im.height}")
+    for dst, src in FICHE_THUMBS.items():
+        if os.path.exists(src) and need(dst, src):
+            im = ImageOps.fit(to_rgb(Image.open(src)).convert("RGB"), (192, 192), Image.LANCZOS, centering=(0.5, 0.4))
+            size = save_webp(im, dst, quality=78)
+            report("miniature " + os.path.basename(dst), src, size, "192×192")
+    for dst, src in FICHE_CARDS.items():
+        if os.path.exists(src):
+            photo_card(src, dst, focus=(0.5, 0.4))
+
+
 def og(font_dir):
     """Carte Open Graph de marque (charte : crème, épinette, jais). Texte = celui du site (aucune promesse)."""
     W, H = 1200, 630
@@ -439,6 +492,7 @@ if __name__ == "__main__":
     accueil()
     vca()
     vca_entreprise()
+    fiches()
     if "--og" in sys.argv:
         og(sys.argv[sys.argv.index("--og") + 1])
     print("Terminé.")

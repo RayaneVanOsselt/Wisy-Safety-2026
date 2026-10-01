@@ -16,9 +16,12 @@ const SRC = read("js/search.js");
 const LANGS = ["fr", "en", "nl", "af", "ar", "bg", "de", "ro", "it", "sl"];
 const I18N = (() => { const ctx = { window: {} }; ["common", "search", "formations"].forEach((n) => vm.runInNewContext(read("js/i18n-data-" + n + ".js"), ctx)); return ctx.window.I18N; })();
 
-test("registre : les deux articles sont indexés comme « articles » (groupe à part), avec titres et descriptions traduits", () => {
+test("registre : les articles (VCA Base + fiches 2026-10-01) sont indexés comme « articles » (groupe à part), avec titres et descriptions traduits", () => {
   const arts = Site.pages().filter((p) => p.kind === "article");
-  assert.deepEqual(arts.map((a) => a.url).sort(), ["article-vca-cout-financement.html", "article-vca-erreurs-examen.html"]);
+  ["article-vca-cout-financement.html", "article-vca-erreurs-examen.html", "article-fibre-parcours-professionnels.html", "article-fibre-devenir-expert.html",
+    "formation-vca-ligne-hierarchique.html#article-communication-hierarchique", "formation-diisocyanates.html#article-diisocyanates-reglementation"]
+    .forEach((u) => assert.ok(arts.some((a) => a.url === u), "article indexé : " + u));
+  assert.equal(arts.length, 10, "2 articles VCA Base + 3 VCA Ligne hiérarchique + 3 diisocyanates + 2 fibre optique");
   arts.forEach((a) => LANGS.forEach((l) => { assert.ok(I18N[l][a.titleKey], l + " " + a.titleKey); assert.ok(I18N[l][a.descKey], l + " " + a.descKey); }));
   assert.match(SRC, /\(p\.kind === "article" \? ARTICLES : PAGES\)\.push/, "les articles ne se mélangent pas aux pages");
   assert.match(SRC, /groupHTML\(t\("search\.group_articles"\)/);

@@ -11,7 +11,7 @@ const Site = require("../js/site-content.js");
 const FAQ = require("../js/faq-data.js");
 
 const ROOT = path.join(__dirname, "..");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "vca-entreprise", "coordination", "mentions-legales", "politique-de-confidentialite", "conditions-generales-utilisation", "article-vca-cout-financement", "article-vca-erreurs-examen", "inscription", "contact", "avis", "faq", "agenda"].map((n) => n + ".html").concat(["admin/avis.html"]);
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "vca-entreprise", "coordination", "mentions-legales", "politique-de-confidentialite", "conditions-generales-utilisation", "article-vca-cout-financement", "article-vca-erreurs-examen", "inscription", "contact", "avis", "faq", "agenda", "formation-vca-ligne-hierarchique", "formation-diisocyanates", "formation-fibre-optique", "article-fibre-parcours-professionnels", "article-fibre-devenir-expert"].map((n) => n + ".html").concat(["admin/avis.html"]);
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 
 /* Existence sensible à la casse. Renvoie true, false, ou le vrai nom si seule la casse diffère. */
@@ -158,7 +158,10 @@ test("target=_blank : toujours rel=noopener ; liens sortants limités aux domain
     "www.autoriteprotectiondonnees.be",
     /* Politique de confidentialité : politiques de confidentialité des prestataires techniques réellement utilisés
        (EmailJS, Supabase, jsDelivr, Google Maps) — voir docs/LEGAL_PRIVACY_CGU_REPORT.md. */
-    "www.emailjs.com", "supabase.com", "www.jsdelivr.com", "policies.google.com"]);
+    "www.emailjs.com", "supabase.com", "www.jsdelivr.com", "policies.google.com",
+    /* Fiches formation du 2026-10-01 : documents OFFICIELS et professionnels tracés dans js/sources-data.js (scripts/check-sources.js
+       refuse tout lien externe qui n'y figure pas). */
+    "eur-lex.europa.eu", "echa.europa.eu", "www.isopa.org", "www.alipa.org", "www.ap.be", "www.thefoa.org", "www.itu.int", "www.cisco.com"]);
   PAGES.forEach((f) => {
     refs(f).forEach(({ url, a, tag }) => {
       if (a.target === "_blank") assert.match(a.rel || "", /noopener/, f + " : target=_blank sans noopener : " + url);
@@ -196,7 +199,12 @@ test("aucun secret privé dans le code livré au navigateur (seules les clés PU
 });
 
 test("registre : chaque page publique et chaque fiche formation pointe vers une destination réelle", () => {
-  Site.pages().forEach((p) => assert.equal(existsExact(p.url), true, "page " + p.id));
+  /* Articles lus en modale (#article-<slug>) : la page existe ET l'article y est présent (id). */
+  Site.pages().forEach((p) => {
+    const [p0, frag] = p.url.split("#");
+    assert.equal(existsExact(p0), true, "page " + p.id);
+    if (frag) assert.ok(idsOf(p0).has(frag), "ancre de l'article " + p.id + " : #" + frag);
+  });
   Site.formations().forEach((f) => {
     const [p0, frag] = f.url.split("#");
     assert.equal(existsExact(p0), true, "fiche " + f.id);

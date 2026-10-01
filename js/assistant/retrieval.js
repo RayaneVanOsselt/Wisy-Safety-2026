@@ -57,7 +57,8 @@
     var raw = normalize(s).split(" ");
     var out = [];
     for (var i = 0; i < raw.length; i++) {
-      var w = raw[i];
+      /* Élision française (« l'otdr », « d'examen ») : le mot compte, pas l'article. */
+      var w = raw[i].replace(/^(?:l|d|j|n|s|c|m|t|qu|jusqu|lorsqu|puisqu)'/, "");
       if (!w || w.length < 3) continue;
       if (STOP[w]) continue;
       out.push(w);

@@ -68,38 +68,13 @@
     /* VCA Base : page dédiée formation-vca-base.html — construite depuis le registre js/trainings-data.js
        (voir plus bas), comme la nacelle et le BEPS. */
     { id: "vca-base", fromTrainings: true },
-    {
-      id: "vca-hierarchique", registrationId: "vca-ligne-hierarchique", category: "management",
-      title: "VCA Ligne hiérarchique", titleKey: "dd.vca_hier", taglineKey: "dd.vca_hier_desc", descKey: "fo.f2_desc",
-      url: "formations.html#vca-hierarchique", signupUrl: "inscription.html?formation=vca-hierarchique",
-      image: "assets/images/formations/vca-hierarchique.webp",
-      duration: "2 jours", level: "Avancé",
-      description: "Pour responsables et encadrants en milieu professionnel. Approfondissement des concepts de sécurité.",
-      features: ["Management de la sécurité", "Approche pratique", "Cas concrets"],
-      keywords: ["vca", "hierarchique", "vol-vca", "ligne", "encadrement", "responsable", "responsables", "manager", "management", "chef", "supervisor", "leidinggevende"]
-    },
-    {
-      id: "diisocyanates", registrationId: "diisocyanates", category: "securite",
-      title: "Diisocyanates & substances dangereuses", titleKey: "dd.diiso", taglineKey: "dd.diiso_desc", descKey: "fo.f3_desc",
-      url: "formations.html#diisocyanates", signupUrl: "inscription.html?formation=diisocyanates",
-      image: "assets/images/formations/diisocyanates.webp",
-      duration: "1 jour", level: "Spécialisée",
-      description: "Manipulation sécurisée des produits chimiques en entreprise. Conforme aux normes européennes en vigueur.",
-      features: ["Produits chimiques", "Normes REACH", "Équipements adaptés"],
-      keywords: ["diisocyanate", "diisocyanates", "isocyanate", "reach", "chimique", "chimiques", "substances", "dangereuses", "produits", "chemical", "gevaarlijke"]
-    },
+    /* VCA Ligne hiérarchique, Diisocyanates, Fibre optique : pages dédiées « fiche » (2026-10-01), faits du registre
+       js/trainings-data.js — prix, durée et format NON confirmés : absents (jamais affichés ni affirmés). */
+    { id: "vca-hierarchique", fromTrainings: true },
+    { id: "diisocyanates", fromTrainings: true },
     /* Nacelles élévatrices : construite depuis le registre js/trainings-data.js (voir plus bas). */
     { id: "nacelle", fromTrainings: true },
-    {
-      id: "fibre-optique", registrationId: "fibre-optique", category: "technique",
-      title: "Fibre optique", titleKey: "dd.fibre", taglineKey: "dd.fibre_desc", descKey: "fo.f5_desc",
-      url: "formations.html#fibre-optique", signupUrl: "inscription.html?formation=fibre-optique",
-      image: "assets/images/formations/fibre-optique.webp",
-      duration: "3 jours", level: "Technique",
-      description: "Soudure et installation professionnelle de fibres optiques. Formation complète avec équipement fourni.",
-      features: ["Équipement fourni", "Expert technique", "Pratique intensive"],
-      keywords: ["fibre", "fiber", "optique", "optic", "soudure", "raccordement", "telecom", "installation", "ftth"]
-    },
+    { id: "fibre-optique", fromTrainings: true },
     /* BEPS — Premier secours : construite depuis le registre js/trainings-data.js (voir plus bas),
        comme la nacelle. Page dédiée formation-beps-premiers-secours.html. */
     { id: "beps", fromTrainings: true }
@@ -112,21 +87,21 @@
     var e = {
       id: T.id, registrationId: T.registrationId, category: T.category,
       title: T.title, fullTitle: T.fullTitle,
-      titleKey: T.titleKey, fullTitleKey: T.fullTitleKey, taglineKey: "dd." + T.id.replace(/-/g, "_") + "_desc", summaryKey: T.summaryKey, descKey: T.summaryKey,
+      titleKey: T.titleKey, fullTitleKey: T.fullTitleKey, taglineKey: T.taglineKey || "dd." + T.id.replace(/-/g, "_") + "_desc", summaryKey: T.summaryKey, descKey: T.summaryKey,
       url: T.url, signupUrl: T.signupUrl,
-      duration: T.durationDays != null ? Trainings.formatDuration(T.durationDays) : Trainings.formatDurationHours(T.durationHours),
+      duration: T.durationDays != null ? Trainings.formatDuration(T.durationDays) : Trainings.formatDurationHours(T.durationHours),   /* null = non confirmée */
       level: T.level || "Spécialisée",
       description: T.summary, objective: T.objective,
-      price: T.price, priceLabel: Trainings.formatPrice(T.price),
+      priceLabel: Trainings.formatPrice(T.price),
       format: T.formatLabel, audience: T.audience.slice(),
-      features: [T.formatLabel, "Approche orientée sécurité"].concat(T.exam && T.exam.included ? ["Examen inclus"] : [], langs ? [langs.join(", ")] : []),
+      features: T.features ? T.features.slice() : [T.formatLabel, "Approche orientée sécurité"].concat(T.exam && T.exam.included ? ["Examen inclus"] : [], langs ? [langs.join(", ")] : []),
       /* Mots-clés bruts (avec « formation nacelle », « securite nacelle »…) : utiles à la recherche du
          site, qui traite les mots génériques à part. `keywords` (assistant) n'en garde que les
          termes discriminants — voir GENERIC_KEYWORD. */
       searchKeywords: T.keywords.concat(T.searchExtra || []),
       keywords: T.keywords.filter(function (k) { return !GENERIC_KEYWORD.test(k); }),
       thumb: T.images.thumb, image: T.images.card, imageAlt: T.imageAlt,
-      factKeys: ["dur", "fmt", langs ? "langs" : (T.exam && T.exam.included ? "exam" : null)].filter(Boolean)
+      factKeys: T.factKeys ? T.factKeys.slice() : ["dur", "fmt", langs ? "langs" : (T.exam && T.exam.included ? "exam" : null)].filter(Boolean)
         .map(function (k) { return "dd." + T.id.replace(/-/g, "_") + "_" + k; }),
       dedicatedPage: true
     };
@@ -136,11 +111,18 @@
     if (T.types && T.types.length) { e.subtypes = T.types.map(function (t) { return t.name; }); }
     if (T.unconfirmed) { e.unconfirmed = T.unconfirmed.slice(); }
     if (T.unconfirmedClaims) { e.unconfirmedClaims = T.unconfirmedClaims.slice(); }
+    if (T.price) { e.price = T.price; }                                   /* prix non confirmé (null) : champ absent, jamais affirmé */
     if (T.priceUnit) { e.priceUnit = T.priceUnit; }
     if (T.venue) { e.venue = T.venue; }
     if (T.exam) { e.exam = { included: T.exam.included === true }; }
     if (T.certification) { e.certification = T.certification; }
-    if (T.official) { e.official = { verifiedAt: T.official.verifiedAt, exam: T.official.exam, diplomaValidityYears: T.official.diplomaValidityYears, worksiteTrainingMinHours: T.official.worksiteTrainingMinHours }; }
+    if (T.official) {
+      var O = T.official, src = O.sources || {}, main = src.besacc || src.eurlex;
+      e.official = { verifiedAt: O.verifiedAt, exam: O.exam, diplomaValidityYears: O.diplomaValidityYears, worksiteTrainingMinHours: O.worksiteTrainingMinHours };
+      /* Fiches 2026-10-01 : libellé du diplôme, cadre légal, source officielle principale (citée par l'assistant). */
+      ["diplomaLabel", "regulation", "appliesFrom", "thresholdPercentWeight", "renewalYears", "belgianOel"].forEach(function (k) { if (O[k] != null) e.official[k] = O[k]; });
+      if (main) e.official.sourceUrl = typeof main === "string" ? main : main.fr;
+    }
     return e;
   }
   /* Mots trop génériques pour discriminer UNE formation (« une formation », « sécurité », « prix ») :
@@ -228,6 +210,40 @@
       content: "Article : le format officiel de l'examen VCA Base (40 questions, 60 minutes, 64,5 % pour réussir) et les pièges à éviter pour le préparer sereinement.",
       keywords: ["examen", "erreurs", "erreur", "reussir", "echec", "piege", "pieges", "preparer", "preparation", "conseils", "stress", "temps", "questions", "64,5", "vca", "article", "exam", "fouten", "examen vca"]
     },
+    /* Articles des pages « fiche » (2026-10-01) : lus en modale sur leur page de formation (#article-<slug>) ; les 2 articles
+       fibre ont aussi leur propre page (URL canonique, reprise de l'ancien site). Faits sourcés : docs/content-sources.md. */
+    { id: "article-vlh-communication", kind: "article", published: "2026-10-01", url: "formation-vca-ligne-hierarchique.html#article-communication-hierarchique",
+      title: "Communication hiérarchique : faire passer les messages sécurité", titleKey: "search.art_vlh1_t", descKey: "search.art_vlh1_d",
+      content: "Conseils de l'équipe pédagogique pour les encadrants : message clair, cohérent et répété, outils (briefings, causeries, retours d'expérience), rôle du responsable.",
+      keywords: ["communication", "briefing", "causerie", "message securite", "encadrant", "manager", "ligne hierarchique", "vca"] },
+    { id: "article-vlh-erreurs", kind: "article", published: "2026-10-01", url: "formation-vca-ligne-hierarchique.html#article-erreurs-hierarchie",
+      title: "Les erreurs fréquentes de la hiérarchie en matière de sécurité", titleKey: "search.art_vlh2_t", descKey: "search.art_vlh2_d",
+      content: "Conseils de l'équipe pédagogique : manque d'exemplarité, communication inefficace, facteur humain sous-estimé, écoute du terrain, pilotage, production avant sécurité.",
+      keywords: ["erreurs", "exemplarite", "encadrement", "hierarchie", "chef d'equipe", "prevention", "vca"] },
+    { id: "article-vlh-culture", kind: "article", published: "2026-10-01", url: "formation-vca-ligne-hierarchique.html#article-culture-securite",
+      title: "Ligne hiérarchique et culture sécurité : le rôle de l'encadrement", titleKey: "search.art_vlh3_t", descKey: "search.art_vlh3_d",
+      content: "Conseils de l'équipe pédagogique : rôle de la ligne hiérarchique, piliers d'une culture sécurité, leviers de l'encadrement.",
+      keywords: ["culture securite", "leadership", "encadrement", "ligne hierarchique", "vca"] },
+    { id: "article-dii-definition", kind: "article", published: "2026-10-01", url: "formation-diisocyanates.html#article-diisocyanates-definition",
+      title: "Les diisocyanates : définition, familles et dangers", titleKey: "search.art_dii1_t", descKey: "search.art_dii1_d",
+      content: "Article sourcé : définition (règlement REACH, annexe XVII, entrée 74), MDI, TDI, HDI, IPDI, NDI, sensibilisants respiratoires et cutanés de catégorie 1, asthme professionnel.",
+      keywords: ["diisocyanates", "isocyanate", "mdi", "tdi", "hdi", "ipdi", "ndi", "polyurethane", "asthme professionnel", "sensibilisant", "definition"] },
+    { id: "article-dii-reglementation", kind: "article", published: "2026-10-01", url: "formation-diisocyanates.html#article-diisocyanates-reglementation",
+      title: "Le règlement (UE) 2020/1149, point par point", titleKey: "search.art_dii2_t", descKey: "search.art_dii2_d",
+      content: "Article sourcé : calendrier (24 février 2022, 24 août 2023), personnes visées, obligations de l'employeur, trois niveaux de formation, renouvellement au moins tous les cinq ans, valeurs limites belges.",
+      keywords: ["reglement 2020/1149", "reach", "obligation", "formation obligatoire", "24 aout 2023", "employeur", "amende", "diisocyanates", "reglementation"] },
+    { id: "article-dii-substances", kind: "article", published: "2026-10-01", url: "formation-diisocyanates.html#article-substances-dangereuses",
+      title: "Autres substances dangereuses : les repères officiels", titleKey: "search.art_dii3_t", descKey: "search.art_dii3_d",
+      content: "Article sourcé : amiante (directive 1999/77/CE), silice cristalline alvéolaire et chrome VI (directive (UE) 2017/2398), formaldéhyde (directive (UE) 2019/983), comparés aux diisocyanates.",
+      keywords: ["amiante", "silice", "silice cristalline", "chrome vi", "chrome 6", "formaldehyde", "cancerigene", "substances dangereuses", "produits dangereux"] },
+    { id: "article-fibre-parcours", kind: "article", published: "2026-10-01", url: "article-fibre-parcours-professionnels.html",
+      title: "Les parcours professionnels dans la fibre optique : du technicien à l'ingénieur réseau", titleKey: "search.art_fib1_t", descKey: "search.art_fib1_d",
+      content: "Article : niveaux de postes (technicien, chef d'équipe, ingénieur réseau), compétences, exemples de certifications (CFOT de la FOA, CCNA de Cisco).",
+      keywords: ["metier fibre", "technicien fibre", "ingenieur reseau", "carriere", "parcours", "cfot", "ccna", "certification fibre", "fibre optique"] },
+    { id: "article-fibre-expert", kind: "article", published: "2026-10-01", url: "article-fibre-devenir-expert.html",
+      title: "Devenir expert en fibre optique : compétences techniques et outils", titleKey: "search.art_fib2_t", descKey: "search.art_fib2_d",
+      content: "Article sourcé : fibre monomode et multimode, recommandations UIT-T G.652 et G.657, OM3 et OM4, pertes typiques (connecteur, épissure), microscope, photomètre, VFL, OTDR.",
+      keywords: ["otdr", "epissure", "soudure", "monomode", "multimode", "g.652", "g.657", "om3", "om4", "budget optique", "vfl", "expert fibre", "fibre optique"] },
     {
       id: "peb", url: "peb-wallonie-bruxelles.html", title: "Devenez certificateur PEB", titleKey: "search.page_peb_t", descKey: "search.page_peb_d",
       content: "Devenir certificateur PEB (performance énergétique des bâtiments) en Wallonie ou à Bruxelles : conditions d'accès, formation réglementaire, examen, demande d'agrément et sessions. Les deux Régions ont des procédures et des autorités distinctes : un agrément wallon ou bruxellois ne permet d'exercer que dans sa propre Région. Tarif de la formation Wisy Safety communiqué sur demande.",
@@ -295,7 +311,7 @@
      (Sert d'allow-list à l'assistant et de base au sitemap.) */
   function publicPaths() {
     var seen = {}, out = [];
-    PAGES.map(function (p) { return p.url; })
+    PAGES.map(function (p) { return pathOf(p.url); })               /* articles en modale : #article-… retiré */
       .concat(FORMATIONS.filter(function (f) { return f.dedicatedPage; }).map(function (f) { return pathOf(f.url); }))
       .concat(SERVICES.map(function (x) { return pathOf(x.url); }))
       .forEach(function (u) { if (!seen[u]) { seen[u] = 1; out.push(u); } });

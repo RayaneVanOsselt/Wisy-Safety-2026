@@ -11,7 +11,7 @@ const vm = require("node:vm");
 
 const ROOT = path.join(__dirname, "..");
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda", "peb-wallonie-bruxelles", "formation-beps-premiers-secours", "formation-vca-base", "vca-entreprise", "article-vca-cout-financement", "article-vca-erreurs-examen", "coordination", "mentions-legales", "politique-de-confidentialite", "conditions-generales-utilisation"].map((n) => n + ".html");
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda", "peb-wallonie-bruxelles", "formation-beps-premiers-secours", "formation-vca-base", "vca-entreprise", "article-vca-cout-financement", "article-vca-erreurs-examen", "coordination", "mentions-legales", "politique-de-confidentialite", "conditions-generales-utilisation", "formation-vca-ligne-hierarchique", "formation-diisocyanates", "formation-fibre-optique", "article-fibre-parcours-professionnels", "article-fibre-devenir-expert"].map((n) => n + ".html");
 
 /* Gabarit JS de repli : on exécute bandHTML() tel qu'écrit dans search.js. */
 function jsBand() {

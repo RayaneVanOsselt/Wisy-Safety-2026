@@ -1,8 +1,8 @@
 /* =========================================================================
    WISY SAFETY — Registre des formations dotées d'une page dédiée (+ le service VCA Entreprise)
    -------------------------------------------------------------------------
-   SOURCE UNIQUE DES FAITS des formations à page dédiée (VCA Base, Nacelles
-   Élévatrices, BEPS) : route, prix, durée, langues, format, public, mots-clés,
+   SOURCE UNIQUE DES FAITS des formations à page dédiée (VCA Base, VCA Ligne
+   hiérarchique, Diisocyanates, Nacelles Élévatrices, Fibre optique, BEPS) : route, prix, durée, langues, format, public, mots-clés,
    visuels. Le SERVICE « VCA Entreprise » (accompagnement à la certification d'une
    entreprise — ni formation, ni VCA Base) y est décrit à part (`vcaEntreprise`) :
    il n'entre PAS dans `all()` / `get()` (pas de durée, pas d'examen).
@@ -427,6 +427,129 @@
       "VCA** réservé aux grandes entreprises"]
   };
 
+  /* Formations « fiche technique » (2026-10-01) — docs/content-audit.md, docs/content-sources.md. Prix, durée, format : NON confirmés
+     (ancien site contradictoire) → null, jamais affichés ni affirmés. `official` = faits officiels sourcés ; `unconfirmedClaims` = à ne
+     jamais reprendre sans preuve. */
+  var VCA_LH = {
+    id: "vca-hierarchique",
+    registrationId: "vca-ligne-hierarchique",
+    slug: "vca-ligne-hierarchique",
+    category: "management",
+    url: "formation-vca-ligne-hierarchique.html",
+    signupUrl: "inscription.html?formation=vca-hierarchique",
+    catalogueUrl: "formations.html#vca-hierarchique",
+    legacyUrl: "https://wisysafety.be/vca-ligne-hierarchique/",
+    title: "VCA Ligne hiérarchique",
+    fullTitle: "Formation VCA Ligne hiérarchique (VOL-VCA)",
+    summary: "Pour les chefs d'équipe, superviseurs et responsables qui encadrent du personnel opérationnel : préparation à l'examen officiel « Sécurité pour les cadres opérationnels » (VOL-VCA).",
+    objective: "Préparer l'examen VOL-VCA et donner à l'encadrement les connaissances de sécurité propres à sa mission.",
+    titleKey: "dd.vca_hier", fullTitleKey: "dd.vca_hier_full", summaryKey: "dd.vca_hier_summary", taglineKey: "dd.vca_hier_desc",
+    factKeys: ["dd.vca_hier_f1", "dd.vca_hier_f2"],
+    durationDays: null, price: null, level: "Avancé",
+    audience: ["chefs d'équipe", "superviseurs", "responsables qui encadrent du personnel opérationnel", "entreprises certifiées VCA ou en préparation de certification"],
+    features: ["Diplôme VOL-VCA (délivré par un centre d'examen reconnu)", "Programme : 14 thèmes officiels", "Diplôme valable 10 ans"],
+    exam: { included: null },
+    certification: "Le diplôme VOL-VCA est délivré par un centre d'examen reconnu par BeSaCC-VCA, après réussite de l'examen — pas par Wisy Safety",
+    official: {
+      verifiedAt: "2026-10-01",
+      diplomaLabel: "« Sécurité pour les cadres opérationnels » (VOL-VCA)",
+      exam: { questions: 70, minutes: 75, minutesNote: "selon le centre d'examen", passPercent: 64.5, passPoints: 4515, maxPoints: 7000 },
+      diplomaValidityYears: 10,
+      sources: {
+        besacc: { fr: "https://www.besacc-vca.be/fr/veiligheid-voor-operationeel-leidinggevenden-vol-vca/", nl: "https://www.besacc-vca.be/veiligheid-voor-operationeel-leidinggevenden-vol-vca/", en: "https://www.besacc-vca.be/en/veiligheid-voor-operationeel-leidinggevenden-vol-vca/" },
+        reglement: "https://www.besacc-vca.be/wp-content/uploads/2023/06/Reglement-General-Examens-VCA-2018-03.pdf",
+        centres: "https://www.besacc-vca.be/fr/erkende-examencentra-b-vca-vol-vca-vil-vcu/",
+        registre: "https://csm-examen.be/cdr"
+      }
+    },
+    /* « vca » SEUL désigne d'abord la VCA Base : seules les formes explicites (ligne hiérarchique, VOL) pointent ici. */
+    keywords: ["vca ligne hierarchique", "vca hierarchique", "ligne hierarchique", "vol-vca", "vol", "chef", "chefs", "superviseur", "encadrant",
+      "encadrement", "responsable", "cadre operationnel", "cadres operationnels", "leidinggevende", "operationeel leidinggevenden", "supervisor"],
+    searchExtra: ["formation vca ligne hierarchique", "chef d'equipe", "chefs d'equipe", "chef de chantier", "vca chef", "vca encadrement", "examen vol", "tarif", "price", "prijs"],
+    images: { hero: "assets/images/formations/vca-hierarchique.webp", card: "assets/images/formations/vca-hierarchique.webp",
+      thumb: "assets/images/vca-ligne-hierarchique/vca-lh-thumb-192.webp", og: "assets/images/partage/formation-vca-ligne-hierarchique-1200x630.jpg" },
+    imageAlt: "Encadrant en casque blanc et gilet haute visibilité qui indique une direction sur un chantier, un ordinateur portable à la main",
+    unconfirmedClaims: ["agréé", "agrément", "centre d'examen reconnu", "examen inclus", "certification reconnue au niveau international", "taux de réussite (95 %)",
+      "tarifs 280 € / 370 € / 195–345 €", "durée (10 h, 14 h, 1 ou 2 jours)", "repas inclus", "référence WSY-VOL/2025-BE", "« des milliers de professionnels »"]
+  };
+
+  var DIISO = {
+    id: "diisocyanates",
+    registrationId: "diisocyanates",
+    slug: "diisocyanates",
+    category: "securite",
+    url: "formation-diisocyanates.html",
+    signupUrl: "inscription.html?formation=diisocyanates",
+    catalogueUrl: "formations.html#diisocyanates",
+    legacyUrl: "https://wisysafety.be/produit-dangereux/",
+    title: "Diisocyanates & substances dangereuses",
+    fullTitle: "Formation diisocyanates et substances dangereuses",
+    summary: "Depuis le 24 août 2023, un produit contenant 0,1 % ou plus de diisocyanates ne peut être utilisé à titre industriel ou professionnel que par une personne qui a suivi avec succès une formation à leur utilisation sûre (règlement (UE) 2020/1149).",
+    objective: "Former à l'utilisation sûre des diisocyanates, comme l'exige le règlement (UE) 2020/1149 avant tout usage industriel ou professionnel.",
+    titleKey: "dd.diiso", fullTitleKey: "dd.diiso_full", summaryKey: "dd.diiso_summary", taglineKey: "dd.diiso_desc",
+    factKeys: ["dd.diiso_f1", "dd.diiso_f2"],
+    durationDays: null, price: null, level: "Spécialisée",
+    audience: ["peintres", "façadiers", "étancheurs", "menuisiers", "opérateurs industriels", "toute personne qui utilise ou supervise l'utilisation de produits contenant des diisocyanates"],
+    features: ["Règlement (UE) 2020/1149", "Exigée depuis le 24 août 2023", "Renouvellement au moins tous les 5 ans"],
+    official: {
+      verifiedAt: "2026-10-01",
+      regulation: "Règlement (UE) 2020/1149 de la Commission du 3 août 2020 (REACH, annexe XVII, entrée 74)",
+      appliesFrom: "2023-08-24", labelFrom: "2022-02-24", thresholdPercentWeight: 0.1, renewalYears: 5,
+      levels: ["général", "intermédiaire", "avancé"],
+      belgianOel: { since: "2026-06-03", eightHoursUgNco: 10, shortTermUgNco: 20, from2029: { eightHoursUgNco: 6, shortTermUgNco: 12 } },
+      sources: {
+        eurlex: { fr: "https://eur-lex.europa.eu/legal-content/FR/TXT/HTML/?uri=CELEX:32020R1149", nl: "https://eur-lex.europa.eu/legal-content/NL/TXT/HTML/?uri=CELEX:32020R1149", en: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32020R1149" },
+        spf: "https://emploi.belgique.be/fr/actualites/nouvelles-valeurs-limites-dexposition-professionnelle-pour-le-plomb-ses-composes-et-les",
+        echa: "https://echa.europa.eu/substance-information/-/substanceinfo/100.251.385"
+      }
+    },
+    keywords: ["diisocyanates", "diisocyanate", "isocyanate", "isocyanates", "mdi", "tdi", "hdi", "ipdi", "polyurethane", "polyurethanes", "pu", "mousse pu",
+      "reach", "2020/1149", "annexe xvii", "substances dangereuses", "produits dangereux", "produit dangereux", "produits chimiques", "chimique",
+      "agents chimiques", "asthme professionnel", "peintre", "facadier", "etancheur", "gevaarlijke stoffen", "diisocyanaten", "dangerous substances"],
+    searchExtra: ["formation diisocyanates", "formation obligatoire", "obligatoire", "amende", "prix", "tarif", "price", "prijs"],
+    images: { hero: "assets/images/diisocyanates/diisocyanates-laboratoire-flacons-960.webp", card: "assets/images/formations/diisocyanates.webp",
+      thumb: "assets/images/diisocyanates/diisocyanates-thumb-192.webp", og: "assets/images/partage/formation-diisocyanates-1200x630.jpg" },
+    imageAlt: "Illustration : un technicien en blouse et lunettes de protection manipule des flacons portant un pictogramme de danger",
+    unconfirmed: ["certification valable partout en europe", "certificat européen", "agréé", "agrément", "reconnaissance légale européenne"],
+    unconfirmedClaims: ["tarif 200 € (ancienne page) ou 95 € (bordereau)", "durée 2–4 h", "format présentiel ou intra-entreprise", "niveau de formation couvert",
+      "« +2 500 professionnels »", "« 98 % de satisfaction »", "« 4,9/5 »", "amende de 250 € par jour et par salarié", "« protection santé garantie »"]
+  };
+
+  var FIBRE = {
+    id: "fibre-optique",
+    registrationId: "fibre-optique",
+    slug: "fibre-optique",
+    category: "technique",
+    url: "formation-fibre-optique.html",
+    signupUrl: "inscription.html?formation=fibre-optique",
+    catalogueUrl: "formations.html#fibre-optique",
+    legacyUrl: "https://wisysafety.be/fibre-optique/",
+    title: "Fibre optique",
+    fullTitle: "Formation fibre optique",
+    summary: "Du raccordement à la mesure OTDR : un parcours en trois niveaux et six modules pour les artisans, techniciens et ingénieurs qui interviennent sur les réseaux fibre (FTTH, FTTx).",
+    objective: "Installer, raccorder, souder, mesurer et concevoir des réseaux fibre optique, selon le niveau choisi.",
+    titleKey: "dd.fibre", fullTitleKey: "dd.fibre_full", summaryKey: "dd.fibre_summary", taglineKey: "dd.fibre_desc",
+    factKeys: ["dd.fibre_f1", "dd.fibre_f2"],
+    durationDays: null, price: null, level: "Technique",
+    audience: ["artisans", "électriciens", "techniciens", "installateurs", "ingénieurs", "chefs de projet"],
+    features: ["3 niveaux : débutant, intermédiaire, avancé", "6 modules", "4 formats : intensif, modulaire, mixte, sur chantier"],
+    types: [
+      { id: "base", name: "Base de la fibre optique" }, { id: "connecteurs", name: "Connecteurs et raccordements" },
+      { id: "fusion", name: "Épissure par fusion" }, { id: "mesures", name: "Mesures et diagnostic (OTDR)" },
+      { id: "chantier", name: "Installation sur chantier" }, { id: "conception", name: "Conception et planification" }
+    ],
+    keywords: ["fibre optique", "fibre", "fiber", "fibre optic", "ftth", "fttx", "fttb", "otdr", "reflectometre", "soudure", "epissure", "epissure par fusion",
+      "fusion", "raccordement", "connecteur", "connecteurs", "telecom", "telecommunications", "monomode", "multimode", "glasvezel", "glasfaser"],
+    searchExtra: ["formation fibre optique", "technicien fibre", "prix", "tarif", "price", "prijs"],
+    images: { hero: "assets/images/formations/fibre-optique.webp", card: "assets/images/formations/fibre-optique.webp",
+      thumb: "assets/images/fibre-optique/fibre-optique-thumb-192.webp", og: "assets/images/partage/formation-fibre-optique-1200x630.jpg" },
+    imageAlt: "Image de synthèse : câble à fibres optiques ouvert, fibres de couleur éclairées sur fond bleu",
+    unconfirmed: ["certification", "certifiant", "certifiée", "agréé", "agrément", "attestation reconnue"],
+    unconfirmedClaims: ["« 500+ professionnels formés »", "« 15+ ans d'expertise »", "« formés depuis 2010 »", "« 100 % certifications reconnues »",
+      "durées des modules (170 h au total) et du format intensif (35–40 h)", "maximum 8 participants", "80 % de pratique", "plateforme e-learning et forum",
+      "« techniciens certifiés avec plus de 10 ans d'expérience »", "rencontres avec des employeurs", "tarif (650 € au bordereau)"]
+  };
+
   /* Niveau VCA correspondant à une situation (critères OFFICIELS : sous-traitants, pétrochimie). Sert au guide « Quel niveau ? »
      de la page et à l'assistant — une INDICATION : le niveau exigé dépend surtout des donneurs d'ordre. */
   function vcaLevelFor(situation) {
@@ -436,16 +559,18 @@
   }
 
   /* Toutes les formations à page dédiée (extensible : ajouter une entrée). */
-  var TRAININGS = { "vca-base": VCA_BASE, nacelle: NACELLES, beps: BEPS };
+  var TRAININGS = { "vca-base": VCA_BASE, "vca-hierarchique": VCA_LH, diisocyanates: DIISO, nacelle: NACELLES, "fibre-optique": FIBRE, beps: BEPS };
 
   /* ---------------------------------------------------------------------
      Formatage (FR) — l'i18n de l'interface passe par les clés `dd.*`.
      --------------------------------------------------------------------- */
   function formatDuration(days) {
+    if (days == null) return null;
     return days + (days > 1 ? " jours" : " jour");
   }
-  /* 15 -> "15 heures" ; 1 -> "1 heure" */
+  /* 15 -> "15 heures" ; 1 -> "1 heure" ; null -> null (durée non confirmée : jamais affichée) */
   function formatDurationHours(hours) {
+    if (hours == null) return null;
     return hours + (hours > 1 ? " heures" : " heure");
   }
   /* 35000/HT -> "350 € HT" ; 24550/HT -> "245,50 € HT" ; 7000/null -> "70 €" (statut TVA non précisé) */
@@ -475,6 +600,9 @@
     nacelles: NACELLES,
     beps: BEPS,
     vcaBase: VCA_BASE,
+    vcaLigneHierarchique: VCA_LH,
+    diisocyanates: DIISO,
+    fibreOptique: FIBRE,
     vcaEntreprise: VCA_ENTREPRISE,
     vcaLevelFor: vcaLevelFor
   };

@@ -66,6 +66,12 @@ test("formations mises en avant = registre du site (route, titre traduit, durée
     if (url === "peb-wallonie-bruxelles.html") { assert.ok(Site.pages().some((p) => p.url === url)); return; }
     const f = byUrl[url];
     assert.ok(block.includes('data-i18n="' + f.titleKey + '"'), url + " : titre = clé du registre " + f.titleKey);
+    /* Durée NON confirmée (fiches 2026-10-01) : aucune durée affichée, mais un fait vérifié du registre (factKeys). */
+    if (f.duration == null) {
+      assert.doesNotMatch(block, /data-i18n="(dd\.[a-z_]+_dur|home\.dur_\dd)"/, url + " : aucune durée non confirmée affichée");
+      assert.ok((f.factKeys || []).some((k) => block.includes('data-i18n="' + k + '"')), url + " : un fait vérifié du registre est affiché");
+      return;
+    }
     const dur = (block.match(/data-i18n="(dd\.[a-z_]+_dur|home\.dur_\dd)"/) || [])[1];
     assert.ok(dur, url + " : durée affichée");
     assert.equal(I18N.fr[dur], f.duration, url + " : durée = registre (" + f.duration + ")");
@@ -78,7 +84,7 @@ test("formations mises en avant = registre du site (route, titre traduit, durée
 test("VCA : formation VCA Base + ressources ; pas de section VCA Entreprise sur l'accueil (retirée), parcours entreprise → devis réel", () => {
   const vca = part(MAIN, '<section class="home-section home-vca"', "</section>");
   assert.match(vca, /<a class="home-pass[^"]*" href="formation-vca-base\.html"/); assert.match(vca, /<a class="home-exam[^"]*" href="formation-vca-base\.html#examen"/);
-  assert.match(vca, /href="article-vca-cout-financement\.html"/); assert.match(vca, /href="article-vca-erreurs-examen\.html"/); assert.match(vca, /href="formations\.html#vca-hierarchique"/);
+  assert.match(vca, /href="article-vca-cout-financement\.html"/); assert.match(vca, /href="article-vca-erreurs-examen\.html"/); assert.match(vca, /href="formation-vca-ligne-hierarchique\.html"/);
   /* examen officiel : les chiffres affichés = registre (faits OFFICIELS sourcés, js/trainings-data.js) */
   const ex = Trainings.vcaBase.official.exam;
   assert.match(vca, new RegExp('data-count="' + ex.questions + '"')); assert.match(vca, new RegExp('data-count="' + ex.minutes + '"'));

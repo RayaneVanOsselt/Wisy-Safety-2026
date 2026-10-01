@@ -1,0 +1,68 @@
+/* =========================================================================
+   WISY SAFETY — Articles : magasin (lisible sans JavaScript) + fenêtre de lecture modale (js/article-modal.js)
+   Préfixe `am-`. Mise en page de lecture : ~68 caractères par ligne, titres H2/H3, plein écran sur mobile avec
+   en-tête collant (titre + fermer). Animation sobre (opacité + léger déplacement, 220 ms), coupée en mouvement réduit.
+   ========================================================================= */
+
+/* ---------- Magasin d'articles : sans JS, une section normale en fin de page ---------- */
+.am-store { margin-top: clamp(2rem, 4vw, 3rem); border-top: 1px solid var(--granit-20); padding-top: clamp(1.5rem, 3vw, 2.5rem); }
+.am-store__title { font-size: var(--fs-h3); }
+.am-js .am-store { display: none; }
+
+/* ---------- Article (dans le magasin comme dans la modale) ---------- */
+.am-article { max-width: 72ch; margin-inline: auto; padding-block: 1.5rem 2rem; }
+.am-store .am-article + .am-article { border-top: 1px solid var(--granit-20); }
+.am-article__kicker { margin: 0 0 .6rem; font-family: var(--font-titre); font-weight: 600; font-size: var(--fs-micro); letter-spacing: .1em; text-transform: uppercase; color: var(--epinette); }
+.am-article__title { font-size: clamp(1.6rem, 3.2vw, 2.3rem); line-height: 1.12; margin-bottom: .75rem; }
+.am-article__title:focus { outline: none; }
+.am-article__title:focus-visible { outline: 3px solid var(--brume); outline-offset: 4px; }
+.am-article__lead { font-size: var(--fs-lead); color: var(--granit); margin-bottom: .9rem; }
+.am-article__meta { display: flex; flex-wrap: wrap; gap: .35rem 1.1rem; margin: 0 0 1.25rem; font-size: var(--fs-small); color: var(--granit); }
+.am-article__fig { margin: 0 0 1.5rem; }
+.am-article__fig img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius); background: var(--brume-08); }
+.am-article__fig figcaption { margin-top: .5rem; font-size: var(--fs-micro); color: var(--granit); }
+.am-article__body h3 { font-size: 1.2rem; margin: 1.75rem 0 .6rem; }
+.am-article__body h4 { font-size: 1rem; margin: 1.25rem 0 .4rem; }
+.am-article__body p, .am-article__body li { line-height: 1.7; }
+.am-article__body ul, .am-article__body ol { margin: 0 0 1rem; padding-inline-start: 1.25rem; }
+.am-article__body ul { list-style: disc; }
+.am-article__body ol { list-style: decimal; }
+.am-article__body li { margin-bottom: .35rem; }
+.am-article__body li::marker { color: var(--brume); }
+.am-article__body a { color: var(--epinette); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(31, 111, 100, .35); }
+.am-key { margin: 1.5rem 0; padding: 1rem 1.15rem; border-radius: var(--radius-sm); background: var(--brume-08); border-inline-start: 3px solid var(--epinette); }
+.am-key > :last-child { margin-bottom: 0; }
+.am-key__t { display: block; margin-bottom: .35rem; font-family: var(--font-titre); font-weight: 700; font-size: var(--fs-micro); letter-spacing: .1em; text-transform: uppercase; color: var(--epinette); }
+.am-table-wrap { overflow-x: auto; margin: 0 0 1.25rem; border: 1px solid var(--granit-20); border-radius: var(--radius-sm); }
+.am-table { width: 100%; border-collapse: collapse; font-size: .92rem; min-width: 520px; }
+.am-table th, .am-table td { padding: .6rem .75rem; text-align: start; vertical-align: top; border-bottom: 1px solid var(--granit-20); }
+.am-table thead th { background: var(--brume-08); font-family: var(--font-titre); font-weight: 600; font-size: var(--fs-small); }
+.am-table tbody tr:last-child > * { border-bottom: 0; }
+.am-article__foot { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--granit-20); display: grid; gap: 1.1rem; }
+.am-article__foot .fx-src { margin-top: 0; padding-top: 0; border-top: 0; }
+.am-article__verified { margin: 0; font-size: var(--fs-small); color: var(--granit); }
+.am-next { display: grid; gap: .5rem; }
+.am-next__t { font-family: var(--font-titre); font-weight: 600; font-size: var(--fs-small); color: var(--granit); }
+.am-next ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
+.am-next a { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; color: var(--epinette); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(31, 111, 100, .35); }
+
+/* ---------- Fenêtre modale ---------- */
+.am-locked { overflow: hidden; padding-inline-end: var(--am-gap, 0px); }
+.am-dialog { width: min(920px, calc(100vw - 2rem)); max-width: none; max-height: calc(100dvh - 2rem); padding: 0; border: 0; border-radius: var(--radius-lg); background: var(--creme); color: var(--noir-jais); box-shadow: var(--shadow-drop); overflow: hidden; }
+.am-dialog[open] { display: flex; flex-direction: column; animation: am-in 220ms var(--ease-premium); }
+.am-dialog::backdrop { background: rgba(27, 45, 40, .62); backdrop-filter: blur(2px); animation: am-fade 220ms ease; }
+.am-dialog__bar { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .6rem .75rem .6rem 1.25rem; background: rgba(244, 250, 249, .97); border-bottom: 1px solid var(--granit-20); }
+.am-dialog__title { margin: 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-titre); font-weight: 600; font-size: .95rem; color: var(--granit); }
+.am-close { flex: none; display: inline-flex; align-items: center; gap: .45rem; min-height: 44px; padding: .5rem .9rem; border-radius: var(--radius-btn); border: 1.5px solid var(--granit-20); background: #fff; font-family: var(--font-titre); font-weight: 600; font-size: .9rem; color: var(--noir-jais); }
+.am-close:hover { border-color: var(--brume); }
+.am-close svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.am-dialog__scroll { overflow-y: auto; overscroll-behavior: contain; padding-inline: clamp(1.1rem, 4vw, 3rem); -webkit-overflow-scrolling: touch; }
+@media (max-width: 719px) {
+  .am-dialog { width: 100vw; max-height: 100dvh; height: 100dvh; margin: 0; border-radius: 0; }
+}
+@keyframes am-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes am-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .am-dialog[open], .am-dialog::backdrop { animation: none; }
+}
+.am-table-wrap:focus-visible { outline: 3px solid var(--brume); outline-offset: 2px; }

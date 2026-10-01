@@ -131,7 +131,7 @@ WisyFAQ.register("sl", {
   },
   "faq-choisir-vca-difference": {
    "question": "Kakšna je razlika med VCA osnovni in VCA za vodstvo?",
-   "answer": "- VCA osnovni (1 dan): namenjen je vsem sodelavcem na terenu in zajema osnove varnosti.\n- VCA za vodstvo (2 dneva): namenjen je vodjem in operativnim odgovornim osebam, ki vodijo ekipe.",
+   "answer": "- VCA osnovni (1 dan): namenjen vsem zaposlenim na terenu; zajema osnove varnosti.\n- VCA za vodstvo: namenjen osebam, ki vodijo operativno osebje; pripravlja na uradni izpit VOL-VCA (osnovna varnost ter znanje, značilno za vodenje). Obe diplomi veljata 10 let.",
    "keywords": [
     "vca",
     "vca osnovni",
@@ -459,7 +459,7 @@ WisyFAQ.register("sl", {
   },
   "faq-deroulement-duree": {
    "question": "Koliko časa traja usposabljanje?",
-   "answer": "Trajanje je od 1 do 3 dni glede na usposabljanje:\n- 1 dan: VCA osnovni, Dvižna ploščad, Diizocianati in nevarne snovi;\n- 2 dneva: VCA za vodstvo;\n- 3 dni: Optična vlakna, BEPS — Prva pomoč.",
+   "answer": "Trajanje je odvisno od usposabljanja:\n- 1 dan: VCA osnovni, Dvižna ploščad;\n- 3 dni: BEPS — Prva pomoč;\n- VCA za vodstvo, Diizocianati in nevarne snovi ter Optična vlakna: trajanje na zahtevo, glede na izbrano obliko.",
    "keywords": [
     "trajanje",
     "dnevi",
@@ -480,7 +480,7 @@ WisyFAQ.register("sl", {
   },
   "faq-deroulement-theorie-pratique": {
    "question": "So usposabljanja teoretična ali praktična?",
-   "answer": "Običajno združujejo teorijo in prakso. Usposabljanje za dvižne ploščadi na primer združuje teoretični del s praktično vadbo, Optična vlakna pa vključujejo terensko prakso z zagotovljeno opremo.",
+   "answer": "Običajno združujejo teorijo in prakso. Usposabljanje Dvižna ploščad na primer združuje teoretični del in praktične vaje.",
    "keywords": [
     "teorija",
     "praksa",

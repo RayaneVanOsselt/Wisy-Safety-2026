@@ -31,6 +31,7 @@ const Site = require("../js/site-content.js");
 const FAQ = require("../js/faq-data.js");
 const Trainings = require("../js/trainings-data.js");
 const Peb = require("../js/peb-data.js");
+const Sources = require("../js/sources-data.js");
 
 const ORIGIN = Site.ORIGIN;
 const C = FAQ.CONTACT;
@@ -54,6 +55,13 @@ const OG_VCAE = { file: VE.images.og, width: 1200, height: 630, alt: VE.imageAlt
 /* Articles « Conseils & ressources VCA » : image de partage propre à chaque article (photo de l'article + logo). */
 const OG_ART_COST = { file: "assets/images/partage/article-cout-financement-1200x630.jpg", width: 1200, height: 630, alt: "Équipe en gilets de sécurité réunie autour d'une table de travail, avec des documents et un panneau d'évaluation des risques" };
 const OG_ART_EXAM = { file: "assets/images/partage/article-erreurs-examen-1200x630.jpg", width: 1200, height: 630, alt: "Homme casqué en gilet haute visibilité qui prend des notes sur un chantier" };
+/* Fiches formation (2026-10-01) : cartes de partage générées par scripts/optimize-images.py (fiches()). */
+const LH = Trainings.vcaLigneHierarchique, DI = Trainings.diisocyanates, FI = Trainings.fibreOptique;
+const OG_VLH = { file: LH.images.og, width: 1200, height: 630, alt: LH.imageAlt };
+const OG_DII = { file: DI.images.og, width: 1200, height: 630, alt: DI.imageAlt };
+const OG_FIB = { file: FI.images.og, width: 1200, height: 630, alt: FI.imageAlt };
+const OG_ART_FIB1 = { file: "assets/images/partage/article-fibre-parcours-1200x630.jpg", width: 1200, height: 630, alt: "Illustration : un technicien casqué en veste orange, devant un décor de câbles lumineux" };
+const OG_ART_FIB2 = { file: "assets/images/partage/article-fibre-expert-1200x630.jpg", width: 1200, height: 630, alt: "Illustration : une technicienne casquée en gilet haute visibilité travaille sur un coffret de câbles en extérieur" };
 /* Coordination : pas de carte de partage dédiée (aucun visuel de chantier fourni pour l'instant) —
    repli volontaire sur OG_DEFAULT, comme agenda.html / contact.html / avis.html / faq.html. */
 
@@ -67,6 +75,13 @@ const DOCS = [
   /* VCA Entreprise : SERVICE d'accompagnement (nœud `service`, jamais `course`) — le tarif du registre y figure parce qu'il est affiché sur la page. */
   { file: "vca-entreprise.html", graph: ["organization", "breadcrumb", "service"], image: OG_VCAE,
     breadcrumb: [["Accueil", "index.html"], ["VCA Entreprise", "vca-entreprise.html"]] },
+  /* Fiches formation : `course` sans prix ni durée (non confirmés), `articles` = articles lus en modale sur la page. */
+  { file: "formation-vca-ligne-hierarchique.html", graph: ["organization", "breadcrumb", "course", "articles"], image: OG_VLH, lastmod: "2026-10-01",
+    breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["VCA ligne hiérarchique", "formation-vca-ligne-hierarchique.html"]] },
+  { file: "formation-diisocyanates.html", graph: ["organization", "breadcrumb", "course", "articles"], image: OG_DII, lastmod: "2026-10-01",
+    breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["Diisocyanates & substances dangereuses", "formation-diisocyanates.html"]] },
+  { file: "formation-fibre-optique.html", graph: ["organization", "breadcrumb", "course"], image: OG_FIB, lastmod: "2026-10-01",
+    breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["Fibre optique", "formation-fibre-optique.html"]] },
   { file: "formation-nacelles-elevatrices.html", graph: ["organization", "breadcrumb", "course"], image: OG_NACELLES,
     breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["Nacelles élévatrices", "formation-nacelles-elevatrices.html"]] },
   { file: "formation-beps-premiers-secours.html", graph: ["organization", "breadcrumb", "course"], image: OG_BEPS,
@@ -95,7 +110,12 @@ const DOCS = [
   { file: "article-vca-cout-financement.html", graph: ["organization", "breadcrumb", "article"], image: OG_ART_COST, ogType: "article",
     breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["VCA Base", "formation-vca-base.html"], ["Coût et financement d'une formation VCA", "article-vca-cout-financement.html"]] },
   { file: "article-vca-erreurs-examen.html", graph: ["organization", "breadcrumb", "article"], image: OG_ART_EXAM, ogType: "article",
-    breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["VCA Base", "formation-vca-base.html"], ["Erreurs à l'examen VCA", "article-vca-erreurs-examen.html"]] }
+    breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["VCA Base", "formation-vca-base.html"], ["Erreurs à l'examen VCA", "article-vca-erreurs-examen.html"]] },
+  /* Articles fibre (reprise des URL de l'ancien site) : page autonome canonique ; la page de formation les propose aussi en modale. */
+  { file: "article-fibre-parcours-professionnels.html", graph: ["organization", "breadcrumb", "article"], image: OG_ART_FIB1, ogType: "article", lastmod: "2026-10-01",
+    breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["Fibre optique", "formation-fibre-optique.html"], ["Parcours professionnels", "article-fibre-parcours-professionnels.html"]] },
+  { file: "article-fibre-devenir-expert.html", graph: ["organization", "breadcrumb", "article"], image: OG_ART_FIB2, ogType: "article", lastmod: "2026-10-01",
+    breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["Fibre optique", "formation-fibre-optique.html"], ["Devenir expert", "article-fibre-devenir-expert.html"]] }
 ];
 /* Pages techniques : jamais indexées, jamais dans le sitemap. */
 const TECHNICAL = ["404.html", "admin/avis.html", "docs/maquettes/wisy-safety-header.html", "docs/maquettes/wisy-safety-footer.html"];
@@ -155,8 +175,6 @@ const NODES = {
      correspond au fichier de la page (doc.file), pas à une formation figée. */
   course: (doc, meta) => {
     const t = Trainings.all().filter((x) => x.url === doc.file)[0];
-    const priceSpec = { "@type": "PriceSpecification", price: String(t.price.amountCents / 100), priceCurrency: t.price.currency };
-    if (t.price.vatIncluded === true || t.price.vatIncluded === false) priceSpec.valueAddedTaxIncluded = t.price.vatIncluded;
     const node = {
       "@type": "Course",
       name: t.fullTitle,
@@ -166,9 +184,15 @@ const NODES = {
     };
     /* Langues : uniquement si confirmées (VCA Base : `languages: null` → aucune `inLanguage`, jamais devinée). */
     if (t.languages && t.languages.length) node.inLanguage = t.languages.slice();
-    node.timeRequired = t.durationDays != null ? "P" + t.durationDays + "D" : "PT" + t.durationHours + "H";
+    /* Durée et prix : uniquement s'ils sont confirmés (fiches 2026-10-01 : null → aucun timeRequired, aucune offre). */
+    if (t.durationDays != null) node.timeRequired = "P" + t.durationDays + "D";
+    else if (t.durationHours != null) node.timeRequired = "PT" + t.durationHours + "H";
     node.provider = providerOf();
-    node.offers = { "@type": "Offer", url: Site.absoluteUrl(doc.file), price: String(t.price.amountCents / 100), priceCurrency: t.price.currency, priceSpecification: priceSpec };
+    if (t.price) {
+      const priceSpec = { "@type": "PriceSpecification", price: String(t.price.amountCents / 100), priceCurrency: t.price.currency };
+      if (t.price.vatIncluded === true || t.price.vatIncluded === false) priceSpec.valueAddedTaxIncluded = t.price.vatIncluded;
+      node.offers = { "@type": "Offer", url: Site.absoluteUrl(doc.file), price: String(t.price.amountCents / 100), priceCurrency: t.price.currency, priceSpecification: priceSpec };
+    }
     return node;
   },
   /* Service « VCA Entreprise » — faits du registre js/trainings-data.js (`vcaEntreprise`), tous affichés sur la page. Le prix est
@@ -218,9 +242,20 @@ const NODES = {
       datePublished: p.published,
       dateModified: p.modified || p.published,
       author: { "@id": ORG_ID },
-      publisher: { "@id": ORG_ID }
+      publisher: { "@id": ORG_ID },
+      ...citationOf(p.id)
     };
   },
+  /* Articles lus en modale sur une page de formation (#article-<slug>) : mêmes règles, URL avec ancre. */
+  articles: (doc) => ({
+    "@type": "ItemList",
+    name: "Articles",
+    itemListElement: Site.pages().filter((p) => p.kind === "article" && p.url.indexOf(doc.file + "#") === 0).map((p, i) => ({
+      "@type": "ListItem", position: i + 1,
+      item: Object.assign({ "@type": "Article", headline: p.title, url: Site.absoluteUrl(doc.file) + p.url.slice(doc.file.length), inLanguage: "fr",
+        datePublished: p.published, dateModified: p.modified || p.published, author: { "@id": ORG_ID }, publisher: { "@id": ORG_ID } }, citationOf(p.id))
+    }))
+  }),
   courseList: () => ({
     "@type": "ItemList",
     name: "Formations Wisy Safety",
@@ -248,6 +283,13 @@ const NODES = {
     }))
   })
 };
+
+/* Sources officielles citées par un article (js/sources-data.js) → propriété schema.org `citation`. */
+function citationOf(pageId) {
+  const ids = Sources.ARTICLE_SOURCES[pageId];
+  if (!ids || !ids.length) return {};
+  return { citation: ids.map((id) => { const d = Sources.doc(id); return { "@type": "CreativeWork", name: d.title, url: d.url, publisher: { "@type": "Organization", name: d.org } }; }) };
+}
 
 function graphFor(doc, meta) {
   return { "@context": "https://schema.org", "@graph": doc.graph.map((k) => NODES[k](doc, meta)) };
@@ -321,9 +363,9 @@ function withBlock(html, block) {
 
 /* ------------------------------------------------------------------ sitemap + robots */
 function sitemap() {
-  const urls = DOCS.map((d) => Site.absoluteUrl(d.file));
+  /* <lastmod> seulement quand une date RÉELLE de modification est connue (jamais une date inventée). */
   return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    urls.map((u) => "  <url><loc>" + u + "</loc></url>").join("\n") + "\n</urlset>\n";
+    DOCS.map((d) => "  <url><loc>" + Site.absoluteUrl(d.file) + "</loc>" + (d.lastmod ? "<lastmod>" + d.lastmod + "</lastmod>" : "") + "</url>").join("\n") + "\n</urlset>\n";
 }
 function robots() {
   return [

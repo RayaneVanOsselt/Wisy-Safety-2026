@@ -130,7 +130,7 @@ WisyFAQ.register("nl", {
   },
   "faq-choisir-vca-difference": {
    "question": "Wat is het verschil tussen VCA Basis en VCA voor Leidinggevenden?",
-   "answer": "- VCA Basis (1 dag): richt zich tot alle medewerkers op het terrein en behandelt de basisprincipes van veiligheid.\n- VCA voor Leidinggevenden (2 dagen): richt zich tot kaderleden en operationeel verantwoordelijken die teams aansturen.",
+   "answer": "- VCA Basis (1 dag): bedoeld voor alle medewerkers op het terrein; behandelt de basisprincipes van veiligheid.\n- VCA voor Leidinggevenden: bedoeld voor wie operationeel personeel aanstuurt; bereidt voor op het officiële VOL-VCA-examen (basisveiligheid plus de kennis die eigen is aan leidinggeven). Beide diploma's zijn 10 jaar geldig.",
    "keywords": [
     "vca",
     "vca basis",
@@ -459,7 +459,7 @@ WisyFAQ.register("nl", {
   },
   "faq-deroulement-duree": {
    "question": "Hoe lang duurt een opleiding?",
-   "answer": "De duur varieert van 1 tot 3 dagen naargelang de opleiding:\n- 1 dag: VCA Basis, Hoogwerker, Di-isocyanaten & gevaarlijke stoffen;\n- 2 dagen: VCA voor Leidinggevenden;\n- 3 dagen: Glasvezel, BEPS — Eerste hulp.",
+   "answer": "De duur hangt af van de opleiding:\n- 1 dag: VCA Basis, Hoogwerker;\n- 3 dagen: BEPS — Eerste hulp;\n- VCA voor Leidinggevenden, Di-isocyanaten & gevaarlijke stoffen en Glasvezel: duur op aanvraag, afhankelijk van de gekozen formule.",
    "keywords": [
     "duur",
     "dagen",
@@ -480,7 +480,7 @@ WisyFAQ.register("nl", {
   },
   "faq-deroulement-theorie-pratique": {
    "question": "Zijn de opleidingen theoretisch of praktisch?",
-   "answer": "Ze combineren over het algemeen theorie en praktijk. De opleiding Hoogwerker combineert bijvoorbeeld een theoretisch deel met praktijkoefeningen, en Glasvezel bevat praktijk op het terrein met het aangeboden materiaal.",
+   "answer": "Ze combineren doorgaans theorie en praktijk. De opleiding Hoogwerker combineert bijvoorbeeld een theoretisch deel met praktijkoefeningen.",
    "keywords": [
     "theorie",
     "praktijk",

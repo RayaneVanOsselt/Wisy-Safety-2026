@@ -52,6 +52,14 @@
   /* VCA Entreprise — SERVICE d'accompagnement (ni formation, ni VCA Base) : 590 € par participant, tarif indicatif, statut TVA
      non précisé — lu dans le registre central js/trainings-data.js (jamais recopié ici ; « Sur devis » si le registre manque). */
   var VCA_ENTREPRISE = (window.WisyTrainings && window.WisyTrainings.vcaEntreprise) || null;
+  /* VCA Ligne hiérarchique, Diisocyanates, Fibre optique : AUCUN tarif confirmé (l'ancien site se contredisait : bordereau
+     295 / 95 / 650 € contre 280–370 € et 200 € sur ses propres pages — docs/content-audit.md). Le registre central porte
+     price: null → « Sur devis » tant que Wisy Safety n'a pas confirmé un tarif par écrit ; il suffira alors de le saisir
+     dans js/trainings-data.js (une seule définition, reprise ici, sur la fiche, dans la recherche et par l'assistant). */
+  function registryPriceCents(key) {
+    var t = window.WisyTrainings && window.WisyTrainings[key];
+    return (t && t.price && t.price.amountCents) || null;
+  }
 
   /* Catégories — clé stable => libellé i18n (résolu dans registration.js) */
   var CATEGORIES = [
@@ -96,7 +104,8 @@
     {
       id: "vca-ligne-hierarchique",
       code: "VCA-LH",
-      priceCents: 29500,
+      priceCents: registryPriceCents("vcaLigneHierarchique"),   /* tarif non confirmé → « Sur devis » */
+      onQuote: !registryPriceCents("vcaLigneHierarchique"),
       unit: "participant",
       category: "certification",
       icon: "hierarchy",
@@ -176,7 +185,8 @@
     {
       id: "fibre-optique",
       code: "FIB",
-      priceCents: 65000,
+      priceCents: registryPriceCents("fibreOptique"),   /* tarif non confirmé → « Sur devis » */
+      onQuote: !registryPriceCents("fibreOptique"),
       unit: "participant",
       category: "telecom",
       icon: "fiber",
@@ -228,7 +238,8 @@
     {
       id: "diisocyanates",
       code: "DIISO",
-      priceCents: 9500,
+      priceCents: registryPriceCents("diisocyanates"),   /* tarif non confirmé → « Sur devis » */
+      onQuote: !registryPriceCents("diisocyanates"),
       unit: "participant",
       category: "securite",
       icon: "hazard",
@@ -245,17 +256,19 @@
         it: "Diisocianati & sostanze pericolose",
         sl: "Diizocianati in nevarne snovi"
       },
+      /* « obligatoire » sans nuance serait inexact : la formation est exigée pour les usages industriels ou professionnels
+         de produits à 0,1 % ou plus de diisocyanates (règlement (UE) 2020/1149) — détail sur la page de la formation. */
       description: {
-        fr: "Formation obligatoire (REACH)",
-        en: "Mandatory training (REACH)",
-        nl: "Verplichte opleiding (REACH)",
-        af: "Verpligte opleiding (REACH)",
-        ar: "تدريب إلزامي (REACH)",
-        bg: "Задължително обучение (REACH)",
-        de: "Verpflichtende Schulung (REACH)",
-        ro: "Formare obligatorie (REACH)",
-        it: "Formazione obbligatoria (REACH)",
-        sl: "Obvezno usposabljanje (REACH)"
+        fr: "Règlement (UE) 2020/1149 — REACH",
+        en: "Regulation (EU) 2020/1149 — REACH",
+        nl: "Verordening (EU) 2020/1149 — REACH",
+        af: "Regulasie (EU) 2020/1149 — REACH",
+        ar: "اللائحة (الاتحاد الأوروبي) 2020/1149 — REACH",
+        bg: "Регламент (ЕС) 2020/1149 — REACH",
+        de: "Verordnung (EU) 2020/1149 — REACH",
+        ro: "Regulamentul (UE) 2020/1149 — REACH",
+        it: "Regolamento (UE) 2020/1149 — REACH",
+        sl: "Uredba (EU) 2020/1149 — REACH"
       }
     }
   ];

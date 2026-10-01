@@ -330,3 +330,18 @@ test("VCA Base : aucune réponse n'affirme un agrément, une accréditation, un 
     assert.doesNotMatch(r.message.replace(/Je ne peux pas affirmer d’agrément[^.]*\./, ""), banned, q + " → " + r.message);
   });
 });
+
+test("comparaison VCA Base ⇄ VCA Ligne hiérarchique → réponse du Centre d'aide, les DEUX formations en cartes", () => {
+  ["Quelle différence entre VCA base et VCA ligne hiérarchique ?", "Quelle différence entre VCA Base et VCA Ligne hiérarchique ?",
+   "VCA base ou VCA ligne hiérarchique, laquelle choisir ?", "Comparer B-VCA et VOL-VCA"].forEach((q) => {
+    const r = Responder.respond(q);
+    assert.equal(r.meta.intent, "faq", q);
+    assert.equal(r.meta.faqId, "faq-choisir-vca-difference", q);
+    assert.deepEqual(r.cards.map((c) => c.id), ["vca-base", "vca-hierarchique"], q);
+  });
+  /* la suggestion proposée par l'assistant lui-même mène bien à cette réponse */
+  const s = Responder.respond("Combien de temps mon diplôme VCA est-il valable ?").suggestions[0];
+  assert.equal(Responder.respond(s).meta.faqId, "faq-choisir-vca-difference");
+  /* une seule formation nommée, sans comparaison : la fiche de CETTE formation */
+  assert.notEqual(Responder.respond("Je cherche la formation VCA ligne hiérarchique").meta.intent, "faq");
+});

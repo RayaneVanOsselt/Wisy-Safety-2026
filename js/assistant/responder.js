@@ -224,6 +224,11 @@
   function isExam(q) { return has(apos(q), ["examen", "examens", "exam", "qcm", "seuil", "reussir", "reussite", "echouer", "echec", "repasser", "combien de questions"]); }
   /* Mots de PRIX explicites (« combien » seul ne suffit pas : « combien de temps est valable le diplôme ? »). */
   function hasPriceWord(q) { return has(q, ["prix", "tarif", "tarifs", "cout", "coute", "coutent", "euro", "euros", "devis"]); }
+  function isVcaComparison(q) {
+    var s = apos(q);
+    return has(s, ["differen", "compar", "choisir", "lequel", "laquelle", "versus", "vs"]) &&
+      has(s, ["base", "b-vca", "bvca"]) && has(s, ["hierarch", "ligne", "vol-vca", "encadr", "cadre"]);
+  }
   function isDiploma(q) { return has(apos(q), ["diplom", "certifi", "attestation", "valable", "validite", "expir", "registre", "verifier", "verification"]); }
   /* Agrément / accréditation / reconnaissance : jamais affirmés sans confirmation de Wisy Safety. */
   /* Obligation légale (« dois-je… », « suis-je concerné ») et sanctions : jamais de montant inventé. */
@@ -409,6 +414,17 @@
     if (Faq) {
       var verbatim = Faq.exact(rawMessage);
       if (verbatim && !RICH_INTENT_FAQ[verbatim.id]) return faqResponse(verbatim, null);
+    }
+
+    /* 2a'') Comparaison VCA Base ⇄ VCA Ligne hiérarchique (« quelle différence… », « laquelle choisir… ») : la réponse du
+       Centre d'aide, qui présente les DEUX formations — sinon la formation la mieux notée masquerait l'autre. */
+    if (Faq && isVcaComparison(q)) {
+      var cmp = Faq.get("faq-choisir-vca-difference");
+      if (cmp) {
+        var cmpRes = faqResponse(cmp, null);
+        cmpRes.cards = [Knowledge.byId("vca-base"), Knowledge.byId("vca-hierarchique")].filter(Boolean).map(trainingCard);
+        return cmpRes;
+      }
     }
 
     /* Formation évoquée dans le message (ou contexte de page) */

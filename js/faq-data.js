@@ -178,8 +178,9 @@
       id: "faq-choisir-vca-difference",
       category: "choisir",
       question: "Quelle est la différence entre la VCA Base et la VCA Ligne hiérarchique ?",
+      /* VCA Ligne hiérarchique : durée NON confirmée (2026-10-01, voir docs/content-audit.md) ; faits officiels BeSaCC-VCA. */
       answer: "- VCA Base (1 jour) : elle s'adresse à l'ensemble des collaborateurs de terrain et couvre les fondamentaux de la sécurité.\n" +
-        "- VCA Ligne hiérarchique (2 jours) : elle vise les cadres et responsables opérationnels qui encadrent des équipes.",
+        "- VCA Ligne hiérarchique : elle vise les personnes qui encadrent du personnel opérationnel et prépare à l'examen officiel VOL-VCA (sécurité de base et connaissances propres à l'encadrement). Les deux diplômes sont valables 10 ans.",
       keywords: ["vca", "vca base", "ligne hiérarchique", "différence", "base", "cadre", "responsable", "encadrement", "b-vca", "vol-vca"],
       synonyms: ["comparer", "lequel choisir", "niveau", "manager", "chef d'équipe", "superviseur"],
       relatedQuestions: ["faq-deroulement-duree", "faq-attestations-vca-examen", "faq-choisir-catalogue"]
@@ -354,10 +355,11 @@
       id: "faq-deroulement-duree",
       category: "deroulement",
       question: "Combien de temps dure une formation ?",
-      answer: "La durée varie de 1 à 3 jours selon la formation :\n" +
-        "- 1 jour : VCA Base, Nacelles élévatrices, Diisocyanates & substances dangereuses ;\n" +
-        "- 2 jours : VCA Ligne hiérarchique ;\n" +
-        "- 3 jours : Fibre optique, BEPS – Premier secours.",
+      /* VCA Ligne hiérarchique, Diisocyanates, Fibre optique : durées NON confirmées (ancien site contradictoire) → « sur demande ». */
+      answer: "La durée dépend de la formation :\n" +
+        "- 1 jour : VCA Base, Nacelles élévatrices ;\n" +
+        "- 3 jours : BEPS – Premier secours ;\n" +
+        "- VCA Ligne hiérarchique, Diisocyanates & substances dangereuses et Fibre optique : durée communiquée sur demande, selon la formule choisie.",
       keywords: ["durée", "jours", "heures", "combien de temps"],
       synonyms: ["combien de jours", "la formation dure", "durée de la formation", "long", "journée", "1 jour", "2 jours", "3 jours", "longueur"],
       relatedQuestions: ["faq-deroulement-comment", "faq-choisir-vca-difference", "faq-inscription-dates"],
@@ -367,7 +369,7 @@
       id: "faq-deroulement-theorie-pratique",
       category: "deroulement",
       question: "Les formations sont-elles théoriques ou pratiques ?",
-      answer: "Elles associent généralement théorie et pratique. La formation Nacelles élévatrices combine par exemple une partie théorique et une mise en pratique, et la Fibre optique comprend une pratique de terrain avec l'équipement fourni.",
+      answer: "Elles associent généralement théorie et pratique. La formation Nacelles élévatrices combine par exemple une partie théorique et une mise en pratique.",
       keywords: ["théorie", "pratique", "exercices", "mise en pratique", "terrain", "équipement"],
       synonyms: ["cours théorique", "travaux pratiques", "matériel", "équipement fourni", "sur machine", "manipulation", "théorique ou pratique"],
       relatedQuestions: ["faq-deroulement-comment", "faq-deroulement-duree", "faq-attestations-recevoir"]
@@ -379,7 +381,7 @@
       answer: "Wisy Safety est un centre de formation situé à Anderlecht (1070), à Bruxelles : " + CONTACT.street + ".\n\n" +
         "Pour une formation organisée dans vos locaux ou une intervention sur site, contactez-nous.",
       keywords: ["lieu", "adresse", "anderlecht", "bruxelles", "localisation", "où"],
-      synonyms: ["où se trouve", "où se situe", "où êtes-vous", "où se déroule", "où a lieu", "accès", "comment venir", "plan", "itinéraire", "transports", "parking", "centre de formation", "situé"],
+      synonyms: ["où se trouve", "où se situe", "où êtes-vous", "vous êtes où", "vous êtes situés où", "c'est où", "où se déroule", "où a lieu", "accès", "comment venir", "plan", "itinéraire", "transports", "parking", "centre de formation", "situé"],
       relatedQuestions: ["faq-entreprises-sur-site", "faq-contact-horaires", "faq-contact-contact"],
       action: "contact"
     },

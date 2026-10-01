@@ -81,6 +81,11 @@
     "faq-tarifs-prix": "page-article-vca-cout",
     "faq-attestations-vca-examen": "page-article-vca-examen"
   };
+  /* Section « Toutes les sources » d'une page formation : c'est là que se trouvent les liens officiels (EUR-Lex,
+     BeSaCC-VCA…). L'assistant y renvoie plutôt que d'afficher lui-même une URL externe (règle de sécurité de validation.js). */
+  function sourcesCard(f) {
+    return { type: "navigation", title: "Sources officielles — " + f.title, description: "Textes officiels cités, avec leur date de vérification.", url: String(f.url).split("#")[0] + "#sources" };
+  }
   function cardsOf() { return Array.prototype.slice.call(arguments).filter(Boolean); }
   function contactCard() {
     return {
@@ -221,6 +226,9 @@
   function hasPriceWord(q) { return has(q, ["prix", "tarif", "tarifs", "cout", "coute", "coutent", "euro", "euros", "devis"]); }
   function isDiploma(q) { return has(apos(q), ["diplom", "certifi", "attestation", "valable", "validite", "expir", "registre", "verifier", "verification"]); }
   /* Agrément / accréditation / reconnaissance : jamais affirmés sans confirmation de Wisy Safety. */
+  /* Obligation légale (« dois-je… », « suis-je concerné ») et sanctions : jamais de montant inventé. */
+  function isObligation(q) { return has(apos(q), ["obligatoire", "obligation", "oblige", "dois je", "dois-je", "doit on", "faut il", "suis je concerne", "concerne", "concernee", "exige", "exigee", "requis", "requise"]); }
+  function isFine(q) { return has(apos(q), ["amende", "amendes", "sanction", "sanctions", "penalite", "penalites", "boete", "contravention", "proces verbal"]); }
   function isAccreditation(q) { return has(apos(q), ["agree", "agrement", "accredit", "reconnu", "reconnue", "reconnaissance", "homologu", "centre d examen", "officiellement"]); }
   function isLocation(q) {
     return has(apos(q), ["ou a lieu", "ou ont lieu", "ou se deroule", "ou se passe", "ou se donne", "ou se trouve", "ou etes", "adresse", "lieu", "localisation", "situe", "venir", "itineraire", "presentiel"]);
@@ -230,6 +238,12 @@
   function joinList(items) {
     if (items.length <= 1) return items.join("");
     return items.slice(0, -1).join(", ") + " et " + items[items.length - 1];
+  }
+  function frLongDate(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ""));
+    if (!m) return String(iso || "");
+    var mois = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+    return (+m[3] === 1 ? "1er" : String(+m[3])) + " " + mois[+m[2] - 1] + " " + m[1];
   }
   function lower(s) { return String(s).charAt(0).toLowerCase() + String(s).slice(1); }
 
@@ -323,6 +337,10 @@
         if (f.priceLabel && f.subtypes) {
           /* fiche riche (tarif + types de nacelles connus) : questions les plus utiles d'abord */
           suggestions = ["Quel est le tarif ?", "Durée de cette formation", "Quels types de nacelles ?", "Comment m’inscrire ?"];
+        } else if (f.official && f.official.regulation) {
+          suggestions = ["Suis-je concerné ?", "La formation est-elle obligatoire ?", "Comment m’inscrire ?", "Contacter Wisy Safety"];
+        } else if (f.official && f.official.exam && !(f.exam && f.exam.included)) {
+          suggestions = ["Comment se passe l’examen ?", "Combien de temps le diplôme est-il valable ?", "Comment m’inscrire ?", "Contacter Wisy Safety"];
         } else if (f.priceLabel && f.exam && f.exam.included) {
           /* fiche à examen inclus (VCA Base) : tarif, examen, prochaines sessions, inscription */
           suggestions = ["Quel est le tarif ?", "L’examen est-il inclus ?", "Prochaines sessions", "Comment m’inscrire ?"];
@@ -397,6 +415,36 @@
     var mentioned = Retrieval.bestFormation(withoutBrand(rawMessage));
     if (!mentioned && opts.context && opts.context.formationId) mentioned = Knowledge.byId(opts.context.formationId);
 
+    /* 2a') Formation à CADRE RÉGLEMENTAIRE sourcé (diisocyanates : règlement (UE) 2020/1149) — obligation, validité, attestation,
+       amende : on ne dit QUE ce que dit le texte officiel du registre (jamais d'avis juridique, jamais de montant d'amende). */
+    var reg = mentioned && mentioned.official && mentioned.official.regulation ? mentioned : null;
+    if (reg && (isFine(q) || isObligation(q) || isCertification(q) || isDiploma(q) || isAccreditation(q) || isAudience(q)) && !hasPriceWord(q)) {
+      var o = reg.official;
+      var core = "Selon le " + o.regulation + " : depuis le " + frLongDate(o.appliesFrom) + ", un produit contenant " + String(o.thresholdPercentWeight).replace(".", ",") +
+        " % ou plus de diisocyanates ne peut être utilisé à titre industriel ou professionnel que par une personne qui a suivi avec succès une formation à leur utilisation sûre (salariés, indépendants et personnes qui supervisent ces tâches). " +
+        "L’employeur ou l’indépendant atteste de la réussite, et la formation est renouvelée au moins tous les " + o.renewalYears + " ans ; le texte ne crée pas de « certificat européen ».";
+      var msg = isFine(q)
+        ? "Le " + o.regulation.replace(/ \(REACH.*$/, "") + " ne fixe aucun montant d’amende, et je ne peux pas vous donner de chiffre non vérifié. Pour les sanctions applicables en Belgique, renseignez-vous auprès du SPF Emploi, Travail et Concertation sociale ou de votre conseiller en prévention. " + core
+        : core + " Pour savoir si un produit précis est concerné, consultez son étiquette et sa fiche de données de sécurité, ou utilisez l’outil « Suis-je concerné ? » de la page.";
+      return {
+        message: msg + " Ce n’est pas un avis juridique : votre conseiller en prévention peut analyser votre situation.",
+        cards: [trainingCard(reg), sourcesCard(reg), contactCard()],
+        suggestions: ["Suis-je concerné ?", "Comment m’inscrire ?", "Contacter Wisy Safety"],
+        sources: [{ title: reg.title, url: String(reg.url).split("#")[0] + "#reglementation" }, { title: "Sources officielles", url: String(reg.url).split("#")[0] + "#sources" }],
+        meta: { intent: isFine(q) ? "regulation_fine" : "regulation_obligation" }
+      };
+    }
+    /* Amende / sanction sans formation nommée : aucune donnée vérifiée → on le dit, sans chiffre. */
+    if (isFine(q) && !mentioned) {
+      return {
+        message: "Je n’ai pas de montant d’amende vérifié, je ne peux donc pas vous en donner. Les sanctions dépendent de la réglementation applicable : renseignez-vous auprès du SPF Emploi, Travail et Concertation sociale ou de votre conseiller en prévention. Pour les diisocyanates, le règlement (UE) 2020/1149 lui-même ne fixe aucun montant.",
+        cards: cardsOf(Knowledge.byId("diisocyanates") ? trainingCard(Knowledge.byId("diisocyanates")) : null, contactCard()),
+        suggestions: ["La formation diisocyanates est-elle obligatoire ?", "Contacter Wisy Safety"],
+        sources: [{ title: "Contact", url: C.contactUrl }],
+        meta: { intent: "fine_unknown" }
+      };
+    }
+
     /* 2b) CACES / certification / agrément : jamais affirmés sans confirmation.
        Concerne les formations qui déclarent des affirmations `unconfirmed`
        (la nacelle) — ou toute mention explicite de CACES / R486. */
@@ -417,10 +465,12 @@
     if (mentioned && mentioned.unconfirmedClaims && isAccreditation(q)) {
       return {
         message: "Je ne peux pas affirmer d’agrément, d’accréditation ou de reconnaissance particulière pour cette formation sans confirmation de l’équipe Wisy Safety. " +
-          "Ce qui est établi : la formation « " + mentioned.title + " » inclut l’examen, et la certification est délivrée après réussite de l’examen. " +
+          (mentioned.exam && mentioned.exam.included
+            ? "Ce qui est établi : la formation « " + mentioned.title + " » inclut l’examen, et la certification est délivrée après réussite de l’examen. "
+            : (mentioned.certification ? "Ce qui est établi : " + mentioned.certification + ". " : "")) +
           "Pour le statut de Wisy Safety, contactez l’équipe.",
         cards: [trainingCard(mentioned), contactCard()],
-        suggestions: ["L’examen est-il inclus ?", "Comment m’inscrire ?"],
+        suggestions: mentioned.exam && mentioned.exam.included ? ["L’examen est-il inclus ?", "Comment m’inscrire ?"] : ["Comment se passe l’examen ?", "Comment m’inscrire ?"],
         sources: [{ title: mentioned.title, url: mentioned.url }, { title: "Contact", url: C.contactUrl }],
         meta: { intent: "certification_unconfirmed" }
       };
@@ -457,7 +507,9 @@
       if (priceFaq) return faqResponse(priceFaq.top.item, priceFaq);
       var px = faqExtras("faq-tarifs-prix");
       return {
-        message: (mentioned ? "À propos de la formation « " + mentioned.title + " » :\n" : "") +
+        message: mentioned && /^formation-[a-z0-9-]+\.html$/.test(String(mentioned.url).split("#")[0])
+          ? "Le tarif de la formation « " + mentioned.title + " » n’est pas affiché sur sa page : l’équipe Wisy Safety vous le communique sur demande, selon la formule et le nombre de participants. Je ne peux pas vous donner de montant non confirmé."
+          : (mentioned ? "À propos de la formation « " + mentioned.title + " » :\n" : "") +
           faqText("faq-tarifs-prix", "Les tarifs dépendent de la formation. Contactez-nous pour recevoir un tarif adapté à votre besoin."),
         cards: [contactCard()],
         suggestions: px.related.length ? px.related : ["Voir les formations disponibles", "Comment s’inscrire ?"],
@@ -577,11 +629,39 @@
         meta: { intent: "formation_exam", faqId: faqExtras("faq-attestations-vca-examen").sources.length ? "faq-attestations-vca-examen" : undefined }
       };
     }
+    /* Examen OFFICIEL d'une formation qui y prépare sans l'inclure (VCA Ligne hiérarchique / VOL-VCA) : faits du registre, diplôme
+       délivré par un centre d'examen reconnu — jamais « examen inclus » ni « Wisy délivre le diplôme ». */
+    if (mentioned && mentioned.official && mentioned.official.exam && !(mentioned.exam && mentioned.exam.included) && isExam(q) && !hasPriceWord(q)) {
+      var ex = mentioned.official.exam;
+      return {
+        message: "La formation « " + mentioned.title + " » prépare à l’examen " + (mentioned.official.diplomaLabel || "officiel") + ". D’après les documents officiels vérifiés le " + frLongDate(mentioned.official.verifiedAt) +
+          " : examen sur ordinateur de " + ex.questions + " questions de plusieurs types, réussi à partir de " + String(ex.passPercent).replace(".", ",") + " %" +
+          (ex.passPoints ? " (" + ex.passPoints + " points sur " + ex.maxPoints + ")" : "") + (ex.minutes ? ", d’une durée de " + ex.minutes + " minutes " + (ex.minutesNote || "") : "") + ". " +
+          (mentioned.certification ? mentioned.certification + ". " : "") + "Le format peut évoluer : vérifiez-le auprès du centre d’examen. Pour l’organisation de l’examen avec votre session, contactez l’équipe Wisy Safety.",
+        cards: [trainingCard(mentioned), sourcesCard(mentioned), contactCard()],
+        suggestions: ["Combien de temps le diplôme est-il valable ?", "Comment m’inscrire ?"],
+        sources: [{ title: mentioned.title, url: mentioned.url + "#examen" }],
+        meta: { intent: "formation_exam" }
+      };
+    }
+    /* « Diplôme VCA » sans autre précision : les deux diplômes de PERSONNES (B-VCA et VOL-VCA) suivent la même règle officielle. */
+    var vB = Knowledge.byId("vca-base"), vL = Knowledge.byId("vca-hierarchique");
+    if (vB && vL && vB.official && vL.official && isDiploma(q) && has(q, ["vca"]) && !hasPriceWord(q) &&
+        !has(apos(q), ["vol", "hierarch", "ligne", "encadr", "chef", "cadre", "superviseur", "entreprise", "base", "b-vca", "bvca"])) {
+      return {
+        message: "Les diplômes VCA de personnes — VCA Base (B-VCA) et VCA Ligne hiérarchique (VOL-VCA) — sont considérés comme valables s’ils datent de moins de " + vL.official.diplomaValidityYears +
+          " ans à compter de la date de l’examen (BeSaCC-VCA). Ils sont délivrés par un centre d’examen reconnu, après réussite de l’examen, et inscrits au registre central des diplômes VCA, où leur validité peut être vérifiée.",
+        cards: [trainingCard(vB), trainingCard(vL), contactCard()],
+        suggestions: ["Quelle différence entre VCA Base et VCA Ligne hiérarchique ?", "Comment m’inscrire ?"],
+        sources: [{ title: vB.title, url: vB.url + "#examen" }, { title: vL.title, url: vL.url + "#examen" }],
+        meta: { intent: "vca_diploma_validity" }
+      };
+    }
     /* Diplôme / certificat / validité : faits officiels du registre (durée de validité, registre central). */
     if (mentioned && mentioned.official && mentioned.official.diplomaValidityYears && isDiploma(q) && !hasPriceWord(q)) {
       return {
         message: "Pour la formation « " + mentioned.title + " » : " + (mentioned.certification ? mentioned.certification + ". " : "") +
-          "Selon BeSaCC-VCA, un diplôme de sécurité de base est considéré comme valable s’il date de moins de " + mentioned.official.diplomaValidityYears +
+          "Selon BeSaCC-VCA, un diplôme " + (mentioned.official.diplomaLabel || "de sécurité de base") + " est considéré comme valable s’il date de moins de " + mentioned.official.diplomaValidityYears +
           " ans à compter de la date de l’examen, et son authenticité peut être vérifiée dans le registre central des diplômes VCA. Pour toute question sur le document remis, contactez l’équipe Wisy Safety.",
         cards: [trainingCard(mentioned), contactCard()],
         suggestions: ["L’examen est-il inclus ?", "Comment m’inscrire ?"],
@@ -605,7 +685,9 @@
     if (mentioned) {
       if (isDuration(q)) {
         return {
-          message: "La formation « " + mentioned.title + " » dure " + mentioned.duration + " (niveau " + mentioned.level.toLowerCase() + ").",
+          message: mentioned.duration
+            ? "La formation « " + mentioned.title + " » dure " + mentioned.duration + " (niveau " + mentioned.level.toLowerCase() + ")."
+            : "La durée de la formation « " + mentioned.title + " » n’est pas publiée sur le site : l’équipe Wisy Safety vous la communique sur demande, selon la formule choisie.",
           cards: [trainingCard(mentioned)],
           suggestions: ["Comment m’inscrire ?", "Voir d’autres formations"],
           sources: [{ title: mentioned.title, url: mentioned.url }],
@@ -660,7 +742,7 @@
       }
       if (isWhere(q) && mentioned.url !== "formations.html#" + mentioned.id) {
         return {
-          message: "Vous trouverez la formation « " + mentioned.title + " » sur sa page dédiée (programme, types de nacelles, FAQ) ainsi que dans le catalogue des formations.",
+          message: "Vous trouverez la formation « " + mentioned.title + " » sur sa page dédiée (" + (mentioned.subtypes && mentioned.id === "nacelle" ? "programme, types de nacelles, FAQ" : "programme, FAQ, sources") + ") ainsi que dans le catalogue des formations.",
           cards: [trainingCard(mentioned)],
           suggestions: ["Quel est le tarif ?", "Comment m’inscrire ?"],
           sources: [{ title: mentioned.title, url: mentioned.url }, { title: "Toutes les formations", url: "formations.html" }],
@@ -669,7 +751,7 @@
       }
       // Fiche générale de la formation
       return {
-        message: "Voici la formation « " + mentioned.title + " » : " + mentioned.description + " Durée : " + mentioned.duration + "." + extraFacts(mentioned),
+        message: "Voici la formation « " + mentioned.title + " » : " + mentioned.description + (mentioned.duration ? " Durée : " + mentioned.duration + "." : "") + extraFacts(mentioned),
         cards: [trainingCard(mentioned)],
         suggestions: ["Comment m’inscrire ?", "Voir d’autres formations", "Contacter Wisy Safety"],
         sources: [{ title: mentioned.title, url: mentioned.url }],

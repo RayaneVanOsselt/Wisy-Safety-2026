@@ -132,7 +132,7 @@ WisyFAQ.register("en", {
   },
   "faq-choisir-vca-difference": {
    "question": "What is the difference between VCA Basic and VCA for Supervisors?",
-   "answer": "- VCA Basic (1 day): it is aimed at all field employees and covers the fundamentals of safety.\n- VCA for Supervisors (2 days): it targets managers and operational supervisors who lead teams.",
+   "answer": "- VCA Basic (1 day): it is aimed at all field employees and covers the fundamentals of safety.\n- VCA for Supervisors: it targets people in charge of operational staff and prepares for the official VOL-VCA exam (basic safety plus the knowledge specific to supervision). Both diplomas are valid for 10 years.",
    "keywords": [
     "vca",
     "vca basic",
@@ -461,7 +461,7 @@ WisyFAQ.register("en", {
   },
   "faq-deroulement-duree": {
    "question": "How long does a course last?",
-   "answer": "The duration varies from 1 to 3 days depending on the course:\n- 1 day: VCA Basic, Aerial work platform, Diisocyanates & hazardous substances;\n- 2 days: VCA for Supervisors;\n- 3 days: Optical fibre, BEPS — First aid.",
+   "answer": "The duration depends on the course:\n- 1 day: VCA Basic, Aerial work platform;\n- 3 days: BEPS — First aid;\n- VCA for Supervisors, Diisocyanates & hazardous substances and Optical fibre: duration provided on request, depending on the option chosen.",
    "keywords": [
     "duration",
     "days",
@@ -482,7 +482,7 @@ WisyFAQ.register("en", {
   },
   "faq-deroulement-theorie-pratique": {
    "question": "Are the courses theoretical or practical?",
-   "answer": "They generally combine theory and practice. The Aerial work platform course, for example, combines a theoretical part with hands-on practice, and Optical fibre includes field practice with the equipment provided.",
+   "answer": "They generally combine theory and practice. The Aerial work platform course, for example, combines a theoretical part with hands-on practice.",
    "keywords": [
     "theory",
     "practice",

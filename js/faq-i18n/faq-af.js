@@ -131,7 +131,7 @@ WisyFAQ.register("af", {
   },
   "faq-choisir-vca-difference": {
    "question": "Wat is die verskil tussen VCA Basis en VCA vir Toesighouers?",
-   "answer": "- VCA Basis (1 dag): dit is gerig op alle werknemers in die veld en dek die grondbeginsels van veiligheid.\n- VCA vir Toesighouers (2 dae): dit rig op bestuurders en operasionele verantwoordelikes wat spanne lei.",
+   "answer": "- VCA Basis (1 dag): vir alle werknemers op die terrein; dek die grondbeginsels van veiligheid.\n- VCA vir Toesighouers: vir mense wat operasionele personeel bestuur; berei voor op die amptelike VOL-VCA-eksamen (basiese veiligheid plus die kennis eie aan toesig). Albei diplomas is 10 jaar geldig.",
    "keywords": [
     "vca",
     "vca basis",
@@ -459,7 +459,7 @@ WisyFAQ.register("af", {
   },
   "faq-deroulement-duree": {
    "question": "Hoe lank duur 'n opleiding?",
-   "answer": "Die duur wissel van 1 tot 3 dae volgens die opleiding:\n- 1 dag: VCA Basis, Hoogwerker, Di-isosianate & gevaarlike stowwe;\n- 2 dae: VCA vir Toesighouers;\n- 3 dae: Optiese vesel, BEPS — Noodhulp.",
+   "answer": "Die duur hang van die opleiding af:\n- 1 dag: VCA Basis, Hoogwerker;\n- 3 dae: BEPS — Noodhulp;\n- VCA vir Toesighouers, Di-isosianate & gevaarlike stowwe en Optiese vesel: duur op aanvraag, na gelang van die gekose formule.",
    "keywords": [
     "duur",
     "dae",
@@ -480,7 +480,7 @@ WisyFAQ.register("af", {
   },
   "faq-deroulement-theorie-pratique": {
    "question": "Is die opleidings teoreties of prakties?",
-   "answer": "Hulle kombineer gewoonlik teorie en praktyk. Die Hoogwerker-opleiding kombineer byvoorbeeld 'n teoretiese deel met praktiese oefening, en Optiese vesel sluit praktyk in die veld in met die toerusting wat verskaf word.",
+   "answer": "Dit kombineer gewoonlik teorie en praktyk. Die opleiding Hoogwerker kombineer byvoorbeeld 'n teoretiese deel met praktiese oefening.",
    "keywords": [
     "teorie",
     "praktyk",

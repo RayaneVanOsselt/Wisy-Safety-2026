@@ -131,7 +131,7 @@ WisyFAQ.register("de", {
   },
   "faq-choisir-vca-difference": {
    "question": "Was ist der Unterschied zwischen VCA Grundlagen und VCA für Führungskräfte?",
-   "answer": "- VCA Grundlagen (1 Tag): richtet sich an alle Mitarbeiter vor Ort und deckt die Grundlagen der Sicherheit ab.\n- VCA für Führungskräfte (2 Tage): richtet sich an Führungs- und Aufsichtskräfte, die Teams leiten.",
+   "answer": "- VCA Grundlagen (1 Tag): für alle Mitarbeitenden vor Ort; behandelt die Grundlagen der Sicherheit.\n- VCA für Führungskräfte: für Personen, die operatives Personal führen; bereitet auf die offizielle VOL-VCA-Prüfung vor (Grundsicherheit plus das für die Führung spezifische Wissen). Beide Diplome sind 10 Jahre gültig.",
    "keywords": [
     "vca",
     "vca grundlagen",
@@ -459,7 +459,7 @@ WisyFAQ.register("de", {
   },
   "faq-deroulement-duree": {
    "question": "Wie lange dauert eine Schulung?",
-   "answer": "Die Dauer variiert je nach Schulung von 1 bis 3 Tagen:\n- 1 Tag: VCA Grundlagen, Hubarbeitsbühne, Diisocyanate & Gefahrstoffe;\n- 2 Tage: VCA für Führungskräfte;\n- 3 Tage: Glasfaser, BEPS — Erste Hilfe.",
+   "answer": "Die Dauer hängt von der Schulung ab:\n- 1 Tag: VCA Grundlagen, Hubarbeitsbühne;\n- 3 Tage: BEPS — Erste Hilfe;\n- VCA für Führungskräfte, Diisocyanate & Gefahrstoffe und Glasfaser: Dauer auf Anfrage, je nach gewählter Variante.",
    "keywords": [
     "dauer",
     "tage",
@@ -480,7 +480,7 @@ WisyFAQ.register("de", {
   },
   "faq-deroulement-theorie-pratique": {
    "question": "Sind die Schulungen theoretisch oder praktisch?",
-   "answer": "Sie verbinden in der Regel Theorie und Praxis. Die Schulung Hubarbeitsbühne kombiniert beispielsweise einen theoretischen Teil mit praktischer Anwendung, und Glasfaser umfasst Praxis vor Ort mit der bereitgestellten Ausrüstung.",
+   "answer": "Sie verbinden in der Regel Theorie und Praxis. Die Schulung Hubarbeitsbühne kombiniert zum Beispiel einen theoretischen Teil mit praktischen Übungen.",
    "keywords": [
     "theorie",
     "praxis",

@@ -131,7 +131,7 @@ WisyFAQ.register("it", {
   },
   "faq-choisir-vca-difference": {
    "question": "Qual è la differenza tra VCA base e VCA per responsabili?",
-   "answer": "- VCA base (1 giorno): è rivolto a tutti i collaboratori sul campo e copre i fondamenti della sicurezza.\n- VCA per responsabili (2 giorni): è destinato ai dirigenti e ai responsabili operativi che coordinano squadre.",
+   "answer": "- VCA base (1 giorno): si rivolge a tutto il personale sul campo e copre i fondamenti della sicurezza.\n- VCA per responsabili: si rivolge a chi coordina personale operativo e prepara all'esame ufficiale VOL-VCA (sicurezza di base più le conoscenze proprie del ruolo di responsabile). Entrambi i diplomi sono validi 10 anni.",
    "keywords": [
     "vca",
     "vca base",
@@ -459,7 +459,7 @@ WisyFAQ.register("it", {
   },
   "faq-deroulement-duree": {
    "question": "Quanto dura un corso?",
-   "answer": "La durata varia da 1 a 3 giorni a seconda del corso:\n- 1 giorno: VCA base, Piattaforma elevatrice, Diisocianati & sostanze pericolose;\n- 2 giorni: VCA per responsabili;\n- 3 giorni: Fibra ottica, BEPS — Primo soccorso.",
+   "answer": "La durata dipende dal corso:\n- 1 giorno: VCA base, Piattaforma elevatrice;\n- 3 giorni: BEPS — Primo soccorso;\n- VCA per responsabili, Diisocianati & sostanze pericolose e Fibra ottica: durata comunicata su richiesta, secondo la formula scelta.",
    "keywords": [
     "durata",
     "giorni",
@@ -480,7 +480,7 @@ WisyFAQ.register("it", {
   },
   "faq-deroulement-theorie-pratique": {
    "question": "I corsi sono teorici o pratici?",
-   "answer": "In genere uniscono teoria e pratica. Il corso piattaforma elevatrice combina, ad esempio, una parte teorica e una messa in pratica, e Fibra ottica comprende una pratica sul campo con l'attrezzatura fornita.",
+   "answer": "In genere combinano teoria e pratica. Il corso Piattaforma elevatrice, ad esempio, unisce una parte teorica a esercitazioni pratiche.",
    "keywords": [
     "teoria",
     "pratica",

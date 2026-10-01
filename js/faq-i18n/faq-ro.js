@@ -130,7 +130,7 @@ WisyFAQ.register("ro", {
   },
   "faq-choisir-vca-difference": {
    "question": "Care este diferența dintre VCA de bază și VCA pentru personalul de conducere?",
-   "answer": "- VCA de bază (1 zi): se adresează tuturor colaboratorilor din teren și acoperă noțiunile fundamentale de siguranță.\n- VCA pentru personalul de conducere (2 zile): vizează cadrele și responsabilii operaționali care coordonează echipe.",
+   "answer": "- VCA de bază (1 zi): se adresează tuturor angajaților de pe teren și acoperă noțiunile fundamentale de securitate.\n- VCA pentru personalul de conducere: se adresează persoanelor care coordonează personal operativ și pregătește pentru examenul oficial VOL-VCA (securitate de bază plus cunoștințele specifice conducerii). Ambele diplome sunt valabile 10 ani.",
    "keywords": [
     "vca",
     "vca de bază",
@@ -458,7 +458,7 @@ WisyFAQ.register("ro", {
   },
   "faq-deroulement-duree": {
    "question": "Cât durează o formare?",
-   "answer": "Durata variază de la 1 la 3 zile în funcție de formare:\n- 1 zi: VCA de bază, Nacelă elevatoare, Diizocianați & substanțe periculoase;\n- 2 zile: VCA pentru personalul de conducere;\n- 3 zile: Fibră optică, BEPS — Prim ajutor.",
+   "answer": "Durata depinde de curs:\n- 1 zi: VCA de bază, Nacelă elevatoare;\n- 3 zile: BEPS — Prim ajutor;\n- VCA pentru personalul de conducere, Diizocianați & substanțe periculoase și Fibră optică: durata se comunică la cerere, în funcție de formula aleasă.",
    "keywords": [
     "durată",
     "zile",
@@ -479,7 +479,7 @@ WisyFAQ.register("ro", {
   },
   "faq-deroulement-theorie-pratique": {
    "question": "Formările sunt teoretice sau practice?",
-   "answer": "În general asociază teoria cu practica. Formarea nacele elevatoare combină, de exemplu, o parte teoretică cu o punere în practică, iar Fibră optică cuprinde practică pe teren cu echipamentul furnizat.",
+   "answer": "Ele combină de obicei teoria și practica. Cursul Nacelă elevatoare, de exemplu, combină o parte teoretică cu exerciții practice.",
    "keywords": [
     "teorie",
     "practică",

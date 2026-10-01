@@ -41,7 +41,24 @@
 .fx-figure { margin: 0; position: relative; }
 .fx-figure img { width: 100%; height: auto; aspect-ratio: 5 / 4; object-fit: cover; border-radius: var(--radius); background: var(--brume-08); }
 .fx-figure figcaption { margin-top: .6rem; font-size: var(--fs-micro); color: var(--granit); }
-@media (max-width: 1023px) { .fx-hero__media { display: none; } }
+@media (max-width: 1023px) {
+  .fx-hero__media { display: none; }
+  /* Mobile : les informations essentielles (et leurs boutons) suivent immédiatement le titre — visibles sans défiler.
+     Les appels à l'action de l'en-tête font doublon avec ceux de la fiche et de la barre d'action collante. */
+  .fx-hero .fx-cta-row, .fx-hero .fx-verified { display: none; }
+  .fx-hero { padding-bottom: 1.25rem; }
+  .fx-lead { margin-bottom: .5rem; }
+  .fx-body { padding-top: 1.25rem; }
+}
+@media (max-width: 599px) {
+  .fx-h1 { font-size: 1.8rem; margin-bottom: .6rem; }
+  .fx-kicker { margin-bottom: .6rem; }
+  .fx-lead { font-size: 1rem; line-height: 1.5; }
+  .fx-bc { padding-block: .75rem .25rem; }
+  .fx-card { padding: 1rem; }
+  .fx-fact { padding-block: .45rem; }
+  .fx-fact dd { font-size: .92rem; }
+}
 
 /* Plaque réglementaire (page diisocyanates) : le cadre légal tient lieu d'image de tête */
 .fx-plate { border: 1px solid var(--fx-rule); border-radius: var(--radius); background: #fff; padding: clamp(1.25rem, 2.5vw, 1.75rem); box-shadow: var(--shadow-sm); }
@@ -80,7 +97,7 @@
 .fx-sec { padding-block: clamp(1.75rem, 3.5vw, 2.75rem); border-top: 1px solid var(--fx-rule); scroll-margin-top: var(--header-offset, 96px); }
 .fx-sec:first-child { border-top: 0; padding-top: 0; }
 .fx-sec__head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .25rem 1rem; align-items: baseline; margin-bottom: 1.25rem; }
-.fx-num { font-family: var(--font-titre); font-weight: 700; font-size: .95rem; color: var(--brume); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+.fx-num { font-family: var(--font-titre); font-weight: 700; font-size: .95rem; color: var(--sarcelle); font-variant-numeric: tabular-nums; letter-spacing: .04em; }
 .fx-sec__head h2 { font-size: var(--fs-h3); margin: 0; }
 .fx-sec__head p { grid-column: 2; margin: .35rem 0 0; color: var(--granit); max-width: var(--fx-col); }
 .fx-prose { max-width: var(--fx-col); }
@@ -97,7 +114,7 @@
 /* Liste numérotée sobre (programme, étapes) */
 .fx-steps { counter-reset: fx; list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
 .fx-steps > li { counter-increment: fx; display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); gap: .75rem; padding-block: .7rem; border-bottom: 1px solid var(--fx-rule); }
-.fx-steps > li::before { content: counter(fx, decimal-leading-zero); font-family: var(--font-titre); font-weight: 700; color: var(--granit-clair); font-variant-numeric: tabular-nums; }
+.fx-steps > li::before { content: counter(fx, decimal-leading-zero); font-family: var(--font-titre); font-weight: 700; color: var(--granit); font-variant-numeric: tabular-nums; }
 .fx-steps--2col { column-gap: 2rem; }
 @media (min-width: 720px) { .fx-steps--2col { grid-template-columns: 1fr 1fr; } }
 .fx-steps b { display: block; font-family: var(--font-titre); font-weight: 600; }
@@ -229,6 +246,9 @@
 
 /* ---------- Page autonome d'un article (article-fibre-*.html) ---------- */
 .am-page .am-article { padding-top: .5rem; }
+/* Page autonome : le titre de l'article est le h1, ses intertitres deviennent des h2 / h3 (même rendu que dans la modale). */
+.am-page .am-article__body h2 { font-size: 1.2rem; margin: 1.75rem 0 .6rem; }
+.am-page .am-article__body h3 { font-size: 1rem; margin: 1.25rem 0 .4rem; }
 .am-page .am-article__title { font-size: clamp(1.9rem, 4vw, 2.8rem); }
 
 /* ---------- Mouvement réduit ---------- */

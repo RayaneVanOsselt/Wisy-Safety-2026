@@ -65,3 +65,4 @@
 @media (prefers-reduced-motion: reduce) {
   .am-dialog[open], .am-dialog::backdrop { animation: none; }
 }
+.am-table-wrap:focus-visible { outline: 3px solid var(--brume); outline-offset: 2px; }

@@ -13,7 +13,9 @@ assets/
 │   ├── beps/         Photo + illustrations d'accent de la page Formation BEPS
 │   ├── contact/      Photo de la page Contact
 │   ├── coordination/ Photo hero de la page WiSy Coordination
+│   ├── diisocyanates/ Visuels des 3 articles de la page Formation Diisocyanates + miniature de recherche
 │   ├── faq/          Décor du Centre d'aide
+│   ├── fibre-optique/ Visuels des 2 articles fibre (modale + pages d'articles) + miniature de recherche
 │   ├── formations/   Photos des 6 formations (catalogue + inscription)
 │   ├── logo/         Logo Wisy Safety (voir ci-dessous)
 │   ├── nacelles/     Photos de la page Formation Nacelles
@@ -21,7 +23,8 @@ assets/
 │   ├── partage/      Images affichées quand on partage un lien (Facebook, LinkedIn, WhatsApp…)
 │   ├── partenaires/  Logos des partenaires (bandeau de l'accueil)
 │   ├── vca-base/     Photos des deux articles VCA Base + miniature de recherche
-│   └── vca-entreprise/  Page VCA Entreprise : affiche du film (3 tailles × AVIF/WebP) + mascotte détourée (2 tailles × AVIF/WebP)
+│   ├── vca-entreprise/  Page VCA Entreprise : affiche du film (3 tailles × AVIF/WebP) + mascotte détourée (2 tailles × AVIF/WebP)
+│   └── vca-ligne-hierarchique/  Visuels des 3 dossiers de la page VCA Ligne hiérarchique + miniature de recherche
 ├── videos/
 │   ├── accueil/      Vidéo de l'accueil : animation du logo (2 versions + 2 affiches) ; poster.webp (affiche de l'ancienne vidéo)
 │   └── vca-entreprise/  Film de présentation VCA Entreprise AVEC SON : 720p (6,5 Mo) et 1080p (9,8 Mo), chargés seulement au clic sur « lecture »
@@ -65,5 +68,6 @@ s'ils échouent, ils indiquent le fichier en cause.
 | `images/coordination/` | `coordination.html` |
 | `images/partage/` | aperçu des liens partagés (balises générées par `scripts/build-seo.js`) |
 | `images/logo/`, `icons/` | en-tête, pied de page, onglet du navigateur, données envoyées à Google |
+| `images/vca-ligne-hierarchique/`, `images/diisocyanates/`, `images/fibre-optique/` | pages `formation-vca-ligne-hierarchique.html`, `formation-diisocyanates.html`, `formation-fibre-optique.html` (cartes et modale des articles), pages `article-fibre-*.html`, aperçu dans la recherche — visuels générés par IA, à remplacer : voir [docs/images-manifest.md](../docs/images-manifest.md) |
 | `videos/accueil/` | `index.html` : animation du logo (hero + intro) — voir [docs/README-ACCUEIL.md](../docs/README-ACCUEIL.md) |
 | `videos/vca-entreprise/`, `images/vca-entreprise/` | `vca-entreprise.html` : film (avec son), affiche et mascotte — voir [docs/README-VCA-ENTREPRISE.md](../docs/README-VCA-ENTREPRISE.md) |

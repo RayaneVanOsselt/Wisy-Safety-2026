@@ -34,7 +34,7 @@ test("noms propres : minuscules, chiffres, tirets — sans espace, sans accent, 
 
 test("dossiers connus : chaque image est rangée dans un dossier prévu (voir assets/README.md)", () => {
   const TOP = ["fonts", "icons", "images", "videos", "originaux"];
-  const IMAGES = ["assistant", "beps", "contact", "coordination", "faq", "formations", "logo", "nacelles", "partage", "partenaires", "peb", "vca-base", "vca-entreprise"];
+  const IMAGES = ["assistant", "beps", "contact", "coordination", "diisocyanates", "faq", "fibre-optique", "formations", "logo", "nacelles", "partage", "partenaires", "peb", "vca-base", "vca-entreprise", "vca-ligne-hierarchique"];
   const bad = [];
   FILES.forEach((f) => {
     const [, a, b] = f.split("/");

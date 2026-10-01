@@ -15,37 +15,46 @@
 
   /* ---------------- ENGLISH ---------------- */
   m("en", {
+    "meta.title": "Career paths in optical fibre | Wisy Safety"
   });
 
   /* ---------------- NEDERLANDS ---------------- */
   m("nl", {
+    "meta.title": "Loopbanen in de glasvezel | Wisy Safety"
   });
 
   /* ---------------- AFRIKAANS ---------------- */
   m("af", {
+    "meta.title": "Loopbaanroetes in optiese vesel | Wisy Safety"
   });
 
   /* ---------------- العربية ---------------- */
   m("ar", {
+    "meta.title": "المسارات المهنية في الألياف الضوئية | Wisy Safety"
   });
 
   /* ---------------- БЪЛГАРСКИ ---------------- */
   m("bg", {
+    "meta.title": "Професионални пътища в оптичните влакна | Wisy Safety"
   });
 
   /* ---------------- DEUTSCH ---------------- */
   m("de", {
+    "meta.title": "Berufswege in der Glasfasertechnik | Wisy Safety"
   });
 
   /* ---------------- ROMÂNĂ ---------------- */
   m("ro", {
+    "meta.title": "Parcursuri profesionale în fibra optică | Wisy Safety"
   });
 
   /* ---------------- ITALIANO ---------------- */
   m("it", {
+    "meta.title": "Percorsi professionali nella fibra ottica | Wisy Safety"
   });
 
   /* ---------------- SLOVENŠČINA ---------------- */
   m("sl", {
+    "meta.title": "Poklicne poti v optičnih vlaknih | Wisy Safety"
   });
 })();

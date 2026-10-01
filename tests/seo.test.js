@@ -108,7 +108,8 @@ test("plus de hreflang relatifs ni de balises SEO en double (le bloc généré e
 
 /* ------------------------------------------------------------------ données structurées */
 test("JSON-LD : valide, types autorisés, une Organisation dont les faits = coordonnées du site", () => {
-  const ALLOWED = new Set(["EducationalOrganization", "LocalBusiness", "WebSite", "BreadcrumbList", "ListItem", "ItemList", "Course", "Article", "ContactPage", "PostalAddress", "GeoCoordinates", "OpeningHoursSpecification", "Offer", "Service", "BusinessAudience", "UnitPriceSpecification", "PriceSpecification"]);
+  /* CreativeWork + Organization : propriété `citation` des articles (sources officielles citées, js/sources-data.js). */
+  const ALLOWED = new Set(["EducationalOrganization", "LocalBusiness", "WebSite", "BreadcrumbList", "ListItem", "ItemList", "Course", "Article", "ContactPage", "PostalAddress", "GeoCoordinates", "OpeningHoursSpecification", "Offer", "Service", "BusinessAudience", "UnitPriceSpecification", "PriceSpecification", "CreativeWork", "Organization"]);
   PUBLIC.forEach((f) => {
     const blocks = ldBlocks(read(f));
     assert.equal(blocks.length, 1, f + " : un seul bloc JSON-LD statique (le FAQPage de faq.html est injecté à l'exécution)");
@@ -174,7 +175,7 @@ test("VCA Base : la fiche Course reprend le registre (prix, durée) ; langues NO
 
 test("articles : og:type article, dates du registre AFFICHÉES, auteur = l'organisation, image de partage propre", () => {
   const arts = SEO.DOCS.filter((d) => d.ogType === "article");
-  assert.equal(arts.length, 2);
+  assert.equal(arts.length, 4, "2 articles VCA Base + 2 articles fibre optique (pages autonomes)");
   arts.forEach((d) => {
     const html = read(d.file), h = head(html), meta = SEO.metaOf(html);
     const page = Site.pages().find((p) => p.url === d.file), art = ldBlocks(html)[0]["@graph"].find((n) => n["@type"] === "Article");
@@ -188,10 +189,10 @@ test("articles : og:type article, dates du registre AFFICHÉES, auteur = l'organ
     assert.equal(art.inLanguage, "fr");
     /* la date de publication est celle AFFICHÉE (« 26 septembre 2026 ») */
     const [y, m, dd] = page.published.split("-"), mois = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-    assert.ok(strip(html).includes(+dd + " " + mois[+m - 1] + " " + y), d.file + " : date de publication non affichée");
+    assert.ok(strip(html).includes((+dd === 1 ? "1er" : +dd) + " " + mois[+m - 1] + " " + y), d.file + " : date de publication non affichée");
     assert.doesNotMatch(JSON.stringify(art), /"Person"|aggregateRating|"Review"/, "aucun auteur ni avis inventé");
   });
-  assert.notEqual(arts[0].image.file, arts[1].image.file, "une image de partage par article");
+  assert.equal(new Set(arts.map((a) => a.image.file)).size, arts.length, "une image de partage par article");
 });
 
 test("les pages françaises-seulement n'affirment rien qu'elles n'affichent pas : aucune Review/AggregateRating/FAQPage statique/Event", () => {

@@ -27,8 +27,9 @@ test("« Combien coûte cette formation ? » → PRIX NON INVENTÉ + contact (te
   const r = Responder.respond("Combien coûte la formation VCA hiérarchique ?");
   assert.equal(r.meta.intent, "price_unavailable");
   assert.ok(hasCardType(r, "contact"));
-  assert.match(r.message.toLowerCase(), /les tarifs varient selon la formation/);
-  assert.match(r.message.toLowerCase(), /contactez-nous/);
+  /* Fiche dédiée sans tarif confirmé (2026-10-01) : on le dit, montant communiqué sur demande, jamais deviné. */
+  assert.match(r.message.toLowerCase(), /communique sur demande/);
+  assert.match(r.message.toLowerCase(), /montant non confirmé/);
   assert.ok(!/\d+\s?€/.test(r.message), "aucun prix chiffré inventé");
 });
 
@@ -216,7 +217,8 @@ test("RÉGRESSION : « Combien de temps / de jours dure la formation ? » sur la
 test("« Combien de temps dure la formation ? » sans contexte → réponse générale honnête, aucune formation au hasard", () => {
   const r = Responder.respond("Combien de temps dure la formation ?");
   assert.equal(r.meta.intent, "faq");
-  assert.match(r.message, /1 à 3 jours/);
+  assert.match(r.message, /La durée dépend de la formation/);
+  assert.match(r.message, /communiquée sur demande/, "durées non confirmées : sur demande, jamais devinées");
   assert.ok(!(r.cards || []).some((c) => c.type === "training"), "pas de carte formation au hasard");
 });
 
@@ -267,7 +269,8 @@ test("VCA Base : examen inclus → faits OFFICIELS du registre (40 questions, 60
 
 test("VCA Base : diplôme / validité → faits officiels ; agrément / reconnaissance → JAMAIS affirmés, contact proposé", () => {
   const d = Responder.respond("Le diplôme VCA est valable combien de temps ?");
-  assert.equal(d.meta.intent, "formation_certification");
+  /* « diplôme VCA » sans précision : la règle officielle commune aux deux diplômes de personnes (B-VCA, VOL-VCA). */
+  assert.ok(["formation_certification", "vca_diploma_validity"].includes(d.meta.intent), d.meta.intent);
   assert.match(d.message, /moins de 10 ans/);
   ["La formation VCA est-elle agréée ?", "Wisy Safety est-il un centre d’examen accrédité pour la VCA ?", "Le diplôme VCA est-il reconnu ?"].forEach((q) => {
     const r = Responder.respond(q);

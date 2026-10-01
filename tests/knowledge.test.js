@@ -28,7 +28,10 @@ test("formations : url = fiche (ancre catalogue OU page dédiée existante), sig
       assert.ok(fs.existsSync(path.join(__dirname, "..", f.url)), "la page dédiée existe : " + f.url);
     }
     assert.match(f.signupUrl, /^inscription\.html\?formation=/, "signup " + f.id);
-    assert.ok(f.duration && /jour|heure/.test(f.duration), "durée " + f.id);
+    /* Durée NON confirmée (registre : durationDays/durationHours null — fiches 2026-10-01) : absente, jamais devinée. */
+    const T = require("../js/trainings-data.js").get(f.id);
+    if (T && T.durationDays == null && T.durationHours == null) assert.equal(f.duration, null, "durée non confirmée, jamais affirmée : " + f.id);
+    else assert.ok(f.duration && /jour|heure/.test(f.duration), "durée " + f.id);
   });
 });
 

@@ -177,7 +177,8 @@ test("aucune date de session écrite dans une page HTML (les dates ne viennent q
   const V = require("../js/trainings-data.js").vcaBase.official.verifiedAt.split("-");
   const NOMS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
   const verified = +V[2] + " " + NOMS[+V[1] - 1] + " " + V[0];
-  const ALLOWED = new Set(["7 avril 2023", "15 avril 2023", verified]);
+  /* + date RÉGLEMENTAIRE (règlement (UE) 2020/1149, carte Diisocyanates du catalogue) — pas une session. */
+  const ALLOWED = new Set(["7 avril 2023", "15 avril 2023", "24 août 2023", verified]);
   ["formation-vca-base.html", "agenda.html", "inscription.html", "formations.html", "index.html", "article-vca-cout-financement.html", "article-vca-erreurs-examen.html"].forEach((f) => {
     const t = strip(read(f)), found = [...t.matchAll(new RegExp("\\b\\d{1,2}(?:er)?\\s+(?:" + MOIS + ")\\s+20\\d{2}\\b", "gi"))].map((m) => m[0]).filter((d) => !ALLOWED.has(d));
     assert.deepEqual(found, [], f + " : date écrite en dur (les sessions ne viennent que de js/sessions-data.js ou de Supabase)");

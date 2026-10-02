@@ -6,6 +6,10 @@ vrai navigateur (script d'audit injecté : débordement, médias, titres, contra
 JSON-LD, ressources), balayage responsive dans des cadres de 320 à 1440 px, parcours d'inscription, menu mobile,
 étude de 6 systèmes de design sur styles.refero.design et de 6 concurrents (§16).
 
+> **Mise à jour du 02/10/2026 (fin de journée)** : les corrections faites après l'audit, leurs commits et les
+> vérifications sont listés au **§24**. Trois constats se sont révélés être des faux positifs (M13, M16, m5) ; trois
+> nouveaux problèmes ont été trouvés en corrigeant (§24.2).
+
 Niveaux de gravité : **Critique** (perte de clients, de crédibilité ou risque juridique), **Majeur** (dégrade nettement
 l'expérience, l'accessibilité ou le référencement), **Moyen**, **Mineur**.
 
@@ -102,7 +106,8 @@ pastilles + image », pastilles et cartes partout, un gabarit différent par pag
 ## 7. Responsive Audit
 
 Balayage automatique des 24 pages à **320, 375, 390, 430, 768, 1024 et 1440 px** : **aucun débordement horizontal**.
-Problèmes : hauteur de l'en-tête sur mobile (M5), bandeau cookies (M6), cibles tactiles trop petites (M10).
+Problèmes : hauteur de l'en-tête sur mobile (M5), bandeau cookies (M6), cibles tactiles trop petites (M10), pied de
+page très long sur mobile (m15 : ≈ 2 100 px à 375 px, soit 2,6 écrans, mesuré sur l'accueil, Contact et Fibre optique).
 
 ## 8. Accessibility Audit (WCAG 2.2 AA)
 
@@ -111,9 +116,9 @@ Problèmes : hauteur de l'en-tête sur mobile (M5), bandeau cookies (M6), cibles
 | 1.4.3 Contraste | 14 éléments sous le seuil (M9) |
 | 2.4.1 Contourner des blocs | Pas de lien d'évitement sur 9 pages (M8) |
 | 2.5.8 Taille des cibles | Liens du bandeau et du pied de page à 19–23 px de haut, cases à cocher de 13 px (M10) |
-| 1.3.1 Titres | Sauts H1 → H3 sur 4 pages (M13) |
-| 4.1.2 Nom accessible | 1 lien sans nom sur Coordination (M16) |
-| 2.4.3 Ordre du focus | Menu mobile : l'arrière-plan reste focalisable (M15) |
+| 1.3.1 Titres | ~~Sauts H1 → H3 sur 4 pages (M13)~~ : faux positif, la hiérarchie du code source est correcte (§24.3) |
+| 4.1.2 Nom accessible | ~~1 lien sans nom sur Coordination (M16)~~ : faux positif, lien décoratif `aria-hidden` et hors tabulation (§24.3) |
+| 2.4.3 Ordre du focus | Menu mobile : l'arrière-plan reste focalisable (M15) ; menu **fermé** encore atteignable au clavier (N1, §24.2) |
 | 2.3.3 Mouvement | `prefers-reduced-motion` respecté |
 | Formulaires | Tous les champs ont une étiquette |
 
@@ -142,8 +147,9 @@ Problèmes : hauteur de l'en-tête sur mobile (M5), bandeau cookies (M6), cibles
 
 ## 11. Content & Data Reliability
 
-Voir C2 et C3. Aussi, préexistant : compteurs de l'accueil (« 500+ », « 10+ », « 250+ », « 100 % »), de l'agenda et
-de PEB, sans source (imposés par des tests existants). Les 3 nouvelles formations sont sourcées
+Voir C2 et C3. Aussi, préexistant : compteurs de l'accueil (« 500+ », « 10+ », « 250+ », « 100 % »), de l'agenda,
+de PEB et de Contact, sans source (imposés par des tests existants). Page Contact : carte « Conseillers habilités ·
+N1 · N2 · PEB · VCA », traduite par « Certified advisors », « Erkende adviseurs », « Zugelassene Berater »… (N3, §24.2). Les 3 nouvelles formations sont sourcées
 (`docs/content-sources.md`).
 
 ## 12. Media Audit
@@ -240,10 +246,10 @@ signature.
 | M10 | Cibles tactiles < 24 px | bandeau utilitaire, contacts du pied de page, liens « fx-link », cases de consentement 13–18 px | WCAG 2.5.8, erreurs au doigt | `line-height` serré, pas de zone de clic | `min-height: 24px` (44 px pour les actions principales) | Faible |
 | M11 | Titres > 60 et descriptions > 155 caractères | 4 + 11 pages | Textes coupés dans Google | Rédaction | Raccourcir | Faible |
 | M12 | 9 langues non indexables | moteur i18n | Aucun trafic organique NL/EN | Une URL par page, traduction côté navigateur | URL par langue (`/nl/…`) + `hreflang`, en commençant par le néerlandais | Élevé (chantier) |
-| M13 | Sauts de niveau de titre | index, formations, agenda, contact | Navigation par titres confuse | H3 directement sous H1 | Corriger la hiérarchie | Faible |
+| ~~M13~~ | ~~Sauts de niveau de titre~~ — **faux positif** (§24.3) | index, formations, agenda, contact | — | — | Aucune action | — |
 | M14 | 3 tests en échec | `tests/site-content.test.js`, `tests/assets-structure.test.js` | CI rouge, vraies régressions masquées | Service VCA Entreprise partiellement relié au registre ; guide manquant | Relier `vca-entreprise` au registre et ajouter le guide | Faible |
 | M15 | Menu mobile : focus non piégé | script du menu (`js/main.js`, `js/site-chrome.js`) | Au clavier, on tabule derrière le menu ouvert | Pas d'`inert` sur le reste de la page | `inert` sur `main` et le pied de page tant que le menu est ouvert, focus sur le premier lien | Faible |
-| M16 | Lien sans nom accessible | `coordination.html` (`#co-why`) | Lecteur d'écran : « lien » sans texte | Lien icône | `aria-label` | Faible |
+| ~~M16~~ | ~~Lien sans nom accessible~~ — **faux positif** (§24.3) | `coordination.html` (`#co-why`) | — | — | Aucune action | — |
 | M17 | En-tête du catalogue générique | `formations.html` | Zone vide, pastilles, aucun message fort | Gabarit | Refonte avec une vraie entrée en matière (après C2) | Moyen |
 
 ## 19. Medium Issues
@@ -254,16 +260,17 @@ signature.
 | m2 | Codes langue peu contrastés dans le sélecteur | menu langue | Granit au lieu de #9AA8A4 |
 | m3 | Socle CSS copié dans 24 pages | toutes les pages | Le sortir dans un fichier CSS mis en cache |
 | m4 | « Title Case » anglais sur des titres français | catalogue et autres | Majuscule initiale seulement |
-| m5 | 7 images sans `width`/`height` | `inscription.html` | Ajouter les dimensions (CLS) |
+| ~~m5~~ | ~~7 images sans `width`/`height`~~ — **faux positif** (§24.3) | `inscription.html` | Aucune action |
 | m6 | Image 1024 px affichée à 216 px | accueil (`beps.webp`) | `srcset` |
 | m7 | Vidéo VCA Entreprise 1080p : 9,8 Mo | `assets/videos/vca-entreprise/` | Réencoder (CRF plus élevé) |
-| m8 | Compteurs non sourcés (« 500+ », « 100 % »…) | accueil, agenda, PEB | Retirer ou sourcer (tests à adapter) |
+| m8 | Compteurs non sourcés (« 500+ », « 100 % »…) | accueil, agenda, PEB, Contact | Retirer ou sourcer (tests à adapter) |
 | m9 | Données des participants gardées sans expiration | `localStorage` de l'inscription | Effacer après envoi, expirer après 7 jours |
 | m10 | Pas d'en-têtes de sécurité | GitHub Pages | Hébergeur avec en-têtes (CSP, Referrer-Policy…) |
 | m11 | Pas de 301 pour l'ancien site | hébergement | Voir `docs/redirects.md` |
 | m12 | Photos génériques (« Photo d'illustration », visuels IA) sur les fiches | fiches | Remplacer par des photos réelles de Wisy |
 | m13 | Deux appels à l'action de même poids partout | fiches, catalogue | Un bouton principal, l'autre en lien |
 | m14 | Pas de preuves sur les fiches (avis, formateurs) | fiches | Avis réels (page Avis) et formateurs nommés, après accord |
+| m15 | Pied de page ≈ 2 100 px sur mobile (2,6 écrans) | toutes les pages | Colonnes repliables sur mobile, bloc d'appel à l'action raccourci |
 
 ## 20. Minor Issues
 
@@ -297,3 +304,56 @@ d'évitement), M9 (contrastes), M10 (cibles), M11 (titres et descriptions), M13 
 | 3 | S1 données et calendrier, C3 examen VCA, S2 photos | **Wisy Safety** puis développement |
 | 4 | M4 / S5 allègement, M12 / S4 néerlandais indexable, m3 socle CSS | développement |
 | 5 | Hébergement avec en-têtes et 301 (m10, m11), bascule du domaine | Wisy Safety + développement |
+
+---
+
+## 24. Corrections apportées (02/10/2026)
+
+Chaque série a été suivie de la suite de tests (les 3 échecs préexistants VCA Entreprise, M14, restent les seuls),
+de `scripts/check-i18n.js` (aucune erreur) et de `scripts/build-seo.js --check` (à jour).
+
+### 24.1 Constats de l'audit corrigés
+
+| # | Correction | Commit |
+|---|---|---|
+| C1 | L'étape finale de l'inscription **envoie la demande** à Wisy Safety (EmailJS, même gabarit que Contact), affiche une référence, efface les données du navigateur après envoi ; en cas d'échec, lien e-mail prérempli et téléphone. Libellés dans les 10 langues. | `5f88842` |
+| C2, M3 | Plus d'« agréé », de « formations certifiées » ni de « certifications officielles » (bandeau des 24 pages, menu, catalogue, 10 langues) ; entrée de menu « Certificat » vers `#` retirée (69 occurrences). Test `tests/credibility.test.js`. | `4dcc134` |
+| M2 | L'état caché des animations « reveal » ne s'applique que si JavaScript tourne (`html.js`), et la classe est retirée si un script échoue. | `6778f07` |
+| M8, M9, M10 | Lien « Aller au contenu » sur 9 pages ; 14 contrastes corrigés ; cibles d'au moins 24 px (bandeau, pied de page, liens d'action). | `f803b55` |
+| M11 | Titres ≤ 60 et descriptions ≤ 155 caractères sur 12 pages (HTML, dictionnaires, données structurées régénérées). | `2f0a1cd` |
+| M1 | **Une direction artistique par formation** : VCA Ligne hiérarchique « Encadrer » (éditorial), Diisocyanates « Le texte réglementaire » (documentaire), Fibre optique « Le chemin de la lumière » (catalogue technique). Détail : `docs/design-references.md`. | `d825fda` |
+| M15 | Menu mobile ouvert : reste de la page inerte, focus dans le panneau, retour du focus sur le bouton. Test `tests/menu-a11y.test.js`. | `7e20614` |
+| M6, m1 | Bandeau cookies mobile : ≈ 60 % → ≈ 38 % de l'écran (375 × 812), « Tout accepter » et « Tout refuser » côte à côte et de même taille, boutons toujours visibles ; l'assistant ne se pose plus sur le contenu tant que le choix n'est pas fait. | `97a22bd` |
+
+### 24.2 Problèmes trouvés en corrigeant
+
+| # | Problème | Gravité | Statut |
+|---|---|---|---|
+| N1 | Menu mobile **fermé** : ses 27 liens, hors écran et invisibles, restaient atteignables au clavier sur toutes les pages, même sur ordinateur (WCAG 2.4.3, 2.4.7). | Majeur | Corrigé (`7e20614`) |
+| N2 | Rubrique « Formations » active (`aria-current="true"`) et survol du menu en brume sur crème : 2,79:1. | Majeur (1.4.3) | Corrigé (`06b1785`) : épinette, 5,9:1 |
+| N3 | Contact : carte « Conseillers habilités · N1 · N2 · PEB · VCA » avec 5 étoiles, traduite par « Certified advisors », « Erkende adviseurs », « Zugelassene Berater », « مستشارون معتمدون »… : la traduction durcit le texte français en **agrément**. Texte d'origine du propriétaire (équipe nommée), donc **non modifié**. | Critique si non confirmé | **À confirmer par Wisy Safety** : qualifications exactes (conseiller en prévention niveau 1 / 2, auditeur VCA), puis aligner les 9 traductions sur le français |
+
+Également corrigé dans les fiches formation : en-têtes de ligne des tableaux empilés trop étroits sur mobile
+(« Pour qui / ? » sur deux lignes), cibles « Recommencer » et « Ouvrir la page de l'article » portées à 44 px.
+
+### 24.3 Faux positifs
+
+- **M13** : recontrôle du code source des 4 pages (accueil, catalogue, agenda, contact) : aucun passage de H1 à H3 ni de H2 à H4. Le relevé initial, fait sur la page rendue, ne se reproduit pas dans le code source : aucune action.
+- **M16** : le lien `#co-why` est décoratif, `aria-hidden="true"` et `tabindex="-1"` : il n'est ni lu ni atteignable.
+- **m5** : les images sans dimensions d'`inscription.html` sont dans des conteneurs à rapport d'aspect fixe : aucun décalage de mise en page.
+
+### 24.4 Vérifications des 3 fiches refondues
+
+- 320, 375, 768, 1024, 1280 et 1440 px : aucun débordement ; en arabe (droite à gauche) : mise en page miroir correcte.
+- Contrastes : aucun texte sous 4,5:1 (contrôle automatique sur l'ensemble du texte visible) ; cibles ≥ 24 px.
+- Fonctions : onglets au clavier (flèches), « Suis-je concerné ? » (3 issues + réinitialisation), articles en fenêtre,
+  FAQ, barre d'action mobile, boutons d'inscription et de devis dans l'en-tête à toutes les largeurs.
+- Aucune ressource en erreur, aucun texte réécrit (éléments `data-i18n` et `data-src` déplacés tels quels).
+
+### 24.5 Ce qui reste
+
+| Étape | Contenu | Qui |
+|---|---|---|
+| Décisions | C3 (qui organise l'examen VCA Base), N3 (qualifications de l'équipe), M7 / S1 (prix, durées, dates), m8 (compteurs), m12 / S2 (photos réelles) | **Wisy Safety** |
+| Développement | M5 en-tête sur 3 étages, M17 en-tête du catalogue, M14 (relier VCA Entreprise au registre et écrire son guide), m15 pied de page mobile, M4 / S5 allègement, M12 / S4 néerlandais indexable | développement |
+

@@ -210,8 +210,10 @@ a.f-c-value:hover{color:var(--turquoise)}
 </style>
 <link rel="stylesheet" href="css/coordination.css">
 <noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+<style>.skip-link{position:absolute;z-index:3000;inset-inline-start:1rem;top:0;padding:.75rem 1.1rem;background:var(--noir-jais);color:var(--creme);border-radius:0 0 var(--radius-sm,8px) var(--radius-sm,8px);font-family:var(--font-titre);font-weight:600;transform:translateY(-120%);transition:transform .2s ease}.skip-link:focus{transform:none;outline:3px solid var(--turquoise);outline-offset:2px}</style>
 </head>
 <body class="coordination-page">
+<a class="skip-link" href="#contenu" data-i18n="a11y.skip">Aller au contenu</a>
 
 <header class="site-header" id="top">
   <div class="util-bar"><div class="util-inner">
@@ -491,7 +493,7 @@ a.f-c-value:hover{color:var(--turquoise)}
     </div>
     <div class="co-legal__grid">
       <article class="co-legal__card co-legal__card--sim reveal" data-spot>
-        <div class="co-legal__cardhead"><span class="co-legal__cardnum">01</span><h3 data-i18n="coord.legal_card1_title">Le déclencheur</h3></div>
+        <div class="co-legal__cardhead"><span class="co-legal__cardnum" aria-hidden="true">01</span><h3 data-i18n="coord.legal_card1_title">Le déclencheur</h3></div>
         <p data-i18n="coord.legal_card1_text">Dès qu'un chantier temporaire ou mobile réunit plusieurs entrepreneurs — simultanément ou successivement — un coordinateur sécurité-santé doit être désigné.</p>
         <div class="co-sim" data-sim data-state="many" hidden>
           <p class="co-sim__title"><svg aria-hidden="true"><use href="#ci-sliders"/></svg><span data-i18n="coord.sim_title">Testez le déclencheur</span></p>
@@ -525,12 +527,12 @@ a.f-c-value:hover{color:var(--turquoise)}
         </div>
       </article>
       <article class="co-legal__card reveal" data-spot>
-        <div class="co-legal__cardhead"><span class="co-legal__cardnum">02</span><h3 data-i18n="coord.legal_card2_title">Deux phases</h3></div>
+        <div class="co-legal__cardhead"><span class="co-legal__cardnum" aria-hidden="true">02</span><h3 data-i18n="coord.legal_card2_title">Deux phases</h3></div>
         <svg class="co-legal__art" aria-hidden="true"><use href="#ci-doc"/></svg>
         <p data-i18n="coord.legal_card2_text">Une phase « projet », dès la conception (PSS), et une phase « réalisation », pendant le chantier (suivi, DIU).</p>
       </article>
       <article class="co-legal__card reveal" data-spot>
-        <div class="co-legal__cardhead"><span class="co-legal__cardnum">03</span><h3 data-i18n="coord.legal_card3_title">Niveaux A et B</h3></div>
+        <div class="co-legal__cardhead"><span class="co-legal__cardnum" aria-hidden="true">03</span><h3 data-i18n="coord.legal_card3_title">Niveaux A et B</h3></div>
         <svg class="co-legal__art" aria-hidden="true"><use href="#ci-badge"/></svg>
         <p data-i18n="coord.legal_card3_text">Le niveau de qualification requis pour le coordinateur dépend de l'ampleur et de la complexité du projet, pas d'un choix du maître d'ouvrage.</p>
       </article>

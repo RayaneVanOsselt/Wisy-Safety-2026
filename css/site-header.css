@@ -220,3 +220,8 @@ html .site-header.is-scrolled .main-bar {
   .m-panel .m-help,
   .m-panel .m-help__ic { transition-duration: .001ms !important; }
 }
+
+/* WCAG 2.2 — 2.5.8 (taille des cibles) : liens du bandeau utilitaire et du pied de page sur 24 px de haut au moins
+   (19–23 px mesurés le 02/10/2026). */
+.util-contacts a, .util-help { display: inline-flex; align-items: center; min-height: 24px; }
+.site-footer a:not(.btn) { display: inline-flex; align-items: center; min-height: 24px; }

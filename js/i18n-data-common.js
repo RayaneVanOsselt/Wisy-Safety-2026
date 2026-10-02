@@ -18,6 +18,7 @@
 
   /* ---------------- FRANÇAIS (langue source) ---------------- */
   m("fr", {
+    "a11y.skip": "Aller au contenu",
     "util.badge": "Centre de formation à la sécurité · Anderlecht, Belgique",
     "nav.formations": "Formations",
     "nav.all_formations": "Voir toutes les formations",
@@ -63,6 +64,7 @@
 
   /* ---------------- ENGLISH ---------------- */
   m("en", {
+    "a11y.skip": "Skip to content",
     "util.badge": "Safety training centre · Anderlecht, Belgium",
     "nav.formations": "Training",
     "nav.all_formations": "View all courses", "nav.all_formations_desc": "The full catalogue",
@@ -107,6 +109,7 @@
 
   /* ---------------- NEDERLANDS ---------------- */
   m("nl", {
+    "a11y.skip": "Naar de inhoud",
     "util.badge": "Opleidingscentrum voor veiligheid · Anderlecht, België",
     "nav.formations": "Opleidingen",
     "nav.all_formations": "Alle opleidingen bekijken", "nav.all_formations_desc": "De volledige catalogus",
@@ -151,6 +154,7 @@
 
   /* ---------------- AFRIKAANS ---------------- */
   m("af", {
+    "a11y.skip": "Gaan na die inhoud",
     "util.badge": "Veiligheidsopleidingsentrum · Anderlecht, België",
     "nav.formations": "Opleidings",
     "nav.all_formations": "Bekyk alle opleidings", "nav.all_formations_desc": "Die volledige katalogus",
@@ -195,6 +199,7 @@
 
   /* ---------------- العربية (RTL) ---------------- */
   m("ar", {
+    "a11y.skip": "الانتقال إلى المحتوى",
     "util.badge": "مركز تدريب على السلامة · أندرلخت، بلجيكا",
     "nav.formations": "الدورات",
     "nav.all_formations": "عرض جميع الدورات", "nav.all_formations_desc": "الكتالوج الكامل",
@@ -239,6 +244,7 @@
 
   /* ---------------- БЪЛГАРСКИ ---------------- */
   m("bg", {
+    "a11y.skip": "Към съдържанието",
     "util.badge": "Учебен център по безопасност · Андерлехт, Белгия",
     "nav.formations": "Обучения",
     "nav.all_formations": "Вижте всички обучения", "nav.all_formations_desc": "Пълният каталог",
@@ -283,6 +289,7 @@
 
   /* ---------------- DEUTSCH ---------------- */
   m("de", {
+    "a11y.skip": "Zum Inhalt",
     "util.badge": "Schulungszentrum für Sicherheit · Anderlecht, Belgien",
     "nav.formations": "Schulungen",
     "nav.all_formations": "Alle Schulungen ansehen", "nav.all_formations_desc": "Der vollständige Katalog",
@@ -327,6 +334,7 @@
 
   /* ---------------- ROMÂNĂ ---------------- */
   m("ro", {
+    "a11y.skip": "Salt la conținut",
     "util.badge": "Centru de formare în securitate · Anderlecht, Belgia",
     "nav.formations": "Cursuri",
     "nav.all_formations": "Vedeți toate cursurile", "nav.all_formations_desc": "Catalogul complet",
@@ -371,6 +379,7 @@
 
   /* ---------------- ITALIANO ---------------- */
   m("it", {
+    "a11y.skip": "Vai al contenuto",
     "util.badge": "Centro di formazione sulla sicurezza · Anderlecht, Belgio",
     "nav.formations": "Corsi",
     "nav.all_formations": "Vedi tutti i corsi", "nav.all_formations_desc": "Il catalogo completo",
@@ -415,6 +424,7 @@
 
   /* ---------------- SLOVENŠČINA ---------------- */
   m("sl", {
+    "a11y.skip": "Na vsebino",
     "util.badge": "Center za varnostno usposabljanje · Anderlecht, Belgija",
     "nav.formations": "Usposabljanja",
     "nav.all_formations": "Oglejte si vsa usposabljanja", "nav.all_formations_desc": "Celoten katalog",

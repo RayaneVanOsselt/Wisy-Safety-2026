@@ -228,3 +228,9 @@ html .site-header.is-scrolled .main-bar {
    (19–23 px mesurés le 02/10/2026). */
 .util-contacts a, .util-help { display: inline-flex; align-items: center; min-height: 24px; }
 .site-footer a:not(.btn) { display: inline-flex; align-items: center; min-height: 24px; }
+
+/* Menu mobile fermé : hors de l'ordre de tabulation et de l'arbre d'accessibilité (audit du 02/10/2026). Sans cela,
+   ses 27 liens, invisibles hors écran, restaient atteignables au clavier sur toutes les pages, même sur ordinateur.
+   La visibilité ne bascule qu'à la fin de l'animation de fermeture ; à l'ouverture, elle est immédiate. */
+.m-panel:not(.is-open) { visibility: hidden; transition: transform var(--t-med) var(--ease-out), visibility 0s linear var(--t-med); }
+.m-panel.is-open { visibility: visible; }

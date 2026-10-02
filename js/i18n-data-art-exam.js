@@ -9,7 +9,7 @@
 
   /* ---------------- FRANÇAIS (langue source — miroir du HTML) ---------------- */
   m("fr", {
-    "meta.title": "Erreurs à l'examen VCA Base : comment les éviter | Wisy Safety",
+    "meta.title": "Examen VCA Base : erreurs à éviter | Wisy Safety",
     "a2.bc_current": "Erreurs à l'examen VCA",
     "a2.cat": "Examen",
     "a2.h1": "Les erreurs fréquentes à l'examen VCA et comment les éviter",

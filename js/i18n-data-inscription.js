@@ -18,7 +18,7 @@
   /* ----------------------------- FRANÇAIS ----------------------------- */
   m("fr", {
     "meta.title": "Inscription aux formations | Wisy Safety",
-    "meta.desc": "Construisez votre parcours de formation Wisy Safety : sélectionnez vos formations, indiquez le nombre de participants et obtenez immédiatement votre récapitulatif.",
+    "meta.desc": "Inscription aux formations Wisy Safety : choisissez vos formations, indiquez les participants et envoyez votre demande à l'équipe.",
 
     /* Hero */
     "reg.eyebrow": "Inscription aux formations",

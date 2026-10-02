@@ -1,0 +1,131 @@
+/* =========================================================================
+   VCA LIGNE HIÉRARCHIQUE — « Encadrer »
+   Direction éditoriale et humaine : le titre est posé sur un panneau sombre face à la photo de l'encadrant,
+   à fond perdu ; l'examen se lit comme un tableau de bord en grands chiffres ; le programme officiel devient
+   l'index d'un manuel sur une bande épinette ; une seule colonne de lecture, numéros de section en marge.
+   ========================================================================= */
+
+/* ---------- En-tête : panneau sombre + photo à fond perdu ---------- */
+.fxt-hero--vlh { display: grid; background: var(--noir-jais); color: var(--creme); }
+.fxt-hero--vlh .fxt-hero__panel { display: flex; align-items: center; padding: clamp(1.1rem, 3vw, 2rem) var(--pad-x, 1.25rem) clamp(2.25rem, 6vw, 4.5rem); }
+.fxt-hero--vlh .fxt-hero__inner { width: 100%; max-width: 40rem; }
+.fxt-hero--vlh .fx-bc { color: rgba(244, 250, 249, .72); margin-bottom: clamp(1.75rem, 5vw, 3.25rem); }
+.fxt-hero--vlh .fx-bc a { color: rgba(244, 250, 249, .86); text-decoration-color: rgba(244, 250, 249, .3); }
+.fxt-hero--vlh .fx-bc a:hover { color: var(--creme); }
+.fxt-hero--vlh .fx-bc li + li::before { color: rgba(244, 250, 249, .45); }
+.fxt-hero--vlh .fx-bc [aria-current="page"] { color: var(--creme); }
+.fxt-hero--vlh .fx-kicker { color: var(--brume); }
+.fxt-hero--vlh .fx-kicker::before { background: var(--brume); }
+.fxt-hero--vlh .fx-h1 { color: var(--creme); font-size: clamp(2.35rem, 5.6vw, 4.7rem); line-height: .98; letter-spacing: -.035em; max-width: 13ch; margin-bottom: 1.4rem; }
+.fxt-hero--vlh .fx-h1 .fx-mark { color: var(--brume); }
+.fxt-hero--vlh .fx-h1 .fx-nowrap { display: block; margin-top: .35rem; font-size: .42em; letter-spacing: .02em; color: rgba(244, 250, 249, .7); }
+.fxt-hero--vlh .fx-lead { color: rgba(244, 250, 249, .84); max-width: 46ch; margin-bottom: 1.75rem; }
+.fxt-hero--vlh .fx-verified { color: rgba(244, 250, 249, .72); }
+.fxt-hero--vlh .fx-verified .fx-ic { color: var(--brume); }
+.fxt-hero--vlh .btn--outline { color: var(--creme); background: transparent; border-color: rgba(244, 250, 249, .45); }
+.fxt-hero--vlh .btn--outline:hover { border-color: var(--creme); color: var(--creme); background: rgba(244, 250, 249, .06); }
+.fxt-hero--vlh .fxt-hero__photo { position: relative; margin: 0; min-height: clamp(15rem, 52vw, 24rem); order: -1; overflow: hidden; }
+.fxt-hero--vlh .fxt-hero__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 28%; }
+.fxt-hero--vlh .fxt-hero__photo figcaption { position: absolute; inset-inline-end: .75rem; bottom: .65rem; padding: .2rem .55rem; border-radius: 4px; background: rgba(27, 45, 40, .72); color: var(--creme); font-size: var(--fs-micro); }
+@media (min-width: 1024px) {
+  .fxt-hero--vlh { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); min-height: min(80vh, 46rem); }
+  .fxt-hero--vlh .fxt-hero__panel { padding-inline-start: max(var(--pad-x, 1.5rem), calc((100vw - var(--maxw, 1200px)) / 2 + var(--pad-x, 1.5rem))); padding-inline-end: clamp(2rem, 4vw, 4rem); }
+  .fxt-hero--vlh .fxt-hero__photo { order: 0; min-height: 0; }
+  /* raccord net entre le panneau et la photo : un filet brume vertical, pas d'ombre */
+  .fxt-hero--vlh .fxt-hero__photo::before { content: ""; position: absolute; inset-block: 0; inset-inline-start: 0; width: 3px; background: var(--brume); z-index: 1; }
+}
+
+/* ---------- Tableau de bord de l'examen ---------- */
+.vlh-board { background: #fff; border-bottom: 1px solid var(--fx-rule); }
+.vlh-board__grid { display: grid; margin: 0; }
+.vlh-board__item { display: flex; flex-direction: column; gap: .35rem; padding: clamp(1.25rem, 3vw, 2.1rem) 0; border-top: 1px solid var(--fx-rule); }
+.vlh-board__item:first-child { border-top: 0; }
+.vlh-board__big { font-family: var(--font-titre); font-weight: 700; font-size: clamp(3rem, 7vw, 5.2rem); line-height: .86; letter-spacing: -.045em; color: var(--epinette); font-variant-numeric: tabular-nums; }
+.vlh-board__item--wide .vlh-board__big { font-size: clamp(2.2rem, 4.6vw, 3.5rem); letter-spacing: -.03em; padding-top: .35rem; }
+.vlh-board dt { font-family: var(--font-titre); font-weight: 600; font-size: var(--fs-micro); letter-spacing: .1em; text-transform: uppercase; color: var(--granit); }
+.vlh-board dd { margin: 0; max-width: 30ch; color: var(--noir-jais); }
+.vlh-board__item--text { flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: .35rem 1rem; padding-block: 1rem; }
+.vlh-board__item--text dd { max-width: none; }
+.vlh-board__foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 2rem; padding-block: 1rem 1.25rem; border-top: 1px solid var(--fx-rule); font-size: var(--fs-small); color: var(--granit); }
+.vlh-board__foot .fxt-practical dt { color: var(--granit); }
+.vlh-board__foot .fxt-practical a { color: var(--epinette); }
+.vlh-board__foot .fxt-practical { flex: 1 1 22rem; }
+.vlh-board__foot .fx-card__note { flex: 0 1 46ch; margin: 0; }
+@media (min-width: 720px) {
+  .vlh-board__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .vlh-board__item { border-top: 0; padding-inline: clamp(1rem, 2.5vw, 2rem); border-inline-start: 1px solid var(--fx-rule); }
+  .vlh-board__item:first-child { border-inline-start: 0; padding-inline-start: 0; }
+  .vlh-board__item--text { grid-column: 1 / -1; border-inline-start: 0; padding-inline: 0; border-top: 1px solid var(--fx-rule); }
+}
+
+/* ---------- Sections : une colonne de lecture, numéro en marge ---------- */
+.fx-theme--vlh .fx-sec { border-top: 1px solid var(--fx-rule); padding-block: clamp(2.5rem, 6vw, 4.75rem); }
+.fx-theme--vlh .fx-sec:first-child { border-top: 0; }
+.fx-theme--vlh .fx-sec__head h2 { font-size: clamp(1.6rem, 3vw, 2.35rem); letter-spacing: -.02em; line-height: 1.12; max-width: 22ch; }
+.fx-theme--vlh .fx-num { font-size: 1rem; color: var(--epinette); }
+@media (min-width: 1024px) {
+  .fx-theme--vlh .fx-sec { display: grid; grid-template-columns: 9rem minmax(0, 1fr); column-gap: 3rem; align-items: start; }
+  .fx-theme--vlh .fx-sec > * { grid-column: 2; }
+  .fx-theme--vlh .fx-sec__head { display: contents; }
+  .fx-theme--vlh .fx-sec__head .fx-num { grid-column: 1; grid-row: 1 / span 3; font-size: clamp(3.4rem, 5vw, 4.6rem); line-height: .85; letter-spacing: -.04em; color: transparent; -webkit-text-stroke: 1.5px var(--epinette); }
+  .fx-theme--vlh .fx-sec__head h2 { grid-column: 2; margin-bottom: .4rem; }
+  .fx-theme--vlh .fx-sec__head p { grid-column: 2; margin: 0 0 1.5rem; }
+  .fx-theme--vlh .fx-sec__head h2:last-child { margin-bottom: 1.5rem; }
+}
+
+/* 02 — Programme : l'index d'un manuel, sur une bande épinette */
+.fx-theme--vlh #programme { --fxt-bleed: var(--epinette); border-top: 0; }
+.fx-theme--vlh #programme .fx-steps > li { border-bottom-color: rgba(244, 250, 249, .2); padding-block: .95rem; grid-template-columns: 3.25rem minmax(0, 1fr); }
+.fx-theme--vlh #programme .fx-steps > li::before { font-size: 1.35rem; line-height: 1; color: rgba(244, 250, 249, .78); }
+.fx-theme--vlh #programme .fx-steps b { color: var(--creme); font-size: 1.05rem; }
+.fx-theme--vlh #programme .fx-num { color: rgba(244, 250, 249, .8); }
+/* sur l'épinette, le crème doit rester plein pour tenir 4,5:1 (5,7:1) */
+.fx-theme--vlh #programme .fx-sec__head p, .fx-theme--vlh #programme .fx-note, .fx-theme--vlh #programme .fx-src, .fx-theme--vlh #programme .fx-src__title, .fx-theme--vlh #programme .fx-src a { color: var(--creme); }
+.fx-theme--vlh #programme .fx-note { border-color: rgba(244, 250, 249, .45); }
+@media (min-width: 1024px) { .fx-theme--vlh #programme .fx-sec__head .fx-num { color: transparent; -webkit-text-stroke-color: rgba(244, 250, 249, .65); } }
+.fx-theme--vlh #programme + .fx-sec { border-top: 0; }
+
+/* 03 — Examen : le tableau devient une liste de spécifications */
+.fx-theme--vlh #examen .fx-table-wrap, .fx-theme--vlh #comparatif .fx-table-wrap { border: 0; border-radius: 0; background: transparent; border-top: 2px solid var(--noir-jais); }
+.fx-theme--vlh #examen .fx-table caption { padding-inline: 0; font-family: var(--font-titre); font-weight: 600; color: var(--noir-jais); }
+.fx-theme--vlh #examen .fx-table tbody th { font-family: var(--font-titre); font-size: .95rem; color: var(--noir-jais); }
+@media (min-width: 720px) {
+  .fx-theme--vlh #examen .fx-table th, .fx-theme--vlh #examen .fx-table td { padding: 1rem 1rem 1rem 0; }
+  .fx-theme--vlh #examen .fx-table tbody th { width: 32%; }
+}
+@media (max-width: 719px) { .fx-theme--vlh #examen .fx-table--stack th, .fx-theme--vlh #examen .fx-table--stack td { padding-inline: 0; } }
+.fx-theme--vlh .fx-quote { margin: 2rem 0 .5rem; padding: 0 0 0 1.25rem; padding-inline-start: 1.25rem; padding-inline-end: 0; background: none; border-radius: 0; border-inline-start: 4px solid var(--epinette); font-family: var(--font-titre); font-weight: 600; font-size: clamp(1.15rem, 2vw, 1.45rem); line-height: 1.35; max-width: 38ch; }
+
+/* 04 — Comparatif : la colonne VOL-VCA en négatif */
+.fx-theme--vlh #comparatif .fx-table thead th { background: transparent; padding-inline: 1rem; }
+.fx-theme--vlh #comparatif .fx-table th, .fx-theme--vlh #comparatif .fx-table td { padding-inline: 1rem; }
+.fx-theme--vlh #comparatif .fx-table .fx-col-hl { background: var(--noir-jais); color: var(--creme); }
+.fx-theme--vlh #comparatif .fx-table thead .fx-col-hl { color: var(--creme); }
+.fx-theme--vlh #comparatif .fx-table td.fx-col-hl { border-bottom-color: rgba(244, 250, 249, .16); }
+.fx-theme--vlh #comparatif .fx-table td.fx-col-hl a { color: var(--creme); }
+@media (max-width: 719px) {
+  .fx-theme--vlh #comparatif .fx-table td.fx-col-hl { margin-inline: 0; padding-block: .55rem; }
+  .fx-theme--vlh #comparatif .fx-table--stack td[data-label].fx-col-hl::before { color: rgba(244, 250, 249, .75); }
+}
+
+/* 06 — Ressources : une liste éditoriale, pas des cartes */
+.fx-theme--vlh .fx-res { grid-template-columns: 1fr; gap: 0; }
+.fx-theme--vlh .fx-res__item { border: 0; border-radius: 0; background: transparent; border-top: 1px solid var(--fx-rule); padding-block: 1.5rem; gap: 1rem; }
+.fx-theme--vlh .fx-res__item:last-child { border-bottom: 1px solid var(--fx-rule); }
+.fx-theme--vlh .fx-res__item img { border-radius: var(--radius-sm); }
+.fx-theme--vlh .fx-res__body { padding: 0; }
+.fx-theme--vlh .fx-res__item h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); letter-spacing: -.01em; }
+@media (min-width: 720px) {
+  .fx-theme--vlh .fx-res__item { flex-direction: row; align-items: center; gap: clamp(1.25rem, 3vw, 2.5rem); }
+  .fx-theme--vlh .fx-res__item picture { flex: 0 0 34%; max-width: 20rem; }
+  .fx-theme--vlh .fx-res__item img { aspect-ratio: 4 / 3; }
+}
+@media (min-width: 1280px) { .fx-theme--vlh .fx-res--3 { grid-template-columns: 1fr; } }
+
+/* Formations liées et bandeau final (clair : le pied de page sombre suit immédiatement) */
+.fx-theme--vlh .fx-related a { border-radius: 0; border-width: 0; border-inline-start: 3px solid var(--epinette); background: #fff; }
+.fx-theme--vlh .fx-final { margin-top: 0; padding: clamp(2.5rem, 6vw, 4.5rem) 0; border-radius: 0; border-top: 1px solid var(--fx-rule); background: #fff; color: var(--noir-jais); box-shadow: 0 0 0 100vmax #fff; clip-path: inset(0 -100vmax); }
+.fx-theme--vlh .fx-final h2 { color: var(--noir-jais); font-size: clamp(1.8rem, 3.6vw, 2.8rem); letter-spacing: -.02em; }
+.fx-theme--vlh .fx-final p { color: var(--granit); max-width: 56ch; }
+.fx-theme--vlh .fx-final .btn--ghost { color: var(--epinette); border-color: var(--epinette); }
+.fx-theme--vlh .fx-final .btn--ghost:hover { background: var(--brume-14); }

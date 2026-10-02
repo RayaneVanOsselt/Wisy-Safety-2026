@@ -209,6 +209,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 }
 </style>
 <link rel="stylesheet" href="css/formation-fiche.css">
+<link rel="stylesheet" href="css/fiche-fib.css">
 <link rel="stylesheet" href="css/article-modal.css">
 <noscript><style>.reveal{opacity:1;transform:none}.fx-mobile-bar{display:none}</style></noscript>
 </head>
@@ -328,55 +329,46 @@ a.f-c-value:hover{color:var(--turquoise)}
   </div>
 </aside>
 
-<main id="contenu" class="fx-main" data-fx-page="fibre-optique">
-  <div class="container">
-    <nav class="fx-bc" data-i18n-attr="aria-label:fx.bc_label" aria-label="Fil d'Ariane">
+<main id="contenu" class="fx-main fx-theme fx-theme--fib" data-fx-page="fibre-optique">
+  <!-- ==================== EN-TÊTE « LE CHEMIN DE LA LUMIÈRE » : titre pleine largeur, trait lumineux, photo en planche ==================== -->
+  <header class="fxt-hero fxt-hero--fib" data-fx-hero>
+    <div class="container fxt-hero__inner">
+      <nav class="fx-bc" data-i18n-attr="aria-label:fx.bc_label" aria-label="Fil d'Ariane">
       <ol>
         <li><a href="index.html" data-i18n="fx.bc_home">Accueil</a></li>
         <li><a href="formations.html" data-i18n="fx.bc_formations">Formations</a></li>
         <li><span aria-current="page" data-i18n="dd.fibre">Fibre optique</span></li>
       </ol>
     </nav>
-
-    <!-- ==================== EN-TÊTE DE FICHE ==================== -->
-    <header class="fx-hero" data-fx-hero>
-      <div class="fx-hero__grid">
-        <div>
-          <p class="fx-kicker" data-i18n="fib.kicker">Formation · Technique · Télécommunications</p>
-          <h1 class="fx-h1" id="fx-h1" data-i18n-html="fib.h1">Formation <span class="fx-mark">fibre optique</span></h1>
-          <p class="fx-lead" data-i18n="fib.lead">Du raccordement à la mesure OTDR : un parcours en trois niveaux et six modules pour les artisans, techniciens et ingénieurs qui interviennent sur les réseaux fibre (FTTH, FTTx).</p>
-          <div class="fx-cta-row">
+      <p class="fx-kicker" data-i18n="fib.kicker">Formation · Technique · Télécommunications</p>
+      <h1 class="fx-h1" id="fx-h1" data-i18n-html="fib.h1">Formation <span class="fx-mark">fibre optique</span></h1>
+      <p class="fx-lead" data-i18n="fib.lead">Du raccordement à la mesure OTDR : un parcours en trois niveaux et six modules pour les artisans, techniciens et ingénieurs qui interviennent sur les réseaux fibre (FTTH, FTTx).</p>
+      <div class="fx-cta-row">
             <a class="btn btn--cta" href="inscription.html?formation=fibre-optique" data-fx-track="fx_signup_click" data-fx-from="hero"><span data-i18n="fx.cta_signup">S'inscrire à cette formation</span> <span class="btn__arrow" aria-hidden="true">→</span></a>
             <a class="btn btn--outline" href="contact.html" data-fx-track="fx_quote_click" data-fx-from="hero" data-i18n="fx.cta_quote">Demander un devis entreprise</a>
           </div>
-          <p class="fx-verified"><svg class="fx-ic" aria-hidden="true"><use href="#fx-check"/></svg><span data-i18n-html="fib.verified">Contenus relus le <time datetime="2026-10-01">01/10/2026</time> — repères techniques sourcés en bas de page.</span></p>
-        </div>
-        <div class="fx-hero__media">
-          <figure class="fx-figure">
-            <img src="assets/images/formations/fibre-optique.webp" width="1000" height="600" fetchpriority="high" decoding="async" data-i18n-attr="alt:fib.hero_alt" alt="Image de synthèse : câble à fibres optiques ouvert, fibres de couleur éclairées sur fond bleu">
-            <figcaption data-i18n="fx.photo_illustration">Photo d'illustration.</figcaption>
-          </figure>
-        </div>
-      </div>
-    </header>
+      <p class="fx-verified"><svg class="fx-ic" aria-hidden="true"><use href="#fx-check"/></svg><span data-i18n-html="fib.verified">Contenus relus le <time datetime="2026-10-01">01/10/2026</time> — repères techniques sourcés en bas de page.</span></p>
+      <figure class="fxt-hero__photo"><img src="assets/images/formations/fibre-optique.webp" width="1000" height="600" fetchpriority="high" decoding="async" data-i18n-attr="alt:fib.hero_alt" alt="Image de synthèse : câble à fibres optiques ouvert, fibres de couleur éclairées sur fond bleu"><figcaption data-i18n="fx.photo_illustration">Photo d'illustration.</figcaption></figure>
+    </div>
+  </header>
+
+  <!-- ==================== FICHE TECHNIQUE (niveaux, modules, formats, public) ==================== -->
+  <section class="fib-spec" aria-labelledby="fx-essentials-t">
+    <div class="container">
+      <h2 class="fx-vh" id="fx-essentials-t" data-i18n="fx.essentials">Informations essentielles</h2>
+      <dl class="fib-spec__grid">
+        <div class="fib-spec__item"><span class="fib-spec__big" aria-hidden="true" translate="no">3</span><dt data-i18n="fib.f_levels_t">Parcours</dt><dd data-i18n="fib.f_levels_d">3 niveaux : débutant, intermédiaire, avancé</dd></div>
+        <div class="fib-spec__item"><span class="fib-spec__big" aria-hidden="true" translate="no">6</span><dt data-i18n="fib.f_modules_t">Modules</dt><dd data-i18n="fib.f_modules_d">6 modules, de la base de la fibre à la conception de réseaux</dd></div>
+        <div class="fib-spec__item"><span class="fib-spec__big" aria-hidden="true" translate="no">4</span><dt data-i18n="fib.f_formats_t">Formats</dt><dd data-i18n="fib.f_formats_d">intensif, modulaire, mixte ou sur chantier</dd></div>
+        <div class="fib-spec__item fib-spec__item--text"><dt data-i18n="fib.f_public_t">Public</dt><dd data-i18n="fib.f_public_d">artisans, électriciens, techniciens, installateurs, ingénieurs et chefs de projet</dd></div>
+      </dl>
+      <div class="fib-spec__foot"><dl class="fxt-practical"><div><dt data-i18n="fx.f_practical_t">Durée, tarif et dates</dt><dd data-i18n-html="fx.f_practical_d">communiqués sur demande — <a href="contact.html">contactez l'équipe</a></dd></div></dl><p class="fx-card__note" data-i18n="fib.card_note">Le document remis en fin de formation et les modalités de chaque format vous sont précisés sur demande.</p></div>
+    </div>
+  </section>
+
+  <div class="container">
 
     <div class="fx-body">
-      <!-- ==================== INFORMATIONS ESSENTIELLES ==================== -->
-      <aside class="fx-aside" aria-labelledby="fx-essentials-t">
-        <div class="fx-card">
-          <h2 class="fx-card__title" id="fx-essentials-t" data-i18n="fx.essentials">Informations essentielles</h2>
-          <dl class="fx-facts">
-            <div class="fx-fact"><svg class="fx-ic" aria-hidden="true"><use href="#fx-route"/></svg><dt data-i18n="fib.f_levels_t">Parcours</dt><dd data-i18n="fib.f_levels_d">3 niveaux : débutant, intermédiaire, avancé</dd></div>
-            <div class="fx-fact"><svg class="fx-ic" aria-hidden="true"><use href="#fx-layers"/></svg><dt data-i18n="fib.f_modules_t">Modules</dt><dd data-i18n="fib.f_modules_d">6 modules, de la base de la fibre à la conception de réseaux</dd></div>
-            <div class="fx-fact"><svg class="fx-ic" aria-hidden="true"><use href="#fx-calendar"/></svg><dt data-i18n="fib.f_formats_t">Formats</dt><dd data-i18n="fib.f_formats_d">intensif, modulaire, mixte ou sur chantier</dd></div>
-            <div class="fx-fact"><svg class="fx-ic" aria-hidden="true"><use href="#fx-users"/></svg><dt data-i18n="fib.f_public_t">Public</dt><dd data-i18n="fib.f_public_d">artisans, électriciens, techniciens, installateurs, ingénieurs et chefs de projet</dd></div>
-            <div class="fx-fact"><svg class="fx-ic" aria-hidden="true"><use href="#fx-clock"/></svg><dt data-i18n="fx.f_practical_t">Durée, tarif et dates</dt><dd data-i18n-html="fx.f_practical_d">communiqués sur demande — <a href="contact.html">contactez l'équipe</a></dd></div>
-          </dl>
-          <a class="btn btn--cta" href="inscription.html?formation=fibre-optique" data-fx-track="fx_signup_click" data-fx-from="aside" data-i18n="fx.cta_signup">S'inscrire à cette formation</a>
-          <a class="btn btn--outline" href="contact.html" data-fx-track="fx_quote_click" data-fx-from="aside" data-i18n="fx.cta_quote">Demander un devis entreprise</a>
-          <p class="fx-card__note" data-i18n="fib.card_note">Le document remis en fin de formation et les modalités de chaque format vous sont précisés sur demande.</p>
-        </div>
-      </aside>
 
       <div class="fx-content">
         <!-- 01 — PARCOURS -->
@@ -439,7 +431,7 @@ a.f-c-value:hover{color:var(--turquoise)}
         </section>
 
         <!-- 04 — REPÈRES TECHNIQUES -->
-        <section class="fx-sec" id="reperes" aria-labelledby="fib-s4-t">
+        <section class="fx-sec fxt-bleed fxt-dark" id="reperes" aria-labelledby="fib-s4-t">
           <header class="fx-sec__head"><span class="fx-num" aria-hidden="true">04</span><h2 id="fib-s4-t" data-i18n="fib.s4_h2">Repères techniques abordés</h2><p data-i18n="fib.s4_intro">Quelques notions de référence, vérifiées auprès de la Fiber Optic Association (FOA) et de l'Union internationale des télécommunications (UIT).</p></header>
           <div class="fx-prose">
             <ul>

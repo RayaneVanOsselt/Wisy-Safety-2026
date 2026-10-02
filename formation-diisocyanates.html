@@ -208,6 +208,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 }
 </style>
 <link rel="stylesheet" href="css/formation-fiche.css">
+<link rel="stylesheet" href="css/fiche-dii.css">
 <link rel="stylesheet" href="css/article-modal.css">
 <noscript><style>.reveal{opacity:1;transform:none}.fx-mobile-bar{display:none}</style></noscript>
 </head>
@@ -327,20 +328,19 @@ a.f-c-value:hover{color:var(--turquoise)}
   </div>
 </aside>
 
-<main id="contenu" class="fx-main" data-fx-page="diisocyanates">
-  <div class="container">
-    <nav class="fx-bc" data-i18n-attr="aria-label:fx.bc_label" aria-label="Fil d'Ariane">
+<main id="contenu" class="fx-main fx-theme fx-theme--dii" data-fx-page="diisocyanates">
+  <!-- ==================== EN-TÊTE « LE TEXTE RÉGLEMENTAIRE » : la plaque du règlement comme document ==================== -->
+  <header class="fxt-hero fxt-hero--dii" data-fx-hero>
+    <div class="container">
+      <nav class="fx-bc" data-i18n-attr="aria-label:fx.bc_label" aria-label="Fil d'Ariane">
       <ol>
         <li><a href="index.html" data-i18n="fx.bc_home">Accueil</a></li>
         <li><a href="formations.html" data-i18n="fx.bc_formations">Formations</a></li>
         <li><span aria-current="page" data-i18n="dd.diiso">Diisocyanates &amp; substances dangereuses</span></li>
       </ol>
     </nav>
-
-    <!-- ==================== EN-TÊTE DE FICHE : la plaque réglementaire tient lieu d'image ==================== -->
-    <header class="fx-hero" data-fx-hero>
-      <div class="fx-hero__grid">
-        <div>
+      <div class="fxt-hero__grid">
+        <div class="fxt-hero__text">
           <p class="fx-kicker" data-i18n="dii.kicker">Formation · Produits chimiques · REACH</p>
           <h1 class="fx-h1" id="fx-h1" data-i18n-html="dii.h1">Formation <span class="fx-mark">diisocyanates</span> et substances dangereuses</h1>
           <p class="fx-lead" data-src="SRC-DII-002 SRC-DII-003" data-i18n="dii.lead">Depuis le 24 août 2023, un produit contenant 0,1 % ou plus de diisocyanates ne peut être utilisé à titre industriel ou professionnel que par une personne qui a suivi avec succès une formation à leur utilisation sûre. Wisy Safety propose cette formation.</p>
@@ -350,8 +350,7 @@ a.f-c-value:hover{color:var(--turquoise)}
           </div>
           <p class="fx-verified"><svg class="fx-ic" aria-hidden="true"><use href="#fx-check"/></svg><span data-i18n-html="fx.verified">Informations vérifiées le <time datetime="2026-10-01">01/10/2026</time> — sources officielles en bas de page.</span></p>
         </div>
-        <div class="fx-hero__media fx-hero__media--plate">
-          <div class="fx-plate" data-src="SRC-DII-001 SRC-DII-002 SRC-DII-003 SRC-DII-005 SRC-DII-009">
+        <div class="fxt-hero__doc"><div class="fx-plate" data-src="SRC-DII-001 SRC-DII-002 SRC-DII-003 SRC-DII-005 SRC-DII-009">
             <p class="fx-plate__ref"><span data-i18n="dii.plate_ref">Règlement (UE) 2020/1149</span><small data-i18n="dii.plate_small">REACH · annexe XVII · entrée 74</small></p>
             <dl>
               <div class="fx-plate__row"><dt>24.08.2023</dt><dd data-i18n="dii.plate_r1">Formation réussie exigée avant toute utilisation industrielle ou professionnelle</dd></div>
@@ -360,28 +359,29 @@ a.f-c-value:hover{color:var(--turquoise)}
               <div class="fx-plate__row"><dt>24.02.2022</dt><dd data-i18n="dii.plate_r4">Mention obligatoire sur l'emballage des produits concernés</dd></div>
             </dl>
             <p class="fx-plate__src" data-i18n-html="dii.plate_src">Source : <a href="https://eur-lex.europa.eu/legal-content/FR/TXT/HTML/?uri=CELEX:32020R1149" target="_blank" rel="noopener noreferrer">EUR-Lex, JO L 252 du 4.8.2020<span class="fx-vh">(nouvel onglet)</span></a></p>
-          </div>
-        </div>
+          </div></div>
       </div>
-    </header>
+    </div>
+    <div class="dii-tape" aria-hidden="true"></div>
+  </header>
+
+  <!-- ==================== FICHE SIGNALÉTIQUE (faits officiels sourcés) ==================== -->
+  <section class="dii-sheet" aria-labelledby="fx-essentials-t">
+    <div class="container">
+      <h2 class="dii-sheet__title" id="fx-essentials-t" data-i18n="fx.essentials">Informations essentielles</h2>
+      <dl class="dii-sheet__grid">
+        <div class="dii-sheet__item" data-src="SRC-DII-001"><dt data-i18n="dii.f_law_t">Cadre légal</dt><dd data-i18n="dii.f_law_d">Règlement (UE) 2020/1149 — REACH, annexe XVII, entrée 74</dd></div>
+        <div class="dii-sheet__item" data-src="SRC-DII-002"><dt data-i18n="dii.f_since_t">Exigée depuis</dt><dd data-i18n="dii.f_since_d">le 24 août 2023</dd></div>
+        <div class="dii-sheet__item" data-src="SRC-DII-003 SRC-DII-004"><dt data-i18n="dii.f_scope_t">Qui est visé ?</dt><dd data-i18n="dii.f_scope_d">toute personne qui utilise — ou supervise l'utilisation de — produits à 0,1 % ou plus de diisocyanates, à titre industriel ou professionnel</dd></div>
+        <div class="dii-sheet__item" data-src="SRC-DII-005 SRC-DII-006"><dt data-i18n="dii.f_renew_t">Validité</dt><dd data-i18n="dii.f_renew_d">renouvellement au moins tous les 5 ans ; réussite attestée par l'employeur ou l'indépendant</dd></div>
+      </dl>
+      <div class="dii-sheet__foot"><dl class="fxt-practical"><div><dt data-i18n="fx.f_practical_t">Durée, tarif et dates</dt><dd data-i18n-html="fx.f_practical_d">communiqués sur demande — <a href="contact.html">contactez l'équipe</a></dd></div></dl><p class="fx-card__note" data-i18n="dii.card_note">Le niveau de formation (général, intermédiaire ou avancé) dépend de vos usages : précisez-les dans votre demande.</p></div>
+    </div>
+  </section>
+
+  <div class="container">
 
     <div class="fx-body">
-      <!-- ==================== INFORMATIONS ESSENTIELLES ==================== -->
-      <aside class="fx-aside" aria-labelledby="fx-essentials-t">
-        <div class="fx-card">
-          <h2 class="fx-card__title" id="fx-essentials-t" data-i18n="fx.essentials">Informations essentielles</h2>
-          <dl class="fx-facts">
-            <div class="fx-fact" data-src="SRC-DII-001"><svg class="fx-ic" aria-hidden="true"><use href="#fx-scale"/></svg><dt data-i18n="dii.f_law_t">Cadre légal</dt><dd data-i18n="dii.f_law_d">Règlement (UE) 2020/1149 — REACH, annexe XVII, entrée 74</dd></div>
-            <div class="fx-fact" data-src="SRC-DII-002"><svg class="fx-ic" aria-hidden="true"><use href="#fx-calendar"/></svg><dt data-i18n="dii.f_since_t">Exigée depuis</dt><dd data-i18n="dii.f_since_d">le 24 août 2023</dd></div>
-            <div class="fx-fact" data-src="SRC-DII-003 SRC-DII-004"><svg class="fx-ic" aria-hidden="true"><use href="#fx-percent"/></svg><dt data-i18n="dii.f_scope_t">Qui est visé ?</dt><dd data-i18n="dii.f_scope_d">toute personne qui utilise — ou supervise l'utilisation de — produits à 0,1 % ou plus de diisocyanates, à titre industriel ou professionnel</dd></div>
-            <div class="fx-fact" data-src="SRC-DII-005 SRC-DII-006"><svg class="fx-ic" aria-hidden="true"><use href="#fx-refresh"/></svg><dt data-i18n="dii.f_renew_t">Validité</dt><dd data-i18n="dii.f_renew_d">renouvellement au moins tous les 5 ans ; réussite attestée par l'employeur ou l'indépendant</dd></div>
-            <div class="fx-fact"><svg class="fx-ic" aria-hidden="true"><use href="#fx-clock"/></svg><dt data-i18n="fx.f_practical_t">Durée, tarif et dates</dt><dd data-i18n-html="fx.f_practical_d">communiqués sur demande — <a href="contact.html">contactez l'équipe</a></dd></div>
-          </dl>
-          <a class="btn btn--cta" href="inscription.html?formation=diisocyanates" data-fx-track="fx_signup_click" data-fx-from="aside" data-i18n="fx.cta_signup">S'inscrire à cette formation</a>
-          <a class="btn btn--outline" href="contact.html" data-fx-track="fx_quote_click" data-fx-from="aside" data-i18n="fx.cta_quote">Demander un devis entreprise</a>
-          <p class="fx-card__note" data-i18n="dii.card_note">Le niveau de formation (général, intermédiaire ou avancé) dépend de vos usages : précisez-les dans votre demande.</p>
-        </div>
-      </aside>
 
       <div class="fx-content">
         <!-- 01 — CADRE RÉGLEMENTAIRE -->
@@ -408,7 +408,7 @@ a.f-c-value:hover{color:var(--turquoise)}
         </section>
 
         <!-- 02 — SUIS-JE CONCERNÉ ? -->
-        <section class="fx-sec" id="concerne" aria-labelledby="dii-s2-t">
+        <section class="fx-sec fxt-bleed fxt-dark" id="concerne" aria-labelledby="dii-s2-t">
           <header class="fx-sec__head"><span class="fx-num" aria-hidden="true">02</span><h2 id="dii-s2-t" data-i18n="dii.s2_h2">Suis-je concerné ?</h2><p data-i18n="dii.s2_intro">Trois questions, tirées du texte du règlement. Rien n'est envoyé ni enregistré.</p></header>
           <form class="fx-check" data-fx-check aria-describedby="dii-check-disclaimer">
             <fieldset>

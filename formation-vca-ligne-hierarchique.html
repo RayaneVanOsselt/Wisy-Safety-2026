@@ -209,6 +209,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 }
 </style>
 <link rel="stylesheet" href="css/formation-fiche.css">
+<link rel="stylesheet" href="css/fiche-vlh.css">
 <link rel="stylesheet" href="css/article-modal.css">
 <noscript><style>.reveal{opacity:1;transform:none}.fx-mobile-bar{display:none}</style></noscript>
 </head>
@@ -328,55 +329,46 @@ a.f-c-value:hover{color:var(--turquoise)}
   </div>
 </aside>
 
-<main id="contenu" class="fx-main" data-fx-page="vca-hierarchique">
-  <div class="container">
-    <nav class="fx-bc" data-i18n-attr="aria-label:fx.bc_label" aria-label="Fil d'Ariane">
+<main id="contenu" class="fx-main fx-theme fx-theme--vlh" data-fx-page="vca-hierarchique">
+  <!-- ==================== EN-TÊTE « ENCADRER » : panneau sombre + photo à fond perdu ==================== -->
+  <header class="fxt-hero fxt-hero--vlh" data-fx-hero>
+    <div class="fxt-hero__panel"><div class="fxt-hero__inner">
+      <nav class="fx-bc" data-i18n-attr="aria-label:fx.bc_label" aria-label="Fil d'Ariane">
       <ol>
         <li><a href="index.html" data-i18n="fx.bc_home">Accueil</a></li>
         <li><a href="formations.html" data-i18n="fx.bc_formations">Formations</a></li>
         <li><span aria-current="page" data-i18n="dd.vca_hier">VCA ligne hiérarchique</span></li>
       </ol>
     </nav>
-
-    <!-- ==================== EN-TÊTE DE FICHE ==================== -->
-    <header class="fx-hero" data-fx-hero>
-      <div class="fx-hero__grid">
-        <div>
-          <p class="fx-kicker" data-i18n="vlh.kicker">Formation · Management de la sécurité</p>
-          <h1 class="fx-h1" id="fx-h1" data-i18n-html="vlh.h1">Formation VCA <span class="fx-mark">Ligne hiérarchique</span> <span class="fx-nowrap">(VOL-VCA)</span></h1>
-          <p class="fx-lead" data-i18n="vlh.lead">La formation sécurité des chefs d'équipe, superviseurs et responsables qui encadrent du personnel opérationnel : elle prépare à l'examen officiel « Sécurité pour les cadres opérationnels » (VOL-VCA).</p>
-          <div class="fx-cta-row">
+      <p class="fx-kicker" data-i18n="vlh.kicker">Formation · Management de la sécurité</p>
+      <h1 class="fx-h1" id="fx-h1" data-i18n-html="vlh.h1">Formation VCA <span class="fx-mark">Ligne hiérarchique</span> <span class="fx-nowrap">(VOL-VCA)</span></h1>
+      <p class="fx-lead" data-i18n="vlh.lead">La formation sécurité des chefs d'équipe, superviseurs et responsables qui encadrent du personnel opérationnel : elle prépare à l'examen officiel « Sécurité pour les cadres opérationnels » (VOL-VCA).</p>
+      <div class="fx-cta-row">
             <a class="btn btn--cta" href="inscription.html?formation=vca-hierarchique" data-fx-track="fx_signup_click" data-fx-from="hero"><span data-i18n="fx.cta_signup">S'inscrire à cette formation</span> <span class="btn__arrow" aria-hidden="true">→</span></a>
             <a class="btn btn--outline" href="contact.html" data-fx-track="fx_quote_click" data-fx-from="hero" data-i18n="fx.cta_quote">Demander un devis entreprise</a>
           </div>
-          <p class="fx-verified"><svg class="fx-ic" aria-hidden="true"><use href="#fx-check"/></svg><span data-i18n-html="fx.verified">Informations vérifiées le <time datetime="2026-10-01">01/10/2026</time> — sources officielles en bas de page.</span></p>
-        </div>
-        <div class="fx-hero__media">
-          <figure class="fx-figure">
-            <img src="assets/images/formations/vca-hierarchique.webp" width="1000" height="800" fetchpriority="high" decoding="async" data-i18n-attr="alt:vlh.hero_alt" alt="Encadrant en casque blanc et gilet haute visibilité qui indique une direction sur un chantier, un ordinateur portable à la main">
-            <figcaption data-i18n="fx.photo_illustration">Photo d'illustration.</figcaption>
-          </figure>
-        </div>
-      </div>
-    </header>
+      <p class="fx-verified"><svg class="fx-ic" aria-hidden="true"><use href="#fx-check"/></svg><span data-i18n-html="fx.verified">Informations vérifiées le <time datetime="2026-10-01">01/10/2026</time> — sources officielles en bas de page.</span></p>
+    </div></div>
+    <figure class="fxt-hero__photo"><img src="assets/images/formations/vca-hierarchique.webp" width="1000" height="800" fetchpriority="high" decoding="async" data-i18n-attr="alt:vlh.hero_alt" alt="Encadrant en casque blanc et gilet haute visibilité qui indique une direction sur un chantier, un ordinateur portable à la main"><figcaption data-i18n="fx.photo_illustration">Photo d'illustration.</figcaption></figure>
+  </header>
+
+  <!-- ==================== TABLEAU DE BORD DE L'EXAMEN (faits officiels sourcés) ==================== -->
+  <section class="vlh-board" aria-labelledby="fx-essentials-t">
+    <div class="container">
+      <h2 class="fx-vh" id="fx-essentials-t" data-i18n="fx.essentials">Informations essentielles</h2>
+      <dl class="vlh-board__grid">
+        <div class="vlh-board__item vlh-board__item--wide" data-src="SRC-VLH-001"><span class="vlh-board__big" aria-hidden="true" translate="no">VOL-VCA</span><dt data-i18n="vlh.f_dipl_t">Diplôme visé</dt><dd data-i18n="vlh.f_dipl_d">VOL-VCA — « Sécurité pour les cadres opérationnels »</dd></div>
+        <div class="vlh-board__item" data-src="SRC-VLH-005 SRC-VLH-006"><span class="vlh-board__big" aria-hidden="true" translate="no">70</span><dt data-i18n="vlh.f_exam_t">Examen</dt><dd data-i18n="vlh.f_exam_d">sur ordinateur, 70 questions, réussite à 64,5 %</dd></div>
+        <div class="vlh-board__item" data-src="SRC-VLH-002"><span class="vlh-board__big" aria-hidden="true" translate="no">10</span><dt data-i18n="vlh.f_valid_t">Validité du diplôme</dt><dd data-i18n="vlh.f_valid_d">10 ans à compter du jour de l'examen</dd></div>
+        <div class="vlh-board__item vlh-board__item--text" data-src="SRC-VLH-004"><dt data-i18n="vlh.f_issuer_t">Délivré par</dt><dd data-i18n="vlh.f_issuer_d">un centre d'examen reconnu par BeSaCC-VCA, après réussite de l'examen</dd></div>
+      </dl>
+      <div class="vlh-board__foot"><dl class="fxt-practical"><div><dt data-i18n="fx.f_practical_t">Durée, tarif et dates</dt><dd data-i18n-html="fx.f_practical_d">communiqués sur demande — <a href="contact.html">contactez l'équipe</a></dd></div></dl><p class="fx-card__note" data-i18n="fx.card_note">Le diplôme officiel est délivré par le centre d'examen ; Wisy Safety assure la formation.</p></div>
+    </div>
+  </section>
+
+  <div class="container">
 
     <div class="fx-body">
-      <!-- ==================== INFORMATIONS ESSENTIELLES (colonne collante) ==================== -->
-      <aside class="fx-aside" aria-labelledby="fx-essentials-t">
-        <div class="fx-card">
-          <h2 class="fx-card__title" id="fx-essentials-t" data-i18n="fx.essentials">Informations essentielles</h2>
-          <dl class="fx-facts">
-            <div class="fx-fact" data-src="SRC-VLH-001"><svg class="fx-ic" aria-hidden="true"><use href="#fx-award"/></svg><dt data-i18n="vlh.f_dipl_t">Diplôme visé</dt><dd data-i18n="vlh.f_dipl_d">VOL-VCA — « Sécurité pour les cadres opérationnels »</dd></div>
-            <div class="fx-fact" data-src="SRC-VLH-004"><svg class="fx-ic" aria-hidden="true"><use href="#fx-building"/></svg><dt data-i18n="vlh.f_issuer_t">Délivré par</dt><dd data-i18n="vlh.f_issuer_d">un centre d'examen reconnu par BeSaCC-VCA, après réussite de l'examen</dd></div>
-            <div class="fx-fact" data-src="SRC-VLH-005 SRC-VLH-006"><svg class="fx-ic" aria-hidden="true"><use href="#fx-monitor"/></svg><dt data-i18n="vlh.f_exam_t">Examen</dt><dd data-i18n="vlh.f_exam_d">sur ordinateur, 70 questions, réussite à 64,5 %</dd></div>
-            <div class="fx-fact" data-src="SRC-VLH-002"><svg class="fx-ic" aria-hidden="true"><use href="#fx-clock"/></svg><dt data-i18n="vlh.f_valid_t">Validité du diplôme</dt><dd data-i18n="vlh.f_valid_d">10 ans à compter du jour de l'examen</dd></div>
-            <div class="fx-fact"><svg class="fx-ic" aria-hidden="true"><use href="#fx-calendar"/></svg><dt data-i18n="fx.f_practical_t">Durée, tarif et dates</dt><dd data-i18n-html="fx.f_practical_d">communiqués sur demande — <a href="contact.html">contactez l'équipe</a></dd></div>
-          </dl>
-          <a class="btn btn--cta" href="inscription.html?formation=vca-hierarchique" data-fx-track="fx_signup_click" data-fx-from="aside" data-i18n="fx.cta_signup">S'inscrire à cette formation</a>
-          <a class="btn btn--outline" href="contact.html" data-fx-track="fx_quote_click" data-fx-from="aside" data-i18n="fx.cta_quote">Demander un devis entreprise</a>
-          <p class="fx-card__note" data-i18n="fx.card_note">Le diplôme officiel est délivré par le centre d'examen ; Wisy Safety assure la formation.</p>
-        </div>
-      </aside>
 
       <div class="fx-content">
         <!-- 01 — POUR QUI -->
@@ -403,7 +395,7 @@ a.f-c-value:hover{color:var(--turquoise)}
         </section>
 
         <!-- 02 — PROGRAMME -->
-        <section class="fx-sec" id="programme" aria-labelledby="vlh-s2-t">
+        <section class="fx-sec fxt-bleed fxt-dark" id="programme" aria-labelledby="vlh-s2-t">
           <header class="fx-sec__head"><span class="fx-num" aria-hidden="true">02</span><h2 id="vlh-s2-t" data-i18n="vlh.s2_h2">Un programme calé sur les 14 thèmes officiels</h2><p data-src="SRC-VLH-007" data-i18n="vlh.s2_intro">Les termes finaux de l'examen VOL-VCA, publiés par BeSaCC-VCA, s'organisent en 14 chapitres. La formation les passe en revue, dans cet ordre.</p></header>
           <ol class="fx-steps fx-steps--2col" data-src="SRC-VLH-007">
             <li><b data-i18n="vlh.p01">Législation</b></li>

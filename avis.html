@@ -907,11 +907,17 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
 @media(max-width:1000px){
   .av-hero__grid{grid-template-columns:1fr;gap:2rem}
   #rc-stats{max-width:420px}
-  .av-deposit__grid{grid-template-columns:1fr;gap:2.5rem}
+  .av-deposit__grid{grid-template-columns:minmax(0,1fr);gap:2.5rem}
   .av-intro__title,.av-intro__desc{max-width:none}
 }
 @media(max-width:560px){
   .av-hero__title{font-size:clamp(2rem,8vw,2.6rem)}
+}
+/* très petits écrans : les 5 étoiles de la note tiennent sur une ligne (cibles de 34 px) */
+@media(max-width:380px){
+  .rc-rate{gap:.15rem}
+  .rc-rate__star{padding:.2rem}
+  .rc-rate__star svg{width:28px;height:28px}
 }
 @media(prefers-reduced-motion:reduce){
   .rc-submit::after,.rc-rate--pulse .rc-rate__star.is-on,.rc-success.is-in .rc-success__check *{animation:none}

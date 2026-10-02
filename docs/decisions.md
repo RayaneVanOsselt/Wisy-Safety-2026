@@ -20,6 +20,10 @@ Chaque décision donne : le choix, la raison, et ce qu'il faudrait faire pour la
 4. **Gabarit « fiche technique » séparé** (`css/formation-fiche.css`, préfixe `fx-` ; `js/formation-fiche.js`). Le
    gabarit VCA Base n'est pas modifié (aucun risque de régression). L'en-tête, le pied de page et le socle CSS en ligne sont
    repris de `formation-vca-base.html`. La duplication existait déjà : elle est signalée en dette (P2), pas corrigée ici.
+4 bis. **Une direction artistique par formation** (02/10/2026, retour du propriétaire : « effet copier-coller ») : chaque
+   fiche charge, après le gabarit commun, sa propre feuille (`css/fiche-vlh.css`, `fiche-dii.css`, `fiche-fib.css`) et
+   recompose son en-tête et ses informations essentielles. La colonne latérale collante disparaît de ces trois pages :
+   les faits suivent l'en-tête, les boutons restent dans l'en-tête sur mobile. Détail : `docs/design-references.md`.
 5. **Articles** :
    - VCA LH et diisocyanates : en **fenêtre native `<dialog>`** (`js/article-modal.js`, `css/article-modal.css`), avec
      lien direct `#article-<slug>`, bouton retour du navigateur, retour du focus, et lecture **sans JavaScript** (les

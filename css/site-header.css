@@ -154,6 +154,9 @@
    jamais la couleur seule : texte épinette (5,7:1 sur crème), soulignement plein, graisse. */
 .site-header .nav-link[aria-current="page"] { color: var(--epinette); }
 .site-header .nav-link[aria-current="page"]::after { transform: scaleX(1); background: var(--epinette); }
+/* Rubrique en cours (aria-current="true" sur les fiches formation) et survol : le brume sur fond crème ne fait que 2,8:1 ;
+   l'épinette atteint 5,9:1 (WCAG 1.4.3). Le filet garde le brume. */
+.site-header .nav-link[aria-current], .site-header .nav-link:hover, .site-header .nav-link:focus-visible, .site-header .nav-link[aria-expanded="true"] { color: var(--epinette); }
 .m-panel .m-nav > li > a[aria-current="page"] { color: var(--epinette); font-weight: 600; background: var(--brume-08); }
 .site-footer .f-links a[aria-current="page"] { color: var(--turquoise); font-weight: 600; }
 
@@ -220,3 +223,14 @@ html .site-header.is-scrolled .main-bar {
   .m-panel .m-help,
   .m-panel .m-help__ic { transition-duration: .001ms !important; }
 }
+
+/* WCAG 2.2 — 2.5.8 (taille des cibles) : liens du bandeau utilitaire et du pied de page sur 24 px de haut au moins
+   (19–23 px mesurés le 02/10/2026). */
+.util-contacts a, .util-help { display: inline-flex; align-items: center; min-height: 24px; }
+.site-footer a:not(.btn) { display: inline-flex; align-items: center; min-height: 24px; }
+
+/* Menu mobile fermé : hors de l'ordre de tabulation et de l'arbre d'accessibilité (audit du 02/10/2026). Sans cela,
+   ses 27 liens, invisibles hors écran, restaient atteignables au clavier sur toutes les pages, même sur ordinateur.
+   La visibilité ne bascule qu'à la fin de l'animation de fermeture ; à l'ouverture, elle est immédiate. */
+.m-panel:not(.is-open) { visibility: hidden; transition: transform var(--t-med) var(--ease-out), visibility 0s linear var(--t-med); }
+.m-panel.is-open { visibility: visible; }

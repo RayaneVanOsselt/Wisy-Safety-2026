@@ -9,12 +9,12 @@
   function m(lang, obj) { I[lang] = Object.assign(I[lang] || {}, obj); }
 
   m("fr", {
-    "meta.title": "Wisy Safety — Nos formations certifiées",
-    "fo.hero_pill": "Organisme de formation agréé · Anderlecht",
-    "fo.hero_title": "Nos Formations <span class=\"mark\">Certifiées</span>",
-    "fo.hero_desc": "Développez vos compétences avec nos formations professionnelles reconnues et bénéficiez d'un accompagnement personnalisé.",
-    "fo.badge1": "Certifications officielles", "fo.badge2": "Formateurs experts",
-    "fo.badge3": "Approche pratique", "fo.badge4": "Financement possible",
+    "meta.title": "Formations sécurité à Bruxelles | Wisy Safety",
+    "fo.hero_pill": "Centre de formation à la sécurité · Anderlecht",
+    "fo.hero_title": "Nos <span class=\"mark\">formations</span>",
+    "fo.hero_desc": "Six formations, de la VCA aux premiers secours. Chaque fiche dit ce qui est vérifié, et d'où vient l'information.",
+    "fo.badge1": "Faits sourcés et datés", "fo.badge2": "Anderlecht, Bruxelles",
+    "fo.badge3": "Inscription en ligne", "fo.badge4": "Financement possible",
     "fo.cat_title": "Notre catalogue de formations",
     "fo.filter_all": "Toutes les formations", "fo.filter_securite": "Sécurité",
     "fo.filter_secours": "Premiers secours", "fo.filter_technique": "Technique", "fo.filter_management": "Management",
@@ -39,12 +39,12 @@
   });
 
   m("en", {
-    "meta.title": "Wisy Safety — Our certified training courses",
-    "fo.hero_pill": "Accredited training centre · Anderlecht",
-    "fo.hero_title": "Our <span class=\"mark\">Certified</span> Courses",
-    "fo.hero_desc": "Build your skills with our recognised professional courses and benefit from personalised support.",
-    "fo.badge1": "Official certifications", "fo.badge2": "Expert trainers",
-    "fo.badge3": "Hands-on approach", "fo.badge4": "Funding available",
+    "meta.title": "Safety training courses in Brussels | Wisy Safety",
+    "fo.hero_pill": "Safety training centre · Anderlecht",
+    "fo.hero_title": "Our <span class=\"mark\">courses</span>",
+    "fo.hero_desc": "Six courses, from VCA to first aid. Each page states what has been checked, and where the information comes from.",
+    "fo.badge1": "Sourced, dated facts", "fo.badge2": "Anderlecht, Brussels",
+    "fo.badge3": "Online registration", "fo.badge4": "Funding available",
     "fo.cat_title": "Our course catalogue",
     "fo.filter_all": "All courses", "fo.filter_securite": "Safety",
     "fo.filter_secours": "First aid", "fo.filter_technique": "Technical", "fo.filter_management": "Management",
@@ -69,12 +69,12 @@
   });
 
   m("nl", {
-    "meta.title": "Wisy Safety — Onze gecertificeerde opleidingen",
-    "fo.hero_pill": "Erkend opleidingscentrum · Anderlecht",
-    "fo.hero_title": "Onze <span class=\"mark\">Gecertificeerde</span> Opleidingen",
-    "fo.hero_desc": "Ontwikkel uw vaardigheden met onze erkende professionele opleidingen en geniet van persoonlijke begeleiding.",
-    "fo.badge1": "Officiële certificeringen", "fo.badge2": "Deskundige opleiders",
-    "fo.badge3": "Praktijkgerichte aanpak", "fo.badge4": "Financiering mogelijk",
+    "meta.title": "Veiligheidsopleidingen in Brussel | Wisy Safety",
+    "fo.hero_pill": "Opleidingscentrum voor veiligheid · Anderlecht",
+    "fo.hero_title": "Onze <span class=\"mark\">opleidingen</span>",
+    "fo.hero_desc": "Zes opleidingen, van VCA tot eerste hulp. Elke pagina vermeldt wat gecontroleerd is en waar de informatie vandaan komt.",
+    "fo.badge1": "Feiten met bron en datum", "fo.badge2": "Anderlecht, Brussel",
+    "fo.badge3": "Online inschrijving", "fo.badge4": "Financiering mogelijk",
     "fo.cat_title": "Onze opleidingscatalogus",
     "fo.filter_all": "Alle opleidingen", "fo.filter_securite": "Veiligheid",
     "fo.filter_secours": "Eerste hulp", "fo.filter_technique": "Techniek", "fo.filter_management": "Management",
@@ -99,12 +99,12 @@
   });
 
   m("af", {
-    "meta.title": "Wisy Safety — Ons gesertifiseerde opleidings",
-    "fo.hero_pill": "Geakkrediteerde opleidingsentrum · Anderlecht",
-    "fo.hero_title": "Ons <span class=\"mark\">Gesertifiseerde</span> Opleidings",
-    "fo.hero_desc": "Ontwikkel u vaardighede met ons erkende professionele opleidings en geniet persoonlike begeleiding.",
-    "fo.badge1": "Amptelike sertifisering", "fo.badge2": "Kundige opleiers",
-    "fo.badge3": "Praktiese benadering", "fo.badge4": "Finansiering beskikbaar",
+    "meta.title": "Veiligheidsopleiding in Brussel | Wisy Safety",
+    "fo.hero_pill": "Veiligheidsopleidingsentrum · Anderlecht",
+    "fo.hero_title": "Ons <span class=\"mark\">opleiding</span>",
+    "fo.hero_desc": "Ses opleidings, van VCA tot noodhulp. Elke bladsy sê wat nagegaan is en waar die inligting vandaan kom.",
+    "fo.badge1": "Feite met bron en datum", "fo.badge2": "Anderlecht, Brussel",
+    "fo.badge3": "Aanlyn inskrywing", "fo.badge4": "Finansiering beskikbaar",
     "fo.cat_title": "Ons opleidingskatalogus",
     "fo.filter_all": "Alle opleidings", "fo.filter_securite": "Veiligheid",
     "fo.filter_secours": "Noodhulp", "fo.filter_technique": "Tegnies", "fo.filter_management": "Bestuur",
@@ -129,12 +129,12 @@
   });
 
   m("ar", {
-    "meta.title": "Wisy Safety — دوراتنا التدريبية المعتمدة",
-    "fo.hero_pill": "مركز تدريب معتمد · أندرلخت",
-    "fo.hero_title": "دوراتنا <span class=\"mark\">المعتمدة</span>",
-    "fo.hero_desc": "طوّر مهاراتك من خلال دوراتنا المهنية المعترف بها واستفد من مرافقة شخصية.",
-    "fo.badge1": "شهادات رسمية", "fo.badge2": "مدربون خبراء",
-    "fo.badge3": "نهج عملي", "fo.badge4": "إمكانية التمويل",
+    "meta.title": "دورات السلامة في بروكسل | Wisy Safety",
+    "fo.hero_pill": "مركز تدريب على السلامة · أندرلخت",
+    "fo.hero_title": "<span class=\"mark\">دوراتنا</span> التدريبية",
+    "fo.hero_desc": "ست دورات، من VCA إلى الإسعافات الأولية. تذكر كل صفحة ما تم التحقق منه ومصدر المعلومات.",
+    "fo.badge1": "معلومات موثّقة ومؤرخة", "fo.badge2": "أندرلخت، بروكسل",
+    "fo.badge3": "التسجيل عبر الإنترنت", "fo.badge4": "إمكانية التمويل",
     "fo.cat_title": "كتالوج دوراتنا التدريبية",
     "fo.filter_all": "جميع الدورات", "fo.filter_securite": "السلامة",
     "fo.filter_secours": "الإسعافات الأولية", "fo.filter_technique": "تقني", "fo.filter_management": "الإدارة",
@@ -159,12 +159,12 @@
   });
 
   m("bg", {
-    "meta.title": "Wisy Safety — Нашите сертифицирани обучения",
-    "fo.hero_pill": "Акредитиран учебен център · Андерлехт",
-    "fo.hero_title": "Нашите <span class=\"mark\">Сертифицирани</span> обучения",
-    "fo.hero_desc": "Развийте уменията си с нашите признати професионални обучения и се възползвайте от персонално съдействие.",
-    "fo.badge1": "Официални сертификати", "fo.badge2": "Експертни обучители",
-    "fo.badge3": "Практически подход", "fo.badge4": "Възможност за финансиране",
+    "meta.title": "Обучения по безопасност в Брюксел | Wisy Safety",
+    "fo.hero_pill": "Учебен център по безопасност · Андерлехт",
+    "fo.hero_title": "Нашите <span class=\"mark\">обучения</span>",
+    "fo.hero_desc": "Шест обучения — от VCA до първа помощ. Всяка страница посочва какво е проверено и откъде идва информацията.",
+    "fo.badge1": "Факти с източник и дата", "fo.badge2": "Андерлехт, Брюксел",
+    "fo.badge3": "Записване онлайн", "fo.badge4": "Възможност за финансиране",
     "fo.cat_title": "Нашият каталог с обучения",
     "fo.filter_all": "Всички обучения", "fo.filter_securite": "Безопасност",
     "fo.filter_secours": "Първа помощ", "fo.filter_technique": "Технически", "fo.filter_management": "Мениджмънт",
@@ -189,12 +189,12 @@
   });
 
   m("de", {
-    "meta.title": "Wisy Safety — Unsere zertifizierten Schulungen",
-    "fo.hero_pill": "Anerkanntes Ausbildungszentrum · Anderlecht",
-    "fo.hero_title": "Unsere <span class=\"mark\">zertifizierten</span> Schulungen",
-    "fo.hero_desc": "Erweitern Sie Ihre Kompetenzen mit unseren anerkannten Fachschulungen und profitieren Sie von persönlicher Betreuung.",
-    "fo.badge1": "Offizielle Zertifizierungen", "fo.badge2": "Erfahrene Trainer",
-    "fo.badge3": "Praxisnaher Ansatz", "fo.badge4": "Finanzierung möglich",
+    "meta.title": "Sicherheitsschulungen in Brüssel | Wisy Safety",
+    "fo.hero_pill": "Schulungszentrum für Sicherheit · Anderlecht",
+    "fo.hero_title": "Unsere <span class=\"mark\">Schulungen</span>",
+    "fo.hero_desc": "Sechs Schulungen, von VCA bis Erste Hilfe. Jede Seite sagt, was geprüft wurde und woher die Information stammt.",
+    "fo.badge1": "Belegte, datierte Fakten", "fo.badge2": "Anderlecht, Brüssel",
+    "fo.badge3": "Online-Anmeldung", "fo.badge4": "Finanzierung möglich",
     "fo.cat_title": "Unser Schulungskatalog",
     "fo.filter_all": "Alle Schulungen", "fo.filter_securite": "Sicherheit",
     "fo.filter_secours": "Erste Hilfe", "fo.filter_technique": "Technik", "fo.filter_management": "Management",
@@ -219,12 +219,12 @@
   });
 
   m("ro", {
-    "meta.title": "Wisy Safety — Cursurile noastre certificate",
-    "fo.hero_pill": "Centru de formare acreditat · Anderlecht",
-    "fo.hero_title": "Cursurile noastre <span class=\"mark\">Certificate</span>",
-    "fo.hero_desc": "Dezvoltați-vă competențele cu cursurile noastre profesionale recunoscute și beneficiați de îndrumare personalizată.",
-    "fo.badge1": "Certificări oficiale", "fo.badge2": "Formatori experți",
-    "fo.badge3": "Abordare practică", "fo.badge4": "Finanțare posibilă",
+    "meta.title": "Cursuri de securitate la Bruxelles | Wisy Safety",
+    "fo.hero_pill": "Centru de formare în securitate · Anderlecht",
+    "fo.hero_title": "<span class=\"mark\">Cursurile</span> noastre",
+    "fo.hero_desc": "Șase cursuri, de la VCA la prim ajutor. Fiecare pagină arată ce a fost verificat și de unde provine informația.",
+    "fo.badge1": "Informații cu sursă și dată", "fo.badge2": "Anderlecht, Bruxelles",
+    "fo.badge3": "Înscriere online", "fo.badge4": "Finanțare posibilă",
     "fo.cat_title": "Catalogul nostru de cursuri",
     "fo.filter_all": "Toate cursurile", "fo.filter_securite": "Securitate",
     "fo.filter_secours": "Prim ajutor", "fo.filter_technique": "Tehnic", "fo.filter_management": "Management",
@@ -249,12 +249,12 @@
   });
 
   m("it", {
-    "meta.title": "Wisy Safety — I nostri corsi certificati",
-    "fo.hero_pill": "Centro di formazione accreditato · Anderlecht",
-    "fo.hero_title": "I nostri corsi <span class=\"mark\">Certificati</span>",
-    "fo.hero_desc": "Sviluppa le tue competenze con i nostri corsi professionali riconosciuti e approfitta di un accompagnamento personalizzato.",
-    "fo.badge1": "Certificazioni ufficiali", "fo.badge2": "Formatori esperti",
-    "fo.badge3": "Approccio pratico", "fo.badge4": "Finanziamento possibile",
+    "meta.title": "Corsi sulla sicurezza a Bruxelles | Wisy Safety",
+    "fo.hero_pill": "Centro di formazione sulla sicurezza · Anderlecht",
+    "fo.hero_title": "I nostri <span class=\"mark\">corsi</span>",
+    "fo.hero_desc": "Sei corsi, dalla VCA al primo soccorso. Ogni pagina indica che cosa è stato verificato e da dove viene l'informazione.",
+    "fo.badge1": "Fatti con fonte e data", "fo.badge2": "Anderlecht, Bruxelles",
+    "fo.badge3": "Iscrizione online", "fo.badge4": "Finanziamento possibile",
     "fo.cat_title": "Il nostro catalogo corsi",
     "fo.filter_all": "Tutti i corsi", "fo.filter_securite": "Sicurezza",
     "fo.filter_secours": "Primo soccorso", "fo.filter_technique": "Tecnico", "fo.filter_management": "Management",
@@ -279,12 +279,12 @@
   });
 
   m("sl", {
-    "meta.title": "Wisy Safety — Naša certificirana usposabljanja",
-    "fo.hero_pill": "Akreditirani center za usposabljanje · Anderlecht",
-    "fo.hero_title": "Naša <span class=\"mark\">certificirana</span> usposabljanja",
-    "fo.hero_desc": "Razvijajte svoje kompetence z našimi priznanimi strokovnimi usposabljanji in izkoristite osebno podporo.",
-    "fo.badge1": "Uradni certifikati", "fo.badge2": "Strokovni predavatelji",
-    "fo.badge3": "Praktični pristop", "fo.badge4": "Možnost financiranja",
+    "meta.title": "Varnostna usposabljanja v Bruslju | Wisy Safety",
+    "fo.hero_pill": "Center za varnostno usposabljanje · Anderlecht",
+    "fo.hero_title": "Naša <span class=\"mark\">usposabljanja</span>",
+    "fo.hero_desc": "Šest usposabljanj, od VCA do prve pomoči. Vsaka stran pove, kaj je preverjeno in od kod izvira informacija.",
+    "fo.badge1": "Dejstva z virom in datumom", "fo.badge2": "Anderlecht, Bruselj",
+    "fo.badge3": "Spletna prijava", "fo.badge4": "Možnost financiranja",
     "fo.cat_title": "Naš katalog usposabljanj",
     "fo.filter_all": "Vsa usposabljanja", "fo.filter_securite": "Varnost",
     "fo.filter_secours": "Prva pomoč", "fo.filter_technique": "Tehnično", "fo.filter_management": "Vodenje",

@@ -208,7 +208,7 @@
 /* En-tête d'étape — façon repère de plan */
 .reg-step__head { margin-bottom: 1.6rem; padding-bottom: 1.1rem; border-bottom: 1px solid var(--reg-hair); position: relative; }
 .reg-step__head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 56px; height: 2px; background: var(--turquoise); }
-.reg-step__eyebrow { font-family: var(--reg-mono); font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--brume); margin-bottom: .5rem; }
+.reg-step__eyebrow { font-family: var(--reg-mono); font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--epinette); margin-bottom: .5rem; }
 .reg-step__title { font-size: var(--fs-h2); letter-spacing: -.01em; margin: 0 0 .5rem; }
 .reg-step__sub { color: var(--granit); font-size: var(--fs-lead); max-width: 58ch; margin: 0; }
 
@@ -288,7 +288,7 @@
 .reg-module__ref .sep { color: var(--granit-clair); }
 .reg-module__price { display: inline-flex; align-items: baseline; gap: .3rem; }
 .reg-module__amount { font-family: var(--reg-mono); font-weight: 700; font-size: 1.22rem; color: var(--epinette); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
-.reg-module__amount.is-quote { font-size: .92rem; color: var(--brume); text-transform: uppercase; letter-spacing: .05em; }
+.reg-module__amount.is-quote { font-size: .92rem; color: var(--epinette); text-transform: uppercase; letter-spacing: .05em; }
 .reg-module__unit { font-family: var(--reg-mono); font-size: .72rem; color: var(--granit); }
 .reg-module__name { font-family: var(--font-titre); font-weight: 600; font-size: 1.14rem; color: var(--noir-jais); line-height: 1.2; margin: 0; }
 .reg-module__desc { font-size: var(--fs-small); color: var(--granit); margin: 0; flex: 1; }
@@ -350,7 +350,7 @@
 .reg-line__session { grid-column: 2; display: flex; align-items: flex-start; gap: .4rem; margin-top: .15rem; font-size: .82rem; line-height: 1.35; color: var(--epinette); }
 .reg-line__session svg { flex: none; width: 15px; height: 15px; margin-top: 2px; }
 .reg-line__session b { font-weight: 600; }
-.reg-line__ref { grid-column: 2; font-family: var(--reg-mono); font-size: .64rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--granit-clair); }
+.reg-line__ref { grid-column: 2; font-family: var(--reg-mono); font-size: .64rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--granit); }
 .reg-line__name { grid-column: 2; font-family: var(--font-titre); font-weight: 600; font-size: .96rem; color: var(--noir-jais); line-height: 1.25; }
 .reg-line__meta { grid-column: 2; display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; margin-top: .2rem; }
 .reg-line__calc { font-family: var(--reg-mono); font-size: .74rem; color: var(--granit); font-variant-numeric: tabular-nums; }
@@ -581,3 +581,8 @@ select.reg-input { appearance: none; -webkit-appearance: none; background-image:
   .reg-tilt-ok .reg-module:hover { transform: translateY(-3px); }
   .reg-module, .reg-mobilebar, .reg-sheet, .reg-sheet-scrim { transition-duration: .001ms !important; }
 }
+
+/* Envoi de la demande (paiement en ligne inactif) : confirmation ou échec, avec lien e-mail de secours */
+#reg-pay-message[data-state="error"] { color: var(--noir-jais) !important; font-weight: 500 !important; border-inline-start: 3px solid var(--sarcelle); padding-inline-start: .85rem; text-align: start; }
+#reg-pay-message[data-state="ok"] { border-inline-start: 3px solid var(--epinette); padding-inline-start: .85rem; text-align: start; }
+.reg-req-mail { display: inline-flex; align-items: center; min-height: 44px; margin-top: .35rem; color: var(--epinette); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }

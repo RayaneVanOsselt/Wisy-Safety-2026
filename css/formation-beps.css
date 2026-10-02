@@ -283,7 +283,8 @@ body { background: var(--color-surface); }
 .beps-tabs__panel[hidden] { display: none; }
 .beps-tabs__panel { position: relative; animation: beps-panel-in 420ms var(--ease-premium); }
 @keyframes beps-panel-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-.beps-tabs__kicker { font-family: var(--font-titre); font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--color-accent); background: var(--color-ink); display: inline-block; padding: .35rem .75rem; border-radius: 999px; margin-bottom: 1rem; }
+.beps-tabs__kicker { font-family: var(--font-titre); font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--brume); background: var(--color-ink); display: inline-block; padding: .35rem .75rem; border-radius: 999px; margin-bottom: 1rem; }
+.beps-tabs__panel > .beps-tabs__kicker { color: var(--brume); }   /* sinon « .beps-tabs__panel > p » (gris) l'emporte : 2,67:1 sur fond sombre */
 .beps-tabs__panel h3 { font-size: var(--fs-h3); margin-bottom: .75rem; }
 .beps-tabs__panel > p { color: var(--color-muted); max-width: 62ch; position: relative; }
 .beps-tabs__list { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.25rem; position: relative; }

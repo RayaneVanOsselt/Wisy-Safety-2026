@@ -113,22 +113,37 @@ body.has-wcc-banner #wisy-assistant {
 }
 
 /* -------------------------------------------------------------------------
-   2. FEUILLE MOBILE — bottom sheet compact (jamais 80 % de l'écran)
+   2. FEUILLE MOBILE — compacte (audit du 02/10/2026, M6 : elle couvrait ≈ 60 % du premier écran)
+      Même texte et mêmes trois choix ; « Tout accepter » et « Tout refuser » côte à côte, de même taille
+      (aucun choix n'est mis en retrait), « Personnaliser » en dessous. Icône retirée, lien dans le texte.
    ------------------------------------------------------------------------- */
 @media (max-width: 640px) {
   .wcc-banner {
-    left: .6rem; right: .6rem; bottom: .6rem;
-    max-height: min(64dvh, 520px);
-    overflow-y: auto;
+    left: .5rem; right: .5rem; bottom: .5rem;
+    display: flex; flex-direction: column;
+    border-radius: 16px;
+    max-height: min(46dvh, 400px);
+    overflow: hidden;
   }
-  .wcc-banner__inner { padding: 1.25rem 1.1rem; gap: .85rem; }
-  .wcc-icon { width: 36px; height: 36px; }
-  .wcc-icon svg { width: 18px; height: 18px; }
-  .wcc-banner__title { font-size: 1rem; }
-  .wcc-banner__actions { flex-direction: column; align-items: stretch; }
-  .wcc-btn, .wcc-btn--text { width: 100%; }
-  /* Ordre visuel demandé sur mobile : Tout accepter, Tout refuser, Personnaliser */
+  /* si l'écran est très bas, seul le texte défile : les boutons restent toujours visibles */
+  .wcc-banner__inner { flex: 1 1 auto; min-height: 0; flex-direction: column; flex-wrap: nowrap; align-items: stretch; padding: .9rem 1rem .75rem; gap: .6rem; }
+  .wcc-icon { display: none; }
+  .wcc-banner__body { flex: 1 1 auto; min-width: 0; min-height: 0; overflow-y: auto; }
+  .wcc-banner__title { margin-bottom: .2rem; font-size: .95rem; }
+  .wcc-banner__text { display: inline; margin: 0; font-size: .8rem; line-height: 1.45; }
+  .wcc-banner__link { display: inline; margin-inline-start: .3rem; font-size: .8rem; line-height: 1.45; }
+  .wcc-banner__actions { flex: none; display: grid; grid-template-columns: 1fr 1fr auto; align-items: stretch; gap: .4rem; width: 100%; }
+  .wcc-banner .wcc-btn { min-height: 44px; padding: .4rem .45rem; font-size: .86rem; line-height: 1.2; white-space: normal; }
   .wcc-banner__actions [data-wcc-action="accept"] { order: -1; }
+  .wcc-banner__actions [data-wcc-action="customize"] { width: auto; min-height: 44px; padding: .35rem .4rem; font-size: .84rem; line-height: 1.2; }
+  .wcc-banner .wcc-btn, .wcc-banner__actions [data-wcc-action="customize"] { white-space: nowrap; }
+  /* téléphones étroits : « Personnaliser » passe sous les deux choix principaux plutôt que de les écraser */
+  @media (max-width: 420px) {
+    .wcc-banner__actions { grid-template-columns: 1fr 1fr; row-gap: 0; }
+    .wcc-banner__actions [data-wcc-action="customize"] { grid-column: 1 / -1; min-height: 40px; padding-block: .25rem; }
+  }
+  /* l'assistant ne se pose plus sur le contenu au-dessus du bandeau : il revient dès que le choix est fait */
+  body.has-wcc-banner #wisy-assistant { visibility: hidden; }
 }
 
 /* -------------------------------------------------------------------------

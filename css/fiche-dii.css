@@ -1,0 +1,124 @@
+/* =========================================================================
+   DIISOCYANATES — « Le texte réglementaire »
+   Direction clinique et documentaire : en-tête clair où la plaque du règlement tient lieu d'image, bande
+   rayée de signalisation, fiche signalétique en quatre colonnes, sections en paragraphes (§) avec les
+   sources en notes de marge, outil « Suis-je concerné ? » posé sur un panneau sombre. Angles droits partout.
+   ========================================================================= */
+
+.fx-theme--dii { --dii-rule: var(--noir-jais); }
+
+/* ---------- En-tête : texte + plaque du règlement ---------- */
+.fxt-hero--dii { padding-top: clamp(1rem, 2.5vw, 1.75rem); background: var(--creme); }
+.fxt-hero--dii .fx-bc { padding-bottom: clamp(1.5rem, 4vw, 2.75rem); }
+.fxt-hero--dii .fxt-hero__grid { display: grid; gap: clamp(2rem, 4vw, 4rem); align-items: center; padding-bottom: clamp(2.25rem, 5vw, 4rem); }
+@media (min-width: 1024px) { .fxt-hero--dii .fxt-hero__grid { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); } }
+.fxt-hero--dii .fx-kicker { color: var(--noir-jais); }
+.fxt-hero--dii .fx-kicker::before { width: 12px; height: 12px; background: var(--epinette); }
+.fxt-hero--dii .fx-h1 { font-size: clamp(2.15rem, 4.9vw, 3.9rem); line-height: 1.02; letter-spacing: -.03em; max-width: 15ch; }
+/* le mot clé est surligné comme dans un texte annoté */
+.fxt-hero--dii .fx-h1 .fx-mark { color: var(--noir-jais); text-decoration: underline; text-decoration-color: rgba(72, 214, 194, .55); text-decoration-thickness: .3em; text-underline-offset: -.14em; text-decoration-skip-ink: none; }
+.fxt-hero--dii .fx-lead { color: var(--noir-jais); max-width: 54ch; }
+.fxt-hero--dii .btn, .fx-theme--dii .fx-final .btn { border-radius: 2px; }
+
+/* La plaque : une étiquette officielle, cadre net, en-tête noir */
+.fxt-hero--dii .fx-plate { border: 1.5px solid var(--noir-jais); border-radius: 0; box-shadow: none; padding: 0; background: #fff; }
+.fxt-hero--dii .fx-plate__ref { margin: 0; padding: 1rem 1.25rem; border-bottom: 0; background: var(--noir-jais); color: var(--creme); font-size: clamp(1.05rem, 1.6vw, 1.25rem); }
+.fxt-hero--dii .fx-plate__ref small { color: rgba(244, 250, 249, .78); }
+.fxt-hero--dii .fx-plate dl { padding: .25rem 1.25rem; }
+.fxt-hero--dii .fx-plate__row { grid-template-columns: 9.75rem minmax(0, 1fr); align-items: baseline; padding-block: 1rem; }
+.fxt-hero--dii .fx-plate dt { font-size: clamp(1.25rem, 1.9vw, 1.55rem); white-space: nowrap; color: var(--noir-jais); letter-spacing: -.01em; }
+.fxt-hero--dii .fx-plate__src { margin: 0; padding: .8rem 1.25rem; border-top: 1px solid var(--fx-rule); }
+.fxt-hero--dii .fx-plate__src a { color: var(--epinette); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 479px) { .fxt-hero--dii .fx-plate__row { grid-template-columns: 1fr; gap: .2rem; } }
+
+/* Bande de signalisation : motif à arêtes franches, pas un dégradé */
+.dii-tape { height: 10px; background: repeating-linear-gradient(-45deg, var(--epinette) 0 10px, var(--creme) 10px 20px); border-block: 1px solid var(--epinette); }
+
+/* ---------- Fiche signalétique ---------- */
+.dii-sheet { background: #fff; border-bottom: 1px solid var(--fx-rule); padding-block: clamp(1.75rem, 4vw, 3rem) clamp(1.25rem, 3vw, 2rem); }
+.dii-sheet__title { margin: 0 0 1.25rem; font-size: var(--fs-micro); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--noir-jais); }
+.dii-sheet__grid { display: grid; gap: 0 clamp(1.25rem, 3vw, 2.5rem); margin: 0; }
+@media (min-width: 720px) { .dii-sheet__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .dii-sheet__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.dii-sheet__item { padding: .85rem 0 1.25rem; border-top: 2px solid var(--noir-jais); }
+.dii-sheet__item dt { margin-bottom: .45rem; font-family: var(--font-titre); font-weight: 600; font-size: var(--fs-micro); letter-spacing: .12em; text-transform: uppercase; color: var(--granit); }
+.dii-sheet__item dd { margin: 0; font-size: 1rem; line-height: 1.5; color: var(--noir-jais); }
+.dii-sheet__item:nth-child(-n+2) dd { font-family: var(--font-titre); font-weight: 600; font-size: 1.12rem; line-height: 1.35; }
+.dii-sheet__foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 2rem; padding-top: 1rem; border-top: 1px solid var(--fx-rule); font-size: var(--fs-small); color: var(--granit); }
+.dii-sheet__foot .fxt-practical a { color: var(--epinette); }
+.dii-sheet__foot .fx-card__note { margin: 0; max-width: 70ch; }
+
+/* ---------- Sections : paragraphes (§) et sources en marge ---------- */
+.fx-theme--dii .fx-sec { border-top: 0; padding-block: clamp(2.25rem, 5vw, 3.75rem); }
+.fx-theme--dii .fx-sec__head { padding-top: .9rem; border-top: 2px solid var(--dii-rule); margin-bottom: 1.5rem; }
+.fx-theme--dii .fx-num { color: var(--noir-jais); font-size: .95rem; letter-spacing: .02em; }
+.fx-theme--dii .fx-num::before { content: "§\00a0"; color: var(--epinette); }
+.fx-theme--dii #sources .fx-num::before { content: none; }
+.fx-theme--dii .fx-sec__head h2 { font-size: clamp(1.5rem, 2.7vw, 2.15rem); letter-spacing: -.02em; line-height: 1.15; }
+.fx-theme--dii .fx-steps > li::before { color: var(--epinette); }
+@media (min-width: 1200px) {
+  .fx-theme--dii .fx-sec { display: grid; grid-template-columns: minmax(0, 1fr) 17rem; column-gap: clamp(2.5rem, 4vw, 4.5rem); align-items: start; }
+  .fx-theme--dii .fx-sec > * { grid-column: 1; }
+  .fx-theme--dii .fx-sec > .fx-sec__head { grid-column: 1 / -1; }
+  .fx-theme--dii .fx-sec > .fx-src { grid-column: 2; grid-row: 2 / span 12; position: sticky; top: calc(var(--header-offset, 96px) + 1rem); margin-top: 0; padding-top: .75rem; border-top: 2px solid var(--noir-jais); }
+  .fx-theme--dii .fx-sec__head p { max-width: 70ch; }
+}
+
+/* Tableaux : en-tête noir, cadre net */
+.fx-theme--dii .fx-table-wrap { border: 1.5px solid var(--noir-jais); border-radius: 0; }
+.fx-theme--dii .fx-table thead th { background: var(--noir-jais); color: var(--creme); letter-spacing: .02em; }
+.fx-theme--dii .fx-table caption { color: var(--noir-jais); }
+
+/* § 02 — Suis-je concerné ? : panneau sombre pleine largeur */
+.fx-theme--dii #concerne { --fxt-bleed: var(--noir-jais); }
+.fx-theme--dii #concerne .fx-sec__head { border-top-color: rgba(244, 250, 249, .55); }
+.fx-theme--dii #concerne .fx-num { color: var(--creme); }
+.fx-theme--dii #concerne .fx-num::before { color: var(--brume); }
+.fx-theme--dii #concerne .fx-check { max-width: 56rem; padding: 0; border: 0; border-radius: 0; background: transparent; }
+.fx-theme--dii #concerne fieldset { border-bottom-color: rgba(244, 250, 249, .18); padding-bottom: 1.25rem; margin-bottom: 1.25rem; }
+.fx-theme--dii #concerne legend { font-size: clamp(1rem, 1.6vw, 1.12rem); line-height: 1.4; }
+.fx-theme--dii #concerne legend .fx-num { color: rgba(244, 250, 249, .7); }
+.fx-theme--dii #concerne legend .fx-num::before { content: none; }
+.fx-theme--dii #concerne .fx-check__hint { color: rgba(244, 250, 249, .78); }
+.fx-theme--dii #concerne .fx-check__opts label { border-radius: 2px; border-color: rgba(244, 250, 249, .4); color: var(--creme); }
+.fx-theme--dii #concerne .fx-check__opts label:hover { border-color: var(--creme); }
+.fx-theme--dii #concerne .fx-check__opts input { accent-color: var(--turquoise); }
+.fx-theme--dii #concerne .fx-check__opts label:has(input:checked) { background: var(--creme); border-color: var(--creme); color: var(--noir-jais); }
+.fx-theme--dii #concerne .fx-check__opts input:checked { accent-color: var(--epinette); }
+.fx-theme--dii #concerne .fx-check__result { border-radius: 0; background: rgba(244, 250, 249, .08); border-inline-start-color: var(--turquoise); color: var(--creme); }
+.fx-theme--dii #concerne .fx-check__result--yes { background: rgba(72, 214, 194, .14); }
+.fx-theme--dii #concerne .fx-check__reset { color: var(--creme); }
+.fx-theme--dii #concerne .fx-check__disclaimer { color: rgba(244, 250, 249, .75); }
+.fx-theme--dii #concerne + .fx-sec .fx-sec__head { border-top-color: transparent; }
+
+/* § 03 — Niveaux : le filet s'intensifie avec le niveau */
+.fx-theme--dii #niveaux tbody th { border-inline-start: 4px solid var(--brume); color: var(--noir-jais); font-family: var(--font-titre); font-size: 1rem; }
+.fx-theme--dii #niveaux tbody tr:nth-child(2) th { border-inline-start-color: var(--sarcelle); }
+.fx-theme--dii #niveaux tbody tr:nth-child(3) th { border-inline-start-color: var(--epinette); border-inline-start-width: 6px; }
+@media (max-width: 719px) { .fx-theme--dii #niveaux tbody th { margin-inline-start: 1rem; padding-inline-start: .75rem; } }
+
+/* § 04 — Valeurs limites : les chiffres en grand */
+.fx-theme--dii #valeurs-limites td { font-family: var(--font-titre); font-weight: 600; font-size: clamp(1.1rem, 2vw, 1.45rem); color: var(--noir-jais); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fx-theme--dii #valeurs-limites tbody th { color: var(--noir-jais); }
+@media (max-width: 479px) { .fx-theme--dii #valeurs-limites th, .fx-theme--dii #valeurs-limites td { padding-inline: .6rem; } .fx-theme--dii #valeurs-limites td { white-space: normal; } }
+
+/* Citation de l'emballage : la mention réglementaire, telle quelle */
+.fx-theme--dii .fx-quote { border-radius: 0; border: 1.5px solid var(--noir-jais); border-inline-start-width: 6px; background: #fff; padding: 1rem 1.25rem; font-family: var(--font-titre); max-width: var(--fx-col); }
+
+/* Ressources : un index sans cadres */
+.fx-theme--dii .fx-res { gap: 1.5rem clamp(1.25rem, 3vw, 2.25rem); }
+.fx-theme--dii .fx-res__item { border: 0; border-top: 2px solid var(--noir-jais); border-radius: 0; background: transparent; padding-top: 1rem; }
+.fx-theme--dii .fx-res__item picture, .fx-theme--dii .fx-res__item img { aspect-ratio: 3 / 2; }
+.fx-theme--dii .fx-res__body { padding: .9rem 0 0; }
+
+/* Liens croisés, FAQ */
+.fx-theme--dii .fx-related a { border-radius: 0; border-width: 2px 0 0; border-color: var(--noir-jais); background: transparent; padding-inline: 0; }
+.fx-theme--dii .fx-related a:hover { border-color: var(--epinette); }
+.fx-theme--dii .fx-faq { border-top: 2px solid var(--noir-jais); }
+.fx-theme--dii .fx-faq summary::after { border-radius: 0; border-color: var(--noir-jais); color: var(--noir-jais); }
+.fx-theme--dii .fx-sources-all { border-radius: 0; border-color: var(--noir-jais); }
+.fx-theme--dii .fx-note { border-radius: 0; }
+
+/* Bandeau final : la bande de signalisation revient en tête */
+.fx-theme--dii .fx-final { position: relative; border-radius: 0; margin-bottom: clamp(2.5rem, 5vw, 4rem); padding-top: calc(clamp(1.5rem, 4vw, 2.5rem) + 10px); }
+.fx-theme--dii .fx-final::before { content: ""; position: absolute; inset: 0 0 auto; height: 10px; background: repeating-linear-gradient(-45deg, var(--brume) 0 10px, var(--noir-jais) 10px 20px); }

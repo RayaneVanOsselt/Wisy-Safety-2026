@@ -44,7 +44,7 @@ html{scroll-padding-top:var(--header-offset,9rem)}
 
 .co-kicker{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--font-titre);font-size:var(--fs-micro);font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--epinette);margin:0 0 .9rem}
 .co-kicker::before{content:"";width:22px;height:1.5px;background:var(--turquoise)}
-.co-kicker__n{color:var(--brume)}
+.co-kicker__n{color:var(--epinette)}
 .co-kicker__n::after{content:"·";margin-inline-start:.6rem;color:var(--granit-clair)}
 .co-kicker--light{color:var(--turquoise)}
 .co-kicker--light .co-kicker__n{color:var(--creme)}
@@ -154,8 +154,8 @@ html{scroll-padding-top:var(--header-offset,9rem)}
 .co-explore__tab{position:relative;display:grid;grid-template-columns:1.9rem 3rem minmax(0,1fr);align-items:center;gap:1rem;width:100%;padding:1.15rem 1.3rem;border-radius:var(--radius);border:1px solid transparent;text-align:start;color:var(--noir-jais);transition:background-color var(--motion-base) var(--ease),border-color var(--motion-base) var(--ease),box-shadow var(--motion-base) var(--ease)}
 .co-explore__tab:hover{background:rgba(255,255,255,.65);border-color:var(--granit-12)}
 .co-explore__tab[aria-selected="true"]{background:#fff;border-color:var(--granit-12);box-shadow:var(--shadow-md)}
-.co-explore__num{font-family:var(--font-titre);font-weight:700;font-size:.9rem;color:var(--granit-clair);transition:color var(--motion-base) var(--ease)}
-.co-explore__tab[aria-selected="true"] .co-explore__num{color:var(--brume)}
+.co-explore__num{font-family:var(--font-titre);font-weight:700;font-size:.9rem;color:var(--granit);transition:color var(--motion-base) var(--ease)}
+.co-explore__tab[aria-selected="true"] .co-explore__num{color:var(--epinette)}
 .co-explore__ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--brume-14);color:var(--epinette);transition:background-color var(--motion-base) var(--ease),color var(--motion-base) var(--ease),transform var(--motion-slow) var(--ease-premium)}
 .co-explore__ic svg{width:23px;height:23px}
 .co-explore__tab:hover .co-explore__ic{transform:translateY(-2px)}

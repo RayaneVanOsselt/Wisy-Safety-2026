@@ -11,7 +11,7 @@
 
   /* ---------------- FRANÇAIS (langue source — miroir du HTML) ---------------- */
   m("fr", {
-    "meta.title": "VCA Entreprise : certification VCA*, VCA**, VCA-P | Wisy Safety",
+    "meta.title": "VCA Entreprise : VCA*, VCA**, VCA-P | Wisy Safety",
     "vcae.skip": "Aller au contenu",
     "vcae.bc_label": "Fil d'Ariane",
     "vcae.bc_home": "Accueil",

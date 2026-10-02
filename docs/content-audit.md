@@ -88,12 +88,13 @@ officielle », tarif et durée sur demande).
 
 | Où | Affirmation | État |
 |---|---|---|
-| Barre utilitaire de l'en-tête, toutes les pages (10 langues) | « Organisme de formation **agréé** » / « Centre de formation accrédité » | **[À CONFIRMER]** priorité 1 : aucun agrément documenté |
-| `formations.html` (titre) | « Nos formations **certifiées** » ; menu « catalogue complet certifié » | **[À CONFIRMER]** |
+| Barre utilitaire de l'en-tête, toutes les pages (10 langues) | « Organisme de formation **agréé** » / « Centre de formation accrédité » | **Retiré** le 02/10/2026 (`4dcc134`) : « Centre de formation à la sécurité · Anderlecht, Belgique ». À rétablir seulement sur preuve écrite d'un agrément |
+| `formations.html` (titre) | « Nos formations **certifiées** » ; menu « catalogue complet certifié » | **Retiré** le 02/10/2026 (`4dcc134`) |
 | `formation-vca-base.html`, assistant | « 225 € par personne, **examen inclus** » (confirmé par le propriétaire le 26/09/2026) | **[À CONFIRMER]** : Wisy Safety n'est pas dans la liste des centres d'examen reconnus (`SRC-VLH-004`). Qui organise l'examen, et où ? |
 | `formations.html` (cartes des 3 formations) | Durées « 2 jours / 1 jour / 3 jours », « Conforme aux normes européennes », « Équipement fourni »… | **Corrigé** : cartes réécrites avec des faits sourcés uniquement |
 | `js/registration-data.js` | 295 / 95 / 650 € | **Corrigé** : « Sur devis » (commit `b96b8fa`) |
-| Accueil, PEB, agenda | Compteurs « 500+ », « 10+ », « 100 % » | Hors périmètre, signalé (imposés par des tests existants) |
+| Accueil, PEB, agenda, Contact | Compteurs « 500+ », « 10+ », « 100 % » | Hors périmètre, signalé (imposés par des tests existants) |
+| `contact.html` (carte du visuel) | « Conseillers habilités · N1 · N2 · PEB · VCA » ; traduit « Certified advisors », « Erkende adviseurs », « Zugelassene Berater », « مستشارون معتمدون »… | **[À CONFIRMER]** : texte du propriétaire, non modifié. Les traductions affirment un agrément que le français ne dit pas : à aligner une fois les qualifications confirmées (audit, N3) |
 
 ## 5. Ce qu'il faut à Wisy Safety pour compléter les pages
 

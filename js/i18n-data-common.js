@@ -18,10 +18,11 @@
 
   /* ---------------- FRANÇAIS (langue source) ---------------- */
   m("fr", {
-    "util.badge": "Organisme de formation agréé · Anderlecht, Belgique",
+    "a11y.skip": "Aller au contenu",
+    "util.badge": "Centre de formation à la sécurité · Anderlecht, Belgique",
     "nav.formations": "Formations",
     "nav.all_formations": "Voir toutes les formations",
-    "nav.all_formations_desc": "Notre catalogue complet certifié",
+    "nav.all_formations_desc": "Le catalogue complet",
     "dd.vca_base": "VCA de base", "dd.vca_base_desc": "Les fondamentaux de la sécurité chantier",
     "dd.vca_hier": "VCA ligne hiérarchique", "dd.vca_hier_desc": "Pour l'encadrement et les responsables",
     "dd.nacelle": "Nacelles élévatrices", "dd.nacelle_desc": "Conduite en sécurité des PEMP",
@@ -63,9 +64,10 @@
 
   /* ---------------- ENGLISH ---------------- */
   m("en", {
-    "util.badge": "Accredited training centre · Anderlecht, Belgium",
+    "a11y.skip": "Skip to content",
+    "util.badge": "Safety training centre · Anderlecht, Belgium",
     "nav.formations": "Training",
-    "nav.all_formations": "View all courses", "nav.all_formations_desc": "Our full certified catalogue",
+    "nav.all_formations": "View all courses", "nav.all_formations_desc": "The full catalogue",
     "dd.vca_base": "VCA Basic", "dd.vca_base_desc": "The fundamentals of site safety",
     "dd.vca_hier": "VCA for Supervisors", "dd.vca_hier_desc": "For managers and supervisors",
     "dd.nacelle": "Aerial work platform", "dd.nacelle_desc": "Safe operation of MEWPs",
@@ -107,9 +109,10 @@
 
   /* ---------------- NEDERLANDS ---------------- */
   m("nl", {
-    "util.badge": "Erkend opleidingscentrum · Anderlecht, België",
+    "a11y.skip": "Naar de inhoud",
+    "util.badge": "Opleidingscentrum voor veiligheid · Anderlecht, België",
     "nav.formations": "Opleidingen",
-    "nav.all_formations": "Alle opleidingen bekijken", "nav.all_formations_desc": "Onze volledige gecertificeerde catalogus",
+    "nav.all_formations": "Alle opleidingen bekijken", "nav.all_formations_desc": "De volledige catalogus",
     "dd.vca_base": "VCA Basis", "dd.vca_base_desc": "De basis van de veiligheid op de werf",
     "dd.vca_hier": "VCA voor Leidinggevenden", "dd.vca_hier_desc": "Voor kaderleden en leidinggevenden",
     "dd.nacelle": "Hoogwerker", "dd.nacelle_desc": "Veilig bedienen van hoogwerkers",
@@ -151,9 +154,10 @@
 
   /* ---------------- AFRIKAANS ---------------- */
   m("af", {
-    "util.badge": "Geakkrediteerde opleidingsentrum · Anderlecht, België",
+    "a11y.skip": "Gaan na die inhoud",
+    "util.badge": "Veiligheidsopleidingsentrum · Anderlecht, België",
     "nav.formations": "Opleidings",
-    "nav.all_formations": "Bekyk alle opleidings", "nav.all_formations_desc": "Ons volledige gesertifiseerde katalogus",
+    "nav.all_formations": "Bekyk alle opleidings", "nav.all_formations_desc": "Die volledige katalogus",
     "dd.vca_base": "VCA Basis", "dd.vca_base_desc": "Die grondbeginsels van terreinveiligheid",
     "dd.vca_hier": "VCA vir Toesighouers", "dd.vca_hier_desc": "Vir bestuur en toesighouers",
     "dd.nacelle": "Hoogwerker", "dd.nacelle_desc": "Veilige bediening van hoogwerkers",
@@ -195,9 +199,10 @@
 
   /* ---------------- العربية (RTL) ---------------- */
   m("ar", {
-    "util.badge": "مركز تدريب معتمد · أندرلخت، بلجيكا",
+    "a11y.skip": "الانتقال إلى المحتوى",
+    "util.badge": "مركز تدريب على السلامة · أندرلخت، بلجيكا",
     "nav.formations": "الدورات",
-    "nav.all_formations": "عرض جميع الدورات", "nav.all_formations_desc": "كامل الكتالوج المعتمد لدينا",
+    "nav.all_formations": "عرض جميع الدورات", "nav.all_formations_desc": "الكتالوج الكامل",
     "dd.vca_base": "VCA الأساسي", "dd.vca_base_desc": "أساسيات السلامة في موقع العمل",
     "dd.vca_hier": "VCA للمشرفين", "dd.vca_hier_desc": "للإدارة والمسؤولين",
     "dd.nacelle": "منصة العمل المرتفعة", "dd.nacelle_desc": "التشغيل الآمن لمنصات العمل المرتفعة",
@@ -239,9 +244,10 @@
 
   /* ---------------- БЪЛГАРСКИ ---------------- */
   m("bg", {
-    "util.badge": "Акредитиран учебен център · Андерлехт, Белгия",
+    "a11y.skip": "Към съдържанието",
+    "util.badge": "Учебен център по безопасност · Андерлехт, Белгия",
     "nav.formations": "Обучения",
-    "nav.all_formations": "Вижте всички обучения", "nav.all_formations_desc": "Нашият пълен сертифициран каталог",
+    "nav.all_formations": "Вижте всички обучения", "nav.all_formations_desc": "Пълният каталог",
     "dd.vca_base": "VCA основи", "dd.vca_base_desc": "Основите на безопасността на обекта",
     "dd.vca_hier": "VCA за ръководители", "dd.vca_hier_desc": "За ръководния персонал",
     "dd.nacelle": "Автовишка", "dd.nacelle_desc": "Безопасно управление на подвижни платформи",
@@ -283,9 +289,10 @@
 
   /* ---------------- DEUTSCH ---------------- */
   m("de", {
-    "util.badge": "Anerkanntes Ausbildungszentrum · Anderlecht, Belgien",
+    "a11y.skip": "Zum Inhalt",
+    "util.badge": "Schulungszentrum für Sicherheit · Anderlecht, Belgien",
     "nav.formations": "Schulungen",
-    "nav.all_formations": "Alle Schulungen ansehen", "nav.all_formations_desc": "Unser vollständiger zertifizierter Katalog",
+    "nav.all_formations": "Alle Schulungen ansehen", "nav.all_formations_desc": "Der vollständige Katalog",
     "dd.vca_base": "VCA Grundlagen", "dd.vca_base_desc": "Die Grundlagen der Baustellensicherheit",
     "dd.vca_hier": "VCA für Führungskräfte", "dd.vca_hier_desc": "Für Führungs- und Aufsichtspersonen",
     "dd.nacelle": "Hubarbeitsbühne", "dd.nacelle_desc": "Sicheres Bedienen von Hubarbeitsbühnen",
@@ -327,9 +334,10 @@
 
   /* ---------------- ROMÂNĂ ---------------- */
   m("ro", {
-    "util.badge": "Centru de formare acreditat · Anderlecht, Belgia",
+    "a11y.skip": "Salt la conținut",
+    "util.badge": "Centru de formare în securitate · Anderlecht, Belgia",
     "nav.formations": "Cursuri",
-    "nav.all_formations": "Vedeți toate cursurile", "nav.all_formations_desc": "Catalogul nostru complet certificat",
+    "nav.all_formations": "Vedeți toate cursurile", "nav.all_formations_desc": "Catalogul complet",
     "dd.vca_base": "VCA de bază", "dd.vca_base_desc": "Fundamentele securității pe șantier",
     "dd.vca_hier": "VCA pentru personalul de conducere", "dd.vca_hier_desc": "Pentru conducere și responsabili",
     "dd.nacelle": "Nacelă elevatoare", "dd.nacelle_desc": "Operarea în siguranță a PLE",
@@ -371,9 +379,10 @@
 
   /* ---------------- ITALIANO ---------------- */
   m("it", {
-    "util.badge": "Centro di formazione accreditato · Anderlecht, Belgio",
+    "a11y.skip": "Vai al contenuto",
+    "util.badge": "Centro di formazione sulla sicurezza · Anderlecht, Belgio",
     "nav.formations": "Corsi",
-    "nav.all_formations": "Vedi tutti i corsi", "nav.all_formations_desc": "Il nostro catalogo completo certificato",
+    "nav.all_formations": "Vedi tutti i corsi", "nav.all_formations_desc": "Il catalogo completo",
     "dd.vca_base": "VCA base", "dd.vca_base_desc": "I fondamentali della sicurezza in cantiere",
     "dd.vca_hier": "VCA per responsabili", "dd.vca_hier_desc": "Per dirigenti e responsabili",
     "dd.nacelle": "Piattaforma elevatrice", "dd.nacelle_desc": "Guida in sicurezza delle PLE",
@@ -415,9 +424,10 @@
 
   /* ---------------- SLOVENŠČINA ---------------- */
   m("sl", {
-    "util.badge": "Akreditirani center za usposabljanje · Anderlecht, Belgija",
+    "a11y.skip": "Na vsebino",
+    "util.badge": "Center za varnostno usposabljanje · Anderlecht, Belgija",
     "nav.formations": "Usposabljanja",
-    "nav.all_formations": "Oglejte si vsa usposabljanja", "nav.all_formations_desc": "Naš celoten certificiran katalog",
+    "nav.all_formations": "Oglejte si vsa usposabljanja", "nav.all_formations_desc": "Celoten katalog",
     "dd.vca_base": "VCA osnovni", "dd.vca_base_desc": "Osnove varnosti na gradbišču",
     "dd.vca_hier": "VCA za vodstvo", "dd.vca_hier_desc": "Za vodstvo in odgovorne osebe",
     "dd.nacelle": "Dvižna ploščad", "dd.nacelle_desc": "Varno upravljanje dvižnih ploščadi",

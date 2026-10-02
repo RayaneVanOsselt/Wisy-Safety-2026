@@ -77,7 +77,7 @@ test("page : JSON-LD exact (Course + BreadcrumbList) — prix HT, durée, langue
 test("page : SEO (title, description, canonical, Open Graph) et image OG existante", () => {
   const html = read(N.url);
   assert.match(html, /<title>Formation Nacelles Élévatrices \| Wisy Safety<\/title>/);
-  assert.match(html, /<meta name="description" content="Découvrez la formation Nacelles Élévatrices de Wisy Safety : théorie et pratique/);
+  assert.match(html, /<meta name="description" content="Formation nacelles élévatrices \(PEMP\) chez Wisy Safety : théorie et pratique/);   /* raccourcie à 149 caractères (audit 02/10/2026, M11) */
   assert.match(html, /<link rel="canonical" href="https:\/\/www\.wisysafety\.be\/formation-nacelles-elevatrices\.html">/);
   assert.ok(html.includes('<meta property="og:image" content="https://www.wisysafety.be/' + N.images.og + '">'), "og:image = image de partage du registre");
   assert.equal(N.images.og, "assets/images/partage/formation-nacelles-1200x630.jpg");

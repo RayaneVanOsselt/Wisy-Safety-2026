@@ -9,7 +9,7 @@
 
   /* ---------------- FRANÇAIS (langue source — miroir du HTML) ---------------- */
   m("fr", {
-    "meta.title": "Coût d'une formation VCA : qui peut la financer ? | Wisy Safety",
+    "meta.title": "Coût d'une formation VCA et financement | Wisy Safety",
     "a1.bc_current": "Coût et financement d'une formation VCA",
     "a1.cat": "Coût & financement",
     "a1.h1": "Combien coûte une formation VCA et qui peut la financer ?",

@@ -467,9 +467,10 @@ html:not(.js) .home-hero__toggle, .home-still .home-hero__toggle { display: none
   content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background: radial-gradient(28rem 20rem at 100% 0%, rgba(72, 214, 194, .28), transparent 70%), radial-gradient(22rem 18rem at 0% 100%, rgba(27, 45, 40, .35), transparent 70%);
 }
-.home-path--team .home-path__kicker { color: rgba(244, 250, 249, .7); }
-.home-path--team .home-path__text { color: rgba(244, 250, 249, .8); }
-.home-path--team .home-path__list svg, .home-path--team .home-path__cta { color: var(--home-accent); }
+.home-path--team .home-path__kicker { color: rgba(244, 250, 249, .9); }
+.home-path--team .home-path__text { color: rgba(244, 250, 249, .92); }
+.home-path--team .home-path__list svg, .home-path--team .home-path__cta svg { color: var(--home-accent); }
+.home-path--team .home-path__cta { color: var(--creme, #F4FAF9); }
 .home-path--team .home-path__icon { background: rgba(244, 250, 249, .12); color: var(--home-accent); }
 .home-path--team:hover { border-color: transparent; box-shadow: 0 26px 50px -24px rgba(31, 111, 100, .7); }
 .home-path--team:focus-visible { outline-color: var(--home-ink); }
@@ -865,3 +866,6 @@ a.home-centre__value:focus-visible { outline: 3px solid var(--home-primary); out
   .home-tr:hover .home-tr__media img, .home-pass:hover .home-pass__photo img, .home-vlink:hover .home-vlink__thumb img { transform: none; }
   .js .home-ring__bar { stroke-dashoffset: 35.5; transition: none; }
 }
+
+/* WCAG 2.2 — 2.5.8 : téléphone et e-mail du bloc « centre » sur 24 px de haut au moins */
+a.home-centre__value { display: flex; align-items: center; width: fit-content; min-height: 24px; }

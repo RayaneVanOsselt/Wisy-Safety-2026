@@ -107,7 +107,7 @@ body.peb-page { background: var(--creme); }
 .peb-switch__btn:hover:not([aria-pressed="true"]), .peb-switch__btn:focus-visible { color: var(--creme); }
 .peb-switch__flag { font-size: .78em; opacity: .85; }
 .peb-switch--light { background: var(--brume-08); border-color: var(--granit-20); }
-.peb-switch--light .peb-switch__btn { color: var(--granit); }
+.peb-switch--light .peb-switch__btn { color: var(--noir-jais); }
 .peb-switch--light .peb-switch__btn[aria-pressed="true"] { color: var(--noir-jais); }
 .peb-switch--light .peb-switch__btn:hover:not([aria-pressed="true"]) { color: var(--epinette); }
 
@@ -273,7 +273,7 @@ html[data-peb-region] [data-region-panel] { opacity: 1; }
 .peb-price-card__admin { padding: .9rem 1rem; border-radius: var(--radius-sm); background: var(--brume-08); border: 1px solid var(--granit-20); font-size: .84rem; color: var(--granit); margin-bottom: 1.25rem; }
 .peb-price-card__admin strong { color: var(--noir-jais); }
 .peb-price-card__benchmark { margin-top: auto; padding-top: 1rem; border-top: 1px dashed var(--granit-20); }
-.peb-price-card__benchmark-label { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--granit-clair); margin-bottom: .5rem; }
+.peb-price-card__benchmark-label { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--granit); margin-bottom: .5rem; }
 .peb-price-card__benchmark ul { display: flex; flex-direction: column; gap: .3rem; }
 .peb-price-card__benchmark li { font-size: .82rem; color: var(--granit); display: flex; justify-content: space-between; gap: .5rem; }
 .peb-price-card__benchmark b { color: var(--noir-jais); font-weight: 600; }

@@ -7,7 +7,7 @@ JSON-LD, ressources), balayage responsive dans des cadres de 320 à 1440 px, par
 étude de 6 systèmes de design sur styles.refero.design et de 6 concurrents (§16).
 
 > **Mise à jour du 02/10/2026 (fin de journée)** : les corrections faites après l'audit, leurs commits et les
-> vérifications sont listés au **§24**. Trois constats se sont révélés être des faux positifs (M13, M16, m5) ; trois
+> vérifications sont listés au **§24**. Trois constats se sont révélés être des faux positifs (M13, M16, m5) ; quatre
 > nouveaux problèmes ont été trouvés en corrigeant (§24.2).
 
 Niveaux de gravité : **Critique** (perte de clients, de crédibilité ou risque juridique), **Majeur** (dégrade nettement
@@ -331,6 +331,7 @@ de `scripts/check-i18n.js` (aucune erreur) et de `scripts/build-seo.js --check` 
 |---|---|---|---|
 | N1 | Menu mobile **fermé** : ses 27 liens, hors écran et invisibles, restaient atteignables au clavier sur toutes les pages, même sur ordinateur (WCAG 2.4.3, 2.4.7). | Majeur | Corrigé (`7e20614`) |
 | N2 | Rubrique « Formations » active (`aria-current="true"`) et survol du menu en brume sur crème : 2,79:1. | Majeur (1.4.3) | Corrigé (`06b1785`) : épinette, 5,9:1 |
+| N4 | Avis, de 320 à 375 px : l'intro « Votre expérience compte » et le formulaire de dépôt rognés à droite (jusqu'à 65 px de texte coupé, 5e étoile de la note invisible). La page ne défile pas horizontalement, d'où l'absence de signalement au §7 : c'est le conteneur qui coupait. | Majeur | Corrigé (`bb7c107`) |
 | N3 | Contact : carte « Conseillers habilités · N1 · N2 · PEB · VCA » avec 5 étoiles, traduite par « Certified advisors », « Erkende adviseurs », « Zugelassene Berater », « مستشارون معتمدون »… : la traduction durcit le texte français en **agrément**. Texte d'origine du propriétaire (équipe nommée), donc **non modifié**. | Critique si non confirmé | **À confirmer par Wisy Safety** : qualifications exactes (conseiller en prévention niveau 1 / 2, auditeur VCA), puis aligner les 9 traductions sur le français |
 
 Également corrigé dans les fiches formation : en-têtes de ligne des tableaux empilés trop étroits sur mobile
@@ -345,6 +346,9 @@ de `scripts/check-i18n.js` (aucune erreur) et de `scripts/build-seo.js --check` 
 ### 24.4 Vérifications des 3 fiches refondues
 
 - 320, 375, 768, 1024, 1280 et 1440 px : aucun débordement ; en arabe (droite à gauche) : mise en page miroir correcte.
+- Balayage final des 24 pages à 320, 375, 768, 1024 et 1440 px : aucune page ne défile horizontalement ; les seuls éléments
+  hors cadre sont dans des zones à défilement horizontal voulues (tableaux, onglets, sommaires, filtres) ou une image
+  décorative recadrée (Coordination).
 - Contrastes : aucun texte sous 4,5:1 (contrôle automatique sur l'ensemble du texte visible) ; cibles ≥ 24 px.
 - Fonctions : onglets au clavier (flèches), « Suis-je concerné ? » (3 issues + réinitialisation), articles en fenêtre,
   FAQ, barre d'action mobile, boutons d'inscription et de devis dans l'en-tête à toutes les largeurs.

@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script>(function(d){d.classList.add("js");addEventListener("error",function(e){var t=e.target;if(!t||t===window||t.tagName==="SCRIPT")d.classList.remove("js")},true)})(document.documentElement)</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wisy Safety — Avis clients</title>
 <meta name="description" content="Avis clients Wisy Safety : partagez votre expérience de nos formations sécurité (VCA, PEB, secourisme) et consultez les témoignages vérifiés de nos stagiaires et entreprises.">
@@ -326,7 +327,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 .f-legal__vat{font-variant-numeric:tabular-nums}
 
 /* REVEAL (transform/opacity uniquement) */
-.reveal{opacity:0;transform:translateY(20px);transition:opacity var(--t-reveal) var(--ease-out),transform var(--t-reveal) var(--ease-out);transition-delay:var(--d,0s);will-change:opacity,transform}
+.js .reveal{opacity:0;transform:translateY(20px);transition:opacity var(--t-reveal) var(--ease-out),transform var(--t-reveal) var(--ease-out);transition-delay:var(--d,0s);will-change:opacity,transform}
 .reveal.in{opacity:1;transform:none}
 
 /* RESPONSIVE */
@@ -336,7 +337,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 @media (max-width:620px){.f-grid{grid-template-columns:1fr}.f-cta{flex-direction:column;align-items:flex-start}.f-legal{flex-direction:column;text-align:center;justify-content:center}.f-legal__links{justify-content:center}.impact-main{flex-direction:column;align-items:flex-start;text-align:left}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
-  .reveal{opacity:1;transform:none}.hero-anim{opacity:1;transform:none}
+  .js .reveal{opacity:1;transform:none}.hero-anim{opacity:1;transform:none}
   .marquee__track{animation:none}.scroll-cue svg{animation:none}
 }
 

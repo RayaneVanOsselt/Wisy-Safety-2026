@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script>(function(d){d.classList.add("js");addEventListener("error",function(e){var t=e.target;if(!t||t===window||t.tagName==="SCRIPT")d.classList.remove("js")},true)})(document.documentElement)</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Formation VCA Base à Bruxelles | Wisy Safety</title>
 <meta name="description" content="Formation VCA Base à Anderlecht (Bruxelles) : 1 jour en présentiel, examen inclus, 225 € par personne. Programme, examen, sessions et inscription en ligne.">
@@ -193,7 +194,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 .f-legal__vat{font-variant-numeric:tabular-nums}
 
 /* REVEAL */
-.reveal{opacity:0;transform:translateY(20px);transition:opacity var(--t-reveal) var(--ease-out),transform var(--t-reveal) var(--ease-out);transition-delay:var(--d,0s);will-change:opacity,transform}
+.js .reveal{opacity:0;transform:translateY(20px);transition:opacity var(--t-reveal) var(--ease-out),transform var(--t-reveal) var(--ease-out);transition-delay:var(--d,0s);will-change:opacity,transform}
 .reveal.in{opacity:1;transform:none}
 
 /* RESPONSIVE */
@@ -204,7 +205,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 @media (max-width:380px){.util-contacts{gap:.7rem;font-size:.72rem}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
-  .reveal{opacity:1;transform:none}
+  .js .reveal{opacity:1;transform:none}
 }
 </style>
 <link rel="stylesheet" href="css/formation-vca.css">

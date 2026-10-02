@@ -1384,4 +1384,146 @@
     "reg.session_note_gone": "Zahtevana izvedba ni več na voljo. Prijavo lahko nadaljujete: ekipa Wisy Safety vam bo predlagala datum.",
     "reg.a11y_session_removed": "Izvedba odstranjena."
   });
+
+  /* Envoi de la demande tant que le paiement en ligne n'est pas actif (js/registration.js → applyRequestMode / submitRequest) */
+  m("fr", {
+    "reg.req_journey_s": "Demande transmise à l'équipe",
+    "reg.step_request": "Envoi",
+    "reg.req_sub": "Vérifiez votre récapitulatif, puis envoyez votre demande : l'équipe Wisy Safety vous répond par e-mail.",
+    "reg.req_title": "Envoyer votre demande d'inscription",
+    "reg.req_desc": "Le paiement en ligne n'est pas encore activé. Votre demande est transmise à l'équipe Wisy Safety, qui vous confirme par e-mail la session, les modalités et la facturation. Aucun montant n'est débité.",
+    "reg.req_action": "Envoyer ma demande",
+    "reg.req_sending": "Envoi en cours…",
+    "reg.req_sent": "Demande envoyée. Votre référence : {ref}. L'équipe Wisy Safety vous répond par e-mail pour confirmer la session et la facturation.",
+    "reg.req_sent_btn": "Demande envoyée",
+    "reg.req_error": "L'envoi automatique n'a pas abouti. Envoyez-nous votre demande par e-mail ou appelez le +32 2 318 86 59 en indiquant la référence {ref}.",
+    "reg.req_mail": "Envoyer la demande par e-mail",
+    "reg.req_status": "Réponse de l'équipe par e-mail"
+  });
+  m("en", {
+    "reg.req_journey_s": "Request sent to the team",
+    "reg.step_request": "Send",
+    "reg.req_sub": "Check your summary, then send your request: the Wisy Safety team will reply by email.",
+    "reg.req_title": "Send your registration request",
+    "reg.req_desc": "Online payment is not active yet. Your request is passed on to the Wisy Safety team, who will confirm the session, arrangements and invoicing by email. No amount is charged.",
+    "reg.req_action": "Send my request",
+    "reg.req_sending": "Sending…",
+    "reg.req_sent": "Request sent. Your reference: {ref}. The Wisy Safety team will reply by email to confirm the session and invoicing.",
+    "reg.req_sent_btn": "Request sent",
+    "reg.req_error": "Automatic sending failed. Send us your request by email or call +32 2 318 86 59, quoting reference {ref}.",
+    "reg.req_mail": "Send the request by email",
+    "reg.req_status": "The team replies by email"
+  });
+  m("nl", {
+    "reg.req_journey_s": "Aanvraag naar het team",
+    "reg.step_request": "Verzenden",
+    "reg.req_sub": "Controleer uw overzicht en verstuur dan uw aanvraag: het team van Wisy Safety antwoordt u per e-mail.",
+    "reg.req_title": "Uw inschrijvingsaanvraag versturen",
+    "reg.req_desc": "Online betalen is nog niet actief. Uw aanvraag gaat naar het team van Wisy Safety, dat de sessie, de modaliteiten en de facturatie per e-mail bevestigt. Er wordt niets afgeschreven.",
+    "reg.req_action": "Mijn aanvraag versturen",
+    "reg.req_sending": "Bezig met verzenden…",
+    "reg.req_sent": "Aanvraag verzonden. Uw referentie: {ref}. Het team van Wisy Safety antwoordt u per e-mail om de sessie en de facturatie te bevestigen.",
+    "reg.req_sent_btn": "Aanvraag verzonden",
+    "reg.req_error": "Het automatisch verzenden is mislukt. Stuur ons uw aanvraag per e-mail of bel +32 2 318 86 59 met vermelding van referentie {ref}.",
+    "reg.req_mail": "De aanvraag per e-mail versturen",
+    "reg.req_status": "Antwoord van het team per e-mail"
+  });
+  m("af", {
+    "reg.req_journey_s": "Versoek na die span",
+    "reg.step_request": "Stuur",
+    "reg.req_sub": "Kontroleer u opsomming en stuur dan u versoek: die Wisy Safety-span antwoord u per e-pos.",
+    "reg.req_title": "Stuur u inskrywingsversoek",
+    "reg.req_desc": "Aanlynbetaling is nog nie aktief nie. U versoek word aan die Wisy Safety-span gestuur, wat die sessie, reëlings en fakturering per e-pos bevestig. Geen bedrag word gedebiteer nie.",
+    "reg.req_action": "Stuur my versoek",
+    "reg.req_sending": "Besig om te stuur…",
+    "reg.req_sent": "Versoek gestuur. U verwysing: {ref}. Die Wisy Safety-span antwoord u per e-pos om die sessie en fakturering te bevestig.",
+    "reg.req_sent_btn": "Versoek gestuur",
+    "reg.req_error": "Outomatiese versending het misluk. Stuur ons u versoek per e-pos of bel +32 2 318 86 59 en noem verwysing {ref}.",
+    "reg.req_mail": "Stuur die versoek per e-pos",
+    "reg.req_status": "Die span antwoord per e-pos"
+  });
+  m("ar", {
+    "reg.req_journey_s": "يُحال الطلب إلى الفريق",
+    "reg.step_request": "الإرسال",
+    "reg.req_sub": "راجعوا الملخص ثم أرسلوا طلبكم: يرد عليكم فريق Wisy Safety بالبريد الإلكتروني.",
+    "reg.req_title": "أرسلوا طلب التسجيل",
+    "reg.req_desc": "الدفع عبر الإنترنت غير مفعّل بعد. يُحال طلبكم إلى فريق Wisy Safety الذي يؤكد لكم بالبريد الإلكتروني الدورة والترتيبات والفوترة. لا يُخصم أي مبلغ.",
+    "reg.req_action": "إرسال طلبي",
+    "reg.req_sending": "جارٍ الإرسال…",
+    "reg.req_sent": "تم إرسال الطلب. مرجعكم: {ref}. يرد عليكم فريق Wisy Safety بالبريد الإلكتروني لتأكيد الدورة والفوترة.",
+    "reg.req_sent_btn": "تم إرسال الطلب",
+    "reg.req_error": "تعذّر الإرسال التلقائي. أرسلوا لنا طلبكم بالبريد الإلكتروني أو اتصلوا بالرقم +32 2 318 86 59 مع ذكر المرجع {ref}.",
+    "reg.req_mail": "إرسال الطلب بالبريد الإلكتروني",
+    "reg.req_status": "رد الفريق بالبريد الإلكتروني"
+  });
+  m("bg", {
+    "reg.req_journey_s": "Заявката отива при екипа",
+    "reg.step_request": "Изпращане",
+    "reg.req_sub": "Проверете обобщението си и изпратете заявката: екипът на Wisy Safety ще ви отговори по имейл.",
+    "reg.req_title": "Изпратете заявката си за записване",
+    "reg.req_desc": "Онлайн плащането все още не е активно. Заявката ви се предава на екипа на Wisy Safety, който ще потвърди по имейл сесията, условията и фактурирането. Не се удържа никаква сума.",
+    "reg.req_action": "Изпращане на заявката",
+    "reg.req_sending": "Изпраща се…",
+    "reg.req_sent": "Заявката е изпратена. Вашият номер: {ref}. Екипът на Wisy Safety ще ви отговори по имейл, за да потвърди сесията и фактурирането.",
+    "reg.req_sent_btn": "Заявката е изпратена",
+    "reg.req_error": "Автоматичното изпращане не успя. Изпратете ни заявката по имейл или се обадете на +32 2 318 86 59, като посочите номер {ref}.",
+    "reg.req_mail": "Изпращане на заявката по имейл",
+    "reg.req_status": "Екипът отговаря по имейл"
+  });
+  m("de", {
+    "reg.req_journey_s": "Anfrage an das Team",
+    "reg.step_request": "Senden",
+    "reg.req_sub": "Prüfen Sie Ihre Übersicht und senden Sie dann Ihre Anfrage: Das Team von Wisy Safety antwortet Ihnen per E-Mail.",
+    "reg.req_title": "Ihre Anmeldeanfrage senden",
+    "reg.req_desc": "Die Online-Zahlung ist noch nicht aktiv. Ihre Anfrage geht an das Team von Wisy Safety, das Ihnen Sitzung, Modalitäten und Rechnungsstellung per E-Mail bestätigt. Es wird kein Betrag abgebucht.",
+    "reg.req_action": "Meine Anfrage senden",
+    "reg.req_sending": "Wird gesendet…",
+    "reg.req_sent": "Anfrage gesendet. Ihre Referenz: {ref}. Das Team von Wisy Safety antwortet Ihnen per E-Mail, um Sitzung und Rechnungsstellung zu bestätigen.",
+    "reg.req_sent_btn": "Anfrage gesendet",
+    "reg.req_error": "Der automatische Versand ist fehlgeschlagen. Senden Sie uns Ihre Anfrage per E-Mail oder rufen Sie +32 2 318 86 59 an und nennen Sie die Referenz {ref}.",
+    "reg.req_mail": "Anfrage per E-Mail senden",
+    "reg.req_status": "Antwort des Teams per E-Mail"
+  });
+  m("ro", {
+    "reg.req_journey_s": "Cerere transmisă echipei",
+    "reg.step_request": "Trimitere",
+    "reg.req_sub": "Verificați sumarul, apoi trimiteți cererea: echipa Wisy Safety vă răspunde prin e-mail.",
+    "reg.req_title": "Trimiteți cererea de înscriere",
+    "reg.req_desc": "Plata online nu este încă activă. Cererea dumneavoastră este transmisă echipei Wisy Safety, care vă confirmă prin e-mail sesiunea, modalitățile și facturarea. Nu se debitează nicio sumă.",
+    "reg.req_action": "Trimit cererea",
+    "reg.req_sending": "Se trimite…",
+    "reg.req_sent": "Cerere trimisă. Referința dumneavoastră: {ref}. Echipa Wisy Safety vă răspunde prin e-mail pentru a confirma sesiunea și facturarea.",
+    "reg.req_sent_btn": "Cerere trimisă",
+    "reg.req_error": "Trimiterea automată nu a reușit. Trimiteți-ne cererea prin e-mail sau sunați la +32 2 318 86 59, menționând referința {ref}.",
+    "reg.req_mail": "Trimiteți cererea prin e-mail",
+    "reg.req_status": "Echipa răspunde prin e-mail"
+  });
+  m("it", {
+    "reg.req_journey_s": "Richiesta inviata al team",
+    "reg.step_request": "Invio",
+    "reg.req_sub": "Controlla il riepilogo, poi invia la tua richiesta: il team di Wisy Safety ti risponde via e-mail.",
+    "reg.req_title": "Invia la tua richiesta di iscrizione",
+    "reg.req_desc": "Il pagamento online non è ancora attivo. La tua richiesta viene trasmessa al team di Wisy Safety, che ti conferma via e-mail la sessione, le modalità e la fatturazione. Non viene addebitato alcun importo.",
+    "reg.req_action": "Invia la mia richiesta",
+    "reg.req_sending": "Invio in corso…",
+    "reg.req_sent": "Richiesta inviata. Il tuo riferimento: {ref}. Il team di Wisy Safety ti risponde via e-mail per confermare la sessione e la fatturazione.",
+    "reg.req_sent_btn": "Richiesta inviata",
+    "reg.req_error": "L'invio automatico non è riuscito. Inviaci la tua richiesta via e-mail o chiama il +32 2 318 86 59 indicando il riferimento {ref}.",
+    "reg.req_mail": "Invia la richiesta via e-mail",
+    "reg.req_status": "Il team risponde via e-mail"
+  });
+  m("sl", {
+    "reg.req_journey_s": "Prijava gre k ekipi",
+    "reg.step_request": "Pošiljanje",
+    "reg.req_sub": "Preverite povzetek in nato pošljite prijavo: ekipa Wisy Safety vam odgovori po e-pošti.",
+    "reg.req_title": "Pošljite prijavo",
+    "reg.req_desc": "Spletno plačilo še ni aktivno. Vaša prijava se posreduje ekipi Wisy Safety, ki vam po e-pošti potrdi izvedbo, podrobnosti in obračun. Noben znesek ni bremenjen.",
+    "reg.req_action": "Pošlji prijavo",
+    "reg.req_sending": "Pošiljanje…",
+    "reg.req_sent": "Prijava je poslana. Vaša referenca: {ref}. Ekipa Wisy Safety vam odgovori po e-pošti, da potrdi izvedbo in obračun.",
+    "reg.req_sent_btn": "Prijava poslana",
+    "reg.req_error": "Samodejno pošiljanje ni uspelo. Pošljite nam prijavo po e-pošti ali pokličite +32 2 318 86 59 in navedite referenco {ref}.",
+    "reg.req_mail": "Pošlji prijavo po e-pošti",
+    "reg.req_status": "Ekipa odgovori po e-pošti"
+  });
 })();

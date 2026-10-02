@@ -744,15 +744,33 @@
     var tv = document.getElementById("reg-final-total");
     if (tv) tv.innerHTML = grandTotalLabel(totals) + (totals.vatCents == null ? ' <small>' + t("reg.vat_excluded", "hors TVA à déterminer") + "</small>" : "");
     /* État du prestataire de paiement */
+    var ready = PaymentProvider.isReady();
+    applyRequestMode(!ready);
     var st = document.getElementById("reg-pay-status");
     if (st) {
-      var ready = PaymentProvider.isReady();
       st.innerHTML = icon(ready ? "check" : "info") + (ready
         ? t("reg.pay_ready", "Paiement en ligne disponible")
-        : t("reg.pay_unavailable", "Paiement en ligne bientôt disponible"));
+        : t("reg.req_status", "Réponse de l'équipe par e-mail"));
     }
     var btn = document.getElementById("reg-pay-btn");
-    if (btn) btn.disabled = selectedIds().length === 0;
+    if (btn && !requestSent) btn.disabled = selectedIds().length === 0;
+  }
+
+  /* Sans prestataire de paiement, l'étape 4 ENVOIE la demande à Wisy Safety (au lieu d'un bouton « payer » sans effet) :
+     on remplace les clés de traduction des libellés « Paiement » par celles de l'envoi — le moteur i18n les retraduit
+     ensuite à chaque changement de langue. */
+  var REQUEST_KEYS = { "reg.step_payment": "reg.step_request", "reg.s4_sub": "reg.req_sub", "reg.pay_title": "reg.req_title",
+    "reg.pay_desc": "reg.req_desc", "reg.pay_action": "reg.req_action", "reg.journey_4": "reg.step_request", "reg.journey_4s": "reg.req_journey_s" };
+  function applyRequestMode(on) {
+    Object.keys(REQUEST_KEYS).forEach(function (payKey) {
+      var from = on ? payKey : REQUEST_KEYS[payKey], to = on ? REQUEST_KEYS[payKey] : payKey;
+      document.querySelectorAll('[data-i18n="' + from + '"]').forEach(function (el) {
+        el.setAttribute("data-i18n", to);
+        el.textContent = t(to, el.textContent);
+      });
+    });
+    var providers = document.querySelector(".reg-payment__providers");
+    if (providers) providers.hidden = on;
   }
 
   /* ======================================================================
@@ -816,16 +834,106 @@
     setCatalogue: function (list) { DATA.setCatalogue(list); renderAll(); }
   };
 
+  /* ----------------------------------------------------------------------
+     ENVOI DE LA DEMANDE (tant que le paiement en ligne n'est pas actif)
+     Même canal que les formulaires Contact, Coordination et PEB : EmailJS, gabarit à champs
+     user_name / user_email / user_phone / subject / message (clés publiques, js/supabase-config.js).
+     Le message est rédigé en français pour l'équipe, quelle que soit la langue du visiteur.
+     ---------------------------------------------------------------------- */
+  var requestSent = false;
+  function moneyFr(cents) {
+    try { return new Intl.NumberFormat("fr-BE", { style: "currency", currency: CONFIG.currency, currencyDisplay: "narrowSymbol" }).format((cents || 0) / 100); }
+    catch (e) { return ((cents || 0) / 100).toFixed(2) + " €"; }
+  }
+  function requestMessage(order) {
+    var lines = ["Demande d'inscription en ligne — référence " + order.reference, "", "FORMATIONS"];
+    selectedIds().forEach(function (id) {
+      var tr = DATA.getTraining(id), q = state.trainings[id], s = sessionOf(id);
+      lines.push("- " + (tr.name && tr.name.fr || id) + " (" + (tr.code || id) + ") × " + q + " — " +
+        (isPriced(tr) ? moneyFr(tr.priceCents) + " par participant" : "sur devis") +
+        (s ? " — session : " + Sessions.format(s, "fr").dateLong + (s.location ? ", " + s.location : "") : " — session : à convenir"));
+    });
+    var totals = computeTotals();
+    lines.push("Total indicatif : " + (totals.subtotalCents ? moneyFr(totals.subtotalCents) : "—") + (totals.hasQuote ? " + formation(s) sur devis" : "") + " (TVA à déterminer)");
+    lines.push("", "PARTICIPANTS");
+    selectedIds().forEach(function (id) {
+      var tr = DATA.getTraining(id);
+      if (state.participantsLater[id]) { lines.push("- " + (tr.name && tr.name.fr || id) + " : communiqués plus tard"); return; }
+      (state.participants[id] || []).forEach(function (p, i) {
+        var who = [p.firstName, p.lastName].filter(Boolean).join(" ");
+        lines.push("- " + (tr.name && tr.name.fr || id) + " #" + (i + 1) + " : " + (who || "—") + (p.email ? " <" + p.email + ">" : ""));
+      });
+    });
+    var c = state.customer, b = state.billing;
+    lines.push("", "DEMANDEUR", [c.firstName, c.lastName].join(" ").trim() + " — " + c.email + " — " + c.phone);
+    lines.push("", "FACTURATION", [b.company, b.vat ? "TVA " + b.vat : ""].filter(Boolean).join(" — ") || "Particulier",
+      b.address + ", " + b.zip + " " + b.city + " (" + b.country + ")");
+    lines.push("", "Langue du site : " + lang() + " · Aucun paiement n'a été demandé ni effectué.");
+    return lines.join("\n");
+  }
+  function requestBox() { return document.getElementById("reg-pay-message"); }
+  function showRequestResult(ok, ref, mailBody) {
+    var box = requestBox();
+    if (!box) return;
+    box.hidden = false;
+    box.textContent = "";
+    box.setAttribute("data-state", ok ? "ok" : "error");
+    var p = document.createElement("span");
+    p.textContent = (ok ? t("reg.req_sent", "Demande envoyée. Votre référence : {ref}. L'équipe Wisy Safety vous répond par e-mail pour confirmer la session et la facturation.")
+      : t("reg.req_error", "L'envoi automatique n'a pas abouti. Envoyez-nous votre demande par e-mail ou appelez le +32 2 318 86 59 en indiquant la référence {ref}.")).replace("{ref}", ref);
+    box.appendChild(p);
+    if (!ok) {
+      var a = document.createElement("a");
+      a.className = "reg-req-mail";
+      a.href = "mailto:info@wisysafety.be?subject=" + encodeURIComponent("Demande d'inscription — " + ref) + "&body=" + encodeURIComponent(mailBody.slice(0, 1800));
+      a.textContent = t("reg.req_mail", "Envoyer la demande par e-mail");
+      box.appendChild(document.createElement("br"));
+      box.appendChild(a);
+    }
+    announce(p.textContent);
+  }
+  function submitRequest(order) {
+    if (requestSent) return;
+    if (!validateStep(4)) { goToStep(3); return; }
+    var btn = document.getElementById("reg-pay-btn");
+    var label = btn && btn.querySelector("[data-i18n]");
+    var body = requestMessage(order);
+    var cfg = window.WISY_CONFIG || {};
+    var c = state.customer;
+    var params = {
+      user_name: [c.firstName, c.lastName].join(" ").trim(),
+      user_email: c.email,
+      user_phone: c.phone || "Non renseigné",
+      subject: "Demande d'inscription — " + order.reference,
+      message: body,
+      time: new Date().toLocaleString("fr-BE", { timeZone: "Europe/Brussels" })
+    };
+    if (!window.emailjs || !cfg.EMAILJS_PUBLIC_KEY || !cfg.EMAILJS_SERVICE_ID || !cfg.EMAILJS_TEMPLATE_ID_CONTACT) {
+      showRequestResult(false, order.reference, body);
+      return;
+    }
+    if (btn) { btn.disabled = true; btn.setAttribute("aria-busy", "true"); }
+    if (label) label.textContent = t("reg.req_sending", "Envoi en cours…");
+    try { window.emailjs.init({ publicKey: cfg.EMAILJS_PUBLIC_KEY }); } catch (e) { /* déjà initialisé */ }
+    window.emailjs.send(cfg.EMAILJS_SERVICE_ID, cfg.EMAILJS_TEMPLATE_ID_CONTACT, params).then(function () {
+      requestSent = true;
+      if (btn) btn.removeAttribute("aria-busy");
+      if (label) { label.setAttribute("data-i18n", "reg.req_sent_btn"); label.textContent = t("reg.req_sent_btn", "Demande envoyée"); }
+      showRequestResult(true, order.reference, body);
+      clearStorage();   /* les données personnelles ne restent pas dans le navigateur une fois transmises */
+      track("registration_request_sent", { items: order.items.length });
+    }, function () {
+      if (btn) { btn.disabled = false; btn.removeAttribute("aria-busy"); }
+      if (label) label.textContent = t("reg.req_action", "Envoyer ma demande");
+      showRequestResult(false, order.reference, body);
+    });
+  }
+
   function handlePayClick() {
     var res = initializePayment();
     if (res.status !== "ready") {
-      /* Environnement sans prestataire : on N'AUCUNE simulation de paiement. */
-      var box = document.getElementById("reg-pay-message");
-      if (box) {
-        box.hidden = false;
-        box.textContent = t("reg.payment_soon", "Le paiement en ligne sera prochainement disponible.");
-      }
-      announce(t("reg.payment_soon", "Le paiement en ligne sera prochainement disponible."));
+      /* Sans prestataire : AUCUNE simulation de paiement — la demande est envoyée à Wisy Safety. */
+      submitRequest(res.order);
       return;
     }
     /* Commande initialisée avec un prestataire réel : la conversion VCA Base est comptée ici (jamais avant :
@@ -1079,6 +1187,7 @@
       announce(t("reg.a11y_restored", "Votre inscription précédente a été restaurée."));
     }
     renderAll();
+    applyRequestMode(!PaymentProvider.isReady());
     goToStep(state.step, { noFocus: true, noScroll: true });
     setupTilt();
 

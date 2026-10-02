@@ -25,6 +25,9 @@ window.WISY_CONFIG = {
   /* Réutilise le compte EmailJS déjà configuré pour le formulaire contact.  */
   EMAILJS_PUBLIC_KEY:        "k2JkXtD2RO8TkoO77",
   EMAILJS_SERVICE_ID:        "service_k348qw9",
+  /* Gabarit « contact » (champs user_name / user_email / user_phone / subject / message), partagé avec contact.html,
+     la coordination et PEB — réutilisé par l'inscription pour transmettre la demande tant que le paiement n'est pas actif. */
+  EMAILJS_TEMPLATE_ID_CONTACT: "template_0p9dah6",
   /* Créez un modèle EmailJS dédié aux avis puis collez son ID ici.          */
   /* Laissé vide = aucune notification envoyée (Supabase reste la source).   */
   EMAILJS_TEMPLATE_ID_REVIEW: "",

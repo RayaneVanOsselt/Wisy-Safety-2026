@@ -581,3 +581,8 @@ select.reg-input { appearance: none; -webkit-appearance: none; background-image:
   .reg-tilt-ok .reg-module:hover { transform: translateY(-3px); }
   .reg-module, .reg-mobilebar, .reg-sheet, .reg-sheet-scrim { transition-duration: .001ms !important; }
 }
+
+/* Envoi de la demande (paiement en ligne inactif) : confirmation ou échec, avec lien e-mail de secours */
+#reg-pay-message[data-state="error"] { color: var(--noir-jais) !important; font-weight: 500 !important; border-inline-start: 3px solid var(--sarcelle); padding-inline-start: .85rem; text-align: start; }
+#reg-pay-message[data-state="ok"] { border-inline-start: 3px solid var(--epinette); padding-inline-start: .85rem; text-align: start; }
+.reg-req-mail { display: inline-flex; align-items: center; min-height: 44px; margin-top: .35rem; color: var(--epinette); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }

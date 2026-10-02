@@ -657,6 +657,8 @@ a.f-c-value:hover{color:var(--turquoise)}
 <!-- Parcours d'inscription (données + moteur) -->
 <script src="js/registration-data.js"></script>
 <script src="js/registration.js"></script>
+<!-- EmailJS : transmet la demande d'inscription à l'équipe tant que le paiement en ligne n'est pas actif (js/registration.js) -->
+<script defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js" integrity="sha384-SALc35EccAf6RzGw4iNsyj7kTPr33K7RoGzYu+7heZhT8s0GZouafRiCg1qy44AS" crossorigin="anonymous"></script>
 
 <!-- Assistant Wisy : seul le launcher est chargé d'emblée ; le moteur de réponses et le panneau
      se chargent à la demande (survol, focus, toucher, clic) — voir js/assistant/launcher.js -->

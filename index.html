@@ -207,19 +207,52 @@ a.f-c-value:hover{color:var(--turquoise)}
 </style>
 <link rel="stylesheet" href="css/home.css">
 <script>
-/* Accueil — décidé AVANT le premier affichage (aucun flash) : html.js (améliorations actives) ; html.home-intro (intro du
-   logo : 1re visite de la session, sans ancre, hors robots) ; html.home-still (mouvement réduit ou économie de données :
-   image fixe, aucune vidéo). La suite est dans js/home.js. */
+/* Accueil — décidé AVANT le premier affichage (aucun flash) : html.js (améliorations actives) ; html.home-intro (entrée de
+   marque : 1re visite de la session, sans ancre, onglet visible, hors robots) ; html.home-still (mouvement réduit ou
+   économie de données : image fixe, aucune vidéo). La suite est dans js/home.js. */
 (function(r){r.classList.add("js");var c=navigator.connection||{},k="wisy-home-intro",seen=null;
 if(matchMedia("(prefers-reduced-motion: reduce)").matches||c.saveData){r.classList.add("home-still");return;}
 try{seen=sessionStorage.getItem(k);sessionStorage.setItem(k,"1");}catch(e){seen="1";}
-if(!seen&&!location.hash&&!/bot\b|crawl|spider|slurp|mediapartners|facebookexternalhit|embedly/i.test(navigator.userAgent||""))r.classList.add("home-intro");
+if(!seen&&!location.hash&&document.visibilityState!=="hidden"&&!/bot\b|crawl|spider|slurp|mediapartners|facebookexternalhit|embedly/i.test(navigator.userAgent||""))r.classList.add("home-intro");
 })(document.documentElement);
 </script>
 <style>.skip-link{position:absolute;z-index:3000;inset-inline-start:1rem;top:0;padding:.75rem 1.1rem;background:var(--noir-jais);color:var(--creme);border-radius:0 0 var(--radius-sm,8px) var(--radius-sm,8px);font-family:var(--font-titre);font-weight:600;transform:translateY(-120%);transition:transform .2s ease}.skip-link:focus{transform:none;outline:3px solid var(--turquoise);outline-offset:2px}</style>
 </head>
 <body>
 <a class="skip-link" href="#contenu" data-i18n="a11y.skip">Aller au contenu</a>
+
+<!-- ==================== ENTRÉE DE MARQUE (1re visite de la session) ====================
+     Décor uniquement (aria-hidden, rien de cliquable, AUCUN fichier à charger : le logo est vectoriel, en ligne).
+     Affichée seulement sous html.home-intro (script en tête de page) ; jouée en CSS dès le premier affichage (css/home.css),
+     pilotée par js/home.js : le logo rejoint sa place dans l'en-tête, le hero se synchronise, tout geste la passe.
+     Sous le rideau, le hero est déjà peint : aucun effet sur le LCP. Voir docs/README-ACCUEIL.md. -->
+<div class="home-entrance" hidden aria-hidden="true" data-entrance>
+  <div class="home-entrance__curtain"></div>
+  <div class="home-entrance__brand">
+    <svg class="home-entrance__logo" viewBox="106 96 289 319" width="289" height="319" focusable="false">
+    <defs><linearGradient id="home-entrance-grad" gradientUnits="userSpaceOnUse" x1="237.8" y1="157.6" x2="295.7" y2="218.9"><stop offset=".38" stop-color="#1BA1FB"/><stop offset=".88" stop-color="#20C67A"/></linearGradient></defs>
+    <g class="home-entrance__mark">
+    <path style="--d:0;--len:383" fill="#1BA1FB" d="M207.8 231.5l-6.8 0-6.5-1.7-4.5-3-3-3.3-62-103.8-5.8-10-.2-.7 .5-.5 39.2 0 6.3 2 3.8 3.8 2.5 3.5 16.7 28.7 30 48.8 4.5 3.2 6 2 8-.5 7.3-3-1.5 3-7.3 10.5-7.2 9.2-4.8 4.8-4 3-3.8 2z"/>
+    <path style="--d:1;--len:307" fill="url(#home-entrance-grad)" d="M292.8 236.3l-5.1 0-5.9-1.3-6.6-3.5-5.2-4.5-5.3-7.2-29.5-51.8-5.4-5.7-5.6-2.5-6.2-.5-3.8 .7-8 3.5 2-3.8 5.3-7.2 5.2-5 9.8-5.3 9.2-2 6.8-.2 10.2 2.2 5.6 3.3 4 3.8 4.2 5.7 41.3 67.8-.3 1.2-2.7 4.5-3.6 3.5-4.7 3z"/>
+    <path style="--d:2;--len:301" fill="#20C67A" d="M314.8 215.5l-.8-.2-20.3-33.6-4-5.7-.2-2 38.7-57.8 5.8-5.5 7-2.2 40.2 0 .6 .5-.3 1-11.2 18.2z"/>
+    </g>
+    <g class="home-entrance__word" fill="#1BA0F9">
+    <path style="--i:0" d="M215 315.5l-15.8 0-1-.5-12.2-36.8-.8-.4-.9 1.2-12.3 35.8-1.2 .7-16.6-.2-1-1.6-6-16.4-16-46.3 .8-.5 17.8 0 1.5 .8 10.7 33.7 1.3 3.2 .7 .3 .7-.5 1-2.8 11.3-34.2 1-.5 16.2 0 1.6 3 10.2 34 1.2 1.2 3.3-7.2 10.5-30.5 1.2-.5 18.1 0 .5 1-1.5 4.2-21.8 57.1-1 1.9z"/>
+    <path style="--i:1" d="M259.5 315.5l-15.8 0-.7-.5 0-47.8 .2-.9 .8-.3 15.8 0 1 1 0 47-.3 1zM254 261.8l-3.5-.3-3.5-1.5-2.3-2-1.7-3.5 0-4.8 .7-1.7 2.3-3 3.8-2 5.9 0 2.8 1.2 2 1.8 2 4.2-.2 4.8-2 3.5-1.3 1.3z"/>
+    <path style="--i:2" d="M290.5 316.3l-13.8-.8-7.7-2.5-3.8-1.7-1.2-1.3 .7-2.2 5.6-8.8 8.9 3.7 5.3 1.2 7-.2 1.2-.5 1.5-1.7-.4-1.7-2.8-1.8-11.2-2.2-6.6-2.3-4.7-3.8-2.3-3.7-.5-2 0-6 2.5-5.5 2.6-2.8 2.2-1.5 4.5-2 4.5-1.2 12.8 0 8.7 2.5 2.3 1.8 1 3.7 0 2.2-3.6 6.1-1.2 0-2.2-1.5-8.8-2.8-6.2 .3-2.5 1.9-.3 1.3 1.2 1.5 1.6 .7 13.7 3 7.2 3.3 2.3 2 1.5 2.2 1.5 4.6 0 3.9-1.2 4.3-4.3 5.5-3 2-4.8 1.8z"/>
+    <path style="--i:3" d="M328 331l-8 0-7-1.7-1-1.1 3-8.9 1.2-1.8 4.6 1.2 3.9-.2 3-2 1.2-2.5-10.2-24-9.7-20.5-1-3.2 1-.6 17.2 .3 1.3 1.8 9.3 23.2 1.4 1.7 1.8-2.7 8-21 1.8-3 16.9 0 .1 2-23.8 52.5-3 4.2-2.5 2.6-4 2.2z"/>
+    </g>
+    <g class="home-entrance__word" fill="#1EC379">
+    <path style="--i:1" d="M152.8 385l-8.1 0-8.2-1.2-8-3-3.8-2-2.2-2.1 .5-1.4 6.5-9.8 1.2 0 7.8 4.5 7.2 1.9 5.3 .3 3.2-.5 2.1-1 1.7-1.9 0-2.8-2-2-2.2-1-15.6-3.5-4.4-1.7-4.6-3.5-3-4.1-1.2-3.9 0-5.1 1-3.4 1.7-3.6 2.8-3 3-2.2 6.8-2.8 5.7-.7 12.5 .5 7.8 2.2 5.4 3 1.1 1.3-6.6 10.8-1.2 0-4.2-2.5-5.3-1.7-4.2-.8-6.8 .5-2.7 2.2-.3 2.8 1.2 1.7 3.6 1.4 16.4 4.1 4.3 2 4.5 3.8 2.3 4.2 .5 7.8-.8 3.4-2.2 4.3-4.8 4.3-3 1.7-6.2 2z"/>
+    <path style="--i:2" d="M193.8 385l-5.6-.2-3.4-1-3.3-1.8-2.3-2.2-2-3.6-.5-2.2-.2-3.2 .7-4.3 2.6-3.5 4.4-3 8.1-1.8 7.2 0 4.5 .8 1-.8-.3-2.4-2.2-2.5-4.2-1-7.3 .5-6.8 2.5-3-5.3-1.2-4.2 3-1.8 5-1.8 5.8-1.2 10.7 0 4.8 1.2 5.7 3 2.5 2.6 2.3 4.4 .5 4.6-.3 26.7-1 .5-13 0-.5-.5-.3-2.8-.7-.2-4.8 3.3zM199.5 374.8l3-1.1 1.7-1.7 1-2.5-.4-2.7-2.3-.5-6.2 0-2.8 .7-1.2 1-1 2 0 2 1.5 2 1.9 .9z"/>
+    <path style="--i:3" d="M242.5 384l-13.2 0-1.1-.8 0-28.7-.7-1-4.2-.2-.6-.6 0-9.7 .8-.8 3.5 0 1.2-.9 .3-4.8 .7-2.8 2-3.7 2.8-2.8 6.5-3 8.5-.5 3.5 .5 5.2 1.8 .8 1.5-4.2 9.3-5.3-1.2-2.8 .2-1.9 1.4-1 2.1 0 1.9 .9 1 7.8 0 .8 .6 .2 7.4-.2 2.6-.6 .5-7.4 0-1.5 1.2 0 28.5z"/>
+    <path style="--i:4" d="M278.8 385l-8.1-.5-7.7-3-5.5-4.8-2.8-4.9-1.5-4.8 0-8.2 1.5-4.8 2.5-4.5 6.6-5.5 8.4-3 9.1 .2 4.4 1.5 4.3 2.3 3.8 3.2 1.7 2.6 2 4.4 1.3 5.3 0 5.2-1.1 1.1-27.9 0-1 .7 1 2.8 1.9 1.7 5.1 1.5 5.7-.8 5.8-2.7 7.5 7.2-1.8 2.3-4 2.8-6.5 2.2zM283 358.5l.7-1.5-1-2-1.9-2-2.6-1-4.2 0-2.5 1-2 2-1 2 0 1.2 .8 .5z"/>
+    <path style="--i:5" d="M343.2 401.5l-5.2 0-5-.7-1-.8 2-12.2 1.2-.3 4.8 .7 3.2-.5 3-2.2 1-2.2-9.3-22.8-7.4-16.2-.7 .4 0 7.3-.6 1-7.7 .3-1.5 1.2 0 15 .5 1.5 2 1.5 3.2 0 2.8-.8 1 .6 2 7.9 0 2.3-5 2-9.5 .3-3-.8-3.5-1.7-3.5-3.8-1.8-4-.5-3 0-16.8-.9-1.2-3.6-.2-.5-1.1 0-9.4 .6-.6 3.2 0 1-.7 .2-9.2 .6-.8 5.7-.3 8 1.3 1 1.2 0 7.6 1.2 .9 23.3-.2 1.2 .5 7.6 19.8 1.7 2.7 1.2-1.2 7-20.3 1.1-1.3 13.7-.2 1 .5-19.2 48-2.3 4-5 4.3-4.2 1.7z"/>
+    </g>
+    </svg>
+    <div class="home-entrance__sig"><span class="home-entrance__rule"></span><p class="home-entrance__tag" data-i18n="home.hero_tag">La sécurité comme une référence</p></div>
+  </div>
+</div>
 
 <!-- ==================== HEADER ==================== -->
 <header class="site-header" id="top">
@@ -338,12 +371,9 @@ if(!seen&&!location.hash&&!/bot\b|crawl|spider|slurp|mediapartners|facebookexter
     <symbol id="i-external" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9"/></symbol>
   </svg>
 
-  <!-- ==================== HERO + INTRO DU LOGO ==================== -->
+  <!-- ==================== HERO ==================== -->
   <section class="home-hero" id="accueil" aria-labelledby="home-hero-title" data-home-hero>
-    <!-- 1er élément du hero dans l'ordre du clavier : visible uniquement pendant l'intro du logo -->
-    <button class="home-intro-skip" type="button" data-intro-skip><span data-i18n="home.intro_skip">Passer l'intro</span><span class="home-intro-skip__bar" aria-hidden="true"></span></button>
     <div class="home-hero__bg" aria-hidden="true"></div>
-    <div class="home-hero__stage" aria-hidden="true"></div>
     <div class="home-wrap home-hero__inner">
       <div class="home-hero__copy">
         <p class="home-eyebrow home-hero__eyebrow" data-hero-step data-i18n="home.hero_eyebrow">Centre de formation sécurité · Anderlecht, Bruxelles</p>
@@ -371,20 +401,18 @@ if(!seen&&!location.hash&&!/bot\b|crawl|spider|slurp|mediapartners|facebookexter
           <video class="home-hero__video" id="homeLogoVideo" muted playsinline preload="none" poster="assets/videos/accueil/logo-animation-debut.webp" width="720" height="900" aria-hidden="true" tabindex="-1"></video>
           <script>
           (function(){
-            /* Vidéo du logo : l'AFFICHE (1re image, préchargée) est peinte immédiatement ; la vidéo se charge TOUT DE SUITE
-               quand elle sert d'intro (c'est alors le contenu principal), sinon après l'événement load — et jamais en
+            /* Vidéo du logo : l'AFFICHE (1re image, préchargée) est peinte immédiatement ; la vidéo ne se charge qu'après
+               l'événement load (elle ne concurrence jamais le contenu critique, entrée de marque comprise) — et jamais en
                mouvement réduit ni en économie de données (html.home-still : l'image finale remplace la vidéo). */
             var v=document.getElementById('homeLogoVideo'),r=document.documentElement;
             if(!v||r.classList.contains('home-still'))return;
             var h=document.querySelector('.site-header');if(h)r.style.setProperty('--home-hdr',Math.round(h.getBoundingClientRect().height)+'px');
             function start(){v.src=matchMedia('(max-width: 767px)').matches?'assets/videos/accueil/logo-animation-480.mp4':'assets/videos/accueil/logo-animation-720.mp4';v.load();}
-            if(r.classList.contains('home-intro')){v.preload='auto';start();}
-            else if(document.readyState==='complete')start();else addEventListener('load',start,{once:true});
+            if(document.readyState==='complete')start();else addEventListener('load',start,{once:true});
           })();
           </script>
           <img class="home-hero__still" src="assets/videos/accueil/logo-animation-fin.webp" width="720" height="900" alt="" loading="lazy" decoding="async">
           <span class="home-hero__tag" data-i18n="home.hero_tag">La sécurité comme une référence</span>
-          <p class="home-intro-tagline" aria-hidden="true" data-i18n="home.hero_tag">La sécurité comme une référence</p>
           <button class="home-hero__toggle" type="button" data-video-toggle data-state="pause">
             <svg class="i-pause" aria-hidden="true"><use href="#i-pause"/></svg><svg class="i-play" aria-hidden="true"><use href="#i-play"/></svg><svg class="i-replay" aria-hidden="true"><use href="#i-replay"/></svg>
             <span class="home-sr" data-i18n="home.video_pause">Mettre l'animation en pause</span>
@@ -823,7 +851,7 @@ if(!seen&&!location.hash&&!/bot\b|crawl|spider|slurp|mediapartners|facebookexter
   var yy=document.querySelector("[data-year]");if(yy)yy.textContent=String(Math.max(2026,now.getFullYear()));
 })();
 </script>
-<!-- Page d'accueil : intro du logo, entrées, apparitions, vidéos (voir js/home.js) -->
+<!-- Page d'accueil : entrée de marque, entrées, apparitions, vidéos (voir js/home.js) -->
 <script src="js/home.js"></script>
 </body>
 </html>

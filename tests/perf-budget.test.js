@@ -94,14 +94,15 @@ test("vidéo d'accueil (logo animé) : jamais préchargée d'office, jamais en m
   /* le choix est fait AVANT le premier affichage par le script du <head> : html.home-still = aucune vidéo */
   const head = idx.slice(0, idx.indexOf("</head>"));
   assert.match(head, /prefers-reduced-motion: reduce[^;]*\|\|c\.saveData\)\{r\.classList\.add\("home-still"\);return;\}/, "mouvement réduit / économie de données → image fixe");
-  /* vidéo du logo : l'intro (1re visite de la session) la charge tout de suite — c'est alors le contenu principal ;
-     sinon, ses sources ne sont posées qu'après l'événement load, pour ne pas concurrencer le contenu critique */
+  /* vidéo du logo : ses sources ne sont posées qu'après l'événement load, pour ne pas concurrencer le contenu critique —
+     y compris à la 1re visite (l'entrée de marque est vectorielle et en ligne : elle ne charge rien) */
   const tag = idx.match(/<video[^>]*id="homeLogoVideo"[^>]*>/)[0];
   assert.match(tag, /preload="none"/, "aucun préchargement dans le HTML");
   assert.match(tag, /aria-hidden="true"/); assert.match(tag, /muted/); assert.match(tag, /playsinline/);
   const script = idx.slice(idx.indexOf("Vidéo du logo : l'AFFICHE"), idx.indexOf("})();", idx.indexOf("Vidéo du logo : l'AFFICHE")));
   assert.match(script, /classList\.contains\('home-still'\)\)return;/, "rien n'est chargé en mouvement réduit / économie de données");
-  assert.match(script, /addEventListener\('load',start/, "hors intro : chargement après l'événement load");
+  assert.match(script, /addEventListener\('load',start/, "chargement après l'événement load");
+  assert.doesNotMatch(script, /preload='auto'|home-intro/, "aucun chargement anticipé, même à la 1re visite");
   assert.match(script, /logo-animation-480\.mp4/, "petits écrans : version 480 px");
   assert.equal((idx.match(/<video\b/g) || []).length, 1, "une seule vidéo sur l'accueil (le logo animé)");
   /* poids : versions web du logo animé (8 s, sans piste audio) */

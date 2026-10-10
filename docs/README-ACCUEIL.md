@@ -8,7 +8,7 @@ refait.
 |---|---|
 | `index.html` | Contenu de la page (le socle en ligne — en-tête, pied de page, boutons partagés — est inchangé) |
 | `css/home.css` | Styles de l'accueil uniquement (tout est préfixé `.home-*`, rien ne touche au chrome partagé) |
-| `js/home.js` | Intro du logo, entrée du hero, apparitions au défilement, compteurs, vidéos, halo au pointeur |
+| `js/home.js` | Entrée de marque (pilotage), entrée du hero, apparitions au défilement, compteurs, vidéos, halo au pointeur |
 | `js/i18n-data-home.js` | Textes propres à l'accueil, en 10 langues |
 | `tests/home.test.js` | Garde-fous : en-tête / pied intacts, liens réels, faits du registre, aucune affirmation interdite |
 
@@ -47,15 +47,8 @@ refait.
 | `assets/videos/accueil/logo-animation-debut.webp` | 1re image : affichée immédiatement (élément LCP, préchargée) |
 | `assets/videos/accueil/logo-animation-fin.webp` | Image finale (logo complet) : mouvement réduit, économie de données, sans JavaScript |
 
-**Intro (1re visite de la session uniquement).** Décidée avant le premier affichage par le petit script du `<head>`
-(`html.home-intro`) : l'écran de la vidéo est centré sur une scène sombre ; la vidéo est jouée en entier (8 s), puis le
-logo complet reste affiché avec la signature « La sécurité comme une référence » (2,6 s) avant de rejoindre sa place
-dans le hero pendant que le titre apparaît (≈ 11,5 s au total). L'en-tête reste utilisable pendant
-toute l'intro. Elle s'arrête d'elle-même si la vidéo ne démarre pas en 1,8 s (réseau lent) et au plus tard après
-16 s ; bouton « Passer l'intro », Échap, défilement, molette, toucher ou tabulation l'interrompent. Jamais d'intro :
-mouvement réduit, économie de données, lien avec ancre (`index.html#centre`), robots, 2e visite de la session
-(clé `wisy-home-intro` en `sessionStorage`). Réglages : `INTRO_HOLD`, `INTRO_START_TIMEOUT`, `INTRO_MAX`
-en tête de `js/home.js`.
+La vidéo est jouée dans l'écran du hero (après l'événement `load`, quand elle est visible, une fois) ; elle ne sert
+plus d'intro plein écran depuis le 2026-10-10 (voir « L'entrée de marque » ci-dessous).
 
 **Remplacer la vidéo.** Déposer le nouvel original sous le même nom dans `assets/originaux/accueil/`, puis
 (ffmpeg, recadrage 4:5 à partir de la ligne 250 — à ajuster si le logo n'est pas au même endroit) :
@@ -76,6 +69,43 @@ La vidéo de chantier de l'ancien hero (`hero-720.mp4`, `hero-1080.mp4`, `hero-1
 site : elle est conservée dans `assets/originaux/accueil/` (son affiche `poster.webp` reste produite par
 `scripts/optimize-images.py`).
 
+## L'entrée de marque (1re visite de la session)
+
+Remplace, depuis le 2026-10-10, l'ancienne intro vidéo plein écran (≈ 11,5 s, qui dépendait du chargement d'une vidéo
+de 0,9 Mo et ne s'affichait pas du tout si elle ne démarrait pas en 1,8 s). Inspirations : « Logo Trace Loader » et
+« Arc Preloader Hero » (21st.dev) — le logo se dessine, puis un rideau à bord courbe dévoile la page — avec la retenue des
+sites de référence analysés sur Refero Styles (une seule couleur d'accent, typographie calme, aucun effet gratuit).
+
+| Instant | Ce qui se passe |
+|---|---|
+| 0 → 0,9 s | Rideau sombre (trame fine du hero en négatif). Le « W » du logo se trace au trait turquoise, puis se remplit aux couleurs du logo |
+| 0,4 → 1,15 s | « Wisy Safety » monte lettre à lettre ; trait laser et signature « La sécurité comme une référence » (traduite) |
+| 1,15 → 2,1 s | Le rideau se lève (bord courbe, liseré turquoise) ; le logo vole jusqu'à sa place exacte dans l'en-tête, puis passe le relais au vrai logo |
+| 1,2 → 2,7 s | Le hero monte en parallaxe ; cartes flottantes et soulignement du titre |
+
+**Performances et référencement.**
+- **Aucun fichier chargé** : le logo est vectorisé et écrit dans `index.html` (≈ 4 Ko, même cadre `viewBox="106 96 289 319"`
+  que `logo.png` / `logo-102.webp`, d'où un atterrissage au pixel près). La vidéo du logo, elle, n'est plus jamais
+  chargée avant l'événement `load` (≈ 0,9 Mo de moins pendant le chargement critique de la 1re visite).
+- **Tout est en CSS** (`css/home.css`, section 4 bis) : la séquence démarre au premier affichage sans attendre aucun
+  script ; `js/home.js` ne fait que la compléter (vol du logo, fin, « passer »). Sans `js/home.js`, le rideau se lève
+  quand même.
+- **LCP inchangé** : sous le rideau, le hero est déjà peint (titre, texte, affiche du logo) ; son entrée ne joue que
+  sur `transform`. Seules des propriétés composées sont animées (`transform`, `opacity`, + le tracé du petit logo) :
+  aucune mise en page, aucun décalage (CLS nul, la scène est en `position: fixed` puis retirée du DOM).
+- **Robots** : jamais d'entrée (Googlebot, Bingbot…) ; la scène est `hidden` + `aria-hidden` et ne contient aucun lien.
+
+**Quand elle ne se joue pas** : 2e page vue de la session (clé `wisy-home-intro` en `sessionStorage`), lien avec ancre
+(`index.html#centre`), onglet ouvert en arrière-plan, robots, mouvement réduit, économie de données, stockage
+indisponible. **La passer** : clic ou toucher (le clic n'active rien sous le rideau), n'importe quelle touche, molette,
+défilement ; le hero joue alors sa montée tout de suite. Garde-fou : scène retirée au plus tard après 4 s.
+
+**Réglages.** Lever du rideau : `--e-lift` (`css/home.css`) **et** `ENTRANCE_LIFT` (`js/home.js`), toujours égaux
+(`tests/home.test.js` le vérifie). Vol du logo : transition de `.home-entrance.is-docking`. Pour la désactiver : retirer
+`r.classList.add("home-intro")` du script en tête de `index.html`.
+
+**Revoir l'entrée** : ouvrir l'accueil dans un nouvel onglet (ou vider le `sessionStorage` du site).
+
 ## Modifier un texte
 
 - Texte propre à l'accueil : `js/i18n-data-home.js` (même clé dans les 10 langues ; le HTML de `index.html` doit
@@ -88,6 +118,6 @@ site : elle est conservée dans `assets/originaux/accueil/` (son affiche `poster
 ## Mouvement
 
 Un seul système (`css/home.css`, section 3) : apparition 650 ms (opacité + 20 px), cascade de 70 ms, survols 350 ms,
-courbe `cubic-bezier(.22, 1, .36, 1)`, uniquement `transform` / `opacity` / `translate`. Parallaxe légère (10–22 px)
+courbe `cubic-bezier(.22, 1, .36, 1)`, uniquement `transform` / `opacity` / `translate` (entrée de marque : voir plus haut). Parallaxe légère (10–22 px)
 sur les colonnes de logos, halo au pointeur sur les cartes (pointeur fin uniquement). `prefers-reduced-motion` :
 aucune animation, aucune vidéo. Sans JavaScript : tout le contenu est visible.

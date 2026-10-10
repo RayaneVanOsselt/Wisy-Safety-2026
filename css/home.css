@@ -19,7 +19,7 @@
 
    Sommaire
      1. Tokens · 2. Primitives (conteneur, titres, boutons, liens, puces)
-     3. Apparitions · 4. Hero + intro du logo · 5. Confiance (logos + chiffres)
+     3. Apparitions · 4. Hero (+ 4 bis. entrée de marque) · 5. Confiance (logos + chiffres)
      6. Parcours · 7. Formations · 8. VCA · 9. Pourquoi · 10. Étapes
      11. Centre + carte · 12. Responsive · 13. RTL · 14. Mouvement réduit
    ========================================================================= */
@@ -38,7 +38,7 @@
   --home-border-strong: rgba(31, 111, 100, .38);
   --home-tint: rgba(63, 166, 155, .10);
   --home-dark: var(--noir-jais, #1B2D28);
-  --home-stage: #14232a;                         /* fond de scène de l'intro = teinte des bords de la vidéo du logo */
+  --home-stage: #14232a;                         /* fond de l'écran du logo = teinte des bords de sa vidéo */
 
   --home-radius-sm: 12px;
   --home-radius-md: 18px;
@@ -182,7 +182,7 @@
 .js .home-reveal.is-in { opacity: 1; transform: none; }
 /* Une fois apparu, l'élément perd .home-reveal (js/home.js) et retrouve ses propres transitions de survol. */
 
-/* ------------------------------------------------------ 4. Hero + intro du logo */
+/* ------------------------------------------------------------------- 4. Hero */
 .home-hero {
   position: relative; z-index: 1; isolation: isolate;
   display: flex; align-items: center;
@@ -252,11 +252,6 @@
   content: ""; position: absolute; inset: 0; z-index: 3; border-radius: inherit; pointer-events: none;
   box-shadow: inset 0 0 0 1px rgba(244, 250, 249, .08), inset 0 1px 0 rgba(244, 250, 249, .10);
 }
-.home-hero__screen::after {                         /* vignette : fond l'écran dans la scène pendant l'intro */
-  content: ""; position: absolute; inset: 0; z-index: 2; border-radius: inherit; pointer-events: none;
-  box-shadow: inset 0 0 90px 64px var(--home-stage);
-  opacity: 0; transition: opacity 700ms var(--home-ease);
-}
 .home-hero__video, .home-hero__still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .home-hero__still { display: none; }
 html:not(.js) .home-hero__still, .home-still .home-hero__still { display: block; }
@@ -309,66 +304,13 @@ html:not(.js) .home-hero__toggle, .home-still .home-hero__toggle { display: none
 .home-float--centre { inset-inline-end: -1.5rem; top: 10%; }
 .home-float--centre .home-float__icon { background: var(--home-accent); color: var(--home-ink); }
 
-/* Scène de l'intro (1re visite de la session) — posée par le script en tête de page : html.home-intro */
-.home-hero__stage {
-  position: fixed; z-index: 2; inset: calc(var(--home-hdr, 216px) - 2px) 0 0 0;   /* -2 px : jamais de liseré clair sous l'en-tête */
-  background: radial-gradient(60% 55% at 50% 48%, #1a2c35 0%, var(--home-stage) 55%, #0e1a20 100%);
-  opacity: 0; visibility: hidden; pointer-events: none;
-  transition: opacity 800ms var(--home-ease) 120ms, visibility 0s linear 920ms;
-}
-.home-intro .home-hero__stage { opacity: 1; visibility: visible; transition: none; }
-.home-intro .home-hero__media { position: static; }
-.home-intro .home-hero__screen {
-  position: fixed; inset: auto; z-index: 3;
-  left: 50%; top: calc(var(--home-hdr, 216px) + (100svh - var(--home-hdr, 216px)) / 2);
-  height: min(calc((100svh - var(--home-hdr, 216px)) * .84), 44rem, 110vw); width: auto; aspect-ratio: 4 / 5;
-  translate: -50% -50%;
-  box-shadow: none; transition: none;
-}
-.home-intro .home-hero__screen::after { opacity: 1; transition: none; }
-.home-intro .home-hero__screen::before, .home-intro .home-hero__tag, .home-intro .home-hero__toggle { opacity: 0; }
-.home-hero__tag { transition: opacity 500ms var(--home-ease) 700ms; }
-.home-hero__toggle { transition: opacity 500ms var(--home-ease) 700ms, background-color var(--home-motion) var(--home-ease), border-color var(--home-motion) var(--home-ease), transform var(--home-motion-fast) var(--home-ease); }
-
-.home-intro-skip {
-  position: fixed; z-index: 4; left: 50%; bottom: max(1.25rem, env(safe-area-inset-bottom));
-  translate: -50% 0;
-  display: none; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: .55rem 1.1rem .7rem;
-  border: 1px solid rgba(244, 250, 249, .22); border-radius: 999px; background: rgba(244, 250, 249, .06);
-  font-family: var(--font-titre); font-size: .82rem; font-weight: 500; letter-spacing: .04em; color: rgba(244, 250, 249, .86);
-  cursor: pointer; overflow: hidden;
-  transition: background-color var(--home-motion) var(--home-ease), border-color var(--home-motion) var(--home-ease), opacity 300ms var(--home-ease);
-}
-.home-intro .home-intro-skip { display: inline-flex; }
-.home-intro-skip:hover { background: rgba(244, 250, 249, .12); border-color: rgba(244, 250, 249, .5); }
-.home-intro-skip:focus-visible { outline: 3px solid var(--home-accent); outline-offset: 3px; }
-.home-intro-skip__bar { position: absolute; inset-inline: 1.1rem; bottom: .38rem; height: 2px; border-radius: 2px; background: rgba(244, 250, 249, .16); overflow: hidden; }
-.home-intro-skip__bar::after { content: ""; position: absolute; inset: 0; background: var(--home-accent); transform: scaleX(var(--p, 0)); transform-origin: left center; }
-
-/* Signature de fin d'intro : apparaît sous le logo complet pendant la tenue finale (.is-intro-hold, js/home.js) */
-.home-intro-tagline {
-  position: absolute; z-index: 4; inset-inline: 8%; bottom: 16%; margin: 0;
-  text-align: center; pointer-events: none;
-  font-family: var(--font-titre); font-weight: 500; font-size: clamp(.95rem, .8rem + .55vw, 1.25rem); line-height: 1.35; letter-spacing: .01em;
-  color: rgba(244, 250, 249, .92);
-  opacity: 0; transform: translate3d(0, 12px, 0); filter: blur(4px);
-  transition: opacity 700ms var(--home-ease), transform 700ms var(--home-ease), filter 700ms var(--home-ease);
-}
-.home-intro-tagline::before { content: ""; display: block; width: 34px; height: 2px; margin: 0 auto .85rem; border-radius: 2px; background: var(--home-accent); transform: scaleX(0); transition: transform 800ms var(--home-ease) 300ms; }
-.home-hero.is-intro-hold .home-intro-tagline { opacity: 1; transform: none; filter: none; transition-duration: 1100ms; }
-.home-hero.is-intro-hold .home-intro-tagline::before { transform: scaleX(1); }
-
-/* Entrée du hero : états « avant » (sous .js), joués par .is-revealed (js/home.js).
-   Pendant l'intro (html.home-intro), l'écran reste visible : c'est lui qui porte l'animation du logo. */
+/* Entrée du hero : états « avant » (sous .js), joués par .is-revealed (js/home.js). */
 .js .home-hero [data-hero-step] { opacity: 0; transform: translate3d(0, 18px, 0); }
 .js .home-hero .home-line__in { transform: translate3d(0, 108%, 0); opacity: 0; }
 .js .home-hero .home-line--accent .home-line__in::after { transform: scaleX(0); }
 .js .home-hero .home-float { opacity: 0; transform: translate3d(0, 14px, 0); }
 .js .home-hero:not(.is-revealed) .home-hero__screen { opacity: 0; scale: .97; }
-.js.home-intro .home-hero:not(.is-revealed) .home-hero__screen { opacity: 1; scale: none; }
 .js .home-hero .home-hero__screen { transition: opacity 900ms var(--home-ease), scale 900ms var(--home-ease); }
-.js .home-hero .home-hero__screen.is-flipping { transition: transform 1000ms var(--home-ease); }
-.js .home-hero .home-hero__screen.is-leaving { opacity: 0; scale: .96; transition: opacity 380ms var(--home-ease), scale 380ms var(--home-ease); }
 
 .home-hero.is-revealed [data-hero-step],
 .home-hero.is-revealed .home-line__in {
@@ -395,6 +337,113 @@ html:not(.js) .home-hero__toggle, .home-still .home-hero__toggle { display: none
   .js .home-hero .home-line__in { filter: blur(6px); }
   .home-hero.is-revealed .home-line__in { filter: none; }
 }
+
+/* ------------------------------------------- 4 bis. Entrée de marque (1re visite de la session)
+   Décidée par le script en tête de page (html.home-intro) et jouée EN CSS dès le premier affichage : aucun fichier à
+   charger (logo vectoriel en ligne dans index.html), rien n'attend js/home.js. Séquence (≈ 2,4 s) :
+     0 → 0,9 s      le « W » se trace au trait turquoise, puis se remplit aux couleurs du logo
+     0,4 → 1,15 s   « Wisy Safety » monte lettre à lettre ; trait laser et signature
+     1,15 → 2,1 s   le rideau se lève (bord courbe, liseré turquoise) ; js/home.js pose le logo à sa place dans l'en-tête
+     1,2 → 2,7 s    le hero, DÉJÀ peint sous le rideau (titre, texte, affiche du logo : le LCP ne bouge pas), monte en
+                    parallaxe — uniquement transform, jamais d'opacité sur le contenu
+   Au-dessus de tout (en-tête 1000, bandeau cookies 1130, assistant 1150, menu 1200) sauf le centre de préférences
+   cookies (1400) et les liens d'évitement. Le rideau capte les clics : un clic passe l'entrée sans rien activer dessous.
+   --e-lift doit rester égal à ENTRANCE_LIFT (js/home.js). */
+html.home-intro { --e-lift: 1150ms; --e-ease-lift: cubic-bezier(.76, 0, .24, 1); }
+.home-entrance { display: none; }
+html.home-intro .home-entrance { display: block; position: fixed; inset: 0; z-index: 1300; pointer-events: none; }
+
+.home-entrance__curtain {
+  position: absolute; inset: 0; pointer-events: auto;
+  background:
+    radial-gradient(62% 46% at 50% 46%, rgba(47, 125, 140, .26), transparent 72%),
+    radial-gradient(34% 26% at 50% 42%, rgba(72, 214, 194, .10), transparent 72%),
+    #0e1a20;
+  animation: home-entrance-lift 950ms var(--e-ease-lift) var(--e-lift) both;
+  will-change: transform;
+}
+.home-entrance__curtain::before {                   /* trame fine — celle du hero, en négatif — fondue sur les bords */
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(244, 250, 249, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 250, 249, .05) 1px, transparent 1px);
+  background-size: 56px 56px; background-position: center center;
+  -webkit-mask-image: radial-gradient(ellipse 56% 50% at 50% 46%, #000 0%, transparent 74%);
+          mask-image: radial-gradient(ellipse 56% 50% at 50% 46%, #000 0%, transparent 74%);
+  animation: home-entrance-fade 1200ms ease-out both;
+}
+.home-entrance__curtain::after {                    /* bord inférieur courbe + liseré turquoise (« trait laser ») */
+  content: ""; position: absolute; left: -8vw; right: -8vw; top: calc(100% - 1px); height: 18vh;
+  background: #0e1a20; border-bottom: 2px solid rgba(72, 214, 194, .8);
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  transform-origin: 50% 0;
+  animation: home-entrance-arc 950ms var(--e-ease-lift) var(--e-lift) both;
+}
+
+.home-entrance__brand {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(1.25rem, 3.2vh, 2rem);
+  padding: 1.5rem; text-align: center;
+}
+.home-entrance__logo {
+  display: block; width: auto; height: clamp(9rem, 28vh, 15rem); aspect-ratio: 289 / 319; overflow: visible;
+  transform-origin: 0 0;
+  filter: drop-shadow(0 0 22px rgba(72, 214, 194, .16));
+  animation: home-entrance-out 450ms cubic-bezier(.4, 0, .2, 1) var(--e-lift) both;   /* sortie de secours ; js/home.js la remplace par le vol vers l'en-tête */
+}
+.home-entrance__mark path {                         /* même tracé pour le trait puis le remplissage */
+  stroke: #48D6C2; stroke-width: 2.4; stroke-linejoin: round;
+  stroke-dasharray: var(--len) var(--len); stroke-dashoffset: var(--len);
+  fill-opacity: 0;
+  animation:
+    home-entrance-trace 720ms cubic-bezier(.65, 0, .35, 1) calc(var(--d) * 110ms) both,
+    home-entrance-fill 460ms cubic-bezier(.22, 1, .36, 1) calc(430ms + var(--d) * 110ms) both;
+}
+.home-entrance__word path {
+  transform-box: fill-box; transform-origin: 50% 100%;
+  animation: home-entrance-rise 560ms cubic-bezier(.22, 1, .36, 1) calc(400ms + var(--i) * 40ms) both;
+}
+.home-entrance__sig { display: grid; justify-items: center; gap: 1rem; animation: home-entrance-out 320ms cubic-bezier(.4, 0, .2, 1) var(--e-lift) both; }
+.home-entrance__rule {
+  display: block; width: min(16rem, 58vw); height: 1px;
+  background: linear-gradient(90deg, transparent, #48D6C2 22%, #48D6C2 78%, transparent);
+  box-shadow: 0 0 14px 1px rgba(72, 214, 194, .45);
+  animation: home-entrance-draw 650ms cubic-bezier(.65, 0, .35, 1) 560ms both;
+}
+.home-entrance__tag {
+  margin: 0; max-width: min(92vw, 40rem); text-wrap: balance;
+  font-family: var(--font-titre, "Poppins", system-ui, sans-serif); font-weight: 500; font-size: clamp(.72rem, .66rem + .25vw, .84rem); line-height: 1.5;
+  letter-spacing: .24em; text-transform: uppercase; color: rgba(244, 250, 249, .74);
+  animation: home-entrance-soft 650ms cubic-bezier(.22, 1, .36, 1) 700ms both;
+}
+
+/* Pilotage par js/home.js : vol du logo vers l'en-tête, fondu une fois posé, « passer » au moindre geste */
+.home-entrance.is-docking .home-entrance__logo { animation: none; transition: transform 680ms cubic-bezier(.6, 0, .2, 1); will-change: transform; }
+.home-entrance.is-docked .home-entrance__logo { opacity: 0; transition: opacity 240ms ease-out; }
+.home-entrance.is-skipped { opacity: 0; transition: opacity 260ms ease-out; }
+.home-entrance.is-skipped .home-entrance__curtain { pointer-events: none; }
+
+/* Le hero sous le rideau : déjà visible (LCP inchangé), il monte pendant que le rideau se lève */
+.js.home-intro .home-hero [data-hero-step], .js.home-intro .home-hero .home-line__in { opacity: 1; transform: none; filter: none; }
+.js.home-intro .home-hero:not(.is-revealed) .home-hero__screen { opacity: 1; }
+.js.home-intro .home-hero__inner { animation: home-entrance-hero 1300ms var(--home-ease) calc(var(--e-lift) + 80ms) both; }
+.js.home-intro .home-hero .home-hero__screen { animation: home-entrance-screen 1300ms var(--home-ease) calc(var(--e-lift) + 120ms) both; }
+.js.home-intro .home-hero .home-float { animation: home-entrance-float 900ms var(--home-ease) calc(var(--e-lift) + var(--fd, 0ms)) both; }
+.js.home-intro .home-hero .home-line--accent .home-line__in::after { animation: home-entrance-underline 700ms var(--home-ease) calc(var(--e-lift) + 700ms) both; }
+
+@keyframes home-entrance-lift { to { transform: translate3d(0, calc(-100% - 18vh - 4px), 0); visibility: hidden; } }
+@keyframes home-entrance-arc { to { transform: scaleY(.3); } }
+@keyframes home-entrance-fade { from { opacity: 0; } }
+@keyframes home-entrance-out { to { opacity: 0; transform: translate3d(0, -3vh, 0); visibility: hidden; } }
+@keyframes home-entrance-trace { to { stroke-dashoffset: 0; } }
+@keyframes home-entrance-fill { to { fill-opacity: 1; stroke-opacity: 0; } }
+@keyframes home-entrance-rise { from { opacity: 0; transform: translate3d(0, 45%, 0) scale(.96); } }
+@keyframes home-entrance-draw { from { opacity: 0; transform: scaleX(0); } }
+@keyframes home-entrance-soft { from { opacity: 0; transform: translate3d(0, 10px, 0); } }
+@keyframes home-entrance-hero { from { transform: translate3d(0, 9vh, 0); } }
+@keyframes home-entrance-screen { from { scale: .94; } to { scale: 1; } }
+@keyframes home-entrance-float { from { opacity: 0; transform: translate3d(0, 14px, 0); } to { opacity: 1; transform: none; } }
+@keyframes home-entrance-underline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 /* ------------------------------------------- 5. Confiance : partenaires + chiffres */
 .home-proof { padding-block: var(--home-space); background: linear-gradient(180deg, var(--home-bg) 0%, #eef6f4 100%); border-block-start: 1px solid var(--home-border); }
@@ -831,7 +880,8 @@ a.home-centre__value:focus-visible { outline: 3px solid var(--home-primary); out
 [dir="rtl"] .home-step:hover .home-step__go .home-arrow { transform: scaleX(-1) translateX(4px); }
 [dir="rtl"] .home-path:hover .home-path__cta .home-arrow, [dir="rtl"] .home-path:focus-visible .home-path__cta .home-arrow { transform: scaleX(-1) translateX(6px); }
 [dir="rtl"] .home-float:hover .home-arrow, [dir="rtl"] .home-tr:hover .home-tr__go .home-arrow { transform: scaleX(-1) translateX(3px); }
-[dir="rtl"] .home-btn::before, [dir="rtl"] .home-line--accent .home-line__in::after, [dir="rtl"] .home-intro-skip__bar::after { transform-origin: right center; }
+[dir="rtl"] .home-btn::before, [dir="rtl"] .home-line--accent .home-line__in::after { transform-origin: right center; }
+[dir="rtl"] .home-entrance__tag { letter-spacing: 0; }
 [dir="rtl"] .home-steps__list::after { transform-origin: right center; background: linear-gradient(270deg, var(--home-primary), var(--home-accent)); }
 [dir="rtl"] .home-logos { -webkit-mask-image: linear-gradient(270deg, #000 0%, #000 58%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
   mask-image: linear-gradient(270deg, #000 0%, #000 58%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%); }
@@ -846,10 +896,10 @@ a.home-centre__value:focus-visible { outline: 3px solid var(--home-primary); out
 [dir="rtl"] .home-hero__title, [dir="rtl"] .home-h2, [dir="rtl"] .home-display { letter-spacing: 0; }
 [dir="rtl"] .home-eyebrow, [dir="rtl"] .home-kicker, [dir="rtl"] .home-path__kicker { letter-spacing: 0; }
 
-/* Impression : tout le contenu est visible, sans scène d'intro ni vidéo */
+/* Impression : tout le contenu est visible, sans entrée de marque ni vidéo */
 @media print {
   .js .home-reveal, .js .home-hero [data-hero-step], .js .home-hero .home-line__in, .js .home-hero .home-float, .js .home-hero .home-hero__screen { opacity: 1 !important; transform: none !important; filter: none !important; }
-  .home-hero__stage, .home-intro-skip, .home-hero__toggle { display: none !important; }
+  .home-entrance, .home-hero__toggle { display: none !important; }
 }
 
 /* ------------------------------------------------------------- 14. Mouvement réduit */
@@ -860,7 +910,7 @@ a.home-centre__value:focus-visible { outline: 3px solid var(--home-primary); out
   }
   .js .home-hero .home-line--accent .home-line__in::after { transform: scaleX(1); }
   .js .home-steps__list::after { transform: scaleX(1); transition: none; }
-  .home-hero__stage, .home-intro-skip { display: none !important; }
+  .home-entrance { display: none !important; }
   .home-logos__col { transform: none !important; }
   .home-path:hover, .home-tr:hover, .home-tr-row:hover, .home-step:hover, .home-float:hover, .home-pass:hover, .home-exam:hover, .home-vlink:hover { translate: none; }
   .home-tr:hover .home-tr__media img, .home-pass:hover .home-pass__photo img, .home-vlink:hover .home-vlink__thumb img { transform: none; }

@@ -1,21 +1,21 @@
 /* =========================================================================
-   WISY SAFETY — Page d'accueil : intro du logo, entrée du hero, apparitions,
+   WISY SAFETY — Page d'accueil : entrée de marque, entrée du hero, apparitions,
    compteurs, halo au pointeur, parallaxe légère, vidéo pilotée.
    -------------------------------------------------------------------------
    Chargé uniquement par index.html (après le socle en ligne : en-tête, pied de
    page). Aucune dépendance. Tout est progressif : sans ce fichier, la page reste
    entièrement lisible (les états « cachés » de css/home.css sont sous html.js).
 
-   Intro (html.home-intro, décidée AVANT le premier affichage par le script du
-   <head>) : 1re visite de la session, sans ancre, hors mouvement réduit et
-   économie de données. L'écran de la vidéo est centré sur une scène sombre : la
-   vidéo est jouée EN ENTIER (8 s), puis le logo complet reste affiché avec la
-   signature « La sécurité comme une référence » (tenue de 2,6 s) ; l'écran rejoint
-   ensuite sa place dans le hero (technique FLIP : translation + échelle UNIFORME,
-   jamais déformée) pendant que le titre apparaît — environ 11,5 s au total. Passer
-   l'intro : bouton, Échap, défilement, molette, toucher ou tabulation dans le hero.
-   Garde-fous : si la vidéo ne démarre pas en 1,8 s, ou au plus tard après 16 s,
-   l'intro s'arrête d'elle-même.
+   Entrée de marque (html.home-intro, décidée AVANT le premier affichage par le
+   script du <head>) : 1re visite de la session, sans ancre, onglet visible, hors
+   robots, mouvement réduit et économie de données. Rideau sombre : le « W » du
+   logo se trace puis se remplit, « Wisy Safety » monte, trait laser et signature ;
+   à 1,15 s le rideau se lève (bord courbe), le logo vole jusqu'à sa place dans
+   l'en-tête et le hero — déjà peint dessous, LCP inchangé — monte en parallaxe.
+   ≈ 2,4 s au total, entièrement en CSS (css/home.css, section 4 bis) : ce script
+   ne fait que la synchroniser et la compléter. Aucun fichier chargé (logo
+   vectoriel en ligne). Passer : clic ou toucher, touche, molette, défilement.
+   Garde-fou : la scène est retirée au plus tard après 4 s.
    ========================================================================= */
 (function () {
   "use strict";
@@ -24,8 +24,8 @@
   var reduce = win.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var finePointer = win.matchMedia("(hover: hover) and (pointer: fine)").matches;
   var hasIO = "IntersectionObserver" in win;
-  var INTRO_HOLD = 2600;         // ms : logo complet + signature, tenus après la vidéo (8 s) avant de rejoindre le hero
-  var INTRO_START_TIMEOUT = 1800, INTRO_MAX = 16000;
+  var ENTRANCE_LIFT = 1150;      // ms : lever du rideau de l'entrée de marque (= --e-lift, css/home.css)
+  var ENTRANCE_MAX = 4000;       // ms : garde-fou — la scène est retirée quoi qu'il arrive
   var FR = {                     // repli si le dictionnaire n'est pas chargé
     "home.video_pause": "Mettre l'animation en pause",
     "home.video_play": "Lire l'animation",
@@ -95,7 +95,7 @@
 
   /* ================================================ HERO */
   var hero = doc.querySelector("[data-home-hero]");
-  var screen = hero && hero.querySelector("[data-hero-screen]");
+  var entrance = doc.querySelector("[data-entrance]");
   var video = doc.getElementById("homeLogoVideo");
   var still = root.classList.contains("home-still");
   var heroCtl = null;
@@ -106,101 +106,91 @@
     heroCtl = videoToggle(video, hero.querySelector(".home-hero__toggle"));
   }
 
-  if (hero && root.classList.contains("home-intro") && video && screen) {
-    runIntro();
+  if (hero && entrance && root.classList.contains("home-intro")) {
+    runEntrance();
   } else {
     root.classList.remove("home-intro");
+    if (entrance) entrance.remove();
     raf2(revealHero);                                            // l'état initial est peint, puis l'entrée se joue
     if (video && !still) playWhenVisible(video, heroCtl, 0.35);
   }
 
-  function runIntro() {
-    var skip = hero.querySelector("[data-intro-skip]");
-    var bar = skip && skip.querySelector(".home-intro-skip__bar");
-    var startTimer, maxTimer, holdTimer, holdStart = 0, frameReq = 0, dur = 8, finished = false;
-    var listeners = [];
+  /* Entrée de marque. La séquence est en CSS et a démarré au premier affichage (souvent avant ce script) : on se cale
+     sur elle grâce à l'animation du rideau. Ce script ajoute le vol du logo jusqu'à sa place dans l'en-tête, rend la
+     main au hero quand son entrée est finie, et permet de passer l'entrée au moindre geste. */
+  function runEntrance() {
+    var curtain = entrance.querySelector(".home-entrance__curtain");
+    var logo = entrance.querySelector(".home-entrance__logo");
+    var timers = [], listeners = [], dockTarget = null;
+    function later(fn, ms) { timers.push(setTimeout(fn, Math.max(0, ms))); }
     function on(target, type, fn, opts) { target.addEventListener(type, fn, opts); listeners.push([target, type, fn, opts]); }
+    function anims(el) { return el.getAnimations ? el.getAnimations({ subtree: true }) : []; }
 
-    var end = once(function (fast) {
-      finished = true;
-      clearTimeout(startTimer); clearTimeout(maxTimer); clearTimeout(holdTimer); cancelAnimationFrame(frameReq);
+    var startVideo = once(function () { if (video && !still) playWhenVisible(video, heroCtl, 0.35); });
+    function showHeaderLogo() { if (dockTarget) dockTarget.style.visibility = ""; }
+    var removeStage = once(function () {
+      showHeaderLogo();
+      timers.forEach(clearTimeout);
       listeners.forEach(function (l) { l[0].removeEventListener(l[1], l[2], l[3]); });
-      var hadFocus = skip && doc.activeElement === skip;
-      hero.classList.remove("is-intro-hold");                   // la signature s'efface pendant que l'écran rejoint le hero
-
-      /* FLIP : position de l'intro (First) → place dans le hero (Last). is-revealed est posé AVANT la mesure :
-         l'état « pas encore apparu » réduit l'écran (scale .97), ce qui fausserait le calcul. */
-      var first = screen.getBoundingClientRect();
+      entrance.remove();
+    });
+    /* Le hero a fini de monter : on rend la main à ses états normaux (.is-revealed), sans aucun saut visible */
+    var settleHero = once(function () {
       revealHero();
-      root.classList.remove("home-intro");
-      var last = screen.getBoundingClientRect();
-      var visible = last.width > 0 && last.top < win.innerHeight * 0.78 && last.bottom > 0;
-
-      if (visible) {                                             // desktop / tablette : l'écran rejoint sa place
-        var s = first.width / last.width;                        // même format 4:5 → échelle uniforme, aucune déformation
-        screen.style.transform = "translate(" + (first.left - last.left) + "px," + (first.top - last.top) + "px) scale(" + s + ")";
-        screen.getBoundingClientRect();                          // applique l'état inversé avant la transition
-        screen.classList.add("is-flipping");
-        screen.style.transform = "";
-        var clean = function (e) {
-          if (e && e.target !== screen) return;
-          screen.classList.remove("is-flipping");
-          screen.removeEventListener("transitionend", clean);
-        };
-        screen.addEventListener("transitionend", clean);
-        setTimeout(clean, 1300);
-      } else {                                                   // mobile : sa place est sous le texte → fondu sur la scène
-        hero.classList.remove("is-revealed");
-        root.classList.add("home-intro");
-        screen.classList.add("is-leaving");
-        setTimeout(function () {
-          revealHero();
-          root.classList.remove("home-intro");
-          screen.classList.remove("is-leaving");
-        }, fast ? 200 : 380);
-      }
-      if (hadFocus) { var h1 = hero.querySelector("h1"); if (h1) h1.focus({ preventScroll: true }); }
-      if (video.paused && !video.ended) play(video);
-      playWhenVisible(video, heroCtl, 0.35);
+      raf2(function () { root.classList.remove("home-intro"); });
+      startVideo();
     });
+    setTimeout(function () { removeStage(); settleHero(); }, ENTRANCE_MAX);     // garde-fou : quoi qu'il arrive
 
-    /* Tenue finale : la vidéo est terminée, le logo complet reste affiché et la signature apparaît. */
-    function hold() {
-      if (holdStart || finished) return;
-      holdStart = win.performance ? performance.now() : Date.now();
-      hero.classList.add("is-intro-hold");
-      holdTimer = setTimeout(function () { end(false); }, INTRO_HOLD);
+    var lift = anims(curtain).filter(function (a) { return a.animationName === "home-entrance-lift"; })[0];
+    if (!lift || lift.currentTime == null) {                    // navigateur sans Web Animations : le CSS finit seul
+      setTimeout(function () { removeStage(); settleHero(); }, ENTRANCE_LIFT + 1500);
+      return;
     }
-    /* Barre de progression du bouton « Passer l'intro » : durée de la vidéo + tenue finale */
-    function tick() {
-      var total = dur * 1000 + INTRO_HOLD;
-      var elapsed = holdStart ? dur * 1000 + ((win.performance ? performance.now() : Date.now()) - holdStart) : video.currentTime * 1000;
-      if (bar) bar.style.setProperty("--p", Math.min(1, elapsed / total).toFixed(3));
-      if (!holdStart && (video.ended || video.currentTime >= dur - 0.05)) hold();
-      frameReq = requestAnimationFrame(tick);
+    var toLift = ENTRANCE_LIFT - lift.currentTime;               // ms avant le lever du rideau (négatif : déjà levé)
+
+    /* Vol du logo : de sa place dans la scène à celle du logo de l'en-tête (même dessin, même cadre). Le vrai logo est
+       masqué pendant le vol (jamais deux logos décalés, quelle que soit la hauteur d'écran), puis fondu enchaîné. */
+    function dock() {
+      var target = doc.querySelector(".site-header .logo__img");
+      var a = logo.getBoundingClientRect(), b = target ? target.getBoundingClientRect() : null;
+      if (!b || !a.height || !b.height || b.bottom <= 0 || b.top >= win.innerHeight) return;   // repli : le logo s'efface (CSS)
+      dockTarget = target;
+      target.style.visibility = "hidden";
+      entrance.classList.add("is-docking");                      // coupe la sortie de secours avant qu'elle ne commence
+      logo.getBoundingClientRect();
+      logo.style.transform = "translate(" + (b.left - a.left).toFixed(2) + "px," + (b.top - a.top).toFixed(2) + "px) scale(" + (b.height / a.height).toFixed(4) + ")";
+      later(function () { showHeaderLogo(); entrance.classList.add("is-docked"); }, 990);   // le rideau a dégagé l'en-tête : relais au vrai logo
     }
+    if (toLift > 60) later(dock, toLift - 30);
+    later(startVideo, toLift + 300);
+    later(removeStage, toLift + 1230);
 
-    function readDuration() { if (isFinite(video.duration) && video.duration > 0) dur = video.duration; }
-    readDuration();
-    video.addEventListener("loadedmetadata", readDuration);
-    on(video, "ended", hold);
-    video.addEventListener("playing", function onPlaying() {
-      video.removeEventListener("playing", onPlaying);
-      clearTimeout(startTimer);
-      frameReq = requestAnimationFrame(tick);
-    });
-    startTimer = setTimeout(function () { if (video.paused || video.readyState < 3) end(true); }, INTRO_START_TIMEOUT);
-    maxTimer = setTimeout(function () { end(true); }, INTRO_MAX);
-    play(video);
+    /* Fin de l'entrée du hero (ses animations CSS) */
+    var heroAnims = anims(hero);
+    if (heroAnims.length) Promise.all(heroAnims.map(function (a) { return a.finished; })).then(settleHero, settleHero);
+    else later(settleHero, toLift + 1700);
 
-    function skipNow() { end(true); }
-    if (skip) on(skip, "click", skipNow);
-    on(doc, "keydown", function (e) { if (e.key === "Escape" || e.key === "Esc") skipNow(); });
-    on(win, "wheel", skipNow, { passive: true });
-    on(win, "touchmove", skipNow, { passive: true });
-    on(win, "scroll", function () { if (win.scrollY > 4) skipNow(); }, { passive: true });
-    on(hero, "focusin", function (e) { if (e.target !== skip) skipNow(); });
-    on(doc, "visibilitychange", function () { if (doc.hidden) skipNow(); });
+    /* Passer l'entrée : la scène s'efface, le hero joue tout de suite sa montée (même chorégraphie, sans attendre) */
+    function skip() {
+      if (entrance.classList.contains("is-skipped")) return;
+      entrance.classList.add("is-skipped");
+      showHeaderLogo();
+      var shift = Math.max(0, ENTRANCE_LIFT - (lift.currentTime || 0));
+      if (shift) heroAnims.forEach(function (a) { if (a.currentTime != null) a.currentTime += shift; });
+      timers.forEach(clearTimeout);
+      timers = [];
+      startVideo();
+      later(removeStage, 280);
+      if (!heroAnims.length) later(settleHero, 300);
+    }
+    on(curtain, "pointerdown", skip);
+    on(doc, "keydown", skip);
+    on(win, "wheel", skip, { passive: true });
+    on(win, "touchmove", skip, { passive: true });
+    on(win, "scroll", function () { if (win.scrollY > 4) skip(); }, { passive: true });
+    on(doc, "visibilitychange", function () { if (doc.hidden) skip(); });
+    if (toLift < -1230) removeStage();                           // script très en retard : tout est déjà joué
   }
 
   /* ================================================ APPARITIONS AU DÉFILEMENT */

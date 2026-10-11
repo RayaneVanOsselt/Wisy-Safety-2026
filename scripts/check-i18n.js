@@ -206,7 +206,7 @@ function scanHtml(html) {
 const NAMES_OF_LANGS = ["Français", "English", "Nederlands", "Afrikaans", "العربية", "Български", "Deutsch", "Română", "Italiano", "Slovenščina"];
 const ALLOW_EXACT = new Set([].concat(NAMES_OF_LANGS, LANGS.map((l) => l.toUpperCase()), [
   "Wisy Safety", "Wisy Safety ·", "info@wisysafety.be", "+32 2 318 86 59", "Avenue d'Itterbeek 378", "Avenue d'Itterbeek 378, 1070 Anderlecht", "Av. d'Itterbeek 378, 1070 Anderlecht",
-  "Orange", "Proximus", "Telenet", "Constructel", "VOO", "Unifiber", "VCA", "BEPS", "PEB", "112", "Certibru-RES", "IA",
+  "Orange", "Proximus", "Telenet", "Constructel", "VOO", "Unifiber", "PECB", "VCA", "BEPS", "PEB", "112", "Certibru-RES", "IA",
   "WS · 2026", "RESP", "FACT", "Stripe", "Mollie", "PayPal", "BE0123.456.789",
   /* Pages juridiques : dénomination légale, prestataires et identifiants techniques (balisés translate="no" dans le HTML) */
   "Wisy Safety ASBL",

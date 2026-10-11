@@ -46,7 +46,7 @@ test("logos, icônes et logos partenaires : formats modernes et poids minimal", 
   assert.ok(size("assets/images/logo/logo-102.webp") < 12 * KB, "logo 102 px");
   assert.ok(size("assets/images/logo/logo-204.webp") < 25 * KB, "logo 204 px");
   fs.readdirSync(path.join(ROOT, "assets/images/partenaires")).filter((f) => /-240\.webp$/.test(f)).forEach((f) => assert.ok(size("assets/images/partenaires/" + f) < 10 * KB, "partenaire " + f));
-  assert.equal(fs.readdirSync(path.join(ROOT, "assets/images/partenaires")).filter((f) => /-240\.webp$/.test(f)).length, 6, "6 logos partenaires optimisés");
+  assert.equal(fs.readdirSync(path.join(ROOT, "assets/images/partenaires")).filter((f) => /-240\.webp$/.test(f)).length, 7, "7 logos partenaires optimisés");
   PAGES.forEach((f) => assert.doesNotMatch(noScripts(read(f)), /src="assets\/logo\.png"/, f + " : le logo PNG de 76 Ko n'est plus chargé"));
 });
 

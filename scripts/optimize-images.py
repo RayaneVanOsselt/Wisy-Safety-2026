@@ -217,6 +217,7 @@ def peb():
 PARTNERS = {
     "orange": "orange.png", "proximus": "proximus.webp", "telenet": "telenet.webp",
     "constructel": "constructel.jpeg", "voo": "voo.png", "unifiber": "unifiber.png",
+    "pecb": "pecb.png",
 }
 
 

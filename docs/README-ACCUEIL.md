@@ -17,7 +17,8 @@ refait.
 1. **Hero** — titre en trois lignes, deux actions (« Découvrir nos formations » → `formations.html`, « Former mon
    équipe » → formulaire de devis `contact.html#wisy-contact-form`), l'écran de la **vidéo du logo** et deux cartes
    flottantes (VCA de base, centre d'Anderlecht).
-2. **Confiance** — logos des 6 partenaires (déjà présents sur le site) et les chiffres déjà publiés (10+ ans, 500+,
+2. **Confiance** — logos des 7 partenaires (dont **PECB**, mis en avant : tuile rouge « Nouveau · ISO » + encart
+   « Les formations ISO arrivent chez Wisy Safety » → formulaire de contact, en attendant une page ISO dédiée) et les chiffres déjà publiés (10+ ans, 500+,
    250+, 100 % — les mêmes que la page Contact et l'agenda, voir `tests/agenda.test.js`).
 3. **Parcours** — « Je me forme » (→ `formations.html`) / « Je forme mes équipes » (→ « Demander un devis »,
    formulaire de `contact.html`).

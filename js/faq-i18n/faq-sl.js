@@ -52,7 +52,8 @@ WisyFAQ.register("sl", {
   "nacelle": "Odkrijte usposabljanje za dvižne ploščadi",
   "vca": "Odkrijte usposabljanje VCA osnovni",
   "assistant": "Vprašanje postavite asistentu",
-  "coordination": "Odkrijte WiSy Coordination"
+  "coordination": "Odkrijte WiSy Coordination",
+  "certificats": "Preverite certifikat"
  },
  "popular": [
   {
@@ -612,6 +613,31 @@ WisyFAQ.register("sl", {
     "predpisano",
     "zakonsko",
     "priznanje usposabljanja"
+   ]
+  },
+  "faq-attestations-verifier": {
+   "question": "Kako preverim veljavnost certifikata Wisy Safety?",
+   "answer": "Na strani »Preverjanje certifikatov« vnesite priimek in datum rojstva imetnika: register takoj pokaže, ali je certifikat veljaven, potekel ali preklican, skupaj z opravljenim usposabljanjem, številko in datumi.\n\nIskanje je natančno, datum rojstva pa ni nikoli prikazan. Certifikata ni mogoče najti ali je treba popraviti podatek: obrnite se na nas.",
+   "keywords": [
+    "preveriti",
+    "preverjanje",
+    "veljavnost",
+    "certifikat",
+    "register",
+    "pristnost"
+   ],
+   "synonyms": [
+    "preveriti certifikat",
+    "veljaven certifikat",
+    "potekel certifikat",
+    "kontrola certifikata",
+    "ali je moj certifikat veljaven",
+    "najti moj certifikat",
+    "ponarejen certifikat",
+    "številka certifikata",
+    "preveriti potrdilo",
+    "preveriti diplomo",
+    "delodajalec preveri certifikat"
    ]
   },
   "faq-entreprises-plusieurs": {

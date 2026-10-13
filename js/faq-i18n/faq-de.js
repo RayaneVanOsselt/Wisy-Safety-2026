@@ -52,7 +52,8 @@ WisyFAQ.register("de", {
   "nacelle": "Schulung Hubarbeitsbühnen entdecken",
   "vca": "Schulung VCA Grundlagen entdecken",
   "assistant": "Frage an den Assistenten stellen",
-  "coordination": "WiSy Coordination entdecken"
+  "coordination": "WiSy Coordination entdecken",
+  "certificats": "Ein Zertifikat prüfen"
  },
  "popular": [
   {
@@ -612,6 +613,31 @@ WisyFAQ.register("de", {
     "gesetzlich vorgeschrieben",
     "rechtlich",
     "anerkennung der schulung"
+   ]
+  },
+  "faq-attestations-verifier": {
+   "question": "Wie prüfe ich die Gültigkeit eines Zertifikats von Wisy Safety?",
+   "answer": "Geben Sie auf der Seite „Zertifikatsprüfung“ den Nachnamen und das Geburtsdatum des Inhabers ein: Das Register zeigt sofort, ob das Zertifikat gültig, abgelaufen oder widerrufen ist, mit der besuchten Schulung, der Nummer und den Daten.\n\nDie Suche ist exakt, und das Geburtsdatum wird nie angezeigt. Zertifikat nicht gefunden oder Angabe zu korrigieren: Kontaktieren Sie uns.",
+   "keywords": [
+    "prüfen",
+    "prüfung",
+    "gültigkeit",
+    "zertifikat",
+    "register",
+    "echtheit"
+   ],
+   "synonyms": [
+    "zertifikat prüfen",
+    "gültiges zertifikat",
+    "abgelaufenes zertifikat",
+    "zertifikat kontrollieren",
+    "ist mein zertifikat gültig",
+    "mein zertifikat finden",
+    "gefälschtes zertifikat",
+    "zertifikatsnummer",
+    "bescheinigung prüfen",
+    "diplom prüfen",
+    "arbeitgeber zertifikat prüfen"
    ]
   },
   "faq-entreprises-plusieurs": {

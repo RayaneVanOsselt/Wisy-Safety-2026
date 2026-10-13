@@ -11,7 +11,7 @@ const Site = require("../js/site-content.js");
 const FAQ = require("../js/faq-data.js");
 
 const ROOT = path.join(__dirname, "..");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "vca-entreprise", "coordination", "mentions-legales", "politique-de-confidentialite", "conditions-generales-utilisation", "article-vca-cout-financement", "article-vca-erreurs-examen", "inscription", "contact", "avis", "faq", "agenda", "formation-vca-ligne-hierarchique", "formation-diisocyanates", "formation-fibre-optique", "article-fibre-parcours-professionnels", "article-fibre-devenir-expert"].map((n) => n + ".html").concat(["admin/avis.html"]);
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "vca-entreprise", "coordination", "mentions-legales", "politique-de-confidentialite", "conditions-generales-utilisation", "article-vca-cout-financement", "article-vca-erreurs-examen", "inscription", "contact", "avis", "faq", "agenda", "formation-vca-ligne-hierarchique", "formation-diisocyanates", "formation-fibre-optique", "article-fibre-parcours-professionnels", "article-fibre-devenir-expert", "certificats"].map((n) => n + ".html").concat(["admin/avis.html", "admin/certificats.html"]);
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 
 /* Existence sensible à la casse. Renvoie true, false, ou le vrai nom si seule la casse diffère. */

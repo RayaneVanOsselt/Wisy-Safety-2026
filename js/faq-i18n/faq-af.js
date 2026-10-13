@@ -52,7 +52,8 @@ WisyFAQ.register("af", {
   "nacelle": "Ontdek die Hoogwerker-opleiding",
   "vca": "Ontdek die VCA Basis-opleiding",
   "assistant": "Stel die vraag aan die assistent",
-  "coordination": "Ontdek WiSy Coordination"
+  "coordination": "Ontdek WiSy Coordination",
+  "certificats": "Verifieer ’n sertifikaat"
  },
  "popular": [
   {
@@ -611,6 +612,31 @@ WisyFAQ.register("af", {
     "regulatories",
     "wetlik",
     "erkenning van die opleiding"
+   ]
+  },
+  "faq-attestations-verifier": {
+   "question": "Hoe kontroleer ek of ’n Wisy Safety-sertifikaat geldig is?",
+   "answer": "Voer op die bladsy „Sertifikaatverifikasie” die houer se van en geboortedatum in: die register wys dadelik of die sertifikaat geldig, verval of herroep is, met die opleiding wat gevolg is, die nommer en die datums.\n\nDie soektog is presies en die geboortedatum word nooit gewys nie. Sertifikaat nie gevind nie of inligting om reg te stel: kontak ons.",
+   "keywords": [
+    "kontroleer",
+    "verifikasie",
+    "geldigheid",
+    "sertifikaat",
+    "register",
+    "egtheid"
+   ],
+   "synonyms": [
+    "verifieer ’n sertifikaat",
+    "geldige sertifikaat",
+    "vervalde sertifikaat",
+    "kontroleer ’n sertifikaat",
+    "is my sertifikaat geldig",
+    "vind my sertifikaat",
+    "vals sertifikaat",
+    "sertifikaatnommer",
+    "verifieer ’n attestasie",
+    "verifieer ’n diploma",
+    "werkgewer kontroleer sertifikaat"
    ]
   },
   "faq-entreprises-plusieurs": {

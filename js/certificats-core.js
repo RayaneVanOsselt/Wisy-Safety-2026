@@ -2,12 +2,13 @@
    WISY SAFETY — Vérification des certificats : logique SANS interface (testée par tests/certificats.test.js)
    -------------------------------------------------------------------------
    - validation des saisies (mêmes règles que le serveur, qui revalide TOUT de son côté) ;
-   - client de l'API « wisy-certificats/v1 » de l'extension WordPress (voir docs/README-CERTIFICATS.md) ;
+   - client de la fonction Supabase `verify_certificate` (supabase/certificats.sql) ;
    - normalisation STRICTE de la réponse : seuls les champs attendus sont conservés.
 
    Confidentialité : aucune donnée n'est écrite dans le navigateur (ni localStorage, ni sessionStorage,
    ni cookie, ni URL). Le nom et la date partent uniquement dans le CORPS d'une requête POST chiffrée.
-   Aucune clé ni aucun secret ici : l'API est publique par nature et protégée côté serveur.
+   La clé utilisée est la clé PUBLIQUE du site (js/supabase-config.js) : elle ne donne accès qu'à la
+   fonction de vérification, jamais au registre (Row Level Security, voir docs/README-CERTIFICATS.md).
    ========================================================================= */
 (function (root) {
   "use strict";
@@ -15,7 +16,6 @@
   var NAME_MAX = 80;
   var NAME_RE = /^[\p{L}\p{M}][\p{L}\p{M} '’‘ʼ\-‐‑.]*$/u;
   var STATUSES = ["valid", "expired", "revoked", "undetermined"];
-  var REASONS = ["missing", "not_authorized", "revoked"];
   var TIMEOUT_MS = 15000;
 
   /* ------------------------------------------------------------------ saisies */
@@ -95,7 +95,7 @@
     }
   }
 
-  /* ------------------------------------------------------------------ réponse de l'API */
+  /* ------------------------------------------------------------------ réponse du registre */
 
   function str(v, max) { return typeof v === "string" ? v.slice(0, max || 200) : null; }
   function isoDate(v) { return typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null; }
@@ -103,37 +103,49 @@
   /** Ne garde QUE les champs attendus ; tout statut inconnu rend la réponse invalide (jamais de « faux valide »). */
   function normalizeCertificate(c) {
     if (!c || typeof c !== "object" || STATUSES.indexOf(c.status) < 0) return null;
-    var doc = c.document && typeof c.document === "object" ? c.document : {};
-    var available = doc.available === true && typeof doc.token === "string" && /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(doc.token) && c.status !== "revoked";
     return {
       holder: str(c.holder, 200) || "",
       training: str(c.training, 200) || "",
-      diplomaNumber: str(c.diplomaNumber, 80),
+      certificateNumber: str(c.certificateNumber, 80),
       trainingDate: isoDate(c.trainingDate),
       issueDate: isoDate(c.issueDate),
       expiryDate: isoDate(c.expiryDate),
-      status: c.status,
-      document: available
-        ? { available: true, token: doc.token, expiresIn: Math.max(30, Math.min(3600, +doc.expiresIn || 600)) }
-        : { available: false, reason: REASONS.indexOf(doc.reason) >= 0 ? doc.reason : "missing" }
+      status: c.status
     };
   }
 
+  /**
+   * Réponse JSON de verify_certificate → { kind, … } :
+   *   found | not_found | invalid (fields) | rate_limited (retryAfter s) — ou null si la réponse est inattendue.
+   */
   function normalizeResult(json) {
     if (!json || typeof json !== "object") return null;
     var meta = { checkedAt: str(json.checkedAt, 40), today: isoDate(json.today), timezone: str(json.timezone, 60) || "Europe/Brussels" };
     if (json.status === "not_found") return { kind: "not_found", meta: meta };
+    if (json.status === "invalid") {
+      var f = json.fields && typeof json.fields === "object" ? json.fields : {};
+      var fields = {};
+      if (typeof f.lastName === "string") fields.lastName = f.lastName.slice(0, 20);
+      if (typeof f.birthDate === "string") fields.birthDate = f.birthDate.slice(0, 20);
+      return { kind: "invalid", fields: fields };
+    }
+    if (json.status === "rate_limited") return { kind: "rate_limited", retryAfter: Math.max(60, Math.min(86400, Math.round(+json.retryAfter) || 900)) };
     if (json.status !== "found" || !Array.isArray(json.certificates) || !json.certificates.length) return null;
     var certs = json.certificates.slice(0, 20).map(normalizeCertificate);
     if (certs.some(function (c) { return !c; })) return null;
     return { kind: "found", meta: meta, certificates: certs };
   }
 
-  /* ------------------------------------------------------------------ client HTTP */
+  /* ------------------------------------------------------------------ client HTTP (Supabase) */
 
-  function apiBase(base) {
-    var b = String(base || "").trim().replace(/\/+$/, "");
-    return /^https:\/\/[^\s/]+(\/[^\s]*)?$/.test(b) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/[^\s]*)?$/.test(b) ? b : "";
+  /** Adresse du projet Supabase, seulement si elle est réellement renseignée (https, ou localhost en développement). */
+  function endpoint(cfg) {
+    cfg = cfg || {};
+    var url = String(cfg.SUPABASE_URL || "").trim().replace(/\/+$/, "");
+    var key = String(cfg.SUPABASE_ANON_KEY || "").trim();
+    if (!url || !key || /VOTRE[-_]/.test(url + key)) return null;
+    if (!/^https:\/\/[^\s/]+$/.test(url) && !/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(url)) return null;
+    return { url: url + "/rest/v1/rpc/verify_certificate", key: key };
   }
 
   function withTimeout(fetchImpl, url, init, ms) {
@@ -143,38 +155,18 @@
     return Promise.resolve(fetchImpl(url, init)).finally(function () { if (timer) clearTimeout(timer); });
   }
 
-  /** État du service : { state: "ok" | "not_configured" | "unavailable", challenge } */
-  function health(opts) {
-    var base = apiBase(opts.base);
-    if (!base) return Promise.resolve({ state: "not_configured", challenge: null });
-    return withTimeout(opts.fetch, base + "/health", { method: "GET", credentials: "omit", cache: "no-store", referrerPolicy: "no-referrer", mode: "cors" }, opts.timeout || 8000)
-      .then(function (r) {
-        if (r.status === 404) return { state: "not_configured", challenge: null };
-        if (!r.ok) return { state: "unavailable", challenge: null };
-        return r.json().then(function (j) {
-          var ch = j && j.challenge && j.challenge.provider === "turnstile" && typeof j.challenge.siteKey === "string" ? { provider: "turnstile", siteKey: j.challenge.siteKey.slice(0, 100) } : null;
-          return { state: j && j.status === "ok" ? "ok" : "unavailable", challenge: ch };
-        });
-      })
-      .catch(function () { return { state: "unavailable", challenge: null }; });
-  }
-
   /**
    * Vérification. Renvoie toujours un objet { kind, … } — jamais d'exception :
-   *   found | not_found | invalid (fields) | rate_limited (retryAfter s) | challenge | not_configured | unavailable
+   *   found | not_found | invalid (fields) | rate_limited (retryAfter s) | not_configured | unavailable
+   * @param {{config:object, lastName:string, birthDate:string, fetch:Function, timeout?:number}} opts
    */
   function verify(opts) {
-    var base = apiBase(opts.base);
-    if (!base) return Promise.resolve({ kind: "not_configured" });
-    var body = new URLSearchParams();
-    body.set("lastName", opts.lastName);
-    body.set("birthDate", opts.birthDate);
-    if (opts.challenge) body.set("challenge", opts.challenge);
-    return withTimeout(opts.fetch, base + "/verify", {
+    var ep = endpoint(opts.config);
+    if (!ep || typeof opts.fetch !== "function") return Promise.resolve({ kind: "not_configured" });
+    return withTimeout(opts.fetch, ep.url, {
       method: "POST",
-      /* Requête « simple » (formulaire encodé) : pas de pré-vérification CORS, pas de cookie, rien en cache. */
-      headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-      body: body.toString(),
+      headers: { "Content-Type": "application/json", Accept: "application/json", apikey: ep.key },
+      body: JSON.stringify({ p_last_name: opts.lastName, p_birth_date: opts.birthDate }),
       credentials: "omit",
       cache: "no-store",
       referrerPolicy: "no-referrer",
@@ -185,14 +177,10 @@
         return r.text().then(function (t) {
           var j = null;
           try { j = JSON.parse(t); } catch (e) { j = null; }
-          if (r.status === 200) {
-            var res = normalizeResult(j);
-            return res || { kind: "unavailable" };
-          }
-          if (r.status === 400 && j && j.code === "invalid_input") return { kind: "invalid", fields: j.fields && typeof j.fields === "object" ? j.fields : {} };
-          if (r.status === 429) return { kind: "rate_limited", retryAfter: Math.max(60, Math.min(86400, +(j && j.retryAfter) || +r.headers.get("Retry-After") || 600)) };
-          if (r.status === 403 && j && /^challenge_/.test(j.code || "")) return { kind: "challenge" };
-          if (r.status === 404) return { kind: "not_configured" };
+          if (r.status === 200) return normalizeResult(j) || { kind: "unavailable" };
+          /* Fonction absente (SQL pas encore installé) : PostgREST répond 404 / PGRST202. */
+          if (r.status === 404 || (j && j.code === "PGRST202")) return { kind: "not_configured" };
+          if (r.status === 429) return { kind: "rate_limited", retryAfter: Math.max(60, Math.min(86400, +r.headers.get("Retry-After") || 900)) };
           return { kind: "unavailable" };
         });
       })
@@ -252,8 +240,7 @@
     maskBirthInput: maskBirthInput,
     todayBrussels: todayBrussels,
     normalizeResult: normalizeResult,
-    apiBase: apiBase,
-    health: health,
+    endpoint: endpoint,
     verify: verify,
     validityProgress: validityProgress,
     relative: relative,

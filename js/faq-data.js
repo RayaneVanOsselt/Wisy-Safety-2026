@@ -108,7 +108,8 @@
     nacelle:     { label: "Découvrir la formation Nacelles", href: "formation-nacelles-elevatrices.html" },
     vca:         { label: "Découvrir la formation VCA Base", href: "formation-vca-base.html" },
     assistant:   { label: "Poser la question à l'assistant", href: null },
-    coordination: { label: "Découvrir WiSy Coordination",    href: "coordination.html" }
+    coordination: { label: "Découvrir WiSy Coordination",    href: "coordination.html" },
+    certificats: { label: "Vérifier un certificat",          href: "certificats.html" }
   };
 
   /* ---------------------------------------------------------------------
@@ -438,6 +439,19 @@
       synonyms: ["nacelle élévatrice", "hoogwerker", "reconnue", "agréée", "certificat nacelle", "obligatoire", "réglementaire", "légal", "reconnaissance de la formation"],
       relatedQuestions: ["faq-attestations-recevoir", "faq-deroulement-theorie-pratique", "faq-contact-contact"],
       action: "nacelle"
+    },
+    {
+      id: "faq-attestations-verifier",
+      category: "attestations",
+      /* Le registre est interrogé UNIQUEMENT par la page certificats.html (nom + date de naissance, correspondance exacte) :
+         ni la recherche ni l'assistant ne le consultent — ils y renvoient. Guide : docs/README-CERTIFICATS.md. */
+      question: "Comment vérifier la validité d'un certificat Wisy Safety ?",
+      answer: "Sur la page « Vérification des certificats », saisissez le nom de famille et la date de naissance du titulaire : le registre indique aussitôt si le certificat est valide, expiré ou révoqué, avec la formation suivie, son numéro et ses dates.\n\n" +
+        "La recherche est exacte et la date de naissance n'est jamais affichée. Certificat introuvable ou information à corriger : contactez-nous.",
+      keywords: ["vérifier", "vérification", "validité", "registre", "authenticité", "valide"],
+      synonyms: ["vérifier un certificat", "certificat valide", "certificat expiré", "contrôler un certificat", "mon certificat est-il valide", "retrouver mon certificat", "faux certificat", "numéro de certificat", "vérifier une attestation", "vérifier un diplôme", "employeur vérifier certificat"],
+      relatedQuestions: ["faq-attestations-recevoir", "faq-contact-contact", "faq-attestations-vca-examen"],
+      action: "certificats"
     },
 
     /* ==== Entreprises & équipes ========================================= */

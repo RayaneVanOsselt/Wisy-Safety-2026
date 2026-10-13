@@ -52,7 +52,8 @@ WisyFAQ.register("ro", {
   "nacelle": "Descoperiți formarea nacele elevatoare",
   "vca": "Descoperiți formarea VCA de bază",
   "assistant": "Puneți întrebarea asistentului",
-  "coordination": "Descoperiți WiSy Coordination"
+  "coordination": "Descoperiți WiSy Coordination",
+  "certificats": "Verificați un certificat"
  },
  "popular": [
   {
@@ -611,6 +612,31 @@ WisyFAQ.register("ro", {
     "reglementar",
     "legal",
     "recunoașterea formării"
+   ]
+  },
+  "faq-attestations-verifier": {
+   "question": "Cum verific valabilitatea unui certificat Wisy Safety?",
+   "answer": "Pe pagina „Verificarea certificatelor”, introduceți numele de familie și data nașterii titularului: registrul arată imediat dacă certificatul este valabil, expirat sau revocat, împreună cu formarea urmată, numărul și datele sale.\n\nCăutarea este exactă, iar data nașterii nu este afișată niciodată. Certificat negăsit sau informație de corectat: contactați-ne.",
+   "keywords": [
+    "verificare",
+    "verifica",
+    "valabilitate",
+    "certificat",
+    "registru",
+    "autenticitate"
+   ],
+   "synonyms": [
+    "verificarea unui certificat",
+    "certificat valabil",
+    "certificat expirat",
+    "controlul unui certificat",
+    "este valabil certificatul meu",
+    "găsirea certificatului meu",
+    "certificat fals",
+    "numărul certificatului",
+    "verificarea unei adeverințe",
+    "verificarea unei diplome",
+    "angajator verificare certificat"
    ]
   },
   "faq-entreprises-plusieurs": {

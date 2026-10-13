@@ -2,13 +2,14 @@
    WISY SAFETY — Vérification des certificats : logique SANS interface (testée par tests/certificats.test.js)
    -------------------------------------------------------------------------
    - validation des saisies (mêmes règles que le serveur, qui revalide TOUT de son côté) ;
-   - client de la fonction Supabase `verify_certificate` (supabase/certificats.sql) ;
+   - client du script Google de la feuille des certificats (google-sheets/certificats.gs, adresse dans
+     js/certificats-config.js) ;
    - normalisation STRICTE de la réponse : seuls les champs attendus sont conservés.
 
    Confidentialité : aucune donnée n'est écrite dans le navigateur (ni localStorage, ni sessionStorage,
    ni cookie, ni URL). Le nom et la date partent uniquement dans le CORPS d'une requête POST chiffrée.
-   La clé utilisée est la clé PUBLIQUE du site (js/supabase-config.js) : elle ne donne accès qu'à la
-   fonction de vérification, jamais au registre (Row Level Security, voir docs/README-CERTIFICATS.md).
+   L'adresse du script n'est pas un secret : elle ne donne accès qu'à la vérification, jamais à la feuille
+   (voir docs/README-CERTIFICATS.md).
    ========================================================================= */
 (function (root) {
   "use strict";
@@ -115,13 +116,14 @@
   }
 
   /**
-   * Réponse JSON de verify_certificate → { kind, … } :
-   *   found | not_found | invalid (fields) | rate_limited (retryAfter s) — ou null si la réponse est inattendue.
+   * Réponse JSON du script → { kind, … } :
+   *   found | not_found | invalid (fields) | rate_limited (retryAfter s) | not_configured — ou null si la réponse est inattendue.
    */
   function normalizeResult(json) {
     if (!json || typeof json !== "object") return null;
     var meta = { checkedAt: str(json.checkedAt, 40), today: isoDate(json.today), timezone: str(json.timezone, 60) || "Europe/Brussels" };
     if (json.status === "not_found") return { kind: "not_found", meta: meta };
+    if (json.status === "not_configured") return { kind: "not_configured" };
     if (json.status === "invalid") {
       var f = json.fields && typeof json.fields === "object" ? json.fields : {};
       var fields = {};
@@ -136,16 +138,14 @@
     return { kind: "found", meta: meta, certificates: certs };
   }
 
-  /* ------------------------------------------------------------------ client HTTP (Supabase) */
+  /* ------------------------------------------------------------------ client HTTP (script Google de la feuille) */
 
-  /** Adresse du projet Supabase, seulement si elle est réellement renseignée (https, ou localhost en développement). */
+  /** Adresse du script Google, seulement si c'est bien un déploiement « Application Web » (ou localhost en développement). */
   function endpoint(cfg) {
-    cfg = cfg || {};
-    var url = String(cfg.SUPABASE_URL || "").trim().replace(/\/+$/, "");
-    var key = String(cfg.SUPABASE_ANON_KEY || "").trim();
-    if (!url || !key || /VOTRE[-_]/.test(url + key)) return null;
-    if (!/^https:\/\/[^\s/]+$/.test(url) && !/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(url)) return null;
-    return { url: url + "/rest/v1/rpc/verify_certificate", key: key };
+    var url = String((cfg && cfg.API_URL) || "").trim();
+    if (/^https:\/\/script\.google\.com\/(?:a\/[^\s/]+\/)?macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/.test(url)) return url;
+    if (/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/[^\s]*$/.test(url)) return url;
+    return null;
   }
 
   function withTimeout(fetchImpl, url, init, ms) {
@@ -161,26 +161,28 @@
    * @param {{config:object, lastName:string, birthDate:string, fetch:Function, timeout?:number}} opts
    */
   function verify(opts) {
-    var ep = endpoint(opts.config);
-    if (!ep || typeof opts.fetch !== "function") return Promise.resolve({ kind: "not_configured" });
-    return withTimeout(opts.fetch, ep.url, {
+    var url = endpoint(opts.config);
+    if (!url || typeof opts.fetch !== "function") return Promise.resolve({ kind: "not_configured" });
+    return withTimeout(opts.fetch, url, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json", apikey: ep.key },
-      body: JSON.stringify({ p_last_name: opts.lastName, p_birth_date: opts.birthDate }),
+      /* « text/plain » = requête « simple » : pas de pré-vérification CORS (que les scripts Google ne gèrent pas).
+         Google répond par une redirection vers script.googleusercontent.com, qu'il faut suivre. */
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ lastName: opts.lastName, birthDate: opts.birthDate }),
       credentials: "omit",
       cache: "no-store",
       referrerPolicy: "no-referrer",
       mode: "cors",
-      redirect: "error"
+      redirect: "follow"
     }, opts.timeout || TIMEOUT_MS)
       .then(function (r) {
         return r.text().then(function (t) {
           var j = null;
           try { j = JSON.parse(t); } catch (e) { j = null; }
           if (r.status === 200) return normalizeResult(j) || { kind: "unavailable" };
-          /* Fonction absente (SQL pas encore installé) : PostgREST répond 404 / PGRST202. */
-          if (r.status === 404 || (j && j.code === "PGRST202")) return { kind: "not_configured" };
-          if (r.status === 429) return { kind: "rate_limited", retryAfter: Math.max(60, Math.min(86400, +r.headers.get("Retry-After") || 900)) };
+          /* Déploiement supprimé ou adresse erronée : Google répond 404. */
+          if (r.status === 404) return { kind: "not_configured" };
+          if (r.status === 429) return { kind: "rate_limited", retryAfter: 900 };
           return { kind: "unavailable" };
         });
       })

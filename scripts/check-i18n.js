@@ -38,7 +38,8 @@ const PAGES = ["index", "formations", "contact", "avis", "inscription", "faq", "
   "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles",
   "formation-vca-base", "vca-entreprise", "article-vca-cout-financement", "article-vca-erreurs-examen", "coordination",
   "politique-de-confidentialite", "conditions-generales-utilisation", "404",
-  "formation-vca-ligne-hierarchique", "formation-diisocyanates", "formation-fibre-optique", "article-fibre-parcours-professionnels", "article-fibre-devenir-expert"].map((n) => n + ".html");
+  "formation-vca-ligne-hierarchique", "formation-diisocyanates", "formation-fibre-optique", "article-fibre-parcours-professionnels", "article-fibre-devenir-expert",
+  "certificats"].map((n) => n + ".html");
 
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 

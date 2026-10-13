@@ -52,7 +52,8 @@ WisyFAQ.register("it", {
   "nacelle": "Scopri il corso piattaforma elevatrice",
   "vca": "Scopri il corso VCA base",
   "assistant": "Fai la domanda all'assistente",
-  "coordination": "Scopri WiSy Coordination"
+  "coordination": "Scopri WiSy Coordination",
+  "certificats": "Verificare un certificato"
  },
  "popular": [
   {
@@ -612,6 +613,31 @@ WisyFAQ.register("it", {
     "normativo",
     "legale",
     "riconoscimento del corso"
+   ]
+  },
+  "faq-attestations-verifier": {
+   "question": "Come si verifica la validità di un certificato Wisy Safety?",
+   "answer": "Nella pagina «Verifica dei certificati», inserite il cognome e la data di nascita del titolare: il registro indica subito se il certificato è valido, scaduto o revocato, con la formazione seguita, il numero e le date.\n\nLa ricerca è esatta e la data di nascita non viene mai mostrata. Certificato non trovato o informazione da correggere: contattateci.",
+   "keywords": [
+    "verificare",
+    "verifica",
+    "validità",
+    "certificato",
+    "registro",
+    "autenticità"
+   ],
+   "synonyms": [
+    "verificare un certificato",
+    "certificato valido",
+    "certificato scaduto",
+    "controllare un certificato",
+    "il mio certificato è valido",
+    "ritrovare il mio certificato",
+    "certificato falso",
+    "numero del certificato",
+    "verificare un attestato",
+    "verificare un diploma",
+    "datore di lavoro verifica certificato"
    ]
   },
   "faq-entreprises-plusieurs": {

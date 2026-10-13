@@ -753,6 +753,39 @@ export const FAQ_ITEMS: FaqItem[] = [
     "action": "nacelle"
   },
   {
+    "id": "faq-attestations-verifier",
+    "category": "attestations",
+    "question": "Comment vérifier la validité d'un certificat Wisy Safety ?",
+    "answer": "Sur la page « Vérification des certificats », saisissez le nom de famille et la date de naissance du titulaire : le registre indique aussitôt si le certificat est valide, expiré ou révoqué, avec la formation suivie, son numéro et ses dates.\n\nLa recherche est exacte et la date de naissance n'est jamais affichée. Certificat introuvable ou information à corriger : contactez-nous.",
+    "keywords": [
+      "vérifier",
+      "vérification",
+      "validité",
+      "registre",
+      "authenticité",
+      "valide"
+    ],
+    "synonyms": [
+      "vérifier un certificat",
+      "certificat valide",
+      "certificat expiré",
+      "contrôler un certificat",
+      "mon certificat est-il valide",
+      "retrouver mon certificat",
+      "faux certificat",
+      "numéro de certificat",
+      "vérifier une attestation",
+      "vérifier un diplôme",
+      "employeur vérifier certificat"
+    ],
+    "relatedQuestions": [
+      "faq-attestations-recevoir",
+      "faq-contact-contact",
+      "faq-attestations-vca-examen"
+    ],
+    "action": "certificats"
+  },
+  {
     "id": "faq-entreprises-plusieurs",
     "category": "entreprises",
     "question": "Puis-je inscrire plusieurs collaborateurs ?",

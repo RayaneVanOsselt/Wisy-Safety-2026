@@ -234,6 +234,13 @@
   /* Obligation légale (« dois-je… », « suis-je concerné ») et sanctions : jamais de montant inventé. */
   function isObligation(q) { return has(apos(q), ["obligatoire", "obligation", "oblige", "dois je", "dois-je", "doit on", "faut il", "suis je concerne", "concerne", "concernee", "exige", "exigee", "requis", "requise"]); }
   function isFine(q) { return has(apos(q), ["amende", "amendes", "sanction", "sanctions", "penalite", "penalites", "boete", "contravention", "proces verbal"]); }
+  /* Vérifier / retrouver un certificat délivré par Wisy Safety (page certificats.html). */
+  function isCertificateLookup(q) {
+    var a = apos(q);
+    return has(a, ["certificat", "attestation", "diplome", "certifie", "certifiee", "certificate", "certificaat", "zertifikat", "certificato", "sertifikaat", "certifikat"]) &&
+      has(a, ["verifier", "verifie", "verification", "controler", "controle", "valide", "validite", "valable", "expire", "revoque", "authentique", "authenticite", "faux", "falsifie",
+        "retrouver", "perdu", "perdue", "egare", "registre", "numero", "check", "verify", "valid", "controleren", "prufen", "verificare"]);
+  }
   function isAccreditation(q) { return has(apos(q), ["agree", "agrement", "accredit", "reconnu", "reconnue", "reconnaissance", "homologu", "centre d examen", "officiellement"]); }
   function isLocation(q) {
     return has(apos(q), ["ou a lieu", "ou ont lieu", "ou se deroule", "ou se passe", "ou se donne", "ou se trouve", "ou etes", "adresse", "lieu", "localisation", "situe", "venir", "itineraire", "presentiel"]);
@@ -459,6 +466,23 @@
         sources: [{ title: "Contact", url: C.contactUrl }],
         meta: { intent: "fine_unknown" }
       };
+    }
+
+    /* 2a-bis) Vérifier un certificat délivré par Wisy Safety → la page de vérification. L'assistant ne consulte JAMAIS le
+       registre (données personnelles) : il ne demande ni nom ni date de naissance et n'en traite aucun. Les questions
+       d'agrément / de reconnaissance (2b, 2d) et celles des diplômes VCA (registre central BeSaCC, plus bas) gardent leur réponse. */
+    if (isCertificateLookup(q) && !hasPriceWord(q) && !isAccreditation(q) && !isObligation(q) && !has(q, ["caces", "r486", "vca"])) {
+      var certPage = Knowledge.byId("page-certificats");
+      if (certPage) {
+        return {
+          message: "Pour vérifier un certificat délivré par Wisy Safety, utilisez la page « Vérification des certificats » : saisissez le nom de famille et la date de naissance du titulaire, et le registre indique aussitôt si le certificat est valide, expiré ou révoqué. " +
+            "Par confidentialité, je ne consulte pas ce registre moi-même : n’écrivez ici ni nom ni date de naissance. Certificat introuvable ou information à corriger : contactez l’équipe Wisy Safety.",
+          cards: [navigationCard(certPage), contactCard()],
+          suggestions: ["Que vais-je recevoir après ma formation ?", "Contacter Wisy Safety"],
+          sources: [{ title: certPage.title, url: certPage.url }],
+          meta: { intent: "certificate_verification" }
+        };
+      }
     }
 
     /* 2b) CACES / certification / agrément : jamais affirmés sans confirmation.

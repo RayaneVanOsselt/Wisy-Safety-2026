@@ -52,7 +52,8 @@ WisyFAQ.register("en", {
   "nacelle": "Discover the Aerial work platform course",
   "vca": "Discover the VCA Basic course",
   "assistant": "Ask the assistant",
-  "coordination": "Discover WiSy Coordination"
+  "coordination": "Discover WiSy Coordination",
+  "certificats": "Verify a certificate"
  },
  "popular": [
   {
@@ -614,6 +615,31 @@ WisyFAQ.register("en", {
     "regulatory",
     "legal",
     "recognition of the course"
+   ]
+  },
+  "faq-attestations-verifier": {
+   "question": "How can I check whether a Wisy Safety certificate is valid?",
+   "answer": "On the “Certificate verification” page, enter the holder's surname and date of birth: the register instantly shows whether the certificate is valid, expired or revoked, with the training followed, its number and its dates.\n\nThe search is exact and the date of birth is never displayed. Certificate not found or information to correct: contact us.",
+   "keywords": [
+    "check",
+    "verification",
+    "validity",
+    "certificate",
+    "register",
+    "authenticity"
+   ],
+   "synonyms": [
+    "verify a certificate",
+    "valid certificate",
+    "expired certificate",
+    "check a certificate",
+    "is my certificate valid",
+    "find my certificate",
+    "fake certificate",
+    "certificate number",
+    "verify an attestation",
+    "verify a diploma",
+    "employer check certificate"
    ]
   },
   "faq-entreprises-plusieurs": {

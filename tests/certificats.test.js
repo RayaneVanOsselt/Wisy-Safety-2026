@@ -1,19 +1,17 @@
 "use strict";
-/* Vérification des certificats : client du registre (js/certificats-core.js), import / export Excel
-   (js/certificats-import.js), règles de sécurité du registre (supabase/certificats.sql), page publique,
-   administration, recherche et assistant.   `node --test tests/*.test.js` — aucune dépendance.
-   Le SQL lui-même a été exécuté sur un vrai PostgreSQL (scénario de 46 contrôles décrit dans
-   docs/README-CERTIFICATS.md, § « Ce qui a été vérifié ») ; ici on garde les invariants du fichier. */
+/* Vérification des certificats : client du registre (js/certificats-core.js), script Google de la feuille
+   (google-sheets/certificats.gs, exécuté ici avec une fausse feuille Google Sheets), page publique, recherche,
+   Centre d'aide et assistant.   `node --test tests/*.test.js` — aucune dépendance. */
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");
+const crypto = require("node:crypto");
 
 const ROOT = path.join(__dirname, "..");
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 const C = require("../js/certificats-core.js");
-const X = require("../js/certificats-import.js");
 
 /* ------------------------------------------------------------------ saisies */
 test("nom : nettoyé, obligatoire, lettres / espaces / apostrophes / tirets seulement", () => {
@@ -59,16 +57,28 @@ function fakeFetch(status, body, seen) {
     return Promise.resolve({ status, headers: { get: () => null }, text: () => Promise.resolve(typeof body === "string" ? body : JSON.stringify(body)) });
   };
 }
-const CFG = { SUPABASE_URL: "https://projet.supabase.co", SUPABASE_ANON_KEY: "sb_publishable_test" };
+const API = "https://script.google.com/macros/s/AKfycbx_EXEMPLE_exemple_1234567890abcdef/exec";
+const CFG = { API_URL: API };
 
-test("client : POST JSON vers la fonction verify_certificate, clé publique seulement, rien dans l'URL", async () => {
+test("client : adresse acceptée uniquement si c'est un script Google déployé (…/macros/s/…/exec)", () => {
+  assert.equal(C.endpoint(CFG), API);
+  assert.equal(C.endpoint({ API_URL: "" }), null);
+  assert.equal(C.endpoint({ API_URL: "https://exemple.com/api" }), null);
+  assert.equal(C.endpoint({ API_URL: "https://script.google.com/macros/s/AKfycbx_EXEMPLE_exemple_1234567890abcdef/dev" }), null, "jamais l'URL de test /dev");
+  assert.equal(C.endpoint({ API_URL: "http://script.google.com/macros/s/AKfycbx_EXEMPLE_exemple_1234567890abcdef/exec" }), null, "http refusé");
+  const site = {}; vm.runInNewContext(read("js/certificats-config.js"), { window: site });
+  assert.ok(site.WISY_CERTIFICATS && (site.WISY_CERTIFICATS.API_URL === "" || C.endpoint(site.WISY_CERTIFICATS)), "js/certificats-config.js : adresse vide ou valide");
+});
+
+test("client : POST « text/plain » (sans pré-vérification CORS), redirection suivie, rien dans l'URL", async () => {
   const seen = {};
   const r = await C.verify({ config: CFG, lastName: "Dupont", birthDate: "1992-05-14", fetch: fakeFetch(200, { status: "not_found" }, seen) });
   assert.equal(r.kind, "not_found");
-  assert.equal(seen.url, "https://projet.supabase.co/rest/v1/rpc/verify_certificate");
+  assert.equal(seen.url, API);
   assert.equal(seen.init.method, "POST");
-  assert.deepEqual(JSON.parse(seen.init.body), { p_last_name: "Dupont", p_birth_date: "1992-05-14" });
-  assert.equal(seen.init.headers.apikey, "sb_publishable_test");
+  assert.equal(seen.init.headers["Content-Type"], "text/plain;charset=utf-8");
+  assert.equal(seen.init.redirect, "follow");
+  assert.deepEqual(JSON.parse(seen.init.body), { lastName: "Dupont", birthDate: "1992-05-14" });
   assert.equal(seen.init.credentials, "omit");
   assert.equal(seen.init.referrerPolicy, "no-referrer");
   assert.doesNotMatch(seen.url, /Dupont|1992/);
@@ -76,11 +86,10 @@ test("client : POST JSON vers la fonction verify_certificate, clé publique seul
 
 test("client : registre absent, erreurs et pannes → états explicites, jamais d'exception", async () => {
   assert.equal((await C.verify({ config: {}, lastName: "a", birthDate: "1990-01-01", fetch: fakeFetch(200, {}) })).kind, "not_configured");
-  assert.equal((await C.verify({ config: { SUPABASE_URL: "https://VOTRE-PROJET.supabase.co", SUPABASE_ANON_KEY: "VOTRE_CLE" }, lastName: "a", birthDate: "1990-01-01", fetch: fakeFetch(200, {}) })).kind, "not_configured");
-  assert.equal((await C.verify({ config: { SUPABASE_URL: "http://exemple.com", SUPABASE_ANON_KEY: "k" }, lastName: "a", birthDate: "1990-01-01", fetch: fakeFetch(200, {}) })).kind, "not_configured", "http non chiffré refusé");
-  assert.equal((await C.verify({ config: CFG, lastName: "a", birthDate: "1990-01-01", fetch: fakeFetch(404, { code: "PGRST202" }) })).kind, "not_configured");
-  assert.equal((await C.verify({ config: CFG, lastName: "a", birthDate: "1990-01-01", fetch: fakeFetch(500, "oups") })).kind, "unavailable");
-  assert.equal((await C.verify({ config: CFG, lastName: "a", birthDate: "1990-01-01", fetch: fakeFetch(200, "pas du json") })).kind, "unavailable");
+  assert.equal((await C.verify({ config: CFG, lastName: "a", birthDate: "1990-01-01", fetch: fakeFetch(200, { status: "not_configured" }) })).kind, "not_configured");
+  assert.equal((await C.verify({ config: CFG, lastName: "a", birthDate: "1990-01-01", fetch: fakeFetch(404, "Not Found") })).kind, "not_configured");
+  assert.equal((await C.verify({ config: CFG, lastName: "a", birthDate: "1990-01-01", fetch: fakeFetch(200, "<html>Connexion Google</html>") })).kind, "unavailable", "déploiement mal partagé : page HTML");
+  assert.equal((await C.verify({ config: CFG, lastName: "a", birthDate: "1990-01-01", fetch: fakeFetch(200, { status: "error" }) })).kind, "unavailable");
   assert.equal((await C.verify({ config: CFG, lastName: "a", birthDate: "1990-01-01", fetch: () => Promise.reject(new Error("réseau")) })).kind, "unavailable");
   assert.equal((await C.verify({ config: CFG, lastName: "a", birthDate: "1990-01-01", fetch: fakeFetch(200, { status: "rate_limited", retryAfter: 900 }) })).retryAfter, 900);
 });
@@ -91,116 +100,126 @@ test("frise de validité : position d'aujourd'hui entre délivrance et fin de va
   assert.equal(C.validityProgress({ trainingDate: "2020-01-01", expiryDate: null }, "2025-01-01"), null);
 });
 
-/* ------------------------------------------------------------------ import / export Excel */
-test("import : séparateur détecté, guillemets, BOM, en-têtes français / anglais / ancien modèle WordPress", () => {
-  assert.equal(X.detectDelimiter("nom;prenom;formation"), ";");
-  assert.equal(X.detectDelimiter("nom,prenom,formation"), ",");
-  assert.deepEqual(X.parseCSV('﻿nom;note\r\n"Dupont";"dit ""Jo""; ok"\r\n\r\n'), [["nom", "note"], ["Dupont", 'dit "Jo"; ok']]);
-  assert.equal(X.normalizeHeader("N° de diplôme"), "n_de_diplome");
-  const a = X.analyze("Nom de famille;Prénom;Date de naissance;Formation suivie;Numéro de diplôme;Valable jusqu'au;id_wordpress\nDupont;Marie;14/05/1992;VCA Base;ws-1;12/03/2035;12\n", {});
-  assert.equal(a.ok, true);
-  assert.deepEqual(a.ignored, [], "id_wordpress : colonne connue, ignorée sans avertissement");
-  assert.deepEqual(a.summary, { create: 1, update: 0, error: 0, warning: 0, total: 1 });
-  assert.deepEqual(a.rows[0].record.certificate_number, "WS-1");
-  assert.equal(a.rows[0].record.birth_date, "1992-05-14");
-  assert.equal(a.rows[0].record.expiry_date, "2035-03-12");
+/* ------------------------------------------------------------------ script Google (fausse feuille Google Sheets) */
+const HEAD = ["Numéro de certificat", "Nom", "Prénom", "Autres noms", "Date de naissance", "Formation", "Date de formation", "Date de délivrance", "Valable jusqu'au", "Révoqué", "Entreprise (interne)", "E-mail (interne)", "Téléphone (interne)", "Notes (interne)"];
+const D = (y, m, d) => new Date(Date.UTC(y, m - 1, d, 10));          // cellule « date » de Google Sheets
+const SHEET = [HEAD,
+  ["ws-1", "Dupont", "Marie", "Martin; Durand", D(1992, 5, 14), "VCA Base", D(2025, 3, 12), D(2025, 3, 14), D(2035, 3, 12), "non", "Entreprise SA", "rh@fictive.test", "0470 00 00 00", "note privée"],
+  ["WS-2", "Dupont", "Marie", "", "14/05/1992", "Nacelles élévatrices", "10/02/2018", "", "10/02/2023", "", "", "", "", ""],
+  ["WS-3", "Müller", "Hans", "", "02/11/1978", "VCA Ligne hiérarchique", "05/06/2024", "", "05/06/2034", "oui", "", "", "", ""],
+  ["WS-4", "D’Hondt", "Claire", "", "21/07/1988", "BEPS", "01/09/2025", "", "", "", "", "", "", ""],
+  ["WS-5", "Sans-Date", "Lucie", "", "", "VCA Base", "01/02/2026", "", "01/02/2036", "", "", "", "", ""],
+  ["WS-6", "Erreur", "Date", "", "31/02/1990", "VCA Base", "", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+  ["ws-1", "Doublon", "Paul", "", "03/03/1993", "VCA Base", "", "", "", "", "", "", "", ""]
+];
+function loadScript(rows, nowIso) {
+  const store = new Map();
+  const ctx = {
+    SpreadsheetApp: { getActiveSpreadsheet: () => ({
+      getSheetByName: (n) => (rows && n === "Certificats" ? { getDataRange: () => ({ getValues: () => rows }) } : null),
+      getSpreadsheetTimeZone: () => "Europe/Brussels" }) },
+    CacheService: { getScriptCache: () => ({
+      getAll: (keys) => { const o = {}; keys.forEach((k) => { if (store.has(k)) o[k] = store.get(k); }); return o; },
+      put: (k, v, ttl) => { assert.ok(ttl >= 1 && ttl <= 21600, "durée de cache Google : 6 h au plus (" + ttl + ")"); store.set(k, v); } }) },
+    LockService: { getScriptLock: () => ({ tryLock: () => true, releaseLock: () => {} }) },
+    ContentService: { MimeType: { JSON: "json" }, createTextOutput: (text) => ({ text, setMimeType() { return this; } }) },
+    Utilities: {
+      formatDate: (d, tz) => { const p = new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(d); const g = (t) => p.find((x) => x.type === t).value; return g("year") + "-" + g("month") + "-" + g("day"); },
+      computeDigest: (alg, v) => Array.from(crypto.createHash("sha256").update(String(v)).digest()).map((b) => (b > 127 ? b - 256 : b)),
+      DigestAlgorithm: { SHA_256: "sha256" }, Charset: { UTF_8: "utf8" }
+    }
+  };
+  vm.createContext(ctx);
+  vm.runInContext(read("google-sheets/certificats.gs"), ctx);
+  vm.runInContext("now_ = function () { return new Date(" + JSON.stringify(nowIso || "2026-10-13T10:00:00Z") + "); };", ctx);
+  const post = (body) => JSON.parse(ctx.doPost({ postData: { contents: typeof body === "string" ? body : JSON.stringify(body) } }).text);
+  return { ctx, store, post };
+}
+
+test("script Google : le service répond sans jamais exposer de donnée (doGet)", () => {
+  const { ctx } = loadScript(SHEET);
+  assert.deepEqual(JSON.parse(ctx.doGet().text), { service: "wisy-certificats", status: "ok" });
+  assert.match(read("google-sheets/certificats.gs"), /^\/\*\*\s*\n \* @OnlyCurrentDoc/, "accès limité à la feuille elle-même");
 });
 
-test("import : aucune date devinée, lignes en erreur listées, doublons du fichier refusés", () => {
-  const csv = [
-    "nom;prenom;date_naissance;formation;numero_certificat;date_formation;date_expiration;revoque;email",
-    "Dupont;Marie;31/02/1990;VCA Base;A-1;;;non;",
-    "Martin;Paul;01/01/1980;VCA Base;A-2;01/02/2026;01/02/2025;non;",
-    "Leroy;Emma;09/09/1999;;A-3;;;peut-être;pas-un-mail",
-    "Sans;Date;;BEPS;A-4;;;;",
-    "Doublon;X;03/03/1993;VCA Base;a-4;;;;",
-    "Serie;Excel;33970;VCA Base;A-5;;;oui;"
-  ].join("\n");
-  const a = X.analyze(csv, {});
-  const by = (n) => a.rows.find((r) => r.record && r.record.certificate_number === n) || a.rows.find((r) => r.label.indexOf(n) === 0);
-  assert.equal(a.rows[0].action, "error", "31/02 : date impossible");
-  assert.equal(a.rows[1].action, "error", "fin de validité avant la formation");
-  assert.equal(a.rows[2].action, "error", "formation manquante, oui/non illisible, e-mail invalide");
-  assert.ok(a.rows[2].errors.length >= 3);
-  assert.equal(a.rows[3].action, "create");
-  assert.match(a.rows[3].warnings.join(" "), /pas être trouvé en ligne/);
-  assert.equal(a.rows[4].action, "error", "numéro déjà présent plus haut dans le fichier");
-  assert.equal(by("A-5").record.birth_date, "1993-01-01", "numéro de série Excel converti");
-  assert.equal(by("A-5").record.revoked, true);
-  assert.equal(X.parseDate("03/04/90").error, "format", "année sur deux chiffres : refusée");
+test("script Google : recherche EXACTE, seuls les champs publics, plus récent d'abord", () => {
+  const { post } = loadScript(SHEET);
+  const r = post({ lastName: "dupont", birthDate: "1992-05-14" });
+  assert.equal(r.status, "found");
+  assert.equal(r.certificates.length, 2);
+  assert.deepEqual(r.certificates[0], { holder: "Marie Dupont", training: "VCA Base", certificateNumber: "WS-1", trainingDate: "2025-03-12", issueDate: "2025-03-14", expiryDate: "2035-03-12", status: "valid" });
+  assert.equal(r.certificates[1].status, "expired");
+  const all = JSON.stringify(r);
+  ["1992", "Entreprise", "rh@", "0470", "note privée", "Martin"].forEach((x) => assert.ok(!all.includes(x), "jamais renvoyé : " + x));
+  assert.equal(r.today, "2026-10-13");
+  assert.equal(post({ lastName: "DUPONT MARIE", birthDate: "1992-05-14" }).status, "found", "nom + prénom");
+  assert.equal(post({ lastName: "Martin", birthDate: "1992-05-14" }).status, "found", "autre nom");
+  assert.equal(post({ lastName: "dupon", birthDate: "1992-05-14" }).status, "not_found", "nom partiel");
+  assert.equal(post({ lastName: "Dupont", birthDate: "1992-05-15" }).status, "not_found", "autre date");
 });
 
-test("import : mise à jour d'un certificat existant — une cellule vide ne modifie rien", () => {
-  const existing = { "A-1": { id: "u1", certificate_number: "A-1", last_name: "Dupont", first_name: "Marie", birth_date: "1992-05-14", training: "VCA Base", training_date: "2025-03-12", issue_date: null, expiry_date: "2035-03-12", revoked: false, company: "SA", email: null, phone: null, notes: "privé", other_last_names: null, revoked_reason: null } };
-  const a = X.analyze("numero_certificat;nom;formation;date_expiration;notes\nA-1;;;12/03/2036;\n", { existing });
-  assert.equal(a.rows[0].action, "update");
-  assert.equal(a.rows[0].record.expiry_date, "2036-03-12");
-  assert.equal(a.rows[0].record.last_name, "Dupont");
-  assert.equal(a.rows[0].record.notes, "privé");
-  assert.equal(a.rows[0].record.birth_date, "1992-05-14");
+test("script Google : statuts, dates texte ou cellules date, lignes invalides ignorées", () => {
+  const { post } = loadScript(SHEET);
+  assert.equal(post({ lastName: "Müller", birthDate: "1978-11-02" }).certificates[0].status, "revoked");
+  const u = post({ lastName: "d hondt", birthDate: "1988-07-21" }).certificates[0];
+  assert.equal(u.status, "undetermined");
+  assert.equal(u.expiryDate, null);
+  assert.equal(post({ lastName: "Sans Date", birthDate: "2000-01-01" }).status, "not_found");
+  assert.equal(post({ lastName: "Erreur", birthDate: "1990-02-28" }).status, "not_found", "31/02 : ligne ignorée, jamais devinée");
+  assert.equal(loadScript(SHEET, "2035-03-13T10:00:00Z").post({ lastName: "Dupont", birthDate: "1992-05-14" }).certificates[0].status, "expired", "valable jusqu'au dernier jour inclus");
+  assert.equal(loadScript(SHEET, "2035-03-12T20:00:00Z").post({ lastName: "Dupont", birthDate: "1992-05-14" }).certificates[0].status, "valid");
 });
 
-test("import : numéros générés sur demande, uniques ; en-têtes manquants expliqués", () => {
-  let i = 0; const rand = () => [0.1, 0.2, 0.3, 0.4, 0.5][i++ % 5];
-  const a = X.analyze("nom;formation\nA;VCA Base\nB;VCA Base\n", { generateMissing: true, rand });
-  assert.equal(a.summary.create, 2);
-  const n = a.rows.map((r) => r.record.certificate_number);
-  assert.match(n[0], /^WS-\d{4}-[A-Z2-9]{5}$/);
-  assert.notEqual(n[0], n[1]);
-  assert.equal(X.analyze("nom;formation\nA;VCA\n", {}).rows[0].action, "error", "sans option : numéro obligatoire");
-  assert.match(X.analyze("colonne1;colonne2\na;b\n", {}).error, /nom.*formation/);
+test("script Google : saisies invalides refusées, corps illisible sans plantage", () => {
+  const { post } = loadScript(SHEET);
+  assert.deepEqual(post({ lastName: "", birthDate: "31/02/1990" }), { status: "invalid", fields: { lastName: "required", birthDate: "format" } });
+  assert.deepEqual(post({ lastName: "Dupont", birthDate: "1990-02-31" }).fields, { birthDate: "invalid" });
+  assert.deepEqual(post({ lastName: "Dupont", birthDate: "2999-01-01" }).fields, { birthDate: "future" });
+  assert.deepEqual(post({ lastName: "Dupont3", birthDate: "1990-01-01" }).fields, { lastName: "invalid" });
+  assert.deepEqual(post({ lastName: "x".repeat(81), birthDate: "1990-01-01" }).fields, { lastName: "too_long" });
+  assert.equal(post("pas du json").status, "invalid");
 });
 
-test("export : modèle et sauvegarde lisibles par Excel, sans injection de formule", () => {
-  const empty = X.toCSV([]);
-  assert.ok(empty.startsWith("﻿numero_certificat;nom;prenom;"));
-  const csv = X.toCSV([{ certificate_number: "A-1", last_name: "=HYPERLINK(\"x\")", first_name: "Marie", birth_date: "1992-05-14", training: "VCA; Base", revoked: false }]);
-  assert.match(csv, /14\/05\/1992/);
-  assert.match(csv, /"'=HYPERLINK\(""x""\)"/);
-  assert.match(csv, /"VCA; Base"/);
-  const back = X.analyze(X.toCSV([{ certificate_number: "B-2", last_name: "D'Hondt", first_name: "Claire", birth_date: "1988-07-21", training: "VCA; Base", expiry_date: "2035-01-31", revoked: true }]), {});
-  assert.deepEqual([back.rows[0].action, back.rows[0].record.last_name, back.rows[0].record.birth_date, back.rows[0].record.training, back.rows[0].record.expiry_date, back.rows[0].record.revoked],
-    ["create", "D'Hondt", "1988-07-21", "VCA; Base", "2035-01-31", true], "un export se réimporte tel quel");
+test("script Google : feuille absente ou mal intitulée → « bientôt disponible », jamais d'erreur", () => {
+  assert.equal(loadScript(null).post({ lastName: "Dupont", birthDate: "1992-05-14" }).status, "not_configured");
+  assert.equal(loadScript([["a", "b"], ["x", "y"]]).post({ lastName: "Dupont", birthDate: "1992-05-14" }).status, "not_configured");
 });
 
-test("statut : même règle que le serveur (révoqué > sans date > valide jusqu'au dernier jour inclus)", () => {
-  assert.equal(X.statusOf({ revoked: true, expiry_date: "2099-01-01" }, "2026-10-13"), "revoked");
-  assert.equal(X.statusOf({ expiry_date: null }, "2026-10-13"), "undetermined");
-  assert.equal(X.statusOf({ expiry_date: "2026-10-13" }, "2026-10-13"), "valid");
-  assert.equal(X.statusOf({ expiry_date: "2026-10-12" }, "2026-10-13"), "expired");
+test("script Google : limites d'essais (par nom, puis au total) — impossible d'essayer toutes les dates", () => {
+  const { post, store } = loadScript(SHEET);
+  const res = [];
+  for (let d = 1; d <= 11; d++) res.push(post({ lastName: "Dupont", birthDate: "1980-01-" + String(d).padStart(2, "0") }).status);
+  assert.deepEqual(res.slice(0, 10), Array(10).fill("not_found"));
+  assert.equal(res[10], "rate_limited", "11e essai pour le même nom dans l'heure");
+  assert.equal(post({ lastName: "dupont", birthDate: "1992-05-14" }).status, "rate_limited", "même nom écrit autrement : même compteur");
+  assert.equal(post({ lastName: "Müller", birthDate: "1978-11-02" }).status, "found", "un autre nom n'est pas bloqué");
+  const wait = post({ lastName: "Dupont", birthDate: "1992-05-14" }).retryAfter;
+  assert.ok(wait >= 60 && wait <= 3600, "délai indiqué : " + wait);
+  assert.ok([...store.keys()].every((k) => !/dupont|muller/i.test(k)), "aucun nom en clair dans le cache");
+  const g = loadScript(SHEET);
+  for (let i = 0; i < 500; i++) g.post({ lastName: "Nom" + "abcdefghijklmnopqrstuvwxyz"[i % 26] + "abcdefghijklmnopqrstuvwxyz"[Math.floor(i / 26) % 26], birthDate: "1990-01-01" });
+  assert.equal(g.post({ lastName: "Müller", birthDate: "1978-11-02" }).status, "rate_limited", "plafond global de 500 par heure");
 });
 
-/* ------------------------------------------------------------------ sécurité du registre (SQL) */
-const SQL = read("supabase/certificats.sql");
-test("SQL : table privée, RLS activée, aucun droit du public sur les tables", () => {
-  assert.match(SQL, /alter table public\.certificates\s+enable row level security/);
-  assert.match(SQL, /alter table public\.certificate_lookups\s+enable row level security/);
-  assert.match(SQL, /alter table public\.certificate_settings\s+enable row level security/);
-  assert.match(SQL, /revoke all on public\.certificates, public\.certificate_lookups, public\.certificate_settings from anon;/);
-  assert.doesNotMatch(SQL, /grant [^;]*on public\.certificates[^;]* to anon/i);
-  assert.doesNotMatch(SQL, /create policy[^;]*to anon/i, "aucune politique pour le public");
-  (SQL.match(/create policy "[^"]+" on public\.certificates[^;]+;/g) || []).forEach((p) => assert.match(p, /is_wisy_admin\(\)/, "politique réservée à l'administrateur : " + p.slice(0, 60)));
-});
-
-test("SQL : une seule porte publique, sûre (security definer + search_path vide), réponse minimale", () => {
-  assert.match(SQL, /grant execute on function public\.verify_certificate\(text, text\) to anon, authenticated;/);
-  const fn = SQL.slice(SQL.indexOf("create or replace function public.verify_certificate"), SQL.indexOf("comment on function public.verify_certificate"));
-  assert.match(fn, /security definer\s+set search_path = ''/);
-  const out = fn.slice(fn.indexOf("jsonb_build_object(\n               'holder'"));
-  ["birth_date", "email", "phone", "company", "notes", "revoked_reason", "document_path"].forEach((f) => assert.doesNotMatch(out.slice(0, out.indexOf(") as cert")), new RegExp("c\\." + f + "\\b"), f + " jamais renvoyé"));
-  assert.match(fn, /where c\.birth_date = v_birth\s+and v_key = any \(c\.name_keys\)/, "correspondance EXACTE nom + date");
-  assert.match(fn, /c_per_window\s+constant int\s+:= 10/);
-  assert.match(fn, /c_global_hour constant int\s+:= 1500/);
-  assert.match(fn, /sha256\(convert_to\(v_ip/, "empreinte salée, jamais l'IP");
-  assert.match(SQL, /create or replace function public\.is_wisy_admin\(\)[\s\S]*?app_metadata' ->> 'role'\) = 'admin'/);
-  assert.match(SQL, /'certificats', 'certificats', false/, "stockage des PDF privé");
+test("script Google : « Vérifier les données » signale doublons, dates impossibles, lignes sans date de naissance", () => {
+  const { ctx } = loadScript(SHEET);
+  const reg = ctx.readRegistry_();
+  const txt = reg.problems.join("\n");
+  assert.match(txt, /Ligne 7 : date illisible ou impossible/);
+  assert.match(txt, /Ligne 6 : sans date de naissance/);
+  assert.match(txt, /Ligne 9 : le numéro « WS-1 » est déjà utilisé à la ligne 2/);
+  assert.equal(reg.rows.length, 6, "lignes vides et invalides écartées");
+  ["entreprise", "e_mail", "email", "telephone", "notes", "entreprise_interne"].forEach((h) => assert.equal(ctx.HEADER_MAP[h], undefined, "colonne interne jamais lue : " + h));
+  assert.deepEqual(Object.keys(reg.rows[0]).sort(), ["birth_date", "certificate_number", "expiry_date", "first_name", "issue_date", "keys", "last_name", "line", "other_last_names", "revoked", "training", "training_date"]);
 });
 
 /* ------------------------------------------------------------------ page publique */
 const PAGE = read("certificats.html");
-test("page : branchée sur Supabase, plus sur WordPress ; informations techniques retirées", () => {
+test("page : branchée sur la feuille Google Sheets, ni WordPress ni Supabase ; informations techniques retirées", () => {
   assert.doesNotMatch(PAGE, /wp-json|wordpress/i);
-  assert.match(PAGE, /<script src="js\/supabase-config\.js"><\/script>\s*<script src="js\/certificats-core\.js"><\/script>\s*<script src="js\/certificats\.js"><\/script>/);
+  assert.match(PAGE, /<script src="js\/certificats-config\.js"><\/script>\s*<script src="js\/certificats-core\.js"><\/script>\s*<script src="js\/certificats\.js"><\/script>/);
+  assert.doesNotMatch(PAGE + read("js/certificats.js") + read("js/certificats-core.js"), /supabase/i, "plus de Supabase pour les certificats");
   ["data-service-status", "wc-steps", "wc-microprint", "wc-how", "wc-priv__", "data-challenge", "cert.trust_"].forEach((s) => assert.ok(!PAGE.includes(s), "retiré : " + s));
   assert.ok(!read("js/certificats.js").includes("/document"), "plus de PDF public");
   assert.match(PAGE, /<link rel="canonical" href="https:\/\/www\.wisysafety\.be\/certificats\.html">/);
@@ -230,16 +249,6 @@ test("i18n : les 10 langues ont toutes les clés du français ; chaque clé de l
   const used = new Set((PAGE.match(/data-i18n(?:-html)?="(cert\.[\w]+)"|:(cert\.[\w]+)"/g) || []).map((m) => m.match(/cert\.[\w]+/)[0])
     .concat((read("js/certificats.js").match(/"cert\.[\w]+"/g) || []).map((m) => m.slice(1, -1))));
   used.forEach((k) => assert.ok(fr.includes(k), "clé absente du dictionnaire : " + k));
-});
-
-/* ------------------------------------------------------------------ administration */
-test("administration : non indexée, connexion Supabase, aucune clé secrète", () => {
-  const html = read("admin/certificats.html");
-  assert.match(html, /<meta name="robots" content="noindex,nofollow">/);
-  assert.match(html, /supabase-js@2\.116\.0" integrity="sha384-/);
-  const all = html + read("js/certificats-admin.js") + read("js/supabase-config.js");
-  assert.doesNotMatch(all, /sb_secret_|eyJhbGciOi/, "ni clé secrète ni jeton JWT dans le dépôt");
-  assert.doesNotMatch(read("js/certificats-admin.js"), /\.innerHTML\s*=|insertAdjacentHTML/);
 });
 
 /* ------------------------------------------------------------------ recherche + assistant */

@@ -254,7 +254,7 @@
       content: "Coordination sécurité-santé de chantier (niveaux A et B) : plan de sécurité et de santé (PSS), coordination des intervenants, visites de chantier, dossier d'intervention ultérieure (DIU), conseil en prévention et accompagnement réglementaire pour maîtres d'ouvrage, architectes et entreprises. Cadre légal belge : loi du 4 août 1996 relative au bien-être des travailleurs et arrêté royal du 25 janvier 2001 concernant les chantiers temporaires ou mobiles.",
       keywords: ["coordination", "coordination securite sante", "coordination securite", "coordinateur", "coordinateur securite sante", "coordinateur securite", "coordinateur chantier", "coordinateur niveau a", "coordinateur niveau b", "niveau a", "niveau b", "pss", "plan de securite et de sante", "diu", "dossier d'intervention ulterieure", "conseiller en prevention", "audit securite", "chantier temporaire", "chantier mobile", "chantier temporaire ou mobile", "maitre d'ouvrage", "bien etre au travail", "wisy coordination", "demander une coordination", "securite chantier"]
     },
-    /* Vérification des certificats (registre Supabase, supabase/certificats.sql) : la recherche et l'assistant ORIENTENT vers
+    /* Vérification des certificats (registre Google Sheets, google-sheets/certificats.gs) : la recherche et l'assistant ORIENTENT vers
        la page ; ils ne consultent jamais le registre eux-mêmes (données personnelles). Guide : docs/README-CERTIFICATS.md. */
     {
       id: "certificats", url: "certificats.html", title: "Vérification des certificats", titleKey: "search.page_cert_t", descKey: "search.page_cert_d",

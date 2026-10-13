@@ -1,7 +1,7 @@
 /* =========================================================================
    WISY SAFETY — Page « Vérification des certificats » (certificats.html) : interface
    -------------------------------------------------------------------------
-   Logique pure (validation, client Supabase, normalisation) : js/certificats-core.js.
+   Logique pure (validation, client du registre Google Sheets, normalisation) : js/certificats-core.js.
    Ce fichier : console de vérification, résultat (« pass »), états, accessibilité, motif guilloché.
 
    Règles :
@@ -10,7 +10,7 @@
        (pour la retraduire si la langue change) et est effacée par « Nouvelle vérification » ;
      - aucun faux succès : seul un « found » du registre produit une carte « certificat retrouvé » ;
      - mouvement réduit / onglet masqué : le résultat s'affiche directement, sans animation.
-   Configuration : js/supabase-config.js (SUPABASE_URL + clé publique), voir docs/README-CERTIFICATS.md.
+   Configuration : js/certificats-config.js (adresse du script Google de la feuille), voir docs/README-CERTIFICATS.md.
    ========================================================================= */
 (function () {
   "use strict";
@@ -491,7 +491,7 @@
     setBusy(true);
     announce(t("cert.loading"));
     var minDelay = new Promise(function (r) { setTimeout(r, calm() ? 0 : 900); });
-    var call = C.verify({ config: window.WISY_CONFIG, lastName: v.name, birthDate: v.iso, fetch: window.fetch ? window.fetch.bind(window) : null });
+    var call = C.verify({ config: window.WISY_CERTIFICATS, lastName: v.name, birthDate: v.iso, fetch: window.fetch ? window.fetch.bind(window) : null });
     Promise.all([call, minDelay]).then(function (out) {
       if (epoch !== state.epoch) return; // une nouvelle recherche a été lancée entre-temps
       setBusy(false);

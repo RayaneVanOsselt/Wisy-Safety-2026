@@ -1,0 +1,56 @@
+/* Wisy Certificats — administration (charte Wisy Safety : épinette #1F6F64, jais #1B2D28, crème #F4FAF9). */
+.wisy-cert-wrap{max-width:1200px}
+.wisy-cert-title{display:flex;align-items:center;gap:.5rem;font-weight:700}
+.wisy-cert-title .dashicons{color:#1F6F64;font-size:28px;width:28px;height:28px}
+.wisy-cert-lead{font-size:14px;max-width:760px;color:#3c4a47}
+.wisy-cert-tabs{display:flex;flex-wrap:wrap;gap:.25rem;margin:1rem 0 1.25rem;border-bottom:1px solid #c3d6d3}
+.wisy-cert-tabs a{padding:.55rem .9rem;text-decoration:none;color:#1B2D28;border-radius:6px 6px 0 0;border:1px solid transparent;margin-bottom:-1px}
+.wisy-cert-tabs a.is-active{background:#fff;border-color:#c3d6d3;border-bottom-color:#fff;font-weight:600;color:#1F6F64}
+.wisy-cert-foot{margin-top:2rem;color:#5E6D6A}
+.wisy-card{background:#fff;border:1px solid #d7e4e1;border-radius:10px;padding:1rem 1.25rem;margin:0 0 1.25rem;box-shadow:0 1px 2px rgba(27,45,40,.05)}
+.wisy-card h2{margin-top:.25rem}
+.wisy-kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem;margin:0 0 1.5rem}
+.wisy-kpis--small{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.wisy-kpi{background:#fff;border:1px solid #d7e4e1;border-left:4px solid #9AA8A4;border-radius:10px;padding:.8rem 1rem;display:flex;flex-direction:column;gap:.1rem}
+.wisy-kpi--ok{border-left-color:#1F6F64}.wisy-kpi--warn{border-left-color:#b26a00}.wisy-kpi--ko{border-left-color:#b32d2e}.wisy-kpi--info{border-left-color:#2F7D8C}
+.wisy-kpi__n{font-size:28px;font-weight:700;line-height:1.1;color:#1B2D28}
+.wisy-kpi__l{font-weight:600}
+.wisy-kpi__s{color:#5E6D6A;font-size:12px}
+.wisy-diag{margin:0 0 1rem;padding:0}
+.wisy-diag li{padding:.45rem .6rem .45rem 2rem;position:relative;margin:0;border-bottom:1px solid #eef3f2}
+.wisy-diag li::before{position:absolute;left:.55rem;top:.42rem;font-weight:700}
+.wisy-diag--ok::before{content:"✓";color:#1F6F64}.wisy-diag--warn::before{content:"!";color:#b26a00}.wisy-diag--ko::before{content:"✕";color:#b32d2e}.wisy-diag--info::before{content:"i";color:#2F7D8C}
+.wisy-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.wisy-inline{display:inline-flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.wisy-ok{color:#1F6F64;font-weight:600}
+.wisy-table td,.wisy-table th{vertical-align:top}
+.wisy-row--error td{background:#fcf0f1}
+.wisy-issue{display:inline-block;margin:.15rem 0;padding:.2rem .5rem;border-radius:4px;font-size:12px;line-height:1.4}
+.wisy-issue--error{background:#fcf0f1;color:#8a1f1f}.wisy-issue--warning{background:#fff4e0;color:#7a4a00}.wisy-issue--info{background:#e9f4f2;color:#1F6F64}
+.wisy-map select{min-width:260px}
+.wisy-limits .wisy-num,.wisy-num{display:inline-block;margin:0 .75rem .35rem 0}
+.wisy-confirm{font-weight:600}
+/* Fiche certificat */
+.wisy-cert-intro{background:#F4FAF9;border-left:4px solid #1F6F64;padding:.6rem .8rem;margin:.25rem 0 1rem}
+.wisy-cert-group{border:1px solid #d7e4e1;border-radius:8px;padding:.5rem 1rem 1rem;margin:0 0 1rem}
+.wisy-cert-group legend{font-weight:700;padding:0 .35rem;color:#1F6F64}
+.wisy-cert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.9rem 1.1rem}
+.wisy-cert-field{display:flex;flex-direction:column;gap:.25rem}
+.wisy-cert-field--wide{grid-column:1/-1}
+.wisy-cert-field label{font-weight:600}
+.wisy-cert-field input[type=text],.wisy-cert-field input[type=email],.wisy-cert-field input[type=tel],.wisy-cert-field input[type=date],.wisy-cert-field textarea{width:100%;max-width:100%}
+.wisy-cert-check{display:flex !important;align-items:center;gap:.4rem;font-weight:600}
+.wisy-req{color:#b32d2e}
+.wisy-pub,.wisy-priv{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:.05rem .35rem;border-radius:3px;vertical-align:middle;margin-left:.25rem}
+.wisy-pub{background:#e3f3f0;color:#1F6F64}.wisy-priv{background:#eef0f0;color:#5E6D6A}
+.wisy-cert-doc .dashicons{color:#b32d2e}
+.wisy-cert-legacy{background:#fff4e0;border-radius:6px;padding:.25rem .8rem;margin:.5rem 0}
+.wisy-status{display:inline-block;padding:.15rem .55rem;border-radius:999px;font-weight:700;font-size:12px}
+.wisy-status--valid{background:#e3f3f0;color:#145a51}.wisy-status--expired{background:#fff4e0;color:#7a4a00}.wisy-status--revoked{background:#fcf0f1;color:#8a1f1f}.wisy-status--undetermined{background:#eef0f0;color:#3c4a47}
+.wisy-cert-preview .wisy-status{font-size:14px;margin:.25rem 0 .5rem}
+.wisy-cert-checks{margin:0 0 .5rem}
+.wisy-cert-checks li{padding-left:1.25rem;position:relative}
+.wisy-cert-checks li::before{position:absolute;left:0;font-weight:700}
+.wisy-cert-checks .ok::before{content:"✓";color:#1F6F64}.wisy-cert-checks .ko::before{content:"✕";color:#b32d2e}.wisy-cert-checks .warn::before{content:"!";color:#b26a00}
+.wisy-flag{font-weight:600}.wisy-flag--ok{color:#1F6F64}.wisy-flag--ko{color:#b32d2e}
+.column-wisy_status,.column-wisy_check{width:130px}

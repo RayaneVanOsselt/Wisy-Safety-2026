@@ -1,0 +1,11 @@
+nom;prenom;autres_noms;date_naissance;formation;numero_diplome;date_formation;date_delivrance;date_expiration;revoque;motif_revocation;masquer_pdf;entreprise;telephone_employeur;email_entreprise
+Dupont;Marie;;14/05/1992;VCA Base;TEST-VCA-1001;12/03/2025;14/03/2025;12/03/2035;non;;non;Entreprise Fictive SA;+32 2 000 00 01;rh@fictive.test
+Dupont;Marie;;1992-05-14;Nacelles élévatrices (PEMP);TEST-PEMP-1002;10/02/2018;;10/02/2023;non;;non;Entreprise Fictive SA;;
+Müller;Hans;;02/11/1978;VCA Ligne hiérarchique (VOL);TEST-VOL-1003;05/06/2024;;05/06/2034;oui;Test : révocation fictive;non;;;
+D'Hondt;Claire;;21/07/1988;BEPS — Premier secours;TEST-BEPS-1004;01/09/2025;;;non;;non;;;
+Ngô;Thị Lan;Nguyen;28/02/1995;Fibre optique;TEST-FIB-1005;20/01/2026;;20/01/2031;non;;non;;;
+Leroy;Emma;;09/09/1999;Diisocyanates;TEST-DII-1006;15/05/2026;;15/05/2031;non;;oui;;;
+Martin;Paul;;01/01/1980;VCA Base;TEST-VCA-1007;01/02/2026;;01/02/2036;non;;non;;;
+Sans-Date;Lucie;;;VCA Base;TEST-VCA-1008;01/02/2026;;01/02/2036;non;;non;;;
+Erreur;Date;;31/02/1990;VCA Base;TEST-VCA-1009;01/02/2026;;01/02/2036;non;;non;;;
+Doublon;Fichier;;03/03/1993;VCA Base;TEST-VCA-1001;01/02/2026;;01/02/2036;non;;non;;;

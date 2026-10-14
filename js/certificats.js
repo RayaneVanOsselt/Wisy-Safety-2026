@@ -2,8 +2,8 @@
    WISY SAFETY — Page « Vérification des certificats » (certificats.html) : interface
    -------------------------------------------------------------------------
    Logique pure (validation, client du registre Google Sheets, normalisation) : js/certificats-core.js.
-   Ce fichier : barre de recherche, section « Résultat » (document vérifié), états, accessibilité, effets
-   (exemple de certificat incliné, compteurs, motif guilloché).
+   Ce fichier : barre de recherche, section « Résultat » (document vérifié), états, accessibilité, lecteur des quatre
+   statuts, effets (halo qui suit la souris, certificat holographique incliné, cartes lumineuses, compteurs, guilloché).
 
    Règles :
      - tout texte venant du registre est inséré avec textContent (jamais innerHTML) ;
@@ -19,6 +19,7 @@
   var C = window.WisyCertificatesCore;
   var form = document.querySelector("[data-cert-form]");
   var results = document.querySelector("[data-results]");
+  var hero = document.querySelector("[data-hero]");
   if (!C || !form || !results) return;
 
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
@@ -177,18 +178,54 @@
     if (calm() || typeof requestAnimationFrame !== "function") go();
     else requestAnimationFrame(function () { requestAnimationFrame(go); });
   }
-  /* 3D Card : l'exemple de certificat s'incline sous la souris (souris uniquement, jamais en mouvement réduit). */
-  var visual = $("[data-tilt]");
-  if (visual && !reduced() && window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    var spec = $(".wc-spec", visual);
-    visual.addEventListener("pointermove", function (e) {
-      var r = visual.getBoundingClientRect();
-      var x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
-      spec.style.setProperty("--ry", (x * 16).toFixed(2) + "deg");
-      spec.style.setProperty("--rx", (-y * 12).toFixed(2) + "deg");
+  var finePointer = function () { return !reduced() && !!(window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches); };
+  /* Suivi de la souris limité à une mise à jour par image. */
+  function onPointer(target, fn, leave) {
+    var raf = 0, last = null;
+    target.addEventListener("pointermove", function (e) {
+      last = e;
+      if (!raf) raf = requestAnimationFrame(function () { raf = 0; fn(last); });
     });
-    visual.addEventListener("pointerleave", function () { spec.style.removeProperty("--ry"); spec.style.removeProperty("--rx"); });
+    target.addEventListener("pointerleave", function () { if (raf) { cancelAnimationFrame(raf); raf = 0; } leave(); });
   }
+  if (typeof requestAnimationFrame === "function" && finePointer()) {
+    /* Spotlight (21st.dev) : halo et grille allumée sous la souris, lueurs du fond légèrement décalées. */
+    if (hero) onPointer(hero, function (e) {
+      var r = hero.getBoundingClientRect();
+      hero.classList.add("is-lit");
+      hero.style.setProperty("--mx", (e.clientX - r.left).toFixed(0) + "px");
+      hero.style.setProperty("--my", (e.clientY - r.top).toFixed(0) + "px");
+      hero.style.setProperty("--px", ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+      hero.style.setProperty("--py", ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+    }, function () { hero.classList.remove("is-lit"); });
+    /* 3D Card + Holographic card : le certificat d'exemple s'incline, le reflet irisé et le sceau suivent la souris. */
+    var visual = $("[data-tilt]"), holo = $("[data-holo]");
+    if (visual && holo) onPointer(visual, function (e) {
+      var r = visual.getBoundingClientRect();
+      var x = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)), y = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
+      holo.classList.add("is-tracking");
+      holo.style.setProperty("--ry", ((x - 0.5) * 24).toFixed(2) + "deg");
+      holo.style.setProperty("--rx", (-(y - 0.5) * 18).toFixed(2) + "deg");
+      holo.style.setProperty("--px", x.toFixed(3));
+      holo.style.setProperty("--py", y.toFixed(3));
+    }, function () {
+      holo.classList.remove("is-tracking");
+      ["--rx", "--ry", "--px", "--py"].forEach(function (p) { holo.style.removeProperty(p); });
+    });
+    /* Glowing cards (21st.dev) : chaque carte de la mosaïque s'éclaire autour de la souris. */
+    $$("[data-spotlight]").forEach(function (grid) {
+      var tiles = $$(".wc-tile", grid);
+      onPointer(grid, function (e) {
+        grid.classList.add("is-lit");
+        tiles.forEach(function (tile) {
+          var r = tile.getBoundingClientRect();
+          tile.style.setProperty("--x", (e.clientX - r.left).toFixed(0) + "px");
+          tile.style.setProperty("--y", (e.clientY - r.top).toFixed(0) + "px");
+        });
+      }, function () { grid.classList.remove("is-lit"); });
+    });
+  }
+
   /* Number Ticker : les chiffres montent une fois, quand la section apparaît. */
   function countUp(node) {
     var target = +node.getAttribute("data-count");
@@ -365,8 +402,18 @@
     num.appendChild(ddn);
     dl.appendChild(num);
     dateItem(dl, "cert.f_training_date", cert.trainingDate, null, 1);
-    if (cert.issueDate && cert.issueDate !== cert.trainingDate) dateItem(dl, "cert.f_issue_date", cert.issueDate, null, 2);
+    dateItem(dl, "cert.f_issue_date", cert.issueDate || cert.trainingDate, null, 2);
     dateItem(dl, "cert.f_expiry", cert.expiryDate, "cert.no_expiry", 3);
+    if (cert.language) {
+      var lg = el("div", "wc-dl__item wc-dl__item--full");
+      lg.style.setProperty("--j", "4");
+      lg.appendChild(el("dt", null, t("cert.f_language")));
+      var ddl = el("dd", "wc-lang");
+      ddl.appendChild(icon("globe"));
+      ddl.appendChild(el("span", null, C.languageLabel(cert.language, lang())));
+      lg.appendChild(ddl);
+      dl.appendChild(lg);
+    }
     main.appendChild(dl);
 
     var tl = timeline(cert, meta.today || C.todayBrussels());
@@ -486,6 +533,7 @@
   function setBusy(busy) {
     state.busy = busy;
     form.classList.toggle("is-busy", busy);
+    if (hero) hero.classList.toggle("is-busy", busy);
     submitBtn.disabled = busy;
     var bar = $(".wc-search__bar", form);
     if (bar) form.style.setProperty("--wc-bar-h", bar.offsetHeight + "px");
@@ -549,6 +597,7 @@
       if (box && !box.hidden && box.getAttribute("data-key")) showFieldError(i, box.getAttribute("data-key"));
     });
     setBusy(state.busy);
+    paintExamples();
   });
 
   /* ------------------------------------------------------------------ motif guilloché (papier de sécurité) */
@@ -588,8 +637,76 @@
     else requestAnimationFrame(function () { requestAnimationFrame(draw); });
   }
 
+  /* ------------------------------------------------------------------ exemples (illustrations, aucune donnée réelle) */
+  function stampNode(status) {
+    var st = STATUS[status];
+    var stamp = el("div", "wc-stamp");
+    stamp.appendChild(seal(t(st.stamp)));
+    var center = el("span", "wc-stamp__center");
+    center.appendChild(icon(st.icon));
+    stamp.appendChild(center);
+    return stamp;
+  }
+  /* Lecteur « Lire un résultat » : chaque statut montre le document correspondant (dates d'exemple fixes). */
+  var DEMO = {
+    valid: { start: "2026-03-12", end: "2036-03-12" },
+    expired: { start: "2014-03-12", end: "2024-03-12", bar: 1 },
+    revoked: { start: "2026-03-12", end: "2036-03-12", bar: 1 },
+    undetermined: { start: "2026-03-12", end: null, bar: 0 }
+  };
+  var statesBox = $("[data-states]"), preview = $("[data-states-preview]");
+  var current = "valid";
+  function paintState(status, animate) {
+    if (!preview || !STATUS[status]) return;
+    current = status;
+    var st = STATUS[status], demo = DEMO[status];
+    preview.className = "wc-mini wc-mini--" + status;
+    var banner = $("[data-mini-banner]", preview);
+    banner.setAttribute("data-i18n", st.banner);
+    banner.textContent = t(st.banner);
+    var use = $("[data-mini-icon]", preview);
+    if (use) use.setAttribute("href", "#wc-i-" + st.icon);
+    $("[data-mini-start]", preview).setAttribute("data-iso", demo.start);
+    var end = $("[data-mini-end]", preview);
+    if (demo.end) { end.setAttribute("data-iso", demo.end); end.className = "wc-mono"; }
+    else { end.removeAttribute("data-iso"); end.className = "wc-muted"; end.textContent = t("cert.no_expiry"); }
+    var ratio = demo.bar != null ? demo.bar : (C.validityProgress({ trainingDate: demo.start, expiryDate: demo.end }, C.todayBrussels()) || { ratio: 0 }).ratio;
+    $("[data-mini-bar]", preview).style.setProperty("--w", Math.max(ratio ? 4 : 0, Math.round(ratio * 100)) + "%");
+    var holder = $("[data-mini-stamp]", preview);
+    holder.textContent = "";
+    holder.appendChild(stampNode(status));
+    formatDates(preview);
+    if (animate && !calm()) {
+      preview.classList.remove("is-swap");
+      void preview.offsetWidth;
+      preview.classList.add("is-swap");
+    }
+    if (statesBox) $$("[data-state]", statesBox).forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-state") === status)); });
+  }
+  if (statesBox) statesBox.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-state]");
+    if (b && b.getAttribute("data-state") !== current) paintState(b.getAttribute("data-state"), true);
+  });
+  /* Dates d'exemple au format de la langue choisie. */
+  function formatDates(root) {
+    $$("[data-iso]", root).forEach(function (n) { n.textContent = C.formatDate(n.getAttribute("data-iso"), lang()); });
+  }
+  function paintExamples() {
+    var holoSeal = $("[data-holo-seal]");
+    if (holoSeal) {
+      holoSeal.textContent = "";
+      holoSeal.appendChild(seal(t("cert.spec_verified")));
+      var c = el("span", "wc-stamp__center");
+      c.appendChild(icon("check"));
+      holoSeal.appendChild(c);
+    }
+    formatDates(hero);
+    paintState(current, false);
+  }
+
   /* ------------------------------------------------------------------ démarrage */
   drawGuilloche();
+  paintExamples();
 
   window.WisyCertificates = { reset: resetAll, submit: submit, render: render };
 })();

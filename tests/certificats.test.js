@@ -43,7 +43,7 @@ test("réponse « found » : seuls les champs publics sont conservés, jamais un
     certificates: [{ holder: "Marie Dupont", training: "VCA Base", certificateNumber: "WS-1", trainingDate: "2025-03-12", issueDate: null, expiryDate: "2035-03-12", status: "valid", birthDate: "1992-05-14", email: "x@y.z" }]
   });
   assert.equal(r.kind, "found");
-  assert.deepEqual(Object.keys(r.certificates[0]).sort(), ["certificateNumber", "expiryDate", "holder", "issueDate", "status", "training", "trainingDate"]);
+  assert.deepEqual(Object.keys(r.certificates[0]).sort(), ["certificateNumber", "expiryDate", "holder", "issueDate", "language", "status", "training", "trainingDate"]);
   assert.equal(C.normalizeResult({ status: "found", certificates: [{ holder: "X", status: "valide" }] }), null, "statut inconnu → réponse rejetée");
   assert.equal(C.normalizeResult({ status: "found", certificates: [] }), null);
   assert.equal(C.normalizeResult({ status: "not_found" }).kind, "not_found");
@@ -94,6 +94,16 @@ test("client : registre absent, erreurs et pannes → états explicites, jamais 
   assert.equal((await C.verify({ config: CFG, lastName: "a", birthDate: "1990-01-01", fetch: fakeFetch(200, { status: "rate_limited", retryAfter: 900 }) })).retryAfter, 900);
 });
 
+test("langue de la formation : affichée dans la langue du visiteur, valeur inconnue telle quelle", () => {
+  assert.equal(C.languageLabel("Français", "fr"), "Français");
+  assert.equal(C.languageLabel("francais", "en"), "French");
+  assert.equal(C.languageLabel("Français", "nl"), "Frans");
+  assert.equal(C.languageLabel("Nederlands", "fr"), "Néerlandais");
+  assert.equal(C.languageLabel("Klingon", "fr"), "Klingon");
+  assert.equal(C.languageLabel("", "fr"), "");
+  assert.equal(C.normalizeResult({ status: "found", certificates: [{ holder: "X", training: "Y", language: "Français", status: "valid" }] }).certificates[0].language, "Français");
+});
+
 test("frise de validité : position d'aujourd'hui entre délivrance et fin de validité", () => {
   const p = C.validityProgress({ trainingDate: "2020-01-01", expiryDate: "2030-01-01" }, "2025-01-01");
   assert.ok(p.ratio > 0.49 && p.ratio < 0.51);
@@ -113,16 +123,56 @@ const SHEET = [HEAD,
   ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
   ["ws-1", "Doublon", "Paul", "", "03/03/1993", "VCA Base", "", "", "", "", "", "", "", "", ""]
 ];
-function loadScript(rows, nowIso) {
+/* Objet factice dont toutes les méthodes inconnues (mise en forme, couleurs…) ne font rien et se chaînent. */
+function chain(real) {
+  const p = new Proxy(real || {}, { get: (t, k) => (k in t ? t[k] : typeof k === "symbol" || k === "then" ? undefined : () => p) });
+  return p;
+}
+/* Fausse feuille Google Sheets modifiable (colonnes insérées / supprimées, valeurs lues / écrites). */
+function fakeSheet(grid, opts) {
+  opts = opts || {};
+  let cols = opts.maxColumns || Math.max(...grid.map((r) => r.length));
+  const g = grid.map((r) => { const x = r.slice(); while (x.length < cols) x.push(""); return x; });
+  while (g.length < (opts.maxRows || 40)) g.push(Array(cols).fill(""));
+  const blank = (v) => v === "" || v == null;
+  const lastRow = () => { for (let r = g.length; r >= 1; r--) if (g[r - 1].some((v) => !blank(v))) return r; return 0; };
+  const lastCol = () => { for (let c = cols; c >= 1; c--) if (g.some((row) => !blank(row[c - 1]))) return c; return 0; };
+  const range = (r, c, nr = 1, nc = 1) => chain({
+    getValues: () => g.slice(r - 1, r - 1 + nr).map((row) => row.slice(c - 1, c - 1 + nc)),
+    getValue: () => g[r - 1][c - 1],
+    setValues: (v) => { assert.equal(v.length, nr); v.forEach((row, i) => { assert.equal(row.length, nc); row.forEach((x, j) => { g[r - 1 + i][c - 1 + j] = x; }); }); },
+    setValue: (x) => { g[r - 1][c - 1] = x; },
+    getColumn: () => c
+  });
+  const sheet = chain({
+    grid: g, rules: [],
+    getRange: range,
+    getDataRange: () => range(1, 1, Math.max(lastRow(), 1), Math.max(lastCol(), 1)),
+    getLastRow: lastRow, getLastColumn: lastCol, getMaxColumns: () => cols, getMaxRows: () => g.length,
+    deleteColumn: (c) => { g.forEach((row) => row.splice(c - 1, 1)); cols--; },
+    deleteColumns: (c, n) => { g.forEach((row) => row.splice(c - 1, n)); cols -= n; },
+    insertColumnAfter: (c) => { g.forEach((row) => row.splice(c, 0, "")); cols++; },
+    insertColumnBefore: (c) => { g.forEach((row) => row.splice(c - 1, 0, "")); cols++; },
+    getBandings: () => [], getConditionalFormatRules: () => [], getFilter: () => null, getProtections: () => [],
+    setConditionalFormatRules: (rules) => { sheet.rules = rules; }
+  });
+  return sheet;
+}
+function loadScript(rows, nowIso, sheet) {
   const store = new Map();
+  if (!sheet && rows) sheet = { getDataRange: () => ({ getValues: () => rows }) };
   const ctx = {
-    SpreadsheetApp: { getActiveSpreadsheet: () => ({
-      getSheetByName: (n) => (rows && n === "Certificats" ? { getDataRange: () => ({ getValues: () => rows }) } : null),
-      getSpreadsheetTimeZone: () => "Europe/Brussels" }) },
+    SpreadsheetApp: chain({
+      getActiveSpreadsheet: () => chain({
+        getSheetByName: (n) => (sheet && n === "Certificats" ? sheet : null),
+        getSpreadsheetTimeZone: () => "Europe/Brussels" }),
+      getUi: () => { throw new Error("pas d'interface dans les tests"); },
+      BandingTheme: {}, ProtectionType: {} }),
     CacheService: { getScriptCache: () => ({
       getAll: (keys) => { const o = {}; keys.forEach((k) => { if (store.has(k)) o[k] = store.get(k); }); return o; },
       put: (k, v, ttl) => { assert.ok(ttl >= 1 && ttl <= 21600, "durée de cache Google : 6 h au plus (" + ttl + ")"); store.set(k, v); } }) },
     LockService: { getScriptLock: () => ({ tryLock: () => true, releaseLock: () => {} }) },
+    console: { log: () => {} },
     ContentService: { MimeType: { JSON: "json" }, createTextOutput: (text) => ({ text, setMimeType() { return this; } }) },
     Utilities: {
       formatDate: (d, tz) => { const p = new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(d); const g = (t) => p.find((x) => x.type === t).value; return g("year") + "-" + g("month") + "-" + g("day"); },
@@ -148,7 +198,8 @@ test("script Google : recherche EXACTE, seuls les champs publics, plus récent d
   const r = post({ lastName: "dupont", birthDate: "1992-05-14" });
   assert.equal(r.status, "found");
   assert.equal(r.certificates.length, 2);
-  assert.deepEqual(r.certificates[0], { holder: "Marie Dupont", training: "VCA Base", certificateNumber: "WS-1", trainingDate: "2025-03-12", issueDate: "2025-03-14", expiryDate: "2035-03-12", status: "valid" });
+  assert.deepEqual(r.certificates[0], { holder: "Marie Dupont", training: "VCA Base", language: null, certificateNumber: "WS-001", trainingDate: "2025-03-12", issueDate: "2025-03-14", expiryDate: "2035-03-12", status: "valid" });
+  assert.equal(r.certificates[1].issueDate, "2018-02-10", "date de délivrance vide = date de formation");
   assert.equal(r.certificates[1].status, "expired");
   const all = JSON.stringify(r);
   ["1992", "Entreprise", "rh@", "0470", "note privée", "Martin"].forEach((x) => assert.ok(!all.includes(x), "jamais renvoyé : " + x));
@@ -199,6 +250,66 @@ test("script Google : nom complet saisi dans « Nom » (reprise WordPress) — r
   assert.equal(tol.certificates[0].holder, "Ekizoglu Tolga", "affiché tel que saisi");
 });
 
+test("script Google : accents abîmés par un copier-coller (encodage Mac ou Windows) réparés, texte correct jamais modifié", () => {
+  const { ctx } = loadScript(SHEET);
+  assert.equal(ctx.fixMojibake_("Nacelle \u221a\u00a9l\u221a\u00a9vatrice"), "Nacelle élévatrice");
+  assert.equal(ctx.fixMojibake_("Pot\u221a\u00a2rniche Valeriu"), "Potârniche Valeriu");
+  assert.equal(ctx.fixMojibake_("Nacelle \u00c3\u00a9l\u00c3\u00a9vatrice"), "Nacelle élévatrice", "Windows");
+  assert.equal(ctx.fixMojibake_("»òtefan »öƒÉrnƒÉ"), "Ștefan Țărnă");
+  assert.equal(ctx.fixMojibake_("Fran\u221a\u00dfais"), "Français");
+  assert.equal(ctx.fixMojibake_("Franc\u00c3\u00dfois"), "François", "accent décomposé (Mac) recomposé");
+  assert.equal(ctx.fixMojibake_("M\u00c3\u00bcller V\u00c3\u00a9rifi\u00c3\u00a9"), "Müller Vérifié", "Windows, sans fausse lecture Mac");
+  ["Potârniche Valeriu", "Ștefan Țărnă", "Müller Jörg", "D’Hondt", "Nacelle élévatrice", "NA-EL-002", "", "Ÿ"].forEach((x) => assert.equal(ctx.fixMojibake_(x), x, x));
+  const rows = [["Numéro de certificat", "Nom", "Date de naissance", "Formation", "Valable jusqu'au", "Statut"],
+    ["NA-EL-007", "Pot\u221a\u00a2rniche Valeriu", D(1979, 4, 2), "Nacelle \u221a\u00a9l\u221a\u00a9vatrice", D(2030, 1, 1), "Actif"]];
+  const r = loadScript(rows).post({ lastName: "Potârniche", birthDate: "1979-04-02" });
+  assert.equal(r.status, "found", "retrouvé même avant la réparation de la feuille");
+  assert.equal(r.certificates[0].holder, "Potârniche Valeriu");
+  assert.equal(r.certificates[0].training, "Nacelle élévatrice");
+});
+
+test("script Google : numéros de certificat au format NA-EL-001", () => {
+  const { ctx } = loadScript(SHEET);
+  const cases = { "NA-EL012": "NA-EL-012", "NA-EL_015": "NA-EL-015", "NA-ELE-001": "NA-EL-001", "VCA_001": "VCA-001", "na el 3": "NA-EL-003", "NA-EL-002": "NA-EL-002", "NAEL-044": "NA-EL-044", " NA-EL-120 ": "NA-EL-120", "NA-ELEC-001": "NA-ELEC-001" };
+  Object.keys(cases).forEach((k) => assert.equal(ctx.normalizeCertNumber_(k), cases[k], k));
+  Object.values(cases).forEach((v) => assert.match(v, ctx.CERT_NUMBER_RE));
+  const rows = [["Numéro de certificat", "Nom", "Date de naissance", "Formation"], ["NA-EL012", "Un", D(1990, 1, 1), "VCA"], ["1", "Deux", D(1990, 1, 1), "VCA"]];
+  const p = loadScript(rows).ctx.readRegistry_().problems.join("\n");
+  assert.match(p, /Ligne 2 : numéro écrit « NA-EL012 », affiché « NA-EL-012 »/);
+  assert.match(p, /Ligne 3 : numéro « 1 » au format inhabituel/);
+});
+
+test("script Google : « Préparer la feuille » — colonnes inutiles retirées, Langue ajoutée, données corrigées, relançable", () => {
+  const head = ["Numéro de certificat", "Nom", "Prénom", "Autres noms", "Date de naissance", "Formation", "Date de formation", "Date de délivrance", "Valable jusqu'au", "Statut", "Validité (automatique)", "E-mail (interne)", "", "Remarques"];
+  const sheet = fakeSheet([head,
+    ["1", "Van Osselt", "Rayane", "", D(2004, 8, 8), "Nacelle élévatrice", D(2025, 1, 1), D(2025, 1, 1), D(2026, 1, 1), "Actif", "Expiré", "rh@fictive.test", "", ""],
+    ["NA-EL012", "Pot\u221a\u00a2rniche Valeriu", "", "", D(1979, 4, 2), "Nacelle \u221a\u00a9l\u221a\u00a9vatrice", D(2025, 5, 17), "", D(2030, 5, 17), "Actif", "Valide", "", "", "à rappeler"],
+    ["NA-ELE-001", "Dupont Marie", "Marie", "", D(1990, 1, 1), "VCA de base", D(2025, 2, 1), "", D(2035, 2, 1), "non", "Valide", "", "", ""]
+  ], { maxColumns: 26 });
+  const { ctx, post } = loadScript(null, "2026-10-14T10:00:00Z", sheet);
+  const res = ctx.installer();
+  const g = sheet.grid, w = sheet.getMaxColumns();
+  assert.deepEqual(g[0].slice(0, w), ["Numéro de certificat", "Nom", "Date de naissance", "Formation", "Langue", "Date de formation", "Date de délivrance", "Valable jusqu'au", "Statut", "Remarques"]);
+  assert.equal(w, 10, "plus de colonnes vides à droite");
+  assert.match(res.kept.join(" "), /« Remarques » contient des données : colonne conservée/);
+  assert.match(res.done.join("\n"), /colonnes retirées : « Prénom », « Autres noms », « Validité \(automatique\) », « E-mail \(interne\) »/);
+  assert.deepEqual(g[1].slice(0, 9).map(String), ["1", "Van Osselt Rayane", String(D(2004, 8, 8)), "Nacelle élévatrice", "Français", String(D(2025, 1, 1)), String(D(2025, 1, 1)), String(D(2026, 1, 1)), "Actif"]);
+  assert.deepEqual([g[2][0], g[2][1], g[2][3], g[2][4], String(g[2][6])], ["NA-EL-012", "Potârniche Valeriu", "Nacelle élévatrice", "Français", String(D(2025, 5, 17))]);
+  assert.deepEqual([g[3][0], g[3][1], g[3][8]], ["NA-EL-001", "Dupont Marie", "Actif"], "prénom déjà dans le nom : pas répété");
+  ["2 numéro(s) de certificat remis au format", "2 date(s) de délivrance remplie(s)", "3 langue(s) indiquée(s) : Français", "1 prénom(s) ajouté(s)"].forEach((t) => assert.ok(res.done.join("\n").includes(t), t));
+  assert.equal(sheet.rules.length, 5, "couleurs de validité et de statut");
+  const r = post({ lastName: "Potârniche", birthDate: "1979-04-02" }).certificates[0];
+  assert.deepEqual([r.certificateNumber, r.language, r.issueDate, r.status], ["NA-EL-012", "Français", "2025-05-17", "valid"]);
+  assert.equal(post({ lastName: "Van Osselt", birthDate: "2004-08-08" }).certificates[0].status, "expired");
+  const before = JSON.stringify(g);
+  const again = ctx.installer();
+  assert.equal(JSON.stringify(sheet.grid), before, "relancer ne change plus rien");
+  assert.deepEqual(again.done, []);
+  const empty = fakeSheet([[""]], { maxColumns: 26 });
+  loadScript(null, null, empty).ctx.installer();
+  assert.deepEqual(empty.grid[0], ["Numéro de certificat", "Nom", "Date de naissance", "Formation", "Langue", "Date de formation", "Date de délivrance", "Valable jusqu'au", "Statut"], "feuille neuve");
+});
+
 test("script Google : saisies invalides refusées, corps illisible sans plantage", () => {
   const { post } = loadScript(SHEET);
   assert.deepEqual(post({ lastName: "", birthDate: "31/02/1990" }), { status: "invalid", fields: { lastName: "required", birthDate: "format" } });
@@ -236,10 +347,10 @@ test("script Google : « Vérifier les données » signale doublons, dates impos
   const txt = reg.problems.join("\n");
   assert.match(txt, /Ligne 7 : date illisible ou impossible/);
   assert.match(txt, /Ligne 6 : sans date de naissance/);
-  assert.match(txt, /Ligne 9 : le numéro « WS-1 » est déjà utilisé à la ligne 2/);
+  assert.match(txt, /Ligne 9 : le numéro « WS-001 » est déjà utilisé à la ligne 2/);
   assert.equal(reg.rows.length, 6, "lignes vides et invalides écartées");
   ["entreprise", "e_mail", "email", "telephone", "notes", "entreprise_interne"].forEach((h) => assert.equal(ctx.HEADER_MAP[h], undefined, "colonne interne jamais lue : " + h));
-  assert.deepEqual(Object.keys(reg.rows[0]).sort(), ["birth_date", "certificate_number", "expiry_date", "first_name", "issue_date", "keys", "last_name", "line", "other_last_names", "revoked", "training", "training_date"]);
+  assert.deepEqual(Object.keys(reg.rows[0]).sort(), ["birth_date", "certificate_number", "expiry_date", "first_name", "issue_date", "keys", "language", "last_name", "line", "other_last_names", "revoked", "training", "training_date"]);
 });
 
 /* ------------------------------------------------------------------ page publique */

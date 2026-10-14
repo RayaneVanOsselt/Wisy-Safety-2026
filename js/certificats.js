@@ -2,14 +2,15 @@
    WISY SAFETY — Page « Vérification des certificats » (certificats.html) : interface
    -------------------------------------------------------------------------
    Logique pure (validation, client du registre Google Sheets, normalisation) : js/certificats-core.js.
-   Ce fichier : console de vérification, résultat (« pass »), états, accessibilité, motif guilloché.
+   Ce fichier : barre de recherche, section « Résultat » (document vérifié), états, accessibilité, effets
+   (exemple de certificat incliné, compteurs, motif guilloché).
 
    Règles :
      - tout texte venant du registre est inséré avec textContent (jamais innerHTML) ;
      - rien n'est mémorisé dans le navigateur ; la dernière réponse vit en mémoire le temps de la page
        (pour la retraduire si la langue change) et est effacée par « Nouvelle vérification » ;
-     - aucun faux succès : seul un « found » du registre produit une carte « certificat retrouvé » ;
-     - mouvement réduit / onglet masqué : le résultat s'affiche directement, sans animation.
+     - aucun faux succès : seul un « found » du registre produit un document « certificat retrouvé » ;
+     - mouvement réduit / onglet masqué : tout s'affiche directement, sans animation.
    Configuration : js/certificats-config.js (adresse du script Google de la feuille), voir docs/README-CERTIFICATS.md.
    ========================================================================= */
 (function () {
@@ -17,12 +18,12 @@
 
   var C = window.WisyCertificatesCore;
   var form = document.querySelector("[data-cert-form]");
-  var consoleBox = document.querySelector("[data-console]");
-  if (!C || !form || !consoleBox) return;
+  var results = document.querySelector("[data-results]");
+  if (!C || !form || !results) return;
 
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
-  var formView = $("[data-view-form]", consoleBox);
-  var resultBox = $("[data-result]", consoleBox);
+  var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+  var resultBox = $("[data-result]", results);
   var announcer = $("[data-announce]");
   var nameInput = form.elements.lastName;
   var birthInput = form.elements.birthDate;
@@ -60,12 +61,11 @@
     s.appendChild(u);
     return s;
   }
-  function rosetteSvg(cls) {
+  function rosetteSvg() {
     var s = document.createElementNS(NS, "svg");
     s.setAttribute("viewBox", "0 0 120 120");
     s.setAttribute("aria-hidden", "true");
     s.setAttribute("focusable", "false");
-    if (cls) s.setAttribute("class", cls);
     var u = document.createElementNS(NS, "use");
     u.setAttribute("href", "#wc-rosette");
     s.appendChild(u);
@@ -90,6 +90,21 @@
     if (!announcer) return;
     announcer.textContent = "";
     setTimeout(function () { announcer.textContent = text; }, 60);
+  }
+
+  /* Défilement sous l'en-tête collant (sa hauteur change pendant le défilement : on recale une fois stabilisé). */
+  function scrollToEl(target, always) {
+    var header = document.querySelector(".site-header");
+    var offset = function () { return (header ? Math.max(0, header.getBoundingClientRect().bottom) : 0) + 16; };
+    var top = target.getBoundingClientRect().top;
+    if (!always && top >= offset() && top <= window.innerHeight * 0.55) return;
+    var behavior = calm() ? "instant" : "smooth";
+    try { window.scrollTo({ top: Math.max(0, window.pageYOffset + top - offset()), behavior: behavior }); }
+    catch (e) { window.scrollTo(0, Math.max(0, window.pageYOffset + top - offset())); }
+    setTimeout(function () {
+      var tt = target.getBoundingClientRect().top, o = offset();
+      if (tt < o - 4) { try { window.scrollBy({ top: tt - o, behavior: behavior }); } catch (e) { window.scrollBy(0, tt - o); } }
+    }, calm() ? 0 : 750);
   }
 
   /* ------------------------------------------------------------------ validation des champs */
@@ -117,76 +132,29 @@
     return { ok: !n.error && !d.error, name: n.value, iso: d.iso, nameError: n.error, dateError: d.error };
   }
   function toggleSummary(show) { if (summary) summary.hidden = !show; }
+  function revalidate() { if (state.attempted && validate(false).ok) toggleSummary(false); }
 
   birthInput.addEventListener("input", function (e) {
     var type = e.inputType || "";
-    if (type && type.indexOf("insert") !== 0) { if (state.attempted && validate(false).ok) toggleSummary(false); return; }
-    var before = birthInput.value;
-    var masked = C.maskBirthInput(before);
-    if (masked !== before) {
-      var atEnd = birthInput.selectionStart === before.length;
-      birthInput.value = masked;
-      if (atEnd) birthInput.setSelectionRange(masked.length, masked.length);
+    if (!type || type.indexOf("insert") === 0) {
+      var before = birthInput.value;
+      var masked = C.maskBirthInput(before);
+      if (masked !== before) {
+        var atEnd = birthInput.selectionStart === before.length;
+        birthInput.value = masked;
+        if (atEnd) birthInput.setSelectionRange(masked.length, masked.length);
+      }
     }
-    if (state.attempted && validate(false).ok) toggleSummary(false);
+    revalidate();
   });
-  nameInput.addEventListener("input", function () { if (state.attempted && validate(false).ok) toggleSummary(false); });
+  nameInput.addEventListener("input", revalidate);
   [nameInput, birthInput].forEach(function (inp) {
     inp.addEventListener("blur", function () { if (inp.value) validate(false); });
   });
-
-  /* ------------------------------------------------------------------ bascule formulaire ⇄ résultat */
-  function swap(showResult, node, focusResult) {
-    var apply = function () {
-      if (showResult) { resultBox.textContent = ""; resultBox.appendChild(node); }
-      formView.hidden = !!showResult;
-      resultBox.hidden = !showResult;
-      consoleBox.setAttribute("data-view", showResult ? "result" : "form");
-    };
-    var after = function () {
-      if (showResult) {
-        startTimelines(resultBox);
-        if (focusResult !== false) {
-          var f = $("[data-focus]", resultBox);
-          if (f) { f.setAttribute("tabindex", "-1"); try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); } }
-        }
-      }
-      if (focusResult === false) return;
-      revealConsole();
-    };
-    if (!calm() && typeof document.startViewTransition === "function") {
-      try {
-        var vt = document.startViewTransition(apply);
-        vt.updateCallbackDone.then(after, function () { apply(); after(); });
-        if (vt.finished) vt.finished.catch(function () {});
-        return;
-      } catch (e) { /* repli ci-dessous */ }
-    }
-    apply();
-    if (!calm()) {
-      consoleBox.classList.remove("is-swapping");
-      void consoleBox.offsetWidth;
-      consoleBox.classList.add("is-swapping");
-      setTimeout(function () { consoleBox.classList.remove("is-swapping"); }, 700);
-    }
-    after();
-  }
-
-  /* Défilement jusqu'à la console, sous l'en-tête collant. Sa hauteur change pendant le défilement (le bandeau du haut se
-     replie) : on recale une fois l'en-tête stabilisé, pour que le titre du résultat ne passe jamais dessous. */
-  function revealConsole() {
-    var header = document.querySelector(".site-header");
-    var offset = function () { return (header ? Math.max(0, header.getBoundingClientRect().bottom) : 0) + 16; };
-    var top = consoleBox.getBoundingClientRect().top;
-    if (top >= offset() && top <= window.innerHeight * 0.55) return;
-    var behavior = calm() ? "instant" : "smooth";
-    try { window.scrollTo({ top: Math.max(0, window.pageYOffset + top - offset()), behavior: behavior }); }
-    catch (e) { window.scrollTo(0, Math.max(0, window.pageYOffset + top - offset())); }
-    setTimeout(function () {
-      var t = consoleBox.getBoundingClientRect().top, o = offset();
-      if (t < o - 4) { try { window.scrollBy({ top: t - o, behavior: behavior }); } catch (e) { window.scrollBy(0, t - o); } }
-    }, calm() ? 0 : 750);
-  }
+  /* Cliquer n'importe où dans une case de la barre place le curseur dans son champ. */
+  $$(".wc-field", form).forEach(function (f) {
+    f.addEventListener("click", function (e) { var i = $("input", f); if (i && e.target !== i) i.focus(); });
+  });
 
   /* ------------------------------------------------------------------ effets (21st.dev, portés en natif) */
   /* Text Scramble : le nom du titulaire se « déchiffre » ; le vrai texte est lu par les lecteurs d'écran. */
@@ -205,25 +173,42 @@
     requestAnimationFrame(frame);
   }
   function startTimelines(root) {
-    var go = function () { Array.prototype.forEach.call(root.querySelectorAll(".wc-timeline"), function (tl) { tl.classList.add("is-on"); }); };
+    var go = function () { $$(".wc-timeline", root).forEach(function (tl) { tl.classList.add("is-on"); }); };
     if (calm() || typeof requestAnimationFrame !== "function") go();
     else requestAnimationFrame(function () { requestAnimationFrame(go); });
   }
-  /* Card Spotlight : halo qui suit la souris sur la console. */
-  if (window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    consoleBox.addEventListener("pointermove", function (e) {
-      var r = consoleBox.getBoundingClientRect();
-      consoleBox.style.setProperty("--wc-mx", (e.clientX - r.left) + "px");
-      consoleBox.style.setProperty("--wc-my", (e.clientY - r.top) + "px");
+  /* 3D Card : l'exemple de certificat s'incline sous la souris (souris uniquement, jamais en mouvement réduit). */
+  var visual = $("[data-tilt]");
+  if (visual && !reduced() && window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    var spec = $(".wc-spec", visual);
+    visual.addEventListener("pointermove", function (e) {
+      var r = visual.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+      spec.style.setProperty("--ry", (x * 16).toFixed(2) + "deg");
+      spec.style.setProperty("--rx", (-y * 12).toFixed(2) + "deg");
     });
+    visual.addEventListener("pointerleave", function () { spec.style.removeProperty("--ry"); spec.style.removeProperty("--rx"); });
   }
-  /* Border Beam : un tour de la bordure à l'arrivée. */
-  function beamOnce() {
-    if (calm()) return;
-    consoleBox.classList.remove("is-beaming");
-    void consoleBox.offsetWidth;
-    consoleBox.classList.add("is-beaming");
-    setTimeout(function () { consoleBox.classList.remove("is-beaming"); }, 2400);
+  /* Number Ticker : les chiffres montent une fois, quand la section apparaît. */
+  function countUp(node) {
+    var target = +node.getAttribute("data-count");
+    if (!target || calm() || typeof requestAnimationFrame !== "function") { node.textContent = String(target || node.textContent); return; }
+    var start = null, dur = 1400;
+    node.textContent = "0";
+    function frame(ts) {
+      if (start === null) start = ts;
+      var p = Math.min(1, (ts - start) / dur), eased = 1 - Math.pow(1 - p, 3);
+      node.textContent = String(Math.round(target * eased));
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  var counters = $$("[data-count]");
+  if (counters.length && "IntersectionObserver" in window && !calm()) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { countUp(en.target); io.unobserve(en.target); } });
+    }, { threshold: 0.6 });
+    counters.forEach(function (c) { io.observe(c); });
   }
 
   /* ------------------------------------------------------------------ rendu : cartes d'état */
@@ -232,28 +217,30 @@
     var badge = el("span", "wc-notice__badge");
     badge.appendChild(icon(iconName));
     box.appendChild(badge);
+    var body = el("div");
     var h = el("h3", "wc-notice__title", title);
     h.setAttribute("data-focus", "");
-    box.appendChild(h);
-    box.appendChild(el("p", "wc-notice__text", text));
-    if (extra) box.appendChild(extra);
+    body.appendChild(h);
+    body.appendChild(el("p", "wc-notice__text", text));
+    if (extra) body.appendChild(extra);
     if (actions && actions.length) {
       var row = el("div", "wc-actions");
       actions.forEach(function (a) { row.appendChild(a); });
-      box.appendChild(row);
+      body.appendChild(row);
     }
+    box.appendChild(body);
     return box;
   }
   function contactBtn() { return link("", "contact.html", "mail", t("cert.cta_contact")); }
-  function editBtn() { return button("wc-btn--primary", "search", t("cert.cta_edit"), backToForm); }
-  function retryBtn() { return button("wc-btn--primary", "refresh", t("cert.cta_retry"), function () { backToForm(); submit(); }); }
+  function editBtn() { return button("wc-btn--primary", "search", t("cert.cta_edit"), editSearch); }
+  function retryBtn() { return button("wc-btn--primary", "refresh", t("cert.cta_retry"), function () { submit(); }); }
 
   /* ------------------------------------------------------------------ rendu : certificat retrouvé */
   var STATUS = {
-    valid: { icon: "check", key: "cert.status_valid", stamp: "cert.stamp_valid", explain: "cert.explain_valid" },
-    expired: { icon: "clock", key: "cert.status_expired", stamp: "cert.stamp_expired", explain: "cert.explain_expired" },
-    revoked: { icon: "ban", key: "cert.status_revoked", stamp: "cert.stamp_revoked", explain: "cert.explain_revoked" },
-    undetermined: { icon: "help", key: "cert.status_undetermined", stamp: "cert.stamp_undetermined", explain: "cert.explain_undetermined" }
+    valid: { icon: "check", key: "cert.status_valid", banner: "cert.banner_valid", stamp: "cert.stamp_valid", explain: "cert.explain_valid" },
+    expired: { icon: "clock", key: "cert.status_expired", banner: "cert.banner_expired", stamp: "cert.stamp_expired", explain: "cert.explain_expired" },
+    revoked: { icon: "ban", key: "cert.status_revoked", banner: "cert.banner_revoked", stamp: "cert.stamp_revoked", explain: "cert.explain_revoked" },
+    undetermined: { icon: "help", key: "cert.status_undetermined", banner: "cert.banner_undetermined", stamp: "cert.stamp_undetermined", explain: "cert.explain_undetermined" }
   };
 
   function seal(word) {
@@ -337,45 +324,38 @@
     return b;
   }
 
-  function pass(cert, meta, index, total, instant) {
+  function documentCard(cert, meta, index, total, instant) {
     var st = STATUS[cert.status];
-    var card = el("article", "wc-pass wc-pass--" + cert.status);
+    var card = el("article", "wc-doc wc-doc--" + cert.status);
     card.style.setProperty("--i", String(index));
-    var water = el("div", "wc-pass__water");
+
+    var banner = el("header", "wc-doc__banner");
+    var strong = el("strong");
+    strong.appendChild(icon(st.icon));
+    strong.appendChild(el("span", null, t(st.banner)));
+    banner.appendChild(strong);
+    banner.appendChild(el("span", "wc-doc__kickerline", total > 1 ? t("cert.card_kicker_n", { i: String(index + 1), n: String(total) }) : t("cert.card_kicker")));
+    card.appendChild(banner);
+
+    var body = el("div", "wc-doc__body");
+    var water = el("div", "wc-doc__water");
     water.appendChild(rosetteSvg());
-    card.appendChild(water);
-
-    var head = el("header", "wc-pass__head");
-    var titles = el("div", "wc-pass__titles");
-    titles.appendChild(el("p", "wc-pass__kicker", total > 1 ? t("cert.card_kicker_n", { i: String(index + 1), n: String(total) }) : t("cert.card_kicker")));
-    titles.appendChild(el("h4", "wc-pass__training", cert.training));
-    var badge = el("p", "wc-status");
-    badge.appendChild(icon(st.icon));
-    badge.appendChild(el("span", null, t(st.key)));
-    titles.appendChild(badge);
-    head.appendChild(titles);
-    var stamp = el("div", "wc-stamp");
-    stamp.appendChild(seal(t(st.stamp)));
-    var center = el("span", "wc-stamp__center");
-    center.appendChild(icon(st.icon));
-    stamp.appendChild(center);
-    head.appendChild(stamp);
-    card.appendChild(head);
-
-    var dl = el("dl", "wc-dl");
-    var holder = el("div", "wc-dl__item wc-dl__item--wide");
-    holder.appendChild(el("dt", null, t("cert.f_holder")));
-    var hd = el("dd", "wc-holder");
-    hd.appendChild(el("span", "wc-sr", cert.holder));
+    body.appendChild(water);
+    var main = el("div", "wc-doc__main");
+    main.appendChild(el("h4", "wc-doc__training", cert.training));
+    var holder = el("p", "wc-doc__holder");
+    holder.appendChild(el("span", null, t("cert.f_holder") + " : "));
+    var b = el("b");
+    b.appendChild(el("span", "wc-sr", cert.holder));
     var scr = el("span");
     scr.setAttribute("aria-hidden", "true");
-    hd.appendChild(scr);
+    b.appendChild(scr);
     scramble(scr, cert.holder, instant);
-    holder.appendChild(hd);
-    dl.appendChild(holder);
+    holder.appendChild(b);
+    main.appendChild(holder);
 
-    var num = el("div", "wc-dl__item wc-dl__item--wide");
-    num.style.setProperty("--j", "1");
+    var dl = el("dl", "wc-dl");
+    var num = el("div", "wc-dl__item");
     num.appendChild(el("dt", null, t("cert.f_number")));
     var ddn = el("dd", cert.certificateNumber ? "wc-number" : "wc-muted");
     if (cert.certificateNumber) {
@@ -384,18 +364,28 @@
     } else ddn.textContent = t("cert.not_specified");
     num.appendChild(ddn);
     dl.appendChild(num);
-    dateItem(dl, "cert.f_training_date", cert.trainingDate, null, 2);
-    if (cert.issueDate && cert.issueDate !== cert.trainingDate) dateItem(dl, "cert.f_issue_date", cert.issueDate, null, 3);
-    dateItem(dl, "cert.f_expiry", cert.expiryDate, "cert.no_expiry", 4);
-    card.appendChild(dl);
+    dateItem(dl, "cert.f_training_date", cert.trainingDate, null, 1);
+    if (cert.issueDate && cert.issueDate !== cert.trainingDate) dateItem(dl, "cert.f_issue_date", cert.issueDate, null, 2);
+    dateItem(dl, "cert.f_expiry", cert.expiryDate, "cert.no_expiry", 3);
+    main.appendChild(dl);
 
     var tl = timeline(cert, meta.today || C.todayBrussels());
-    if (tl) card.appendChild(tl);
-
-    var explain = el("p", "wc-pass__explain");
+    if (tl) main.appendChild(tl);
+    var explain = el("p", "wc-doc__explain");
     explain.appendChild(icon(st.icon));
     explain.appendChild(el("span", null, t(st.explain, { date: C.formatDate(cert.status === "valid" ? (meta.today || C.todayBrussels()) : cert.expiryDate, lang()) })));
-    card.appendChild(explain);
+    main.appendChild(explain);
+    body.appendChild(main);
+
+    var side = el("div", "wc-doc__side");
+    var stamp = el("div", "wc-stamp");
+    stamp.appendChild(seal(t(st.stamp)));
+    var center = el("span", "wc-stamp__center");
+    center.appendChild(icon(st.icon));
+    stamp.appendChild(center);
+    side.appendChild(stamp);
+    body.appendChild(side);
+    card.appendChild(body);
     return card;
   }
 
@@ -403,36 +393,52 @@
     var certs = res.certificates;
     var box = el("div", "wc-res");
     var head = el("div", "wc-res__head");
-    var txt = el("div");
     var h = el("h3", "wc-res__title", certs.length > 1 ? t("cert.found_title_n", { n: String(certs.length) }) : t("cert.found_title"));
     h.setAttribute("data-focus", "");
-    txt.appendChild(h);
+    head.appendChild(h);
     var stamp = C.formatStamp(res.meta.checkedAt, lang(), res.meta.timezone);
-    txt.appendChild(el("p", "wc-res__meta", t("cert.checked_at", { date: stamp.date, time: stamp.time })));
-    head.appendChild(txt);
-    var b = el("span", "wc-res__badge");
-    b.appendChild(icon("shield"));
-    head.appendChild(b);
+    head.appendChild(el("p", "wc-res__meta", t("cert.checked_at", { date: stamp.date, time: stamp.time })));
     box.appendChild(head);
     var list = el("div", "wc-res__list");
-    certs.forEach(function (c, i) { list.appendChild(pass(c, res.meta, i, certs.length, instant)); });
+    certs.forEach(function (c, i) { list.appendChild(documentCard(c, res.meta, i, certs.length, instant)); });
     box.appendChild(list);
-    box.appendChild(el("p", "wc-res__disclaimer", t("cert.disclaimer")));
+    var foot = el("div", "wc-res__foot");
+    foot.appendChild(el("p", "wc-res__disclaimer", t("cert.disclaimer")));
     var row = el("div", "wc-actions");
     row.appendChild(button("", "printer", t("cert.cta_print"), function () { window.print(); }));
     row.appendChild(button("wc-btn--primary", "refresh", t("cert.cta_new"), resetAll));
-    box.appendChild(row);
+    foot.appendChild(row);
+    box.appendChild(foot);
     return box;
   }
 
-  /* ------------------------------------------------------------------ rendu selon le résultat */
+  function skeleton() {
+    var box = el("div", "wc-skel");
+    for (var i = 0; i < 4; i++) box.appendChild(el("div", "wc-skel__line"));
+    box.appendChild(el("p", "wc-skel__text", t("cert.loading")));
+    return box;
+  }
+
+  /* ------------------------------------------------------------------ affichage du résultat */
+  function show(node, focus, scroll) {
+    results.hidden = false;
+    resultBox.textContent = "";
+    resultBox.appendChild(node);
+    startTimelines(resultBox);
+    if (focus) {
+      var f = $("[data-focus]", resultBox);
+      if (f) { f.setAttribute("tabindex", "-1"); try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); } }
+    }
+    if (scroll) scrollToEl(results);
+  }
+
   function render(res, instant) {
     state.last = res;
     var kind = res.kind;
+    var focus = !instant, scroll = !instant;
     document.body.setAttribute("data-wc-result", kind);
-    var focus = instant ? false : true;
     if (kind === "found") {
-      swap(true, found(res, instant), focus);
+      show(found(res, instant), focus, scroll);
       if (!instant) announce(res.certificates.length > 1 ? t("cert.found_title_n", { n: String(res.certificates.length) }) : t("cert.found_title"));
       return;
     }
@@ -444,13 +450,13 @@
         li.appendChild(el("span", null, t(k)));
         tips.appendChild(li);
       });
-      swap(true, notice("neutral", "search", t("cert.nf_title"), t("cert.nf_text"), [editBtn(), contactBtn()], tips), focus);
+      show(notice("neutral", "search", t("cert.nf_title"), t("cert.nf_text"), [editBtn(), contactBtn()], tips), focus, scroll);
       if (!instant) announce(t("cert.nf_title"));
       return;
     }
     if (kind === "invalid") {
       var f = res.fields || {};
-      backToForm(true);
+      hideResults();
       if (f.lastName) showFieldError(nameInput, NAME_ERR[f.lastName] || NAME_ERR.invalid);
       if (f.birthDate) showFieldError(birthInput, DATE_ERR[f.birthDate] || DATE_ERR.invalid);
       toggleSummary(true);
@@ -458,23 +464,31 @@
       return;
     }
     if (kind === "rate_limited") {
-      swap(true, notice("warn", "gauge", t("cert.rl_title"), t("cert.rl_text", { n: String(Math.max(1, Math.ceil(res.retryAfter / 60))) }), [contactBtn()]), focus);
+      show(notice("warn", "gauge", t("cert.rl_title"), t("cert.rl_text", { n: String(Math.max(1, Math.ceil(res.retryAfter / 60))) }), [contactBtn()]), focus, scroll);
       if (!instant) announce(t("cert.rl_title"));
       return;
     }
     if (kind === "not_configured") {
-      swap(true, notice("info", "clock", t("cert.soon_title"), t("cert.soon_text"), [button("wc-btn--primary", "search", t("cert.cta_edit"), backToForm), contactBtn()]), focus);
+      show(notice("info", "clock", t("cert.soon_title"), t("cert.soon_text"), [contactBtn()]), focus, scroll);
       if (!instant) announce(t("cert.soon_title"));
       return;
     }
-    swap(true, notice("error", "alert", t("cert.err_title"), t("cert.err_text"), [retryBtn(), contactBtn()]), focus);
+    show(notice("error", "alert", t("cert.err_title"), t("cert.err_text"), [retryBtn(), contactBtn()]), focus, scroll);
     if (!instant) announce(t("cert.err_title"));
+  }
+
+  function hideResults() {
+    results.hidden = true;
+    resultBox.textContent = "";
+    document.body.removeAttribute("data-wc-result");
   }
 
   function setBusy(busy) {
     state.busy = busy;
-    consoleBox.classList.toggle("is-busy", busy);
+    form.classList.toggle("is-busy", busy);
     submitBtn.disabled = busy;
+    var bar = $(".wc-search__bar", form);
+    if (bar) form.style.setProperty("--wc-bar-h", bar.offsetHeight + "px");
     var label = $("[data-submit-label]", submitBtn);
     label.setAttribute("data-i18n", busy ? "cert.submit_busy" : "cert.submit");
     label.textContent = t(busy ? "cert.submit_busy" : "cert.submit");
@@ -489,12 +503,15 @@
     if (!v.ok) { (v.nameError ? nameInput : birthInput).focus(); return; }
     var epoch = ++state.epoch;
     setBusy(true);
+    show(skeleton(), false, true);
+    results.setAttribute("aria-busy", "true");
     announce(t("cert.loading"));
-    var minDelay = new Promise(function (r) { setTimeout(r, calm() ? 0 : 900); });
+    var minDelay = new Promise(function (r) { setTimeout(r, calm() ? 0 : 700); });
     var call = C.verify({ config: window.WISY_CERTIFICATS, lastName: v.name, birthDate: v.iso, fetch: window.fetch ? window.fetch.bind(window) : null });
     Promise.all([call, minDelay]).then(function (out) {
       if (epoch !== state.epoch) return; // une nouvelle recherche a été lancée entre-temps
       setBusy(false);
+      results.removeAttribute("aria-busy");
       render(out[0]);
     });
     /* Mesure d'audience (si consentie) : aucune donnée saisie dans l'événement. */
@@ -502,12 +519,10 @@
   }
   form.addEventListener("submit", function (e) { e.preventDefault(); submit(); });
 
-  /* Retour au formulaire en gardant la saisie (corriger une faute de frappe). */
-  function backToForm(silent) {
-    state.last = null;
-    document.body.removeAttribute("data-wc-result");
-    if (!resultBox.hidden) swap(false);
-    if (silent !== true) { nameInput.focus(); nameInput.select(); }
+  /* Corriger la recherche : on remonte à la barre, saisie conservée. */
+  function editSearch() {
+    scrollToEl(form, true);
+    setTimeout(function () { nameInput.focus(); nameInput.select(); }, calm() ? 0 : 450);
   }
 
   function resetAll() {
@@ -518,10 +533,9 @@
     [nameInput, birthInput].forEach(function (i) { showFieldError(i, ""); });
     toggleSummary(false);
     setBusy(false);
-    document.body.removeAttribute("data-wc-result");
-    swap(false);
-    resultBox.textContent = "";
-    nameInput.focus();
+    hideResults();
+    scrollToEl(form, true);
+    setTimeout(function () { nameInput.focus(); }, calm() ? 0 : 450);
   }
 
   /* Retour arrière depuis une autre page (cache « back/forward ») : on efface tout. */
@@ -576,7 +590,6 @@
 
   /* ------------------------------------------------------------------ démarrage */
   drawGuilloche();
-  setTimeout(beamOnce, 450);
 
   window.WisyCertificates = { reset: resetAll, submit: submit, render: render };
 })();

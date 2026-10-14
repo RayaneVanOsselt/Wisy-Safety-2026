@@ -2,7 +2,7 @@
 
 La page **Vérification des certificats** (`certificats.html`) permet à un titulaire ou à un employeur de vérifier un
 certificat délivré par Wisy Safety : il saisit le **nom de famille** et la **date de naissance**, et le site affiche
-aussitôt le statut (**valide, expiré, révoqué** ou **validité à confirmer**), la formation, le numéro et les dates.
+aussitôt le statut (**valide, expiré, annulé** ou **validité à confirmer**), la formation, le numéro et les dates.
 
 Les certificats sont gérés dans **une feuille Google Sheets** (un tableur comme Excel, gratuit, dans votre compte
 Google). Vous ajoutez une ligne → le site est à jour **immédiatement**, sans republier le site. Pas de WordPress,
@@ -47,9 +47,11 @@ date ? ») et le script ne renvoie que la réponse — jamais la feuille, jamais
    Le menu **Wisy Safety** n'apparaît QUE dans la feuille (jamais dans l'éditeur), après un rechargement. S'il
    n'apparaît toujours pas, le script n'est pas rattaché à la feuille : recréez-le depuis la feuille (Extensions ›
    Apps Script), pas depuis script.google.com.
-5. L'onglet **Certificats** est prêt : en-têtes, format des dates JJ/MM/AAAA, liste oui/non pour « Révoqué »,
-   paramètres régionaux Belgique et fuseau horaire de Bruxelles. Si l'onglet contenait déjà vos données importées,
-   **rien n'est effacé** : seule la mise en forme change.
+5. L'onglet **Certificats** est prêt : en-têtes vert foncé, lignes alternées, filtres, dates au format JJ/MM/AAAA
+   (une date impossible est refusée à la saisie), liste **Actif / Annulé** pour « Statut », colonne
+   **Validité (automatique)** en couleur, paramètres régionaux Belgique et fuseau horaire de Bruxelles. Si l'onglet
+   contenait déjà des données, **rien n'est effacé** : seule la mise en forme change (les anciennes colonnes grises
+   « (interne) » sont retirées si elles sont vides, et l'ancienne colonne « Révoqué » oui / non devient « Statut »).
 
 ### Étape 3 — Publier le script comme « Application Web »
 
@@ -96,8 +98,8 @@ date de naissance) ; la vérification les affiche toutes.
 | **Date de formation** | JJ/MM/AAAA | affichée |
 | **Date de délivrance** | JJ/MM/AAAA, seulement si elle diffère | affichée |
 | **Valable jusqu'au** | Dernier jour de validité, JJ/MM/AAAA. Vide = « validité à confirmer » | affichée + statut |
-| **Révoqué** | oui / non. « oui » = « Révoqué » sur le site, quelle que soit la date | statut |
-| Entreprise, E-mail, Téléphone, Notes **(interne)** | Pour votre suivi | **jamais lues par le site** |
+| **Statut** | **Actif** (normal) ou **Annulé** : le site affiche « Annulé », quelle que soit la date | statut |
+| **Validité (automatique)** | Calculée par la feuille, en couleur : Valide · Expire bientôt (90 jours) · Expiré · Annulé · À confirmer — **ne rien y saisir** | non (le site applique la même règle) |
 
 Vous pouvez ajouter d'autres colonnes à droite (elles sont ignorées) ; ne renommez pas les colonnes utilisées par le
 site. Les intitulés d'un ancien fichier sont aussi reconnus (« Nom de famille », « Numéro de diplôme », « Formation
@@ -117,7 +119,8 @@ suivie », « Date d'expiration », intitulés anglais / néerlandais courants�
 
 - **Ajouter toute une liste depuis Excel** : copiez les lignes dans Excel, collez-les dans la feuille (mêmes colonnes,
   même ordre). Ou Fichier › Importer › « Ajouter à la feuille actuelle ».
-- **Révoquer** : mettez « oui » dans la colonne Révoqué (inutile de supprimer la ligne).
+- **Annuler un certificat** : choisissez « Annulé » dans la colonne Statut (inutile de supprimer la ligne).
+- **Repérer les renouvellements** : filtrez la colonne « Validité (automatique) » sur « Expire bientôt » (icône de filtre dans l'en-tête).
 - **Sauvegarde** : Google garde l'historique des versions (Fichier › Historique des versions). Pour une copie Excel :
   Fichier › Télécharger › Microsoft Excel (.xlsx).
 - **Vous travaillez à plusieurs** : partagez la feuille avec les collègues concernés (Partager › leur adresse,
@@ -132,7 +135,7 @@ suivie », « Date d'expiration », intitulés anglais / néerlandais courants�
 | Prénom et nom du titulaire | Date de naissance, autres noms |
 | Formation suivie, numéro du certificat | Entreprise, e-mail, téléphone, notes |
 | Dates de formation, de délivrance et de fin de validité | La feuille elle-même, une liste de personnes |
-| Statut : valide / expiré / révoqué / validité à confirmer | |
+| Statut : valide / expiré / annulé / validité à confirmer | |
 
 Le nom est comparé **sans tenir compte** des majuscules, accents, espaces, tirets et apostrophes
 (« Van-Össelt » = « van osselt »), mais **jamais approximativement** : « Dupon » ne trouve pas « Dupont ». Une
@@ -183,7 +186,7 @@ Le premier essai réel avec **votre** compte Google se fait à l'étape 5.
 | Je veux… | Où |
 |---|---|
 | Changer les limites d'essais ou le nom de l'onglet | En tête de `google-sheets/certificats.gs` (`CONFIG`), puis recoller le script (ci-dessous) |
-| Mettre à jour le script après une modification | Apps Script › coller la nouvelle version › Enregistrer › **Déployer › Gérer les déploiements › crayon › Version : Nouvelle version › Déployer** (l'URL ne change pas) |
+| Mettre à jour le script après une modification | 1. Apps Script › tout sélectionner › coller la nouvelle version de `google-sheets/certificats.gs` › Enregistrer. 2. **Déployer › Gérer les déploiements › crayon › Version : Nouvelle version › Déployer** (l'URL ne change pas). 3. Dans la feuille : **Wisy Safety › Préparer / mettre en forme la feuille** |
 | Changer l'adresse du script sur le site | `js/certificats-config.js` |
 | Changer les textes de la page (10 langues) | `js/i18n-data-certificats.js` (le français doit rester identique au HTML de `certificats.html`) |
 | Changer le style / les animations | `css/certificats.css` |

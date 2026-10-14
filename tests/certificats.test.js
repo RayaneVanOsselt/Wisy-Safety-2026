@@ -101,17 +101,17 @@ test("frise de validité : position d'aujourd'hui entre délivrance et fin de va
 });
 
 /* ------------------------------------------------------------------ script Google (fausse feuille Google Sheets) */
-const HEAD = ["Numéro de certificat", "Nom", "Prénom", "Autres noms", "Date de naissance", "Formation", "Date de formation", "Date de délivrance", "Valable jusqu'au", "Révoqué", "Entreprise (interne)", "E-mail (interne)", "Téléphone (interne)", "Notes (interne)"];
+const HEAD = ["Numéro de certificat", "Nom", "Prénom", "Autres noms", "Date de naissance", "Formation", "Date de formation", "Date de délivrance", "Valable jusqu'au", "Statut", "Entreprise (interne)", "E-mail (interne)", "Téléphone (interne)", "Notes (interne)", "Validité (automatique)"];
 const D = (y, m, d) => new Date(Date.UTC(y, m - 1, d, 10));          // cellule « date » de Google Sheets
 const SHEET = [HEAD,
-  ["ws-1", "Dupont", "Marie", "Martin; Durand", D(1992, 5, 14), "VCA Base", D(2025, 3, 12), D(2025, 3, 14), D(2035, 3, 12), "non", "Entreprise SA", "rh@fictive.test", "0470 00 00 00", "note privée"],
-  ["WS-2", "Dupont", "Marie", "", "14/05/1992", "Nacelles élévatrices", "10/02/2018", "", "10/02/2023", "", "", "", "", ""],
-  ["WS-3", "Müller", "Hans", "", "02/11/1978", "VCA Ligne hiérarchique", "05/06/2024", "", "05/06/2034", "oui", "", "", "", ""],
-  ["WS-4", "D’Hondt", "Claire", "", "21/07/1988", "BEPS", "01/09/2025", "", "", "", "", "", "", ""],
-  ["WS-5", "Sans-Date", "Lucie", "", "", "VCA Base", "01/02/2026", "", "01/02/2036", "", "", "", "", ""],
-  ["WS-6", "Erreur", "Date", "", "31/02/1990", "VCA Base", "", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-  ["ws-1", "Doublon", "Paul", "", "03/03/1993", "VCA Base", "", "", "", "", "", "", "", ""]
+  ["ws-1", "Dupont", "Marie", "Martin; Durand", D(1992, 5, 14), "VCA Base", D(2025, 3, 12), D(2025, 3, 14), D(2035, 3, 12), "Actif", "Entreprise SA", "rh@fictive.test", "0470 00 00 00", "note privée", "Valide"],
+  ["WS-2", "Dupont", "Marie", "", "14/05/1992", "Nacelles élévatrices", "10/02/2018", "", "10/02/2023", "", "", "", "", "", ""],
+  ["WS-3", "Müller", "Hans", "", "02/11/1978", "VCA Ligne hiérarchique", "05/06/2024", "", "05/06/2034", "Annulé", "", "", "", "", "Annulé"],
+  ["WS-4", "D’Hondt", "Claire", "", "21/07/1988", "BEPS", "01/09/2025", "", "", "", "", "", "", "", ""],
+  ["WS-5", "Sans-Date", "Lucie", "", "", "VCA Base", "01/02/2026", "", "01/02/2036", "", "", "", "", "", ""],
+  ["WS-6", "Erreur", "Date", "", "31/02/1990", "VCA Base", "", "", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+  ["ws-1", "Doublon", "Paul", "", "03/03/1993", "VCA Base", "", "", "", "", "", "", "", "", ""]
 ];
 function loadScript(rows, nowIso) {
   const store = new Map();
@@ -169,6 +169,20 @@ test("script Google : statuts, dates texte ou cellules date, lignes invalides ig
   assert.equal(post({ lastName: "Erreur", birthDate: "1990-02-28" }).status, "not_found", "31/02 : ligne ignorée, jamais devinée");
   assert.equal(loadScript(SHEET, "2035-03-13T10:00:00Z").post({ lastName: "Dupont", birthDate: "1992-05-14" }).certificates[0].status, "expired", "valable jusqu'au dernier jour inclus");
   assert.equal(loadScript(SHEET, "2035-03-12T20:00:00Z").post({ lastName: "Dupont", birthDate: "1992-05-14" }).certificates[0].status, "valid");
+});
+
+test("script Google : « Statut » Actif / Annulé, et l'ancienne colonne « Révoqué » oui / non reste comprise", () => {
+  const old = [["Nom", "Prénom", "Date de naissance", "Formation", "Valable jusqu'au", "Révoqué"],
+    ["Ancien", "Format", "01/01/1980", "VCA Base", "01/01/2099", "oui"], ["Nouveau", "Format", "01/01/1980", "VCA Base", "01/01/2099", "non"]];
+  const o = loadScript(old);
+  assert.equal(o.post({ lastName: "Ancien", birthDate: "1980-01-01" }).certificates[0].status, "revoked");
+  assert.equal(o.post({ lastName: "Nouveau", birthDate: "1980-01-01" }).certificates[0].status, "valid");
+  const bad = loadScript([["Nom", "Date de naissance", "Formation", "Statut"], ["Bizarre", "01/01/1980", "VCA", "peut-être"]]);
+  assert.equal(bad.post({ lastName: "Bizarre", birthDate: "1980-01-01" }).status, "not_found", "statut incompréhensible : ligne ignorée");
+  assert.match(bad.ctx.readRegistry_().problems.join(" "), /« Actif » ou « Annulé »/);
+  const { ctx } = loadScript(SHEET);
+  assert.equal(ctx.colLetter_(1) + ctx.colLetter_(10) + ctx.colLetter_(27), "AJAA");
+  assert.equal(ctx.HEADER_MAP.validite, undefined, "la colonne calculée n'est jamais lue");
 });
 
 test("script Google : saisies invalides refusées, corps illisible sans plantage", () => {
@@ -236,7 +250,7 @@ test("page : aucun stockage navigateur ni innerHTML pour les données du registr
 test("page : animations sans boucle infinie décorative, désactivées en mouvement réduit", () => {
   const css = read("css/certificats.css");
   const infinite = css.split("\n").filter((l) => /infinite/.test(l));
-  infinite.forEach((l) => assert.match(l, /is-busy/, "seule la vérification en cours peut tourner en continu : " + l.trim()));
+  infinite.forEach((l) => assert.match(l, /is-busy|wc-skel__line/, "seule la vérification en cours (bouton, contour, squelette de chargement) peut tourner en continu : " + l.trim()));
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
   assert.match(css, /@media print/);
 });

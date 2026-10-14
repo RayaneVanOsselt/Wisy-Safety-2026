@@ -29,23 +29,22 @@ var CONFIG = {
   MAX_RESULTS: 20
 };
 
-/* Colonnes du modèle (créées par « Préparer la feuille ») : [champ, en-tête, note affichée sur l'en-tête]. */
+/* Colonnes du modèle (créées par « Préparer la feuille ») : [champ, en-tête, note affichée sur l'en-tête, largeur]. */
 var TEMPLATE = [
-  ["certificate_number", "Numéro de certificat", "Imprimé sur le certificat. Unique."],
-  ["last_name", "Nom", "Nom de famille, tel qu'écrit sur le certificat. Obligatoire."],
-  ["first_name", "Prénom", ""],
-  ["other_last_names", "Autres noms", "Facultatif : nom d'usage, de naissance… séparés par « ; ». La personne est aussi trouvée avec ces noms."],
-  ["birth_date", "Date de naissance", "JJ/MM/AAAA. Jamais affichée sur le site. Sans elle, le certificat est introuvable en ligne."],
-  ["training", "Formation", "Intitulé de la formation. Obligatoire."],
-  ["training_date", "Date de formation", "JJ/MM/AAAA"],
-  ["issue_date", "Date de délivrance", "JJ/MM/AAAA, seulement si elle diffère de la date de formation."],
-  ["expiry_date", "Valable jusqu'au", "Dernier jour de validité, JJ/MM/AAAA. Vide = « validité à confirmer » sur le site."],
-  ["revoked", "Révoqué", "oui / non. « oui » = affiché « Révoqué » sur le site, quelle que soit la date."],
-  ["internal", "Entreprise (interne)", "Colonnes internes : JAMAIS lues par la vérification en ligne."],
-  ["internal", "E-mail (interne)", ""],
-  ["internal", "Téléphone (interne)", ""],
-  ["internal", "Notes (interne)", ""]
+  ["certificate_number", "Numéro de certificat", "Imprimé sur le certificat. Unique.", 170],
+  ["last_name", "Nom", "Nom de famille, tel qu'écrit sur le certificat. Obligatoire.", 170],
+  ["first_name", "Prénom", "", 150],
+  ["other_last_names", "Autres noms", "Facultatif : nom d'usage, de naissance… séparés par « ; ». La personne est aussi trouvée avec ces noms. Jamais affiché sur le site.", 150],
+  ["birth_date", "Date de naissance", "JJ/MM/AAAA. Jamais affichée sur le site. Sans elle, le certificat est introuvable en ligne.", 140],
+  ["training", "Formation", "Intitulé de la formation. Obligatoire.", 260],
+  ["training_date", "Date de formation", "JJ/MM/AAAA", 140],
+  ["issue_date", "Date de délivrance", "JJ/MM/AAAA, seulement si elle diffère de la date de formation.", 140],
+  ["expiry_date", "Valable jusqu'au", "Dernier jour de validité, JJ/MM/AAAA. Vide = « validité à confirmer » sur le site.", 140],
+  ["revoked", "Statut", "Actif = certificat normal. Annulé = le site affiche « Annulé », quelle que soit la date.", 110]
 ];
+/* Colonne calculée par la feuille (formule), jamais lue par le site. */
+var VALIDITY_HEADER = "Validité (automatique)";
+var STATUS_ACTIVE = "Actif", STATUS_CANCELLED = "Annulé";
 
 /* En-têtes reconnus (après normalisation : minuscules, sans accents, sans parenthèses, « _ » comme séparateur).
    Les colonnes internes ne sont volontairement PAS reconnues : la vérification ne les lit jamais. */
@@ -59,12 +58,12 @@ var ALIASES = {
   training_date: ["date_de_formation", "date_formation", "date_examen", "date_d_examen", "training_date", "exam_date", "opleidingsdatum"],
   issue_date: ["date_de_delivrance", "date_delivrance", "delivre_le", "date_emission", "issue_date", "issued_on"],
   expiry_date: ["valable_jusqu_au", "valide_jusqu_au", "date_expiration", "date_d_expiration", "expiration", "date_de_validite", "date_validite", "fin_de_validite", "expiry_date", "expiration_date", "valid_until", "geldig_tot"],
-  revoked: ["revoque", "revoquee", "revocation", "revoked"]
+  revoked: ["statut", "statut_du_certificat", "etat_du_certificat", "revoque", "revoquee", "revocation", "annule", "revoked", "status"]
 };
 var HEADER_MAP = {};
 Object.keys(ALIASES).forEach(function (f) { ALIASES[f].forEach(function (a) { HEADER_MAP[a] = f; }); });
 var REQUIRED_HEADERS = ["last_name", "birth_date", "training"];
-var STATUS_LABEL = { valid: "Valide", expired: "Expiré", revoked: "Révoqué", undetermined: "Validité à confirmer" };
+var STATUS_LABEL = { valid: "Valide", expired: "Expiré", revoked: "Annulé", undetermined: "Validité à confirmer" };
 
 /* ======================================================================= utilitaires */
 
@@ -122,13 +121,13 @@ function cellDate_(v, tz) {
   return isRealDate_(y, m, d) ? y + "-" + pad_(m) + "-" + pad_(d) : null;
 }
 
-/** oui / non d'une cellule. @returns {boolean|null} null = valeur incompréhensible */
+/** Statut d'une cellule → annulé ? « Actif » / « Annulé » (ou l'ancien « non » / « oui »). @returns {boolean|null} null = incompréhensible */
 function cellBool_(v) {
   if (v === true) return true;
   if (v === false || v === "" || v == null) return false;
   var s = normalizeHeader_(v);
-  if (["non", "no", "nee", "nein", "n", "false", "faux", "0"].indexOf(s) >= 0) return false;
-  if (["oui", "yes", "ja", "y", "o", "true", "vrai", "1", "x"].indexOf(s) >= 0) return true;
+  if (["actif", "active", "valide", "valid", "en_cours", "non", "no", "nee", "nein", "n", "false", "faux", "0"].indexOf(s) >= 0) return false;
+  if (["annule", "annulee", "cancelled", "canceled", "revoque", "revoquee", "revoked", "retire", "oui", "yes", "ja", "y", "o", "true", "vrai", "1", "x"].indexOf(s) >= 0) return true;
   return null;
 }
 
@@ -185,7 +184,7 @@ function readRegistry_() {
     if (!rec.last_name) bad.push("nom manquant");
     if (!rec.training) bad.push("formation manquante");
     ["birth_date", "training_date", "issue_date", "expiry_date"].forEach(function (f) { if (rec[f] === null) bad.push("date illisible ou impossible (« " + clean_(get(row, f)).slice(0, 20) + " »)"); });
-    if (rec.revoked === null) bad.push("« Révoqué » doit valoir oui ou non");
+    if (rec.revoked === null) bad.push("le statut doit valoir « Actif » ou « Annulé »");
     if (bad.length) { problems.push("Ligne " + line + " : " + bad.join(", ") + " — ligne ignorée par la vérification."); continue; }
     if (!rec.birth_date) problems.push("Ligne " + line + " : sans date de naissance, ce certificat ne peut pas être trouvé en ligne.");
     if (rec.expiry_date && rec.training_date && rec.expiry_date < rec.training_date) problems.push("Ligne " + line + " : la fin de validité est antérieure à la date de formation.");
@@ -314,44 +313,142 @@ function doGet() {
 
 function onOpen() {
   SpreadsheetApp.getUi().createMenu("Wisy Safety")
-    .addItem("Préparer la feuille", "installer")
+    .addItem("Préparer / mettre en forme la feuille", "installer")
     .addItem("Vérifier les données", "verifierLesDonnees")
     .addItem("Tester une recherche", "testerUneRecherche")
     .addToUi();
 }
 
-/** Crée (ou met en forme) l'onglet « Certificats » sans jamais effacer de données. */
+/** Lettre de colonne (1 → A, 27 → AA). */
+function colLetter_(n) { var s = ""; while (n > 0) { var m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); } return s; }
+
+/**
+ * Crée l'onglet « Certificats » ou met à jour celui qui existe, SANS jamais effacer de données :
+ *   - retire les anciennes colonnes « (interne) » si elles sont vides (sinon : les laisse et le signale) ;
+ *   - remplace l'ancienne colonne « Révoqué » (oui / non) par « Statut » (Actif / Annulé) ;
+ *   - ajoute la colonne « Validité (automatique) » (formule) et une mise en forme professionnelle.
+ */
 function installer() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   ss.setSpreadsheetTimeZone(CONFIG.TIMEZONE);
   try { ss.setSpreadsheetLocale("fr_BE"); } catch (e) { /* réglage facultatif */ }
   var sheet = ss.getSheetByName(CONFIG.SHEET_NAME) || ss.insertSheet(CONFIG.SHEET_NAME, 0);
+  var notes = [];
+
   var width = Math.max(sheet.getLastColumn(), 1);
   var header = sheet.getRange(1, 1, 1, width).getValues()[0];
   if (header.every(function (h) { return String(h).trim() === ""; })) {
     sheet.getRange(1, 1, 1, TEMPLATE.length).setValues([TEMPLATE.map(function (c) { return c[1]; })]);
-    TEMPLATE.forEach(function (c, i) { if (c[2]) sheet.getRange(1, i + 1).setNote(c[2]); });
-    header = TEMPLATE.map(function (c) { return c[1]; });
+    width = TEMPLATE.length;
   }
-  var n = header.length, rows = Math.max(sheet.getMaxRows() - 1, 1);
+
+  /* Anciennes colonnes internes et ancienne colonne calculée : retirées si vides (de droite à gauche). */
+  var lastRow = Math.max(sheet.getLastRow(), 1);
+  header = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  for (var c = header.length; c >= 1; c--) {
+    var raw = String(header[c - 1]), key = normalizeHeader_(raw);
+    var internal = /\(interne\)/i.test(raw) || ["entreprise", "e_mail", "email", "telephone", "notes"].indexOf(key) >= 0;
+    var calculated = raw.trim() === VALIDITY_HEADER;
+    if (!internal && !calculated) continue;
+    var hasData = !calculated && lastRow > 1 && sheet.getRange(2, c, lastRow - 1, 1).getValues().some(function (r) { return String(r[0]).trim() !== ""; });
+    if (hasData) notes.push("La colonne « " + raw + " » contient des données : elle a été conservée (le site ne la lit jamais).");
+    else sheet.deleteColumn(c);
+  }
+
+  /* « Révoqué » (oui / non) → « Statut » (Actif / Annulé), valeurs converties. */
+  header = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  var col = {};
+  header.forEach(function (h, i) { var f = HEADER_MAP[normalizeHeader_(h)]; if (f && col[f] === undefined) col[f] = i + 1; });
+  if (col.revoked === undefined) {
+    sheet.insertColumnAfter(Math.max(sheet.getLastColumn(), 1));
+    col.revoked = sheet.getLastColumn() + 1;
+    sheet.getRange(1, col.revoked).setValue("Statut");
+  } else if (String(header[col.revoked - 1]).trim() !== "Statut") {
+    sheet.getRange(1, col.revoked).setValue("Statut");
+  }
+  sheet.getDataRange().clearDataValidations();
+  if (lastRow > 1) {
+    var names = sheet.getRange(2, col.last_name || 2, lastRow - 1, 1).getValues();
+    var statusRange = sheet.getRange(2, col.revoked, lastRow - 1, 1);
+    var status = statusRange.getValues().map(function (r, i) {
+      if (!String(names[i][0]).trim()) return [r[0]];
+      var b = cellBool_(r[0]);
+      return [b === null ? r[0] : (b ? STATUS_CANCELLED : STATUS_ACTIVE)];
+    });
+    statusRange.setValues(status);
+  }
+
+  /* Colonne calculée « Validité (automatique) » : même règle que le site (+ « Expire bientôt » à 90 jours). */
+  var n = sheet.getLastColumn() + 1;
+  if (sheet.getMaxColumns() < n) sheet.insertColumnAfter(sheet.getMaxColumns());
+  var L = function (f) { return colLetter_(col[f]); };
+  var name = L("last_name") + "2:" + L("last_name"), st = L("revoked") + "2:" + L("revoked"), exp = col.expiry_date ? L("expiry_date") + "2:" + L("expiry_date") : null;
+  var expiryPart = exp
+    ? 'IF(' + exp + '="","À confirmer",IF(ISNUMBER(' + exp + '),IF(' + exp + '<TODAY(),"Expiré",IF(' + exp + '<TODAY()+90,"Expire bientôt","Valide")),"Date à vérifier"))'
+    : '"À confirmer"';
+  sheet.getRange(1, n).setFormula('={"' + VALIDITY_HEADER + '";ARRAYFORMULA(IF(' + name + '="","",IF(REGEXMATCH(LOWER(' + st + '&""),"annul|revoq|révoq|^oui$"),"Annulé",' + expiryPart + ')))}');
+  sheet.getRange(1, n).setNote("Colonne calculée automatiquement à partir du statut et de « Valable jusqu'au » : ne rien saisir ici. Le site applique la même règle.");
+
+  /* Mise en forme. */
+  header = sheet.getRange(1, 1, 1, n).getValues()[0];
+  var rows = Math.max(sheet.getMaxRows() - 1, 1);
   sheet.setFrozenRows(1);
-  sheet.getRange(1, 1, 1, n).setFontWeight("bold").setFontColor("#FFFFFF").setBackground("#1F6F64").setWrap(true).setVerticalAlignment("middle");
+  sheet.setFrozenColumns(Math.min(col.last_name || 2, 3));
+  sheet.setTabColor("#1F6F64");
+  sheet.setRowHeight(1, 44);
+  var all = sheet.getRange(1, 1, rows + 1, n);
+  all.setFontFamily("Inter").setFontSize(10).setVerticalAlignment("middle");
+  sheet.getRange(1, 1, 1, n).setFontWeight("bold").setFontColor("#FFFFFF").setBackground("#16302A").setWrap(true).setHorizontalAlignment("left");
+  sheet.getRange(1, n).setBackground("#1F6F64");
+  sheet.getBandings().forEach(function (b) { b.remove(); });
+  all.applyRowBanding(SpreadsheetApp.BandingTheme.GREEN, true, false).setHeaderRowColor("#16302A").setFirstRowColor("#FFFFFF").setSecondRowColor("#F4FAF9");
   header.forEach(function (h, i) {
-    var f = HEADER_MAP[normalizeHeader_(h)];
+    var f = HEADER_MAP[normalizeHeader_(h)], t = TEMPLATE.filter(function (x) { return x[0] === f; })[0];
     var range = sheet.getRange(2, i + 1, rows, 1);
-    if (["birth_date", "training_date", "issue_date", "expiry_date"].indexOf(f) >= 0) { range.setNumberFormat("dd/mm/yyyy"); sheet.setColumnWidth(i + 1, 130); }
-    else if (f === "revoked") { range.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(["oui", "non"], true).setAllowInvalid(false).build()); sheet.setColumnWidth(i + 1, 90); }
-    else if (!f) sheet.getRange(1, i + 1).setBackground("#5E6D6A");
-    else sheet.setColumnWidth(i + 1, f === "training" ? 240 : 160);
+    if (t && t[2]) sheet.getRange(1, i + 1).setNote(t[2]);
+    if (t) sheet.setColumnWidth(i + 1, t[3]);
+    if (["birth_date", "training_date", "issue_date", "expiry_date"].indexOf(f) >= 0) {
+      range.setNumberFormat("dd/mm/yyyy").setHorizontalAlignment("center");
+      range.setDataValidation(SpreadsheetApp.newDataValidation().requireDate().setAllowInvalid(false).setHelpText("Date au format JJ/MM/AAAA, par exemple 27/03/1985.").build());
+    } else if (f === "revoked") {
+      range.setHorizontalAlignment("center").setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList([STATUS_ACTIVE, STATUS_CANCELLED], true).setAllowInvalid(false).setHelpText("Actif ou Annulé.").build());
+    } else if (f === "certificate_number") {
+      range.setNumberFormat("@").setFontFamily("Roboto Mono");
+    } else if (f === "last_name") {
+      range.setFontWeight("bold");
+    }
   });
+  sheet.getRange(2, n, rows, 1).setHorizontalAlignment("center").setFontWeight("bold");
+  sheet.setColumnWidth(n, 150);
+
+  /* Couleurs de la colonne « Validité (automatique) ». */
+  var vr = sheet.getRange(2, n, rows, 1);
+  var rule = function (text, bg, fg) { return SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo(text).setBackground(bg).setFontColor(fg).setRanges([vr]).build(); };
+  var others = sheet.getConditionalFormatRules().filter(function (r) { return !r.getRanges().some(function (g) { return g.getColumn() === n; }); });
+  sheet.setConditionalFormatRules(others.concat([
+    rule("Valide", "#DCF5EE", "#1F6F64"),
+    rule("Expire bientôt", "#FFF1D6", "#8A5A00"),
+    rule("Expiré", "#FDE7D2", "#9A4A00"),
+    rule("Annulé", "#FBE1E4", "#B4233A"),
+    rule("À confirmer", "#E6ECFB", "#3552A8"),
+    rule("Date à vérifier", "#FBE1E4", "#B4233A")
+  ]));
+
+  /* Filtre (tri et recherche par colonne) et en-tête protégé contre les modifications accidentelles. */
+  if (sheet.getFilter()) sheet.getFilter().remove();
+  sheet.getRange(1, 1, Math.max(sheet.getLastRow(), 2), n).createFilter();
+  sheet.getProtections(SpreadsheetApp.ProtectionType.RANGE).forEach(function (p) { if (p.getDescription() === "En-têtes du registre") p.remove(); });
+  sheet.getRange(1, 1, 1, n).protect().setDescription("En-têtes du registre").setWarningOnly(true);
+
   try {
     SpreadsheetApp.getUi().alert("Feuille prête",
       "L'onglet « " + CONFIG.SHEET_NAME + " » est prêt : une ligne par certificat.\n\n" +
-      "Colonnes vertes : utilisées par la vérification en ligne. Colonnes grises « (interne) » : jamais lues par le site.\n\n" +
-      "Étape suivante (une seule fois) : dans Apps Script, Déployer › Nouveau déploiement › Application Web (voir le guide).",
+      "• Statut : « Actif » ou « Annulé ».\n• Validité (automatique) : calculée par la feuille, en couleur (ne rien y saisir).\n• Filtres : cliquez sur l'icône des en-têtes pour trier ou chercher." +
+      (notes.length ? "\n\n" + notes.join("\n") : "") +
+      "\n\nSi vous venez de mettre le script à jour : dans Apps Script, Déployer › Gérer les déploiements › crayon › Nouvelle version.",
       SpreadsheetApp.getUi().ButtonSet.OK);
   } catch (e) {
-    console.log("Feuille prête (lancé depuis l'éditeur : message affiché ici plutôt que dans la feuille).");
+    console.log("Feuille prête. " + notes.join(" "));
   }
 }
 
@@ -360,7 +457,10 @@ function verifierLesDonnees() {
   var reg = readRegistry_();
   var ui = SpreadsheetApp.getUi();
   if (!reg.ok) { ui.alert("Vérification des données", reg.problems.join("\n"), ui.ButtonSet.OK); return; }
-  var msg = reg.rows.length + " certificat(s) utilisable(s) par la vérification en ligne.";
+  var today = todayIso_(), count = { valid: 0, expired: 0, revoked: 0, undetermined: 0 };
+  reg.rows.forEach(function (r) { count[statusOf_(r, today)]++; });
+  var msg = reg.rows.length + " certificat(s) utilisable(s) par la vérification en ligne : " + count.valid + " valide(s), " + count.expired +
+    " expiré(s), " + count.revoked + " annulé(s), " + count.undetermined + " à confirmer.";
   if (!reg.problems.length) msg += "\n\nAucun problème détecté.";
   else msg += "\n\n" + reg.problems.length + " point(s) à corriger :\n" + reg.problems.slice(0, 40).join("\n") + (reg.problems.length > 40 ? "\n…" : "");
   ui.alert("Vérification des données", msg, ui.ButtonSet.OK);

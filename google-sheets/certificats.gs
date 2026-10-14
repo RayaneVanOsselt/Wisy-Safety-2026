@@ -217,6 +217,13 @@ function normalizeCertNumber_(v) {
   return s.replace(/-(\d{1,2})$/, function (m, d) { return "-" + ("00" + d).slice(-3); });
 }
 
+/** Ordre chronologique : date la plus ancienne d'abord, sans date à la fin ; à date égale, par numéro. */
+function compareByDate_(da, db, na, nb) {
+  if (da !== db) { if (!da) return 1; if (!db) return -1; return da < db ? -1 : 1; }
+  na = String(na || ""); nb = String(nb || "");
+  return na < nb ? -1 : na > nb ? 1 : 0;
+}
+
 /* ======================================================================= lecture du registre */
 
 /**
@@ -356,7 +363,7 @@ function verify_(lastName, birthDate, opts) {
   var reg = readRegistry_();
   if (!reg.ok) return { status: "not_configured" };
   var found = reg.rows.filter(function (rec) { return rec.birth_date === input.birth && rec.keys.indexOf(key) >= 0; })
-    .sort(function (a, b) { var x = a.issue_date || a.training_date || "", y = b.issue_date || b.training_date || ""; return x < y ? 1 : x > y ? -1 : 0; })
+    .sort(function (a, b) { return compareByDate_(a.training_date || a.issue_date, b.training_date || b.issue_date, a.certificate_number, b.certificate_number); })
     .slice(0, CONFIG.MAX_RESULTS)
     .map(function (rec) {
       return {
@@ -415,7 +422,8 @@ function colLetter_(n) { var s = ""; while (n > 0) { var m = (n - 1) % 26; s = S
  *      colonnes inutiles (« Autres noms » vide, anciennes colonnes « (interne) », ancienne « Validité (automatique) »,
  *      colonnes vides) sont retirées. Une colonne inconnue qui contient des données est conservée et signalée.
  *   2. Corrections : accents abîmés (« √© » → « é »), numéros au format NA-EL-001, date de délivrance vide = date de
- *      formation, langue vide = Français, statut vide = Actif.
+ *      formation, langue vide = Français, statut vide = Actif ; lignes triées par date de formation (plus anciennes
+ *      en haut).
  *   3. Mise en forme : en-tête, bandes, filtres, formats de date, listes, couleurs de validité.
  */
 function installer() {
@@ -510,6 +518,18 @@ function installer() {
     if (count.issue) done.push(count.issue + " date(s) de délivrance remplie(s) avec la date de formation");
     if (count.language) done.push(count.language + " langue(s) indiquée(s) : " + DEFAULT_LANGUAGE);
     if (count.status) done.push(count.status + " statut(s) écrit(s) « " + STATUS_ACTIVE + " » ou « " + STATUS_CANCELLED + " »");
+
+    /* Lignes dans l'ordre chronologique : date de formation la plus ancienne en haut, la plus récente en bas. */
+    var td = at("training_date"), cn = at("certificate_number");
+    var keyOf = function (row) { return [td >= 0 ? cellDate_(row[td], CONFIG.TIMEZONE) || "" : "", cn >= 0 ? clean_(row[cn]) : ""]; };
+    var keys = data.filter(function (row) { return row.some(function (c) { return String(c).trim() !== ""; }); }).map(keyOf);
+    var sorted = keys.every(function (k, i) { return i === 0 || compareByDate_(keys[i - 1][0], k[0], keys[i - 1][1], k[1]) <= 0; });
+    if (td >= 0 && !sorted) {
+      var specs = [{ column: td + 1, ascending: true }];
+      if (cn >= 0) specs.push({ column: cn + 1, ascending: true });
+      sheet.getRange(2, 1, n, width).sort(specs);
+      done.push("lignes triées par date de formation : les plus anciennes en haut, les plus récentes en bas");
+    }
   }
 
   /* 3. Mise en forme. Colonnes vides à droite retirées : la feuille s'arrête à la dernière colonne utile. */

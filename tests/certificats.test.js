@@ -142,7 +142,19 @@ function fakeSheet(grid, opts) {
     getValue: () => g[r - 1][c - 1],
     setValues: (v) => { assert.equal(v.length, nr); v.forEach((row, i) => { assert.equal(row.length, nc); row.forEach((x, j) => { g[r - 1 + i][c - 1 + j] = x; }); }); },
     setValue: (x) => { g[r - 1][c - 1] = x; },
-    getColumn: () => c
+    getColumn: () => c,
+    sort: (specs) => {
+      const val = (v) => (v instanceof Date ? v.getTime() : v);
+      const block = g.slice(r - 1, r - 1 + nr).sort((a, b) => {
+        for (const { column, ascending } of specs) {
+          const x = val(a[column - 1]), y = val(b[column - 1]);
+          if (blank(x) !== blank(y)) return blank(x) ? 1 : -1;
+          if (x !== y) return (x < y ? -1 : 1) * (ascending === false ? -1 : 1);
+        }
+        return 0;
+      });
+      block.forEach((row, i) => { g[r - 1 + i] = row; });
+    }
   });
   const sheet = chain({
     grid: g, rules: [],
@@ -193,14 +205,14 @@ test("script Google : le service répond sans jamais exposer de donnée (doGet)"
   assert.match(read("google-sheets/certificats.gs"), /^\/\*\*\s*\n \* @OnlyCurrentDoc/, "accès limité à la feuille elle-même");
 });
 
-test("script Google : recherche EXACTE, seuls les champs publics, plus récent d'abord", () => {
+test("script Google : recherche EXACTE, seuls les champs publics, du plus ancien au plus récent", () => {
   const { post } = loadScript(SHEET);
   const r = post({ lastName: "dupont", birthDate: "1992-05-14" });
   assert.equal(r.status, "found");
   assert.equal(r.certificates.length, 2);
-  assert.deepEqual(r.certificates[0], { holder: "Marie Dupont", training: "VCA Base", language: null, certificateNumber: "WS-001", trainingDate: "2025-03-12", issueDate: "2025-03-14", expiryDate: "2035-03-12", status: "valid" });
-  assert.equal(r.certificates[1].issueDate, "2018-02-10", "date de délivrance vide = date de formation");
-  assert.equal(r.certificates[1].status, "expired");
+  assert.deepEqual(r.certificates[1], { holder: "Marie Dupont", training: "VCA Base", language: null, certificateNumber: "WS-001", trainingDate: "2025-03-12", issueDate: "2025-03-14", expiryDate: "2035-03-12", status: "valid" });
+  assert.equal(r.certificates[0].issueDate, "2018-02-10", "date de délivrance vide = date de formation");
+  assert.equal(r.certificates[0].status, "expired", "le plus ancien (2018) d'abord");
   const all = JSON.stringify(r);
   ["1992", "Entreprise", "rh@", "0470", "note privée", "Martin"].forEach((x) => assert.ok(!all.includes(x), "jamais renvoyé : " + x));
   assert.equal(r.today, "2026-10-13");
@@ -218,8 +230,8 @@ test("script Google : statuts, dates texte ou cellules date, lignes invalides ig
   assert.equal(u.expiryDate, null);
   assert.equal(post({ lastName: "Sans Date", birthDate: "2000-01-01" }).status, "not_found");
   assert.equal(post({ lastName: "Erreur", birthDate: "1990-02-28" }).status, "not_found", "31/02 : ligne ignorée, jamais devinée");
-  assert.equal(loadScript(SHEET, "2035-03-13T10:00:00Z").post({ lastName: "Dupont", birthDate: "1992-05-14" }).certificates[0].status, "expired", "valable jusqu'au dernier jour inclus");
-  assert.equal(loadScript(SHEET, "2035-03-12T20:00:00Z").post({ lastName: "Dupont", birthDate: "1992-05-14" }).certificates[0].status, "valid");
+  assert.equal(loadScript(SHEET, "2035-03-13T10:00:00Z").post({ lastName: "Dupont", birthDate: "1992-05-14" }).certificates[1].status, "expired", "valable jusqu'au dernier jour inclus");
+  assert.equal(loadScript(SHEET, "2035-03-12T20:00:00Z").post({ lastName: "Dupont", birthDate: "1992-05-14" }).certificates[1].status, "valid");
 });
 
 test("script Google : « Statut » Actif / Annulé, et l'ancienne colonne « Révoqué » oui / non reste comprise", () => {
@@ -294,9 +306,11 @@ test("script Google : « Préparer la feuille » — colonnes inutiles retirées
   assert.match(res.kept.join(" "), /« Remarques » contient des données : colonne conservée/);
   assert.match(res.done.join("\n"), /colonnes retirées : « Prénom », « Autres noms », « Validité \(automatique\) », « E-mail \(interne\) »/);
   assert.deepEqual(g[1].slice(0, 9).map(String), ["1", "Van Osselt Rayane", String(D(2004, 8, 8)), "Nacelle élévatrice", "Français", String(D(2025, 1, 1)), String(D(2025, 1, 1)), String(D(2026, 1, 1)), "Actif"]);
-  assert.deepEqual([g[2][0], g[2][1], g[2][3], g[2][4], String(g[2][6])], ["NA-EL-012", "Potârniche Valeriu", "Nacelle élévatrice", "Français", String(D(2025, 5, 17))]);
-  assert.deepEqual([g[3][0], g[3][1], g[3][8]], ["NA-EL-001", "Dupont Marie", "Actif"], "prénom déjà dans le nom : pas répété");
-  ["2 numéro(s) de certificat remis au format", "2 date(s) de délivrance remplie(s)", "3 langue(s) indiquée(s) : Français", "1 prénom(s) ajouté(s)"].forEach((t) => assert.ok(res.done.join("\n").includes(t), t));
+  assert.deepEqual([g[3][0], g[3][1], g[3][3], g[3][4], String(g[3][6])], ["NA-EL-012", "Potârniche Valeriu", "Nacelle élévatrice", "Français", String(D(2025, 5, 17))]);
+  assert.deepEqual([g[2][0], g[2][1], g[2][8]], ["NA-EL-001", "Dupont Marie", "Actif"], "prénom déjà dans le nom : pas répété");
+  assert.deepEqual(g.slice(1, 4).map((row) => row[5].toISOString().slice(0, 10)), ["2025-01-01", "2025-02-01", "2025-05-17"], "plus anciennes en haut");
+  assert.equal(g[3][9], "à rappeler", "une colonne conservée suit sa ligne pendant le tri");
+  ["2 numéro(s) de certificat remis au format", "2 date(s) de délivrance remplie(s)", "3 langue(s) indiquée(s) : Français", "1 prénom(s) ajouté(s)", "lignes triées par date de formation"].forEach((t) => assert.ok(res.done.join("\n").includes(t), t));
   assert.equal(sheet.rules.length, 5, "couleurs de validité et de statut");
   const r = post({ lastName: "Potârniche", birthDate: "1979-04-02" }).certificates[0];
   assert.deepEqual([r.certificateNumber, r.language, r.issueDate, r.status], ["NA-EL-012", "Français", "2025-05-17", "valid"]);

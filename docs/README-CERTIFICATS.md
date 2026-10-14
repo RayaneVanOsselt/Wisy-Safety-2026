@@ -90,7 +90,7 @@ de contact : **aucune erreur visible** pour les visiteurs.
 
 **Une ligne = un certificat.** Ajoutez, modifiez ou supprimez des lignes dans l'onglet `Certificats` : le site en
 tient compte dès la recherche suivante. Une personne qui a suivi trois formations a trois lignes (même nom, même
-date de naissance) ; la vérification les affiche toutes.
+date de naissance) ; la vérification les affiche toutes, de la plus ancienne à la plus récente.
 
 | Colonne | Contenu | Utilisée par le site ? |
 |---|---|---|
@@ -124,6 +124,8 @@ anglais / néerlandais courants…). Besoin d'un nom d'usage ou de naissance ? I
   - numéros au format **NA-EL-001** (« NA-EL012 », « NA-EL_015 », « NA-ELE-001 », « VCA_001 » → « NA-EL-012 »,
     « NA-EL-015 », « NA-EL-001 », « VCA-001 ») ;
   - date de délivrance vide = date de formation ; langue vide = Français ; statut vide = Actif ;
+  - lignes triées par **date de formation : les plus anciennes en haut, les plus récentes en bas** (à date égale, par
+    numéro). Ajoutez simplement les nouveaux certificats en bas ; relancez « Préparer » si vous en avez inséré au milieu ;
   - colonnes inutiles retirées (voir l'étape 2 ci-dessus).
 
 ### Astuces

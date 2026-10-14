@@ -60,7 +60,7 @@ test("aucun fichier orphelin : tout fichier hors « originaux » est utilisé pa
   const code = [];
   const collect = (dir, exts) => fs.readdirSync(path.join(ROOT, dir)).filter((n) => exts.some((e) => n.endsWith(e))).forEach((n) => code.push(read(dir + "/" + n)));
   collect(".", [".html"]); collect("css", [".css"]); collect("js", [".js"]); collect("js/assistant", [".js"]);
-  collect("scripts", [".js", ".py"]); collect("admin", [".html"]); collect("supabase/functions/chat", [".ts"]);
+  collect("scripts", [".js", ".py"]); collect("supabase/functions/chat", [".ts"]);
   const corpus = code.join("\n");
   /* Réserve volontaire : conservés pour un usage hors site (profil de réseau social, fiche Google). */
   const RESERVE = new Set(["assets/images/logo/logo-carre-500.png", "assets/README.md"]);

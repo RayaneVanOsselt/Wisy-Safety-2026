@@ -769,51 +769,51 @@
   m("fr", {
     "av.aria_trust": "Indice de confiance",
     "av.aria_reviews": "Avis clients",
-    "av.config_note": "Le dépôt d'avis n'est pas encore relié à Supabase (voir <code>js/supabase-config.js</code>)."
+    "av.config_note": "Le dépôt d'avis n'est pas encore relié à la feuille Google Sheets (voir <code>js/avis-config.js</code>)."
   });
   m("en", {
     "av.aria_trust": "Trust index",
     "av.aria_reviews": "Customer reviews",
-    "av.config_note": "Review submission is not yet connected to Supabase (see <code>js/supabase-config.js</code>)."
+    "av.config_note": "Review submission is not yet connected to the Google Sheets spreadsheet (see <code>js/avis-config.js</code>)."
   });
   m("nl", {
     "av.aria_trust": "Vertrouwensindex",
     "av.aria_reviews": "Klantbeoordelingen",
-    "av.config_note": "Het indienen van beoordelingen is nog niet gekoppeld aan Supabase (zie <code>js/supabase-config.js</code>)."
+    "av.config_note": "Het indienen van beoordelingen is nog niet gekoppeld aan het Google Sheets-bestand (zie <code>js/avis-config.js</code>)."
   });
   m("af", {
     "av.aria_trust": "Vertroue-indeks",
     "av.aria_reviews": "Kliëntresensies",
-    "av.config_note": "Die indiening van resensies is nog nie aan Supabase gekoppel nie (sien <code>js/supabase-config.js</code>)."
+    "av.config_note": "Die indiening van resensies is nog nie aan die Google Sheets-sigblad gekoppel nie (sien <code>js/avis-config.js</code>)."
   });
   m("ar", {
     "av.aria_trust": "مؤشر الثقة",
     "av.aria_reviews": "آراء العملاء",
-    "av.config_note": "لم يُربط إرسال الآراء بـ Supabase بعد (انظر <code>js/supabase-config.js</code>)."
+    "av.config_note": "لم يُربط إرسال الآراء بجدول Google Sheets بعد (انظر <code>js/avis-config.js</code>)."
   });
   m("bg", {
     "av.aria_trust": "Индекс на доверие",
     "av.aria_reviews": "Отзиви на клиенти",
-    "av.config_note": "Подаването на отзиви все още не е свързано със Supabase (вижте <code>js/supabase-config.js</code>)."
+    "av.config_note": "Подаването на отзиви все още не е свързано с таблицата в Google Sheets (вижте <code>js/avis-config.js</code>)."
   });
   m("de", {
     "av.aria_trust": "Vertrauensindex",
     "av.aria_reviews": "Kundenbewertungen",
-    "av.config_note": "Die Abgabe von Bewertungen ist noch nicht mit Supabase verbunden (siehe <code>js/supabase-config.js</code>)."
+    "av.config_note": "Die Abgabe von Bewertungen ist noch nicht mit der Google-Sheets-Tabelle verbunden (siehe <code>js/avis-config.js</code>)."
   });
   m("ro", {
     "av.aria_trust": "Indice de încredere",
     "av.aria_reviews": "Recenzii ale clienților",
-    "av.config_note": "Depunerea recenziilor nu este încă conectată la Supabase (vedeți <code>js/supabase-config.js</code>)."
+    "av.config_note": "Depunerea recenziilor nu este încă conectată la foaia Google Sheets (vedeți <code>js/avis-config.js</code>)."
   });
   m("it", {
     "av.aria_trust": "Indice di fiducia",
     "av.aria_reviews": "Recensioni dei clienti",
-    "av.config_note": "L'invio di recensioni non è ancora collegato a Supabase (vedi <code>js/supabase-config.js</code>)."
+    "av.config_note": "L'invio di recensioni non è ancora collegato al foglio Google Sheets (vedi <code>js/avis-config.js</code>)."
   });
   m("sl", {
     "av.aria_trust": "Indeks zaupanja",
     "av.aria_reviews": "Mnenja strank",
-    "av.config_note": "Oddaja mnenj še ni povezana s storitvijo Supabase (glejte <code>js/supabase-config.js</code>)."
+    "av.config_note": "Oddaja mnenj še ni povezana s preglednico Google Sheets (glejte <code>js/avis-config.js</code>)."
   });
 })();

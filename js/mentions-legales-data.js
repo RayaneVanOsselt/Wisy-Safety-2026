@@ -73,11 +73,12 @@
      et *.html, 2026-09-28) — jamais supposés. Aucun outil de mesure d'audience, aucun pixel publicitaire,
      aucun reCAPTCHA, aucune police tierce (polices auto-hébergées, voir css/fonts.css). */
   var PROCESSORS = [
-    { name: "EmailJS", role: "Acheminement des e-mails transactionnels (formulaire de contact, notification admin optionnelle sur nouvel avis)", evidence: "contact.html, avis.html, js/reviews.js, js/peb.js, js/coordination.js — cdn.jsdelivr.net/npm/@emailjs/browser, clé publique dans js/supabase-config.js" },
-    { name: "Supabase", role: "Hébergement de la base de données des avis clients (avis.html) ; l'e-mail du déposant n'est jamais exposé par la vue publique (Row Level Security)", evidence: "js/supabase-config.js, js/reviews.js" },
+    { name: "EmailJS", role: "Acheminement des e-mails transactionnels (formulaires de contact, coordination, PEB et demande d'inscription)", evidence: "contact.html, inscription.html, coordination.html, peb-wallonie-bruxelles.html, js/registration.js, js/peb.js, js/coordination.js — cdn.jsdelivr.net/npm/@emailjs/browser, clé publique dans js/supabase-config.js" },
+    /* 2026-10-14 : les avis clients ont quitté Supabase pour une feuille Google Sheets privée. */
+    { name: "Google Sheets + Apps Script", role: "Tableau privé des avis clients (avis.html) : un avis envoyé arrive « En attente » ; le script ne transmet au site que les avis « Confirmé », jamais l'e-mail ; il prévient l'équipe par e-mail de chaque nouvel avis", evidence: "js/avis-config.js, js/avis-core.js, js/reviews.js, google-sheets/avis.gs" },
     { name: "Google Maps (embed)", role: "Carte intégrée en page d'accueil UNIQUEMENT, chargée seulement après consentement « Fonctionnalités » (sinon iframe src=\"about:blank\")", evidence: "index.html data-consent-src, js/cookie-consent.js applyConsent()" },
     /* Ajout du 2026-09-30 (audit de la politique de confidentialité) : oublié dans la liste d'origine. */
-    { name: "jsDelivr (CDN)", role: "Fournit les bibliothèques EmailJS et Supabase ; reçoit l'adresse IP du visiteur au téléchargement", evidence: "contact.html, avis.html, coordination.html, peb-wallonie-bruxelles.html — balises <script src=\"https://cdn.jsdelivr.net/…\"> (SRI)" }
+    { name: "jsDelivr (CDN)", role: "Fournit la bibliothèque EmailJS ; reçoit l'adresse IP du visiteur au téléchargement", evidence: "contact.html, inscription.html, coordination.html, peb-wallonie-bruxelles.html — balises <script src=\"https://cdn.jsdelivr.net/…\"> (SRI)" }
   ];
 
   /* Stockage navigateur RÉEL (grep de tout le dépôt, revérifié le 2026-09-30) — 9 clés au total, toutes de même

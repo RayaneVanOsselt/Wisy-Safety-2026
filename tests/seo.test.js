@@ -236,7 +236,7 @@ test("pages techniques (404, admin, maquettes header/footer) : noindex ; 404 uti
 
 /* ------------------------------------------------------------------ polices, icônes */
 test("polices auto-hébergées : plus aucune requête Google Fonts ; chaque fichier @font-face et chaque preload existe", () => {
-  const pages = PUBLIC.concat(["404.html", "admin/avis.html"]);
+  const pages = PUBLIC.concat(["404.html"]);
   pages.forEach((f) => assert.doesNotMatch(read(f), /fonts\.(googleapis|gstatic)\.com/, f + " : plus de Google Fonts"));
   const css = read("css/fonts.css");
   const files = [...css.matchAll(/url\("\.\.\/(assets\/fonts\/[^"]+)"\)/g)].map((m) => m[1]);

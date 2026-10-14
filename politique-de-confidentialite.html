@@ -518,7 +518,7 @@ a.f-c-value:hover{color:var(--turquoise)}
             <div class="lg-fact"><dt data-i18n="pp.f_data">Données</dt><dd data-i18n="pp.avis_data">Prénom et adresse e-mail (obligatoires) ; nom ou initiale, entreprise ou fonction et titre (facultatifs) ; note et commentaire.</dd></div>
             <div class="lg-fact"><dt data-i18n="pp.f_purpose">Finalité</dt><dd data-i18n="pp.avis_purpose">Modérer puis publier votre avis. Sont publiés : le prénom, le nom ou l'initiale et l'entreprise ou la fonction s'ils sont renseignés, la note, le titre, le commentaire et la date. L'adresse e-mail n'est jamais publiée ; elle sert à la gestion de votre avis et à limiter les envois abusifs.</dd></div>
             <div class="lg-fact"><dt data-i18n="pp.f_basis">Base juridique</dt><dd data-i18n="pp.avis_basis">Votre consentement à la publication, donné par la case à cocher du formulaire (art. 6.1.a RGPD).</dd></div>
-            <div class="lg-fact"><dt data-i18n="pp.f_recipients">Destinataires</dt><dd data-i18n="pp.avis_recipients">L'équipe Wisy Safety ; Supabase, qui héberge la base de données des avis ; les visiteurs du site, pour la partie publiée.</dd></div>
+            <div class="lg-fact"><dt data-i18n="pp.f_recipients">Destinataires</dt><dd data-i18n="pp.avis_recipients">L'équipe Wisy Safety ; Google, qui héberge le tableau privé des avis (Google Sheets) ; les visiteurs du site, pour la partie publiée.</dd></div>
             <div class="lg-fact"><dt data-i18n="pp.f_retention">Conservation</dt><dd><mark class="lg-todo" data-i18n="pp.todo_ret_reviews">[À COMPLÉTER — durée de conservation des avis publiés, refusés ou en attente]</mark></dd></div>
           </dl>
         </div>
@@ -559,7 +559,7 @@ a.f-c-value:hover{color:var(--turquoise)}
           <h3 class="lg-panel__title"><svg aria-hidden="true"><use href="#li-server"/></svg><span data-i18n="pp.t_nav">Consultation du site</span></h3>
           <p class="lg-panel__where" data-i18n="pp.assist_where">Toutes les pages</p>
           <dl class="lg-facts">
-            <div class="lg-fact"><dt data-i18n="pp.f_data">Données</dt><dd data-i18n="pp.nav_data">Pour afficher une page, votre navigateur communique nécessairement des données techniques (adresse IP, type de navigateur, page demandée) au serveur qui héberge le site et, sur les pages Contact, Avis, Coordination et PEB, au réseau jsDelivr qui fournit des bibliothèques techniques.</dd></div>
+            <div class="lg-fact"><dt data-i18n="pp.f_data">Données</dt><dd data-i18n="pp.nav_data">Pour afficher une page, votre navigateur communique nécessairement des données techniques (adresse IP, type de navigateur, page demandée) au serveur qui héberge le site et, sur les pages Contact, Inscription, Coordination et PEB, au réseau jsDelivr qui fournit des bibliothèques techniques.</dd></div>
             <div class="lg-fact"><dt data-i18n="pp.f_purpose">Finalité</dt><dd data-i18n="pp.nav_purpose">Afficher le site et assurer son bon fonctionnement.</dd></div>
             <div class="lg-fact"><dt data-i18n="pp.f_basis">Base juridique</dt><dd><mark class="lg-todo" data-i18n="pp.todo_basis_logs">[À COMPLÉTER — base juridique des journaux techniques]</mark></dd></div>
             <div class="lg-fact"><dt data-i18n="pp.f_retention">Conservation</dt><dd><mark class="lg-todo" data-i18n="pp.todo_ret_logs">[À COMPLÉTER — durée de conservation des journaux de l'hébergeur]</mark></dd></div>
@@ -601,18 +601,16 @@ a.f-c-value:hover{color:var(--turquoise)}
           </div></div>
         </details>
         <details class="lg-acc reveal">
-          <summary><span class="lg-acc__ic"><svg aria-hidden="true"><use href="#li-database"/></svg></span><span class="lg-acc__txt"><span class="lg-acc__name" translate="no">Supabase</span><span class="lg-acc__role" data-i18n="pp.p_supabase_role">Base de données des avis clients</span></span><svg class="lg-acc__chev" aria-hidden="true"><use href="#li-chevron"/></svg></summary>
+          <summary><span class="lg-acc__ic"><svg aria-hidden="true"><use href="#li-database"/></svg></span><span class="lg-acc__txt"><span class="lg-acc__name" translate="no">Google Sheets</span><span class="lg-acc__role" data-i18n="pp.p_gsheets_role">Tableau des avis clients</span></span><svg class="lg-acc__chev" aria-hidden="true"><use href="#li-chevron"/></svg></summary>
           <div class="lg-acc__body"><div>
-            <p data-i18n="pp.p_supabase_p1">Héberge les avis envoyés depuis la page Avis et fournit les avis approuvés affichés sur le site.</p>
-            <p data-i18n="pp.p_supabase_p2">Selon sa politique de confidentialité (consultée le 30/09/2026), Supabase Pte. Ltd. laisse au client le choix de la région d'hébergement et encadre ses transferts vers les États-Unis et Singapour par des clauses contractuelles types.</p>
-            <p><span data-i18n="pp.p_region_label">Région d'hébergement de notre projet :</span> <mark class="lg-todo" data-i18n="pp.todo_supabase_region">[À COMPLÉTER — région d'hébergement du projet Supabase]</mark></p>
-            <a class="lg-ext" href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer"><span data-i18n="pp.p_policy_link">Politique de confidentialité du prestataire</span><svg aria-hidden="true"><use href="#li-external"/></svg></a>
+            <p data-i18n="pp.p_gsheets_p1">Héberge, dans un tableau Google Sheets privé, les avis envoyés depuis la page Avis. Un script Google Apps Script y enregistre chaque nouvel avis, prévient l'équipe par e-mail et ne transmet au site que les avis validés, sans adresse e-mail.</p>
+            <a class="lg-ext" href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"><span data-i18n="pp.p_policy_link">Politique de confidentialité du prestataire</span><svg aria-hidden="true"><use href="#li-external"/></svg></a>
           </div></div>
         </details>
         <details class="lg-acc reveal">
           <summary><span class="lg-acc__ic"><svg aria-hidden="true"><use href="#li-globe"/></svg></span><span class="lg-acc__txt"><span class="lg-acc__name" translate="no">jsDelivr</span><span class="lg-acc__role" data-i18n="pp.p_jsdelivr_role">Diffusion de bibliothèques techniques</span></span><svg class="lg-acc__chev" aria-hidden="true"><use href="#li-chevron"/></svg></summary>
           <div class="lg-acc__body"><div>
-            <p data-i18n="pp.p_jsdelivr_p1">Réseau de diffusion de contenu (CDN) qui fournit les bibliothèques EmailJS et Supabase sur les pages Contact, Avis, Coordination et PEB. Il reçoit votre adresse IP lorsque votre navigateur télécharge ces fichiers.</p>
+            <p data-i18n="pp.p_jsdelivr_p1">Réseau de diffusion de contenu (CDN) qui fournit la bibliothèque EmailJS sur les pages Contact, Inscription, Coordination et PEB. Il reçoit votre adresse IP lorsque votre navigateur télécharge ces fichiers.</p>
             <a class="lg-ext" href="https://www.jsdelivr.com/terms/privacy-policy" target="_blank" rel="noopener noreferrer"><span data-i18n="pp.p_policy_link">Politique de confidentialité du prestataire</span><svg aria-hidden="true"><use href="#li-external"/></svg></a>
           </div></div>
         </details>
@@ -645,7 +643,6 @@ a.f-c-value:hover{color:var(--turquoise)}
       <p class="reveal" data-i18n="pp.s5_p1">Certains prestataires peuvent traiter des données en dehors de l'Espace économique européen :</p>
       <ul class="lg-datalist">
         <li class="reveal"><strong translate="no">EmailJS</strong><span data-i18n="pp.s5_emailjs">Serveurs situés aux États-Unis ; clauses contractuelles types, selon la politique du prestataire.</span></li>
-        <li class="reveal"><strong translate="no">Supabase</strong><span data-i18n="pp.s5_supabase">Selon la région d'hébergement choisie ; transferts éventuels vers les États-Unis et Singapour encadrés par des clauses contractuelles types, selon la politique du prestataire.</span></li>
         <li class="reveal"><strong translate="no">jsDelivr · Google</strong><span data-i18n="pp.s5_others">Services internationaux : les conditions de transfert sont décrites dans leurs politiques respectives, accessibles depuis la section précédente.</span></li>
       </ul>
       <p class="reveal" data-i18n="pp.s5_p2">Ces transferts doivent reposer sur l'une des garanties prévues aux articles 44 à 49 du RGPD. Vous pouvez obtenir une copie des garanties applicables en nous écrivant.</p>
@@ -795,11 +792,11 @@ a.f-c-value:hover{color:var(--turquoise)}
       <h2 class="reveal" data-i18n="pp.s10_title">Comment vos données sont-elles protégées ?</h2>
       <p class="reveal" data-i18n="pp.s10_p1">Mesures techniques effectivement en place sur le site :</p>
       <ul class="lg-checks" data-stagger>
-        <li class="reveal"><svg aria-hidden="true"><use href="#li-check"/></svg><span data-i18n="pp.sec1">La base des avis applique des règles de sécurité ligne par ligne : le public peut seulement envoyer un avis en attente et lire les avis approuvés, sans jamais accéder aux adresses e-mail.</span></li>
+        <li class="reveal"><svg aria-hidden="true"><use href="#li-check"/></svg><span data-i18n="pp.sec1">Le tableau des avis reste privé : le public peut seulement envoyer un avis, qui reste en attente, et lire les avis validés, sans jamais accéder aux adresses e-mail.</span></li>
         <li class="reveal"><svg aria-hidden="true"><use href="#li-check"/></svg><span data-i18n="pp.sec2">Chaque avis est relu avant publication et une même adresse e-mail ne peut pas envoyer plus de 3 avis par heure.</span></li>
         <li class="reveal"><svg aria-hidden="true"><use href="#li-check"/></svg><span data-i18n="pp.sec3">Aucune clé secrète ne figure dans le code public du site : seules des clés publiques, conçues pour être utilisées dans un navigateur, y sont présentes.</span></li>
         <li class="reveal"><svg aria-hidden="true"><use href="#li-check"/></svg><span data-i18n="pp.sec4">Les bibliothèques externes sont chargées dans une version figée, avec un contrôle d'intégrité qui bloque tout fichier modifié.</span></li>
-        <li class="reveal"><svg aria-hidden="true"><use href="#li-check"/></svg><span data-i18n="pp.sec5">Les formulaires comportent un champ piège contre les envois automatisés, et les échanges avec EmailJS et Supabase passent par des connexions chiffrées (HTTPS).</span></li>
+        <li class="reveal"><svg aria-hidden="true"><use href="#li-check"/></svg><span data-i18n="pp.sec5">Les formulaires comportent un champ piège contre les envois automatisés, et les échanges avec EmailJS et Google passent par des connexions chiffrées (HTTPS).</span></li>
       </ul>
       <p class="reveal" data-i18n="pp.s10_p2">Aucun système n'étant infaillible, nous vous recommandons de ne pas transmettre de données sensibles (par exemple relatives à votre santé) via les formulaires du site.</p>
     </section>

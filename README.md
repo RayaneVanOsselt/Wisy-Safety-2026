@@ -14,9 +14,8 @@ et sans rien à installer pour le mettre en ligne.
 | `sitemap.xml`, `robots.txt`, `favicon.ico` | Fichiers que les moteurs de recherche et les navigateurs cherchent à la racine (les deux premiers sont **générés**, voir plus bas). |
 | `css/`, `js/` | Styles et scripts. |
 | `assets/` | Polices, images, icônes, vidéo et `originaux/` (photos d'origine). Rangement expliqué dans [assets/README.md](assets/README.md). |
-| `admin/` | Page de modération des avis (non indexée par Google). |
-| `supabase/` | Base des avis (`schema.sql`, `harden-admin.sql`), table optionnelle des sessions (`sessions.sql`) et fonction optionnelle de l'assistant IA. |
-| `google-sheets/` | Script à coller dans la feuille Google Sheets du **registre des certificats** (`certificats.gs`). |
+| `supabase/` | Options non utilisées par défaut : table des sessions (`sessions.sql`, `harden-admin.sql`) et fonction de l'assistant IA. Les avis n'utilisent plus Supabase. |
+| `google-sheets/` | Scripts à coller dans les feuilles Google Sheets : **registre des certificats** (`certificats.gs`) et **avis clients** (`avis.gs`). |
 | `scripts/` | Petits outils qui génèrent le sitemap, les balises SEO, la copie de l'assistant et les images optimisées. |
 | `tests/` | Tests automatiques. |
 | `docs/` | Documentation détaillée, et `docs/maquettes/` (anciennes maquettes de l'en-tête et du pied de page, conservées pour mémoire). |
@@ -34,7 +33,7 @@ et sans rien à installer pour le mettre en ligne.
 | Brancher le calendrier Outlook | l'attribut `data-calendar-url` dans `agenda.html` | [docs/README-AGENDA.md](docs/README-AGENDA.md) |
 | Changer les faits PEB (Wallonie/Bruxelles), le tarif ou les sessions | `js/peb-data.js` | [docs/README-PEB.md](docs/README-PEB.md) |
 | Changer les services, l'équipe ou les affirmations non confirmées de **WiSy Coordination** | `js/coordination-data.js` | [docs/README-COORDINATION.md](docs/README-COORDINATION.md) |
-| Configurer les avis clients (Supabase, e-mail, anti-spam) | `js/supabase-config.js` | [docs/README-AVIS.md](docs/README-AVIS.md) |
+| **Publier ou refuser un avis client** | la feuille **Google Sheets** « Avis - Wisy Safety » : colonne Statut → « Confirmé » (aucun code à modifier) ; mise en service : `google-sheets/avis.gs` + l'adresse dans `js/avis-config.js` | [docs/README-AVIS.md](docs/README-AVIS.md) |
 | **Ajouter des personnes au registre des certificats** | la feuille **Google Sheets** du registre (aucun code à modifier) ; mise en service : `google-sheets/certificats.gs` + l'adresse dans `js/certificats-config.js` | [docs/README-CERTIFICATS.md](docs/README-CERTIFICATS.md) |
 | Changer les **suggestions animées de la barre de recherche** (« Rechercher « VCA de base » »…) et les pastilles « Essayez » (les 4 premières) | `js/i18n-data-search.js` (`search.fx_list`, 7 recherches séparées par « \| » dans chaque langue — chacune doit renvoyer au moins un résultat) ; comportement dans `js/search.js`, style dans `css/search.css` | — |
 | Corriger une traduction, ajouter un texte ou une page traduite | `js/i18n-data-*.js` (+ le HTML) | [docs/README-I18N.md](docs/README-I18N.md) |

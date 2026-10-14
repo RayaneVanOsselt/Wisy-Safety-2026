@@ -185,6 +185,20 @@ test("script Google : « Statut » Actif / Annulé, et l'ancienne colonne « Ré
   assert.equal(ctx.HEADER_MAP.validite, undefined, "la colonne calculée n'est jamais lue");
 });
 
+test("script Google : nom complet saisi dans « Nom » (reprise WordPress) — retrouvé par le nom de famille, le nom complet ou l'ordre inverse", () => {
+  const rows = [["Numéro de certificat", "Nom", "Prénom", "Date de naissance", "Formation", "Valable jusqu'au", "Statut"],
+    ["NA-EL-001", "El Hammouchi Ibrahim", "", D(1990, 1, 1), "Nacelle élévatrice", D(2030, 1, 1), "Actif"],
+    ["NA-EL-002", "Ekizoglu Tolga", "", D(1985, 6, 15), "Nacelle élévatrice", D(2030, 1, 1), "Actif"]];
+  const { post } = loadScript(rows);
+  ["El Hammouchi", "Hammouchi", "el-hammouchi", "El Hammouchi Ibrahim", "Ibrahim El Hammouchi"].forEach((n) =>
+    assert.equal(post({ lastName: n, birthDate: "1990-01-01" }).status, "found", n));
+  assert.equal(post({ lastName: "El", birthDate: "1990-01-01" }).status, "not_found", "fragment trop court");
+  assert.equal(post({ lastName: "Hammouchi", birthDate: "1990-01-02" }).status, "not_found", "la date reste exigée");
+  const tol = post({ lastName: "Tolga Ekizoglu", birthDate: "1985-06-15" });
+  assert.equal(tol.status, "found");
+  assert.equal(tol.certificates[0].holder, "Ekizoglu Tolga", "affiché tel que saisi");
+});
+
 test("script Google : saisies invalides refusées, corps illisible sans plantage", () => {
   const { post } = loadScript(SHEET);
   assert.deepEqual(post({ lastName: "", birthDate: "31/02/1990" }), { status: "invalid", fields: { lastName: "required", birthDate: "format" } });

@@ -139,7 +139,10 @@ suivie », « Date d'expiration », intitulés anglais / néerlandais courants�
 
 Le nom est comparé **sans tenir compte** des majuscules, accents, espaces, tirets et apostrophes
 (« Van-Össelt » = « van osselt »), mais **jamais approximativement** : « Dupon » ne trouve pas « Dupont ». Une
-personne qui saisit « Dupont Marie » (nom + prénom) est retrouvée aussi.
+personne qui saisit « Dupont Marie » (nom + prénom) est retrouvée aussi. Si la colonne « Nom » contient un nom en
+plusieurs mots (nom composé, ou nom complet « Nom Prénom » comme dans la reprise WordPress), chaque suite de mots suffit
+(« El Hammouchi », « Hammouchi », « Ibrahim El Hammouchi »…), jamais un fragment de moins de 3 lettres ; la date de
+naissance reste toujours exigée.
 
 ---
 

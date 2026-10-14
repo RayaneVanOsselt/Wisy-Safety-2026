@@ -188,11 +188,19 @@ function readRegistry_() {
     if (bad.length) { problems.push("Ligne " + line + " : " + bad.join(", ") + " — ligne ignorée par la vérification."); continue; }
     if (!rec.birth_date) problems.push("Ligne " + line + " : sans date de naissance, ce certificat ne peut pas être trouvé en ligne.");
     if (rec.expiry_date && rec.training_date && rec.expiry_date < rec.training_date) problems.push("Ligne " + line + " : la fin de validité est antérieure à la date de formation.");
-    var keys = [], add = function (k) { k = nameKey_(k); if (k && keys.indexOf(k) < 0) keys.push(k); };
+    var keys = [], add = function (k, minLen) { k = nameKey_(k); if (k && k.length >= (minLen || 1) && keys.indexOf(k) < 0) keys.push(k); };
     add(rec.last_name);
     add(rec.last_name + " " + rec.first_name);
     add(rec.first_name + " " + rec.last_name);
-    rec.other_last_names.split(/\s*[;,]\s*/).forEach(add);
+    rec.other_last_names.split(/\s*[;,]\s*/).forEach(function (n) { add(n); });
+    /* Nom en plusieurs mots (nom composé, ou « Nom Prénom » saisi en entier dans la colonne Nom) : chaque suite de mots
+       consécutifs suffit (« El Hammouchi », « Hammouchi »…), ainsi que le prénom placé devant (« Ibrahim El Hammouchi »).
+       Jamais un fragment de moins de 3 lettres (« El », « C »…). La date de naissance reste toujours exigée. */
+    var words = rec.last_name.split(/\s+/).filter(Boolean);
+    if (words.length > 1) {
+      for (var wi = 0; wi < words.length; wi++) for (var wj = wi + 1; wj <= words.length; wj++) add(words.slice(wi, wj).join(" "), 3);
+      for (var wr = 1; wr < words.length; wr++) add(words.slice(wr).concat(words.slice(0, wr)).join(" "));
+    }
     rec.keys = keys;
     rows.push(rec);
   }

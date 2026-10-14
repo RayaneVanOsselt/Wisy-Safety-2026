@@ -751,7 +751,7 @@ export const SITE_PAGES: SiteEntry[] = [
     "type": "page",
     "title": "Vérification des certificats",
     "url": "certificats.html",
-    "content": "Vérification en ligne d'un certificat de formation délivré par Wisy Safety : on saisit le nom de famille et la date de naissance du titulaire, et le registre indique aussitôt si le certificat est valide, expiré ou révoqué, avec la formation suivie, le numéro du certificat et ses dates. La recherche est exacte et la date de naissance n'est jamais affichée. Certificat introuvable, information à corriger ou confirmation écrite : contacter l'équipe Wisy Safety.",
+    "content": "Vérification en ligne d'un certificat de formation délivré par Wisy Safety : on saisit le nom de famille et la date de naissance du titulaire, et le registre indique aussitôt si le certificat est valide, expiré ou annulé, avec la formation suivie, le numéro du certificat et ses dates. La recherche est exacte et la date de naissance n'est jamais affichée. Certificat introuvable, information à corriger ou confirmation écrite : contacter l'équipe Wisy Safety.",
     "keywords": [
       "certificat",
       "certificats",

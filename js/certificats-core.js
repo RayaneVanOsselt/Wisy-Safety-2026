@@ -107,6 +107,7 @@
     return {
       holder: str(c.holder, 200) || "",
       training: str(c.training, 200) || "",
+      language: str(c.language, 60),
       certificateNumber: str(c.certificateNumber, 80),
       trainingDate: isoDate(c.trainingDate),
       issueDate: isoDate(c.issueDate),
@@ -215,6 +216,38 @@
     catch (e) { return new Intl.RelativeTimeFormat("fr", { numeric: "auto" }).format(n, unit); }
   }
 
+  /* Langue de la formation telle qu'écrite dans la feuille (« Français », « Nederlands »…) → code ISO, pour l'afficher
+     dans la langue du visiteur (« French », « Frans »…). Valeur inconnue : affichée telle quelle. */
+  var LANGUAGE_CODES = {
+    fr: ["francais", "french", "frans", "franzosisch", "francese", "franceza"],
+    nl: ["neerlandais", "nederlands", "dutch", "niederlandisch", "olandese", "flamand", "vlaams"],
+    en: ["anglais", "english", "engels", "englisch", "inglese", "engleza"],
+    de: ["allemand", "deutsch", "german", "duits", "tedesco", "germana"],
+    ar: ["arabe", "arabic", "arabisch", "araba"],
+    bg: ["bulgare", "bulgarian", "bulgaars", "bulgarisch"],
+    ro: ["roumain", "romanian", "romana", "roemeens", "rumanisch", "rumeno"],
+    it: ["italien", "italian", "italiano", "italiaans", "italienisch"],
+    sl: ["slovene", "slovenian", "slovenscina", "sloveens", "slowenisch"],
+    af: ["afrikaans"],
+    es: ["espagnol", "spanish", "espanol", "spaans", "spanisch"],
+    pt: ["portugais", "portuguese", "portugues", "portugees"],
+    pl: ["polonais", "polish", "polski", "pools", "polnisch"],
+    tr: ["turc", "turkish", "turkce", "turks", "turkisch"]
+  };
+
+  function languageLabel(value, lang) {
+    var raw = String(value || "").trim();
+    if (!raw) return "";
+    var key = raw.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]/g, "");
+    var code = null;
+    Object.keys(LANGUAGE_CODES).forEach(function (c) { if (!code && (key === c || LANGUAGE_CODES[c].indexOf(key) >= 0)) code = c; });
+    if (!code || typeof Intl === "undefined" || typeof Intl.DisplayNames !== "function") return raw;
+    try {
+      var name = new Intl.DisplayNames([lang || "fr"], { type: "language" }).of(code);
+      return name && name !== code ? name.charAt(0).toLocaleUpperCase(lang || "fr") + name.slice(1) : raw;
+    } catch (e) { return raw; }
+  }
+
   function formatDate(iso, lang) {
     if (!iso) return "";
     var p = iso.split("-");
@@ -247,6 +280,7 @@
     validityProgress: validityProgress,
     relative: relative,
     formatDate: formatDate,
+    languageLabel: languageLabel,
     formatStamp: formatStamp
   };
   root.WisyCertificatesCore = api;

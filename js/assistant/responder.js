@@ -475,7 +475,7 @@
       var certPage = Knowledge.byId("page-certificats");
       if (certPage) {
         return {
-          message: "Pour vérifier un certificat délivré par Wisy Safety, utilisez la page « Vérification des certificats » : saisissez le nom de famille et la date de naissance du titulaire, et le registre indique aussitôt si le certificat est valide, expiré ou révoqué. " +
+          message: "Pour vérifier un certificat délivré par Wisy Safety, utilisez la page « Vérification des certificats » : saisissez le nom de famille et la date de naissance du titulaire, et le registre indique aussitôt si le certificat est valide, expiré ou annulé. " +
             "Par confidentialité, je ne consulte pas ce registre moi-même : n’écrivez ici ni nom ni date de naissance. Certificat introuvable ou information à corriger : contactez l’équipe Wisy Safety.",
           cards: [navigationCard(certPage), contactCard()],
           suggestions: ["Que vais-je recevoir après ma formation ?", "Contacter Wisy Safety"],

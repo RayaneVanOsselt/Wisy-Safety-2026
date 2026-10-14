@@ -2,7 +2,7 @@
 
 La page **Vérification des certificats** (`certificats.html`) permet à un titulaire ou à un employeur de vérifier un
 certificat délivré par Wisy Safety : il saisit le **nom de famille** et la **date de naissance**, et le site affiche
-aussitôt le statut (**valide, expiré, révoqué** ou **validité à confirmer**), la formation, le numéro et les dates.
+aussitôt le statut (**valide, expiré, annulé** ou **validité à confirmer**), la formation, le numéro et les dates.
 
 Les certificats sont gérés dans **une feuille Google Sheets** (un tableur comme Excel, gratuit, dans votre compte
 Google). Vous ajoutez une ligne → le site est à jour **immédiatement**, sans republier le site. Pas de WordPress,
@@ -47,9 +47,16 @@ date ? ») et le script ne renvoie que la réponse — jamais la feuille, jamais
    Le menu **Wisy Safety** n'apparaît QUE dans la feuille (jamais dans l'éditeur), après un rechargement. S'il
    n'apparaît toujours pas, le script n'est pas rattaché à la feuille : recréez-le depuis la feuille (Extensions ›
    Apps Script), pas depuis script.google.com.
-5. L'onglet **Certificats** est prêt : en-têtes, format des dates JJ/MM/AAAA, liste oui/non pour « Révoqué »,
-   paramètres régionaux Belgique et fuseau horaire de Bruxelles. Si l'onglet contenait déjà vos données importées,
-   **rien n'est effacé** : seule la mise en forme change.
+5. L'onglet **Certificats** est prêt, avec 9 colonnes : Numéro de certificat · Nom · Date de naissance · Formation ·
+   Langue · Date de formation · Date de délivrance · Valable jusqu'au · Statut. En-têtes vert foncé, lignes alternées,
+   filtres, dates au format JJ/MM/AAAA (une date impossible est refusée à la saisie), listes **Actif / Annulé** et
+   **Français / Néerlandais / Anglais / Allemand**, « Valable jusqu'au » en couleur (vert = valide, orange = expire
+   dans les 90 jours, rouge = expiré), paramètres régionaux Belgique et fuseau horaire de Bruxelles. La feuille
+   s'arrête à la dernière colonne utile.
+   Si l'onglet contenait déjà des données, elles sont **gardées et corrigées** (voir « Préparer la feuille » plus bas) :
+   le « Prénom » éventuel est ajouté au « Nom », les colonnes vides ou inutiles (« Prénom », « Autres noms » vide,
+   anciennes colonnes grises « (interne) », ancienne « Validité (automatique) ») sont retirées, l'ancienne colonne
+   « Révoqué » oui / non devient « Statut ». Une colonne inconnue qui contient des données est conservée et signalée.
 
 ### Étape 3 — Publier le script comme « Application Web »
 
@@ -87,21 +94,21 @@ date de naissance) ; la vérification les affiche toutes.
 
 | Colonne | Contenu | Utilisée par le site ? |
 |---|---|---|
-| **Numéro de certificat** | Numéro imprimé sur le certificat (unique) | affichée |
-| **Nom** | Nom de famille, tel qu'écrit sur le certificat — **obligatoire** | sert à la recherche, affichée |
-| **Prénom** | | affichée |
-| **Autres noms** | Nom d'usage, de naissance… séparés par « ; » | sert à la recherche, **jamais affichée** |
+| **Numéro de certificat** | Numéro imprimé sur le certificat (unique), au format **NA-EL-001** (groupes séparés par des tirets, 3 chiffres à la fin) | affichée |
+| **Nom** | Nom et prénom, tels qu'écrits sur le certificat (ex. « Dupont Marie ») — **obligatoire** | sert à la recherche, affichée |
 | **Date de naissance** | JJ/MM/AAAA — **sans elle, le certificat est introuvable en ligne** | sert à la recherche, **jamais affichée** |
 | **Formation** | Intitulé de la formation — **obligatoire** | affichée |
+| **Langue** | Langue dans laquelle la formation a été donnée (liste ; une autre langue peut être tapée). Vide = Français | affichée (traduite dans la langue du visiteur) |
 | **Date de formation** | JJ/MM/AAAA | affichée |
-| **Date de délivrance** | JJ/MM/AAAA, seulement si elle diffère | affichée |
-| **Valable jusqu'au** | Dernier jour de validité, JJ/MM/AAAA. Vide = « validité à confirmer » | affichée + statut |
-| **Révoqué** | oui / non. « oui » = « Révoqué » sur le site, quelle que soit la date | statut |
-| Entreprise, E-mail, Téléphone, Notes **(interne)** | Pour votre suivi | **jamais lues par le site** |
+| **Date de délivrance** | JJ/MM/AAAA. Vide = même date que la formation (« Préparer la feuille » la recopie) | affichée |
+| **Valable jusqu'au** | Dernier jour de validité, JJ/MM/AAAA. Vide = « validité à confirmer ». En couleur : vert = valide, orange = expire dans les 90 jours, rouge = expiré | affichée + statut |
+| **Statut** | **Actif** (normal) ou **Annulé** : le site affiche « Annulé », quelle que soit la date | statut |
 
-Vous pouvez ajouter d'autres colonnes à droite (elles sont ignorées) ; ne renommez pas les colonnes utilisées par le
-site. Les intitulés d'un ancien fichier sont aussi reconnus (« Nom de famille », « Numéro de diplôme », « Formation
-suivie », « Date d'expiration », intitulés anglais / néerlandais courants…).
+Vous pouvez ajouter d'autres colonnes à droite (le site ne les lit jamais ; « Préparer la feuille » les garde si elles
+contiennent quelque chose) ; ne renommez pas les colonnes utilisées par le site. Les intitulés d'un ancien fichier sont
+aussi reconnus (« Nom de famille », « Numéro de diplôme », « Formation suivie », « Date d'expiration », intitulés
+anglais / néerlandais courants…). Besoin d'un nom d'usage ou de naissance ? Insérez une colonne **« Autres noms »**
+(noms séparés par « ; ») : la personne sera aussi retrouvée avec ces noms, qui ne sont jamais affichés.
 
 ### Le menu « Wisy Safety » de la feuille
 
@@ -111,13 +118,23 @@ suivie », « Date d'expiration », intitulés anglais / néerlandais courants�
   corrigée. À lancer après chaque gros ajout.
 - **Tester une recherche** : montre exactement ce que le public verrait pour un nom et une date (sans compter dans les
   limites d'essais).
-- **Préparer la feuille** : remet en forme l'onglet (sans rien effacer).
+- **Préparer / mettre en forme la feuille** : remet l'onglet en forme et corrige les données, puis affiche la liste
+  de ce qui a changé. Relançable à volonté (une 2e fois, elle ne change plus rien) :
+  - accents abîmés par un copier-coller (« Nacelle √©l√©vatrice » → « Nacelle élévatrice ») ;
+  - numéros au format **NA-EL-001** (« NA-EL012 », « NA-EL_015 », « NA-ELE-001 », « VCA_001 » → « NA-EL-012 »,
+    « NA-EL-015 », « NA-EL-001 », « VCA-001 ») ;
+  - date de délivrance vide = date de formation ; langue vide = Français ; statut vide = Actif ;
+  - colonnes inutiles retirées (voir l'étape 2 ci-dessus).
 
 ### Astuces
 
 - **Ajouter toute une liste depuis Excel** : copiez les lignes dans Excel, collez-les dans la feuille (mêmes colonnes,
-  même ordre). Ou Fichier › Importer › « Ajouter à la feuille actuelle ».
-- **Révoquer** : mettez « oui » dans la colonne Révoqué (inutile de supprimer la ligne).
+  même ordre : Numéro · Nom · Date de naissance · Formation · Langue · Date de formation · Date de délivrance ·
+  Valable jusqu'au · Statut). Ou Fichier › Importer › « Ajouter à la feuille actuelle ». Puis **Préparer la feuille**
+  (mise en forme + corrections) et **Vérifier les données**.
+- **Annuler un certificat** : choisissez « Annulé » dans la colonne Statut (inutile de supprimer la ligne).
+- **Repérer les renouvellements** : les dates « Valable jusqu'au » en **orange** expirent dans les 90 jours. Pour les
+  regrouper : icône de filtre de « Valable jusqu'au » › Trier de A à Z, ou Filtrer par couleur › orange.
 - **Sauvegarde** : Google garde l'historique des versions (Fichier › Historique des versions). Pour une copie Excel :
   Fichier › Télécharger › Microsoft Excel (.xlsx).
 - **Vous travaillez à plusieurs** : partagez la feuille avec les collègues concernés (Partager › leur adresse,
@@ -129,14 +146,17 @@ suivie », « Date d'expiration », intitulés anglais / néerlandais courants�
 
 | Affiché après une recherche **exacte** (nom + date de naissance) | Jamais affiché, jamais transmis |
 |---|---|
-| Prénom et nom du titulaire | Date de naissance, autres noms |
-| Formation suivie, numéro du certificat | Entreprise, e-mail, téléphone, notes |
+| Nom du titulaire (tel qu'écrit dans « Nom ») | Date de naissance, autres noms |
+| Formation suivie, langue de la formation, numéro du certificat | Toute autre colonne de la feuille |
 | Dates de formation, de délivrance et de fin de validité | La feuille elle-même, une liste de personnes |
-| Statut : valide / expiré / révoqué / validité à confirmer | |
+| Statut : valide / expiré / annulé / validité à confirmer | |
 
 Le nom est comparé **sans tenir compte** des majuscules, accents, espaces, tirets et apostrophes
 (« Van-Össelt » = « van osselt »), mais **jamais approximativement** : « Dupon » ne trouve pas « Dupont ». Une
-personne qui saisit « Dupont Marie » (nom + prénom) est retrouvée aussi.
+personne qui saisit « Dupont Marie » (nom + prénom) est retrouvée aussi. Si la colonne « Nom » contient un nom en
+plusieurs mots (nom composé, ou nom complet « Nom Prénom » comme dans la reprise WordPress), chaque suite de mots suffit
+(« El Hammouchi », « Hammouchi », « Ibrahim El Hammouchi »…), jamais un fragment de moins de 3 lettres ; la date de
+naissance reste toujours exigée.
 
 ---
 
@@ -183,7 +203,7 @@ Le premier essai réel avec **votre** compte Google se fait à l'étape 5.
 | Je veux… | Où |
 |---|---|
 | Changer les limites d'essais ou le nom de l'onglet | En tête de `google-sheets/certificats.gs` (`CONFIG`), puis recoller le script (ci-dessous) |
-| Mettre à jour le script après une modification | Apps Script › coller la nouvelle version › Enregistrer › **Déployer › Gérer les déploiements › crayon › Version : Nouvelle version › Déployer** (l'URL ne change pas) |
+| Mettre à jour le script après une modification | 1. Apps Script › tout sélectionner › coller la nouvelle version de `google-sheets/certificats.gs` › Enregistrer. 2. **Déployer › Gérer les déploiements › crayon › Version : Nouvelle version › Déployer** (l'URL ne change pas). 3. Dans la feuille : **Wisy Safety › Préparer / mettre en forme la feuille** |
 | Changer l'adresse du script sur le site | `js/certificats-config.js` |
 | Changer les textes de la page (10 langues) | `js/i18n-data-certificats.js` (le français doit rester identique au HTML de `certificats.html`) |
 | Changer le style / les animations | `css/certificats.css` |
@@ -200,7 +220,9 @@ Après une modification du site : `node --test tests/*.test.js`.
 | La page affiche « Vérification en ligne bientôt disponible » | L'URL n'est pas dans `js/certificats-config.js`, ou l'onglet `Certificats` / les colonnes « Nom », « Date de naissance », « Formation » sont introuvables (menu Wisy Safety › Vérifier les données). |
 | La page affiche « Le registre ne répond pas » | Le déploiement n'est pas en « Qui a accès : Tout le monde » (Google renvoie une page de connexion), ou l'URL copiée n'est pas celle qui finit par `/exec`. |
 | J'ai modifié le script mais rien ne change | Il faut une **nouvelle version** du déploiement (§ 6). Les modifications de la **feuille**, elles, sont immédiates. |
-| Un certificat existe mais n'est pas trouvé | Vérifier la date de naissance de la ligne et l'orthographe du nom (menu › Tester une recherche) ; ajouter l'autre nom dans « Autres noms ». |
+| Un certificat existe mais n'est pas trouvé | Vérifier la date de naissance de la ligne et l'orthographe du nom (menu › Tester une recherche) ; si la personne utilise un autre nom, insérer une colonne « Autres noms » (§ 2). |
+| Des accents bizarres après un copier-coller (« √© » au lieu de « é ») | Menu **Wisy Safety › Préparer / mettre en forme la feuille** : les cellules sont réparées (le site affiche déjà le bon texte). |
+| « Numéro au format inhabituel » dans Vérifier les données | Le numéro ne suit pas le modèle NA-EL-001 (ex. une ligne de test « 1 ») : corrigez-le, ou lancez « Préparer la feuille » pour les fautes de format courantes. |
 | Une date s'affiche bizarrement (ex. 03/01 au lieu de 01/03) | Fichier › Paramètres › Paramètres régionaux : **Belgique**, puis ressaisir la date. « Préparer la feuille » règle cela automatiquement. |
 | « Trop de vérifications » pendant vos tests | Limite d'essais : attendre la fin de l'heure, ou utiliser « Tester une recherche » dans la feuille (sans limite). |
 

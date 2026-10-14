@@ -1192,7 +1192,7 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
                   <span class="rc-trust__item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-i18n="av.trust_time">2 minutes</span></span>
                 </div>
 
-                <p id="rc-config-note" hidden data-i18n-html="av.config_note">Le dépôt d'avis n'est pas encore relié à Supabase (voir <code>js/supabase-config.js</code>).</p>
+                <p id="rc-config-note" hidden data-i18n-html="av.config_note">Le dépôt d'avis n'est pas encore relié à la feuille Google Sheets (voir <code>js/avis-config.js</code>).</p>
               </form>
             </div>
 
@@ -1365,13 +1365,11 @@ textarea.rc-input{padding:.9rem 1rem;min-height:118px;resize:vertical;line-heigh
 })();
 </script>
 
-<!-- ==================== AVIS — Supabase + EmailJS + logique ==================== -->
-<!-- Configuration (valeurs publiques : URL + clé anon Supabase, clés publiques EmailJS) -->
-<script src="js/supabase-config.js"></script>
-<!-- SDK Supabase (v2) — enregistrement + lecture des avis approuvés -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0" integrity="sha384-JBR+x8blGwjDRO63aHCGiZMD4VNiTR4ZUGA+N6ZKLf3zNt1fK8IBpcgPaMrxqWBp" crossorigin="anonymous"></script>
-<!-- SDK EmailJS (v4) — notification admin facultative d'un nouvel avis -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js" integrity="sha384-SALc35EccAf6RzGw4iNsyj7kTPr33K7RoGzYu+7heZhT8s0GZouafRiCg1qy44AS" crossorigin="anonymous"></script>
+<!-- ==================== AVIS — feuille Google Sheets + logique ==================== -->
+<!-- Adresse du script Google de la feuille « Avis - Wisy Safety » (guide : docs/README-AVIS.md) -->
+<script src="js/avis-config.js"></script>
+<!-- Client de la feuille : envoi d'un avis (« En attente ») + lecture des avis « Confirmé » -->
+<script src="js/avis-core.js"></script>
 <!-- Logique Avis : notation étoiles, validation, envoi, stats, carrousel 3D -->
 <script src="js/reviews.js"></script>
 <!-- ============ Micro-interactions premium du formulaire d'avis ============ -->

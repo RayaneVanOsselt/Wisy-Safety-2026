@@ -1,7 +1,7 @@
 /* =========================================================================
    WISY SAFETY — Page Agenda · comportements de page (agenda.html)
    -------------------------------------------------------------------------
-   Petit script « colle » (le composant calendrier vit dans agenda-calendar.js ;
+   Petit script « colle » (le calendrier des sessions vit dans js/sessions-ui.js ;
    en-tête, révélations au scroll et compteurs sont dans le script commun de la page).
 
      • --ag-hh : hauteur réelle de l'en-tête collant → scroll-margin-top des ancres,
@@ -10,8 +10,9 @@
        (les lecteurs d'écran et le clavier arrivent au bon endroit) ;
      • [data-ag-assistant] : ouvre l'Assistant Wisy (repli : page Contact si indisponible) ;
      • [data-ag-sessions] : liste des sessions PUBLIÉES (js/sessions.js, source unique des dates) — filtre par
-       formation, inscription à UNE session (?formation=…&session=…), état vide honnête. Aucune date n'est écrite
-       dans la page : sans session publiée, on le dit et on renvoie vers le contact et les formations.
+       formation, places (« 9 places disponibles sur 10 » quand la feuille de réservation les a calculées, sinon la
+       capacité), inscription à UNE session (?formation=…&session=…), état vide honnête ; rafraîchie à chaque
+       « wisy:sessions » (places relues toutes les 45 s). Aucune date n'est écrite dans la page.
    ========================================================================= */
 (function () {
   "use strict";
@@ -80,10 +81,11 @@
 
       elList.innerHTML = all.filter(function (s) { return filter === "all" || s.training === filter; }).map(function (s) {
         var f = formationOf(s.training), fmt = Sessions.format(s, lang());
-        var full = s.status === "full" || s.seatsLeft === 0;
+        var full = !Sessions.isBookable(s);   // complète, inscriptions clôturées ou annulée : plus de bouton d'inscription
         var place = s.location || (f && f.venue === "centre" ? t("ag.sess_place_default", "Wisy Safety, Anderlecht") : "");
         var meta = [fmt.time, fmt.language, place].filter(Boolean);
-        var seats = full ? t("search.session_full", "Complet") : (s.seatsLeft != null ? t("search.session_seats", "Places disponibles : {n}").replace("{n}", s.seatsLeft) : "");
+        var UI = window.WisySessionsUI;
+        var seats = UI ? UI.seatsText(Sessions, s, t) : (full ? t("search.session_full", "Complet") : (s.seatsLeft != null ? t("search.session_seats", "Places disponibles : {n}").replace("{n}", s.seatsLeft) : ""));
         var action = full
           ? '<a class="ag-link" href="contact.html">' + esc(t("ag.enda_a2", "Nous contacter")) + "</a>"
           : '<a class="btn btn--outline ag-sess__cta" href="' + esc(Sessions.signupUrl(s, s.training)) + '">' + esc(t("ag.sess_signup", "S'inscrire à cette session")) + "</a>";
@@ -110,7 +112,8 @@
       var again = elFilters.querySelector('[data-ag-filter="' + filter + '"]'); if (again) again.focus();
     });
     document.addEventListener("i18n:changed", render);
-    Sessions.load().then(function () { ready = true; render(); });
+    document.addEventListener("wisy:sessions", render);
+    Sessions.load().then(function () { ready = true; render(); if (Sessions.startLive) Sessions.startLive(); });
   }
 
   /* Assistant Wisy */

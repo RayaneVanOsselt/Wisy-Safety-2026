@@ -209,6 +209,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 }
 </style>
 <link rel="stylesheet" href="css/formation-nacelles.css">
+<link rel="stylesheet" href="css/sessions.css">
 <noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
 </head>
 <body>
@@ -407,6 +408,23 @@ a.f-c-value:hover{color:var(--turquoise)}
           <dd data-i18n="dd.nacelle_fmt">Théorie + pratique</dd>
         </div>
       </dl>
+    </div>
+  </section>
+
+  <!-- ==================== 2 bis. PROCHAINES SESSIONS ====================
+       js/sessions-ui.js remplit ce bloc à partir de js/sessions.js (feuille de réservation ou js/sessions-data.js) :
+       aucune date n'est écrite ici. Masqué tant qu'aucune session n'est publiée. -->
+  <section class="wss-section" id="sessions" data-sessions-for="nacelle" aria-labelledby="nac-sess-t" hidden>
+    <div class="container">
+      <header class="wss-section__head">
+        <div>
+          <p class="wss-section__eyebrow" data-i18n="sess.block_eyebrow">Réservation en ligne</p>
+          <h2 class="wss-section__title" id="nac-sess-t" data-i18n="sess.block_title">Prochaines sessions</h2>
+          <p class="wss-section__lead" data-i18n="sess.block_lead">Choisissez une date : les places restantes sont recalculées à chaque réservation.</p>
+        </div>
+        <p class="wsc-live" data-wss-live hidden><span class="wsc-live__dot" aria-hidden="true"></span><span data-i18n="sess.live">Places mises à jour en direct</span></p>
+      </header>
+      <ul class="wss-list" data-wss-list></ul>
     </div>
   </section>
 
@@ -922,6 +940,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 <script src="js/i18n-data-search.js"></script>
 <script src="js/i18n-data-assistant.js"></script>
 <script src="js/i18n-data-nacelles.js"></script>
+<script src="js/i18n-data-sessions.js"></script>
 <script src="js/i18n.js"></script>
 <!-- Registre central de la formation (source unique des faits) + recherche globale -->
 <script src="js/trainings-data.js"></script>
@@ -938,5 +957,10 @@ a.f-c-value:hover{color:var(--turquoise)}
 <!-- Page : scènes automatiques (module réutilisable) puis logique de la page -->
 <script src="js/scenes.js"></script>
 <script src="js/formation-nacelles.js"></script>
+<!-- Prochaines sessions (places calculées par la feuille de réservation) -->
+<script defer src="js/supabase-config.js"></script>
+<script defer src="js/sessions-data.js"></script>
+<script defer src="js/sessions.js"></script>
+<script defer src="js/sessions-ui.js"></script>
 </body>
 </html>

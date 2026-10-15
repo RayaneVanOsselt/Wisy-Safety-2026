@@ -1,22 +1,27 @@
 # Page Agenda — `agenda.html`
 
-Page « Agenda des formations » (site statique, sans build). Elle affiche la **liste des sessions publiées**
-(lues dans `js/sessions.js`, voir [README-SESSIONS.md](README-SESSIONS.md)) et, en dessous, le composant qui
-accueillera le **calendrier Outlook** de Wisy Safety : il suffira de renseigner **une URL** (voir plus bas).
+Page « Agenda des formations » (site statique, sans build). Sa section `#agenda` affiche le **calendrier des
+formations** (mois par mois, une pastille par session avec ses places : « 9/10 ») et, en dessous, la **liste des
+sessions publiées** (filtre par formation). Les deux lisent `js/sessions.js` : sessions et places viennent de la
+**feuille de réservation** (voir [README-RESERVATIONS.md](README-RESERVATIONS.md)), ou du fichier de secours
+`js/sessions-data.js` (voir [README-SESSIONS.md](README-SESSIONS.md)).
 
 > ⚠ Aucune date, aucune disponibilité, aucune formation fictive n'est écrite dans le HTML — c'est une règle
-> (testée dans `tests/agenda.test.js` et `tests/sessions.test.js`). Les sessions viennent de `js/sessions-data.js`
-> (vide aujourd'hui : la page dit alors « Aucune session n'est publiée pour le moment », avec les boutons Contact et
-> Formations) ou de la table Supabase `training_sessions`.
+> (testée dans `tests/agenda.test.js` et `tests/sessions.test.js`).
+
+> **15/10/2026 — l'emplacement « calendrier Outlook publié » (iframe, `js/agenda-calendar.js`) a été retiré** : publier
+> un calendrier Outlook l'expose tel quel (titres, horaires, événements privés) et n'indique pas les places. Il est
+> remplacé par le calendrier ci-dessus, alimenté par la feuille. Outlook reste l'outil interne de Wisy Safety : la
+> feuille y synchronise un calendrier dédié (README-RESERVATIONS.md, § 4). Récupérable dans l'historique git si besoin.
 
 ## Fichiers
 
 | Fichier | Rôle |
 |---|---|
 | `agenda.html` | Page complète : chrome du site (en-tête, menu mobile, pied de page, scripts communs) + contenu |
-| `css/agenda.css` | Styles propres à la page (`.ag-*`) et au composant calendrier (`.agc*`) |
-| `js/agenda-calendar.js` | Composant **AgendaCalendarSection** (URL Outlook future, iframe isolé, états) |
-| `js/agenda.js` | Colle de page : `--ag-hh` (hauteur d'en-tête), sauts d'ancre accessibles, bouton « Assistant », **liste des sessions publiées** (filtre par formation, inscription à une session, état vide honnête) |
+| `css/agenda.css` | Styles propres à la page (`.ag-*`) |
+| `js/sessions-ui.js` · `css/sessions.css` | **Calendrier des formations** (`[data-sessions-calendar]`) : grille du mois, pastilles colorées selon les places, fiche de la session sélectionnée, actualisation toutes les 45 s |
+| `js/agenda.js` | Colle de page : `--ag-hh` (hauteur d'en-tête), sauts d'ancre accessibles, bouton « Assistant », **liste des sessions publiées** (filtre par formation, places « X disponibles sur Y », inscription à une session, état vide honnête) |
 | `js/sessions.js` · `js/sessions-data.js` | Source unique des dates (chargées par la page) |
 | `tests/agenda.test.js` | 24 tests : structure, honnêteté du contenu, charte, mouvement, accessibilité, composant, intégrations |
 
@@ -31,38 +36,16 @@ timeline « Tout ce qu'il vous faut… » → **Agenda** (`#agenda`, composant) 
 « Vous ne trouvez pas la session… ? » → CTA final (fond `#1B2D28`). Le turquoise n'existe que sur les deux
 `.btn--cta` (hero + final) ; toutes les formes décoratives sont en épinette / sarcelle / brume à très faible opacité.
 
-## Brancher le calendrier Outlook (le jour venu)
+## Calendrier des formations
 
-1. Dans Outlook (Microsoft 365) : **Paramètres → Calendrier → Calendriers partagés → Publier un calendrier**, choisir le
-   calendrier Wisy Safety et le niveau « peut voir tous les détails » (ou « disponibilités seulement » pour ne pas
-   exposer les titres), puis copier le **lien HTML** (`https://outlook.office365.com/owa/calendar/…/calendar.html`).
-2. Dans `agenda.html`, section `#agenda`, renseigner l'attribut :
-
-   ```html
-   <div class="agc" data-agenda-calendar data-calendar-url="https://outlook.office365.com/owa/calendar/…/calendar.html" …>
-   ```
-
-   (ou, pour tout le site, `AGENDA_CALENDAR_URL` dans `window.WISY_CONFIG`, `js/supabase-config.js` ; l'attribut a priorité).
-3. C'est tout : l'état vide est remplacé par l'agenda. Aucun autre fichier à modifier.
-
-**Ce que fait le composant** (voir l'en-tête de `js/agenda-calendar.js`)
-
-- l'URL doit être en **https**, sans identifiants ni port exotique, et son hôte doit être dans la liste blanche
-  (`outlook.office365.com`, `outlook.office.com`, `outlook.live.com`) ; pour un autre fournisseur, ajouter l'hôte
-  exact : `data-allowed-hosts="agenda.exemple.org"`. Une URL refusée n'affiche **aucune erreur** au visiteur : l'état
-  « à venir » reste en place ;
-- `<iframe>` **isolé** : `sandbox` (scripts + origine propre du calendrier + pop-ups sortants, **jamais** de navigation du
-  site parent), `referrerpolicy`, `title` accessible (`data-calendar-title`), chargé **quand la section approche de
-  l'écran** (`IntersectionObserver` + `loading="lazy"`) ;
-- états sur la racine (`data-state`) : `planned` → « Intégration Outlook prévue » · `loading` (`aria-busy`) · `ready` →
-  « Synchronisé avec Outlook » (seulement pour un hôte Outlook réellement chargé) · `slow` après 12 s ;
-- lien de secours « Ouvrir l'agenda dans un nouvel onglet » (`rel="noopener noreferrer"`) et lien vers la page Contact ;
-- hauteur responsive gérée en CSS (`.agc__slot`, `clamp(520px, 78vh, 780px)`), aucune barre horizontale sur mobile.
-
-**À vérifier au moment de la mise en ligne** : Microsoft peut interdire l'affichage en iframe selon la configuration du
-tenant (en-tête `X-Frame-Options` / `frame-ancestors`). Le navigateur ne signale pas ce blocage : si l'agenda reste blanc,
-le lien « Ouvrir dans un nouvel onglet » reste le repli. Si le site reçoit un jour une politique CSP, autoriser
-`frame-src https://outlook.office365.com`.
+- Mois affiché : celui de la première session réservable (sinon le mois courant) ; flèches mois précédent / suivant
+  (jamais avant le mois courant). Lundi en premier ; arabe : grille en miroir.
+- Pastilles : **vert** = places disponibles, **ambre** = dernières places (≤ 3 ou ≤ 20 %), **gris barré** = complet ou
+  inscriptions clôturées. Calendrier étroit (téléphone, colonne) : la pastille montre seulement « 9/10 » ; le nom complet
+  est dans l'étiquette accessible et dans la fiche.
+- Fiche de la session : date, horaires, lieu, langue, grand compteur « 9 / 10 », jauge (une case par place), bouton
+  **Réserver cette session** (`inscription.html?formation=…&session=…`) et la mention « disponibilité indicative ».
+- « Places mises à jour en direct » n'apparaît que si les places viennent de la feuille de réservation.
 
 ## Contenu : d'où viennent les textes et les chiffres
 
@@ -76,11 +59,8 @@ le lien « Ouvrir dans un nouvel onglet » reste le repli. Si le site reçoit un
   dédié » (l'équipe est joignable du lundi au jeudi, 10 h–16 h), « 100 % certifiées » (garde-fou existant : la formation
   Nacelles n'est pas confirmée comme certifiante ; la page renvoie vers la fiche de chaque formation) et
   « Calendrier complet 2025 » (obsolète).
-- Le statut « Agenda en cours de synchronisation » n'est **pas** affiché : rien n'est en cours de synchronisation ;
-  la page dit « Intégration Outlook prévue ».
-- Contenu **traduit dans les 10 langues** (`data-i18n` + `js/i18n-data-agenda.js`, clés `ag.*`) ; le composant calendrier
-  (`js/agenda-calendar.js`) retraduit ses statuts (`ag.st_*`) et le titre de l'iframe (`ag.cal_title`) à chaque changement de
-  langue. Les chiffres du bandeau de confiance sont les mêmes dans toutes les langues.
+- Contenu **traduit dans les 10 langues** (`data-i18n` + `js/i18n-data-agenda.js`, clés `ag.*` ; calendrier et places :
+  `js/i18n-data-sessions.js`, clés `sess.*`). Les chiffres du bandeau de confiance sont les mêmes dans toutes les langues.
 
 ## Intégrations
 

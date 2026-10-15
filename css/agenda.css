@@ -3,8 +3,8 @@
    -------------------------------------------------------------------------
    Les jetons (--epinette, --creme, --radius…), .btn, .container, .reveal et le
    chrome (en-tête, pied de page) viennent du bloc commun inliné dans la page.
-   Ici : uniquement la composition de l'Agenda. Préfixe .ag-* (page) et
-   .agc* (composant AgendaCalendarSection, voir js/agenda-calendar.js).
+   Ici : uniquement la composition de l'Agenda. Préfixe .ag-* (page). Le calendrier des
+   sessions (.wsc-*) et ses fiches (.wss-*) sont dans css/sessions.css (js/sessions-ui.js).
 
    Palette (rôles stricts)
      Épinette #1F6F64 titres, structure, icônes · Sarcelle #2F7D8C surfaces
@@ -289,55 +289,6 @@
   .ag-sess-card__actions .btn { justify-content: center; }
 }
 
-.agc {
-  background: #fff; border: 1px solid var(--ag-line); border-radius: var(--radius-lg);
-  box-shadow: 0 1px 2px rgba(27, 45, 40, .04), 0 18px 40px -26px rgba(27, 45, 40, .20); overflow: hidden;
-}
-.agc__bar {
-  display: flex; align-items: center; justify-content: space-between; gap: .75rem 1.25rem; flex-wrap: wrap;
-  padding: .95rem clamp(1rem, 2.4vw, 1.6rem); border-bottom: 1px solid var(--ag-line-soft);
-  background: linear-gradient(var(--ag-wash), var(--ag-wash)), #fff;
-}
-.agc__title { display: inline-flex; align-items: center; gap: .65rem; margin: 0; font: 600 .98rem/1.2 var(--font-titre); color: var(--noir-jais); }
-.agc__title svg { width: 20px; height: 20px; color: var(--epinette); }
-.agc__status { display: inline-flex; align-items: center; gap: .6rem; margin: 0; font-size: var(--fs-small); color: var(--granit); }
-.agc__dot { flex: none; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--granit-clair); }   /* creux = pas (encore) en ligne */
-.agc[data-state="loading"] .agc__dot, .agc[data-state="slow"] .agc__dot { border-color: var(--brume); }
-.agc[data-state="ready"] .agc__dot { border-color: var(--brume); background: var(--brume); }
-
-.agc__empty { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); align-items: center; gap: clamp(1.75rem, 4.5vw, 4rem); padding: clamp(2rem, 5vw, 3.75rem) clamp(1.25rem, 4vw, 3.5rem); }
-.agc__empty[hidden], .agc__frame[hidden], .agc [hidden] { display: none; }
-.agc__art { width: 100%; max-width: 330px; margin-inline: auto; }
-.agc__art svg { display: block; width: 100%; height: auto; overflow: visible; }
-.agc__art .a-shadow { fill: rgba(27, 45, 40, .07); }
-.agc__art .a-sheet { fill: #fff; stroke: rgba(94, 109, 106, .35); stroke-width: 1.5; }
-.agc__art .a-band { fill: rgba(31, 111, 100, .13); }
-.agc__art .a-ring { fill: none; stroke: var(--epinette); stroke-width: 3.5; stroke-linecap: round; }
-.agc__art .a-tick { stroke: var(--epinette); stroke-width: 3.5; stroke-linecap: round; fill: none; }
-.agc__art .a-hand { stroke: var(--epinette); stroke-width: 3.5; stroke-linecap: round; fill: none; }
-.agc__art .a-cell { fill: rgba(47, 125, 140, .17); }
-.agc__art .a-cell--hi { fill: rgba(63, 166, 155, .42); }
-.agc__art .a-clock { fill: #fff; }
-.agc__art .a-pin { fill: var(--epinette); }
-.agc__art .a-pin-hole { fill: #fff; }
-.agc__empty h3 { margin: 0 0 .7rem; font-size: clamp(1.4rem, 2.6vw, 2rem); letter-spacing: -.015em; text-wrap: balance; }
-.agc__empty p { max-width: 50ch; margin: 0; color: var(--granit); line-height: 1.65; }
-.agc__facts { display: flex; flex-wrap: wrap; gap: .5rem .6rem; margin: 1.4rem 0 0; }
-.agc__facts li { display: inline-flex; align-items: center; gap: .45rem; padding: .4rem .8rem; border: 1px solid var(--ag-line); border-radius: var(--radius-pill); font-size: .84rem; color: var(--granit); }
-.agc__facts svg { width: 15px; height: 15px; color: var(--epinette); }
-.agc__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.6rem; margin-top: 1.75rem; }
-
-/* Mode « agenda intégré » (dès qu'une URL sûre est configurée) */
-.agc__frame { position: relative; contain: content; }
-.agc__slot { position: relative; min-height: clamp(520px, 78vh, 780px); background: #fff; }
-.agc__iframe { position: absolute; inset: 0; display: block; width: 100%; height: 100%; max-width: 100%; border: 0; }
-.agc__loader { position: absolute; inset: 0; z-index: 0; display: grid; place-content: center; gap: .9rem; justify-items: center; color: var(--granit); font-size: var(--fs-small); }
-.agc__loader::before { content: ""; width: 44px; height: 3px; border-radius: 3px; background: var(--brume); opacity: .55; animation: ag-load 1.4s ease-in-out infinite alternate; }
-@keyframes ag-load { from { transform: scaleX(.4); opacity: .3; } to { transform: scaleX(1); opacity: .7; } }
-.agc__frame[aria-busy="false"] .agc__loader { display: none; }
-.agc__fallback { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .4rem 1.25rem; padding: .35rem clamp(1rem, 2.4vw, 1.6rem); border-top: 1px solid var(--ag-line-soft); font-size: var(--fs-small); color: var(--granit); }
-.agc[data-state="slow"] .agc__fallback { background: rgba(47, 125, 140, .06); }
-
 /* ======================================================================
    6. COMMENT ÇA FONCTIONNE — trois étapes reliées par une ligne légère
    ====================================================================== */
@@ -440,8 +391,6 @@
   .ag-hero__grid, .ag-field__grid, .ag-help__grid { grid-template-columns: 1fr; }
   .ag-visual { max-width: 460px; margin-top: .5rem; }
   .ag-hero { padding-bottom: clamp(5.5rem, 16vw, 7rem); }
-  .agc__empty { grid-template-columns: 1fr; text-align: start; }
-  .agc__art { max-width: 240px; margin-inline: 0; }
   /* Timeline : ligne à gauche, panneaux empilés ; on ne bouge qu'en hauteur */
   .ag-timeline::before { left: 22px; }
   .ag-step { grid-template-columns: 44px 1fr; column-gap: 1.1rem; }
@@ -459,13 +408,12 @@
 @media (max-width: 640px) {
   .ag-benefits { grid-template-columns: 1fr; padding-bottom: 0; }
   .ag-benefit:nth-child(even) { margin-top: 0; }
-  .ag-hero__actions .btn, .agc__actions .btn, .ag-help__actions .btn, .ag-final__actions .btn { width: 100%; }
+  .ag-hero__actions .btn, .ag-help__actions .btn, .ag-final__actions .btn { width: 100%; }
   .ag-hero__actions .btn { min-height: 52px; }
   .ag-final__panel { text-align: start; }
   .ag-final__title, .ag-final__text { margin-inline: 0; }
   .ag-final__actions { justify-content: stretch; }
   .ag-contact__row { padding: .7rem .85rem; }
-  .agc__bar { padding-block: .85rem; }
 }
 @media (max-width: 380px) {
   .ag-trust__val { font-size: 1.4rem; }
@@ -479,7 +427,6 @@
   .ag-in, .ag-in--fade { opacity: 1; transform: none; animation: none; }
   .ag-board, .ag-chip { animation: none; }
   .ag-from-l:not(.in), .ag-from-r:not(.in) { transform: none; }
-  .agc__loader::before { animation: none; opacity: .6; }
   .ag-contact__row, .ag-contact__row::after, .ag-contact__go, .ag-link > span[aria-hidden] { transition: none; }
   .ag-contact__row:hover, .ag-contact__row:hover .ag-contact__go, .ag-link:hover > span[aria-hidden] { transform: none; }
 }

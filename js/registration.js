@@ -12,6 +12,10 @@
    l'i18n n'est pas prêt (textes français par défaut).
    Sessions : `inscription.html?formation=<id>&session=<id>` — la session est VÉRIFIÉE auprès de
    window.WisySessions (js/sessions.js, source unique des dates) : jamais une date lue dans l'adresse.
+   Le récapitulatif propose aussi les sessions à venir de chaque formation (liste déroulante, places restantes).
+   Réservation : si la feuille de réservation est branchée (WISY_CONFIG.RESERVATIONS_API_URL, js/reservations.js),
+   l'étape 4 RÉSERVE les places — la feuille les vérifie sous verrou, sa réponse seule fait foi ; sinon, la demande
+   part par e-mail (EmailJS) comme avant. Aucun paiement en ligne.
    Événements d'analyse (bus `wisy:analytics`, consentement géré par js/cookie-consent.js) :
    vca_registration_start (arrivée avec la VCA Base) · vca_registration_complete (commande initialisée).
    ========================================================================= */
@@ -85,6 +89,29 @@
     return found;
   }
   function sessionOf(trainingId) { return state.sessions[trainingId] ? findSession(state.sessions[trainingId]) : null; }
+  /* Identifiant de la formation sur le SITE (registre js/site-content.js) — celui des sessions et de la feuille. */
+  function siteIdOf(regId) {
+    var list = window.WisySite && window.WisySite.formations ? window.WisySite.formations() : [];
+    if (window.WisySite && window.WisySite.services) list = list.concat(window.WisySite.services());
+    for (var i = 0; i < list.length; i++) if (list[i].registrationId === regId) return list[i].id;
+    return regId;
+  }
+  /* Sessions réservables d'une formation du catalogue (ordre chronologique). */
+  function sessionsFor(regId) {
+    if (!Sessions) return [];
+    return Sessions.upcoming(Sessions.peek()).filter(function (s) { return DATA.resolveTrainingId(s.training) === regId && Sessions.isBookable(s); });
+  }
+  /* Places restantes CALCULÉES par la feuille pour la session choisie (null = inconnu : pas de limite côté navigateur). */
+  function seatsLimit(regId) {
+    var s = sessionOf(regId);
+    return s && s.live && s.seatsLeft != null ? s.seatsLeft : null;
+  }
+  /* Formations dont le nombre de participants dépasse les places restantes de la session choisie. */
+  function overbooked() {
+    return selectedIds().filter(function (id) { var lim = seatsLimit(id); return lim != null && state.trainings[id] > lim; });
+  }
+  var Booking = window.WisyReservations || null;
+  function bookingMode() { return !!(Booking && Booking.isConfigured(window.WISY_CONFIG || {})); }
   /* « Jeudi 5 novembre 2026 · 09:00 – 16:30 · Français » (Intl, langue du site) */
   function sessionText(s) {
     var f = Sessions.format(s, lang()), parts = [f.dateLong];
@@ -107,7 +134,7 @@
   /* Vérifie la session demandée par l'adresse et les sessions déjà mémorisées : une session inconnue, passée,
      complète ou annulée est retirée (jamais affichée comme réservée). */
   function initSessions() {
-    if (!Sessions || (!pendingSession && !Object.keys(state.sessions).length)) return;
+    if (!Sessions) return;
     Sessions.load().then(function () {
       var dropped = false;
       if (pendingSession) {
@@ -126,6 +153,21 @@
       save();
       renderSessionNote();
       renderAll();
+      if (Sessions.startLive) Sessions.startLive();
+    });
+    /* Places relues toutes les 45 s : une session devenue complète ou clôturée est retirée ; seuls le récapitulatif et
+       la barre sont redessinés (jamais les formulaires en cours de saisie). */
+    document.addEventListener("wisy:sessions", function () {
+      if (transmitted) return;   // demande déjà envoyée : le récapitulatif affiché reste celui de l'envoi
+      var dropped = false;
+      Object.keys(state.sessions).forEach(function (id) {
+        var s2 = findSession(state.sessions[id]);
+        if (!s2 || !Sessions.isBookable(s2)) { delete state.sessions[id]; dropped = true; }
+      });
+      if (dropped) { sessionNote = { kind: "gone" }; save(); renderSessionNote(); }
+      renderSummary();
+      updateBarAndCtas();
+      if (state.step === 4) renderFinalSummary();
     });
   }
 
@@ -203,7 +245,11 @@
     if (banner) banner.hidden = !(restored && !bannerDismissed && state.step === 1);
   }
 
+  /* Une fois la demande transmise (réservation ou e-mail), plus rien n'est écrit dans le navigateur : les données
+     personnelles ne doivent pas y revenir (ex. actualisation des places juste après l'envoi). */
+  var transmitted = false;
   function save() {
+    if (transmitted) return;
     try { localStorage.setItem(CONFIG.storageKey, JSON.stringify(state)); } catch (e) {}
   }
   function load() {
@@ -335,7 +381,15 @@
 
   /* validateStep(n[, focus]) -> bool. focus=true affiche/pointe les erreurs. */
   function validateStep(n, focus) {
-    if (n === 1) return selectedIds().length > 0;
+    if (n === 1) {
+      var over = overbooked();
+      if (over.length && focus) {
+        announce(t("sess.qty_over", "Il ne reste que {n} place(s) pour cette session : réduisez le nombre de participants ou choisissez une autre date.").replace("{n}", String(seatsLimit(over[0]))));
+        var sel = document.querySelector('#reg-summary [data-session-select="' + over[0] + '"]');
+        if (sel) sel.focus();
+      }
+      return selectedIds().length > 0 && !over.length;
+    }
     if (n === 2) return true; /* participants : facultatifs (voir bascule) */
     if (n === 3) return validateBilling(focus);
     if (n === 4) return validateBilling(false) && selectedIds().length > 0;
@@ -573,11 +627,16 @@
       var tr = DATA.getTraining(id);
       var qty = state.trainings[id];
       var priced = isPriced(tr);
+      var options = state.step < 4 ? sessionsFor(id) : [];
+      var picker = options.length > 0;
+      var lim = seatsLimit(id);
       return '<div class="reg-line" data-line="' + id + '">' +
         '<span class="reg-line__node">' + icon(tr.icon) + "</span>" +
         '<span class="reg-line__ref">' + escapeHtml(tr.code || "") + "</span>" +
         '<span class="reg-line__name">' + escapeHtml(loc(tr.name)) + "</span>" +
-        (sessionOf(id) ? '<span class="reg-line__session">' + icon("calendar") + '<span><b>' + t("reg.session_label", "Session") + "</b> · " + escapeHtml(sessionText(sessionOf(id))) + "</span></span>" : "") +
+        (picker ? sessionPickerHtml(id, tr, options, compact) : "") +
+        (!picker && sessionOf(id) ? '<span class="reg-line__session">' + icon("calendar") + '<span><b>' + t("reg.session_label", "Session") + "</b> · " + escapeHtml(sessionText(sessionOf(id))) + "</span></span>" : "") +
+        (lim != null && qty > lim ? '<span class="reg-line__warn" role="alert">' + icon("info") + escapeHtml(t("sess.qty_over", "Il ne reste que {n} place(s) pour cette session : réduisez le nombre de participants ou choisissez une autre date.").replace("{n}", String(lim))) + "</span>" : "") +
         '<span class="reg-line__meta">' +
           '<span class="reg-line__calc">' + (priced ? money(tr.priceCents) + " × " + qty : qty + " × " + t("reg.on_quote", "Sur devis")) + "</span>" +
           '<span class="reg-line__total">' + (priced ? money(lineTotalCents(id)) : t("reg.on_quote", "Sur devis")) + "</span>" +
@@ -586,9 +645,9 @@
           '<span class="reg-line__qty">' +
             '<button type="button" class="reg-line__qtybtn" data-qty="dec" data-id="' + id + '"' + (qty <= CONFIG.minQuantity ? " disabled" : "") + ' aria-label="' + t("reg.decrease", "Diminuer") + '">' + icon("minus") + "</button>" +
             '<span class="reg-line__qtyval" aria-hidden="true">' + qty + "</span>" +
-            '<button type="button" class="reg-line__qtybtn" data-qty="inc" data-id="' + id + '"' + (qty >= CONFIG.maxQuantity ? " disabled" : "") + ' aria-label="' + t("reg.increase", "Augmenter") + '">' + icon("plus") + "</button>" +
+            '<button type="button" class="reg-line__qtybtn" data-qty="inc" data-id="' + id + '"' + (qty >= CONFIG.maxQuantity || (lim != null && qty >= lim) ? " disabled" : "") + ' aria-label="' + t("reg.increase", "Augmenter") + '">' + icon("plus") + "</button>" +
           "</span>" +
-          (sessionOf(id) ? '<button type="button" class="reg-line__mini" data-remove-session="' + id + '">' + icon("calendar") + t("reg.session_remove", "Retirer la session") + "</button>" : "") +
+          (!picker && sessionOf(id) && state.step < 4 ? '<button type="button" class="reg-line__mini" data-remove-session="' + id + '">' + icon("calendar") + t("reg.session_remove", "Retirer la session") + "</button>" : "") +
           '<button type="button" class="reg-line__mini reg-line__mini--danger" data-remove="' + id + '">' + icon("trash") + t("reg.remove", "Retirer") + "</button>" +
         "</span>" +
       "</div>";
@@ -613,6 +672,21 @@
     return head + '<div class="reg-summary__inner">' +
       '<div class="reg-summary__list">' + lines + "</div>" + cartouche + cta +
     "</div>";
+  }
+
+  /* Liste déroulante des sessions d'une formation : « Date à convenir » + chaque session réservable, avec ses places. */
+  function sessionPickerHtml(id, tr, options, compact) {
+    var cur = state.sessions[id] || "", UI = window.WisySessionsUI;
+    var fid = "reg-sess-" + id + (compact ? "-c" : "");
+    var opts = '<option value="">' + escapeHtml(t("sess.pick_none", "Date à convenir")) + "</option>" + options.map(function (s) {
+      var f = Sessions.format(s, lang()), seats = UI ? UI.seatsText(Sessions, s, t) : "";
+      return '<option value="' + escapeHtml(s.id) + '"' + (s.id === cur ? " selected" : "") + ">" +
+        escapeHtml([f.dateShort, f.time, seats].filter(Boolean).join(" · ")) + "</option>";
+    }).join("");
+    return '<span class="reg-line__pick">' +
+      '<label class="reg-line__pick-k" for="' + fid + '">' + icon("calendar") + "<span>" + escapeHtml(t("sess.pick_label", "Session")) + "</span></label>" +
+      '<select class="reg-line__select" id="' + fid + '" data-session-select="' + id + '" aria-label="' +
+        escapeHtml(t("sess.pick_aria", "Choisir la session pour {training}").replace("{training}", loc(tr.name))) + '">' + opts + "</select></span>";
   }
 
   function ctaLabel() {
@@ -744,16 +818,17 @@
     var tv = document.getElementById("reg-final-total");
     if (tv) tv.innerHTML = grandTotalLabel(totals) + (totals.vatCents == null ? ' <small>' + t("reg.vat_excluded", "hors TVA à déterminer") + "</small>" : "");
     /* État du prestataire de paiement */
-    var ready = PaymentProvider.isReady();
-    applyRequestMode(!ready);
+    var ready = PaymentProvider.isReady(), booking = !ready && bookingMode();
+    applyStep4Mode(ready ? "payment" : booking ? "booking" : "request");
     var st = document.getElementById("reg-pay-status");
     if (st) {
-      st.innerHTML = icon(ready ? "check" : "info") + (ready
+      st.innerHTML = icon(ready || booking ? "check" : "info") + (ready
         ? t("reg.pay_ready", "Paiement en ligne disponible")
+        : booking ? escapeHtml(t("sess.book_status", "Places vérifiées en direct au moment de l'envoi"))
         : t("reg.req_status", "Réponse de l'équipe par e-mail"));
     }
     var btn = document.getElementById("reg-pay-btn");
-    if (btn && !requestSent) btn.disabled = selectedIds().length === 0;
+    if (btn && !requestSent && !bookingSent) btn.disabled = selectedIds().length === 0;
   }
 
   /* Sans prestataire de paiement, l'étape 4 ENVOIE la demande à Wisy Safety (au lieu d'un bouton « payer » sans effet) :
@@ -761,17 +836,26 @@
      ensuite à chaque changement de langue. */
   var REQUEST_KEYS = { "reg.step_payment": "reg.step_request", "reg.s4_sub": "reg.req_sub", "reg.pay_title": "reg.req_title",
     "reg.pay_desc": "reg.req_desc", "reg.pay_action": "reg.req_action", "reg.journey_4": "reg.step_request", "reg.journey_4s": "reg.req_journey_s" };
-  function applyRequestMode(on) {
+  /* Feuille de réservation branchée : l'étape 4 RÉSERVE les places (libellés « Réservation »). */
+  var BOOKING_KEYS = { "reg.step_payment": "sess.step_booking", "reg.s4_sub": "sess.s4_sub", "reg.pay_title": "sess.book_title",
+    "reg.pay_desc": "sess.book_desc", "reg.pay_action": "sess.book_action", "reg.journey_4": "sess.step_booking", "reg.journey_4s": "sess.journey_s" };
+  var STEP4_MODES = { payment: {}, request: REQUEST_KEYS, booking: BOOKING_KEYS };
+  function applyStep4Mode(mode) {
+    var map = STEP4_MODES[mode] || {};
     Object.keys(REQUEST_KEYS).forEach(function (payKey) {
-      var from = on ? payKey : REQUEST_KEYS[payKey], to = on ? REQUEST_KEYS[payKey] : payKey;
-      document.querySelectorAll('[data-i18n="' + from + '"]').forEach(function (el) {
-        el.setAttribute("data-i18n", to);
-        el.textContent = t(to, el.textContent);
+      var keys = [payKey, REQUEST_KEYS[payKey], BOOKING_KEYS[payKey]], to = map[payKey] || payKey;
+      keys.forEach(function (from) {
+        if (from === to) return;
+        document.querySelectorAll('[data-i18n="' + from + '"]').forEach(function (el) {
+          el.setAttribute("data-i18n", to);
+          el.textContent = t(to, el.textContent);
+        });
       });
     });
     var providers = document.querySelector(".reg-payment__providers");
-    if (providers) providers.hidden = on;
+    if (providers) providers.hidden = mode !== "payment";
   }
+  function applyRequestMode(on) { applyStep4Mode(on ? (bookingMode() ? "booking" : "request") : "payment"); }
 
   /* ======================================================================
      13. ABSTRACTION PAIEMENT (aucun service réel connecté)
@@ -917,6 +1001,7 @@
     try { window.emailjs.init({ publicKey: cfg.EMAILJS_PUBLIC_KEY }); } catch (e) { /* déjà initialisé */ }
     window.emailjs.send(cfg.EMAILJS_SERVICE_ID, cfg.EMAILJS_TEMPLATE_ID_CONTACT, params).then(function () {
       requestSent = true;
+      transmitted = true;
       if (btn) btn.removeAttribute("aria-busy");
       if (label) { label.setAttribute("data-i18n", "reg.req_sent_btn"); label.textContent = t("reg.req_sent_btn", "Demande envoyée"); }
       showRequestResult(true, order.reference, body);
@@ -929,11 +1014,104 @@
     });
   }
 
+  /* ----------------------------------------------------------------------
+     RÉSERVATION (feuille Google branchée) — la feuille vérifie les places SOUS VERROU et répond ; l'affichage du
+     navigateur n'est jamais une garantie. Un même identifiant de requête accompagne les nouveaux essais : après une
+     coupure réseau, la feuille renvoie la même référence au lieu de réserver deux fois.
+     ---------------------------------------------------------------------- */
+  var bookingSent = false, bookingRequestId = null;
+  function bookingItems() {
+    return selectedIds().map(function (id) {
+      return {
+        training: siteIdOf(id), sessionId: state.sessions[id] || null, quantity: state.trainings[id],
+        participants: state.participantsLater[id] ? null : (state.participants[id] || []).filter(function (p) { return p && (p.firstName || p.lastName); })
+          .map(function (p) { return { firstName: p.firstName || "", lastName: p.lastName || "", email: p.email || "" }; })
+      };
+    });
+  }
+  function trainingLabel(siteId) { var tr = DATA.getTraining(DATA.resolveTrainingId(siteId) || siteId); return tr ? loc(tr.name) : siteId; }
+  function bookingBox(stateName, lines, action) {
+    var box = requestBox();
+    if (!box) return;
+    box.hidden = false;
+    box.textContent = "";
+    box.setAttribute("data-state", stateName);
+    lines.forEach(function (txt, i) {
+      var el = document.createElement(i === 0 ? "span" : "span");
+      el.className = i === 0 ? "reg-book__lead" : "reg-book__line";
+      el.textContent = txt;
+      if (i > 0) box.appendChild(document.createElement("br"));
+      box.appendChild(el);
+    });
+    if (action) { box.appendChild(document.createElement("br")); box.appendChild(action); }
+    announce(lines.join(" "));
+  }
+  function submitBooking(order) {
+    if (bookingSent) return;
+    if (!validateStep(4)) { goToStep(3); return; }
+    if (!validateStep(1, false)) { goToStep(1); validateStep(1, true); return; }
+    var btn = document.getElementById("reg-pay-btn");
+    var label = btn && btn.querySelector("[data-i18n]");
+    if (btn) { btn.disabled = true; btn.setAttribute("aria-busy", "true"); }
+    if (label) label.textContent = t("sess.book_sending", "Réservation en cours…");
+    if (!bookingRequestId) bookingRequestId = Booking.newRequestId();
+    var restore = function () {
+      if (btn) { btn.disabled = false; btn.removeAttribute("aria-busy"); }
+      if (label) label.textContent = t(label.getAttribute("data-i18n"), label.textContent);
+    };
+    Booking.book({
+      config: window.WISY_CONFIG || {}, fetch: window.fetch ? window.fetch.bind(window) : null,
+      order: { requestId: bookingRequestId, lang: lang(), customer: state.customer, billing: state.billing, items: bookingItems() }
+    }).then(function (res) {
+      if (res.kind === "ok") {
+        bookingSent = true;
+        transmitted = true;
+        if (btn) btn.removeAttribute("aria-busy");
+        if (label) { label.setAttribute("data-i18n", "sess.book_sent_btn"); label.textContent = t("sess.book_sent_btn", "Réservation enregistrée"); }
+        var lines = [t("sess.book_ok", "Réservation enregistrée. Votre référence : {ref}. Un e-mail de confirmation vous est envoyé.").replace("{ref}", res.reference || "—")];
+        res.items.forEach(function (it) {
+          var s = it.sessionId ? findSession(it.sessionId) : null;
+          var key = it.status === "confirmed" ? "sess.book_line_confirmed" : it.status === "pending" ? "sess.book_line_pending" : "sess.book_line_request";
+          var fb = it.status === "confirmed" ? "{training} — {n} place(s) réservée(s) · {date}" : it.status === "pending" ? "{training} — {n} place(s) en attente de confirmation · {date}" : "{training} — demande enregistrée ({n} participant(s)), date à convenir";
+          lines.push(t(key, fb).replace("{training}", trainingLabel(it.training)).replace("{n}", String(it.seats || "")).replace("{date}", s ? sessionText(s) : ""));
+        });
+        bookingBox("ok", lines);
+        clearStorage();   /* les données personnelles ne restent pas dans le navigateur une fois transmises */
+        track("registration_booked", { items: res.items.length, sessions: res.items.filter(function (i) { return i.sessionId; }).length });
+        if (Sessions && Sessions.refresh) Sessions.refresh();
+        return;
+      }
+      restore();
+      if (res.kind === "seats") {
+        bookingRequestId = null;   // rien n'a été écrit : le prochain essai est une nouvelle demande
+        var plines = [t("sess.book_seats", "Les places ont changé entre-temps : rien n'a été réservé.")];
+        res.problems.forEach(function (p) {
+          var s = findSession(p.sessionId), name = s ? trainingLabel(s.training) : "", date = s ? sessionText(s) : "";
+          var key = { insufficient: "sess.book_insufficient", full: "sess.book_full", closed: "sess.book_closed" }[p.reason] || "sess.book_gone";
+          var fb = { insufficient: "{training} · {date} : il ne reste que {n} place(s).", full: "{training} · {date} : la session est complète.", closed: "{training} · {date} : les inscriptions sont clôturées." }[p.reason] || "{training} : cette session n'est plus disponible.";
+          plines.push(t(key, fb).replace("{training}", name).replace("{date}", date).replace("{n}", String(p.remaining == null ? 0 : p.remaining)));
+        });
+        var fix = document.createElement("button");
+        fix.type = "button"; fix.className = "reg-book__fix"; fix.setAttribute("data-goto", "1");
+        fix.textContent = t("sess.book_fix", "Modifier ma sélection");
+        bookingBox("error", plines, fix);
+        if (Sessions && Sessions.refresh) Sessions.refresh();
+        return;
+      }
+      if (res.kind === "invalid") { bookingRequestId = null; bookingBox("error", [t("sess.book_invalid", "Certaines coordonnées sont incomplètes : vérifiez-les puis réessayez.")]); goToStep(3, { focusInvalid: true }); validateBilling(true); return; }
+      if (res.kind === "rate_limited") { bookingRequestId = null; bookingBox("error", [t("sess.book_rate", "Trop de demandes envoyées depuis cette adresse e-mail. Réessayez plus tard ou appelez-nous au +32 2 318 86 59.")]); return; }
+      if (res.kind === "busy") { bookingRequestId = null; bookingBox("error", [t("sess.book_busy", "Beaucoup de réservations en même temps : réessayez dans quelques secondes. Rien n'a été réservé.")]); return; }
+      if (res.kind === "not_configured") { submitRequest(order); return; }   /* feuille retirée : la demande part par e-mail */
+      /* Coupure réseau : on ne sait pas si la feuille a enregistré — le même identifiant est gardé pour le nouvel essai. */
+      bookingBox("error", [t("sess.book_error", "La réservation n'a pas pu être confirmée (problème de connexion). Réessayez : vous ne serez pas inscrit deux fois.")]);
+    });
+  }
+
   function handlePayClick() {
     var res = initializePayment();
     if (res.status !== "ready") {
-      /* Sans prestataire : AUCUNE simulation de paiement — la demande est envoyée à Wisy Safety. */
-      submitRequest(res.order);
+      /* Sans prestataire : AUCUNE simulation de paiement. Feuille branchée → réservation ; sinon demande par e-mail. */
+      if (bookingMode()) submitBooking(res.order); else submitRequest(res.order);
       return;
     }
     /* Commande initialisée avec un prestataire réel : la conversion VCA Base est comptée ici (jamais avant :
@@ -1095,6 +1273,21 @@
       return;
     }
     if (el.id === "reg-consent") { state.consent = el.checked; save(); return; }
+    if (el.hasAttribute("data-session-select")) {
+      var sid = el.getAttribute("data-session-select"), v = el.value, where = el.closest("#reg-sheet-body") ? "#reg-sheet-body" : "#reg-summary";
+      if (v && SESSION_ID_RE.test(v) && findSession(v)) state.sessions[sid] = v; else delete state.sessions[sid];
+      sessionNote = null;
+      save();
+      renderSessionNote();
+      renderSummary();
+      updateBarAndCtas();
+      if (state.step === 2) renderParticipants();
+      var again = document.querySelector(where + ' [data-session-select="' + sid + '"]');
+      if (again) again.focus();
+      var chosen = sessionOf(sid);
+      announce(chosen ? t("sess.a11y_picked", "Session choisie : {date}.").replace("{date}", sessionText(chosen)) : t("sess.a11y_unpicked", "Date à convenir."));
+      return;
+    }
   }
 
   /* Bottom sheet */

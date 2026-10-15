@@ -1,7 +1,7 @@
 # Wisy Safety 2026
 
 Site du centre de formation à la sécurité **Wisy Safety** (Anderlecht, Bruxelles) : catalogue des formations,
-inscription en ligne, avis clients, Centre d'aide, agenda et assistant virtuel.
+inscription et réservation de places en ligne, avis clients, Centre d'aide, agenda et assistant virtuel.
 
 Le site est **100 % statique** : du HTML, du CSS et du JavaScript, sans framework, sans étape de « build »
 et sans rien à installer pour le mettre en ligne.
@@ -15,7 +15,7 @@ et sans rien à installer pour le mettre en ligne.
 | `css/`, `js/` | Styles et scripts. |
 | `assets/` | Polices, images, icônes, vidéo et `originaux/` (photos d'origine). Rangement expliqué dans [assets/README.md](assets/README.md). |
 | `supabase/` | Options non utilisées par défaut : table des sessions (`sessions.sql`, `harden-admin.sql`) et fonction de l'assistant IA. Les avis n'utilisent plus Supabase. |
-| `google-sheets/` | Scripts à coller dans les feuilles Google Sheets : **registre des certificats** (`certificats.gs`) et **avis clients** (`avis.gs`). |
+| `google-sheets/` | Scripts à coller dans les feuilles Google Sheets : **réservations** (`reservations.gs`), **registre des certificats** (`certificats.gs`) et **avis clients** (`avis.gs`). |
 | `scripts/` | Petits outils qui génèrent le sitemap, les balises SEO, la copie de l'assistant et les images optimisées. |
 | `tests/` | Tests automatiques. |
 | `docs/` | Documentation détaillée, et `docs/maquettes/` (anciennes maquettes de l'en-tête et du pied de page, conservées pour mémoire). |
@@ -29,8 +29,9 @@ et sans rien à installer pour le mettre en ligne.
 | Changer les questions du Centre d'aide | `js/faq-data.js` | [docs/README-FAQ.md](docs/README-FAQ.md) |
 | Changer le prix, la durée ou les langues de la formation Nacelles | `js/trainings-data.js` | [docs/README-NACELLES.md](docs/README-NACELLES.md) |
 | Changer les faits de la formation **VCA Base** (prix, examen, programme, sources officielles) ou ses articles | `js/trainings-data.js` (`VCA_BASE`) | [docs/README-VCA.md](docs/README-VCA.md) |
-| **Publier une date de session** (VCA Base, agenda, inscription, recherche, assistant) | `js/sessions-data.js` (ou la table Supabase `supabase/sessions.sql`) | [docs/README-SESSIONS.md](docs/README-SESSIONS.md) |
-| Brancher le calendrier Outlook | l'attribut `data-calendar-url` dans `agenda.html` | [docs/README-AGENDA.md](docs/README-AGENDA.md) |
+| **Publier une session, gérer les places et les réservations** (agenda, pages formation, inscription) | la feuille **Google Sheets** « Réservations - Wisy Safety » (aucun code à modifier) ; mise en service : `google-sheets/reservations.gs` + l'adresse dans `js/supabase-config.js` (`RESERVATIONS_API_URL`) | [docs/README-RESERVATIONS.md](docs/README-RESERVATIONS.md) |
+| Session de secours (tant que la feuille n'est pas branchée) | `js/sessions-data.js` | [docs/README-SESSIONS.md](docs/README-SESSIONS.md) |
+| Synchroniser le calendrier Outlook | menu de la feuille « Wisy Safety › Configurer Microsoft 365 » | [docs/README-RESERVATIONS.md](docs/README-RESERVATIONS.md) § 4 |
 | Changer les faits PEB (Wallonie/Bruxelles), le tarif ou les sessions | `js/peb-data.js` | [docs/README-PEB.md](docs/README-PEB.md) |
 | Changer les services, l'équipe ou les affirmations non confirmées de **WiSy Coordination** | `js/coordination-data.js` | [docs/README-COORDINATION.md](docs/README-COORDINATION.md) |
 | **Publier ou refuser un avis client** | la feuille **Google Sheets** « Avis - Wisy Safety » : colonne Statut → « Confirmé » (aucun code à modifier) ; mise en service : `google-sheets/avis.gs` + l'adresse dans `js/avis-config.js` | [docs/README-AVIS.md](docs/README-AVIS.md) |

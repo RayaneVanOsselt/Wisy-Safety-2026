@@ -1,11 +1,14 @@
 /* =========================================================================
-   WISY SAFETY — Configuration publique (EmailJS, sessions)
+   WISY SAFETY — Configuration publique (EmailJS, sessions, réservations)
    -------------------------------------------------------------------------
    Site 100 % statique : ce fichier ne contient QUE des valeurs publiques,
    sûres à exposer côté client :
      • EMAILJS_PUBLIC_KEY → clé publique EmailJS (formulaires contact, coordination, PEB, inscription).
+     • RESERVATIONS_API_URL → adresse PUBLIQUE (…/exec) du script de la feuille Google « Réservations - Wisy Safety »
+       (google-sheets/reservations.gs) : sessions, places restantes calculées et réservations. La feuille reste
+       privée ; les identifiants Microsoft vivent dans le script, jamais ici. Guide : docs/README-RESERVATIONS.md.
      • SUPABASE_URL / SUPABASE_ANON_KEY → utilisées SEULEMENT si SESSIONS_SOURCE = "supabase"
-       (option des sessions, désactivée : voir docs/README-SESSIONS.md).
+       (option des sessions, non utilisée : voir docs/README-SESSIONS.md).
 
    Les AVIS CLIENTS n'utilisent plus Supabase : ils sont gérés dans la feuille Google Sheets
    « Avis - Wisy Safety » (adresse dans js/avis-config.js, guide docs/README-AVIS.md).
@@ -25,12 +28,17 @@ window.WISY_CONFIG = {
      la coordination et PEB — réutilisé par l'inscription pour transmettre la demande tant que le paiement n'est pas actif. */
   EMAILJS_TEMPLATE_ID_CONTACT: "template_0p9dah6",
 
+  /* ---- Réservations (feuille Google « Réservations - Wisy Safety ») ---------- */
+  /* Collez ici l'adresse « Application Web » du script de la feuille (https://script.google.com/macros/s/…/exec).
+     VIDE = réservations pas encore activées : les sessions viennent de js/sessions-data.js et l'inscription
+     envoie une simple demande par e-mail (EmailJS), comme avant.                                         */
+  RESERVATIONS_API_URL: "",
+
   /* ---- Sessions de formation (dates) ------------------------------------ */
-  /* "data" (défaut) : les sessions viennent de js/sessions-data.js — un fichier à éditer, vide = aucune
-                       session publiée (les pages affichent « Consultez les prochaines disponibilités »).
-     "supabase"      : elles viennent de la table `training_sessions` (voir supabase/sessions.sql) : une
-                       ligne ajoutée dans Supabase apparaît sur le site sans toucher au code. Si la table
-                       est injoignable, le site retombe sur js/sessions-data.js.
-     Guide pas à pas : docs/README-SESSIONS.md.                                                         */
-  SESSIONS_SOURCE: "data"
+  /* "sheets"   : les sessions et leurs places viennent de la feuille de réservation (adresse ci-dessus) ;
+                  si elle est vide ou injoignable, repli sur js/sessions-data.js.
+     "data"     : uniquement js/sessions-data.js — un fichier à éditer, vide = aucune session publiée.
+     "supabase" : table `training_sessions` (voir supabase/sessions.sql), non utilisée.
+     Guides : docs/README-RESERVATIONS.md et docs/README-SESSIONS.md.                                  */
+  SESSIONS_SOURCE: "sheets"
 };

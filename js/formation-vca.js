@@ -119,7 +119,13 @@
         if (f.time) meta.appendChild(metaLine("i-clock", f.time));
         if (f.language) meta.appendChild(metaLine("i-globe", f.language));
         meta.appendChild(metaLine("i-pin", s.location || tr("vca.av_loc_default", "Wisy Safety, Anderlecht")));
-        if (s.seatsLeft != null && bookable) meta.appendChild(metaLine("i-users", tr("vca.av_seats", "Places disponibles : {n}").replace("{n}", String(s.seatsLeft))));
+        if (s.seatsLeft != null && bookable) {
+          /* Places calculées par la feuille de réservation : « 9 places disponibles sur 10 ». */
+          const seats = s.live && s.capacity
+            ? tr(s.seatsLeft === 1 ? "sess.seats_one" : "sess.seats_of", s.seatsLeft === 1 ? "1 place disponible sur {total}" : "{n} places disponibles sur {total}").replace("{n}", String(s.seatsLeft)).replace("{total}", String(s.capacity))
+            : tr("vca.av_seats", "Places disponibles : {n}").replace("{n}", String(s.seatsLeft));
+          meta.appendChild(metaLine("i-users", seats));
+        }
         body.appendChild(meta);
         if (bookable) {
           const a = el("a", "btn btn--cta");
@@ -132,7 +138,7 @@
           a.appendChild(document.createTextNode(" ")); a.appendChild(arrow);
           body.appendChild(a);
         } else {
-          body.appendChild(el("span", "vca-sess__status", tr("vca.av_full", "Complet")));
+          body.appendChild(el("span", "vca-sess__status", S.stateOf && S.stateOf(s, now) === "closed" ? tr("sess.closed", "Inscriptions clôturées") : tr("vca.av_full", "Complet")));
         }
         li.appendChild(date); li.appendChild(body);
         list.appendChild(li);
@@ -142,8 +148,9 @@
 
     if (!S) { show("empty"); return; }
     show("loading");
-    S.load().then((res) => { sessions = res.sessions; render(); }).catch(() => { sessions = []; render(); });
+    S.load().then((res) => { sessions = res.sessions; render(); if (S.startLive) S.startLive(); }).catch(() => { sessions = []; render(); });
     document.addEventListener("i18n:changed", render);
+    document.addEventListener("wisy:sessions", () => { sessions = S.peek(); render(); });   // places relues toutes les 45 s
   }
 
   /* ======================================================================

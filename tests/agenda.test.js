@@ -1,7 +1,9 @@
 "use strict";
 /* Page Agenda (agenda.html) : structure sémantique, contenu HONNÊTE (aucune date, aucune disponibilité,
-   aucune métrique inventée), charte graphique, animations légères, accessibilité, composant
-   AgendaCalendarSection (URL Outlook future), navigation et intégration recherche / assistant / FAQ.
+   aucune métrique inventée ÉCRITES dans la page), charte graphique, animations légères, accessibilité, calendrier des
+   sessions (js/sessions-ui.js, alimenté uniquement par js/sessions.js — l'ancien emplacement « calendrier Outlook
+   publié » en iframe a été retiré le 15/10/2026 : il aurait exposé l'agenda Outlook), navigation et intégration
+   recherche / assistant / FAQ.
    `node --test tests/*.test.js` (aucune dépendance). */
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
@@ -18,7 +20,6 @@ const strip = (css) => css.replace(/\/\*[\s\S]*?\*\//g, "");
 const MAIN = HTML.slice(HTML.indexOf("<main"), HTML.indexOf("</main>") + 7);
 const TEXT = MAIN.replace(/<!--[\s\S]*?-->/g, " ").replace(/<svg[\s\S]*?<\/svg>/g, " ").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ");
 
-const Cal = require("../js/agenda-calendar.js");
 const Knowledge = require("../js/assistant/knowledge.js");
 const Validation = require("../js/assistant/validation.js");
 const Responder = require("../js/assistant/responder.js");
@@ -26,9 +27,10 @@ const FAQ = require("../js/faq-search.js");
 
 /* ------------------------------------------------------------------ fichiers & SEO */
 test("fichiers de la page Agenda présents, scripts liés, feuille propre à la page", () => {
-  ["agenda.html", "css/agenda.css", "js/agenda-calendar.js", "js/agenda.js", "docs/README-AGENDA.md"].forEach((f) => assert.ok(exists(f), f));
-  assert.match(HTML, /<link rel="stylesheet" href="css\/agenda\.css">/);
-  assert.match(HTML, /<script defer src="js\/agenda-calendar\.js"><\/script>/);
+  ["agenda.html", "css/agenda.css", "css/sessions.css", "js/sessions-ui.js", "js/agenda.js", "docs/README-AGENDA.md"].forEach((f) => assert.ok(exists(f), f));
+  assert.ok(!exists("js/agenda-calendar.js"), "ancien composant iframe Outlook retiré");
+  assert.match(HTML, /<link rel="stylesheet" href="css\/agenda\.css">\n<link rel="stylesheet" href="css\/sessions\.css">/);
+  assert.match(HTML, /<script defer src="js\/sessions\.js"><\/script>\n<script defer src="js\/sessions-ui\.js"><\/script>/);
   assert.match(HTML, /<script defer src="js\/agenda\.js"><\/script>/);
   assert.match(HTML, /<script defer src="js\/assistant\/launcher\.js"><\/script>/, "assistant : launcher seul");
   assert.match(HTML, /<body class="agenda-page">/);
@@ -70,15 +72,16 @@ test("tous les liens internes pointent vers une page ou une ancre existante", ()
 });
 
 /* ------------------------------------------------------------------ contenu honnête */
-test("AUCUNE date, aucune disponibilité, aucun calendrier factice dans la page", () => {
+test("AUCUNE date, aucune disponibilité, aucun calendrier factice ÉCRITS dans la page (tout vient de js/sessions.js)", () => {
   const MOIS = "janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre";
   assert.doesNotMatch(TEXT, new RegExp("\\b\\d{1,2}(er)?\\s+(" + MOIS + ")\\b", "i"), "jour + mois");
   assert.doesNotMatch(TEXT, new RegExp("\\b(" + MOIS + ")\\s+20\\d{2}\\b", "i"), "mois + année");
   assert.doesNotMatch(TEXT, /\b20\d{2}-\d{2}-\d{2}\b|\b\d{1,2}\/\d{1,2}\/(20)?\d{2}\b/, "dates numériques");
   assert.doesNotMatch(TEXT, /\b2025\b/, "pas de « Calendrier 2025 » repris de l'ancienne page");
-  assert.doesNotMatch(TEXT, /places? (restantes?|disponibles?)|complet\b|derni(è|e)res places/i, "aucune disponibilité inventée");
-  assert.doesNotMatch(HTML, /<table|role="grid"|aria-label="[^"]*calendrier"/i, "aucun faux calendrier fonctionnel");
-  assert.doesNotMatch(strip(read("js/agenda-calendar.js") + read("js/agenda.js")), /\b(reserv|booking|payment|panier)\w*/i, "aucune logique de réservation fictive");
+  assert.doesNotMatch(TEXT, /\d+\s*(places?|sur \d)|\d+\s*\/\s*\d+/i, "aucun nombre de places écrit dans la page (seule la légende nomme les états)");
+  assert.doesNotMatch(HTML, /<table|role="grid"|data-wsc-session=|<iframe/i, "aucune case ni pastille de session écrite à la main, aucun iframe");
+  const code = (f) => strip(read(f)).replace(/\/\/[^\n]*/g, "");
+  ["js/agenda.js", "js/sessions-ui.js"].forEach((f) => assert.doesNotMatch(code(f), /["']20\d{2}-\d{2}(-\d{2})?["']/, f + " : aucune date écrite dans le code"));
 });
 
 test("métriques : uniquement des chiffres déjà validés par le site (accueil / contact) — pas ceux, contradictoires, de l'ancienne page", () => {
@@ -106,70 +109,27 @@ test("coordonnées = celles du pied de page et de la base de connaissances", () 
   assert.ok(TEXT.includes("Du lundi au jeudi, de 10h00 à 16h00"));
 });
 
-/* ------------------------------------------------------------------ AgendaCalendarSection */
-test("AgendaCalendarSection : URL vide par défaut, aucune URL fictive, état « Intégration Outlook prévue »", () => {
-  assert.match(HTML, /<div class="agc" data-agenda-calendar data-calendar-url=""/);
+/* ------------------------------------------------------------------ calendrier des sessions */
+test("calendrier : gabarit vide rempli par js/sessions-ui.js ; aucun calendrier Outlook publié ; libellés traduits", () => {
+  assert.match(MAIN, /<div class="wsc reveal" data-sessions-calendar data-state="loading"/);
+  assert.match(MAIN, /<h4 class="wsc-month" data-wsc-month aria-live="polite"><\/h4>/, "mois annoncé poliment, vide tant que les sessions ne sont pas chargées");
+  assert.match(MAIN, /<div class="wsc-grid" data-wsc-grid><p class="wsc-loading" data-i18n="sess\.cal_loading">/);
+  assert.match(MAIN, /<p class="wsc-live" data-wsc-live hidden>/, "« en direct » masqué tant que les places ne viennent pas de la feuille");
+  assert.match(MAIN, /<p class="wsc-status" data-wsc-status role="status" hidden><\/p>/);
+  assert.match(MAIN, /data-wsc-prev data-i18n-attr="aria-label:sess\.cal_prev"/); assert.match(MAIN, /data-wsc-next data-i18n-attr="aria-label:sess\.cal_next"/);
+  assert.match(MAIN, /<div class="wsc-detail" data-wsc-detail><\/div>/);
   assert.doesNotMatch(HTML.replace(/<!--[\s\S]*?-->/g, ""), /https?:\/\/[^"'\s>]*(outlook|office365|live\.com)/i, "aucune URL Outlook dans la page");
-  assert.match(HTML, /<span data-i18n="ag\.st_planned" data-agc-status>Intégration Outlook prévue<\/span>/);
-  assert.doesNotMatch(MAIN.match(/<p class="agc__status"[\s\S]*?<\/p>/)[0], /[Ss]ynchronis/, "jamais « synchronisé » comme état réel");
-  ["data-agc-empty", "data-agc-frame", "data-agc-slot", "data-agc-open"].forEach((a) => assert.match(HTML, new RegExp(a), "gabarit : " + a));
-  assert.match(HTML, /<div class="agc__frame" data-agc-frame hidden/, "cadre de l'agenda masqué tant qu'aucune URL n'est configurée");
+  assert.doesNotMatch(HTML, /data-agenda-calendar|class="agc/, "ancien composant iframe retiré");
+  assert.ok(MAIN.indexOf("data-sessions-calendar") < MAIN.indexOf("data-ag-sessions"), "le calendrier précède la liste des sessions");
+  assert.match(HTML, /<script src="js\/i18n-data-sessions\.js"><\/script>/);
 });
 
-test("safeCalendarUrl : https + hôte Outlook exact, sans identifiants ni port exotique", () => {
-  const ok = [
-    "https://outlook.office365.com/owa/calendar/wisy@wisysafety.be/abc123/calendar.html",
-    "https://outlook.live.com/owa/calendar/00000000-0000/calendar.html",
-    "https://outlook.office.com/bookwithme/user/abc",
-    "  https://OUTLOOK.office365.com/owa/calendar/x/calendar.html  "
-  ];
-  ok.forEach((u) => assert.ok(Cal.safeCalendarUrl(u), "accepté : " + u));
-  assert.equal(Cal.safeCalendarUrl("https://OUTLOOK.office365.com/x"), "https://outlook.office365.com/x", "normalisée");
-  [
-    "", "   ", null, undefined, 42, {},
-    "http://outlook.office365.com/x", "ftp://outlook.office365.com/x", "javascript:alert(1)", "data:text/html,<script>alert(1)</script>",
-    "//outlook.office365.com/x", "outlook.office365.com/x", "/owa/calendar/x",
-    "https://evil.example/outlook.office365.com", "https://outlook.office365.com.evil.example/x", "https://evil-outlook.office365.com/x", "https://office365.com/x",
-    "https://user:pass@outlook.office365.com/x", "https://outlook.office365.com:8443/x",
-    "https://outlook.office365.com/a b", "https://outlook.office365.com/\nx", "https://outlook.office365.com/" + "a".repeat(2100)
-  ].forEach((u) => assert.equal(Cal.safeCalendarUrl(u), null, "refusée : " + String(u).slice(0, 60)));
-  assert.equal(Cal.safeCalendarUrl("https://agenda.example.org/cal", []), null, "hôte non listé par défaut");
-  assert.ok(Cal.safeCalendarUrl("https://agenda.example.org/cal", ["agenda.example.org"]), "hôte ajouté explicitement");
-  assert.equal(Cal.safeCalendarUrl("https://sub.agenda.example.org/cal", ["agenda.example.org"]), null, "hôtes exacts, pas de sous-domaines implicites");
-  assert.deepEqual(Cal.parseHosts("A.example.org, b.example.org  http://mauvais/ x_y"), ["a.example.org", "b.example.org"]);
-});
-
-test("resolveConfig : data-calendar-url d'abord, sinon WISY_CONFIG.AGENDA_CALENDAR_URL ; titre accessible par défaut", () => {
-  const el = (attrs) => ({ getAttribute: (n) => (n in attrs ? attrs[n] : null) });
-  const URL1 = "https://outlook.office365.com/owa/calendar/a@b.be/1/calendar.html", URL2 = "https://outlook.live.com/owa/calendar/2/calendar.html";
-  assert.equal(Cal.resolveConfig(el({ "data-calendar-url": URL1 }), { WISY_CONFIG: { AGENDA_CALENDAR_URL: URL2 } }).url, URL1);
-  assert.equal(Cal.resolveConfig(el({ "data-calendar-url": "" }), { WISY_CONFIG: { AGENDA_CALENDAR_URL: URL2 } }).url, URL2);
-  assert.equal(Cal.resolveConfig(el({}), {}).url, null, "rien de configuré → état vide");
-  assert.equal(Cal.resolveConfig(el({ "data-calendar-url": "http://outlook.live.com/x" }), {}).url, null, "URL refusée → état vide, sans erreur visible");
-  assert.equal(Cal.resolveConfig(el({}), {}).title, "Agenda des formations Wisy Safety");
-  assert.equal(Cal.resolveConfig(el({ "data-calendar-title": "Mon agenda" }), {}).title, "Mon agenda");
-  assert.ok(Cal.resolveConfig(el({ "data-calendar-url": "https://x.example.org/c", "data-allowed-hosts": "x.example.org" }), {}).url);
-});
-
-test("états du composant : libellés honnêtes ; « Synchronisé avec Outlook » seulement pour un agenda Outlook réellement chargé", () => {
-  assert.equal(Cal.statusText("planned"), "Intégration Outlook prévue");
-  assert.equal(Cal.statusText("loading"), "Chargement de l’agenda…");
-  assert.equal(Cal.statusText("slow"), "L’agenda met du temps à répondre");
-  assert.equal(Cal.statusText("ready", "https://outlook.office365.com/owa/calendar/x/calendar.html"), "Synchronisé avec Outlook");
-  assert.equal(Cal.statusText("ready", "https://agenda.example.org/c"), "Agenda en ligne");
-  assert.equal(Cal.statusText("n'importe quoi"), "Intégration Outlook prévue");
-});
-
-test("iframe : isolé (sandbox sans navigation du parent), titre, chargement paresseux, délai de repli", () => {
-  assert.doesNotMatch(Cal.SANDBOX, /allow-top-navigation/, "l'agenda ne peut pas rediriger la page");
-  assert.match(Cal.SANDBOX, /allow-scripts/); assert.match(Cal.SANDBOX, /allow-popups/);
-  assert.equal(Cal.LOAD_TIMEOUT, 12000);
-  const src = read("js/agenda-calendar.js");
-  assert.match(src, /f\.title = tr\("ag\.cal_title", cfg\.title\)/); assert.match(src, /f\.loading = "lazy"/); assert.match(src, /referrerPolicy = "strict-origin-when-cross-origin"/);
-  assert.match(src, /IntersectionObserver/, "chargement quand la section approche de l'écran");
-  assert.match(src, /setAttribute\("aria-busy", "true"\)/, "état de chargement annoncé");
-  assert.match(HTML, /data-agc-open href="#agenda" target="_blank" rel="noopener noreferrer" hidden/, "lien de secours (href remplacé par le composant ; #agenda le rend explorable tant qu'il est masqué) sans fuite d'opener");
-  assert.doesNotMatch(strip(src), /console\.|innerHTML|document\.write|eval\(/, "aucun log, aucune injection HTML");
+test("liste des sessions : places calculées (« X places disponibles sur Y ») via WisySessionsUI, rafraîchie à chaque « wisy:sessions »", () => {
+  const js = read("js/agenda.js");
+  assert.match(js, /UI\.seatsText\(Sessions, s, t\)/);
+  assert.match(js, /var full = !Sessions\.isBookable\(s\);/, "complète, clôturée ou annulée : plus de bouton d'inscription");
+  assert.match(js, /document\.addEventListener\("wisy:sessions", render\)/);
+  assert.match(js, /Sessions\.startLive\(\)/);
 });
 
 /* ------------------------------------------------------------------ charte, mouvement, accessibilité */
@@ -239,9 +199,9 @@ test("accessibilité CSS : focus visible épinette (crème sur fond sombre), lie
   assert.match(css, /\.ag-skip:focus/);
   assert.doesNotMatch(css, /-9999px/);
   assert.match(HTML, /<div class="ag-visual ag-in" style="--i:2" aria-hidden="true">/, "composition décorative masquée aux lecteurs d'écran");
-  assert.match(HTML, /<div class="agc__art" aria-hidden="true">/);
   assert.ok(!/tabindex="[1-9]/.test(HTML), "jamais de tabindex positif");
-  assert.match(HTML, /<p class="agc__status" role="status">/, "changements d'état annoncés poliment");
+  assert.match(HTML, /<p class="wsc-status" data-wsc-status role="status" hidden>/, "changements d'état annoncés poliment");
+  assert.match(read("css/sessions.css"), /\.wsc-chip:focus-visible \{ outline: 3px solid/, "pastilles du calendrier : focus visible");
 });
 
 /* ------------------------------------------------------------------ navigation partagée */

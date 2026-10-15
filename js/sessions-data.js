@@ -5,8 +5,11 @@
    parcours d'inscription, l'assistant Wisy et la recherche du site. Il ne faut JAMAIS écrire une date dans
    une page HTML.
 
-   ► AUJOURD'HUI : aucune session n'est publiée → les pages affichent « Consultez les prochaines
-     disponibilités » avec les liens vers l'agenda et le contact. Aucune date n'est inventée.
+   ► AUJOURD'HUI : une session (Nacelles élévatrices, 18/10/2026, 10 places). Sans session, les pages affichent
+     « Consultez les prochaines disponibilités » avec les liens vers l'agenda et le contact. Aucune date n'est inventée.
+
+   ► DEPUIS LES RÉSERVATIONS EN LIGNE : les sessions se gèrent dans la feuille Google « Réservations - Wisy Safety »
+     (docs/README-RESERVATIONS.md). Ce fichier ne sert plus que de secours si la feuille ne répond pas.
 
    ► POUR PUBLIER UNE SESSION : ajoutez un bloc entre les crochets ci-dessous (une virgule entre deux blocs),
      enregistrez, mettez en ligne. Toutes les pages sont à jour. Guide pas à pas : docs/README-SESSIONS.md.
@@ -21,8 +24,8 @@
          endTime: "HH:MM",          // facultatif — heure de fin
          language: "fr",            // facultatif — fr, nl, en…
          location: "…",             // facultatif — par défaut : le centre d'Anderlecht
-         capacity: 12,              // facultatif — nombre de places au total
-         seatsLeft: 12,             // facultatif — places encore disponibles (0 = complet)
+         capacity: 12,              // facultatif — nombre de places au total (les places RESTANTES ne s'écrivent jamais
+                                    // ici : la feuille de réservation les calcule à partir des réservations enregistrées)
          status: "open"             // facultatif — open (défaut), full (complet) ou cancelled (annulée)
        }
 
@@ -32,8 +35,18 @@
    Autre source possible (sans toucher au code) : une table Supabase — voir supabase/sessions.sql.
    ========================================================================= */
 window.WISY_SESSIONS = {
-  updatedAt: "2026-09-26",
+  updatedAt: "2026-10-15",
   sessions: [
-    /* Aucune session publiée pour le moment. */
+    /* Session demandée par Wisy Safety le 15/10/2026 — la même figure dans la feuille de réservation (même identifiant).
+       Ce fichier ne sert que tant que la feuille n'est pas branchée (ou si elle ne répond pas) : il n'affiche que la
+       capacité, jamais des places restantes. Une fois la feuille en service, les sessions se gèrent dans la feuille. */
+    {
+      id: "2026-10-18-nacelle",
+      training: "nacelle",
+      date: "2026-10-18",
+      startTime: "10:00",
+      endTime: "18:00",
+      capacity: 10
+    }
   ]
 };

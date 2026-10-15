@@ -39,6 +39,7 @@
 <link rel="stylesheet" href="css/assistant.css">
 <link rel="stylesheet" href="css/cookie-consent.css">
 <link rel="stylesheet" href="css/agenda.css">
+<link rel="stylesheet" href="css/sessions.css">
 <style>
 /* ==================== TOKENS ==================== */
 :root{
@@ -474,6 +475,33 @@ a.f-c-value:hover{color:var(--turquoise)}
         <p data-i18n="ag.cal_head_p2" class="ag-lead reveal" style="--d:.12s">Les sessions publiées par Wisy Safety sont listées ci-dessous, avec leurs horaires et leurs disponibilités.</p>
       </header>
 
+      <!-- Calendrier des sessions — js/sessions-ui.js lit js/sessions.js (source unique des dates) : aucune date, aucune place
+           n'est écrite dans ce HTML. Places « X disponibles sur Y » calculées par la feuille de réservation
+           (google-sheets/reservations.gs), rafraîchies toutes les 45 s. Guide : docs/README-RESERVATIONS.md. -->
+      <div class="wsc reveal" data-sessions-calendar data-state="loading" style="--d:.14s">
+        <div class="wsc-bar">
+          <div class="wsc-bar__title"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18M7.5 13.5h3M13.5 13.5h3M7.5 17h3"/></svg><h3 data-i18n="sess.cal_title">Calendrier des formations</h3></div>
+          <p class="wsc-live" data-wsc-live hidden><span class="wsc-live__dot" aria-hidden="true"></span><span data-i18n="sess.live">Places mises à jour en direct</span></p>
+        </div>
+        <div class="wsc-body">
+          <div class="wsc-cal">
+            <div class="wsc-nav">
+              <button type="button" class="wsc-nav__btn" data-wsc-prev data-i18n-attr="aria-label:sess.cal_prev" aria-label="Mois précédent"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+              <h4 class="wsc-month" data-wsc-month aria-live="polite"></h4>
+              <button type="button" class="wsc-nav__btn" data-wsc-next data-i18n-attr="aria-label:sess.cal_next" aria-label="Mois suivant"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+            </div>
+            <div class="wsc-grid" data-wsc-grid><p class="wsc-loading" data-i18n="sess.cal_loading">Chargement du calendrier…</p></div>
+            <p class="wsc-status" data-wsc-status role="status" hidden></p>
+            <ul class="wsc-legend" data-i18n-attr="aria-label:sess.legend_label" aria-label="Légende du calendrier">
+              <li><i class="wsc-key" aria-hidden="true"></i><span data-i18n="sess.legend_open">Places disponibles</span></li>
+              <li><i class="wsc-key wsc-key--low" aria-hidden="true"></i><span data-i18n="sess.legend_low">Dernières places</span></li>
+              <li><i class="wsc-key wsc-key--full" aria-hidden="true"></i><span data-i18n="sess.legend_full">Complet ou inscriptions clôturées</span></li>
+            </ul>
+          </div>
+          <div class="wsc-detail" data-wsc-detail></div>
+        </div>
+      </div>
+
       <!-- Sessions PUBLIÉES — js/agenda.js lit js/sessions.js (source unique des dates) : aucune date n'est écrite dans ce HTML.
            Sans session : état vide honnête (contact + formations). Guide : docs/README-SESSIONS.md. -->
       <div class="ag-sessions reveal" data-ag-sessions style="--d:.14s">
@@ -486,57 +514,6 @@ a.f-c-value:hover{color:var(--turquoise)}
           <div class="ag-sessions__actions">
             <a data-i18n="ag.enda_a2" class="btn btn--outline" href="contact.html">Nous contacter</a>
             <a class="ag-link" href="formations.html"><span data-i18n="ag.cta_formations">Découvrir nos formations</span> <span aria-hidden="true">→</span></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- AgendaCalendarSection — js/agenda-calendar.js
-           Pour brancher le calendrier Outlook : renseigner data-calendar-url (https, hôte Outlook / Microsoft 365).
-           Vide = état « à venir » ci-dessous. Voir docs/README-AGENDA.md. -->
-      <div class="reveal" style="--d:.16s">
-        <div class="agc" data-agenda-calendar data-calendar-url="" data-calendar-title="Agenda des formations Wisy Safety" data-i18n-attr="data-calendar-title:ag.cal_title" data-state="planned">
-          <div class="agc__bar">
-            <h3 class="agc__title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></svg><span data-i18n="ag.enda_s1">Agenda Wisy Safety</span></h3>
-            <p class="agc__status" role="status"><span class="agc__dot" aria-hidden="true"></span><span data-i18n="ag.st_planned" data-agc-status>Intégration Outlook prévue</span></p>
-          </div>
-
-          <div class="agc__empty" data-agc-empty>
-            <div class="agc__art" aria-hidden="true">
-              <svg viewBox="0 0 320 284" fill="none">
-                <ellipse class="a-shadow" cx="160" cy="262" rx="118" ry="13"/>
-                <rect class="a-sheet" x="40" y="52" width="220" height="188" rx="20"/>
-                <path class="a-band" d="M40 72a20 20 0 0 1 20-20h180a20 20 0 0 1 20 20v30H40z"/>
-                <path class="a-tick" d="M92 40v26M208 40v26"/>
-                <rect class="a-cell" x="60" y="118" width="36" height="26" rx="7"/><rect class="a-cell" x="108" y="118" width="36" height="26" rx="7"/><rect class="a-cell a-cell--hi" x="156" y="118" width="36" height="26" rx="7"/><rect class="a-cell" x="204" y="118" width="36" height="26" rx="7"/>
-                <rect class="a-cell" x="60" y="154" width="36" height="26" rx="7"/><rect class="a-cell" x="108" y="154" width="36" height="26" rx="7"/><rect class="a-cell" x="156" y="154" width="36" height="26" rx="7"/><rect class="a-cell" x="204" y="154" width="36" height="26" rx="7"/>
-                <rect class="a-cell" x="60" y="190" width="36" height="26" rx="7"/><rect class="a-cell" x="108" y="190" width="36" height="26" rx="7"/>
-                <circle class="a-clock" cx="236" cy="212" r="40"/><circle class="a-ring" cx="236" cy="212" r="40"/>
-                <path class="a-hand" d="M236 190v22l14 10"/>
-                <path class="a-pin" d="M64 8c-14.4 0-26 10.8-26 24.4 0 17.6 26 37 26 37s26-19.4 26-37C90 18.8 78.4 8 64 8z"/><circle class="a-pin-hole" cx="64" cy="32" r="9"/>
-              </svg>
-            </div>
-            <div>
-              <h3 data-i18n="ag.enda_h3_1">Le calendrier Outlook sera bientôt intégré</h3>
-              <p data-i18n="ag.enda_p1">Un calendrier synchronisé avec Outlook complétera bientôt la liste des sessions ci-dessus : dates, horaires et disponibilités.</p>
-              <ul data-i18n-attr="aria-label:ag.enda_ul1" class="agc__facts" aria-label="Ce que l'agenda présentera">
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 9.5h18"/></svg><span data-i18n="ag.c_facts_s1">Dates</span></li>
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-i18n="ag.c_facts_s2">Horaires</span></li>
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.8"/></svg><span data-i18n="ag.c_facts_s3">Lieux</span></li>
-                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="ag.c_facts_s4">Disponibilités</span></li>
-              </ul>
-              <div class="agc__actions">
-                <a data-i18n="ag.enda_a1" class="btn btn--outline" href="formations.html">Découvrir les formations</a>
-                <a data-i18n="ag.enda_a2" class="ag-link" href="contact.html">Nous contacter</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="agc__frame" data-agc-frame hidden aria-busy="true">
-            <div class="agc__slot" data-agc-slot><div data-i18n="ag.enda_d1" class="agc__loader" aria-hidden="true">Chargement de l'agenda…</div></div>
-            <div class="agc__fallback">
-              <a class="ag-link" data-agc-open href="#agenda" target="_blank" rel="noopener noreferrer" hidden><span data-i18n="ag.enda_s3">Ouvrir l'agenda dans un nouvel onglet</span> <span aria-hidden="true">↗</span></a>
-              <a data-i18n="ag.enda_a3" class="ag-link" href="contact.html">Une question sur une session ? Contactez-nous</a>
-            </div>
           </div>
         </div>
       </div>
@@ -687,6 +664,7 @@ a.f-c-value:hover{color:var(--turquoise)}
 <script src="js/i18n-data-search.js"></script>
 <script src="js/i18n-data-assistant.js"></script>
 <script src="js/i18n-data-agenda.js"></script>
+<script src="js/i18n-data-sessions.js"></script>
 <script src="js/i18n.js"></script>
 <!-- Recherche globale -->
 <script src="js/trainings-data.js"></script>
@@ -699,11 +677,11 @@ a.f-c-value:hover{color:var(--turquoise)}
 <script defer src="js/assistant/launcher.js"></script>
 <!-- Consentement aux cookies : bandeau + centre de préférences (voir js/cookie-consent.js) -->
 <script defer src="js/cookie-consent.js"></script>
-<!-- Agenda : composant AgendaCalendarSection (intégration Outlook future) + comportements de page -->
+<!-- Agenda : sessions (feuille de réservation ou js/sessions-data.js), calendrier + liste, comportements de page -->
 <script defer src="js/supabase-config.js"></script>
 <script defer src="js/sessions-data.js"></script>
 <script defer src="js/sessions.js"></script>
-<script defer src="js/agenda-calendar.js"></script>
+<script defer src="js/sessions-ui.js"></script>
 <script defer src="js/agenda.js"></script>
 <script>
 (function(){

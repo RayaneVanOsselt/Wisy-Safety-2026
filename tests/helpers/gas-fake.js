@@ -5,6 +5,8 @@
 
    Utilisé par tests/reservations.test.js (et réutilisable par un petit serveur de démonstration local).
    Aucune dépendance. Le comportement imite Google Sheets là où le script en dépend :
+     - une nouvelle feuille a 1 000 lignes et 26 colonnes : lire ou écrire au-delà lève l'erreur de Google
+       (« hors des dimensions de la feuille ») — insertRowsAfter / insertColumnsAfter agrandissent la feuille ;
      - une apostrophe initiale force le texte et n'apparaît pas dans la cellule ;
      - getDataRange() = zone jusqu'à la dernière ligne / colonne non vide ;
      - les méthodes de mise en forme (couleurs, largeurs, validations…) ne font rien et se chaînent.
@@ -24,6 +26,7 @@ const store = (x) => (typeof x === "string" && x.charAt(0) === "'" ? x.slice(1) 
 
 function fakeSheet(name, grid, env) {
   let cols = Math.max(26, ...(grid || [[]]).map((r) => r.length));
+  let maxRows = (env && env.maxRows) || 1000, maxCols = cols;
   const g = (grid || []).map((r) => { const x = r.slice(); while (x.length < cols) x.push(""); return x; });
   const blank = (v) => v === "" || v == null;
   const lastRow = () => { for (let r = g.length; r >= 1; r--) if (g[r - 1].some((v) => !blank(v))) return r; return 0; };
@@ -35,6 +38,9 @@ function fakeSheet(name, grid, env) {
   };
   const range = (r, c, nr = 1, nc = 1) => {
     if (typeof r === "string") return chain();
+    if (r < 1 || c < 1 || nr < 1 || nc < 1 || r - 1 + nr > maxRows || c - 1 + nc > maxCols) {
+      throw new Error("Exception: Les coordonnées de la plage sont hors des dimensions de la feuille. (" + sheetName + " : lignes " + r + "–" + (r - 1 + nr) + " / " + maxRows + ", colonnes " + c + "–" + (c - 1 + nc) + " / " + maxCols + ")");
+    }
     ensure(r - 1 + nr, c - 1 + nc);
     const self = chain({
       getValues: () => g.slice(r - 1, r - 1 + nr).map((row) => row.slice(c - 1, c - 1 + nc)),
@@ -60,7 +66,9 @@ function fakeSheet(name, grid, env) {
     getName: () => sheetName, setName: (n) => { sheetName = n; return sheet; },
     getRange: range,
     getDataRange: () => range(1, 1, Math.max(lastRow(), 1), Math.max(lastCol(), 1)),
-    getLastRow: lastRow, getLastColumn: lastCol, getMaxColumns: () => cols, getMaxRows: () => g.length,
+    getLastRow: lastRow, getLastColumn: lastCol, getMaxColumns: () => maxCols, getMaxRows: () => maxRows,
+    insertRowsAfter: (after, n) => { maxRows += n; return sheet; },
+    insertColumnsAfter: (after, n) => { maxCols += n; return sheet; },
     getProtections: () => [], getBandings: () => [],
     getActiveRange: () => range(active.row, 1, active.rows, cols),
     getActiveRangeList: () => ({ getRanges: () => [range(active.row, 1, active.rows, cols)] }),
@@ -111,7 +119,7 @@ function parseDate(s, tz, fmt) {
  */
 function loadGas(file, opts) {
   opts = opts || {};
-  const env = { onWrite: null };
+  const env = { onWrite: null, maxRows: opts.maxRows };
   const sheets = [];
   const cache = new Map(), props = new Map(Object.entries(opts.props || {}));
   const mails = [], alerts = [], toasts = [], http = [], triggers = [];

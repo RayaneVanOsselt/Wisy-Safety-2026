@@ -278,7 +278,9 @@ test("aucun secret dans le script ni dans le site : identifiants Microsoft dans 
   assert.doesNotMatch(src, /client_secret:\s*"[^"]/, "aucun secret écrit en dur");
   const site = ["js/supabase-config.js", "js/reservations.js", "js/sessions.js", "js/registration.js"].map(read).join("\n");
   assert.doesNotMatch(site, /MS_CLIENT_SECRET|client_secret|login\.microsoftonline\.com|graph\.microsoft\.com/i, "le site ne parle jamais à Microsoft");
-  assert.match(read("js/supabase-config.js"), /RESERVATIONS_API_URL: "",/, "adresse vide tant que la feuille n'est pas déployée");
+  const cfg = {}; vm.runInNewContext(read("js/supabase-config.js"), { window: cfg });
+  assert.ok(R.endpoint(cfg.WISY_CONFIG), "adresse publique « Application Web » de la feuille (…/exec), rien d'autre");
+  assert.equal(cfg.WISY_CONFIG.SESSIONS_SOURCE, "sheets");
 });
 
 /* ------------------------------------------------------------------ e-mails */
@@ -559,4 +561,43 @@ test("sessions.js : fetch du navigateur rattaché à window (sinon « Illegal in
   vm.runInNewContext(read("js/sessions.js"), ctx);
   const r = await win.WisySessions.load();
   assert.equal(r.source, "sheets", "la feuille est bien lue dans un vrai navigateur");
+});
+
+/* ------------------------------------------------------------------ comportements de la VRAIE feuille Google (15/10/2026) */
+test("dimensions de Google : installation sur une feuille de 1 000 lignes, puis la feuille s'agrandit au-delà (jamais « hors des dimensions »)", () => {
+  const G = sheetGas({ maxRows: 40 });                          // petite feuille : mêmes règles que les 1 000 lignes de Google
+  assert.equal(G.sheet("Sessions").getMaxRows(), 40);
+  for (let i = 0; i < 45; i++) {
+    const r = G.post(order(0, { customer: { firstName: "A", lastName: "B", email: "grand" + i + "@exemple.be", phone: "1" },
+      items: [{ training: "vca-base", sessionId: null, quantity: 1, participants: null }] }));
+    assert.equal(r.status, "ok", "demande " + i);
+  }
+  assert.equal(bookings(G).length, 45);
+  assert.ok(G.sheet("Réservations").getMaxRows() > 45, "lignes ajoutées automatiquement");
+  G.ctx.installer();                                             // réparer / réinstaller après agrandissement : sans erreur
+});
+
+test("heure gardée avec son apostrophe par Google (« '10:00 ») : la session reste valide et affichée", () => {
+  const G = sheetGas();
+  const sh = G.sheet("Sessions"), head = sh.grid[0];
+  sh.grid[1][head.indexOf("Début")] = "'10:00"; sh.grid[1][head.indexOf("Fin")] = "'18:00";   // écrit directement, apostrophe comprise
+  G.ctx.clearCache_();
+  const s = session(G);
+  assert.ok(s, "toujours publiée");
+  assert.equal(s.startTime, "10:00"); assert.equal(s.endTime, "18:00");
+});
+
+test("diagnostic à distance (?action=health) : onglets, tâche automatique, nombre de sessions et raisons — sans aucune donnée personnelle", () => {
+  const fresh = loadGas("google-sheets/reservations.gs", { now: NOW });
+  let h = fresh.get({ action: "health" });
+  assert.equal(h.version, "1.0.1"); assert.equal(h.tabs.Sessions, false, "feuille pas encore installée");
+  assert.equal(h.sessions.rows, 0); assert.equal(h.automaticTask, false);
+  const G = sheetGas();
+  G.post(order(2));
+  edit(G, 2, "capacity", "dix");
+  h = G.get({ action: "health" });
+  assert.deepEqual(plain(h.tabs), { Formations: true, Sessions: true, "Réservations": true, Participants: true, "Écarts Outlook": true, "File d'envoi": true, Journal: true });
+  assert.equal(h.automaticTask, true);
+  assert.deepEqual(plain(h.sessions), { rows: 1, valid: 0, published: 0, upcoming: 0, problems: { "places (total) : nombre entier de 1 à 500": 1 } });
+  assert.doesNotMatch(JSON.stringify(h), /Dupont|exemple\.be|0470|Nacelles|2026-10-18/, "aucun nom, e-mail, ni session non publiée");
 });

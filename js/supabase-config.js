@@ -32,7 +32,7 @@ window.WISY_CONFIG = {
   /* Collez ici l'adresse « Application Web » du script de la feuille (https://script.google.com/macros/s/…/exec).
      VIDE = réservations pas encore activées : les sessions viennent de js/sessions-data.js et l'inscription
      envoie une simple demande par e-mail (EmailJS), comme avant.                                         */
-  RESERVATIONS_API_URL: "",
+  RESERVATIONS_API_URL: "https://script.google.com/macros/s/AKfycbw4fV7ZDyLcEk0J41INJjwQ_41ASkyCSGx7_ZuVxU1U_wmWdYDvLWwxgF-ga_QFxrvnPQ/exec",
 
   /* ---- Sessions de formation (dates) ------------------------------------ */
   /* "sheets"   : les sessions et leurs places viennent de la feuille de réservation (adresse ci-dessus) ;

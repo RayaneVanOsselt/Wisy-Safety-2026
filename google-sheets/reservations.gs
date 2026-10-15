@@ -28,7 +28,7 @@
  * =========================================================================
  */
 
-var VERSION = "1.0.0";
+var VERSION = "1.0.1";
 
 var CONFIG = {
   FILE_NAME: "Réservations - Wisy Safety",
@@ -198,7 +198,7 @@ function fmt_(d, pattern) { return Utilities.formatDate(d, CONFIG.TIMEZONE, patt
 function cellDate_(v) {
   if (v === "" || v == null) return "";
   if (isDate_(v)) return fmt_(v, "yyyy-MM-dd");
-  var s = String(v).trim(), p, y, m, d;
+  var s = String(v).trim().replace(/^'/, ""), p, y, m, d;   // apostrophe de texte éventuellement gardée par Google
   if ((p = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/))) { y = +p[1]; m = +p[2]; d = +p[3]; }
   else if ((p = s.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})$/))) { d = +p[1]; m = +p[2]; y = +p[3]; }
   else return null;
@@ -211,7 +211,7 @@ function cellDate_(v) {
 function cellTime_(v) {
   if (v === "" || v == null) return "";
   if (isDate_(v)) return fmt_(v, "HH:mm");
-  var p = String(v).trim().toLowerCase().match(/^(\d{1,2})(?:\s*[:h.]\s*(\d{2})?)?$/);
+  var p = String(v).trim().replace(/^'/, "").toLowerCase().match(/^(\d{1,2})(?:\s*[:h.]\s*(\d{2})?)?$/);
   if (!p) return null;
   var h = +p[1], m = p[2] ? +p[2] : 0;
   return h <= 23 && m <= 59 ? pad_(h) + ":" + pad_(m) : null;
@@ -221,7 +221,7 @@ function cellTime_(v) {
 function cellDateTime_(v) {
   if (v === "" || v == null) return null;
   if (isDate_(v)) return v;
-  var p = String(v).trim().match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})(?:\s+(\d{1,2})[:h](\d{2}))?$/);
+  var p = String(v).trim().replace(/^'/, "").match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})(?:\s+(\d{1,2})[:h](\d{2}))?$/);
   if (!p) return false;
   var day = cellDate_(p[1] + "/" + p[2] + "/" + p[3]);
   if (!day) return false;
@@ -311,6 +311,9 @@ function rowFor_(t, data) {
 function appendRows_(t, rows) {
   if (!rows.length) return;
   var first = t.sheet.getLastRow() + 1;
+  /* Une feuille Google a 1 000 lignes au départ : on en ajoute avant d'écrire au-delà (sinon « hors des dimensions »). */
+  var missing = first + rows.length - 1 - t.sheet.getMaxRows();
+  if (missing > 0) t.sheet.insertRowsAfter(t.sheet.getMaxRows(), missing + 200);
   t.sheet.getRange(first, 1, rows.length, t.width).setValues(rows);
   rows.forEach(function (r) { t.values.push(r); });
 }
@@ -515,6 +518,29 @@ function publicSessions_() {
   return { status: "ok", version: VERSION, generatedAt: fmt_(now, "yyyy-MM-dd'T'HH:mm"), sessions: out.slice(0, 200) };
 }
 
+/** État de la feuille, SANS aucune donnée personnelle ni session non publiée (nombres et raisons génériques) :
+    permet de diagnostiquer une installation à distance. */
+function health_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet(), tabs = {};
+  Object.keys(TAB).forEach(function (k) { tabs[TAB[k]] = !!ss.getSheetByName(TAB[k]); });
+  var formations = readFormations_(), sessions = readSessions_(formations), now = now_();
+  var reasons = {};
+  sessions.list.forEach(function (s) { s.problems.forEach(function (p) { var k = p.replace(/ligne \d+/, "ligne ?"); reasons[k] = (reasons[k] || 0) + 1; }); });
+  var hasTrigger = false;
+  try { hasTrigger = ScriptApp.getProjectTriggers().some(function (t) { return t.getHandlerFunction() === "tick"; }); } catch (e) { hasTrigger = null; }
+  return {
+    status: "ok", version: VERSION, outlook: !!msConfig_(), timezone: CONFIG.TIMEZONE,
+    tabs: tabs, automaticTask: hasTrigger,
+    sessions: {
+      rows: sessions.list.length,
+      valid: sessions.list.filter(function (s) { return s.valid; }).length,
+      published: sessions.list.filter(function (s) { return s.valid && s.published; }).length,
+      upcoming: sessions.list.filter(function (s) { return s.valid && s.published && s.status !== "cancelled" && endOf_(s).getTime() > now.getTime(); }).length,
+      problems: reasons
+    }
+  };
+}
+
 var CACHE_KEY = "reservations:sessions:v1";
 
 function clearCache_() {
@@ -525,7 +551,7 @@ function clearCache_() {
 function doGet(e) {
   try {
     var action = e && e.parameter && e.parameter.action ? String(e.parameter.action) : "sessions";
-    if (action === "health") return json_({ status: "ok", version: VERSION, outlook: !!msConfig_() });
+    if (action === "health") return json_(health_());
     if (action !== "sessions") return json_({ status: "error" });
     var cache = CacheService.getScriptCache(), hit = cache.get(CACHE_KEY);
     if (hit) return ContentService.createTextOutput(hit).setMimeType(ContentService.MimeType.JSON);
@@ -1128,6 +1154,7 @@ function nouvelleSession() {
   var ss = SpreadsheetApp.getActiveSpreadsheet(), t = table_(TAB.SESSIONS);
   if (!t) { installer(); t = table_(TAB.SESSIONS); }
   var line = t.sheet.getLastRow() + 1;
+  if (line > t.sheet.getMaxRows()) t.sheet.insertRowsAfter(t.sheet.getMaxRows(), 50);
   setCell_(t, line, "status", S_OPEN);
   setCell_(t, line, "published", false);
   ss.setActiveSheet(t.sheet);
@@ -1490,7 +1517,7 @@ function installer() {
   if (ft.col.id !== undefined) ft.sheet.getRange(2, ft.col.id + 1, fRows, 1).setFontColor("#5E6D6A");
 
   /* Sessions : mise en forme, puis première session (seulement si l'onglet est vide et la date à venir). */
-  var st = table_(TAB.SESSIONS), sh = st.sheet, rows = 300;
+  var st = table_(TAB.SESSIONS), sh = st.sheet, rows = Math.max(1, sh.getMaxRows() - 1);
   var c = st.col, range = function (f) { return sh.getRange(2, c[f] + 1, rows, 1); };
   range("start").setNumberFormat("@");   // « 10:00 » reste un texte (jamais converti en heure par Google Sheets)
   range("end").setNumberFormat("@");
@@ -1498,7 +1525,7 @@ function installer() {
     var today = fmt_(now_(), "yyyy-MM-dd");
     appendRows_(st, SEED_SESSIONS.filter(function (s) { return s.date >= today; }).map(function (s) {
       return rowFor_(st, { id: s.date + "-" + s.training, training: (FORMATIONS.filter(function (f) { return f[0] === s.training; })[0] || [])[1] || s.training,
-        date: at_(s.date, "12:00"), start: asText_(s.start), end: asText_(s.end), capacity: s.capacity, status: S_OPEN, published: true });
+        date: at_(s.date, "12:00"), start: s.start, end: s.end, capacity: s.capacity, status: S_OPEN, published: true });   // colonnes déjà en texte
     }));
   }
   var names = readFormations_().list.map(function (f) { return f.name; });
@@ -1534,18 +1561,18 @@ function installer() {
     sheet.getProtections(SpreadsheetApp.ProtectionType.SHEET).forEach(function (p) { p.remove(); });
     sheet.protect().setDescription("Écrit par le script Wisy Safety : utilisez le menu pour annuler une réservation").setWarningOnly(true);
   });
-  var bt = table_(TAB.BOOKINGS);
-  bt.sheet.getRange(2, bt.col.status + 1, 2000, 1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(BOOKING_STATUSES, true).setAllowInvalid(false).build());
-  bt.sheet.getRange(2, bt.col.received + 1, 2000, 1).setNumberFormat("dd/mm/yyyy hh:mm");
-  bt.sheet.getRange(2, bt.col.expires + 1, 2000, 1).setNumberFormat("dd/mm/yyyy hh:mm");
-  bt.sheet.getRange(2, bt.col.cancelled + 1, 2000, 1).setNumberFormat("dd/mm/yyyy hh:mm");
+  var bt = table_(TAB.BOOKINGS), bRows = Math.max(1, bt.sheet.getMaxRows() - 1);
+  bt.sheet.getRange(2, bt.col.status + 1, bRows, 1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(BOOKING_STATUSES, true).setAllowInvalid(false).build());
+  bt.sheet.getRange(2, bt.col.received + 1, bRows, 1).setNumberFormat("dd/mm/yyyy hh:mm");
+  bt.sheet.getRange(2, bt.col.expires + 1, bRows, 1).setNumberFormat("dd/mm/yyyy hh:mm");
+  bt.sheet.getRange(2, bt.col.cancelled + 1, bRows, 1).setNumberFormat("dd/mm/yyyy hh:mm");
   bt.sheet.setConditionalFormatRules([
-    byText(B_CONFIRMED, "#DDF4EE", "#1F6F64", bt.sheet.getRange(2, bt.col.status + 1, 2000, 1)),
-    byText(B_PENDING, "#FFF1D6", "#8A5A00", bt.sheet.getRange(2, bt.col.status + 1, 2000, 1)),
-    byText(B_CANCELLED, "#ECEFEE", "#5E6D6A", bt.sheet.getRange(2, bt.col.status + 1, 2000, 1))
+    byText(B_CONFIRMED, "#DDF4EE", "#1F6F64", bt.sheet.getRange(2, bt.col.status + 1, bRows, 1)),
+    byText(B_PENDING, "#FFF1D6", "#8A5A00", bt.sheet.getRange(2, bt.col.status + 1, bRows, 1)),
+    byText(B_CANCELLED, "#ECEFEE", "#5E6D6A", bt.sheet.getRange(2, bt.col.status + 1, bRows, 1))
   ]);
   var gt = table_(TAB.GAPS);
-  gt.sheet.getRange(2, gt.col.decision + 1, 500, 1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList([G_TODO, G_APPLY, G_IGNORE], true).setAllowInvalid(true).build());
+  gt.sheet.getRange(2, gt.col.decision + 1, Math.max(1, gt.sheet.getMaxRows() - 1), 1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList([G_TODO, G_APPLY, G_IGNORE], true).setAllowInvalid(true).build());
   ss.setActiveSheet(sh);
 
   /* Tâche automatique toutes les 10 minutes (une seule). */
@@ -1555,6 +1582,7 @@ function installer() {
   completeSessionIds_();
   refreshAll_();
   clearCache_();
-  ui_().alert("Feuille prête ✔\n\n• Formations : " + readFormations_().list.length + " formations du site.\n• Sessions : la liste des sessions (une ligne = une date).\n" +
-    "• Les places restantes sont calculées automatiquement.\n\nÉtape suivante : Déployer › Nouveau déploiement › Application Web (voir docs/README-RESERVATIONS.md).");
+  var done = "Feuille prête ✔\n\n• Formations : " + readFormations_().list.length + " formations du site.\n• Sessions : la liste des sessions (une ligne = une date).\n" +
+    "• Les places restantes sont calculées automatiquement.\n\nÉtape suivante : Déployer › Nouveau déploiement › Application Web (voir docs/README-RESERVATIONS.md).";
+  try { ui_().alert(done); } catch (e) { try { ss.toast("Feuille prête ✔ — voir docs/README-RESERVATIONS.md", "Wisy Safety", 10); } catch (e2) { /* lancé depuis l'éditeur */ } }
 }

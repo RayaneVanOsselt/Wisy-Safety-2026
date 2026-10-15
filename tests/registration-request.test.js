@@ -9,6 +9,8 @@ const read = (f) => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
 test("sans prestataire de paiement, le bouton final envoie la demande (jamais un simple « bientôt disponible »)", () => {
   const js = read("js/registration.js");
   assert.match(js, /if \(res\.status !== "ready"\) \{[\s\S]{0,200}submitRequest\(res\.order\)/, "handlePayClick → submitRequest");
+  assert.match(js, /if \(bookingMode\(\)\) submitBooking\(res\.order\); else submitRequest\(res\.order\);/, "feuille de réservation branchée → réservation ; sinon e-mail");
+  assert.match(js, /if \(res\.kind === "not_configured"\) \{ submitRequest\(order\); return; \}/, "feuille retirée → la demande part quand même par e-mail");
   assert.match(js, /window\.emailjs\.send\(cfg\.EMAILJS_SERVICE_ID, cfg\.EMAILJS_TEMPLATE_ID_CONTACT, params\)/);
   assert.match(js, /clearStorage\(\);\s*\/\* les données personnelles/, "données effacées du navigateur après envoi");
   assert.match(js, /mailto:info@wisysafety\.be\?subject=/, "secours par e-mail si l'envoi échoue");

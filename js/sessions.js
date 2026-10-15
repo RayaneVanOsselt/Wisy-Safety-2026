@@ -11,10 +11,14 @@
      • la recherche du site      (résultat « Prochaines sessions »)
 
    D'OÙ VIENNENT LES SESSIONS (une seule source active à la fois, choisie dans js/supabase-config.js) :
+     "sheets"    (réservations)  la feuille Google « Réservations - Wisy Safety » (google-sheets/reservations.gs,
+                           adresse RESERVATIONS_API_URL) : sessions publiées + places restantes CALCULÉES par la
+                           feuille à partir des réservations enregistrées (`live: true`). Rafraîchies toutes les
+                           45 s (startLive) : l'événement `wisy:sessions` prévient les pages.
      "data"      (défaut)  js/sessions-data.js — un fichier que le propriétaire édite ; vide = aucune session.
-     "supabase"  (option)  table `training_sessions` (voir supabase/sessions.sql) : une ligne ajoutée dans
-                           Supabase apparaît sur le site SANS modifier le code. Si la table est injoignable,
-                           le site retombe sur js/sessions-data.js (jamais de page cassée).
+     "supabase"  (option)  table `training_sessions` (voir supabase/sessions.sql).
+     Feuille ou table injoignable (ou adresse vide) → repli sur js/sessions-data.js (jamais de page cassée) ; ces
+     sessions-là n'ont pas de places calculées (`live: false`) : les pages n'affichent alors que la capacité.
 
    VÉRACITÉ — règle absolue : aucune date n'est inventée. Liste vide = « consultez les disponibilités ».
    Une session mal formée est REJETÉE (et signalée par `rejected`), jamais « corrigée » en silence.
@@ -31,13 +35,14 @@
   "use strict";
 
   var TZ = "Europe/Brussels";
-  var STATUSES = ["open", "full", "cancelled"];
+  var STATUSES = ["open", "full", "closed", "cancelled"];   // closed = inscriptions fermées (la session reste visible)
   var ID_RE = /^[a-z0-9][a-z0-9-]{2,63}$/;
   var TRAINING_RE = /^[a-z0-9][a-z0-9-]{1,40}$/;
   var TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
   var DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
   /* Adresse d'inscription : uniquement une page interne du site (jamais une URL fournie par les données). */
   var SIGNUP_RE = /^inscription\.html\?[A-Za-z0-9_=&.%-]{1,200}$/;
+  var CLOSES_RE = /^(\d{4})-(\d{2})-(\d{2})T([01]\d|2[0-3]):[0-5]\d$/;   // fin des inscriptions, heure de Bruxelles
   var LOCALE_MAP = { fr: "fr-BE", nl: "nl-BE", en: "en-BE", de: "de-BE", af: "af-ZA", ar: "ar-MA", bg: "bg-BG", ro: "ro-RO", it: "it-IT", sl: "sl-SI" };
 
   /* ------------------------------------------------------------------ validation */
@@ -70,7 +75,8 @@
     if (raw.location != null && (typeof raw.location !== "string" || raw.location.length > 160)) why.push("location : texte de 160 caractères maximum");
     if (raw.capacity != null && !isInt(raw.capacity, 1, 500)) why.push("capacity : entier de 1 à 500");
     if (raw.seatsLeft != null && !isInt(raw.seatsLeft, 0, raw.capacity != null && isInt(raw.capacity, 1, 500) ? raw.capacity : 500)) why.push("seatsLeft : entier de 0 à capacity");
-    if (raw.status != null && STATUSES.indexOf(raw.status) < 0) why.push("status : open, full ou cancelled");
+    if (raw.status != null && STATUSES.indexOf(raw.status) < 0) why.push("status : open, full, closed ou cancelled");
+    if (raw.closesAt != null && raw.closesAt !== "" && !(typeof raw.closesAt === "string" && CLOSES_RE.test(raw.closesAt))) why.push("closesAt : AAAA-MM-JJTHH:MM");
     if (raw.priceCents != null && !isInt(raw.priceCents, 0, 10000000)) why.push("priceCents : entier en centimes");
     if (raw.signupUrl != null && raw.signupUrl !== "" && !SIGNUP_RE.test(String(raw.signupUrl))) why.push("signupUrl : uniquement une adresse « inscription.html?… » du site");
     return why;
@@ -93,6 +99,8 @@
       status: status,
       priceCents: raw.priceCents != null ? raw.priceCents : null,
       signupUrl: raw.signupUrl ? String(raw.signupUrl) : null,
+      closesAt: raw.closesAt ? String(raw.closesAt) : null,
+      live: raw.live === true,                                        // places calculées par la feuille de réservation
       startsAt: raw.date + "T" + (st || "00:00")
     };
   }
@@ -127,9 +135,23 @@
     if (s.date < n.date) return false;
     return s.endTime ? n.time < s.endTime : true;
   }
-  /* Inscription possible : à venir, ouverte, avec des places. */
+  /* Inscriptions fermées : statut « closed » ou date de fin des inscriptions passée (heure de Bruxelles). */
+  function isClosed(s, now) {
+    if (s.status === "closed") return true;
+    if (!s.closesAt) return false;
+    var n = partsIn(now);
+    return n.date + "T" + n.time >= s.closesAt;
+  }
+  /* Inscription possible : à venir, ouverte, avec des places, avant la fin des inscriptions. */
   function isBookable(s, now) {
-    return s.status === "open" && (s.seatsLeft == null || s.seatsLeft > 0) && isUpcoming(s, now);
+    return s.status === "open" && (s.seatsLeft == null || s.seatsLeft > 0) && isUpcoming(s, now) && !isClosed(s, now);
+  }
+  /* État affichable : open | full | closed | cancelled (les pages choisissent le libellé). */
+  function stateOf(s, now) {
+    if (s.status === "cancelled") return "cancelled";
+    if (s.status === "full" || s.seatsLeft === 0) return "full";
+    if (isClosed(s, now)) return "closed";
+    return "open";
   }
   function upcoming(list, now) {
     return list.filter(function (s) { return s.status !== "cancelled" && isUpcoming(s, now); });
@@ -177,6 +199,21 @@
   }
 
   /* ------------------------------------------------------------------ chargement */
+  /* Adresse du script Google de la feuille de réservation (déploiement « Application Web »), ou localhost en développement. */
+  function sheetsEndpoint(cfg) {
+    var url = String((cfg && cfg.RESERVATIONS_API_URL) || "").trim();
+    if (/^https:\/\/script\.google\.com\/(?:a\/[^\s/]+\/)?macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/.test(url)) return url;
+    if (/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/[^\s?#]*$/.test(url)) return url;
+    return null;
+  }
+  /* Session reçue de la feuille → session brute (mêmes noms de champs). Les places viennent du serveur. */
+  function fromSheet(r) {
+    r = r && typeof r === "object" ? r : {};
+    return {
+      id: r.id, training: r.training, date: r.date, startTime: r.startTime, endTime: r.endTime, language: r.language,
+      location: r.location, capacity: r.capacity, seatsLeft: r.seatsLeft, status: r.status, closesAt: r.closesAt, live: true
+    };
+  }
   /* Ligne de la table Supabase `training_sessions` (snake_case) → session brute. */
   function fromRow(r) {
     return {
@@ -218,29 +255,77 @@
 
   /* load() → Promise<{ sessions, rejected, source }> — mis en cache pour la durée de la page ; jamais rejetée.
      `opts.env` ({ config, data, fetch }) sert aux tests ; `opts.force` ignore le cache. */
+  function fromSheets(cfg, env) {
+    var url = sheetsEndpoint(cfg) + "?action=sessions";
+    var ctl = typeof AbortController === "function" ? new AbortController() : null;
+    var timer = ctl ? setTimeout(function () { ctl.abort(); }, TIMEOUT_MS * 2) : null;   // Google peut mettre 2–3 s à répondre
+    return env.fetch(url, { method: "GET", credentials: "omit", cache: "no-store", redirect: "follow", referrerPolicy: "no-referrer", signal: ctl ? ctl.signal : undefined })
+      .then(function (res) {
+        if (timer) clearTimeout(timer);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (json) {
+        if (!json || json.status !== "ok" || !Array.isArray(json.sessions)) throw new Error("réponse inattendue");
+        return report(normalizeAll(json.sessions.slice(0, 200).map(fromSheet)), "feuille de réservation");
+      });
+  }
+
+  function envOf(opts) {
+    var e = (opts && opts.env) || {};
+    /* fetch rattaché à window : appelé seul (env.fetch(…)), il lève « Illegal invocation » dans les navigateurs. */
+    return { config: e.config || root.WISY_CONFIG || {}, data: e.data || root.WISY_SESSIONS, fetch: e.fetch || (typeof root.fetch === "function" ? root.fetch.bind(root) : undefined) };
+  }
+  function wantsSheets(env) { return env.config.SESSIONS_SOURCE === "sheets" && !!sheetsEndpoint(env.config) && typeof env.fetch === "function"; }
+
   function load(opts) {
     opts = opts || {};
     if (cache && !opts.force) return Promise.resolve(cache);
     if (pending && !opts.force) return pending;
-    var e = opts.env || {};
-    var env = { config: e.config || root.WISY_CONFIG || {}, data: e.data || root.WISY_SESSIONS, fetch: e.fetch || root.fetch };
+    var env = envOf(opts);
     var cfg = env.config;
     var wantsSupabase = cfg.SESSIONS_SOURCE === "supabase" && cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY && typeof env.fetch === "function";
-    var p = (wantsSupabase ? fromSupabase(cfg, env).then(function (r) { r.source = "supabase"; return r; }) : Promise.reject(new Error("data")))
+    var remote = wantsSheets(env) ? fromSheets(cfg, env).then(function (r) { r.source = "sheets"; return r; })
+      : wantsSupabase ? fromSupabase(cfg, env).then(function (r) { r.source = "supabase"; return r; })
+      : Promise.reject(new Error("data"));
+    var p = remote
       .catch(function () { var r = fromDataFile(env); r.source = "data"; return r; })
       .then(function (r) { cache = r; pending = null; return r; });
     pending = p;
     return p;
   }
   function peek() { return cache ? cache.sessions.slice() : []; }
-  function reset() { cache = null; pending = null; }
+  function source() { return cache ? cache.source : null; }
+  function reset() { cache = null; pending = null; stopLive(); }
+
+  /* ------------------------------------------------------------------ actualisation en direct (source « sheets ») */
+  /* Toutes les `ms` (45 s par défaut), tant que l'onglet est visible, les places sont relues dans la feuille ; un échec garde
+     la dernière liste reçue (jamais un retour silencieux aux données statiques). `wisy:sessions` prévient les pages. */
+  var liveTimer = null;
+  function notify() {
+    try { if (root.document && typeof root.CustomEvent === "function") root.document.dispatchEvent(new root.CustomEvent("wisy:sessions", { detail: { source: source() } })); } catch (e) { /* silencieux */ }
+  }
+  function refresh(opts) {
+    var env = envOf(opts);
+    if (!wantsSheets(env)) return Promise.resolve(cache);
+    return fromSheets(env.config, env).then(function (r) { r.source = "sheets"; cache = r; notify(); return r; }, function () { return cache; });
+  }
+  function startLive(ms) {
+    if (liveTimer || !root.document || !wantsSheets(envOf())) return false;
+    var tick = function () { if (!root.document.hidden) refresh(); };
+    liveTimer = setInterval(tick, Math.max(15000, ms || 45000));
+    root.document.addEventListener("visibilitychange", function () { if (!root.document.hidden && liveTimer) refresh(); });
+    return true;
+  }
+  function stopLive() { if (liveTimer) { clearInterval(liveTimer); liveTimer = null; } }
 
   return {
     TZ: TZ, STATUSES: STATUSES,
     validate: validate, normalize: normalize, normalizeAll: normalizeAll,
-    todayISO: todayISO, isUpcoming: isUpcoming, isBookable: isBookable,
+    todayISO: todayISO, isUpcoming: isUpcoming, isBookable: isBookable, isClosed: isClosed, stateOf: stateOf,
     upcoming: upcoming, forTraining: forTraining, nextFor: nextFor,
     signupUrl: signupUrl, format: format, langName: langName,
-    load: load, peek: peek, reset: reset
+    sheetsEndpoint: sheetsEndpoint, fromSheet: fromSheet,
+    load: load, peek: peek, reset: reset, source: source, refresh: refresh, startLive: startLive, stopLive: stopLive
   };
 });

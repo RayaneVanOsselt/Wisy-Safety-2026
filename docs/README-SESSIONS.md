@@ -13,12 +13,19 @@ page HTML** : elles viennent d'**une seule source**, lue par le site tout entier
 
 Le module `js/sessions.js` (`WisySessions`) valide, trie et distribue les sessions. Il ne touche jamais au DOM.
 
-## Aujourd'hui : aucune session publiée
+> **Depuis le 15/10/2026 : les sessions et les réservations se gèrent dans la feuille Google « Réservations - Wisy
+> Safety »** (`SESSIONS_SOURCE: "sheets"`) — voir **[README-RESERVATIONS.md](README-RESERVATIONS.md)**. La feuille
+> calcule les places restantes à partir des réservations enregistrées ; le site affiche « X places disponibles sur Y ».
+> Le fichier `js/sessions-data.js` ne sert plus que de **secours** (tant que l'adresse de la feuille n'est pas collée,
+> ou si elle ne répond pas) : il n'affiche que la capacité, jamais des places restantes.
 
-`js/sessions-data.js` est **vide**. Les pages affichent alors « Aucune session n'est publiée pour le moment » ou
+## Aujourd'hui
+
+`js/sessions-data.js` contient la session **Nacelles élévatrices du 18/10/2026 (10:00–18:00, 10 places)**, la même que
+celle créée par la feuille. Sans session, les pages affichent « Aucune session n'est publiée pour le moment » ou
 « Consultez les prochaines disponibilités », avec les boutons Agenda et Contact — jamais une date inventée.
 
-## Option 1 — le fichier `js/sessions-data.js` (par défaut, le plus simple)
+## Option 1 — le fichier `js/sessions-data.js` (secours)
 
 Ajoutez un bloc entre les crochets (une virgule entre deux blocs), enregistrez, mettez en ligne. Toutes les pages
 sont à jour.
@@ -32,9 +39,8 @@ sont à jour.
   endTime: "16:30",         // facultatif
   language: "fr",           // facultatif — fr, nl, en…
   location: "…",            // facultatif — sinon le centre d'Anderlecht, uniquement pour une formation dont le lieu est confirmé
-  capacity: 12,             // facultatif — places au total
-  seatsLeft: 12,            // facultatif — places encore libres (0 = complet)
-  status: "open"            // facultatif — open (défaut), full (complet) ou cancelled (annulée : elle disparaît)
+  capacity: 12,             // facultatif — places au total (les places RESTANTES ne s'écrivent jamais ici)
+  status: "open"            // facultatif — open (défaut), full (complet), closed (inscriptions fermées) ou cancelled
 }
 ```
 
@@ -43,13 +49,15 @@ sont à jour.
 Règles utiles :
 
 - Les sessions **passées disparaissent toutes seules** (jour civil et heure de fin, à l'heure de Bruxelles).
-- `seatsLeft: 0` (ou `status: "full"`) affiche « Complet » : la session reste visible mais n'est plus réservable.
+- `status: "full"` affiche « Complet » et `status: "closed"` « Inscriptions clôturées » : la session reste visible mais
+  n'est plus réservable. (Le champ `seatsLeft` est encore lu pour compatibilité, mais ne l'utilisez plus : les places
+  restantes viennent de la feuille de réservation.)
 - Une session mal remplie **n'est pas affichée** et la console du navigateur (F12 → Console) dit pourquoi :
   `[Wisy sessions · sessions-data.js] session ignorée (…) : date : format AAAA-MM-JJ…`.
 - `tests/sessions.test.js` vérifie que toutes les sessions du fichier sont valides et que leur formation existe
   (`node --test tests/*.test.js`).
 
-## Option 2 — une table Supabase (sans toucher au code)
+## Option 3 — une table Supabase (non utilisée)
 
 1. Supabase → **SQL Editor** → collez et lancez `supabase/sessions.sql` (une seule fois ; idempotent).
 2. Donnez le rôle administrateur à votre compte : `supabase/harden-admin.sql`, **BLOC 1**.

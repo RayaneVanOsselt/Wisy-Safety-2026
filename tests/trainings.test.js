@@ -162,7 +162,7 @@ test("catalogue : la carte mène à la page dédiée, garde l'ancre #nacelle, sa
 /* ---------------------------- intégrité i18n ---------------------------- */
 function loadDictionaries() {
   const w = {};
-  ["common", "search", "assistant", "nacelles", "formations"].forEach((n) => {
+  ["common", "search", "assistant", "nacelles", "formations", "sessions"].forEach((n) => {
     new Function("window", read("js/i18n-data-" + n + ".js"))(w);
   });
   return w.I18N;

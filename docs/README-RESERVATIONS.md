@@ -14,6 +14,9 @@ de serveur à louer, pas de mot de passe supplémentaire.
                                e-mails (Gmail, ou Microsoft 365 une fois branché) · calendrier Outlook dédié (optionnel)
 ```
 
+> 📄 **Guide imprimable des onglets** (à quoi sert chaque onglet, menu, « je veux… je fais… ») :
+> [guide-feuille-reservations.pdf](guide-feuille-reservations.pdf) — 6 pages.
+
 ## 1. Ce qui est garanti
 
 - **Les places ne sont jamais saisies à la main.** « Réservées » et « Restantes » sont recalculées à chaque demande à

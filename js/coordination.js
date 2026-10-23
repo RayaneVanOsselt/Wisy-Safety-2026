@@ -22,7 +22,7 @@
      initServicePicks()  « Demander ce service » coche le service dans le formulaire.
      initTeam()          fiches de js/coordination-data.js (TEAM) ou, tant que ce
                          tableau est vide, l'état « équipe à venir » du HTML.
-     initForm()          validation native + anti-spam + envoi EmailJS (même compte
+     initForm()          validation native + envoi js/forms.js (feuille Google, secours EmailJS — même compte
                          que contact.html / peb-wallonie-bruxelles.html), sans pièce jointe.
      initTracking()      clics [data-co-track] → bus `wisy:analytics` (aucune donnée perso).
 
@@ -494,83 +494,48 @@
   /* --------------------------------------------------------------------- */
   function initForm() {
     const form = $("#co-form");
-    if (!form) return;
-    const status = $("[data-co-form-status]", form);
-    const submitBtn = $(".co-form__submit", form);
-
-    const EMAILJS_PUBLIC_KEY = "k2JkXtD2RO8TkoO77";
-    const EMAILJS_SERVICE_ID = "service_k348qw9";
-    const EMAILJS_TEMPLATE_ID = "template_0p9dah6"; // même gabarit que contact.html / peb.js (champs user_name/user_email/user_phone/subject/message)
-    let initialized = false;
-
-    function setStatus(text, state) {
-      if (!status) return;
-      status.textContent = text;
-      status.hidden = false;
-      status.setAttribute("data-state", state || "ok");
-    }
+    if (!form || !window.WisyForms) return;
+    const v = (name) => (form.querySelector(`[name="${name}"]`) || {}).value || "";
 
     function fieldLabel(select, value) {
-      if (!value) return "";
+      if (!value || !select) return "";
       const opt = Array.from(select.options).find((o) => o.value === value);
       return opt ? opt.textContent.trim() : value;
     }
 
+    /* Envoi : js/forms.js (script de la feuille Google → onglet « Demandes » + e-mail à info@wisysafety.be avec
+       « Répondre à » = le visiteur ; secours EmailJS). Le texte transmis à l'équipe reste lisible quelle que soit la langue. */
+    const c = window.WisyForms.controller({
+      status: $("[data-co-form-status]", form),
+      button: $(".co-form__submit", form),
+      t: (k, fb) => Chrome.tr(k, fb),
+      okKey: "coord.form_sent", okFallback: "Votre demande a bien été envoyée. Notre équipe revient vers vous rapidement.",
+      errKey: "coord.form_error", errFallback: "L'envoi a échoué. Vous pouvez nous écrire directement à info@wisysafety.be.",
+      fields: { name: form.querySelector('[name="nom"]'), email: form.querySelector('[name="email"]'), phone: form.querySelector('[name="telephone"]'),
+        company: form.querySelector('[name="societe"]'), message: form.querySelector('[name="message"]'), consent: form.querySelector('[name="consent"]') },
+      payload: () => {
+        const services = $$('input[name="services"]:checked', form).map((b) => (b.closest("label") || b).textContent.trim()).filter(Boolean);
+        return {
+          form: "coordination", lang: (window.WisyI18N && window.WisyI18N.current()) || "fr", page: "/coordination.html",
+          elapsed: window.performance ? performance.now() : 3000, website: v("website"),
+          consent: !!(form.querySelector('[name="consent"]') || {}).checked,
+          name: (v("prenom") + " " + v("nom")).trim(), email: v("email"), phone: v("telephone"), company: v("societe"), message: v("message"),
+          details: [
+            ["Services souhaités", services.join(", ")],
+            ["Type de projet", fieldLabel(form.querySelector('[name="type_projet"]'), v("type_projet"))],
+            ["Phase du projet", fieldLabel(form.querySelector('[name="phase_projet"]'), v("phase_projet"))],
+            ["Localisation du chantier", v("localisation")],
+            ["Démarrage souhaité", v("date_demarrage")]
+          ]
+        };
+      },
+      onSuccess: () => { Chrome.track("coord_form_submit", { services: $$('input[name="services"]:checked', form).length }); form.reset(); }
+    });
+
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-
-      // Piège à robots : rempli par un robot, jamais visible/atteignable par un humain → faux succès silencieux.
-      const honeypot = form.querySelector('[name="website"]');
-      if (honeypot && honeypot.value) { form.reset(); setStatus(Chrome.tr("coord.form_sent", "Votre demande a bien été envoyée."), "ok"); return; }
-
       if (!form.checkValidity()) { form.reportValidity(); return; }
-
-      const v = (name) => (form.querySelector(`[name="${name}"]`) || {}).value || "";
-      const typeSelect = form.querySelector('[name="type_projet"]');
-      const phaseSelect = form.querySelector('[name="phase_projet"]');
-      const services = $$('input[name="services"]:checked', form).map((b) => (b.closest("label") || b).textContent.trim()).filter(Boolean);
-      const messageParts = [
-        "Demande de coordination sécurité-santé — WiSy Coordination",
-        "Services souhaités : " + (services.join(", ") || "—"),
-        "Société : " + (v("societe") || "—"),
-        "Type de projet : " + (fieldLabel(typeSelect, v("type_projet")) || "—"),
-        "Phase du projet : " + (fieldLabel(phaseSelect, v("phase_projet")) || "—"),
-        "Localisation : " + (v("localisation") || "—"),
-        "Date de démarrage souhaitée : " + (v("date_demarrage") || "—"),
-        "",
-        "Message :",
-        v("message") || "—"
-      ].join("\n");
-
-      const params = {
-        user_name: (v("prenom") + " " + v("nom")).trim(),
-        user_email: v("email"),
-        user_phone: v("telephone") || "Non renseigné",
-        subject: "Coordination sécurité-santé",
-        message: messageParts,
-        time: new Date().toLocaleString("fr-BE", { timeZone: "Europe/Brussels" })
-      };
-
-      // EmailJS est chargé en `defer` : on le lit au moment de l'envoi, jamais au démarrage.
-      if (!window.emailjs) {
-        setStatus(Chrome.tr("coord.form_fallback", "L'envoi automatique n'est pas disponible pour le moment : écrivez-nous directement à info@wisysafety.be."), "error");
-        return;
-      }
-
-      submitBtn.disabled = true;
-      try { if (!initialized) { window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); initialized = true; } }
-      catch (e2) { /* déjà initialisé ailleurs sur la page : ignoré */ }
-
-      window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
-        .then(() => {
-          form.reset();
-          setStatus(Chrome.tr("coord.form_sent", "Votre demande a bien été envoyée. Notre équipe revient vers vous rapidement."), "ok");
-          Chrome.track("coord_form_submit", { services: services.length });
-        })
-        .catch(() => {
-          setStatus(Chrome.tr("coord.form_error", "L'envoi a échoué. Vous pouvez nous écrire directement à info@wisysafety.be."), "error");
-        })
-        .finally(() => { submitBtn.disabled = false; });
+      c.submit();
     });
   }
 

@@ -42,7 +42,8 @@ test("registre : 6 formations, ids uniques, catégories déclarées, comptes coh
 
 test("registre ⇄ catalogue d'inscription : chaque formation a son registrationId, et inversement", () => {
   const catalogue = Array.from(Reg.getCatalogue(), (c) => c.id).sort();    // Array.from : sort de l'autre contexte vm
-  assert.deepEqual(Site.formations().map((f) => f.registrationId).sort(), catalogue);
+  /* Formations ET services réservables (VCA Entreprise est un service d'accompagnement, présent au catalogue d'inscription). */
+  assert.deepEqual(Site.formations().concat(Site.services()).map((f) => f.registrationId).filter(Boolean).sort(), catalogue);
 });
 
 test("lien profond ?formation= : identifiants du site OU du catalogue ; inconnu → null", () => {
@@ -89,10 +90,10 @@ test("le registre est en LECTURE SEULE pour ses consommateurs (copies)", () => {
 });
 
 test("URL absolue : la racine pour l'accueil, .html ailleurs, domaine canonique unique", () => {
-  assert.equal(Site.ORIGIN, "https://www.wisysafety.be");
-  assert.equal(Site.absoluteUrl("index.html"), "https://www.wisysafety.be/");
-  assert.equal(Site.absoluteUrl("faq.html"), "https://www.wisysafety.be/faq.html");
-  assert.match(read(".env.example"), /ASSISTANT_ALLOWED_ORIGIN=https:\/\/www\.wisysafety\.be/, "même domaine que l'origine CORS de l'assistant");
+  assert.equal(Site.ORIGIN, "https://wisysafety.be", "domaine servi par GitHub Pages (CNAME) : www et github.io y redirigent en 301");
+  assert.equal(Site.absoluteUrl("index.html"), "https://wisysafety.be/");
+  assert.equal(Site.absoluteUrl("faq.html"), "https://wisysafety.be/faq.html");
+  assert.match(read(".env.example"), /ASSISTANT_ALLOWED_ORIGIN=https:\/\/wisysafety\.be/, "même domaine que l'origine CORS de l'assistant");
 });
 
 test("chaque page charge le registre AVANT la recherche (et le lanceur le charge à la demande si besoin)", () => {

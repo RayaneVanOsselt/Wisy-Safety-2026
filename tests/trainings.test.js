@@ -78,8 +78,8 @@ test("page : SEO (title, description, canonical, Open Graph) et image OG existan
   const html = read(N.url);
   assert.match(html, /<title>Formation Nacelles Élévatrices \| Wisy Safety<\/title>/);
   assert.match(html, /<meta name="description" content="Formation nacelles élévatrices \(PEMP\) chez Wisy Safety : théorie et pratique/);   /* raccourcie à 149 caractères (audit 02/10/2026, M11) */
-  assert.match(html, /<link rel="canonical" href="https:\/\/www\.wisysafety\.be\/formation-nacelles-elevatrices\.html">/);
-  assert.ok(html.includes('<meta property="og:image" content="https://www.wisysafety.be/' + N.images.og + '">'), "og:image = image de partage du registre");
+  assert.match(html, /<link rel="canonical" href="https:\/\/wisysafety\.be\/formation-nacelles-elevatrices\.html">/);
+  assert.ok(html.includes('<meta property="og:image" content="https://wisysafety.be/' + N.images.og + '">'), "og:image = image de partage du registre");
   assert.equal(N.images.og, "assets/images/partage/formation-nacelles-1200x630.jpg");
   assert.ok(exists(N.images.og), "l'image de partage existe");
 });

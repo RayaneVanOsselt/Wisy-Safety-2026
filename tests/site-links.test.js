@@ -142,7 +142,7 @@ test("aucun lien javascript: ni href/src vide ; mailto: et tel: bien formés", (
 
 /* ------------------------------------------------------------------ sécurité des liens sortants */
 test("target=_blank : toujours rel=noopener ; liens sortants limités aux domaines attendus", () => {
-  const ALLOWED = new Set(["maps.google.com", "www.google.com", "cdn.jsdelivr.net", "www.wisysafety.be",
+  const ALLOWED = new Set(["maps.google.com", "www.google.com", "cdn.jsdelivr.net", "wisysafety.be",
     /* Sources réglementaires officielles citées par peb-wallonie-bruxelles.html (voir docs/README-PEB.md) */
     "www.wallonie.be", "energie.wallonie.be", "environnement.brussels", "examen.environnement.brussels",
     /* Sources officielles citées par formation-vca-base.html et ses deux articles (voir docs/README-VCA.md) :

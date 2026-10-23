@@ -34,16 +34,21 @@
     return out;
   }
 
-  /** Réponse de la liste → { kind: "ok", reviews, stats } | { kind: "not_configured" } | null (réponse inattendue). */
-  function normalizeList(json) {
+  /** Réponse de la liste → { kind: "ok", reviews, stats } | { kind: "not_configured" } | null (réponse inattendue).
+      `exclude` : références à ne JAMAIS afficher (avis de test publiés par erreur — filet de sécurité de js/avis-config.js ;
+      la vraie correction reste de passer l'avis en « Refusé » dans la feuille). Si un avis est écarté, les statistiques de
+      la feuille (qui le comptent) sont ignorées : la page les recalcule sur les avis affichés. */
+  function normalizeList(json, exclude) {
     if (!json || typeof json !== "object") return null;
     if (json.status === "not_configured") return { kind: "not_configured" };
     if (json.status !== "ok" || !Array.isArray(json.reviews)) return null;
-    var reviews = json.reviews.slice(0, 200).map(normalizeReview).filter(Boolean);
+    var banned = Array.isArray(exclude) ? exclude.map(String) : [];
+    var all = json.reviews.slice(0, 200).map(normalizeReview).filter(Boolean);
+    var reviews = all.filter(function (r) { return !r.reference || banned.indexOf(r.reference) < 0; });
     var s = json.stats && typeof json.stats === "object" ? json.stats : {};
     var count = Math.round(Number(s.count));
     var average = Number(s.average);
-    var stats = count >= reviews.length && count > 0 && average >= 1 && average <= 5 ? { count: count, average: average } : null;
+    var stats = reviews.length === all.length && count >= reviews.length && count > 0 && average >= 1 && average <= 5 ? { count: count, average: average } : null;
     return { kind: "ok", reviews: reviews, stats: stats };
   }
 
@@ -107,7 +112,8 @@
   function list(opts) {
     var url = endpoint(opts.config);
     if (!url || typeof opts.fetch !== "function") return Promise.resolve({ kind: "not_configured" });
-    return call(opts.fetch, url, { method: "GET" }, opts.timeout, normalizeList);
+    var exclude = opts.config && opts.config.EXCLUDED_REFERENCES;
+    return call(opts.fetch, url, { method: "GET" }, opts.timeout, function (j) { return normalizeList(j, exclude); });
   }
 
   /**

@@ -116,7 +116,7 @@ test("distinction des concepts : certificat / agrément / formation / examen / f
 /* ------------------------------------------------------------------ page : structure et SEO */
 test("page : un seul H1, canonical, meta description dans les bornes, image sociale existante", () => {
   assert.equal((html.match(/<h1[\s>]/g) || []).length, 1);
-  assert.match(html, /<link rel="canonical" href="https:\/\/www\.wisysafety\.be\/peb-wallonie-bruxelles\.html">/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/wisysafety\.be\/peb-wallonie-bruxelles\.html">/);
   const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "";
   assert.ok(desc.length >= 70 && desc.length <= 175, "longueur meta description : " + desc.length);
 });

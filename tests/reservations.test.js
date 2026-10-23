@@ -47,9 +47,9 @@ function edit(G, line, field, value) {
 const bookings = (G) => G.sheet("Réservations").records();
 
 /* ------------------------------------------------------------------ installation */
-test("installer : 7 onglets, TOUTES les formations du site, la session Nacelles du 18/10/2026 (10 places, publiée), tâche automatique", () => {
+test("installer : 8 onglets (dont « Demandes » des formulaires), TOUTES les formations du site, la session Nacelles du 18/10/2026 (10 places, publiée), tâche automatique", () => {
   const G = sheetGas();
-  assert.deepEqual(G.sheets.map((s) => s.getName()), ["Formations", "Sessions", "Réservations", "Participants", "Écarts Outlook", "File d'envoi", "Journal"]);
+  assert.deepEqual(G.sheets.map((s) => s.getName()), ["Formations", "Sessions", "Réservations", "Participants", "Écarts Outlook", "File d'envoi", "Journal", "Demandes"]);
   const ctx = { window: {} }; ctx.self = ctx.window;
   vm.runInNewContext(read("js/trainings-data.js"), ctx); vm.runInNewContext(read("js/site-content.js"), ctx);
   const site = ctx.window.WisySite.formations().concat(ctx.window.WisySite.services());
@@ -57,7 +57,7 @@ test("installer : 7 onglets, TOUTES les formations du site, la session Nacelles 
   assert.deepEqual(plain(rows.map((r) => r["Identifiant"])), plain(site.map((f) => f.id)), "mêmes formations, même ordre que le registre du site");
   rows.forEach((r, i) => {
     assert.equal(r["Formation"], site[i].title, "nom = titre du site : " + r["Identifiant"]);
-    assert.equal(r["Page du site"], "https://rayanevanosselt.github.io/Wisy-Safety-2026/" + site[i].url);
+    assert.equal(r["Page du site"], "https://wisysafety.be/" + site[i].url, "domaine officiel (plus l'adresse github.io)");
     if (site[i].priceLabel) assert.ok(r["Tarif"].startsWith(site[i].priceLabel), "tarif du site : " + r["Tarif"]);
     else assert.equal(r["Tarif"], "Sur devis", "aucun tarif inventé : " + r["Identifiant"]);
   });
@@ -292,6 +292,8 @@ test("e-mails : confirmation au client + avis à Wisy Safety ; en cas d'échec �
   assert.equal(G.mails[0].to, "client" + seq + "@exemple.be"); assert.match(G.mails[0].subject, /réservation confirmée WSR-/);
   assert.match(G.mails[0].htmlBody, /dimanche 18 octobre 2026, 10:00–18:00/);
   assert.equal(G.mails[1].to, "info@wisysafety.be"); assert.match(G.mails[1].htmlBody, /8 place\(s\) restante\(s\) sur 10/);
+  assert.equal(G.mails[0].replyTo, "info@wisysafety.be", "le client répond à l'équipe");
+  assert.equal(G.mails[1].replyTo, "client" + seq + "@exemple.be", "« Répondre » depuis l'avis à l'équipe écrit directement au client");
   const F = loadGas("google-sheets/reservations.gs", { now: () => now, mailFails: true });
   F.ctx.installer();
   F.post(order(1));
@@ -590,13 +592,16 @@ test("heure gardée avec son apostrophe par Google (« '10:00 ») : la session r
 test("diagnostic à distance (?action=health) : onglets, tâche automatique, nombre de sessions et raisons — sans aucune donnée personnelle", () => {
   const fresh = loadGas("google-sheets/reservations.gs", { now: NOW });
   let h = fresh.get({ action: "health" });
-  assert.equal(h.version, "1.0.1"); assert.equal(h.tabs.Sessions, false, "feuille pas encore installée");
+  assert.equal(h.version, "1.1.0"); assert.equal(h.tabs.Sessions, false, "feuille pas encore installée");
+  assert.deepEqual(plain(h.features), ["sessions", "book", "contact"], "le site peut vérifier que le script sait recevoir les formulaires");
   assert.equal(h.sessions.rows, 0); assert.equal(h.automaticTask, false);
   const G = sheetGas();
   G.post(order(2));
   edit(G, 2, "capacity", "dix");
   h = G.get({ action: "health" });
-  assert.deepEqual(plain(h.tabs), { Formations: true, Sessions: true, "Réservations": true, Participants: true, "Écarts Outlook": true, "File d'envoi": true, Journal: true });
+  assert.deepEqual(plain(h.tabs), { Formations: true, Sessions: true, "Réservations": true, Participants: true, "Écarts Outlook": true, "File d'envoi": true, Journal: true, Demandes: true });
+  assert.deepEqual(plain(h.mail.outbox), { pending: 0, sent: 2, failed: 0, lastSentAt: "2026-10-15T10:00" }, "file d'envoi : des COMPTES seulement");
+  assert.equal(h.mail.sender, "google"); assert.equal(h.requests.total, 0);
   assert.equal(h.automaticTask, true);
   assert.deepEqual(plain(h.sessions), { rows: 1, valid: 0, published: 0, upcoming: 0, problems: { "places (total) : nombre entier de 1 à 500": 1 } });
   assert.doesNotMatch(JSON.stringify(h), /Dupont|exemple\.be|0470|Nacelles|2026-10-18/, "aucun nom, e-mail, ni session non publiée");

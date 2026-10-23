@@ -162,7 +162,9 @@ function organization() {
     telephone: C.phone.replace(/\s+/g, ""),
     address: { "@type": "PostalAddress", streetAddress: C.street, postalCode: C.postalCode, addressLocality: C.city, addressCountry: "BE" },
     geo: { "@type": "GeoCoordinates", latitude: C.geo.latitude, longitude: C.geo.longitude },
-    openingHoursSpecification: C.openingHours.map((h) => ({ "@type": "OpeningHoursSpecification", dayOfWeek: h.days, opens: h.opens, closes: h.closes }))
+    openingHoursSpecification: C.openingHours.map((h) => ({ "@type": "OpeningHoursSpecification", dayOfWeek: h.days, opens: h.opens, closes: h.closes })),
+    areaServed: (C.areaServed || []).map((name) => ({ "@type": "AdministrativeArea", name })),
+    contactPoint: { "@type": "ContactPoint", contactType: "customer service", email: C.email, telephone: C.phone.replace(/\s+/g, ""), url: ORIGIN + "/" + C.contactUrl }
   };
 }
 const providerOf = () => ({ "@type": "EducationalOrganization", name: C.company, url: ORIGIN + "/" });

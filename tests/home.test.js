@@ -95,8 +95,8 @@ test("VCA : formation VCA Base + ressources ; pas de section VCA Entreprise sur 
   assert.doesNotMatch(MAIN, /home-biz|id="entreprises"|href="#entreprises"|homeBizVideo/);
   assert.doesNotMatch(read("css/home.css") + read("js/home.js"), /home-biz|homeBizVideo/, "aucun style ni script résiduel");
   /* « Former mon équipe » (hero) et la carte « Je forme mes équipes » mènent au formulaire de devis RÉEL */
-  assert.match(MAIN, /<a class="home-btn home-btn--ghost" href="contact\.html#wisy-contact-form"><span data-i18n="home\.hero_cta2">/);
-  assert.match(MAIN, /<a class="home-path home-path--team[^"]*" href="contact\.html#wisy-contact-form"/);
+  assert.match(MAIN, /<a class="home-btn home-btn--ghost" href="contact\.html\?subject=devis#wisy-contact-form"><span data-i18n="home\.hero_cta2">/);
+  assert.match(MAIN, /<a class="home-path home-path--team[^"]*" href="contact\.html\?subject=devis#wisy-contact-form"/);
   assert.match(read("contact.html"), /id="wisy-contact-form"/);
   assert.ok(FAQ.items().some((it) => it.id === "faq-entreprises-devis"), "le devis pour les entreprises est une réponse publiée du Centre d'aide");
 });

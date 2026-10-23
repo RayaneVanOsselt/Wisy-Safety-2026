@@ -55,7 +55,7 @@ test("pages publiques : <html lang=fr>, un seul H1, un seul canonical ABSOLU ég
     const canon = h.match(/<link rel="canonical" href="([^"]+)">/g) || [];
     assert.equal(canon.length, 1, f + " : un seul canonical");
     assert.equal(canon[0].match(/href="([^"]+)"/)[1], Site.absoluteUrl(f), f + " : canonical = URL du registre");
-    assert.match(canon[0], /href="https:\/\/www\.wisysafety\.be\//, f + " : URL absolue (https, domaine canonique)");
+    assert.match(canon[0], /href="https:\/\/wisysafety\.be\//, f + " : URL absolue (https, domaine canonique)");
     assert.doesNotMatch(h, /<meta name="robots"[^>]*noindex/, f + " : indexable");
   });
 });
@@ -109,7 +109,8 @@ test("plus de hreflang relatifs ni de balises SEO en double (le bloc généré e
 /* ------------------------------------------------------------------ données structurées */
 test("JSON-LD : valide, types autorisés, une Organisation dont les faits = coordonnées du site", () => {
   /* CreativeWork + Organization : propriété `citation` des articles (sources officielles citées, js/sources-data.js). */
-  const ALLOWED = new Set(["EducationalOrganization", "LocalBusiness", "WebSite", "BreadcrumbList", "ListItem", "ItemList", "Course", "Article", "ContactPage", "PostalAddress", "GeoCoordinates", "OpeningHoursSpecification", "Offer", "Service", "BusinessAudience", "UnitPriceSpecification", "PriceSpecification", "CreativeWork", "Organization"]);
+  const ALLOWED = new Set(["EducationalOrganization", "LocalBusiness", "WebSite", "BreadcrumbList", "ListItem", "ItemList", "Course", "Article", "ContactPage", "PostalAddress", "GeoCoordinates", "OpeningHoursSpecification", "Offer", "Service", "BusinessAudience", "UnitPriceSpecification", "PriceSpecification", "CreativeWork", "Organization",
+    /* zone desservie (areaServed) et point de contact du formulaire */ "AdministrativeArea", "ContactPoint"]);
   PUBLIC.forEach((f) => {
     const blocks = ldBlocks(read(f));
     assert.equal(blocks.length, 1, f + " : un seul bloc JSON-LD statique (le FAQPage de faq.html est injecté à l'exécution)");
@@ -124,6 +125,10 @@ test("JSON-LD : valide, types autorisés, une Organisation dont les faits = coor
     assert.equal(org[0].address.addressLocality, C.city);
     assert.deepEqual([org[0].geo.latitude, org[0].geo.longitude], [C.geo.latitude, C.geo.longitude]);
     assert.equal(g["@graph"].filter((n) => n["@type"] === "WebSite").length, f === "index.html" ? 1 : 0, f + " : WebSite sur l'accueil uniquement");
+    /* Zone desservie : celle de la source unique, AFFICHÉE dans la barre du haut de la page. */
+    assert.deepEqual(org[0].areaServed.map((a) => a.name), C.areaServed, f + " : areaServed = js/faq-data.js");
+    assert.match(read(f), /data-i18n="util\.badge">[^<]*Bruxelles &amp; Wallonie/, f + " : zone desservie visible");
+    assert.equal(org[0].contactPoint.email, C.email);
   });
 });
 
@@ -206,7 +211,7 @@ test("sitemap.xml : exactement les URLs canoniques des pages indexables, sans do
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   assert.equal(new Set(locs).size, locs.length, "aucun doublon");
   assert.deepEqual(locs, PUBLIC.map((f) => Site.absoluteUrl(f)), "URLs canoniques, dans l'ordre du registre");
-  locs.forEach((u) => assert.ok(u.startsWith("https://www.wisysafety.be/") && !/[?#]/.test(u), "URL propre : " + u));
+  locs.forEach((u) => assert.ok(u.startsWith("https://wisysafety.be/") && !/[?#]/.test(u), "URL propre : " + u));
   SEO.TECHNICAL.forEach((f) => assert.ok(!xml.includes(f), "page technique exclue : " + f));
   assert.doesNotMatch(xml, /\?lang=|search|\/admin\//, "ni variantes de langue, ni recherche, ni admin");
 });
@@ -215,7 +220,7 @@ test("robots.txt : rien de public n'est bloqué, le sitemap est référencé", (
   const txt = read("robots.txt");
   assert.match(txt, /^User-agent: \*$/m);
   assert.match(txt, /^Allow: \/$/m);
-  assert.match(txt, /^Sitemap: https:\/\/www\.wisysafety\.be\/sitemap\.xml$/m);
+  assert.match(txt, /^Sitemap: https:\/\/wisysafety\.be\/sitemap\.xml$/m);
   assert.doesNotMatch(txt, /^Disallow:\s*(\/?|\/(css|js|assets)\b.*)$/m, "ni le site, ni ses ressources de rendu ne sont bloqués");
 });
 

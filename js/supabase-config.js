@@ -3,10 +3,13 @@
    -------------------------------------------------------------------------
    Site 100 % statique : ce fichier ne contient QUE des valeurs publiques,
    sûres à exposer côté client :
-     • EMAILJS_PUBLIC_KEY → clé publique EmailJS (formulaires contact, coordination, PEB, inscription).
+     • EMAILJS_PUBLIC_KEY → clé publique EmailJS : envoi de SECOURS des formulaires (contact, coordination, PEB,
+       inscription) quand le script de la feuille ne répond pas (js/forms.js, js/registration.js).
      • RESERVATIONS_API_URL → adresse PUBLIQUE (…/exec) du script de la feuille Google « Réservations - Wisy Safety »
        (google-sheets/reservations.gs) : sessions, places restantes calculées et réservations. La feuille reste
        privée ; les identifiants Microsoft vivent dans le script, jamais ici. Guide : docs/README-RESERVATIONS.md.
+       Le MÊME script reçoit les demandes des formulaires contact / devis, coordination et test PEB (action
+       "contact" → onglet « Demandes » + e-mail à info@wisysafety.be) : docs/README-FORMULAIRES.md.
      • SUPABASE_URL / SUPABASE_ANON_KEY → utilisées SEULEMENT si SESSIONS_SOURCE = "supabase"
        (option des sessions, non utilisée : voir docs/README-SESSIONS.md).
 
@@ -21,7 +24,7 @@ window.WISY_CONFIG = {
   SUPABASE_URL:      "https://frylezdzcuegyqqmxris.supabase.co",
   SUPABASE_ANON_KEY: "sb_publishable_-aXXgnr5Mn9DEbBv0EeR9g_KFQd4jei",
 
-  /* ---- EmailJS (formulaires contact, coordination, PEB, inscription) ---- */
+  /* ---- EmailJS (SECOURS des formulaires contact, coordination, PEB, inscription : js/forms.js) ---- */
   EMAILJS_PUBLIC_KEY:        "k2JkXtD2RO8TkoO77",
   EMAILJS_SERVICE_ID:        "service_k348qw9",
   /* Gabarit « contact » (champs user_name / user_email / user_phone / subject / message), partagé avec contact.html,
@@ -33,6 +36,12 @@ window.WISY_CONFIG = {
      VIDE = réservations pas encore activées : les sessions viennent de js/sessions-data.js et l'inscription
      envoie une simple demande par e-mail (EmailJS), comme avant.                                         */
   RESERVATIONS_API_URL: "https://script.google.com/macros/s/AKfycbw4fV7ZDyLcEk0J41INJjwQ_41ASkyCSGx7_ZuVxU1U_wmWdYDvLWwxgF-ga_QFxrvnPQ/exec",
+
+  /* ---- Formulaires (contact / devis, coordination, test PEB) ----------------------------------------- */
+  /* VIDE = même script que les réservations ci-dessus (recommandé). Une autre adresse …/exec permet d'utiliser un
+     script séparé. Si le script répond « action inconnue » (ancienne version) ou ne répond pas, js/forms.js envoie la
+     demande par EmailJS : aucune demande n'est perdue. Guide : docs/README-FORMULAIRES.md.                        */
+  FORMS_API_URL: "",
 
   /* ---- Sessions de formation (dates) ------------------------------------ */
   /* "sheets"   : les sessions et leurs places viennent de la feuille de réservation (adresse ci-dessus) ;

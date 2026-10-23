@@ -1,6 +1,7 @@
 # Wisy Safety 2026
 
-Site du centre de formation à la sécurité **Wisy Safety** (Anderlecht, Bruxelles) : catalogue des formations,
+Site du centre de formation à la sécurité **Wisy Safety** (Anderlecht, Bruxelles) — **https://wisysafety.be** (domaine
+canonique, sans « www » ; www et l'adresse github.io y redirigent) : catalogue des formations,
 inscription et réservation de places en ligne, avis clients, Centre d'aide, agenda et assistant virtuel.
 
 Le site est **100 % statique** : du HTML, du CSS et du JavaScript, sans framework, sans étape de « build »
@@ -37,6 +38,8 @@ et sans rien à installer pour le mettre en ligne.
 | **Publier ou refuser un avis client** | la feuille **Google Sheets** « Avis - Wisy Safety » : colonne Statut → « Confirmé » (aucun code à modifier) ; mise en service : `google-sheets/avis.gs` + l'adresse dans `js/avis-config.js` | [docs/README-AVIS.md](docs/README-AVIS.md) |
 | **Ajouter des personnes au registre des certificats** | la feuille **Google Sheets** du registre (aucun code à modifier) ; mise en service : `google-sheets/certificats.gs` + l'adresse dans `js/certificats-config.js` | [docs/README-CERTIFICATS.md](docs/README-CERTIFICATS.md) |
 | Changer les **suggestions animées de la barre de recherche** (« Rechercher « VCA de base » »…) et les pastilles « Essayez » (les 4 premières) | `js/i18n-data-search.js` (`search.fx_list`, 7 recherches séparées par « \| » dans chaque langue — chacune doit renvoyer au moins un résultat) ; comportement dans `js/search.js`, style dans `css/search.css` | — |
+| **Recevoir les demandes des formulaires** (contact / devis, coordination, test PEB) dans info@wisysafety.be ; mettre à jour le script ; SPF/DKIM/DMARC | `google-sheets/reservations.gs` (action « contact », onglet « Demandes ») + `js/forms.js` ; adresse dans `js/supabase-config.js` | [docs/README-FORMULAIRES.md](docs/README-FORMULAIRES.md) |
+| Rediriger une ancienne adresse (ancien site WordPress) | `404.html` (table) + dossier `ancienne-adresse/index.html` | [docs/redirects.md](docs/redirects.md) |
 | Corriger une traduction, ajouter un texte ou une page traduite | `js/i18n-data-*.js` (+ le HTML) | [docs/README-I18N.md](docs/README-I18N.md) |
 | Comprendre ou activer l'assistant virtuel | `js/assistant/` | [docs/README-ASSISTANT.md](docs/README-ASSISTANT.md) |
 | Compléter ou modifier les **pages juridiques** (mentions légales, politique de confidentialité, CGU) — dont les mentions « [À COMPLÉTER] » | le HTML de la page + `js/i18n-data-privacy.js` / `js/i18n-data-cgu.js` / `js/i18n-data-legal.js` (10 langues) ; style et comportements communs : `css/legal.css`, `js/legal.js` | [docs/LEGAL_PRIVACY_CGU_REPORT.md](docs/LEGAL_PRIVACY_CGU_REPORT.md) |

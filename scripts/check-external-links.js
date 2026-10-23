@@ -21,7 +21,7 @@ const path = require("node:path");
 const ROOT = path.join(__dirname, "..");
 const Sources = require("../js/sources-data.js");
 
-const UA = "Mozilla/5.0 (compatible; WisySafety-LinkCheck/1.0; +https://www.wisysafety.be)";
+const UA = "Mozilla/5.0 (compatible; WisySafety-LinkCheck/1.0; +https://wisysafety.be)";
 const TIMEOUT = 20000, CONCURRENCY = 4;
 
 function collect() {

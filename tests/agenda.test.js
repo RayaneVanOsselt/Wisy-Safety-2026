@@ -46,7 +46,7 @@ test("SEO : title, meta description, un seul H1, landmarks, canonical absolu (bl
   assert.doesNotMatch(HTML, /<main\b[^>]*\b(lang|dir)=/, "aucun forçage de langue / de sens de lecture sur le contenu");
   assert.ok((HTML.match(/<section /g) || []).length >= 7, "sections sémantiques");
   assert.match(HTML, /<nav data-i18n-attr="aria-label:ag\.crumbs_label" class="ag-crumbs" aria-label="Fil d'Ariane">/, "fil d'Ariane (libellé traduit)");
-  assert.match(HTML, /<link rel="canonical" href="https:\/\/www\.wisysafety\.be\/agenda\.html">/, "canonical absolu");
+  assert.match(HTML, /<link rel="canonical" href="https:\/\/wisysafety\.be\/agenda\.html">/, "canonical absolu");
   assert.doesNotMatch(HTML, /rel="alternate" hreflang=/, "pas de hreflang relatif (langues = même URL traduite en JS)");
   assert.doesNotMatch(HTML, /"@type"\s*:\s*"Event"|schema\.org\/Event/, "aucune donnée structurée d'événement fictif");
 });

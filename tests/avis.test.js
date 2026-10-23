@@ -70,6 +70,18 @@ test("client : lecture des avis en GET ; seuls les champs publics sont gardés, 
   assert.equal(A.normalizeList({ status: "ok", reviews: [], stats: { count: 0, average: null } }).stats, null);
 });
 
+test("filet de sécurité : un avis de TEST resté « Confirmé » (référence listée dans js/avis-config.js) n'est jamais affiché ; statistiques recalculées", async () => {
+  const site = {}; vm.runInNewContext(read("js/avis-config.js"), { window: site });
+  assert.ok(Array.from(site.WISY_AVIS.EXCLUDED_REFERENCES).indexOf("WS-2026-T9Q2B") >= 0, "avis « Test Claude » du 14/10/2026 écarté");
+  const live = { status: "ok", stats: { count: 2, average: 4.5 }, reviews: [
+    { reference: "WS-2026-T9Q2B", first_name: "Test", last_name: "Claude", rating: 5, comment: "Avis de test", date: "2026-10-14" },
+    { reference: "WS-2026-REAL1", first_name: "Anne", rating: 4, comment: "Formation claire.", date: "2026-10-20" }] };
+  const r = await A.list({ config: Object.assign({}, CFG, { EXCLUDED_REFERENCES: ["WS-2026-T9Q2B"] }), fetch: fakeFetch(200, live) });
+  assert.deepEqual(r.reviews.map((x) => x.first_name), ["Anne"]);
+  assert.equal(r.stats, null, "les statistiques de la feuille comptent l'avis écarté : la page recalcule sur les avis affichés");
+  assert.equal((await A.list({ config: CFG, fetch: fakeFetch(200, live) })).reviews.length, 2, "sans liste : comportement inchangé");
+});
+
 test("client : feuille absente, erreurs et pannes → états explicites, jamais d'exception", async () => {
   assert.equal((await A.list({ config: { API_URL: "" }, fetch: fakeFetch(200, {}) })).kind, "not_configured");
   assert.equal((await A.list({ config: CFG, fetch: fakeFetch(404, "Not found") })).kind, "not_configured");

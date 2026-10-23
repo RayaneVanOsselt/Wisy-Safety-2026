@@ -128,6 +128,11 @@ par jour avec Gmail, 1 500 avec Google Workspace) et rien n'est envoyé à Outlo
 
 ## 5. Mettre à jour le script
 
+> **Version 1.1.0 (23/10/2026)** : le même script reçoit aussi les **formulaires du site** (contact / devis,
+> coordination, test PEB → onglet « Demandes », voir [README-FORMULAIRES.md](README-FORMULAIRES.md)) ; les e-mails à
+> l'équipe ont « Répondre à » = le client ; liens vers https://wisysafety.be ; menu « ✉ Envoyer un e-mail de test ».
+> Après avoir collé cette version : Nouvelle version du déploiement, puis *🛠 Installer / réparer la feuille*.
+
 Collez la nouvelle version de `google-sheets/reservations.gs` › Enregistrer › **Déployer › Gérer les déploiements › ✏
 Modifier › Version : Nouvelle version › Déployer**. L'adresse `/exec` reste la même (rien à changer sur le site).
 Relancez *🛠 Installer / réparer la feuille* si la nouvelle version ajoute des colonnes (rien n'est effacé).

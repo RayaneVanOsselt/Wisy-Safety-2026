@@ -106,7 +106,7 @@
     "faq.sug_none_q": "pour « {q} ».",
     "faq.sug_all": "Voir les {n} résultats",
     "faq.sug_ask": "Poser cette question à l'assistant Wisy Safety",
-    "meta.title": "Wisy Safety — Centre d'aide & FAQ"
+    "meta.title": "Centre d'aide et FAQ des formations sécurité | Wisy Safety"
   });
 
   /* ---------------- ENGLISH ---------------- */
@@ -195,7 +195,7 @@
     "faq.sug_none_q": "for “{q}”.",
     "faq.sug_all": "See all {n} results",
     "faq.sug_ask": "Ask this question to the Wisy Safety assistant",
-    "meta.title": "Wisy Safety — Help centre & FAQ"
+    "meta.title": "Help centre and FAQ on safety training | Wisy Safety"
   });
 
   /* ---------------- NEDERLANDS ---------------- */
@@ -284,7 +284,7 @@
     "faq.sug_none_q": "voor “{q}”.",
     "faq.sug_all": "Alle {n} resultaten bekijken",
     "faq.sug_ask": "Deze vraag stellen aan de Wisy Safety-assistent",
-    "meta.title": "Wisy Safety — Helpcentrum & FAQ"
+    "meta.title": "Helpcentrum en FAQ over veiligheidsopleidingen | Wisy Safety"
   });
 
   /* ---------------- AFRIKAANS ---------------- */
@@ -373,7 +373,7 @@
     "faq.sug_none_q": "vir “{q}”.",
     "faq.sug_all": "Bekyk al {n} resultate",
     "faq.sug_ask": "Stel hierdie vraag aan die Wisy Safety-assistent",
-    "meta.title": "Wisy Safety — Hulpsentrum & FAQ"
+    "meta.title": "Hulpsentrum en FAQ oor veiligheidsopleiding | Wisy Safety"
   });
 
   /* ---------------- العربية ---------------- */
@@ -462,7 +462,7 @@
     "faq.sug_none_q": "لـ «{q}».",
     "faq.sug_all": "عرض جميع النتائج ({n})",
     "faq.sug_ask": "اطرح هذا السؤال على مساعد Wisy Safety",
-    "meta.title": "Wisy Safety — مركز المساعدة والأسئلة الشائعة",
+    "meta.title": "مركز المساعدة والأسئلة الشائعة حول دورات السلامة | Wisy Safety",
     "faq.n_questions_zero": "{n} أسئلة",
     "faq.n_questions_two": "سؤالان",
     "faq.n_questions_few": "{n} أسئلة",
@@ -563,7 +563,7 @@
     "faq.sug_none_q": "за „{q}“.",
     "faq.sug_all": "Вижте всички {n} резултата",
     "faq.sug_ask": "Задайте този въпрос на асистента на Wisy Safety",
-    "meta.title": "Wisy Safety — Помощен център и FAQ"
+    "meta.title": "Помощен център и FAQ за обученията | Wisy Safety"
   });
 
   /* ---------------- DEUTSCH ---------------- */
@@ -652,7 +652,7 @@
     "faq.sug_none_q": "für „{q}“.",
     "faq.sug_all": "Alle {n} Ergebnisse ansehen",
     "faq.sug_ask": "Diese Frage dem Wisy-Safety-Assistenten stellen",
-    "meta.title": "Wisy Safety — Hilfe-Center & FAQ"
+    "meta.title": "Hilfe-Center und FAQ zu Sicherheitsschulungen | Wisy Safety"
   });
 
   /* ---------------- ROMÂNĂ ---------------- */
@@ -741,7 +741,7 @@
     "faq.sug_none_q": "pentru „{q}”.",
     "faq.sug_all": "Vedeți toate cele {n} rezultate",
     "faq.sug_ask": "Adresați această întrebare asistentului Wisy Safety",
-    "meta.title": "Wisy Safety — Centru de ajutor și FAQ",
+    "meta.title": "Centru de ajutor și FAQ despre cursuri | Wisy Safety",
     "faq.n_questions_few": "{n} întrebări",
     "faq.n_results_few": "{n} rezultate",
     "faq.n_shown_pl_few": "{n} întrebări afișate"
@@ -833,7 +833,7 @@
     "faq.sug_none_q": "per «{q}».",
     "faq.sug_all": "Vedi tutti i {n} risultati",
     "faq.sug_ask": "Fai questa domanda all’assistente Wisy Safety",
-    "meta.title": "Wisy Safety — Centro assistenza e FAQ"
+    "meta.title": "Centro assistenza e FAQ sui corsi di sicurezza | Wisy Safety"
   });
 
   /* ---------------- SLOVENŠČINA ---------------- */
@@ -922,7 +922,7 @@
     "faq.sug_none_q": "za „{q}“.",
     "faq.sug_all": "Poglejte vseh {n} zadetkov",
     "faq.sug_ask": "Postavite to vprašanje asistentu Wisy Safety",
-    "meta.title": "Wisy Safety — Center za pomoč in FAQ",
+    "meta.title": "Center za pomoč in FAQ o usposabljanjih | Wisy Safety",
     "faq.n_questions_two": "{n} vprašanji",
     "faq.n_questions_few": "{n} vprašanja",
     "faq.n_results_two": "{n} zadetka",

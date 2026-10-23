@@ -87,7 +87,7 @@ test("« Demander ce service » : chaque service de la section 03 coche sa case 
   assert.deepEqual(boxes, picks, "une case par service, même ordre");
   const titles = all(/<span class="co-svc__tt" data-i18n="([^"]+)"/g, MAIN), labels = all(/<span class="co-pick__box"[\s\S]*?<\/span><span data-i18n="([^"]+)"/g, MAIN);
   assert.deepEqual(labels, titles, "libellés des cases = titres des services (même clé de traduction)");
-  A.match(JS, /"Services souhaités : "/, "services cochés repris dans le message envoyé");
+  A.match(JS, /\["Services souhaités", services\.join\(", "\)\]/, "services cochés repris dans la demande envoyée (détail « Services souhaités »)");
 });
 
 test("rien d'inventé : équipe vide assumée, aucune affirmation non confirmée (agrément, zone, ancienneté, volume, tarif)", () => {

@@ -176,6 +176,8 @@
 
   function formations() { return FORMATIONS.slice(); }
   function pages() { return PAGES.slice(); }
+  /* Toutes les routes publiques du registre (pages, pages dédiées de formation ET services comme VCA Entreprise). */
+  function publicPaths() { return Site && Site.publicPaths ? Site.publicPaths() : []; }
   function faq() { return faqEntries(); }
 
   function byId(id) {
@@ -196,6 +198,7 @@
     all: all,
     formations: formations,
     pages: pages,
+    publicPaths: publicPaths,
     faq: faq,
     byId: byId,
     formationsByCategory: formationsByCategory,

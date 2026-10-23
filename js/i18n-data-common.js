@@ -19,7 +19,7 @@
   /* ---------------- FRANÇAIS (langue source) ---------------- */
   m("fr", {
     "a11y.skip": "Aller au contenu",
-    "util.badge": "Centre de formation à la sécurité · Anderlecht, Belgique",
+    "util.badge": "Formation sécurité · Anderlecht · Bruxelles & Wallonie",
     "nav.formations": "Formations",
     "nav.all_formations": "Voir toutes les formations",
     "nav.all_formations_desc": "Le catalogue complet",
@@ -65,7 +65,7 @@
   /* ---------------- ENGLISH ---------------- */
   m("en", {
     "a11y.skip": "Skip to content",
-    "util.badge": "Safety training centre · Anderlecht, Belgium",
+    "util.badge": "Safety training · Anderlecht · Brussels & Wallonia",
     "nav.formations": "Training",
     "nav.all_formations": "View all courses", "nav.all_formations_desc": "The full catalogue",
     "dd.vca_base": "VCA Basic", "dd.vca_base_desc": "The fundamentals of site safety",
@@ -110,7 +110,7 @@
   /* ---------------- NEDERLANDS ---------------- */
   m("nl", {
     "a11y.skip": "Naar de inhoud",
-    "util.badge": "Opleidingscentrum voor veiligheid · Anderlecht, België",
+    "util.badge": "Veiligheidsopleidingen · Anderlecht · Brussel & Wallonië",
     "nav.formations": "Opleidingen",
     "nav.all_formations": "Alle opleidingen bekijken", "nav.all_formations_desc": "De volledige catalogus",
     "dd.vca_base": "VCA Basis", "dd.vca_base_desc": "De basis van de veiligheid op de werf",
@@ -155,7 +155,7 @@
   /* ---------------- AFRIKAANS ---------------- */
   m("af", {
     "a11y.skip": "Gaan na die inhoud",
-    "util.badge": "Veiligheidsopleidingsentrum · Anderlecht, België",
+    "util.badge": "Veiligheidsopleiding · Anderlecht · Brussel & Wallonië",
     "nav.formations": "Opleidings",
     "nav.all_formations": "Bekyk alle opleidings", "nav.all_formations_desc": "Die volledige katalogus",
     "dd.vca_base": "VCA Basis", "dd.vca_base_desc": "Die grondbeginsels van terreinveiligheid",
@@ -200,7 +200,7 @@
   /* ---------------- العربية (RTL) ---------------- */
   m("ar", {
     "a11y.skip": "الانتقال إلى المحتوى",
-    "util.badge": "مركز تدريب على السلامة · أندرلخت، بلجيكا",
+    "util.badge": "تدريب على السلامة · أندرلخت · بروكسل ووالونيا",
     "nav.formations": "الدورات",
     "nav.all_formations": "عرض جميع الدورات", "nav.all_formations_desc": "الكتالوج الكامل",
     "dd.vca_base": "VCA الأساسي", "dd.vca_base_desc": "أساسيات السلامة في موقع العمل",
@@ -245,7 +245,7 @@
   /* ---------------- БЪЛГАРСКИ ---------------- */
   m("bg", {
     "a11y.skip": "Към съдържанието",
-    "util.badge": "Учебен център по безопасност · Андерлехт, Белгия",
+    "util.badge": "Обучения · Андерлехт · Брюксел и Валония",
     "nav.formations": "Обучения",
     "nav.all_formations": "Вижте всички обучения", "nav.all_formations_desc": "Пълният каталог",
     "dd.vca_base": "VCA основи", "dd.vca_base_desc": "Основите на безопасността на обекта",
@@ -290,7 +290,7 @@
   /* ---------------- DEUTSCH ---------------- */
   m("de", {
     "a11y.skip": "Zum Inhalt",
-    "util.badge": "Schulungszentrum für Sicherheit · Anderlecht, Belgien",
+    "util.badge": "Sicherheitsschulungen · Anderlecht · Brüssel & Wallonien",
     "nav.formations": "Schulungen",
     "nav.all_formations": "Alle Schulungen ansehen", "nav.all_formations_desc": "Der vollständige Katalog",
     "dd.vca_base": "VCA Grundlagen", "dd.vca_base_desc": "Die Grundlagen der Baustellensicherheit",
@@ -335,7 +335,7 @@
   /* ---------------- ROMÂNĂ ---------------- */
   m("ro", {
     "a11y.skip": "Salt la conținut",
-    "util.badge": "Centru de formare în securitate · Anderlecht, Belgia",
+    "util.badge": "Formare în securitate · Anderlecht · Bruxelles și Valonia",
     "nav.formations": "Cursuri",
     "nav.all_formations": "Vedeți toate cursurile", "nav.all_formations_desc": "Catalogul complet",
     "dd.vca_base": "VCA de bază", "dd.vca_base_desc": "Fundamentele securității pe șantier",
@@ -380,7 +380,7 @@
   /* ---------------- ITALIANO ---------------- */
   m("it", {
     "a11y.skip": "Vai al contenuto",
-    "util.badge": "Centro di formazione sulla sicurezza · Anderlecht, Belgio",
+    "util.badge": "Formazione sicurezza · Anderlecht · Bruxelles e Vallonia",
     "nav.formations": "Corsi",
     "nav.all_formations": "Vedi tutti i corsi", "nav.all_formations_desc": "Il catalogo completo",
     "dd.vca_base": "VCA base", "dd.vca_base_desc": "I fondamentali della sicurezza in cantiere",
@@ -425,7 +425,7 @@
   /* ---------------- SLOVENŠČINA ---------------- */
   m("sl", {
     "a11y.skip": "Na vsebino",
-    "util.badge": "Center za varnostno usposabljanje · Anderlecht, Belgija",
+    "util.badge": "Varnostno usposabljanje · Anderlecht · Bruselj in Valonija",
     "nav.formations": "Usposabljanja",
     "nav.all_formations": "Oglejte si vsa usposabljanja", "nav.all_formations_desc": "Celoten katalog",
     "dd.vca_base": "VCA osnovni", "dd.vca_base_desc": "Osnove varnosti na gradbišču",
@@ -492,36 +492,116 @@
   m("it", { "aria.home": "Wisy Safety — home", "aria.main_nav": "Navigazione principale", "aria.mobile_menu": "Menu mobile", "aria.legal_nav": "Informazioni legali", "footer.vat": "IVA" });
   m("sl", { "aria.home": "Wisy Safety — domača stran", "aria.main_nav": "Glavna navigacija", "aria.mobile_menu": "Mobilni meni", "aria.legal_nav": "Pravne informacije", "footer.vat": "DDV" });
 
-  /* Champ piège anti-spam (invisible), commun aux formulaires de contact et d'avis. */
+  /* Formulaires : champ piège anti-spam (invisible) et messages d'envoi communs (js/forms.js : contact, coordination, test PEB). */
   m("fr", {
-    "form.hp_label": "Ne remplissez pas ce champ"
+    "form.hp_label": "Ne remplissez pas ce champ",
+    "form.ref": "Référence : {ref}.",
+    "form.invalid": "Certains champs sont incomplets ou invalides : vérifiez-les puis réessayez.",
+    "form.rate": "Trop de demandes envoyées depuis cette adresse e-mail. Réessayez dans une heure ou appelez-nous au +32 2 318 86 59.",
+    "form.busy": "Beaucoup de demandes en même temps : réessayez dans quelques secondes.",
+    "form.retry": "Réessayer",
+    "form.by_mail": "Envoyer par e-mail",
+    "form.by_phone": "Appeler le +32 2 318 86 59",
+    "form.kept": "Vos informations restent dans le formulaire."
   });
   m("en", {
-    "form.hp_label": "Do not fill in this field"
+    "form.hp_label": "Do not fill in this field",
+    "form.ref": "Reference: {ref}.",
+    "form.invalid": "Some fields are incomplete or invalid: please check them and try again.",
+    "form.rate": "Too many requests have been sent from this email address. Please try again in an hour or call us on +32 2 318 86 59.",
+    "form.busy": "Many requests at the same time: please try again in a few seconds.",
+    "form.retry": "Try again",
+    "form.by_mail": "Send by email",
+    "form.by_phone": "Call +32 2 318 86 59",
+    "form.kept": "Your information is still in the form."
   });
   m("nl", {
-    "form.hp_label": "Vul dit veld niet in"
+    "form.hp_label": "Vul dit veld niet in",
+    "form.ref": "Referentie: {ref}.",
+    "form.invalid": "Sommige velden zijn onvolledig of ongeldig: controleer ze en probeer opnieuw.",
+    "form.rate": "Er zijn te veel aanvragen verstuurd vanaf dit e-mailadres. Probeer het over een uur opnieuw of bel ons op +32 2 318 86 59.",
+    "form.busy": "Veel aanvragen tegelijk: probeer het over enkele seconden opnieuw.",
+    "form.retry": "Opnieuw proberen",
+    "form.by_mail": "Per e-mail versturen",
+    "form.by_phone": "Bel +32 2 318 86 59",
+    "form.kept": "Uw gegevens blijven in het formulier staan."
   });
   m("af", {
-    "form.hp_label": "Moenie hierdie veld invul nie"
+    "form.hp_label": "Moenie hierdie veld invul nie",
+    "form.ref": "Verwysing: {ref}.",
+    "form.invalid": "Sommige velde is onvolledig of ongeldig: kontroleer dit en probeer weer.",
+    "form.rate": "Te veel versoeke is vanaf hierdie e-posadres gestuur. Probeer oor 'n uur weer of bel ons by +32 2 318 86 59.",
+    "form.busy": "Baie versoeke gelyktydig: probeer oor 'n paar sekondes weer.",
+    "form.retry": "Probeer weer",
+    "form.by_mail": "Stuur per e-pos",
+    "form.by_phone": "Bel +32 2 318 86 59",
+    "form.kept": "U inligting bly in die vorm."
   });
   m("ar", {
-    "form.hp_label": "لا تملأ هذا الحقل"
+    "form.hp_label": "لا تملأ هذا الحقل",
+    "form.ref": "المرجع: {ref}.",
+    "form.invalid": "بعض الحقول غير مكتملة أو غير صالحة: يرجى التحقق منها ثم إعادة المحاولة.",
+    "form.rate": "تم إرسال عدد كبير جدًا من الطلبات من عنوان البريد الإلكتروني هذا. أعيدوا المحاولة بعد ساعة أو اتصلوا بنا على +32 2 318 86 59.",
+    "form.busy": "عدد كبير من الطلبات في الوقت نفسه: أعيدوا المحاولة بعد بضع ثوانٍ.",
+    "form.retry": "إعادة المحاولة",
+    "form.by_mail": "الإرسال بالبريد الإلكتروني",
+    "form.by_phone": "الاتصال على +32 2 318 86 59",
+    "form.kept": "تبقى معلوماتكم في النموذج."
   });
   m("bg", {
-    "form.hp_label": "Не попълвайте това поле"
+    "form.hp_label": "Не попълвайте това поле",
+    "form.ref": "Номер: {ref}.",
+    "form.invalid": "Някои полета са непълни или невалидни: проверете ги и опитайте отново.",
+    "form.rate": "От този имейл адрес са изпратени твърде много заявки. Опитайте отново след час или ни се обадете на +32 2 318 86 59.",
+    "form.busy": "Много заявки едновременно: опитайте отново след няколко секунди.",
+    "form.retry": "Опитайте отново",
+    "form.by_mail": "Изпратете по имейл",
+    "form.by_phone": "Обадете се на +32 2 318 86 59",
+    "form.kept": "Данните ви остават във формуляра."
   });
   m("de", {
-    "form.hp_label": "Dieses Feld bitte nicht ausfüllen"
+    "form.hp_label": "Dieses Feld bitte nicht ausfüllen",
+    "form.ref": "Referenz: {ref}.",
+    "form.invalid": "Einige Felder sind unvollständig oder ungültig: Bitte prüfen Sie sie und versuchen Sie es erneut.",
+    "form.rate": "Von dieser E-Mail-Adresse wurden zu viele Anfragen gesendet. Versuchen Sie es in einer Stunde erneut oder rufen Sie uns unter +32 2 318 86 59 an.",
+    "form.busy": "Viele Anfragen gleichzeitig: Bitte versuchen Sie es in einigen Sekunden erneut.",
+    "form.retry": "Erneut versuchen",
+    "form.by_mail": "Per E-Mail senden",
+    "form.by_phone": "+32 2 318 86 59 anrufen",
+    "form.kept": "Ihre Angaben bleiben im Formular erhalten."
   });
   m("ro", {
-    "form.hp_label": "Nu completați acest câmp"
+    "form.hp_label": "Nu completați acest câmp",
+    "form.ref": "Referință: {ref}.",
+    "form.invalid": "Unele câmpuri sunt incomplete sau nevalide: verificați-le și încercați din nou.",
+    "form.rate": "Prea multe cereri trimise de la această adresă de e-mail. Încercați din nou peste o oră sau sunați-ne la +32 2 318 86 59.",
+    "form.busy": "Multe cereri în același timp: încercați din nou peste câteva secunde.",
+    "form.retry": "Încercați din nou",
+    "form.by_mail": "Trimiteți prin e-mail",
+    "form.by_phone": "Sunați la +32 2 318 86 59",
+    "form.kept": "Informațiile dumneavoastră rămân în formular."
   });
   m("it", {
-    "form.hp_label": "Non compilare questo campo"
+    "form.hp_label": "Non compilare questo campo",
+    "form.ref": "Riferimento: {ref}.",
+    "form.invalid": "Alcuni campi sono incompleti o non validi: controllali e riprova.",
+    "form.rate": "Troppe richieste inviate da questo indirizzo e-mail. Riprova tra un'ora o chiamaci al +32 2 318 86 59.",
+    "form.busy": "Molte richieste contemporaneamente: riprova tra qualche secondo.",
+    "form.retry": "Riprova",
+    "form.by_mail": "Invia per e-mail",
+    "form.by_phone": "Chiama il +32 2 318 86 59",
+    "form.kept": "Le tue informazioni restano nel modulo."
   });
   m("sl", {
-    "form.hp_label": "Tega polja ne izpolnjujte"
+    "form.hp_label": "Tega polja ne izpolnjujte",
+    "form.ref": "Referenca: {ref}.",
+    "form.invalid": "Nekatera polja so nepopolna ali neveljavna: preverite jih in poskusite znova.",
+    "form.rate": "S tega e-poštnega naslova je bilo poslanih preveč zahtev. Poskusite znova čez eno uro ali nas pokličite na +32 2 318 86 59.",
+    "form.busy": "Hkrati je veliko zahtev: poskusite znova čez nekaj sekund.",
+    "form.retry": "Poskusi znova",
+    "form.by_mail": "Pošlji po e-pošti",
+    "form.by_phone": "Pokliči +32 2 318 86 59",
+    "form.kept": "Vaši podatki ostanejo v obrazcu."
   });
 
   /* ---------------- Consentement aux cookies (bandeau, centre de préférences, encart carte) ----------------

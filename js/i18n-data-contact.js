@@ -9,7 +9,7 @@
   function m(lang, obj) { I[lang] = Object.assign(I[lang] || {}, obj); }
 
   m("fr", {
-    "meta.title": "Wisy Safety — Contact",
+    "meta.title": "Contact et devis | Wisy Safety, Anderlecht (Bruxelles)",
     "ct.chero_pill": "Expertise sécurité certifiée",
     "ct.chero_title": "Besoin d'expertise en <span class=\"mark\">sécurité</span> ?",
     "ct.chero_desc": "Notre équipe de professionnels est à votre écoute pour discuter de vos besoins spécifiques en formation et conseil en sécurité.",
@@ -18,7 +18,7 @@
     "ct.gcard_years": "Ans d'expérience", "ct.gcard_advisors": "Conseillers habilités",
     "ct.gt_title": "Entrons en <span class=\"mark\">contact</span>",
     "ct.gt_lead": "Devis, inscription ou conseil : notre équipe de conseillers certifiés vous répond sous 24 h ouvrées.",
-    "ct.info_hours": "Horaires", "ct.info_hours_val": "Lun – Jeu · 9h – 17h",
+    "ct.info_hours": "Horaires", "ct.info_hours_val": "Lun – Jeu · 10h – 16h",
     "ct.f_name": "Votre nom complet", "ct.f_phone": "Téléphone", "ct.f_email": "Votre e-mail",
     "ct.f_subject": "Sujet de votre demande", "ct.f_subject_ph": "Choisissez un sujet",
     "ct.f_opt1": "Demande de devis", "ct.f_opt2": "Inscription à une formation",
@@ -29,7 +29,7 @@
     "ct.f_submit": "Envoyer le message", "ct.f_sending": "Envoi en cours…",
     "ct.f_ok": "Merci ! Votre message a bien été envoyé. Notre équipe vous répond sous 24 h ouvrées.",
     "ct.f_notconfigured": "Le service d'envoi n'est pas encore configuré. Écrivez-nous directement à info@wisysafety.be.",
-    "ct.f_error": "Oups, l'envoi a échoué. Réessayez ou contactez-nous à info@wisysafety.be.",
+    "ct.f_error": "L'envoi n'a pas abouti. Réessayez ou écrivez-nous à info@wisysafety.be.",
     "ct.card1_title": "Support & devis", "ct.card1_text": "Une question ou un besoin de devis sur mesure ? Écrivez-nous, réponse sous 24 h ouvrées.", "ct.card1_btn": "Nous écrire",
     "ct.card2_title": "Ligne directe", "ct.card2_text": "Parlez immédiatement à un conseiller certifié pour un premier échange, sans engagement.", "ct.card2_btn": "Appeler",
     "ct.card3_title": "Formations & inscriptions", "ct.card3_text": "Consultez le calendrier des sessions et inscrivez vos équipes en quelques clics.", "ct.card3_btn": "Voir les formations",
@@ -40,7 +40,7 @@
   });
 
   m("en", {
-    "meta.title": "Wisy Safety — Contact",
+    "meta.title": "Contact and quotes | Wisy Safety, Anderlecht (Brussels)",
     "ct.chero_pill": "Certified safety expertise",
     "ct.chero_title": "Need <span class=\"mark\">safety</span> expertise?",
     "ct.chero_desc": "Our team of professionals is ready to discuss your specific training and safety-consulting needs.",
@@ -49,7 +49,7 @@
     "ct.gcard_years": "Years of experience", "ct.gcard_advisors": "Certified advisors",
     "ct.gt_title": "Let's get <span class=\"mark\">in touch</span>",
     "ct.gt_lead": "Quote, enrolment or advice: our team of certified advisors replies within 24 working hours.",
-    "ct.info_hours": "Hours", "ct.info_hours_val": "Mon – Thu · 9:00 – 17:00",
+    "ct.info_hours": "Hours", "ct.info_hours_val": "Mon – Thu · 10:00 – 16:00",
     "ct.f_name": "Your full name", "ct.f_phone": "Phone", "ct.f_email": "Your e-mail",
     "ct.f_subject": "Subject of your request", "ct.f_subject_ph": "Choose a subject",
     "ct.f_opt1": "Quote request", "ct.f_opt2": "Course enrolment",
@@ -60,7 +60,7 @@
     "ct.f_submit": "Send the message", "ct.f_sending": "Sending…",
     "ct.f_ok": "Thank you! Your message has been sent. Our team will reply within 24 working hours.",
     "ct.f_notconfigured": "The sending service is not yet configured. Please write to us directly at info@wisysafety.be.",
-    "ct.f_error": "Oops, sending failed. Please try again or contact us at info@wisysafety.be.",
+    "ct.f_error": "Your message could not be sent. Please try again or write to us at info@wisysafety.be.",
     "ct.card1_title": "Support & quotes", "ct.card1_text": "A question or need a tailored quote? Write to us — reply within 24 working hours.", "ct.card1_btn": "Write to us",
     "ct.card2_title": "Direct line", "ct.card2_text": "Speak straight away to a certified advisor for a first chat, no commitment.", "ct.card2_btn": "Call",
     "ct.card3_title": "Courses & enrolment", "ct.card3_text": "Check the session calendar and enrol your teams in just a few clicks.", "ct.card3_btn": "View the courses",
@@ -71,7 +71,7 @@
   });
 
   m("nl", {
-    "meta.title": "Wisy Safety — Contact",
+    "meta.title": "Contact en offerte | Wisy Safety, Anderlecht (Brussel)",
     "ct.chero_pill": "Gecertificeerde veiligheidsexpertise",
     "ct.chero_title": "Nood aan <span class=\"mark\">veiligheids</span>expertise?",
     "ct.chero_desc": "Ons team van professionals staat klaar om uw specifieke behoeften op het gebied van opleiding en veiligheidsadvies te bespreken.",
@@ -80,7 +80,7 @@
     "ct.gcard_years": "Jaar ervaring", "ct.gcard_advisors": "Erkende adviseurs",
     "ct.gt_title": "Laten we <span class=\"mark\">contact</span> leggen",
     "ct.gt_lead": "Offerte, inschrijving of advies: ons team van gecertificeerde adviseurs antwoordt binnen 24 werkuren.",
-    "ct.info_hours": "Uren", "ct.info_hours_val": "Ma – Do · 9u – 17u",
+    "ct.info_hours": "Uren", "ct.info_hours_val": "Ma – Do · 10u – 16u",
     "ct.f_name": "Uw volledige naam", "ct.f_phone": "Telefoon", "ct.f_email": "Uw e-mail",
     "ct.f_subject": "Onderwerp van uw aanvraag", "ct.f_subject_ph": "Kies een onderwerp",
     "ct.f_opt1": "Offerteaanvraag", "ct.f_opt2": "Inschrijving voor een opleiding",
@@ -91,7 +91,7 @@
     "ct.f_submit": "Bericht verzenden", "ct.f_sending": "Bezig met verzenden…",
     "ct.f_ok": "Bedankt! Uw bericht is verzonden. Ons team antwoordt binnen 24 werkuren.",
     "ct.f_notconfigured": "De verzenddienst is nog niet geconfigureerd. Schrijf ons rechtstreeks op info@wisysafety.be.",
-    "ct.f_error": "Oeps, verzenden mislukt. Probeer opnieuw of contacteer ons op info@wisysafety.be.",
+    "ct.f_error": "Uw bericht kon niet worden verzonden. Probeer opnieuw of schrijf ons op info@wisysafety.be.",
     "ct.card1_title": "Support & offertes", "ct.card1_text": "Een vraag of een offerte op maat nodig? Schrijf ons — antwoord binnen 24 werkuren.", "ct.card1_btn": "Schrijf ons",
     "ct.card2_title": "Directe lijn", "ct.card2_text": "Spreek meteen met een gecertificeerde adviseur voor een eerste gesprek, vrijblijvend.", "ct.card2_btn": "Bellen",
     "ct.card3_title": "Opleidingen & inschrijvingen", "ct.card3_text": "Raadpleeg de sessiekalender en schrijf uw teams in met enkele klikken.", "ct.card3_btn": "Bekijk de opleidingen",
@@ -102,7 +102,7 @@
   });
 
   m("af", {
-    "meta.title": "Wisy Safety — Kontak",
+    "meta.title": "Kontak en kwotasie | Wisy Safety, Anderlecht (Brussel)",
     "ct.chero_pill": "Gesertifiseerde veiligheidskundigheid",
     "ct.chero_title": "Het u <span class=\"mark\">veiligheids</span>kundigheid nodig?",
     "ct.chero_desc": "Ons span van professionele persone is gereed om u spesifieke behoeftes aan opleiding en veiligheidsadvies te bespreek.",
@@ -111,7 +111,7 @@
     "ct.gcard_years": "Jaar ondervinding", "ct.gcard_advisors": "Gemagtigde adviseurs",
     "ct.gt_title": "Kom ons <span class=\"mark\">gesels</span>",
     "ct.gt_lead": "Kwotasie, inskrywing of advies: ons span gesertifiseerde adviseurs antwoord binne 24 werksure.",
-    "ct.info_hours": "Ure", "ct.info_hours_val": "Ma – Do · 9:00 – 17:00",
+    "ct.info_hours": "Ure", "ct.info_hours_val": "Ma – Do · 10:00 – 16:00",
     "ct.f_name": "U volle naam", "ct.f_phone": "Telefoon", "ct.f_email": "U e-pos",
     "ct.f_subject": "Onderwerp van u versoek", "ct.f_subject_ph": "Kies 'n onderwerp",
     "ct.f_opt1": "Kwotasie-aanvraag", "ct.f_opt2": "Inskrywing vir 'n opleiding",
@@ -122,7 +122,7 @@
     "ct.f_submit": "Stuur die boodskap", "ct.f_sending": "Besig om te stuur…",
     "ct.f_ok": "Dankie! U boodskap is gestuur. Ons span antwoord binne 24 werksure.",
     "ct.f_notconfigured": "Die stuurdiens is nog nie opgestel nie. Skryf direk aan ons by info@wisysafety.be.",
-    "ct.f_error": "Oeps, stuur het misluk. Probeer weer of kontak ons by info@wisysafety.be.",
+    "ct.f_error": "U boodskap kon nie gestuur word nie. Probeer weer of skryf aan ons by info@wisysafety.be.",
     "ct.card1_title": "Ondersteuning & kwotasies", "ct.card1_text": "'n Vraag of 'n pasgemaakte kwotasie nodig? Skryf vir ons — antwoord binne 24 werksure.", "ct.card1_btn": "Skryf vir ons",
     "ct.card2_title": "Direkte lyn", "ct.card2_text": "Praat dadelik met 'n gesertifiseerde adviseur vir 'n eerste gesprek, geen verpligting.", "ct.card2_btn": "Bel",
     "ct.card3_title": "Opleidings & inskrywings", "ct.card3_text": "Raadpleeg die sessiekalender en skryf u spanne in met 'n paar klikke.", "ct.card3_btn": "Bekyk die opleidings",
@@ -133,7 +133,7 @@
   });
 
   m("ar", {
-    "meta.title": "Wisy Safety — اتصل بنا",
+    "meta.title": "اتصل بنا واطلب عرض سعر | Wisy Safety، أندرلخت (بروكسل)",
     "ct.chero_pill": "خبرة معتمدة في السلامة",
     "ct.chero_title": "هل تحتاج إلى خبرة في <span class=\"mark\">السلامة</span>؟",
     "ct.chero_desc": "فريقنا من المهنيين مستعد لمناقشة احتياجاتك الخاصة في التدريب والاستشارات في مجال السلامة.",
@@ -142,7 +142,7 @@
     "ct.gcard_years": "سنوات الخبرة", "ct.gcard_advisors": "مستشارون معتمدون",
     "ct.gt_title": "لنبقَ على <span class=\"mark\">تواصل</span>",
     "ct.gt_lead": "عرض سعر أو تسجيل أو استشارة: يردّ فريقنا من المستشارين المعتمدين خلال 24 ساعة عمل.",
-    "ct.info_hours": "الأوقات", "ct.info_hours_val": "الإثنين – الخميس · 9:00 – 17:00",
+    "ct.info_hours": "الأوقات", "ct.info_hours_val": "الإثنين – الخميس · 10:00 – 16:00",
     "ct.f_name": "اسمك الكامل", "ct.f_phone": "الهاتف", "ct.f_email": "بريدك الإلكتروني",
     "ct.f_subject": "موضوع طلبك", "ct.f_subject_ph": "اختر موضوعًا",
     "ct.f_opt1": "طلب عرض سعر", "ct.f_opt2": "التسجيل في دورة تدريبية",
@@ -153,7 +153,7 @@
     "ct.f_submit": "إرسال الرسالة", "ct.f_sending": "جارٍ الإرسال…",
     "ct.f_ok": "شكرًا! تم إرسال رسالتك. سيردّ فريقنا خلال 24 ساعة عمل.",
     "ct.f_notconfigured": "خدمة الإرسال غير مهيّأة بعد. راسلنا مباشرة على info@wisysafety.be.",
-    "ct.f_error": "عذرًا، فشل الإرسال. حاول مرة أخرى أو تواصل معنا على info@wisysafety.be.",
+    "ct.f_error": "تعذّر إرسال رسالتكم. حاولوا مرة أخرى أو راسلونا على info@wisysafety.be.",
     "ct.card1_title": "الدعم وعروض الأسعار", "ct.card1_text": "سؤال أو حاجة إلى عرض سعر مخصص؟ راسلنا — الرد خلال 24 ساعة عمل.", "ct.card1_btn": "راسلنا",
     "ct.card2_title": "الخط المباشر", "ct.card2_text": "تحدّث فورًا مع مستشار معتمد لإجراء نقاش أولي، دون أي التزام.", "ct.card2_btn": "اتصل",
     "ct.card3_title": "الدورات والتسجيل", "ct.card3_text": "اطّلع على جدول الجلسات وسجّل فرقك ببضع نقرات.", "ct.card3_btn": "عرض الدورات",
@@ -164,7 +164,7 @@
   });
 
   m("bg", {
-    "meta.title": "Wisy Safety — Контакт",
+    "meta.title": "Контакт и оферта | Wisy Safety, Андерлехт (Брюксел)",
     "ct.chero_pill": "Сертифицирана експертиза по безопасност",
     "ct.chero_title": "Нужна ли ви е <span class=\"mark\">експертиза по безопасност</span>?",
     "ct.chero_desc": "Нашият екип от професионалисти е на разположение да обсъди специфичните ви нужди от обучение и консултации по безопасност.",
@@ -173,7 +173,7 @@
     "ct.gcard_years": "Години опит", "ct.gcard_advisors": "Оправомощени консултанти",
     "ct.gt_title": "Нека се <span class=\"mark\">свържем</span>",
     "ct.gt_lead": "Оферта, записване или съвет: нашият екип от сертифицирани консултанти отговаря в рамките на 24 работни часа.",
-    "ct.info_hours": "Часове", "ct.info_hours_val": "Пон – Чет · 9 – 17 ч",
+    "ct.info_hours": "Часове", "ct.info_hours_val": "Пон – Чет · 10 – 16 ч",
     "ct.f_name": "Вашето пълно име", "ct.f_phone": "Телефон", "ct.f_email": "Вашият имейл",
     "ct.f_subject": "Тема на запитването", "ct.f_subject_ph": "Изберете тема",
     "ct.f_opt1": "Запитване за оферта", "ct.f_opt2": "Записване за обучение",
@@ -184,7 +184,7 @@
     "ct.f_submit": "Изпрати съобщението", "ct.f_sending": "Изпраща се…",
     "ct.f_ok": "Благодарим! Съобщението ви е изпратено. Екипът ни ще отговори в рамките на 24 работни часа.",
     "ct.f_notconfigured": "Услугата за изпращане още не е конфигурирана. Пишете ни директно на info@wisysafety.be.",
-    "ct.f_error": "Опа, изпращането се провали. Опитайте отново или ни пишете на info@wisysafety.be.",
+    "ct.f_error": "Съобщението не можа да бъде изпратено. Опитайте отново или ни пишете на info@wisysafety.be.",
     "ct.card1_title": "Поддръжка и оферти", "ct.card1_text": "Въпрос или нужда от персонална оферта? Пишете ни — отговор в рамките на 24 работни часа.", "ct.card1_btn": "Пишете ни",
     "ct.card2_title": "Директна линия", "ct.card2_text": "Говорете веднага със сертифициран консултант за първи разговор, без ангажимент.", "ct.card2_btn": "Обадете се",
     "ct.card3_title": "Обучения и записвания", "ct.card3_text": "Разгледайте календара на сесиите и запишете екипите си с няколко клика.", "ct.card3_btn": "Вижте обученията",
@@ -195,7 +195,7 @@
   });
 
   m("de", {
-    "meta.title": "Wisy Safety — Kontakt",
+    "meta.title": "Kontakt und Angebot | Wisy Safety, Anderlecht (Brüssel)",
     "ct.chero_pill": "Zertifizierte Sicherheitsexpertise",
     "ct.chero_title": "Brauchen Sie <span class=\"mark\">Sicherheits</span>expertise?",
     "ct.chero_desc": "Unser Team aus Fachleuten steht bereit, um Ihre spezifischen Anforderungen an Schulung und Sicherheitsberatung zu besprechen.",
@@ -204,7 +204,7 @@
     "ct.gcard_years": "Jahre Erfahrung", "ct.gcard_advisors": "Zugelassene Berater",
     "ct.gt_title": "Treten wir <span class=\"mark\">in Kontakt</span>",
     "ct.gt_lead": "Angebot, Anmeldung oder Beratung: Unser Team zertifizierter Berater antwortet innerhalb von 24 Arbeitsstunden.",
-    "ct.info_hours": "Zeiten", "ct.info_hours_val": "Mo – Do · 9 – 17 Uhr",
+    "ct.info_hours": "Zeiten", "ct.info_hours_val": "Mo – Do · 10 – 16 Uhr",
     "ct.f_name": "Ihr vollständiger Name", "ct.f_phone": "Telefon", "ct.f_email": "Ihre E-Mail",
     "ct.f_subject": "Betreff Ihrer Anfrage", "ct.f_subject_ph": "Wählen Sie ein Thema",
     "ct.f_opt1": "Angebotsanfrage", "ct.f_opt2": "Anmeldung zu einer Schulung",
@@ -215,7 +215,7 @@
     "ct.f_submit": "Nachricht senden", "ct.f_sending": "Wird gesendet…",
     "ct.f_ok": "Danke! Ihre Nachricht wurde gesendet. Unser Team antwortet innerhalb von 24 Arbeitsstunden.",
     "ct.f_notconfigured": "Der Versanddienst ist noch nicht konfiguriert. Schreiben Sie uns direkt an info@wisysafety.be.",
-    "ct.f_error": "Ups, der Versand ist fehlgeschlagen. Versuchen Sie es erneut oder kontaktieren Sie uns unter info@wisysafety.be.",
+    "ct.f_error": "Ihre Nachricht konnte nicht gesendet werden. Versuchen Sie es erneut oder schreiben Sie uns an info@wisysafety.be.",
     "ct.card1_title": "Support & Angebote", "ct.card1_text": "Eine Frage oder ein individuelles Angebot nötig? Schreiben Sie uns — Antwort innerhalb von 24 Arbeitsstunden.", "ct.card1_btn": "Schreiben Sie uns",
     "ct.card2_title": "Direkte Linie", "ct.card2_text": "Sprechen Sie sofort mit einem zertifizierten Berater für ein erstes Gespräch, unverbindlich.", "ct.card2_btn": "Anrufen",
     "ct.card3_title": "Schulungen & Anmeldungen", "ct.card3_text": "Sehen Sie den Sessionkalender ein und melden Sie Ihre Teams mit wenigen Klicks an.", "ct.card3_btn": "Schulungen ansehen",
@@ -226,7 +226,7 @@
   });
 
   m("ro", {
-    "meta.title": "Wisy Safety — Contact",
+    "meta.title": "Contact și ofertă | Wisy Safety, Anderlecht (Bruxelles)",
     "ct.chero_pill": "Expertiză certificată în securitate",
     "ct.chero_title": "Aveți nevoie de expertiză în <span class=\"mark\">securitate</span>?",
     "ct.chero_desc": "Echipa noastră de profesioniști este pregătită să discute nevoile dvs. specifice de formare și consultanță în securitate.",
@@ -235,7 +235,7 @@
     "ct.gcard_years": "Ani de experiență", "ct.gcard_advisors": "Consilieri abilitați",
     "ct.gt_title": "Să luăm <span class=\"mark\">legătura</span>",
     "ct.gt_lead": "Ofertă, înscriere sau consiliere: echipa noastră de consilieri certificați răspunde în 24 de ore lucrătoare.",
-    "ct.info_hours": "Program", "ct.info_hours_val": "Lun – Joi · 9 – 17",
+    "ct.info_hours": "Program", "ct.info_hours_val": "Lun – Joi · 10 – 16",
     "ct.f_name": "Numele dvs. complet", "ct.f_phone": "Telefon", "ct.f_email": "E-mailul dvs.",
     "ct.f_subject": "Subiectul cererii dvs.", "ct.f_subject_ph": "Alegeți un subiect",
     "ct.f_opt1": "Cerere de ofertă", "ct.f_opt2": "Înscriere la un curs",
@@ -246,7 +246,7 @@
     "ct.f_submit": "Trimiteți mesajul", "ct.f_sending": "Se trimite…",
     "ct.f_ok": "Mulțumim! Mesajul dvs. a fost trimis. Echipa noastră răspunde în 24 de ore lucrătoare.",
     "ct.f_notconfigured": "Serviciul de trimitere nu este încă configurat. Scrieți-ne direct la info@wisysafety.be.",
-    "ct.f_error": "Ups, trimiterea a eșuat. Încercați din nou sau contactați-ne la info@wisysafety.be.",
+    "ct.f_error": "Mesajul nu a putut fi trimis. Încercați din nou sau scrieți-ne la info@wisysafety.be.",
     "ct.card1_title": "Suport & oferte", "ct.card1_text": "O întrebare sau o ofertă personalizată? Scrieți-ne — răspuns în 24 de ore lucrătoare.", "ct.card1_btn": "Scrieți-ne",
     "ct.card2_title": "Linie directă", "ct.card2_text": "Vorbiți imediat cu un consilier certificat pentru o primă discuție, fără angajament.", "ct.card2_btn": "Sunați",
     "ct.card3_title": "Cursuri & înscrieri", "ct.card3_text": "Consultați calendarul sesiunilor și înscrieți-vă echipele în câteva clicuri.", "ct.card3_btn": "Vedeți cursurile",
@@ -257,7 +257,7 @@
   });
 
   m("it", {
-    "meta.title": "Wisy Safety — Contatti",
+    "meta.title": "Contatti e preventivi | Wisy Safety, Anderlecht (Bruxelles)",
     "ct.chero_pill": "Competenza certificata in sicurezza",
     "ct.chero_title": "Hai bisogno di competenza in <span class=\"mark\">sicurezza</span>?",
     "ct.chero_desc": "Il nostro team di professionisti è a disposizione per discutere le tue esigenze specifiche di formazione e consulenza sulla sicurezza.",
@@ -266,7 +266,7 @@
     "ct.gcard_years": "Anni di esperienza", "ct.gcard_advisors": "Consulenti abilitati",
     "ct.gt_title": "Mettiamoci <span class=\"mark\">in contatto</span>",
     "ct.gt_lead": "Preventivo, iscrizione o consulenza: il nostro team di consulenti certificati risponde entro 24 ore lavorative.",
-    "ct.info_hours": "Orari", "ct.info_hours_val": "Lun – Gio · 9 – 17",
+    "ct.info_hours": "Orari", "ct.info_hours_val": "Lun – Gio · 10 – 16",
     "ct.f_name": "Il tuo nome completo", "ct.f_phone": "Telefono", "ct.f_email": "La tua e-mail",
     "ct.f_subject": "Oggetto della richiesta", "ct.f_subject_ph": "Scegli un oggetto",
     "ct.f_opt1": "Richiesta di preventivo", "ct.f_opt2": "Iscrizione a un corso",
@@ -277,7 +277,7 @@
     "ct.f_submit": "Invia il messaggio", "ct.f_sending": "Invio in corso…",
     "ct.f_ok": "Grazie! Il tuo messaggio è stato inviato. Il nostro team risponde entro 24 ore lavorative.",
     "ct.f_notconfigured": "Il servizio di invio non è ancora configurato. Scrivici direttamente a info@wisysafety.be.",
-    "ct.f_error": "Ops, l'invio non è riuscito. Riprova o contattaci a info@wisysafety.be.",
+    "ct.f_error": "Non è stato possibile inviare il messaggio. Riprova o scrivici a info@wisysafety.be.",
     "ct.card1_title": "Supporto & preventivi", "ct.card1_text": "Una domanda o un preventivo su misura? Scrivici — risposta entro 24 ore lavorative.", "ct.card1_btn": "Scrivici",
     "ct.card2_title": "Linea diretta", "ct.card2_text": "Parla subito con un consulente certificato per un primo confronto, senza impegno.", "ct.card2_btn": "Chiama",
     "ct.card3_title": "Corsi & iscrizioni", "ct.card3_text": "Consulta il calendario delle sessioni e iscrivi i tuoi team in pochi clic.", "ct.card3_btn": "Vedi i corsi",
@@ -288,7 +288,7 @@
   });
 
   m("sl", {
-    "meta.title": "Wisy Safety — Kontakt",
+    "meta.title": "Kontakt in ponudba | Wisy Safety, Anderlecht (Bruselj)",
     "ct.chero_pill": "Certificirano strokovno znanje o varnosti",
     "ct.chero_title": "Potrebujete strokovno znanje o <span class=\"mark\">varnosti</span>?",
     "ct.chero_desc": "Naša ekipa strokovnjakov je pripravljena, da se pogovori o vaših posebnih potrebah po usposabljanju in svetovanju o varnosti.",
@@ -297,7 +297,7 @@
     "ct.gcard_years": "Let izkušenj", "ct.gcard_advisors": "Pooblaščeni svetovalci",
     "ct.gt_title": "Vzpostavimo <span class=\"mark\">stik</span>",
     "ct.gt_lead": "Ponudba, prijava ali nasvet: naša ekipa certificiranih svetovalcev odgovori v 24 delovnih urah.",
-    "ct.info_hours": "Ure", "ct.info_hours_val": "Pon – Čet · 9 – 17",
+    "ct.info_hours": "Ure", "ct.info_hours_val": "Pon – Čet · 10 – 16",
     "ct.f_name": "Vaše polno ime", "ct.f_phone": "Telefon", "ct.f_email": "Vaša e-pošta",
     "ct.f_subject": "Zadeva vašega povpraševanja", "ct.f_subject_ph": "Izberite zadevo",
     "ct.f_opt1": "Povpraševanje za ponudbo", "ct.f_opt2": "Prijava na usposabljanje",
@@ -308,7 +308,7 @@
     "ct.f_submit": "Pošlji sporočilo", "ct.f_sending": "Pošiljanje…",
     "ct.f_ok": "Hvala! Vaše sporočilo je bilo poslano. Naša ekipa odgovori v 24 delovnih urah.",
     "ct.f_notconfigured": "Storitev pošiljanja še ni nastavljena. Pišite nam neposredno na info@wisysafety.be.",
-    "ct.f_error": "Ups, pošiljanje ni uspelo. Poskusite znova ali nas kontaktirajte na info@wisysafety.be.",
+    "ct.f_error": "Sporočila ni bilo mogoče poslati. Poskusite znova ali nam pišite na info@wisysafety.be.",
     "ct.card1_title": "Podpora & ponudbe", "ct.card1_text": "Vprašanje ali potrebujete prilagojeno ponudbo? Pišite nam — odgovor v 24 delovnih urah.", "ct.card1_btn": "Pišite nam",
     "ct.card2_title": "Neposredna linija", "ct.card2_text": "Takoj se pogovorite s certificiranim svetovalcem za prvi pogovor, brez obveznosti.", "ct.card2_btn": "Pokličite",
     "ct.card3_title": "Usposabljanja & prijave", "ct.card3_text": "Oglejte si koledar terminov in prijavite svoje ekipe z nekaj kliki.", "ct.card3_btn": "Oglejte si usposabljanja",

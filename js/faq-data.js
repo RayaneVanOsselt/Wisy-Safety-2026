@@ -92,7 +92,10 @@
        pied de page ; latitude / longitude = celles de la carte intégrée à l'accueil (Google Maps).
        tests/seo.test.js vérifie qu'ils ne divergent pas de ces deux sources. */
     openingHours: [{ days: ["Monday", "Tuesday", "Wednesday", "Thursday"], opens: "10:00", closes: "16:00" }],
-    geo: { latitude: 50.834996, longitude: 4.276271 }
+    geo: { latitude: 50.834996, longitude: 4.276271 },
+    /* Zone desservie indiquée par Wisy Safety (brief du 23/10/2026 : « Bruxelles et toute la Wallonie ») — affichée dans
+       la barre du haut de chaque page (util.badge, « Bruxelles & Wallonie ») et reprise en `areaServed` dans les données structurées. */
+    areaServed: ["Région de Bruxelles-Capitale", "Wallonie"]
   };
 
   /* ---------------------------------------------------------------------

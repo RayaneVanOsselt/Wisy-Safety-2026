@@ -1067,8 +1067,15 @@
         bookingSent = true;
         transmitted = true;
         if (btn) btn.removeAttribute("aria-busy");
-        if (label) { label.setAttribute("data-i18n", "sess.book_sent_btn"); label.textContent = t("sess.book_sent_btn", "Réservation enregistrée"); }
-        var lines = [t("sess.book_ok", "Réservation enregistrée. Votre référence : {ref}. Un e-mail de confirmation vous est envoyé.").replace("{ref}", res.reference || "—")];
+        /* Aucune date choisie (toutes les lignes « date à convenir ») : c'est une DEMANDE, pas une réservation. */
+        var onlyRequests = res.items.length > 0 && res.items.every(function (it) { return it.status === "request"; });
+        if (label) {
+          if (onlyRequests) { label.setAttribute("data-i18n", "reg.req_sent_btn"); label.textContent = t("reg.req_sent_btn", "Demande envoyée"); }
+          else { label.setAttribute("data-i18n", "sess.book_sent_btn"); label.textContent = t("sess.book_sent_btn", "Réservation enregistrée"); }
+        }
+        var lines = [(onlyRequests
+          ? t("sess.book_ok_request", "Demande enregistrée. Votre référence : {ref}. L'équipe vous propose une date par e-mail ; un accusé de réception vous est envoyé.")
+          : t("sess.book_ok", "Réservation enregistrée. Votre référence : {ref}. Un e-mail de confirmation vous est envoyé.")).replace("{ref}", res.reference || "—")];
         res.items.forEach(function (it) {
           var s = it.sessionId ? findSession(it.sessionId) : null;
           var key = it.status === "confirmed" ? "sess.book_line_confirmed" : it.status === "pending" ? "sess.book_line_pending" : "sess.book_line_request";

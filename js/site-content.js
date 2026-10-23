@@ -40,8 +40,10 @@
 })(typeof self !== "undefined" ? self : this, function (Trainings) {
   "use strict";
 
-  /* Domaine canonique de production (déjà utilisé par la page Nacelles et .env.example). */
-  var ORIGIN = "https://www.wisysafety.be";
+  /* Domaine canonique de production : https://wisysafety.be SANS « www » — c'est l'adresse servie par GitHub Pages
+     (fichier CNAME) ; www.wisysafety.be et rayanevanosselt.github.io/Wisy-Safety-2026 y redirigent en 301 (vérifié le
+     23/10/2026). Une URL canonique doit répondre 200, jamais être une redirection. */
+  var ORIGIN = "https://wisysafety.be";
   var SITE_NAME = "Wisy Safety";
   var VERIFIED_AT = "2026-09-20";
 

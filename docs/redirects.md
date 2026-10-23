@@ -1,65 +1,59 @@
 # Redirections de l'ancien site vers le nouveau
 
-Quand le nouveau site remplacera l'ancien sur **wisysafety.be** (domaine supposé, **[À CONFIRMER]**), les anciennes
-adresses doivent renvoyer vers les nouvelles par une **redirection permanente (301)**. Sinon, les liens partagés et
-les résultats Google tombent sur une page 404, et le référencement acquis est perdu.
+Depuis le 22/10/2026, **https://wisysafety.be** sert le nouveau site (GitHub Pages, fichier `CNAME`). Avant, ce même
+domaine servait un site WordPress : ses adresses peuvent encore figurer dans Google, dans des favoris ou des liens
+partagés. Sans redirection, elles tombent sur la page 404 et le référencement acquis est perdu.
 
-## 1. Pages de cette mission (URLs ouvertes le 01/10/2026, code 200)
+## 1. Ce qui est en place (vérifié par `tests/redirects.test.js`)
 
-| Ancienne URL | Nouvelle URL | Note |
-|---|---|---|
-| `/vca-ligne-hierarchique/` | `/formation-vca-ligne-hierarchique.html` | les 3 dossiers sont dans la page (`#article-communication-hierarchique`, `#article-erreurs-hierarchie`, `#article-culture-securite`) |
-| `/produit-dangereux/` | `/formation-diisocyanates.html` | les 3 articles sont dans la page (`#article-diisocyanates-definition`, `#article-diisocyanates-reglementation`, `#article-substances-dangereuses`) |
-| `/fibre-optique/` | `/formation-fibre-optique.html` | |
-| `/les-parcours-professionnels-dans-la-fibre-optique-du-technicien-a-lingenieur-reseau/` | `/article-fibre-parcours-professionnels.html` | |
-| `/devenir-expert-en-fibre-optique-competences-cles-et-debouches-professionnels/` | `/article-fibre-devenir-expert.html` | |
-| `/optimisation-des-reseaux-fibre-optique-gain-de-performance-et-economies/` | `/formation-fibre-optique.html` | article **non repris** (`docs/articles-fact-check/fibre-optimisation-reseaux.md`) : redirigé vers le sujet le plus proche |
-| `/sinscrire/` | `/inscription.html` | |
+GitHub Pages **ne sait pas envoyer de code 301**. Deux mécanismes complémentaires :
 
-## 2. Autres adresses vues dans le pied de page de l'ancien site (liens relevés, pages **non ouvertes**)
+1. **Une page de redirection par ancienne adresse** (`dossier/index.html`) : canonical vers la nouvelle page,
+   `<meta http-equiv="refresh" content="0">` et `location.replace`. Google traite un renvoi immédiat comme une
+   redirection permanente ; le visiteur arrive directement sur la nouvelle page (code 200, pas de 404).
+2. **Une table de secours dans `404.html`** (script en tête de page) : même liste, plus les anciennes adresses qui portent
+   le nom d'une page actuelle — un dossier `formations/` entrerait en conflit avec l'adresse `/formations` (qui sert
+   `formations.html`). Pour celles-là, le visiteur est redirigé ; Google, lui, voit une 404 et finit par oublier
+   l'ancienne adresse, la nouvelle étant dans le sitemap.
 
-| Ancienne URL | Proposition | À décider |
-|---|---|---|
-| `/formations/` | `/formations.html` | — |
-| `/wisy-vca/` | `/vca-entreprise.html` | — |
-| `/wisy-coordination/` | `/coordination.html` | — |
-| `/agenda/` | `/agenda.html` | — |
-| `/formulaie-de-contact/` (orthographe d'origine) | `/contact.html` | — |
-| `/mentions-legales/` | `/mentions-legales.html` | — |
-| `/wisy-expertise/` | aucune page équivalente | page cible à choisir (accueil ?) |
-| `/wisy-certificat/` | aucune page équivalente (l'entrée « Certificat » du nouveau menu pointe aussi vers `#`) | à décider avec le propriétaire |
+| Ancienne adresse | Nouvelle page | Mécanisme | Note |
+|---|---|---|---|
+| `/vca-ligne-hierarchique/` | `/formation-vca-ligne-hierarchique.html` | page + 404 | les 3 dossiers sont dans la page |
+| `/produit-dangereux/` | `/formation-diisocyanates.html` | page + 404 | les 3 articles sont dans la page |
+| `/fibre-optique/` | `/formation-fibre-optique.html` | page + 404 | |
+| `/les-parcours-professionnels-dans-la-fibre-optique-du-technicien-a-lingenieur-reseau/` | `/article-fibre-parcours-professionnels.html` | page + 404 | |
+| `/devenir-expert-en-fibre-optique-competences-cles-et-debouches-professionnels/` | `/article-fibre-devenir-expert.html` | page + 404 | |
+| `/optimisation-des-reseaux-fibre-optique-gain-de-performance-et-economies/` | `/formation-fibre-optique.html` | page + 404 | article non repris (chiffres sans source) : sujet le plus proche |
+| `/sinscrire/` | `/inscription.html` | page + 404 | |
+| `/wisy-vca/` | `/vca-entreprise.html` | page + 404 | |
+| `/wisy-coordination/` | `/coordination.html` | page + 404 | |
+| `/formulaie-de-contact/` | `/contact.html` | page + 404 | orthographe d'origine |
+| `/wisy-certificat/` | `/certificats.html` | page + 404 | la page de vérification existe désormais |
+| `/formations/` | `/formations.html` | 404 seulement | conflit de nom |
+| `/agenda/` | `/agenda.html` | 404 seulement | conflit de nom |
+| `/mentions-legales/` | `/mentions-legales.html` | 404 seulement | conflit de nom |
 
-Avant la bascule, il faut faire l'inventaire complet des URLs de l'ancien site (sitemap WordPress `/wp-sitemap.xml`
-ou Google Search Console) et compléter ce tableau. Cette mission ne l'a pas fait.
+**Volontairement NON redirigées** : les anciennes fiches individuelles `/certificat/<nom>/` (données personnelles
+publiées par WordPress) et `/wisy-expertise/` (aucune page équivalente : une redirection vers l'accueil serait traitée
+comme une fausse 404 par Google). Elles répondent 404 et sortiront de l'index.
 
-## 3. Comment les mettre en place
+## 2. Inventaire encore incomplet
 
-Le site est aujourd'hui publié par **GitHub Pages**, qui **ne sait pas** faire de vraies redirections 301. Trois options :
+Cette liste vient des liens relevés sur l'ancien site (01/10/2026). Les archives publiques (Wayback Machine) étaient
+indisponibles le 23/10/2026. **À faire après la validation du domaine dans Google Search Console** : rapport
+« Pages » › « Introuvable (404) » — chaque ancienne adresse encore visitée s'ajoute ici (une ligne dans la table de
+`404.html` et, sans conflit de nom, un dossier `nom/index.html` copié sur un existant), puis `node --test tests/redirects.test.js`.
 
-1. **Recommandé** : mettre le domaine derrière un service qui gère les redirections (Cloudflare, Netlify…). Fichier
-   au format `_redirects` (Netlify, Cloudflare Pages) :
+## 3. Pour de vraies redirections 301 (option)
 
-   ```text
-   /vca-ligne-hierarchique/   /formation-vca-ligne-hierarchique.html   301
-   /produit-dangereux/        /formation-diisocyanates.html            301
-   /fibre-optique/            /formation-fibre-optique.html            301
-   /les-parcours-professionnels-dans-la-fibre-optique-du-technicien-a-lingenieur-reseau/   /article-fibre-parcours-professionnels.html   301
-   /devenir-expert-en-fibre-optique-competences-cles-et-debouches-professionnels/          /article-fibre-devenir-expert.html            301
-   /optimisation-des-reseaux-fibre-optique-gain-de-performance-et-economies/              /formation-fibre-optique.html                 301
-   /sinscrire/                /inscription.html                        301
-   ```
+Mettre le domaine derrière un service qui gère les règles de redirection (Cloudflare, gratuit, en gardant GitHub Pages
+comme hébergeur) — changement de DNS à décider par Wisy Safety. Les pages de redirection actuelles resteraient
+inoffensives.
 
-2. **Hébergement Apache** (`.htaccess`) : `Redirect 301 /produit-dangereux/ /formation-diisocyanates.html`, etc.
+## 4. Vérifier
 
-3. **En restant sur GitHub Pages** : créer une petite page par ancienne adresse (par exemple `produit-dangereux/index.html`)
-   avec `<link rel="canonical">` vers la nouvelle page et `<meta http-equiv="refresh" content="0; url=…">`. Google
-   traite ce renvoi immédiat presque comme une 301, mais ce n'en est pas une. Ce n'est qu'un **dernier recours**.
+```bash
+curl -s https://wisysafety.be/produit-dangereux/ | grep -E "canonical|refresh"
+```
 
-Cette mission n'a créé aucune de ces pages : le domaine et l'hébergement final ne sont pas confirmés.
-
-## 4. Après la bascule
-
-- Tester chaque ancienne URL (`curl -I`) : code `301` et bonne destination.
-- Soumettre `sitemap.xml` dans Google Search Console et suivre les erreurs 404 pendant quelques semaines.
-- Les liens vers l'ancien site dans les sources (`legacyUrl` dans `js/trainings-data.js`) servent seulement à la
-  traçabilité. Ils ne sont pas affichés.
+Puis ouvrir l'adresse dans un navigateur : on arrive sur la nouvelle page.

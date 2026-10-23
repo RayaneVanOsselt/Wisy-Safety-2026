@@ -4,4 +4,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.wisysafety.be/sitemap.xml
+Sitemap: https://wisysafety.be/sitemap.xml

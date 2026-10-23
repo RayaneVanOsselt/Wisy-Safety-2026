@@ -22,7 +22,7 @@ node --test tests/*.test.js  # échoue si une copie générée est obsolète
 
 ## Ce que génère `scripts/build-seo.js`
 
-- `sitemap.xml` : uniquement les pages publiques indexables, en URL canonique absolue (`https://www.wisysafety.be/…`).
+- `sitemap.xml` : uniquement les pages publiques indexables, en URL canonique absolue (`https://wisysafety.be/…`).
 - `robots.txt` : tout est explorable (CSS, JS et images inclus, indispensables au rendu) ; référence du sitemap.
 - Dans le `<head>` de chaque page, entre `<!-- seo:start -->` et `<!-- seo:end -->` : canonical, Open Graph, Twitter,
   `theme-color`, données structurées JSON-LD. **Ne pas éditer ce bloc à la main.** Le `<title>` et la meta
@@ -30,7 +30,8 @@ node --test tests/*.test.js  # échoue si une copie générée est obsolète
 - Pages techniques (`404.html`, maquettes `docs/maquettes/wisy-safety-header/footer.html`) : `noindex`, hors sitemap.
 
 Données structurées (chacune reprend un fait **déjà affiché** sur la page ; `tests/seo.test.js` le vérifie) :
-`EducationalOrganization`+`LocalBusiness` (adresse, téléphone, horaires, position), `WebSite` (accueil),
+`EducationalOrganization`+`LocalBusiness` (adresse, téléphone, horaires, position, zone desservie `areaServed`
+Bruxelles + Wallonie — affichée dans la barre du haut —, `ContactPoint`), `WebSite` (accueil),
 `BreadcrumbList` (pages avec fil d'Ariane visible), `Course` (Nacelles : prix HT, durée, langues),
 `ItemList` de `Course` (catalogue), `ContactPage`. Le `FAQPage` du Centre d'aide est injecté par `js/faq-page.js`
 à partir des questions affichées. Volontairement **absents** : `AggregateRating`/`Review` (avis dynamiques),
@@ -44,8 +45,10 @@ Données structurées (chacune reprend un fait **déjà affiché** sur la page ;
 - **hreflang retiré** : les 10 langues sont la *même URL* traduite en JavaScript ; les anciennes balises `hreflang`
   (URLs relatives vers `?lang=xx`, canonical identique) étaient invalides et ignorées. Une vraie indexation par langue
   exigerait une URL et un HTML distincts par langue (projet à part).
-- **URL canonique** : `https://www.wisysafety.be`. L'accueil est la racine `/` ; les autres pages gardent `.html`
-  (fichiers réels). Des URL sans `.html` dépendent de l'hébergeur (réécriture) — non nécessaire au SEO.
+- **URL canonique** : `https://wisysafety.be` (sans « www » : c'est l'adresse servie par GitHub Pages, fichier `CNAME` ;
+  `www.wisysafety.be` et `rayanevanosselt.github.io/Wisy-Safety-2026` y redirigent en 301 — vérifié le 23/10/2026 ;
+  une URL canonique doit répondre 200, jamais être une redirection). L'accueil est la racine `/` ; les autres pages
+  gardent `.html` (fichiers réels). Des URL sans `.html` dépendent de l'hébergeur (réécriture) — non nécessaire au SEO.
 - **404** : `404.html` est autonome (chemins racine) et prête pour GitHub Pages / Netlify / Cloudflare Pages / Vercel.
 
 ## Performance (Core Web Vitals)

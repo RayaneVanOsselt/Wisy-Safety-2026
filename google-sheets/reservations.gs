@@ -28,14 +28,14 @@
  * =========================================================================
  */
 
-var VERSION = "1.0.1";
+var VERSION = "1.1.0";
 
 var CONFIG = {
   FILE_NAME: "Réservations - Wisy Safety",
   TIMEZONE: "Europe/Brussels",
   LOCALE: "fr_BE",
-  NOTIFY_EMAIL: "info@wisysafety.be",       // reçoit une copie de chaque réservation ("" = aucune)
-  SITE_URL: "https://rayanevanosselt.github.io/Wisy-Safety-2026/",
+  NOTIFY_EMAIL: "info@wisysafety.be",       // reçoit chaque réservation et chaque demande du site ("" = aucune)
+  SITE_URL: "https://wisysafety.be/",       // adresse officielle du site (liens des e-mails et de l'onglet Formations)
   PHONE: "+32 2 318 86 59",
   CONFIRMATION: "immediate",                // "immediate" : places confirmées tout de suite · "manual" : « En attente » jusqu'à votre validation
   PENDING_HOURS: 72,                        // mode "manual" : une réservation non validée libère ses places après ce délai
@@ -50,13 +50,22 @@ var CONFIG = {
   MAX_SEND_TRIES: 6,
   OUTLOOK_TIMEZONE: "Romance Standard Time",// = Bruxelles pour Microsoft
   OUTLOOK_CATEGORY: "Formation Wisy",
-  MAX_OUTLOOK_PER_RUN: 25
+  MAX_OUTLOOK_PER_RUN: 25,
+  /* Demandes envoyées par les formulaires du site (contact, devis, coordination, test PEB) — onglet « Demandes ». */
+  CONTACT_ACK: true,                        // accusé de réception envoyé au visiteur (avec sa référence)
+  CONTACT_ACK_MIN_QUOTA: 30,                // sans Microsoft 365 : pas d'accusé si le quota Gmail du jour descend sous ce seuil
+  CONTACT_PER_EMAIL_PER_HOUR: 5,            // demandes par adresse e-mail et par heure
+  CONTACT_GLOBAL_PER_HOUR: 40,              // demandes par heure, tous visiteurs confondus
+  CONTACT_GLOBAL_PER_6_HOURS: 150,
+  CONTACT_MIN_FILL_MS: 2500,                // formulaire envoyé moins de 2,5 s après l'ouverture de la page = robot (ignoré)
+  REQUEST_RETENTION_MONTHS: 0               // > 0 : les demandes plus anciennes sont anonymisées automatiquement (durée à
+                                            // reporter dans la politique de confidentialité ; 0 = désactivé)
 };
 
 /* Onglets */
 var TAB = {
   FORMATIONS: "Formations", SESSIONS: "Sessions", BOOKINGS: "Réservations", PEOPLE: "Participants",
-  GAPS: "Écarts Outlook", OUTBOX: "File d'envoi", LOG: "Journal"
+  GAPS: "Écarts Outlook", OUTBOX: "File d'envoi", LOG: "Journal", REQUESTS: "Demandes"
 };
 
 /* Formations du site (registre js/site-content.js — tests/reservations.test.js vérifie que la liste est identique).
@@ -83,6 +92,8 @@ var SESSION_STATUSES = [S_OPEN, S_CLOSED, S_CANCELLED];
 var B_CONFIRMED = "Confirmée", B_PENDING = "En attente", B_CANCELLED = "Annulée", B_REQUEST = "Demande (date à convenir)", B_EXPIRED = "Expirée";
 var BOOKING_STATUSES = [B_CONFIRMED, B_PENDING, B_CANCELLED, B_REQUEST, B_EXPIRED];
 var Q_TODO = "À envoyer", Q_SENT = "Envoyé", Q_FAILED = "Échec";
+var R_NEW = "Nouvelle", R_DOING = "En cours", R_DONE = "Traitée", R_SPAM = "Indésirable", R_ERASED = "Effacée";
+var REQUEST_STATUSES = [R_NEW, R_DOING, R_DONE, R_SPAM, R_ERASED];
 var G_TODO = "À décider", G_APPLY = "Appliquer", G_IGNORE = "Ignorer", G_DONE = "Traité";
 
 var LANGUAGES = [["fr", "Français"], ["nl", "Néerlandais"], ["en", "Anglais"], ["de", "Allemand"], ["it", "Italien"],
@@ -159,7 +170,26 @@ COLS[TAB.OUTBOX] = [
   ["created", "Créé le", "", 135, false], ["kind", "Type", "", 160, false], ["to", "Destinataire", "", 220, false],
   ["subject", "Objet", "", 320, false], ["status", "Statut", "", 100, false], ["tries", "Essais", "", 70, false],
   ["next", "Prochain essai", "", 135, false], ["error", "Dernière erreur", "", 320, false], ["ref", "Référence", "", 135, false],
-  ["body", "Contenu (technique)", "", 120, true]
+  ["body", "Contenu (technique)", "", 120, true],
+  ["reply", "Répondre à", "Adresse utilisée quand on clique sur « Répondre » (le visiteur pour les e-mails adressés à l'équipe).", 200, false]
+];
+COLS[TAB.REQUESTS] = [
+  ["received", "Reçue le", "Rempli automatiquement.", 135, false],
+  ["ref", "Référence", "Donnée au visiteur (WSC-AAAA-XXXXX).", 135, false],
+  ["form", "Formulaire", "Contact, Coordination ou Test PEB.", 120, false],
+  ["subject", "Sujet", "", 200, false],
+  ["name", "Nom", "", 170, false],
+  ["email", "E-mail", "Répondre directement depuis votre messagerie : l'e-mail reçu a cette adresse en « Répondre à ».", 210, false],
+  ["phone", "Téléphone", "", 130, false],
+  ["company", "Société", "", 170, false],
+  ["message", "Message", "", 380, false],
+  ["details", "Détails", "Champs propres au formulaire (services, phase du projet, Région…).", 300, false],
+  ["page", "Page", "Page du site d'où la demande a été envoyée.", 190, false],
+  ["lang", "Langue du site", "", 80, false],
+  ["status", "Statut", "Nouvelle · En cours · Traitée · Indésirable · Effacée (anonymisée).", 110, false],
+  ["notes", "Notes", "Libre.", 220, false],
+  ["mailed", "E-mail à l'équipe", "Envoyé = parti vers " + CONFIG.NOTIFY_EMAIL + " ; sinon voir l'onglet « File d'envoi ».", 130, false],
+  ["request", "Clé de requête (technique)", "", 120, true]
 ];
 COLS[TAB.LOG] = [
   ["when", "Date", "", 135, false], ["kind", "Type", "", 110, false], ["target", "Session / référence", "", 190, false],
@@ -298,7 +328,9 @@ function table_(name) {
 
 function get_(t, row, f) { return t.col[f] === undefined ? "" : row[t.col[f]]; }
 
-function emptyRow_(row) { return !row.some(function (v) { return String(v).trim() !== ""; }); }
+/* Une case à cocher décochée (false) ne rend pas une ligne « remplie » : sinon les 1 000 lignes préparées avec des cases
+   apparaîtraient comme des sessions incomplètes. */
+function emptyRow_(row) { return !row.some(function (v) { return v !== false && String(v).trim() !== ""; }); }
 
 /** Ligne prête à écrire dans un onglet (un tableau de la largeur de l'en-tête). */
 function rowFor_(t, data) {
@@ -528,9 +560,27 @@ function health_() {
   sessions.list.forEach(function (s) { s.problems.forEach(function (p) { var k = p.replace(/ligne \d+/, "ligne ?"); reasons[k] = (reasons[k] || 0) + 1; }); });
   var hasTrigger = false;
   try { hasTrigger = ScriptApp.getProjectTriggers().some(function (t) { return t.getHandlerFunction() === "tick"; }); } catch (e) { hasTrigger = null; }
+  /* File d'envoi et demandes : uniquement des COMPTES (aucune adresse, aucun nom). */
+  var outbox = { pending: 0, sent: 0, failed: 0, lastSentAt: null }, ob = table_(TAB.OUTBOX);
+  if (ob) for (var r = 1; r < ob.values.length; r++) {
+    var st = clean_(get_(ob, ob.values[r], "status"));
+    if (st === Q_TODO) outbox.pending++; else if (st === Q_FAILED) outbox.failed++;
+    else if (st === Q_SENT) { outbox.sent++; var c = get_(ob, ob.values[r], "created"); if (isDate_(c) && (!outbox.lastSentAt || c > outbox.lastSentAt)) outbox.lastSentAt = c; }
+  }
+  if (outbox.lastSentAt) outbox.lastSentAt = fmt_(outbox.lastSentAt, "yyyy-MM-dd'T'HH:mm");
+  var requests = { total: 0, open: 0 }, rq = table_(TAB.REQUESTS);
+  if (rq) for (var q = 1; q < rq.values.length; q++) {
+    if (emptyRow_(rq.values[q])) continue;
+    requests.total++;
+    if (clean_(get_(rq, rq.values[q], "status")) === R_NEW) requests.open++;
+  }
+  var quotaLow = false;
+  try { quotaLow = !msConfig_() && MailApp.getRemainingDailyQuota() < CONFIG.CONTACT_ACK_MIN_QUOTA; } catch (e) { quotaLow = null; }
   return {
-    status: "ok", version: VERSION, outlook: !!msConfig_(), timezone: CONFIG.TIMEZONE,
+    status: "ok", version: VERSION, features: ["sessions", "book", "contact"], outlook: !!msConfig_(), timezone: CONFIG.TIMEZONE,
     tabs: tabs, automaticTask: hasTrigger,
+    mail: { sender: msConfig_() ? "microsoft365" : "google", notify: !!CONFIG.NOTIFY_EMAIL, quotaLow: quotaLow, outbox: outbox },
+    requests: requests,
     sessions: {
       rows: sessions.list.length,
       valid: sessions.list.filter(function (s) { return s.valid; }).length,
@@ -617,16 +667,19 @@ function validateOrder_(body, formations) {
   return { order: order, fields: fields };
 }
 
-/** Limites d'envoi. Renvoie le nombre de secondes à attendre (0 = autorisé). Compte la demande si elle est autorisée. */
-function rateLimit_(email) {
-  var cache = CacheService.getScriptCache();
+/** Limites d'envoi. Renvoie le nombre de secondes à attendre (0 = autorisé). Compte la demande si elle est autorisée.
+    `kind` = "c" : compteurs séparés pour les demandes des formulaires (CONFIG.CONTACT_*). */
+function rateLimit_(email, kind) {
+  var cache = CacheService.getScriptCache(), k = kind === "c" ? "c" : "r";
+  var L = k === "c" ? { hour: CONFIG.CONTACT_GLOBAL_PER_HOUR, six: CONFIG.CONTACT_GLOBAL_PER_6_HOURS, email: CONFIG.CONTACT_PER_EMAIL_PER_HOUR }
+    : { hour: CONFIG.GLOBAL_PER_HOUR, six: CONFIG.GLOBAL_PER_6_HOURS, email: CONFIG.PER_EMAIL_PER_HOUR };
   var t = now_().getTime(), hour = Math.floor(t / 3600000), quarter = Math.floor(t / 21600000);
   var untilHour = Math.ceil(((hour + 1) * 3600000 - t) / 1000), untilQuarter = Math.ceil(((quarter + 1) * 21600000 - t) / 1000);
   var counters = [
-    { k: "r:h:" + hour, limit: CONFIG.GLOBAL_PER_HOUR, ttl: untilHour + 60, retry: untilHour },
-    { k: "r:q:" + quarter, limit: CONFIG.GLOBAL_PER_6_HOURS, ttl: Math.min(21600, untilQuarter + 60), retry: untilQuarter },
-    { k: "r:e:" + hex_(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, email, Utilities.Charset.UTF_8)).slice(0, 40) + ":" + hour,
-      limit: CONFIG.PER_EMAIL_PER_HOUR, ttl: untilHour + 60, retry: untilHour }
+    { k: k + ":h:" + hour, limit: L.hour, ttl: untilHour + 60, retry: untilHour },
+    { k: k + ":q:" + quarter, limit: L.six, ttl: Math.min(21600, untilQuarter + 60), retry: untilQuarter },
+    { k: k + ":e:" + hex_(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, email, Utilities.Charset.UTF_8)).slice(0, 40) + ":" + hour,
+      limit: L.email, ttl: untilHour + 60, retry: untilHour }
   ];
   var values = cache.getAll(counters.map(function (c) { return c.k; })) || {};
   for (var i = 0; i < counters.length; i++) {
@@ -638,15 +691,16 @@ function rateLimit_(email) {
 
 var REF_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";   // sans 0/O ni 1/I (lisible au téléphone)
 
-function newReference_(taken) {
-  var year = fmt_(now_(), "yyyy");
+/** Référence lisible : WSR-AAAA-XXXXX (réservation) ou, avec `prefix` = "WSC", WSC-AAAA-XXXXX (demande). */
+function newReference_(taken, prefix) {
+  var year = fmt_(now_(), "yyyy"), pre = prefix || "WSR";
   for (var tries = 0; tries < 50; tries++) {
     var s = "";
     for (var i = 0; i < 5; i++) s += REF_CHARS.charAt(Math.floor(Math.random() * REF_CHARS.length));
-    var ref = "WSR-" + year + "-" + s;
+    var ref = pre + "-" + year + "-" + s;
     if (!taken[ref]) return ref;
   }
-  return "WSR-" + year + "-" + now_().getTime().toString(36).toUpperCase().slice(-6);
+  return pre + "-" + year + "-" + now_().getTime().toString(36).toUpperCase().slice(-6);
 }
 
 function itemStatus_(statusCode) { return statusCode === "confirmed" ? "confirmed" : statusCode === "pending" ? "pending" : "request"; }
@@ -746,20 +800,246 @@ function submitBooking_(body) {
   return result;
 }
 
-/** Appel du site : POST { action: "book", requestId, lang, customer, billing, items[], website }. */
+/** Appel du site : POST { action: "book", … } (réservation) ou { action: "contact", … } (demande d'un formulaire). */
 function doPost(e) {
+  var action = "";
   try {
     var raw = (e && e.postData && e.postData.contents) || "{}";
     if (raw.length > 40000) return json_({ status: "invalid", fields: { items: "too_long" } });
     var body = {};
     try { body = JSON.parse(raw) || {}; } catch (err) { body = {}; }
     if (typeof body !== "object" || Array.isArray(body)) body = {};
-    if (body.action !== "book") return json_({ status: "error" });
-    return json_(submitBooking_(body));
+    action = body.action;
+    if (action === "book") return json_(submitBooking_(body));
+    if (action === "contact") return json_(submitContact_(body));
+    return json_({ status: "error" });
   } catch (err) {
-    try { log_("Réservation", "", "Erreur", String(err && err.message || err).slice(0, 300)); } catch (e2) { /* journal indisponible */ }
+    try { log_(action === "contact" ? "Demande" : "Réservation", "", "Erreur", String(err && err.message || err).slice(0, 300)); } catch (e2) { /* journal indisponible */ }
     return json_({ status: "error" });
   }
+}
+
+/* ======================================================================= demandes des formulaires (POST action "contact")
+
+   Formulaires de contact / devis, WiSy Coordination et test d'éligibilité PEB. Chaque demande est :
+   1. revalidée ici (le formulaire du navigateur peut être contourné) ;
+   2. enregistrée dans l'onglet « Demandes » SOUS VERROU (une même clé de requête renvoie la même référence : un nouvel
+      essai après une coupure réseau ne crée jamais de doublon) ;
+   3. envoyée à l'équipe (CONFIG.NOTIFY_EMAIL) avec « Répondre à » = le visiteur, + accusé de réception au visiteur ;
+      un e-mail qui échoue reste dans la « File d'envoi » et est réessayé (5 min, 15 min, 1 h…) — la demande, elle,
+      est déjà en sécurité dans la feuille.
+   Le site n'affiche « demande reçue » qu'après la réponse « ok » de ce script. */
+
+var CONTACT_FORMS = {
+  contact: { label: "Contact", messageRequired: true, subjects: {
+    devis: "Demande de devis", inscription: "Inscription à une formation", conseil: "Conseil & accompagnement sécurité",
+    coordination: "Coordination sécurité-santé", peb: "Certification PEB", autre: "Autre question" } },
+  coordination: { label: "Coordination", messageRequired: false, subject: "Coordination sécurité-santé (WiSy Coordination)" },
+  peb: { label: "Test PEB", messageRequired: false, subject: "Certification PEB — test d'éligibilité" }
+};
+var PHONE_RE = /^[0-9+().\/\s-]{6,40}$/;
+var PAGE_RE = /^\/[A-Za-z0-9._\/-]{0,120}$/;
+
+/** Texte long saisi par un visiteur : retours à la ligne gardés, autres caractères de contrôle retirés. */
+function cleanText_(v) {
+  return String(v == null ? "" : v).replace(/\r\n?/g, "\n").replace(/[\u0000-\u0009\u000B-\u001F\u007F\u200B-\u200D\uFEFF]/g, " ")
+    .replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
+/** Revalide une demande. Renvoie { req, fields } — `fields` non vide = demande refusée (champ → raison). */
+function validateContact_(body) {
+  var fields = {}, form = CONTACT_FORMS[String(body.form || "")];
+  var req = {
+    requestId: String(body.requestId == null ? "" : body.requestId),
+    form: form ? String(body.form) : "",
+    lang: /^[a-z]{2}$/.test(String(body.lang || "")) ? String(body.lang) : "fr",
+    name: clean_(body.name), email: clean_(body.email).toLowerCase(), phone: clean_(body.phone), company: clean_(body.company),
+    subjectCode: clean_(body.subject, 40).toLowerCase(), subject: "", message: cleanText_(body.message),
+    page: PAGE_RE.test(String(body.page || "")) ? String(body.page) : "", details: []
+  };
+  if (!REQUEST_RE.test(req.requestId)) fields.requestId = "invalid";
+  if (!form) { fields.form = "invalid"; return { req: req, fields: fields }; }
+  /* Au moins un caractère qui n'est ni un chiffre, ni une ponctuation ASCII, ni un espace : une lettre, quelle que soit
+     l'écriture (latine, cyrillique, arabe, chinoise…). */
+  if (!req.name || !/[^\s0-9!-\/:-@\[-`{-~]/.test(req.name)) fields.name = "required";
+  else if (req.name.length > 120) fields.name = "too_long";
+  if (req.email.length > 160 || !EMAIL_RE.test(req.email)) fields.email = "invalid";
+  if (req.phone && (req.phone.length > 40 || !PHONE_RE.test(req.phone))) fields.phone = "invalid";
+  if (req.company.length > 120) fields.company = "too_long";
+  if (form.subjects) {
+    req.subject = form.subjects[req.subjectCode] || "";
+    if (!req.subject) fields.subject = "invalid";
+  } else req.subject = form.subject;
+  if (req.message.length > 5000) fields.message = "too_long";
+  else if (form.messageRequired && req.message.length < 3) fields.message = "required";
+  if (body.consent !== true) fields.consent = "required";
+  var details = Array.isArray(body.details) ? body.details : [];
+  if (details.length > 12) fields.details = "invalid";
+  details.slice(0, 12).forEach(function (d) {
+    if (!Array.isArray(d) || d.length !== 2) { fields.details = "invalid"; return; }
+    var label = clean_(d[0]), value = clean_(Array.isArray(d[1]) ? d[1].join(", ") : d[1]);
+    if (!label || label.length > 60 || value.length > 400) { fields.details = "invalid"; return; }
+    if (value) req.details.push([label, value]);
+  });
+  return { req: req, fields: fields };
+}
+
+/** Message manifestement publicitaire : beaucoup de liens (gardé dans la feuille en « Indésirable », sans e-mail). */
+function looksLikeSpam_(req) {
+  var text = [req.name, req.company, req.message].concat(req.details.map(function (d) { return d[1]; })).join(" ");
+  return (text.match(/https?:\/\/|www\./gi) || []).length >= 4;
+}
+
+/**
+ * Enregistre une demande d'un formulaire du site.
+ * @returns {Object} ok (reference, duplicate?, notified) | invalid (fields) | rate_limited (retryAfter) | busy
+ */
+function submitContact_(body) {
+  /* Champ piège rempli, ou formulaire envoyé en moins de CONTACT_MIN_FILL_MS : robot → réponse normale, rien d'enregistré. */
+  var elapsed = Number(body.elapsed);
+  if (clean_(body.website) || (isFinite(elapsed) && elapsed >= 0 && elapsed < CONFIG.CONTACT_MIN_FILL_MS)) {
+    return { status: "ok", reference: newReference_({}, "WSC"), notified: true };
+  }
+  var v = validateContact_(body);
+  if (Object.keys(v.fields).length) return { status: "invalid", fields: v.fields };
+  var req = v.req, form = CONTACT_FORMS[req.form];
+
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(15000)) return { status: "busy" };
+  var ref, line, spam = looksLikeSpam_(req);
+  try {
+    ensureTab_(TAB.REQUESTS); ensureOutboxReply_();
+    var t = table_(TAB.REQUESTS), refs = {};
+    for (var r = 1; r < t.values.length; r++) {
+      var row = t.values[r], key = String(get_(t, row, "request") || "");
+      refs[clean_(get_(t, row, "ref"))] = true;
+      if (key && key === req.requestId) return { status: "ok", reference: clean_(get_(t, row, "ref")), duplicate: true, notified: true };
+    }
+    var wait = rateLimit_(req.email, "c");
+    if (wait > 0) return { status: "rate_limited", retryAfter: wait };
+    ref = newReference_(refs, "WSC");
+    appendRows_(t, [rowFor_(t, {
+      received: now_(), ref: ref, form: form.label, subject: req.subject, name: asText_(req.name), email: asText_(req.email),
+      phone: asText_(req.phone), company: asText_(req.company), message: asText_(req.message),
+      details: asText_(req.details.map(function (d) { return d[0] + " : " + d[1]; }).join("\n")),
+      page: asText_(req.page), lang: req.lang, status: spam ? R_SPAM : R_NEW, mailed: spam ? "Non (indésirable)" : "En file",
+      request: req.requestId
+    })]);
+    line = t.values.length;
+    SpreadsheetApp.flush();
+  } finally {
+    lock.releaseLock();
+  }
+  if (spam) return { status: "ok", reference: ref, notified: true };
+
+  var notified = false;
+  try {
+    var teamLine = queueContactEmails_(ref, req, form);
+    processOutbox_(4);
+    var ob = table_(TAB.OUTBOX);
+    notified = !!(teamLine && ob && clean_(get_(ob, ob.values[teamLine - 1] || [], "status")) === Q_SENT);
+    var t2 = table_(TAB.REQUESTS);
+    if (t2) setCell_(t2, line, "mailed", notified ? "Envoyé" : "En file (réessai automatique)");
+  } catch (err) {
+    log_("Demande", ref, "Erreur", "Envoi différé : " + String(err && err.message || err).slice(0, 300));
+  }
+  return { status: "ok", reference: ref, notified: notified };
+}
+
+/** Prépare l'e-mail à l'équipe (Répondre à = visiteur) et l'accusé de réception. Renvoie la ligne de l'e-mail équipe. */
+function queueContactEmails_(ref, req, form) {
+  var rows = [
+    ["Formulaire", form.label], ["Sujet", req.subject], ["Nom", req.name],
+    ["E-mail", '<a href="mailto:' + esc_(req.email) + '">' + esc_(req.email) + "</a>", true],
+    ["Téléphone", req.phone ? '<a href="tel:' + esc_(req.phone.replace(/[^0-9+]/g, "")) + '">' + esc_(req.phone) + "</a>" : "—", !!req.phone],
+    ["Société", req.company || "—"]
+  ].concat(req.details).concat([
+    ["Page", req.page ? '<a href="' + esc_(CONFIG.SITE_URL.replace(/\/$/, "") + req.page) + '">' + esc_(req.page) + "</a>" : "—", !!req.page],
+    ["Langue du site", langName_(req.lang) || req.lang], ["Reçue le", fmt_(now_(), "dd/MM/yyyy HH:mm") + " (heure de Bruxelles)"], ["Référence", ref]
+  ]);
+  var table = '<table cellpadding="6" style="border-collapse:collapse;width:100%;font-size:14px">' + rows.map(function (r) {
+    return '<tr><td style="color:#5E6D6A;white-space:nowrap;vertical-align:top;border-bottom:1px solid #eef3f2">' + esc_(r[0]) +
+      '</td><td style="border-bottom:1px solid #eef3f2">' + (r[2] ? r[1] : esc_(r[1])) + "</td></tr>";
+  }).join("") + "</table>";
+  var message = req.message ? '<p style="margin:18px 0 6px;color:#5E6D6A">Message</p><div style="white-space:pre-wrap;background:#F4FAF9;border-radius:8px;padding:12px 14px">' + esc_(req.message) + "</div>" : "";
+  var team = emailFrame_("Nouvelle demande depuis le site — " + req.subject,
+    "<p>Pour répondre à <b>" + esc_(req.name) + "</b>, utilisez simplement « Répondre » : la réponse part vers " + esc_(req.email) + ".</p>" +
+    table + message + '<p style="color:#5E6D6A;font-size:13px">Suivi : onglet « ' + esc_(TAB.REQUESTS) + " » de la feuille « " + esc_(CONFIG.FILE_NAME) + " » (colonne Statut).</p>");
+  var who = clean_(req.name, 60);
+  var teamLine = queue_("Demande (équipe)", CONFIG.NOTIFY_EMAIL, "[Site] " + req.subject + " — " + who + " (" + ref + ")", team, ref, req.email);
+
+  if (CONFIG.CONTACT_ACK && (msConfig_() || MailApp.getRemainingDailyQuota() >= CONFIG.CONTACT_ACK_MIN_QUOTA)) {
+    var A = ACK_TEXT[req.lang] || ACK_TEXT.fr;
+    /* Jamais le message du visiteur dans l'accusé (le formulaire ne doit pas servir à envoyer du texte libre à un tiers) ;
+       le nom n'est repris que s'il ressemble à un nom. */
+    var greet = /^[^@:\/<>{}\[\]]{1,60}$/.test(who) && !/https?|www\./i.test(who) ? A.hello.replace("{name}", esc_(who)) : A.helloAnon;
+    var ack = emailFrame_(A.title,
+      "<p>" + greet + "</p><p>" + A.body.replace("{ref}", "<b>" + esc_(ref) + "</b>") + "</p>" +
+      "<p>" + A.subject + " <b>" + esc_(req.subject) + "</b></p><p>" + A.reply.replace("{phone}", esc_(CONFIG.PHONE)) + "</p>" +
+      '<p style="color:#5E6D6A;font-size:13px">' + A.auto + "</p>");
+    queue_("Accusé de réception", req.email, A.mailSubject.replace("{ref}", ref), ack, ref, CONFIG.NOTIFY_EMAIL);
+  }
+  return teamLine;
+}
+
+/* Accusé de réception (le contenu de la demande n'y est PAS repris). Langues : fr, nl, en (les autres reçoivent fr). */
+var ACK_TEXT = {
+  fr: { title: "Nous avons bien reçu votre demande", mailSubject: "Wisy Safety — demande bien reçue ({ref})", hello: "Bonjour {name},", helloAnon: "Bonjour,",
+    body: "Merci pour votre message. Votre demande est enregistrée sous la référence {ref}.", subject: "Sujet :",
+    reply: "L'équipe Wisy Safety vous répond dans les meilleurs délais. Pour compléter votre demande, répondez simplement à cet e-mail ou appelez-nous au {phone}.",
+    auto: "E-mail automatique envoyé à la suite d'une demande faite sur wisysafety.be. Si vous n'êtes pas à l'origine de cette demande, ignorez ce message." },
+  nl: { title: "Wij hebben uw aanvraag goed ontvangen", mailSubject: "Wisy Safety — aanvraag ontvangen ({ref})", hello: "Beste {name},", helloAnon: "Beste,",
+    body: "Bedankt voor uw bericht. Uw aanvraag is geregistreerd onder referentie {ref}.", subject: "Onderwerp:",
+    reply: "Het team van Wisy Safety antwoordt u zo snel mogelijk. Wilt u iets toevoegen? Beantwoord dan gewoon deze e-mail of bel ons op {phone}.",
+    auto: "Automatische e-mail na een aanvraag op wisysafety.be. Heeft u deze aanvraag niet gedaan, dan mag u dit bericht negeren." },
+  en: { title: "We have received your request", mailSubject: "Wisy Safety — request received ({ref})", hello: "Hello {name},", helloAnon: "Hello,",
+    body: "Thank you for your message. Your request has been recorded under reference {ref}.", subject: "Subject:",
+    reply: "The Wisy Safety team will get back to you as soon as possible. To add information, simply reply to this e-mail or call us on {phone}.",
+    auto: "Automatic e-mail sent after a request made on wisysafety.be. If you did not make this request, please ignore this message." }
+};
+
+/** Crée l'onglet s'il manque (feuille installée avec une version précédente du script). */
+function ensureTab_(name) {
+  if (!SpreadsheetApp.getActiveSpreadsheet().getSheetByName(name)) {
+    setupTab_(SpreadsheetApp.getActiveSpreadsheet(), name);
+    if (name === TAB.REQUESTS) formatRequestsTab_();
+  }
+}
+/** Ajoute la colonne « Répondre à » de la file d'envoi si elle manque (sinon la réponse de l'équipe partirait vers elle-même). */
+function ensureOutboxReply_() {
+  var t = table_(TAB.OUTBOX);
+  if (!t) { setupTab_(SpreadsheetApp.getActiveSpreadsheet(), TAB.OUTBOX); return; }
+  if (t.col.reply === undefined) setupTab_(SpreadsheetApp.getActiveSpreadsheet(), TAB.OUTBOX);
+}
+/** Mise en forme de l'onglet « Demandes » : liste des statuts, couleurs, dates. */
+function formatRequestsTab_() {
+  var t = table_(TAB.REQUESTS);
+  if (!t) return;
+  var rows = Math.max(1, t.sheet.getMaxRows() - 1), status = t.sheet.getRange(2, t.col.status + 1, rows, 1);
+  status.setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(REQUEST_STATUSES, true).setAllowInvalid(true).build());
+  t.sheet.getRange(2, t.col.received + 1, rows, 1).setNumberFormat("dd/mm/yyyy hh:mm");
+  t.sheet.getRange(2, t.col.message + 1, rows, 1).setWrap(true);
+  t.sheet.getRange(2, t.col.details + 1, rows, 1).setWrap(true);
+  var byText = function (text, bg, fg) { return SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo(text).setBackground(bg).setFontColor(fg).setRanges([status]).build(); };
+  t.sheet.setConditionalFormatRules([byText(R_NEW, "#FFF1D6", "#8A5A00"), byText(R_DOING, "#E3EEFF", "#1D4E89"), byText(R_DONE, "#DDF4EE", "#1F6F64"),
+    byText(R_SPAM, "#ECEFEE", "#5E6D6A"), byText(R_ERASED, "#ECEFEE", "#5E6D6A")]);
+}
+
+/** Anonymise les demandes plus anciennes que CONFIG.REQUEST_RETENTION_MONTHS (0 = jamais). Renvoie le nombre traité. */
+function purgeOldRequests_() {
+  var months = Number(CONFIG.REQUEST_RETENTION_MONTHS) || 0, t = table_(TAB.REQUESTS);
+  if (months <= 0 || !t) return 0;
+  var limit = new Date(now_().getTime()), n = 0;
+  limit.setMonth(limit.getMonth() - months);
+  for (var r = 1; r < t.values.length; r++) {
+    var row = t.values[r], when = get_(t, row, "received");
+    if (!isDate_(when) || when.getTime() >= limit.getTime() || clean_(get_(t, row, "status")) === R_ERASED) continue;
+    ["name", "email", "phone", "company", "message", "details", "page", "notes"].forEach(function (f) { setCell_(t, r + 1, f, ""); });
+    setCell_(t, r + 1, "status", R_ERASED);
+    n++;
+  }
+  if (n) log_("Demande", "", "Info", n + " demande(s) de plus de " + months + " mois anonymisée(s) (durée de conservation).");
+  return n;
 }
 
 /* ======================================================================= e-mails (file d'envoi + réessais) */
@@ -770,10 +1050,14 @@ function log_(kind, target, level, message) {
   appendRows_(t, [rowFor_(t, { when: now_(), kind: kind, target: asText_(target || ""), level: level, message: asText_(message) })]);
 }
 
-function queue_(kind, to, subject, html, ref) {
+/** Met un e-mail dans la file d'envoi. `replyTo` : adresse du bouton « Répondre » (défaut : CONFIG.NOTIFY_EMAIL).
+    Renvoie le numéro de ligne dans l'onglet « File d'envoi » (0 si rien n'a été mis en file). */
+function queue_(kind, to, subject, html, ref, replyTo) {
   var t = table_(TAB.OUTBOX);
-  if (!t || !EMAIL_RE.test(String(to || ""))) return;
-  appendRows_(t, [rowFor_(t, { created: now_(), kind: kind, to: asText_(to), subject: asText_(subject), status: Q_TODO, tries: 0, next: now_(), ref: asText_(ref || ""), body: asText_(html.slice(0, 45000)) })]);
+  if (!t || !EMAIL_RE.test(String(to || ""))) return 0;
+  var reply = EMAIL_RE.test(String(replyTo || "")) ? String(replyTo) : "";
+  appendRows_(t, [rowFor_(t, { created: now_(), kind: kind, to: asText_(to), subject: asText_(subject), status: Q_TODO, tries: 0, next: now_(), ref: asText_(ref || ""), body: asText_(html.slice(0, 45000)), reply: asText_(reply) })]);
+  return t.values.length;
 }
 
 function emailFrame_(title, inner) {
@@ -818,19 +1102,22 @@ function queueBookingEmails_(w) {
       itemsHtml_(w) + (lines ? "<p>Places après cette réservation :</p><ul>" + lines + "</ul>" : "") +
       "<p>Détail dans la feuille « " + esc_(CONFIG.FILE_NAME) + " », onglet Réservations.</p>");
     var subjectSessions = w.order.items.map(function (it) { return it.trainingName + " ×" + it.quantity; }).join(", ");
-    queue_("Avis Wisy Safety", CONFIG.NOTIFY_EMAIL, "Nouvelle réservation " + w.ref + " — " + subjectSessions, team, w.ref);
+    /* « Répondre » depuis la messagerie de l'équipe écrit directement au client. */
+    queue_("Avis Wisy Safety", CONFIG.NOTIFY_EMAIL, "Nouvelle réservation " + w.ref + " — " + subjectSessions, team, w.ref, c.email);
   }
 }
 
-/** Envoie un e-mail : Microsoft 365 (boîte dédiée) si configuré, sinon Gmail (MailApp). Lève une erreur en cas d'échec. */
-function sendEmail_(to, subject, html) {
+/** Envoie un e-mail : Microsoft 365 (boîte dédiée) si configuré, sinon Gmail (MailApp). Lève une erreur en cas d'échec.
+    `replyTo` : adresse du bouton « Répondre » (défaut : CONFIG.NOTIFY_EMAIL). */
+function sendEmail_(to, subject, html, replyTo) {
+  var reply = EMAIL_RE.test(String(replyTo || "")) ? String(replyTo) : CONFIG.NOTIFY_EMAIL;
   var ms = msConfig_();
   if (ms) {
     var res = graph_(ms, "post", "/users/" + encodeURIComponent(ms.mailbox) + "/sendMail", {
       message: {
         subject: subject, body: { contentType: "HTML", content: html },
         toRecipients: [{ emailAddress: { address: to } }],
-        replyTo: CONFIG.NOTIFY_EMAIL ? [{ emailAddress: { address: CONFIG.NOTIFY_EMAIL } }] : []
+        replyTo: reply ? [{ emailAddress: { address: reply } }] : []
       },
       saveToSentItems: true
     });
@@ -838,7 +1125,7 @@ function sendEmail_(to, subject, html) {
     return;
   }
   if (MailApp.getRemainingDailyQuota() < 1) throw new Error("quota d'e-mails Google du jour épuisé");
-  MailApp.sendEmail({ to: to, subject: subject, htmlBody: html, name: "Wisy Safety", replyTo: CONFIG.NOTIFY_EMAIL || undefined });
+  MailApp.sendEmail({ to: to, subject: subject, htmlBody: html, name: "Wisy Safety", replyTo: reply || undefined });
 }
 
 /** Délai avant le prochain essai : 5 min, 15 min, 1 h, 3 h, 12 h, puis 24 h. */
@@ -856,7 +1143,7 @@ function processOutbox_(limit) {
     if (isDate_(next) && next.getTime() > now.getTime()) continue;
     var line = r + 1, tries = (int_(get_(t, row, "tries")) || 0) + 1;
     try {
-      sendEmail_(clean_(get_(t, row, "to")), String(get_(t, row, "subject")), String(get_(t, row, "body")));
+      sendEmail_(clean_(get_(t, row, "to")), String(get_(t, row, "subject")), String(get_(t, row, "body")), clean_(get_(t, row, "reply")));
       setCell_(t, line, "status", Q_SENT);
       setCell_(t, line, "tries", tries);
       setCell_(t, line, "error", "");
@@ -1081,6 +1368,7 @@ function tick() {
   clearCache_();
   processOutbox_(20);
   syncOutlook_();
+  try { purgeOldRequests_(); } catch (err) { log_("Demande", "", "Erreur", "Anonymisation : " + String(err && err.message || err).slice(0, 200)); }
 }
 
 /* ======================================================================= menu « Wisy Safety » */
@@ -1104,6 +1392,7 @@ function onOpen() {
     .addSeparator()
     .addItem("⚙ Configurer Microsoft 365 (Outlook)…", "configurerMicrosoft")
     .addItem("🧪 Tester la connexion Outlook", "testerOutlook")
+    .addItem("✉ Envoyer un e-mail de test à l'équipe", "envoyerUnEmailDeTest")
     .addItem("🛠 Installer / réparer la feuille", "installer")
     .addToUi();
 }
@@ -1454,6 +1743,20 @@ function configurerMicrosoft() {
   testerOutlook();
 }
 
+/** Vérifie la chaîne d'envoi réelle (Microsoft 365 si configuré, sinon Gmail) vers CONFIG.NOTIFY_EMAIL. */
+function envoyerUnEmailDeTest() {
+  var ui = ui_();
+  if (!CONFIG.NOTIFY_EMAIL) { ui.alert("Aucune adresse d'équipe : renseignez CONFIG.NOTIFY_EMAIL en haut du script."); return; }
+  try {
+    sendEmail_(CONFIG.NOTIFY_EMAIL, "Wisy Safety — e-mail de test (" + fmt_(now_(), "dd/MM/yyyy HH:mm") + ")",
+      emailFrame_("E-mail de test", "<p>Si vous lisez ce message dans la boîte " + esc_(CONFIG.NOTIFY_EMAIL) + ", les demandes du site vous parviennent.</p>" +
+        "<p>Expéditeur utilisé : " + (msConfig_() ? "Microsoft 365 (" + esc_(msConfig_().mailbox) + ")" : "compte Google du script (Gmail)") + ".</p>"));
+    ui.alert("E-mail de test envoyé à " + CONFIG.NOTIFY_EMAIL + ". S'il n'arrive pas dans les 5 minutes, regardez dans les indésirables puis dans l'onglet « " + TAB.LOG + " ».");
+  } catch (err) {
+    ui.alert("L'envoi a échoué : " + String(err && err.message || err).slice(0, 400));
+  }
+}
+
 function testerOutlook() {
   var ui = ui_(), ms = msConfig_();
   if (!ms) { ui.alert("Outlook n'est pas configuré : menu Wisy Safety › Configurer Microsoft 365."); return; }
@@ -1496,7 +1799,7 @@ function setupTab_(ss, name) {
 
 function setupTabs_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  [TAB.FORMATIONS, TAB.SESSIONS, TAB.BOOKINGS, TAB.PEOPLE, TAB.GAPS, TAB.OUTBOX, TAB.LOG].forEach(function (n) { setupTab_(ss, n); });
+  [TAB.FORMATIONS, TAB.SESSIONS, TAB.BOOKINGS, TAB.PEOPLE, TAB.GAPS, TAB.OUTBOX, TAB.LOG, TAB.REQUESTS].forEach(function (n) { setupTab_(ss, n); });
 }
 
 function installer() {
@@ -1571,6 +1874,7 @@ function installer() {
     byText(B_PENDING, "#FFF1D6", "#8A5A00", bt.sheet.getRange(2, bt.col.status + 1, bRows, 1)),
     byText(B_CANCELLED, "#ECEFEE", "#5E6D6A", bt.sheet.getRange(2, bt.col.status + 1, bRows, 1))
   ]);
+  formatRequestsTab_();
   var gt = table_(TAB.GAPS);
   gt.sheet.getRange(2, gt.col.decision + 1, Math.max(1, gt.sheet.getMaxRows() - 1), 1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList([G_TODO, G_APPLY, G_IGNORE], true).setAllowInvalid(true).build());
   ss.setActiveSheet(sh);

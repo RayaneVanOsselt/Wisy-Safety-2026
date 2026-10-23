@@ -37,13 +37,7 @@
   /* Variables des phrases traduites : « {region} », « {years} », « {n} » */
   const fmt = (tpl, vars) => String(tpl).replace(/\{(\w+)\}/g, (m, k) => (vars[k] != null ? vars[k] : m));
 
-  /* Même compte / gabarit EmailJS que contact.html (champs user_name/user_email/user_phone/
-     subject/message/time ; « Certification PEB » = option déjà proposée par ce gabarit). Valeurs
-     PUBLIQUES par conception (protégées côté EmailJS par la configuration du service) : reprises
-     ici telles quelles, comme le fait déjà contact.html — pas de secret exposé. */
-  const EMAILJS_PUBLIC_KEY = "k2JkXtD2RO8TkoO77";
-  const EMAILJS_SERVICE_ID = "service_k348qw9";
-  const EMAILJS_TEMPLATE_ID = "template_0p9dah6";
+  /* Envoi du test d'éligibilité : js/forms.js (identifiants EmailJS de secours dans js/supabase-config.js). */
 
   /* Analytics : même convention que l'assistant (wisy:analytics, voir js/assistant/assistant.js) —
      aucune plateforme n'est ajoutée ici, l'évènement existe pour un futur consommateur. */
@@ -403,8 +397,7 @@
      ÉLIGIBILITÉ — mini-parcours 4 étapes + résultat INDICATIF (jamais une
      décision administrative — le texte de mise en garde reste toujours visible
      à l'étape résultat). Contrat HTML : voir data-quiz-* dans la page.
-     Envoi final : réutilise le compte EmailJS déjà configuré pour contact.html
-     (mêmes champs user_name/user_email/user_phone/subject/message/time).
+     Envoi final : js/forms.js (feuille Google, secours EmailJS — même compte que contact.html).
      ======================================================================= */
   function initEligibilityQuiz() {
     const root = $("[data-quiz]");
@@ -506,6 +499,28 @@
       if (statusMsg && statusEl) statusEl.textContent = tr(statusMsg.key, statusMsg.fallback);
     });
 
+    /* Envoi : js/forms.js (script de la feuille Google → onglet « Demandes » + e-mail à info@wisysafety.be avec
+       « Répondre à » = le visiteur ; secours EmailJS). Résultat transmis en français à l'équipe. */
+    const val = (name) => ((form && form.querySelector(`[name="${name}"]`)) || {}).value || "";
+    const sender = form && window.WisyForms ? window.WisyForms.controller({
+      status: statusEl,
+      button: $('[type="submit"]', form),
+      t: (k, fb) => tr(k, fb),
+      okKey: "peb.quiz_sent_ok", okFallback: "Merci ! Notre équipe revient vers vous sous 24 h ouvrées.",
+      errKey: "peb.quiz_sent_err", errFallback: "L'envoi a échoué. Écrivez-nous directement à info@wisysafety.be.",
+      fields: { name: form.querySelector('[name="quiz-name"]'), email: form.querySelector('[name="quiz-email"]'), phone: form.querySelector('[name="quiz-phone"]'), consent: form.querySelector('[name="quiz-consent"]') },
+      payload: () => ({
+        form: "peb", lang: currentLang(), page: "/peb-wallonie-bruxelles.html",
+        elapsed: window.performance ? performance.now() : 3000, consent: !!(form.querySelector('[name="quiz-consent"]') || {}).checked,
+        name: val("quiz-name"), email: val("quiz-email"), phone: val("quiz-phone"),
+        details: [
+          ["Région", regionLabelFr()], ["Profil", state.profile || "-"],
+          ["Expérience", state.profile === "experience" ? (state.years || "-") + " an(s)" : ""],
+          ["Résultat indicatif affiché", indicativeResult("fr")]
+        ]
+      })
+    }) : null;
+
     if (form) {
       form.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -516,28 +531,9 @@
         goTo("result");
         track("peb_eligibility_completed", { region: state.region, profile: state.profile });
 
-        const submitBtn = $('[type="submit"]', form);
-        if (!window.emailjs) {
-          setStatus("peb.quiz_sent_offline", "Merci ! Pour aller plus vite, écrivez-nous directement à info@wisysafety.be.");
-          return;
-        }
-        if (submitBtn) submitBtn.disabled = true;
-        const params = {
-          user_name: (form.querySelector('[name="quiz-name"]') || {}).value || "",
-          user_email: (form.querySelector('[name="quiz-email"]') || {}).value || "",
-          user_phone: (form.querySelector('[name="quiz-phone"]') || {}).value || "Non renseigné",
-          subject: "Certification PEB",
-          message: "Vérification d'éligibilité PEB — Région : " + regionLabelFr() + " · Profil : " + (state.profile || "-") +
-            (state.profile === "experience" ? " · Expérience : " + (state.years || "-") + " an(s)" : "") +
-            " · Langue du visiteur : " + currentLang() +
-            " · Résultat indicatif transmis : " + indicativeResult("fr"),
-          time: new Date().toLocaleString("fr-BE", { dateStyle: "long", timeStyle: "short" })
-        };
-        try { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); } catch (e2) { /* déjà initialisé ailleurs : ignoré */ }
-        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
-          .then(() => setStatus("peb.quiz_sent_ok", "Merci ! Notre équipe revient vers vous sous 24 h ouvrées."))
-          .catch(() => setStatus("peb.quiz_sent_err", "L'envoi a échoué. Écrivez-nous directement à info@wisysafety.be."))
-          .finally(() => { if (submitBtn) submitBtn.disabled = false; });
+        if (!sender) { setStatus("peb.quiz_sent_err", "L'envoi a échoué. Écrivez-nous directement à info@wisysafety.be."); return; }
+        statusMsg = null;   // le message affiché est désormais géré par js/forms.js
+        sender.submit();
       });
     }
 

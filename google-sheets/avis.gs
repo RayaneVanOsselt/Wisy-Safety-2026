@@ -27,7 +27,7 @@ var CONFIG = {
   FILE_NAME: "Avis - Wisy Safety",
   TIMEZONE: "Europe/Brussels",
   NOTIFY_EMAIL: "info@wisysafety.be",     // e-mail prévenu à chaque nouvel avis ("" = aucun e-mail)
-  SITE_URL: "https://rayanevanosselt.github.io/Wisy-Safety-2026/avis.html",
+  SITE_URL: "https://wisysafety.be/avis.html",
   PER_EMAIL_PER_HOUR: 3,                  // avis par adresse e-mail et par heure (annoncé dans la politique de confidentialité)
   GLOBAL_PER_HOUR: 30,                    // avis par heure, tous visiteurs confondus (protection contre les robots)
   GLOBAL_PER_6_HOURS: 100,                // avis par tranche de 6 heures, tous visiteurs confondus

@@ -24,7 +24,7 @@ function boot({ ua = "Mozilla/5.0 Chrome/126", languages = ["fr-BE"], search = "
   const ctx = {
     window: win, document: doc, CustomEvent: function CE() {},
     navigator: { userAgent: ua, languages },
-    location: { search, href: "https://www.wisysafety.be/index.html" + search },
+    location: { search, href: "https://wisysafety.be/index.html" + search },
     history: { replaceState: () => {} },
     localStorage: { getItem: (k) => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = v; } },
     URL, URLSearchParams

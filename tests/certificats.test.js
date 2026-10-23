@@ -375,7 +375,7 @@ test("page : branchée sur la feuille Google Sheets, ni WordPress ni Supabase ; 
   assert.doesNotMatch(PAGE + read("js/certificats.js") + read("js/certificats-core.js"), /supabase/i, "plus de Supabase pour les certificats");
   ["data-service-status", "wc-steps", "wc-microprint", "wc-how", "wc-priv__", "data-challenge", "cert.trust_"].forEach((s) => assert.ok(!PAGE.includes(s), "retiré : " + s));
   assert.ok(!read("js/certificats.js").includes("/document"), "plus de PDF public");
-  assert.match(PAGE, /<link rel="canonical" href="https:\/\/www\.wisysafety\.be\/certificats\.html">/);
+  assert.match(PAGE, /<link rel="canonical" href="https:\/\/wisysafety\.be\/certificats\.html">/);
   assert.match(PAGE, /<input id="wc-last-name" name="lastName"[^>]*autocomplete="off"/);
   assert.match(PAGE, /<input id="wc-birth-date" name="birthDate"[^>]*inputmode="numeric"/);
 });
@@ -410,7 +410,7 @@ test("recherche : la page figure dans le registre du site (10 langues) et dans l
   const p = Site.page("certificats");
   assert.ok(p && p.url === "certificats.html");
   assert.ok(Site.publicPaths().includes("certificats.html"));
-  assert.match(read("sitemap.xml"), /<loc>https:\/\/www\.wisysafety\.be\/certificats\.html<\/loc>/);
+  assert.match(read("sitemap.xml"), /<loc>https:\/\/wisysafety\.be\/certificats\.html<\/loc>/);
   const ctx = { window: {} }; ctx.window.I18N = {}; vm.createContext(ctx);
   vm.runInContext(read("js/i18n-data-search.js"), ctx);
   ["fr", "en", "nl", "af", "ar", "bg", "de", "ro", "it", "sl"].forEach((l) => assert.ok(ctx.window.I18N[l]["search.page_cert_t"] && ctx.window.I18N[l]["search.page_cert_d"], l));

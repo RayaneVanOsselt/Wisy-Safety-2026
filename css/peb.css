@@ -329,6 +329,13 @@ html[data-peb-region] [data-region-panel] { opacity: 1; }
 .peb-quiz__nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: .5rem; }
 .peb-quiz__nav .btn { min-width: 130px; }
 .peb-quiz__status { min-height: 1.4em; font-size: .88rem; color: var(--epinette); margin-top: .85rem; }
+.peb-quiz__status[data-state="error"] { color: #9a3226; }
+.peb-quiz__consent { display: flex; align-items: flex-start; gap: .6rem; font-size: .84rem; line-height: 1.5; color: var(--granit, #4a5a56); margin: .35rem 0 .9rem; cursor: pointer; }
+.peb-quiz__consent input { margin-top: .22rem; flex-shrink: 0; }
+.peb-quiz__consent a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.peb-quiz__status .wf-alts { display: flex; flex-wrap: wrap; gap: .5rem .9rem; align-items: center; margin-top: .55rem; }
+.peb-quiz__status .wf-retry { font: inherit; font-weight: 600; color: #fff; background: #9a3226; border: 0; border-radius: 999px; padding: .4rem 1rem; cursor: pointer; }
+.peb-quiz__status .wf-alt { color: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 
 .peb-quiz__result { text-align: center; }
 .peb-quiz__result .ic-wrap { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; background: var(--brume-14); color: var(--epinette); margin-bottom: 1.1rem; }

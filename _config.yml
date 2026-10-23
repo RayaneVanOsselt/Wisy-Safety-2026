@@ -1,0 +1,15 @@
+# Publication GitHub Pages (Jekyll, aucune autre option) : seuls les fichiers du SITE sont publiés sur wisysafety.be.
+# Les dossiers de travail (documentation, tests, outils, scripts Google à coller, originaux des images et vidéos) restent
+# dans le dépôt mais ne sont plus servis par le domaine : ils n'ont rien à faire dans Google sous le nom de Wisy Safety.
+# Vérifié par tests/publish.test.js — ne jamais exclure un dossier chargé par les pages (assets/images, css, js…).
+exclude:
+  - README.md
+  - docs/
+  - tests/
+  - scripts/
+  - google-sheets/
+  - supabase/
+  - wordpress/
+  - content/
+  - chatbot/
+  - assets/originaux/

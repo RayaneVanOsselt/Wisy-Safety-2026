@@ -40,6 +40,7 @@
   if (Knowledge && Knowledge.pages && Knowledge.formations) {
     Knowledge.pages().forEach(function (p) { allowUrl(p.url); });
     Knowledge.formations().forEach(function (f) { allowUrl(f.url); });
+    if (Knowledge.publicPaths) Knowledge.publicPaths().forEach(allowUrl);   // services (VCA Entreprise) compris
   } else {
     ["index.html", "formations.html", "contact.html", "avis.html", "inscription.html", "faq.html", "agenda.html"].forEach(allowUrl);
   }

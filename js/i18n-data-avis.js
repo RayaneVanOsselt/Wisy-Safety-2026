@@ -9,7 +9,7 @@
 
   /* ----------------------------- FRANÇAIS -------------------------------- */
   m("fr", {
-    "meta.title": "Wisy Safety — Avis clients",
+    "meta.title": "Avis clients sur nos formations sécurité | Wisy Safety",
 
     "av.hero_eyebrow": "Registre public des avis",
     "av.hero_title": "Votre <span class=\"mark\">expérience</span> compte",
@@ -89,7 +89,7 @@
 
   /* ----------------------------- ENGLISH --------------------------------- */
   m("en", {
-    "meta.title": "Wisy Safety — Customer reviews",
+    "meta.title": "Customer reviews of our safety training | Wisy Safety",
     "av.hero_eyebrow": "Public review register",
     "av.hero_title": "Your <span class=\"mark\">experience</span> matters",
     "av.hero_desc": "Share your experience and help us keep improving the quality of our safety training, session after session.",
@@ -163,7 +163,7 @@
 
   /* ----------------------------- NEDERLANDS ------------------------------ */
   m("nl", {
-    "meta.title": "Wisy Safety — Klantbeoordelingen",
+    "meta.title": "Klantbeoordelingen van onze veiligheidsopleidingen | Wisy Safety",
     "av.hero_eyebrow": "Openbaar beoordelingsregister",
     "av.hero_title": "Uw <span class=\"mark\">ervaring</span> telt",
     "av.hero_desc": "Deel uw ervaring en help ons de kwaliteit van onze veiligheidsopleidingen sessie na sessie te verbeteren.",
@@ -237,7 +237,7 @@
 
   /* ----------------------------- AFRIKAANS ------------------------------- */
   m("af", {
-    "meta.title": "Wisy Safety — Klantresensies",
+    "meta.title": "Klantresensies van ons veiligheidsopleiding | Wisy Safety",
     "av.hero_eyebrow": "Openbare resensieregister",
     "av.hero_title": "U <span class=\"mark\">ervaring</span> tel",
     "av.hero_desc": "Deel u ervaring en help ons om die gehalte van ons veiligheidsopleiding sessie ná sessie te verbeter.",
@@ -311,7 +311,7 @@
 
   /* ------------------------------ العربية (RTL) -------------------------- */
   m("ar", {
-    "meta.title": "Wisy Safety — آراء العملاء",
+    "meta.title": "آراء العملاء حول دوراتنا في السلامة | Wisy Safety",
     "av.hero_eyebrow": "سجل الآراء العام",
     "av.hero_title": "<span class=\"mark\">تجربتك</span> مهمة",
     "av.hero_desc": "شاركنا تجربتك وساعدنا على تحسين جودة دوراتنا التدريبية في السلامة، دورة بعد أخرى.",
@@ -385,7 +385,7 @@
 
   /* ----------------------------- БЪЛГАРСКИ ------------------------------- */
   m("bg", {
-    "meta.title": "Wisy Safety — Отзиви на клиенти",
+    "meta.title": "Отзиви за нашите обучения по безопасност | Wisy Safety",
     "av.hero_eyebrow": "Публичен регистър на отзивите",
     "av.hero_title": "Вашият <span class=\"mark\">опит</span> има значение",
     "av.hero_desc": "Споделете своя опит и ни помогнете да подобряваме качеството на обученията си по безопасност, курс след курс.",
@@ -459,7 +459,7 @@
 
   /* ------------------------------ DEUTSCH -------------------------------- */
   m("de", {
-    "meta.title": "Wisy Safety — Kundenbewertungen",
+    "meta.title": "Kundenbewertungen unserer Sicherheitsschulungen | Wisy Safety",
     "av.hero_eyebrow": "Öffentliches Bewertungsregister",
     "av.hero_title": "Ihre <span class=\"mark\">Erfahrung</span> zählt",
     "av.hero_desc": "Teilen Sie Ihre Erfahrung und helfen Sie uns, die Qualität unserer Sicherheitsschulungen Kurs für Kurs zu verbessern.",
@@ -533,7 +533,7 @@
 
   /* ------------------------------ ROMÂNĂ --------------------------------- */
   m("ro", {
-    "meta.title": "Wisy Safety — Recenzii clienți",
+    "meta.title": "Recenzii despre cursurile noastre de siguranță | Wisy Safety",
     "av.hero_eyebrow": "Registru public al recenziilor",
     "av.hero_title": "<span class=\"mark\">Experiența</span> dumneavoastră contează",
     "av.hero_desc": "Împărtășiți-ne experiența dumneavoastră și ajutați-ne să îmbunătățim calitatea cursurilor noastre de securitate, sesiune după sesiune.",
@@ -607,7 +607,7 @@
 
   /* ------------------------------ ITALIANO ------------------------------- */
   m("it", {
-    "meta.title": "Wisy Safety — Recensioni clienti",
+    "meta.title": "Recensioni sui nostri corsi di sicurezza | Wisy Safety",
     "av.hero_eyebrow": "Registro pubblico delle recensioni",
     "av.hero_title": "La tua <span class=\"mark\">esperienza</span> conta",
     "av.hero_desc": "Condividi la tua esperienza e aiutaci a migliorare la qualità dei nostri corsi sulla sicurezza, sessione dopo sessione.",
@@ -681,7 +681,7 @@
 
   /* ----------------------------- SLOVENŠČINA ----------------------------- */
   m("sl", {
-    "meta.title": "Wisy Safety — Mnenja strank",
+    "meta.title": "Mnenja strank o naših usposabljanjih | Wisy Safety",
     "av.hero_eyebrow": "Javni register mnenj",
     "av.hero_title": "Vaša <span class=\"mark\">izkušnja</span> šteje",
     "av.hero_desc": "Delite svojo izkušnjo in nam pomagajte izboljševati kakovost naših varnostnih usposabljanj, tečaj za tečajem.",

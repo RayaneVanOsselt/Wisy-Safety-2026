@@ -405,6 +405,9 @@ html{scroll-padding-top:var(--header-offset,9rem)}
 .co-form__submit{width:100%}
 .co-form__status{margin:1rem 0 0;font-size:.9rem;padding:.75rem 1rem;border-radius:var(--radius-sm);background:var(--brume-14);color:var(--epinette)}
 .co-form__status[data-state="error"]{background:rgba(200,70,60,.12);color:#9a3226}
+.co-form__status .wf-alts{display:flex;flex-wrap:wrap;gap:.5rem .9rem;align-items:center;margin-top:.55rem}
+.co-form__status .wf-retry{font:inherit;font-weight:600;color:#fff;background:#9a3226;border:0;border-radius:999px;padding:.4rem 1rem;cursor:pointer}
+.co-form__status .wf-alt{color:inherit;font-weight:600;text-decoration:underline;text-underline-offset:3px}
 
 /* ==================== RESPONSIVE ==================== */
 @media (max-width:1199px){.co-rail{display:none}}

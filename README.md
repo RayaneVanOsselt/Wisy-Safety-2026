@@ -9,17 +9,24 @@ et sans rien à installer pour le mettre en ligne.
 
 ## Organisation du dossier
 
+**Ce dossier est le site lui-même, et il est public** (dépôt GitHub public, publié sur wisysafety.be). N'y déposez
+jamais de document personnel (certificats, attestations, listes de participants) : rangez-les dans un dossier privé.
+Les fichiers et dossiers ci-dessous ont une place imposée par les adresses du site : ne les renommez pas.
+
 | Élément | Rôle |
 |---|---|
 | `index.html`, `formations.html`, `formation-vca-base.html`, `formation-nacelles-elevatrices.html`, `formation-beps-premiers-secours.html`, `peb-wallonie-bruxelles.html`, `coordination.html`, `article-vca-cout-financement.html`, `article-vca-erreurs-examen.html`, `inscription.html`, `contact.html`, `avis.html`, `faq.html`, `agenda.html`, `certificats.html`, `mentions-legales.html`, `politique-de-confidentialite.html`, `conditions-generales-utilisation.html`, `404.html` | Les pages du site. **Elles restent à la racine** : leurs adresses (`/formations.html`…) en dépendent, les déplacer changerait les URL et le référencement. |
 | `sitemap.xml`, `robots.txt`, `favicon.ico` | Fichiers que les moteurs de recherche et les navigateurs cherchent à la racine (les deux premiers sont **générés**, voir plus bas). |
+| `CNAME`, `_config.yml` | Réglages de la publication sur GitHub Pages : le domaine wisysafety.be et la liste des dossiers non publiés. |
+| `wisy-certificat/`, `wisy-vca/`, `wisy-coordination/`, `sinscrire/`, `fibre-optique/`, `produit-dangereux/`, `vca-ligne-hierarchique/`, `formulaie-de-contact/` et les 3 dossiers d'articles (`devenir-expert-…`, `les-parcours-…`, `optimisation-…`) | **Anciennes adresses** du site WordPress, qui renvoient vers les nouvelles pages. Chaque nom de dossier est une adresse internet : `wisy-certificat/` est celle du **QR code imprimé sur les certificats**. Ne les déplacez pas, ne les renommez pas. Liste : [docs/redirects.md](docs/redirects.md). |
 | `css/`, `js/` | Styles et scripts. |
 | `assets/` | Polices, images, icônes, vidéo et `originaux/` (photos d'origine). Rangement expliqué dans [assets/README.md](assets/README.md). |
 | `supabase/` | Options non utilisées par défaut : table des sessions (`sessions.sql`, `harden-admin.sql`) et fonction de l'assistant IA. Les avis n'utilisent plus Supabase. |
 | `google-sheets/` | Scripts à coller dans les feuilles Google Sheets : **réservations** (`reservations.gs`), **registre des certificats** (`certificats.gs`) et **avis clients** (`avis.gs`). |
 | `scripts/` | Petits outils qui génèrent le sitemap, les balises SEO, la copie de l'assistant et les images optimisées. |
+| `content/` | Textes sources : `i18n/` (traductions de certaines pages, utilisées par `scripts/build-i18n-fiches.js`) et `_legacy/` (archive des pages de l'ancien site). |
 | `tests/` | Tests automatiques. |
-| `docs/` | Documentation détaillée, et `docs/maquettes/` (anciennes maquettes de l'en-tête et du pied de page, conservées pour mémoire). |
+| `docs/` | Documentation détaillée (un guide par sujet), le prompt de l'assistant IA (`chatbot-system-prompt.md`), le guide PDF de la feuille Réservations (`guide-feuille-reservations.pdf`) et `docs/maquettes/` (anciennes maquettes de l'en-tête et du pied de page, conservées pour mémoire). |
 
 ## Où modifier quoi
 

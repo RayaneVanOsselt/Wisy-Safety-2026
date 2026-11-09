@@ -10,7 +10,7 @@ const path = require("node:path");
 
 const ROOT = path.join(__dirname, "..");
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
-const STUBS = fs.readdirSync(ROOT).filter((d) => fs.existsSync(path.join(ROOT, d, "index.html")) && !/^(docs|tests|content|wordpress|chatbot|assets)$/.test(d));
+const STUBS = fs.readdirSync(ROOT).filter((d) => fs.existsSync(path.join(ROOT, d, "index.html")) && !/^(docs|tests|content|assets)$/.test(d));
 const MAP = JSON.parse(read("404.html").match(/<script>\(function\(\)\{var m=(\{[^}]*\});/)[1]);
 
 test("chaque page de redirection : même cible partout (canonical absolu, meta refresh 0 s, location.replace), cible existante", () => {

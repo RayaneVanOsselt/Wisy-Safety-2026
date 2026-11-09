@@ -3,7 +3,7 @@
 Test passé le **01/10/2026** sur le code de la branche (commit `3e09e99` et suivants), en appelant directement le
 moteur de réponses (`js/assistant/responder.js`), celui qui répond **aujourd'hui** sur le site. L'enrichissement par IA
 (Edge Function) n'est pas branché : `ASSISTANT_API_URL` n'est pas renseigné dans `js/supabase-config.js`
-(voir `chatbot/system-prompt.md`).
+(voir `docs/chatbot-system-prompt.md`).
 
 Critères : la réponse vient du contenu vérifié ; **jamais** de prix, de durée, de date, d'agrément ni de montant
 d'amende inventés ; les cartes renvoient vers une vraie page ; les demandes hors sujet ou malveillantes sont recadrées.

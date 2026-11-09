@@ -88,6 +88,16 @@ de contact : **aucune erreur visible** pour les visiteurs.
 
 ## 2. Ajouter et gérer les personnes (au quotidien)
 
+### Ajouter un nouveau certificat, en 4 étapes
+
+1. **Le PDF** : enregistrez-le dans votre dossier privé des certificats, **jamais** dans le dossier du site.
+2. **La ligne** : dans la feuille « Wisy Safety - Certificat », cliquez sur la première case vide de la colonne A, sous
+   le dernier certificat. Remplissez une case par colonne, en recopiant le PDF :
+   numéro suivant (après NA-EL-045 : **NA-EL-046**), nom puis prénom, date de naissance, formation, langue, date de
+   formation, date de délivrance, date « Valable jusqu'au », **Actif**.
+3. **Le contrôle** : menu **Wisy Safety › Vérifier les données** (aucune ligne signalée = tout est bon).
+4. **Le test** : sur wisysafety.be/certificats.html, cherchez le nom de famille et la date de naissance.
+
 **Une ligne = un certificat.** Ajoutez, modifiez ou supprimez des lignes dans l'onglet `Certificats` : le site en
 tient compte dès la recherche suivante. Une personne qui a suivi trois formations a trois lignes (même nom, même
 date de naissance) ; la vérification les affiche toutes, de la plus ancienne à la plus récente.
@@ -203,7 +213,7 @@ Le premier essai réel avec **votre** compte Google se fait à l'étape 5.
 - **Assistant Wisy** : « vérifier un certificat », « mon certificat est-il valide ? », « j'ai perdu mon
   attestation »… → il renvoie vers la page et le contact. **Il ne consulte jamais le registre** et ne répète aucune
   donnée personnelle, même si on lui donne un nom et une date de naissance. Même règle dans le prompt de
-  l'assistant IA serveur (`supabase/functions/chat/index.ts`, copie dans `chatbot/system-prompt.md`).
+  l'assistant IA serveur (`supabase/functions/chat/index.ts`, copie dans `docs/chatbot-system-prompt.md`).
 
 ---
 
@@ -239,8 +249,8 @@ Après une modification du site : `node --test tests/*.test.js`.
 
 ## 8. Et WordPress / Supabase ?
 
-La page n'utilise **ni WordPress ni Supabase**. L'ancienne extension `wordpress/wisy-certificats/` (et
-`tests/wordpress/`) reste dans le dépôt, inutilisée : vous pouvez la supprimer. Pour reprendre des certificats saisis
+La page n'utilise **ni WordPress ni Supabase**. L'ancienne extension `wordpress/wisy-certificats/` et ses tests
+ont été supprimés le 09/11/2026 ; ils restent dans l'historique git si besoin. Pour reprendre des certificats saisis
 dans WordPress : exportez-les en CSV/Excel puis importez-les dans la feuille (étape 1.3). Supabase reste utilisé
 uniquement pour les avis clients, comme avant.
 

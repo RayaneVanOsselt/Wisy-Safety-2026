@@ -67,7 +67,7 @@ Chaque décision donne : le choix, la raison, et ce qu'il faudrait faire pour la
     `search.js` est à 1,3 Ko de son budget de 62 Ko. C'est à faire avec un relèvement de budget justifié.
 16. **Assistant** : il reste **déterministe** (aucun appel à un modèle d'IA en production). Il cite le contenu
     vérifié et renvoie vers `page#sources` : la validation des liens n'autorise que les pages du site. Règles détaillées
-    dans `chatbot/system-prompt.md`, tests dans `docs/chatbot-tests.md`.
+    dans `docs/chatbot-system-prompt.md`, tests dans `docs/chatbot-tests.md`.
 
 ## Traductions et SEO
 

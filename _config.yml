@@ -9,8 +9,6 @@ exclude:
   - scripts/
   - google-sheets/
   - supabase/
-  - wordpress/
   - content/
-  - chatbot/
   - assets/originaux/
   - "*.pdf"

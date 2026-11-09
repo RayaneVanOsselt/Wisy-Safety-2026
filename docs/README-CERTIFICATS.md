@@ -110,6 +110,13 @@ aussi reconnus (« Nom de famille », « Numéro de diplôme », « Formation su
 anglais / néerlandais courants…). Besoin d'un nom d'usage ou de naissance ? Insérez une colonne **« Autres noms »**
 (noms séparés par « ; ») : la personne sera aussi retrouvée avec ces noms, qui ne sont jamais affichés.
 
+### Où ranger les PDF des certificats
+
+**Jamais dans le dossier du site** : ce dossier est public (dépôt GitHub public, publié sur wisysafety.be), un PDF déposé
+ici est lisible par tout le monde avec le nom, la date et le lieu de naissance de la personne. `.gitignore`, `_config.yml`
+et `tests/publish.test.js` bloquent les PDF à la racine, mais ne remplacent pas cette règle. Gardez les PDF dans un
+dossier privé, hors du site.
+
 ### Le menu « Wisy Safety » de la feuille
 
 - **Vérifier les données** : liste les lignes à corriger — date impossible (31/02/1990) ou illisible, nom ou

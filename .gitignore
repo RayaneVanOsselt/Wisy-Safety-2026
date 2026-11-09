@@ -8,6 +8,10 @@ Icon?
 !assets/icons/
 !assets/icons/**
 
+# ---- Données personnelles : tout ce dossier est PUBLIC (dépôt public + wisysafety.be) ----
+# Les certificats (PDF) restent hors de ce dossier. Voir docs/README-CERTIFICATS.md.
+/*.pdf
+
 # ---- Éditeurs ---------------------------------------------------------------
 .idea/
 .vscode/

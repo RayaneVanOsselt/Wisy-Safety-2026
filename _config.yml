@@ -13,3 +13,4 @@ exclude:
   - content/
   - chatbot/
   - assets/originaux/
+  - "*.pdf"

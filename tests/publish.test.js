@@ -16,6 +16,11 @@ test("_config.yml : dossiers de travail exclus de la publication, domaine conser
   assert.equal(read("CNAME").trim(), "wisysafety.be");
 });
 
+test("aucun PDF à la racine : le dépôt est public, un certificat y exposerait des données personnelles", () => {
+  assert.deepEqual(fs.readdirSync(ROOT).filter((f) => /\.pdf$/i.test(f)), []);
+  assert.ok(EXCLUDED.includes('"*.pdf"'), "PDF exclus de la publication");
+});
+
 test("aucun fichier exclu n'est chargé par une page publiée (src, href, url())", () => {
   const pages = fs.readdirSync(ROOT).filter((f) => f.endsWith(".html"));
   const files = pages.concat(fs.readdirSync(path.join(ROOT, "css")).map((f) => "css/" + f));

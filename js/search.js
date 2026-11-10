@@ -42,7 +42,7 @@
     return {
       id: f.id, cat: f.category, url: f.url,
       /* Tarif du registre (jamais recopié) : affiché dans les résultats seulement s'il est « par personne » confirmé. */
-      priceLabel: f.priceLabel, priceUnit: f.priceUnit,
+      priceLabel: f.priceLabel, priceUnit: f.priceUnit, pricePending: f.pricePending === true,
       /* Fiche riche (page dédiée) : titre complet, résumé, miniature et faits clés ; sinon accroche courte. */
       titleKey: f.fullTitleKey || f.titleKey, descKey: f.summaryKey || f.taglineKey,
       kw: f.searchKeywords || f.keywords,
@@ -54,7 +54,7 @@
      diplôme individuel, VCA Entreprise un accompagnement à la certification d'une entreprise). Tout vient du registre (`Site.services()`). */
   var SERVICES = (Site.services ? Site.services() : []).map(function (s) {
     return { id: s.id, url: s.url, titleKey: s.titleKey, descKey: s.taglineKey, kw: s.searchKeywords, thumb: s.thumb,
-      levels: s.levels, priceLabel: s.priceLabel, priceUnit: s.priceUnit, priceIndicative: s.priceIndicative, image: s.image, signupUrl: s.signupUrl };
+      levels: s.levels, priceLabel: s.priceLabel, priceUnit: s.priceUnit, priceIndicative: s.priceIndicative, pricePending: s.pricePending === true, image: s.image, signupUrl: s.signupUrl };
   });
 
   /* Pages du site — les ARTICLES (`kind: "article"`) forment leur propre groupe de résultats. */
@@ -515,6 +515,7 @@
      ----------------------------------------------------------------------- */
   var pvList = [], pvDefault = null, pvShown = -2;
   function perPerson(x) {
+    if (x.pricePending) return t("price.pending");   /* tarif retiré du site : « En cours de préparation » à la place du prix */
     return x.priceLabel && x.priceUnit === "participant" ? x.priceLabel + " " + t("search.per_person") + (x.priceIndicative ? " · " + t("search.indicative") : "") : "";
   }
   function pvFormation(f) {
@@ -561,7 +562,7 @@
         // faits clés (durée · format · langues) — uniquement pour les fiches qui en ont ; le tarif (registre) s'y ajoute
         // seulement s'il est confirmé « par personne » (aucune mention HT / TTC inventée)
         facts: f.factKeys ? f.factKeys.map(function (k) { return esc(t(k)); })
-          .concat(f.priceLabel && f.priceUnit === "participant" ? [esc(f.priceLabel + " " + t("search.per_person"))] : []).join(" · ") : ""
+          .concat(f.pricePending ? [esc(t("price.pending"))] : f.priceLabel && f.priceUnit === "participant" ? [esc(f.priceLabel + " " + t("search.per_person"))] : []).join(" · ") : ""
       });
     }).join("");
   }
@@ -578,7 +579,7 @@
         thumb: x.thumb,
         pv: pvService(x),
         facts: x.levels.map(esc)
-          .concat(x.priceLabel && x.priceUnit === "participant" ? [esc(x.priceLabel + " " + t("search.per_person") + (x.priceIndicative ? " · " + t("search.indicative") : ""))] : []).join(" · ")
+          .concat(x.pricePending ? [esc(t("price.pending"))] : x.priceLabel && x.priceUnit === "participant" ? [esc(x.priceLabel + " " + t("search.per_person") + (x.priceIndicative ? " · " + t("search.indicative") : ""))] : []).join(" · ")
       });
     }).join("");
   }

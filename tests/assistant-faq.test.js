@@ -154,9 +154,12 @@ test("les prix : jamais un chiffre hors formation confirmée (assistant ET FAQ)"
     const r = ask(q);
     assert.doesNotMatch(r.message, /\d+\s?€/, q);
   });
-  assert.match(ask("Combien coûte la formation nacelle ?").message, /350 € HT/, "le prix nacelle reste servi par le registre");
-  assert.match(ask("Prix du VCA de base ?").message, /225 € par personne/, "le prix VCA Base est servi par le registre (jamais par la FAQ)");
-  assert.match(ask("Prix du BEPS ?").message, /70 €/, "le prix BEPS (registre central) est désormais confirmé");
+  /* Tarifs retirés du site : « en cours de préparation », jamais un montant (registre central) */
+  ["Combien coûte la formation nacelle ?", "Prix du VCA de base ?", "Prix du BEPS ?"].forEach((q) => {
+    const r = ask(q);
+    assert.match(r.message, /en cours de préparation/, q);
+    assert.doesNotMatch(r.message, /\d+\s?€/, q);
+  });
 });
 
 test("prompt-injection : la FAQ ne permet pas de contourner les garde-fous", () => {

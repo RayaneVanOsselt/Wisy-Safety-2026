@@ -23,7 +23,7 @@ test("« Je cherche une formation sur la fibre optique » → carte fibre-optiqu
 });
 
 test("« Combien coûte cette formation ? » → PRIX NON INVENTÉ + contact (texte de la FAQ)", () => {
-  /* la VCA Ligne hiérarchique n'a AUCUN tarif confirmé (contrairement à la VCA Base : 225 €) */
+  /* la VCA Ligne hiérarchique n'a AUCUN tarif confirmé (à la différence des formations au tarif « en cours de préparation ») */
   const r = Responder.respond("Combien coûte la formation VCA hiérarchique ?");
   assert.equal(r.meta.intent, "price_unavailable");
   assert.ok(hasCardType(r, "contact"));
@@ -107,14 +107,15 @@ test("« Avez-vous une formation nacelle ? » → fiche + carte vers la page dé
   assert.equal(r.meta.intent, "formation_detail");
   assert.equal(r.cards[0].id, "nacelle");
   assert.equal(r.cards[0].url, "formation-nacelles-elevatrices.html");
-  assert.match(r.message, /350 € HT/);
+  assert.doesNotMatch(r.message, /\d\s?€/, "aucun prix : le tarif est retiré du site");
 });
 
-test("« Combien coûte la formation nacelle ? » → 350 € HT (donnée confirmée)", () => {
+test("« Combien coûte la formation nacelle ? » → tarif « en cours de préparation » (aucun montant)", () => {
   const r = Responder.respond("Combien coûte la formation nacelle ?");
-  assert.equal(r.meta.intent, "formation_price");
-  assert.match(r.message, /350 € HT/);
-  assert.equal(r.cards[0].priceLabel, "350 € HT");
+  assert.equal(r.meta.intent, "price_unavailable");
+  assert.match(r.message, /en cours de préparation/);
+  assert.doesNotMatch(r.message, /\d\s?€/);
+  r.cards.forEach((c) => assert.ok(!c.priceLabel, "aucun prix sur les cartes"));
 });
 
 test("« Combien de temps dure la formation ? » → durée (et non prix)", () => {
@@ -191,17 +192,18 @@ test("prix : une formation SANS prix confirmé reste « non indiqué » (aucun c
   });
 });
 
-test("prix : le BEPS a désormais un tarif CONFIRMÉ (70 €, registre central)", () => {
+test("prix : le tarif du BEPS est retiré du site — « en cours de préparation » (registre central)", () => {
   const r = Responder.respond("Prix du BEPS ?");
-  assert.equal(r.meta.intent, "formation_price");
-  assert.match(r.message, /70\s?€/);
+  assert.equal(r.meta.intent, "price_unavailable");
+  assert.match(r.message, /en cours de préparation/);
+  assert.doesNotMatch(r.message, /\d\s?€/);
 });
 
 test("écran d'accueil de la fiche nacelle : questions utiles proposées d'abord", () => {
   const w = Responder.welcome({ page: "formation", formationId: "nacelle" });
   assert.deepEqual(w.suggestions, ["Quel est le tarif ?", "Durée de cette formation", "Quels types de nacelles ?", "Comment m’inscrire ?"]);
   /* ces suggestions sont elles-mêmes comprises par le moteur */
-  assert.equal(Responder.respond("Quel est le tarif ?", NAC_CTX).meta.intent, "formation_price");
+  assert.equal(Responder.respond("Quel est le tarif ?", NAC_CTX).meta.intent, "price_unavailable");
   assert.equal(Responder.respond("Quels types de nacelles ?", NAC_CTX).meta.intent, "formation_types");
 });
 
@@ -232,17 +234,14 @@ const FAKE = [
   { id: "2099-03-24-nl", training: "vca-base", date: "2099-03-24", startTime: null, endTime: null, language: "nl", status: "full", seatsLeft: 0, signupUrl: null }
 ];
 
-test("VCA Base : prix 225 € par personne, examen inclus — et JAMAIS « hors TVA » (statut TVA non précisé)", () => {
+test("VCA Base : tarif « en cours de préparation » — aucun montant, et JAMAIS « hors TVA »", () => {
   ["Prix du VCA de base ?", "Combien coûte la VCA Base ?", "Quel est le tarif ?"].forEach((q) => {
     const r = Responder.respond(q, q === "Quel est le tarif ?" ? VCA_CTX : undefined);
-    assert.equal(r.meta.intent, "formation_price", q);
-    assert.match(r.message, /225 € par personne, examen inclus/, q);
-    assert.match(r.message, /statut TVA \(HT ou TTC\) n’est pas précisé/, q);
-    assert.doesNotMatch(r.message, /hors TVA|HT\)/, q + " → " + r.message);
-    assert.equal(r.cards[0].priceLabel, "225 €");
+    assert.equal(r.meta.intent, "price_unavailable", q);
+    assert.match(r.message, /en cours de préparation/, q);
+    assert.doesNotMatch(r.message, /\d\s?€|hors TVA|HT\)/, q + " → " + r.message);
+    r.cards.forEach((c) => assert.ok(!c.priceLabel, "aucun prix sur les cartes : " + q));
   });
-  /* la nacelle, elle, est bien HT (registre) : sa phrase ne dit rien d'inconnu sur la TVA */
-  assert.doesNotMatch(Responder.respond("Combien coûte la formation nacelle ?").message, /statut TVA/);
 });
 
 test("VCA Base : la question générique « Quel est le tarif ? » sans formation ne désigne AUCUNE formation au hasard", () => {
@@ -316,7 +315,7 @@ test("VCA Base : accueil de la fiche → questions utiles, toutes comprises par 
   const w = Responder.welcome(VCA_CTX.context);
   assert.match(w.message, /VCA Base/);
   assert.deepEqual(w.suggestions, ["Quel est le tarif ?", "L’examen est-il inclus ?", "Prochaines sessions", "Comment m’inscrire ?"]);
-  assert.equal(Responder.respond("Quel est le tarif ?", VCA_CTX).meta.intent, "formation_price");
+  assert.equal(Responder.respond("Quel est le tarif ?", VCA_CTX).meta.intent, "price_unavailable");
   assert.equal(Responder.respond("L’examen est-il inclus ?", VCA_CTX).meta.intent, "formation_exam");
   assert.equal(Responder.respond("Prochaines sessions", VCA_CTX).meta.intent, "schedule_unavailable");
   assert.equal(Responder.respond("Comment m’inscrire ?", VCA_CTX).meta.intent, "formation_signup");

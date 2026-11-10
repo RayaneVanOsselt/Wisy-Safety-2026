@@ -41,7 +41,7 @@
     "a2.callout": "Aucune réussite n'est garantie : le diplôme n'est délivré qu'en cas de réussite à l'examen.",
     "a2.src_matrix": "Matrice d'évaluation B-VCA, version 2.0 (PDF)",
     "a2.src_mock": "Examen blanc B-VCA (lien indiqué par BeSaCC-VCA)",
-    "a2.cta_p": "La formation VCA Base de Wisy Safety : 225 € par personne, examen inclus.",
+    "a2.cta_p": "La formation VCA Base de Wisy Safety : tarif en cours de préparation, examen inclus.",
     "a2.next_t": "Combien coûte une formation VCA et qui peut la financer ?",
     "a2.img_alt": "Homme casqué en gilet haute visibilité qui prend des notes sur un chantier"
   });
@@ -80,7 +80,7 @@
     "a2.callout": "Passing is never guaranteed: the diploma is only issued if you pass the exam.",
     "a2.src_matrix": "B-VCA assessment matrix, version 2.0 (PDF)",
     "a2.src_mock": "B-VCA mock exam (link given by BeSaCC-VCA)",
-    "a2.cta_p": "Wisy Safety's VCA Basic course: €225 per person, exam included.",
+    "a2.cta_p": "Wisy Safety's VCA Basic course: price in preparation, exam included.",
     "a2.next_t": "How much does a VCA course cost and who can fund it?",
     "a2.img_alt": "Man in a helmet and high-visibility vest taking notes on a building site"
   });
@@ -119,7 +119,7 @@
     "a2.callout": "Slagen is nooit gegarandeerd: het diploma wordt enkel uitgereikt bij het slagen voor het examen.",
     "a2.src_matrix": "Beoordelingsmatrix B-VCA, versie 2.0 (PDF)",
     "a2.src_mock": "Proefexamen B-VCA (link vermeld door BeSaCC-VCA)",
-    "a2.cta_p": "De opleiding VCA Basis van Wisy Safety: 225 € per persoon, examen inbegrepen.",
+    "a2.cta_p": "De opleiding VCA Basis van Wisy Safety: prijs in voorbereiding, examen inbegrepen.",
     "a2.next_t": "Hoeveel kost een VCA-opleiding en wie kan ze financieren?",
     "a2.img_alt": "Man met helm en veiligheidsvest die notities maakt op een werf"
   });
@@ -158,7 +158,7 @@
     "a2.callout": "Slaag word nooit gewaarborg nie: die diploma word slegs uitgereik as u die eksamen slaag.",
     "a2.src_matrix": "B-VCA-assesseringsmatriks, weergawe 2.0 (PDF)",
     "a2.src_mock": "B-VCA-oefeneksamen (skakel deur BeSaCC-VCA verskaf)",
-    "a2.cta_p": "Wisy Safety se VCA Basis-opleiding: 225 € per persoon, eksamen ingesluit.",
+    "a2.cta_p": "Wisy Safety se VCA Basis-opleiding: prys in voorbereiding, eksamen ingesluit.",
     "a2.next_t": "Hoeveel kos 'n VCA-opleiding en wie kan dit befonds?",
     "a2.img_alt": "Man met veiligheidshelm en hoësigbaarheid-baadjie wat aantekeninge op 'n terrein maak"
   });
@@ -197,7 +197,7 @@
     "a2.callout": "النجاح غير مضمون أبداً: فالدبلوم لا يُمنح إلا عند النجاح في الامتحان.",
     "a2.src_matrix": "مصفوفة تقييم B-VCA، الإصدار 2.0 (PDF)",
     "a2.src_mock": "الامتحان التجريبي B-VCA (الرابط الذي تشير إليه BeSaCC-VCA)",
-    "a2.cta_p": "دورة VCA الأساسي لدى Wisy Safety: 225 يورو للشخص، والامتحان مشمول.",
+    "a2.cta_p": "دورة VCA الأساسي لدى Wisy Safety: السعر قيد الإعداد، والامتحان مشمول.",
     "a2.next_t": "كم تكلّف دورة VCA ومن يمكنه تمويلها؟",
     "a2.img_alt": "رجل يرتدي خوذة وسترة عالية الوضوح يدوّن ملاحظات في موقع عمل"
   });
@@ -236,7 +236,7 @@
     "a2.callout": "Успехът никога не е гарантиран: дипломата се издава само при успешно положен изпит.",
     "a2.src_matrix": "Матрица за оценяване B-VCA, версия 2.0 (PDF)",
     "a2.src_mock": "Пробен изпит B-VCA (връзка, посочена от BeSaCC-VCA)",
-    "a2.cta_p": "Обучението VCA основи на Wisy Safety: 225 € на човек, включително изпита.",
+    "a2.cta_p": "Обучението VCA основи на Wisy Safety: цената е в процес на подготовка, включително изпита.",
     "a2.next_t": "Колко струва обучение по VCA и кой може да го финансира?",
     "a2.img_alt": "Мъж с каска и жилетка с висока видимост, който си води бележки на обект"
   });
@@ -275,7 +275,7 @@
     "a2.callout": "Ein Bestehen ist nie garantiert: Das Diplom wird nur bei bestandener Prüfung ausgestellt.",
     "a2.src_matrix": "Bewertungsmatrix B-VCA, Version 2.0 (PDF)",
     "a2.src_mock": "Probeprüfung B-VCA (von BeSaCC-VCA angegebener Link)",
-    "a2.cta_p": "Die Schulung VCA Grundlagen von Wisy Safety: 225 € pro Person, Prüfung inklusive.",
+    "a2.cta_p": "Die Schulung VCA Grundlagen von Wisy Safety: Preis in Vorbereitung, Prüfung inklusive.",
     "a2.next_t": "Was kostet eine VCA-Schulung und wer kann sie finanzieren?",
     "a2.img_alt": "Mann mit Helm und Warnweste, der auf einer Baustelle Notizen macht"
   });
@@ -314,7 +314,7 @@
     "a2.callout": "Promovarea nu este niciodată garantată: diploma se eliberează doar dacă promovați examenul.",
     "a2.src_matrix": "Matricea de evaluare B-VCA, versiunea 2.0 (PDF)",
     "a2.src_mock": "Examen de probă B-VCA (link indicat de BeSaCC-VCA)",
-    "a2.cta_p": "Cursul VCA de bază de la Wisy Safety: 225 € pe persoană, examen inclus.",
+    "a2.cta_p": "Cursul VCA de bază de la Wisy Safety: preț în curs de pregătire, examen inclus.",
     "a2.next_t": "Cât costă un curs VCA și cine îl poate finanța?",
     "a2.img_alt": "Bărbat cu cască și vestă de înaltă vizibilitate care ia notițe pe un șantier"
   });
@@ -353,7 +353,7 @@
     "a2.callout": "Il superamento non è mai garantito: il diploma viene rilasciato solo se superi l'esame.",
     "a2.src_matrix": "Matrice di valutazione B-VCA, versione 2.0 (PDF)",
     "a2.src_mock": "Esame di prova B-VCA (link indicato da BeSaCC-VCA)",
-    "a2.cta_p": "Il corso VCA base di Wisy Safety: 225 € a persona, esame incluso.",
+    "a2.cta_p": "Il corso VCA base di Wisy Safety: prezzo in preparazione, esame incluso.",
     "a2.next_t": "Quanto costa un corso VCA e chi può finanziarlo?",
     "a2.img_alt": "Uomo con casco e giubbotto ad alta visibilità che prende appunti in un cantiere"
   });
@@ -392,7 +392,7 @@
     "a2.callout": "Uspeh ni nikoli zagotovljen: diploma se izda le ob uspešno opravljenem izpitu.",
     "a2.src_matrix": "Matrika ocenjevanja B-VCA, različica 2.0 (PDF)",
     "a2.src_mock": "Poskusni izpit B-VCA (povezava, ki jo navaja BeSaCC-VCA)",
-    "a2.cta_p": "Usposabljanje VCA osnovni podjetja Wisy Safety: 225 € na osebo, izpit vključen.",
+    "a2.cta_p": "Usposabljanje VCA osnovni podjetja Wisy Safety: cena v pripravi, izpit vključen.",
     "a2.next_t": "Koliko stane usposabljanje VCA in kdo ga lahko financira?",
     "a2.img_alt": "Moški s čelado in odsevnim brezrokavnikom si na gradbišču zapisuje opombe"
   });

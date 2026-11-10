@@ -31,7 +31,8 @@ const OUT_SITE = path.join(OUT_DIR, "site.generated.ts");
 function contentOf(f) {
   let c = f.description;
   if (f.objective) c += " Objectif : " + f.objective;
-  if (f.priceUnit === "participant") c += " Le tarif est indiqué par personne.";
+  if (f.pricePending) c += " Le tarif est EN COURS DE PRÉPARATION : aucun montant n'est affiché sur le site, ne jamais en citer ni en deviner un.";
+  else if (f.priceUnit === "participant") c += " Le tarif est indiqué par personne.";
   if (f.price && f.price.vatIncluded !== true && f.price.vatIncluded !== false) c += " Le statut TVA (HT ou TTC) du tarif n'est PAS précisé : ne jamais écrire « HT », « TTC » ni « hors TVA ».";
   if (f.exam && f.exam.included) c += " L'examen est inclus dans le tarif.";
   if (f.official && f.official.exam) {

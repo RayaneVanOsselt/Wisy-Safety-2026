@@ -42,8 +42,8 @@ test("VÉRACITÉ — examen Wallonie : écrit puis oral, JAMAIS l'ancienne descr
   assert.doesNotMatch(allText, /logiciel|encodage/i, "l'examen wallon ne mentionne ni logiciel ni encodage (spécifique à Bruxelles)");
 });
 
-test("VÉRACITÉ — Bruxelles : droit de dossier 50 € explicitement décrit comme un frais d'agrément, jamais le prix de la formation", () => {
-  assert.equal(Peb.brussels.approval.feeCents, 5000);
+test("VÉRACITÉ — Bruxelles : le droit de dossier est explicitement décrit comme un frais d'agrément (montant non affiché), jamais le prix de la formation", () => {
+  assert.equal(Peb.brussels.approval.feeCents, null, "montant retiré du site");
   assert.match(Peb.brussels.approval.feeNote, /PAS le prix de la formation/);
 });
 
@@ -57,9 +57,10 @@ test("VÉRACITÉ — aucun prix Wisy inventé : PEB_PRICING reste null tant qu'a
   assert.equal(Peb.PRICING.wallonia, null);
   assert.equal(Peb.PRICING.brussels, null);
   assert.match(visible, /Tarif sur demande/);
-  /* aucun montant en euros n'est présenté comme LE prix Wisy (seuls 50 € [agrément] et les repères concurrents apparaissent) */
+  /* tous les prix ont été retirés du site : aucun montant en euros sur la page (ni Wisy, ni concurrents, ni frais officiel) */
   const euroAmounts = [...visible.matchAll(/(\d[\d\s.,]*)\s?€/g)].map((m) => m[1].replace(/\s/g, ""));
-  euroAmounts.forEach((a) => assert.ok(["50", "645", "745", "1050", "1390"].includes(a), "montant € inattendu sur la page : " + a + " € — vérifier qu'il ne s'agit pas d'un prix Wisy inventé"));
+  assert.deepEqual(euroAmounts, [], "aucun montant en euros sur la page PEB");
+  assert.doesNotMatch(visible, /Homegrade|Certinergie|IFAPME/, "plus de repères de prix concurrents");
 });
 
 test("VÉRACITÉ — Wisy Safety n'est jamais qualifié d'« agréé »/« reconnu »/« officiel » pour le PEB (seules les autorités le sont)", () => {
@@ -109,8 +110,8 @@ test("VÉRACITÉ (10 langues) — dans js/i18n-data-peb.js, aucun texte ne prés
 });
 
 test("distinction des concepts : certificat / agrément / formation / examen / frais ne sont jamais confondus dans les libellés visibles", () => {
-  assert.match(visible, /droit de dossier/i, "les 50 € sont désignés comme un droit de dossier");
-  assert.doesNotMatch(visible, /50\s?€[^.]*(prix de la formation|tarif de la formation)/i, "les 50 € ne sont jamais présentés comme le prix de la formation");
+  assert.match(visible, /droit de dossier/i, "le droit de dossier est désigné comme tel");
+  assert.doesNotMatch(visible, /droit de dossier[^.]*(est|représente) (le )?(prix|tarif) de la formation/i, "le droit de dossier n'est jamais présenté comme le prix de la formation");
 });
 
 /* ------------------------------------------------------------------ page : structure et SEO */

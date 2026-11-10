@@ -150,12 +150,12 @@ test("données structurées = contenu VISIBLE : horaires, position, fil d'Ariane
     const ld = ldBlocks(html)[0]["@graph"].find((n) => n["@type"] === "BreadcrumbList").itemListElement.map((i) => i.name);
     ld.forEach((name) => assert.ok(visible.includes(name), d.file + " : « " + name + " » absent du fil d'Ariane affiché (" + visible.join(" / ") + ")"));
   });
-  /* formation Nacelles : prix, durée, langues du registre — et le prix est affiché sur la page */
+  /* formation Nacelles : durée, langues du registre — tarif retiré : aucune offre ni prix dans les données structurées */
   const N = Trainings.nacelles, nac = read(N.url), course = ldBlocks(nac)[0]["@graph"].find((n) => n["@type"] === "Course");
   assert.equal(course.name, N.fullTitle); assert.equal(course.timeRequired, "P1D");
   assert.deepEqual(course.inLanguage, ["fr", "nl", "en"]);
-  assert.equal(course.offers.price, "350"); assert.equal(course.offers.priceCurrency, "EUR"); assert.equal(course.offers.priceSpecification.valueAddedTaxIncluded, false);
-  assert.match(strip(nac), /350\s*€/, "le prix du JSON-LD est affiché sur la page");
+  assert.ok(!("offers" in course), "tarif retiré : aucune offre dans le JSON-LD");
+  assert.doesNotMatch(strip(nac), /\d\s*€/, "aucun montant affiché sur la page");
   assert.equal(course.description, SEO.metaOf(nac).description, "description = meta description");
   /* catalogue : chaque Course reprend le titre ET la description affichés sur la carte */
   const fo = read("formations.html"), text = decode(strip(fo));
@@ -167,14 +167,13 @@ test("données structurées = contenu VISIBLE : horaires, position, fil d'Ariane
   });
 });
 
-test("VCA Base : la fiche Course reprend le registre (prix, durée) ; langues NON confirmées → aucune `inLanguage`", () => {
+test("VCA Base : la fiche Course reprend le registre (durée, aucun prix) ; langues NON confirmées → aucune `inLanguage`", () => {
   const V = Trainings.vcaBase, html = read(V.url), course = ldBlocks(html)[0]["@graph"].find((n) => n["@type"] === "Course");
   assert.equal(course.name, V.fullTitle); assert.equal(course.timeRequired, "P1D");
-  assert.equal(course.offers.price, String(V.price.amountCents / 100)); assert.equal(course.offers.priceCurrency, "EUR");
-  assert.ok(!("valueAddedTaxIncluded" in course.offers.priceSpecification), "statut TVA non précisé : jamais inventé");
+  assert.ok(!("offers" in course), "tarif retiré : aucune offre ni prix dans le JSON-LD");
   assert.ok(!("inLanguage" in course), "langues non confirmées : aucune langue déclarée");
   assert.ok(!("hasCourseInstance" in course), "aucune session inventée dans les données structurées");
-  assert.match(strip(html), /225\s*€/, "le prix du JSON-LD est affiché sur la page");
+  assert.doesNotMatch(strip(html), /\d\s*€/, "aucun montant affiché sur la page");
   assert.equal(course.description, SEO.metaOf(html).description, "description = meta description");
 });
 

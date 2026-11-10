@@ -69,15 +69,15 @@ var TAB = {
 };
 
 /* Formations du site (registre js/site-content.js — tests/reservations.test.js vérifie que la liste est identique).
-   [identifiant du site, nom, type, tarif affiché, durée, page du site]. Aucun tarif inventé : « Sur devis » = non publié. */
+   [identifiant du site, nom, type, tarif affiché, durée, page du site]. Aucun tarif inventé : « Sur devis » = non publié ; « En cours de préparation » = tarif retiré du site. */
 var FORMATIONS = [
-  ["vca-base", "VCA Base", "Formation", "225 € par participant", "1 jour", "formation-vca-base.html"],
+  ["vca-base", "VCA Base", "Formation", "En cours de préparation", "1 jour", "formation-vca-base.html"],
   ["vca-hierarchique", "VCA Ligne hiérarchique", "Formation", "Sur devis", "", "formation-vca-ligne-hierarchique.html"],
   ["diisocyanates", "Diisocyanates & substances dangereuses", "Formation", "Sur devis", "", "formation-diisocyanates.html"],
-  ["nacelle", "Nacelles élévatrices", "Formation", "350 € HT", "1 jour", "formation-nacelles-elevatrices.html"],
+  ["nacelle", "Nacelles élévatrices", "Formation", "En cours de préparation", "1 jour", "formation-nacelles-elevatrices.html"],
   ["fibre-optique", "Fibre optique", "Formation", "Sur devis", "", "formation-fibre-optique.html"],
-  ["beps", "BEPS — Premier secours", "Formation", "70 €", "15 heures", "formation-beps-premiers-secours.html"],
-  ["vca-entreprise", "VCA Entreprise", "Accompagnement", "590 € par participant (indicatif)", "", "vca-entreprise.html"]
+  ["beps", "BEPS — Premier secours", "Formation", "En cours de préparation", "15 heures", "formation-beps-premiers-secours.html"],
+  ["vca-entreprise", "VCA Entreprise", "Accompagnement", "En cours de préparation", "", "vca-entreprise.html"]
 ];
 
 /* Première session, demandée par Wisy Safety le 15/10/2026. Ajoutée par « Installer » seulement si l'onglet Sessions est

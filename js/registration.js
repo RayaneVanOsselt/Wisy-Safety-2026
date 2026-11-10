@@ -49,7 +49,7 @@
   }
 
   /* Formatage monétaire — centimes -> devise, selon la langue (les 10 langues du site ; chiffres latins
-     partout, y compris en arabe : « ar-MA » suit la convention belge 1.225,50 €).
+     partout, y compris en arabe : « ar-MA » suit la convention belge 1.000,50 €).
      narrowSymbol : « € » plutôt que « EUR » (le roumain affiche sinon le code de la devise). */
   var LOCALE_MAP = { fr: "fr-BE", nl: "nl-BE", en: "en-BE", de: "de-BE", af: "af-ZA", ar: "ar-MA", bg: "bg-BG", ro: "ro-RO", it: "it-IT", sl: "sl-SI" };
   function money(cents) {
@@ -356,12 +356,20 @@
     }
     return { subtotalCents: subtotal, vatCents: vat, totalCents: total, hasQuote: hasQuoteItems() };
   }
-  /* Libellé de prix unitaire (ou « Sur devis ») */
-  function priceLabel(item) { return isPriced(item) ? money(item.priceCents) : t("reg.on_quote", "Sur devis"); }
-  /* Libellé du total général : montant, ou « Sur devis » si aucun item tarifé */
+  /* Tarif retiré du site en attendant sa publication : « En cours de préparation » (et non « Sur devis ») */
+  function isPending(item) { return !!item && !isPriced(item) && item.pricePending === true; }
+  function pendingLabel() { return t("price.pending", "En cours de préparation"); }
+  function quoteLabel(item) { return isPending(item) ? pendingLabel() : t("reg.on_quote", "Sur devis"); }
+  /* Libellé de prix unitaire (ou « En cours de préparation » / « Sur devis ») */
+  function priceLabel(item) { return isPriced(item) ? money(item.priceCents) : quoteLabel(item); }
+  /* Libellé du total général : montant, « En cours de préparation » si toutes les formations choisies ont leur tarif
+     retiré, « Sur devis » si aucun item tarifé */
   function grandTotalLabel(totals) {
     if (totals.subtotalCents > 0) return money(totals.totalCents);
-    if (totals.hasQuote) return t("reg.on_quote", "Sur devis");
+    if (totals.hasQuote) {
+      var ids = selectedIds();
+      return ids.length && ids.every(function (id) { return isPending(DATA.getTraining(id)); }) ? pendingLabel() : t("reg.on_quote", "Sur devis");
+    }
     return money(0);
   }
   function clearRegistration() {
@@ -638,8 +646,8 @@
         (!picker && sessionOf(id) ? '<span class="reg-line__session">' + icon("calendar") + '<span><b>' + t("reg.session_label", "Session") + "</b> · " + escapeHtml(sessionText(sessionOf(id))) + "</span></span>" : "") +
         (lim != null && qty > lim ? '<span class="reg-line__warn" role="alert">' + icon("info") + escapeHtml(t("sess.qty_over", "Il ne reste que {n} place(s) pour cette session : réduisez le nombre de participants ou choisissez une autre date.").replace("{n}", String(lim))) + "</span>" : "") +
         '<span class="reg-line__meta">' +
-          '<span class="reg-line__calc">' + (priced ? money(tr.priceCents) + " × " + qty : qty + " × " + t("reg.on_quote", "Sur devis")) + "</span>" +
-          '<span class="reg-line__total">' + (priced ? money(lineTotalCents(id)) : t("reg.on_quote", "Sur devis")) + "</span>" +
+          '<span class="reg-line__calc">' + (priced ? money(tr.priceCents) + " × " + qty : qty + " × " + quoteLabel(tr)) + "</span>" +
+          '<span class="reg-line__total">' + (priced ? money(lineTotalCents(id)) : quoteLabel(tr)) + "</span>" +
         "</span>" +
         '<span class="reg-line__actions">' +
           '<span class="reg-line__qty">' +
@@ -654,11 +662,16 @@
     }).join("");
 
     var totals = computeTotals();
-    var quoteNote = totals.hasQuote ? '<p class="reg-quote-note">' + icon("info") + t("reg.quote_note", "Formation « sur devis » : le tarif vous sera communiqué séparément.") + "</p>" : "";
+    var chosen = selectedIds().map(function (cid) { return DATA.getTraining(cid); });
+    var anyPending = chosen.some(isPending);
+    var anyQuote = chosen.some(function (x) { return !isPriced(x) && !isPending(x); });
+    var allPending = chosen.length > 0 && chosen.every(isPending);
+    var quoteNote = totals.hasQuote ? (anyQuote ? '<p class="reg-quote-note">' + icon("info") + t("reg.quote_note", "Formation « sur devis » : le tarif vous sera communiqué séparément.") + "</p>" : "") +
+      (anyPending ? '<p class="reg-quote-note">' + icon("info") + t("reg.pending_note", "Tarif en cours de préparation : il vous sera communiqué séparément.") + "</p>" : "") : "";
     var cartouche = '<dl class="reg-cartouche">' +
-      '<div class="reg-cartouche__row"><dt>' + t("reg.subtotal", "Sous-total formations") + '</dt><dd>' + money(totals.subtotalCents) + "</dd></div>" +
+      '<div class="reg-cartouche__row"><dt>' + t("reg.subtotal", "Sous-total formations") + '</dt><dd>' + (allPending ? pendingLabel() : money(totals.subtotalCents)) + "</dd></div>" +
       '<div class="reg-cartouche__row reg-cartouche__row--vat"><dt>' + t("reg.vat", "TVA") + "</dt><dd>" +
-        (totals.vatCents == null ? t("reg.vat_tbd", "À déterminer") : money(totals.vatCents)) + "</dd></div>" +
+        (totals.vatCents == null || allPending ? t("reg.vat_tbd", "À déterminer") : money(totals.vatCents)) + "</dd></div>" +
       '<div class="reg-cartouche__row reg-cartouche__row--total"><dt>' + t("reg.total", "Total") + '</dt><dd data-grandtotal>' + grandTotalLabel(totals) + "</dd></div>" +
     "</dl>" + quoteNote;
 
@@ -934,11 +947,12 @@
     selectedIds().forEach(function (id) {
       var tr = DATA.getTraining(id), q = state.trainings[id], s = sessionOf(id);
       lines.push("- " + (tr.name && tr.name.fr || id) + " (" + (tr.code || id) + ") × " + q + " — " +
-        (isPriced(tr) ? moneyFr(tr.priceCents) + " par participant" : "sur devis") +
+        (isPriced(tr) ? moneyFr(tr.priceCents) + " par participant" : isPending(tr) ? "tarif en cours de préparation" : "sur devis") +
         (s ? " — session : " + Sessions.format(s, "fr").dateLong + (s.location ? ", " + s.location : "") : " — session : à convenir"));
     });
     var totals = computeTotals();
-    lines.push("Total indicatif : " + (totals.subtotalCents ? moneyFr(totals.subtotalCents) : "—") + (totals.hasQuote ? " + formation(s) sur devis" : "") + " (TVA à déterminer)");
+    lines.push("Total indicatif : " + (totals.subtotalCents ? moneyFr(totals.subtotalCents) : "—") + (totals.hasQuote ? (selectedIds().some(function (id) { var x = DATA.getTraining(id); return !isPriced(x) && !isPending(x); }) ? " + formation(s) sur devis" : "") +
+      (selectedIds().some(function (id) { return isPending(DATA.getTraining(id)); }) ? " + formation(s) au tarif en cours de préparation" : "") : "") + " (TVA à déterminer)");
     lines.push("", "PARTICIPANTS");
     selectedIds().forEach(function (id) {
       var tr = DATA.getTraining(id);
@@ -1170,7 +1184,7 @@
       addTraining(id, 1);
       trackStart(id, "catalogue");
       var tr = DATA.getTraining(id);
-      afterCartChange(t("reg.a11y_added", "Formation ajoutée :") + " " + loc(tr.name) + ". " + t("reg.a11y_total", "Total") + " : " + money(computeTotals().totalCents));
+      afterCartChange(t("reg.a11y_added", "Formation ajoutée :") + " " + loc(tr.name) + ". " + t("reg.a11y_total", "Total") + " : " + grandTotalLabel(computeTotals()));
       return;
     }
     if ((el = e.target.closest("[data-remove-session]"))) {

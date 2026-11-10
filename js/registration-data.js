@@ -6,8 +6,10 @@
    Aucun prix ne doit être écrit en dur ailleurs dans le code.
 
    ► Prix stockés en CENTIMES (entiers) pour éviter toute erreur de virgule
-     flottante. 225,00 € => 22500. priceCents:null + onQuote:true => « Sur devis »
+     flottante (ex. : un tarif de 100,00 € s'écrirait 10000). priceCents:null + onQuote:true => « Sur devis »
      (formation non tarifée : exclue du sous-total, tarif communiqué séparément).
+   ► pricePending:true (avec priceCents:null) => « En cours de préparation » à la place du prix : le tarif
+     a été retiré du site en attendant sa publication. Il se saisit dans js/trainings-data.js (registre central).
    ► Structure prête pour un remplacement par une API / un CMS : il suffira
      de fournir le même objet (mêmes clés) depuis le réseau, puis d'appeler
      window.WisyRegistration.setCatalogue(list).
@@ -40,25 +42,22 @@
     }
   };
 
-  /* Formation « Nacelles élévatrices » : ses faits (prix HT…) viennent du registre
-     central js/trainings-data.js (chargé AVANT ce fichier) — une seule définition
-     partagée avec la page dédiée, la recherche et l'assistant. Sans registre :
-     « Sur devis » (jamais de prix inventé). */
-  var NACELLE = (window.WisyTrainings && window.WisyTrainings.nacelles) || null;
-  /* Idem pour le BEPS (voir js/trainings-data.js) : 70 € — jamais de prix inventé si le registre manque. */
-  var BEPS = (window.WisyTrainings && window.WisyTrainings.beps) || null;
-  /* Idem pour la VCA Base : 225 € / personne vient du registre central (jamais de prix inventé si le registre manque). */
-  var VCA_BASE = (window.WisyTrainings && window.WisyTrainings.vcaBase) || null;
-  /* VCA Entreprise — SERVICE d'accompagnement (ni formation, ni VCA Base) : 590 € par participant, tarif indicatif, statut TVA
-     non précisé — lu dans le registre central js/trainings-data.js (jamais recopié ici ; « Sur devis » si le registre manque). */
-  var VCA_ENTREPRISE = (window.WisyTrainings && window.WisyTrainings.vcaEntreprise) || null;
-  /* VCA Ligne hiérarchique, Diisocyanates, Fibre optique : AUCUN tarif confirmé (l'ancien site se contredisait : bordereau
-     295 / 95 / 650 € contre 280–370 € et 200 € sur ses propres pages — docs/content-audit.md). Le registre central porte
-     price: null → « Sur devis » tant que Wisy Safety n'a pas confirmé un tarif par écrit ; il suffira alors de le saisir
-     dans js/trainings-data.js (une seule définition, reprise ici, sur la fiche, dans la recherche et par l'assistant). */
+  /* Formations « Nacelles élévatrices », BEPS, VCA Base et service VCA Entreprise : leurs tarifs ont été RETIRÉS du site
+     (« En cours de préparation »). Leurs faits viennent du registre central js/trainings-data.js (chargé AVANT ce
+     fichier) — une seule définition partagée avec la page dédiée, la recherche et l'assistant. Sans registre ou sans
+     tarif : jamais de prix inventé. */
+  /* VCA Ligne hiérarchique, Diisocyanates, Fibre optique : AUCUN tarif confirmé (l'ancien site se contredisait —
+     docs/content-audit.md). Le registre central porte price: null → « Sur devis » tant que Wisy Safety n'a pas
+     confirmé un tarif par écrit ; il suffira alors de le saisir dans js/trainings-data.js (une seule définition, reprise
+     ici, sur la fiche, dans la recherche et par l'assistant). */
   function registryPriceCents(key) {
     var t = window.WisyTrainings && window.WisyTrainings[key];
     return (t && t.price && t.price.amountCents) || null;
+  }
+  /* Tarif retiré en attendant sa publication : « En cours de préparation » à la place du prix. */
+  function registryPending(key) {
+    var t = window.WisyTrainings && window.WisyTrainings[key];
+    return !!(t && t.pricePending === true && !registryPriceCents(key));
   }
 
   /* Catégories — clé stable => libellé i18n (résolu dans registration.js) */
@@ -78,8 +77,9 @@
     {
       id: "vca-base",
       code: "VCA-B",
-      priceCents: VCA_BASE ? VCA_BASE.price.amountCents : null,   /* 225 € — registre central */
-      onQuote: !VCA_BASE,
+      priceCents: registryPriceCents("vcaBase"),   /* tarif retiré du site — registre central */
+      onQuote: !registryPriceCents("vcaBase") && !registryPending("vcaBase"),
+      pricePending: registryPending("vcaBase"),
       unit: "participant",
       category: "certification",
       icon: "shield",
@@ -131,8 +131,9 @@
     {
       id: "vca-entreprise",
       code: "VCA-E",
-      priceCents: VCA_ENTREPRISE ? VCA_ENTREPRISE.price.amountCents : null,   /* 590 € / participant (indicatif) — registre central */
-      onQuote: !VCA_ENTREPRISE,
+      priceCents: registryPriceCents("vcaEntreprise"),   /* tarif retiré du site — registre central */
+      onQuote: !registryPriceCents("vcaEntreprise") && !registryPending("vcaEntreprise"),
+      pricePending: registryPending("vcaEntreprise"),
       unit: "participant",
       category: "accompagnement",
       icon: "building",
@@ -158,8 +159,9 @@
     {
       id: "nacelle-elevatrice",
       code: "NAC",
-      priceCents: NACELLE ? NACELLE.price.amountCents : null,   /* 350 € HT — registre central */
-      onQuote: !NACELLE,
+      priceCents: registryPriceCents("nacelles"),   /* tarif retiré du site — registre central */
+      onQuote: !registryPriceCents("nacelles") && !registryPending("nacelles"),
+      pricePending: registryPending("nacelles"),
       unit: "participant",
       category: "engins",
       icon: "lift",
@@ -211,8 +213,9 @@
     {
       id: "beps",
       code: "BEPS",
-      priceCents: BEPS ? BEPS.price.amountCents : null,   /* 70 € — registre central */
-      onQuote: !BEPS,
+      priceCents: registryPriceCents("beps"),   /* tarif retiré du site — registre central */
+      onQuote: !registryPriceCents("beps") && !registryPending("beps"),
+      pricePending: registryPending("beps"),
       unit: "participant",
       category: "secours",
       icon: "aid",

@@ -42,17 +42,13 @@ test("byId + formationsByCategory", () => {
   assert.deepEqual(secu, ["diisocyanates", "vca-base"]);
 });
 
-test("HONNÊTETÉ : seul un prix CONFIRMÉ peut figurer sur une formation (registre central)", () => {
-  /* Prix confirmés par Wisy Safety, en centimes. Toute autre formation reste sans prix. */
-  const CONFIRMED = { nacelle: { cents: 35000, label: "350 € HT" }, beps: { cents: 7000, label: "70 €" }, "vca-base": { cents: 22500, label: "225 €" } };
+test("HONNÊTETÉ : aucun prix n'est affiché ; les tarifs retirés sont « en cours de préparation » (registre central)", () => {
+  /* Tarifs retirés du site : aucune formation n'a de montant ; seules ces formations portent « en cours de préparation ». */
+  const PENDING = ["nacelle", "beps", "vca-base"];
   Knowledge.formations().forEach((f) => {
     assert.ok(!("prix" in f), "pas de champ « prix » sur " + f.id);
-    if (CONFIRMED[f.id]) {
-      assert.equal(f.price.amountCents, CONFIRMED[f.id].cents, "prix confirmé " + f.id);
-      assert.equal(f.priceLabel, CONFIRMED[f.id].label, "libellé " + f.id);
-    } else {
-      assert.ok(!("price" in f) && !f.priceLabel, "pas de prix inventé sur " + f.id);
-    }
+    assert.ok(!("price" in f) && !f.priceLabel, "aucun prix sur " + f.id);
+    assert.equal(f.pricePending === true, PENDING.includes(f.id), "tarif en cours de préparation : " + f.id);
   });
 });
 

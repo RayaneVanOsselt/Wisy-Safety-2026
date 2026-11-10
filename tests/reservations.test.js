@@ -59,6 +59,7 @@ test("installer : 8 onglets (dont « Demandes » des formulaires), TOUTES les fo
     assert.equal(r["Formation"], site[i].title, "nom = titre du site : " + r["Identifiant"]);
     assert.equal(r["Page du site"], "https://wisysafety.be/" + site[i].url, "domaine officiel (plus l'adresse github.io)");
     if (site[i].priceLabel) assert.ok(r["Tarif"].startsWith(site[i].priceLabel), "tarif du site : " + r["Tarif"]);
+    else if (site[i].pricePending) assert.equal(r["Tarif"], "En cours de préparation", "tarif retiré du site : " + r["Identifiant"]);
     else assert.equal(r["Tarif"], "Sur devis", "aucun tarif inventé : " + r["Identifiant"]);
   });
   const s = G.sheet("Sessions").records();

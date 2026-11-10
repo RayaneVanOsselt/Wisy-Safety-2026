@@ -10,7 +10,7 @@
      initTabs()             onglets « Face à une urgence » (role=tablist, flèches)
      initChain()            chaîne des secours : ligne + étapes ; scroll pinné sur desktop
                             (feature-detecté), grille statique partout ailleurs
-     initCounters()         chiffres 15 / 70 € / 3 / 112 / 6 : 0 → valeur au scroll-in
+     initCounters()         chiffres 15 / 3 / 112 / 6 : 0 → valeur au scroll-in
      initTilt()             tilt 3D très léger des cartes « Pourquoi Wisy Safety » (souris fine)
      initMagnetic()         micro-déplacement des CTA vers le curseur (souris fine)
      initSmoothScroll()    ancres internes (respecte prefers-reduced-motion)

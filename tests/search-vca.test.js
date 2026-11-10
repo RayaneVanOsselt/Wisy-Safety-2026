@@ -61,11 +61,12 @@ test("accès rapides (état vide) : VCA Base, prix, dates, examen, adresse — d
   assert.match(SRC, /itemHTML\(\{ icon: IC\[q\.icon\], title: esc\(t\(q\.labelKey\)\), href: q\.href[,}]/, "chaque accès rapide est une option (role=option)");
 });
 
-test("tarif : affiché dans les résultats depuis le registre, uniquement « par personne » confirmé — jamais une mention HT / TTC inventée", () => {
+test("tarif : « En cours de préparation » dans les résultats (registre) à la place du prix — jamais un montant ni une mention HT / TTC inventée", () => {
   const f = Site.formation("vca-base");
-  assert.equal(f.priceLabel, "225 €"); assert.equal(f.priceUnit, "participant");
-  assert.match(SRC, /f\.priceLabel && f\.priceUnit === "participant"/);
-  assert.match(SRC, /priceLabel: f\.priceLabel, priceUnit: f\.priceUnit/);
+  assert.equal(f.priceLabel, null); assert.equal(f.pricePending, true); assert.equal(f.priceUnit, "participant");
+  assert.match(SRC, /f\.pricePending \? \[esc\(t\("price\.pending"\)\)\]/);
+  assert.match(SRC, /priceLabel: f\.priceLabel, priceUnit: f\.priceUnit, pricePending: f\.pricePending === true/);
+  LANGS.forEach((l) => assert.ok(I18N[l]["price.pending"], l + " price.pending"));
   LANGS.forEach((l) => assert.ok(I18N[l]["search.per_person"], l + " search.per_person"));
   assert.ok(!Site.formation("nacelle").priceUnit, "aucune unité inventée pour les autres formations");
 });

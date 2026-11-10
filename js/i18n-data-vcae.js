@@ -21,7 +21,6 @@
     "vcae.cta_signup": "Démarrer mon inscription",
     "vcae.cta_advisor": "Parler à un conseiller",
     "vcae.price_pre": "Accompagnement :",
-    "vcae.price_post": "par participant · tarif indicatif",
     "vcae.v_group": "Film de présentation VCA Entreprise",
     "vcae.v_desc": "Film de présentation de 19 secondes, avec une musique rythmée : le logo Wisy Safety apparaît, puis des images de chantiers, d'une carrière et d'ouvriers casqués.",
     "vcae.v_poster_alt": "Chantier au coucher du soleil : grues et excavatrice devant un bâtiment en construction",
@@ -147,8 +146,6 @@
     "vcae.rg_b3": "Un conseiller reste joignable du lundi au jeudi, de 10 h à 16 h.",
     "vcae.rg_tag": "Accompagnement",
     "vcae.rg_card_t": "Accompagnement à la certification VCA de votre entreprise",
-    "vcae.rg_per": "par participant",
-    "vcae.rg_ind": "Tarif indicatif. Le statut TVA n'est pas précisé : l'équipe le confirme avec vous.",
     "vcae.rg_qty": "Participants",
     "vcae.rg_dec": "Retirer un participant",
     "vcae.rg_inc": "Ajouter un participant",
@@ -162,7 +159,6 @@
     "vcae.ct_secondary": "Poser une question",
     "vcae.ct_assistant": "Demander à l'assistant Wisy",
     "vcae.mascot_alt": "Mascotte Wisy Safety : un ouvrier souriant en casque jaune, une clé à molette à la main",
-    "vcae.bar_s": "par participant · tarif indicatif"
   });
 
   /* ---------------- ENGLISH ---------------- */
@@ -177,7 +173,6 @@
     "vcae.cta_signup": "Start my registration",
     "vcae.cta_advisor": "Talk to an advisor",
     "vcae.price_pre": "Support:",
-    "vcae.price_post": "per participant · indicative price",
     "vcae.v_group": "VCA for Companies introduction film",
     "vcae.v_desc": "A 19-second introduction film with a rhythmic soundtrack: the Wisy Safety logo appears, followed by images of building sites, a quarry and workers in hard hats.",
     "vcae.v_poster_alt": "Building site at sunset: cranes and an excavator in front of a building under construction",
@@ -303,8 +298,6 @@
     "vcae.rg_b3": "An advisor can be reached Monday to Thursday, 10:00 to 16:00.",
     "vcae.rg_tag": "Support",
     "vcae.rg_card_t": "Support towards your company's VCA certification",
-    "vcae.rg_per": "per participant",
-    "vcae.rg_ind": "Indicative price. The VAT status is not specified: the team confirms it with you.",
     "vcae.rg_qty": "Participants",
     "vcae.rg_dec": "Remove a participant",
     "vcae.rg_inc": "Add a participant",
@@ -318,7 +311,6 @@
     "vcae.ct_secondary": "Ask a question",
     "vcae.ct_assistant": "Ask the Wisy assistant",
     "vcae.mascot_alt": "Wisy Safety mascot: a smiling worker in a yellow hard hat holding a wrench",
-    "vcae.bar_s": "per participant · indicative price"
   });
 
   /* ---------------- NEDERLANDS ---------------- */
@@ -333,7 +325,6 @@
     "vcae.cta_signup": "Mijn inschrijving starten",
     "vcae.cta_advisor": "Met een adviseur praten",
     "vcae.price_pre": "Begeleiding:",
-    "vcae.price_post": "per deelnemer · indicatieve prijs",
     "vcae.v_group": "Presentatiefilm VCA Bedrijven",
     "vcae.v_desc": "Presentatiefilm van 19 seconden met ritmische muziek: het logo van Wisy Safety verschijnt, gevolgd door beelden van bouwplaatsen, een steengroeve en arbeiders met helm.",
     "vcae.v_poster_alt": "Bouwplaats bij zonsondergang: kranen en een graafmachine voor een gebouw in aanbouw",
@@ -459,8 +450,6 @@
     "vcae.rg_b3": "Een adviseur is bereikbaar van maandag tot donderdag, van 10 tot 16 uur.",
     "vcae.rg_tag": "Begeleiding",
     "vcae.rg_card_t": "Begeleiding naar de VCA-certificering van uw bedrijf",
-    "vcae.rg_per": "per deelnemer",
-    "vcae.rg_ind": "Indicatieve prijs. De btw-status is niet vermeld: het team bevestigt die met u.",
     "vcae.rg_qty": "Deelnemers",
     "vcae.rg_dec": "Een deelnemer verwijderen",
     "vcae.rg_inc": "Een deelnemer toevoegen",
@@ -474,7 +463,6 @@
     "vcae.ct_secondary": "Een vraag stellen",
     "vcae.ct_assistant": "Vraag het aan de Wisy-assistent",
     "vcae.mascot_alt": "Mascotte van Wisy Safety: een lachende arbeider met gele helm en een sleutel in de hand",
-    "vcae.bar_s": "per deelnemer · indicatieve prijs"
   });
 
   /* ---------------- AFRIKAANS ---------------- */
@@ -489,7 +477,6 @@
     "vcae.cta_signup": "Begin my inskrywing",
     "vcae.cta_advisor": "Praat met 'n adviseur",
     "vcae.price_pre": "Ondersteuning:",
-    "vcae.price_post": "per deelnemer · aanduidende prys",
     "vcae.v_group": "Voorstellingsfilm VCA vir Maatskappye",
     "vcae.v_desc": "'n Voorstellingsfilm van 19 sekondes met ritmiese musiek: die Wisy Safety-logo verskyn, gevolg deur beelde van bouwerwe, 'n steengroef en werkers met veiligheidshelms.",
     "vcae.v_poster_alt": "Bouwerf met sonsondergang: kraans en 'n graafmasjien voor 'n gebou wat opgerig word",
@@ -615,8 +602,6 @@
     "vcae.rg_b3": "'n Adviseur is bereikbaar Maandag tot Donderdag, 10:00 tot 16:00.",
     "vcae.rg_tag": "Ondersteuning",
     "vcae.rg_card_t": "Ondersteuning vir die VCA-sertifisering van jou maatskappy",
-    "vcae.rg_per": "per deelnemer",
-    "vcae.rg_ind": "Aanduidende prys. Die BTW-status is nie gespesifiseer nie: die span bevestig dit met jou.",
     "vcae.rg_qty": "Deelnemers",
     "vcae.rg_dec": "Verwyder 'n deelnemer",
     "vcae.rg_inc": "Voeg 'n deelnemer by",
@@ -630,7 +615,6 @@
     "vcae.ct_secondary": "Vra 'n vraag",
     "vcae.ct_assistant": "Vra die Wisy-assistent",
     "vcae.mascot_alt": "Wisy Safety-maskot: 'n glimlaggende werker met 'n geel veiligheidshelm en 'n moersleutel in die hand",
-    "vcae.bar_s": "per deelnemer · aanduidende prys"
   });
 
   /* ---------------- العربية (RTL) ---------------- */
@@ -645,7 +629,6 @@
     "vcae.cta_signup": "ابدأوا تسجيلي",
     "vcae.cta_advisor": "تحدثوا إلى مستشار",
     "vcae.price_pre": "المرافقة:",
-    "vcae.price_post": "لكل مشارك · سعر إرشادي",
     "vcae.v_group": "فيلم تعريفي بـ VCA للشركات",
     "vcae.v_desc": "فيلم تعريفي مدته 19 ثانية بموسيقى إيقاعية: يظهر شعار Wisy Safety، ثم مشاهد لأوراش بناء ومحجر وعمال بخوذات.",
     "vcae.v_poster_alt": "ورشة بناء عند الغروب: رافعات وحفّارة أمام مبنى قيد الإنشاء",
@@ -771,8 +754,6 @@
     "vcae.rg_b3": "يبقى مستشار متاحًا من الاثنين إلى الخميس، من 10 إلى 16.",
     "vcae.rg_tag": "المرافقة",
     "vcae.rg_card_t": "مرافقة شركتكم نحو شهادة VCA",
-    "vcae.rg_per": "لكل مشارك",
-    "vcae.rg_ind": "سعر إرشادي. وضع الضريبة على القيمة المضافة غير محدّد: يؤكده الفريق معكم.",
     "vcae.rg_qty": "المشاركون",
     "vcae.rg_dec": "إزالة مشارك",
     "vcae.rg_inc": "إضافة مشارك",
@@ -786,7 +767,6 @@
     "vcae.ct_secondary": "اطرحوا سؤالًا",
     "vcae.ct_assistant": "اسألوا مساعد Wisy",
     "vcae.mascot_alt": "تميمة Wisy Safety: عامل مبتسم بخوذة صفراء ومفتاح ربط في يده",
-    "vcae.bar_s": "لكل مشارك · سعر إرشادي"
   });
 
   /* ---------------- БЪЛГАРСКИ ---------------- */
@@ -801,7 +781,6 @@
     "vcae.cta_signup": "Започнете записването ми",
     "vcae.cta_advisor": "Говорете със съветник",
     "vcae.price_pre": "Съдействие:",
-    "vcae.price_post": "на участник · ориентировъчна цена",
     "vcae.v_group": "Представителен филм VCA за фирми",
     "vcae.v_desc": "Представителен филм от 19 секунди с ритмична музика: появява се логото на Wisy Safety, следват кадри от строителни обекти, кариера и работници с каски.",
     "vcae.v_poster_alt": "Строителен обект по залез слънце: кранове и багер пред сграда в строеж",
@@ -927,8 +906,6 @@
     "vcae.rg_b3": "Съветник е на разположение от понеделник до четвъртък, от 10 до 16 ч.",
     "vcae.rg_tag": "Съдействие",
     "vcae.rg_card_t": "Съдействие за VCA сертифицирането на вашата фирма",
-    "vcae.rg_per": "на участник",
-    "vcae.rg_ind": "Ориентировъчна цена. Статутът по ДДС не е уточнен: екипът ще го потвърди с вас.",
     "vcae.rg_qty": "Участници",
     "vcae.rg_dec": "Премахнете участник",
     "vcae.rg_inc": "Добавете участник",
@@ -942,7 +919,6 @@
     "vcae.ct_secondary": "Задайте въпрос",
     "vcae.ct_assistant": "Попитайте асистента на Wisy",
     "vcae.mascot_alt": "Талисман на Wisy Safety: усмихнат работник с жълта каска и гаечен ключ в ръка",
-    "vcae.bar_s": "на участник · ориентировъчна цена"
   });
 
   /* ---------------- DEUTSCH ---------------- */
@@ -957,7 +933,6 @@
     "vcae.cta_signup": "Meine Anmeldung starten",
     "vcae.cta_advisor": "Mit einem Berater sprechen",
     "vcae.price_pre": "Begleitung:",
-    "vcae.price_post": "pro Teilnehmer · Richtpreis",
     "vcae.v_group": "Vorstellungsfilm VCA für Unternehmen",
     "vcae.v_desc": "Vorstellungsfilm von 19 Sekunden mit rhythmischer Musik: Das Wisy-Safety-Logo erscheint, danach Bilder von Baustellen, einem Steinbruch und Arbeitern mit Schutzhelm.",
     "vcae.v_poster_alt": "Baustelle bei Sonnenuntergang: Kräne und ein Bagger vor einem Rohbau",
@@ -1083,8 +1058,6 @@
     "vcae.rg_b3": "Ein Berater ist Montag bis Donnerstag von 10 bis 16 Uhr erreichbar.",
     "vcae.rg_tag": "Begleitung",
     "vcae.rg_card_t": "Begleitung zur VCA-Zertifizierung Ihres Unternehmens",
-    "vcae.rg_per": "pro Teilnehmer",
-    "vcae.rg_ind": "Richtpreis. Der MwSt.-Status ist nicht angegeben: Das Team klärt ihn mit Ihnen.",
     "vcae.rg_qty": "Teilnehmer",
     "vcae.rg_dec": "Einen Teilnehmer entfernen",
     "vcae.rg_inc": "Einen Teilnehmer hinzufügen",
@@ -1098,7 +1071,6 @@
     "vcae.ct_secondary": "Eine Frage stellen",
     "vcae.ct_assistant": "Den Wisy-Assistenten fragen",
     "vcae.mascot_alt": "Maskottchen von Wisy Safety: ein lächelnder Arbeiter mit gelbem Schutzhelm und einem Schraubenschlüssel in der Hand",
-    "vcae.bar_s": "pro Teilnehmer · Richtpreis"
   });
 
   /* ---------------- ROMÂNĂ ---------------- */
@@ -1113,7 +1085,6 @@
     "vcae.cta_signup": "Începe înscrierea mea",
     "vcae.cta_advisor": "Vorbește cu un consultant",
     "vcae.price_pre": "Sprijin:",
-    "vcae.price_post": "per participant · preț orientativ",
     "vcae.v_group": "Film de prezentare VCA pentru companii",
     "vcae.v_desc": "Film de prezentare de 19 secunde, cu muzică ritmată: apare sigla Wisy Safety, apoi imagini de șantier, dintr-o carieră și cu muncitori cu cască.",
     "vcae.v_poster_alt": "Șantier la apus: macarale și un excavator în fața unei clădiri în construcție",
@@ -1239,8 +1210,6 @@
     "vcae.rg_b3": "Un consultant poate fi contactat de luni până joi, între 10 și 16.",
     "vcae.rg_tag": "Sprijin",
     "vcae.rg_card_t": "Sprijin pentru certificarea VCA a companiei dumneavoastră",
-    "vcae.rg_per": "per participant",
-    "vcae.rg_ind": "Preț orientativ. Statutul TVA nu este precizat: echipa îl confirmă împreună cu dumneavoastră.",
     "vcae.rg_qty": "Participanți",
     "vcae.rg_dec": "Elimină un participant",
     "vcae.rg_inc": "Adaugă un participant",
@@ -1254,7 +1223,6 @@
     "vcae.ct_secondary": "Pune o întrebare",
     "vcae.ct_assistant": "Întreabă asistentul Wisy",
     "vcae.mascot_alt": "Mascota Wisy Safety: un muncitor zâmbitor cu cască galbenă, având o cheie în mână",
-    "vcae.bar_s": "per participant · preț orientativ"
   });
 
   /* ---------------- ITALIANO ---------------- */
@@ -1269,7 +1237,6 @@
     "vcae.cta_signup": "Avvia la mia iscrizione",
     "vcae.cta_advisor": "Parla con un consulente",
     "vcae.price_pre": "Supporto:",
-    "vcae.price_post": "per partecipante · prezzo indicativo",
     "vcae.v_group": "Filmato di presentazione VCA aziende",
     "vcae.v_desc": "Filmato di presentazione di 19 secondi con musica ritmata: compare il logo Wisy Safety, poi immagini di cantieri, di una cava e di operai con il casco.",
     "vcae.v_poster_alt": "Cantiere al tramonto: gru ed escavatore davanti a un edificio in costruzione",
@@ -1395,8 +1362,6 @@
     "vcae.rg_b3": "Un consulente è raggiungibile dal lunedì al giovedì, dalle 10 alle 16.",
     "vcae.rg_tag": "Supporto",
     "vcae.rg_card_t": "Supporto per la certificazione VCA della vostra azienda",
-    "vcae.rg_per": "per partecipante",
-    "vcae.rg_ind": "Prezzo indicativo. Lo stato IVA non è specificato: il team lo conferma con voi.",
     "vcae.rg_qty": "Partecipanti",
     "vcae.rg_dec": "Rimuovi un partecipante",
     "vcae.rg_inc": "Aggiungi un partecipante",
@@ -1410,7 +1375,6 @@
     "vcae.ct_secondary": "Fai una domanda",
     "vcae.ct_assistant": "Chiedi all'assistente Wisy",
     "vcae.mascot_alt": "Mascotte di Wisy Safety: un operaio sorridente con casco giallo e una chiave inglese in mano",
-    "vcae.bar_s": "per partecipante · prezzo indicativo"
   });
 
   /* ---------------- SLOVENŠČINA ---------------- */
@@ -1425,7 +1389,6 @@
     "vcae.cta_signup": "Začni mojo prijavo",
     "vcae.cta_advisor": "Pogovorite se s svetovalcem",
     "vcae.price_pre": "Podpora:",
-    "vcae.price_post": "na udeleženca · okvirna cena",
     "vcae.v_group": "Predstavitveni film VCA za podjetja",
     "vcae.v_desc": "Predstavitveni film v trajanju 19 sekund z ritmično glasbo: pojavi se logotip Wisy Safety, nato posnetki gradbišč, kamnoloma in delavcev s čeladami.",
     "vcae.v_poster_alt": "Gradbišče ob sončnem zahodu: žerjavi in bager pred stavbo v gradnji",
@@ -1551,8 +1514,6 @@
     "vcae.rg_b3": "Svetovalec je dosegljiv od ponedeljka do četrtka, od 10. do 16. ure.",
     "vcae.rg_tag": "Podpora",
     "vcae.rg_card_t": "Podpora pri certificiranju VCA vašega podjetja",
-    "vcae.rg_per": "na udeleženca",
-    "vcae.rg_ind": "Okvirna cena. Status DDV ni naveden: ekipa ga potrdi z vami.",
     "vcae.rg_qty": "Udeleženci",
     "vcae.rg_dec": "Odstrani udeleženca",
     "vcae.rg_inc": "Dodaj udeleženca",
@@ -1566,7 +1527,6 @@
     "vcae.ct_secondary": "Postavite vprašanje",
     "vcae.ct_assistant": "Vprašajte pomočnika Wisy",
     "vcae.mascot_alt": "Maskota Wisy Safety: nasmejan delavec z rumeno čelado in ključem v roki",
-    "vcae.bar_s": "na udeleženca · okvirna cena"
   });
 
 })();

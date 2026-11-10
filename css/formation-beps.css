@@ -89,7 +89,7 @@
   --fs-h3: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
   --fs-lead: clamp(1.0625rem, 1rem + .35vw, 1.3rem);
   --fs-body: clamp(1rem, .96rem + .2vw, 1.125rem);
-  --fs-xxl: clamp(3.5rem, 2rem + 6vw, 6.5rem);   /* chiffres-signature (15, 70 €, modules…) */
+  --fs-xxl: clamp(3.5rem, 2rem + 6vw, 6.5rem);   /* chiffres-signature (15, modules…) */
 
   --header-offset: 6.5rem;
   --chain-progress: 0;
@@ -373,6 +373,8 @@ body { background: var(--color-surface); }
 .beps-cta__stats dt { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: rgba(244, 250, 249, .55); margin-bottom: .35rem; }
 .beps-cta__stats dd { margin: 0; font-family: var(--font-titre); font-weight: 800; font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.4rem); color: var(--color-accent); letter-spacing: -.01em; }
 .beps-cta__stats dd .unit { font-size: .55em; font-weight: 700; margin-left: .2em; color: rgba(244, 250, 249, .7); }
+/* Tarif retiré : « En cours de préparation » (texte à la place du montant) — corps réduit, sur deux lignes si besoin. */
+.beps-stats__item dd.beps-stats__pending, .beps-cta__stats dd.beps-stats__pending { font-size: clamp(1.05rem, .85rem + .7vw, 1.4rem); line-height: 1.2; letter-spacing: 0; max-width: 11rem; }
 
 /* ==================== 10. MICRO-INTERACTIONS ==================== */
 /* CTA « magnétique » très léger : translate limité par JS (voir initMagnetic), désactivé au

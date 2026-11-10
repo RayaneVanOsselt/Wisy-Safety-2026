@@ -59,8 +59,10 @@
 
     /* Faits confirmés */
     durationDays: 1,
-    /* 350 € HT — en centimes, hors TVA (comme registration-data.js) */
-    price: { amountCents: 35000, currency: "EUR", vatIncluded: false },
+    /* Tarif : retiré du site (en cours de préparation). `price: null` = aucun montant affiché ni affirmé ;
+       `pricePending: true` = les écrans affichent « En cours de préparation » à la place du prix. */
+    price: null,
+    pricePending: true,
     languages: ["fr", "nl", "en"],
     languageLabels: ["Français", "Néerlandais", "Anglais"],
     format: "theory-practice",
@@ -129,8 +131,9 @@
 
     /* Faits confirmés (fiche BEPS publiée par Wisy Safety) */
     durationHours: 15,
-    /* 70 € — le statut TVA n'est pas précisé sur la fiche source : on n'invente ni HT ni TTC. */
-    price: { amountCents: 7000, currency: "EUR", vatIncluded: null },
+    /* Tarif : retiré du site (en cours de préparation) — voir `pricePending`. */
+    price: null,
+    pricePending: true,
     languages: ["fr", "nl", "en"],
     languageLabels: ["Français", "Néerlandais", "Anglais"],
     format: "practice-focused",
@@ -185,7 +188,7 @@
      VCA Base — page dédiée formation-vca-base.html (refonte du 2026-09-26).
 
      Trois sortes de faits, jamais mélangées :
-       1. CONFIRMÉS par Wisy Safety : brief du propriétaire (225 € / personne, présentiel, examen inclus,
+       1. CONFIRMÉS par Wisy Safety : brief du propriétaire (tarif par personne — retiré du site —, présentiel, examen inclus,
           centre d'Anderlecht, « certification VCA après réussite de l'examen ») + durée « 1 jour » déjà
           publiée par le site (FAQ, catalogue). Adresse / téléphone / horaires : js/faq-data.js (CONTACT).
        2. OFFICIELS (`official`) : organisation VCA belge (Contractor Safety Management / BeSaCC-VCA) et
@@ -217,8 +220,9 @@
 
     /* Faits confirmés */
     durationDays: 1,
-    /* 225 € / personne — le statut TVA n'est pas précisé dans le brief : on n'invente ni HT ni TTC. */
-    price: { amountCents: 22500, currency: "EUR", vatIncluded: null },
+    /* Tarif : retiré du site (en cours de préparation) — voir `pricePending`. */
+    price: null,
+    pricePending: true,
     priceUnit: "participant",
     format: "in-person",
     formatLabel: "Présentiel",
@@ -282,7 +286,7 @@
     /* Mots-clés de la RECHERCHE du site uniquement (mots génériques de prix / d'examen : ils ne doivent pas
        désigner la VCA Base pour l'assistant — voir GENERIC_KEYWORD dans site-content.js). */
     searchExtra: [
-      "prix", "prix vca", "tarif", "tarif vca", "cout", "combien coute", "225", "examen", "examen inclus", "diplome", "certificat", "adresse",
+      "prix", "prix vca", "tarif", "tarif vca", "cout", "combien coute", "examen", "examen inclus", "diplome", "certificat", "adresse",
       "price", "cost", "fee", "exam", "exam included", "certificate", "diploma",
       "prijs", "kosten", "tarief", "preis", "prufung", "zertifikat", "prezzo", "costo", "esame", "pret", "cena", "izpit", "prys", "eksamen",
       "цена", "изпит", "сертификат", "سعر", "ثمن", "تكلفة", "امتحان", "اختبار", "شهادة"
@@ -317,7 +321,7 @@
 
      Trois sortes de faits, jamais mélangées :
        1. CONFIRMÉS par Wisy Safety : ligne du bordereau d'inscription publié sur wisysafety.be/sinscrire/ (lue le
-          2026-09-26) — « VCA Entreprise · Accompagnement à la certification LSC · 590 € / pers. », sous la mention
+          2026-09-26) — « VCA Entreprise · Accompagnement à la certification LSC », avec un tarif par participant (retiré du site), sous la mention
           « Tarifs indicatifs par participant » ; le statut TVA n'y est pas précisé → `vatIncluded: null`.
        2. OFFICIELS (`official`) : niveaux, validité, audits de suivi, organisme certificateur — SSVV (propriétaire du
           schéma VCA), BeSaCC-VCA, Prévention et Intérim ; chacun avec sa source et sa date de vérification.
@@ -350,10 +354,10 @@
     summaryKey: "dd.vca_entreprise_summary",
     taglineKey: "dd.vca_entreprise_desc",
 
-    /* Faits confirmés — 590 € par participant, tarif INDICATIF (bordereau). Ni HT ni TTC : non précisé. */
-    price: { amountCents: 59000, currency: "EUR", vatIncluded: null },
+    /* Tarif : retiré du site (en cours de préparation) — voir `pricePending`. */
+    price: null,
+    pricePending: true,
     priceUnit: "participant",
-    priceIndicative: true,
 
     /* Public visé : reprend l'ancienne page (sous-traitants et prestataires, BTP, énergie, maintenance industrielle,
        pétrochimie) et le critère officiel des niveaux (recours ou non à des sous-traitants). */
@@ -406,7 +410,7 @@
       "checklist aannemers", "checklist contractors"
     ],
     /* Mots de la RECHERCHE du site uniquement (prix) — l'assistant les traite à part (voir GENERIC_KEYWORD). */
-    searchExtra: ["prix", "tarif", "590", "combien coute", "price", "cost", "prijs", "kosten", "preis", "prezzo", "pret", "cena", "prys", "цена", "سعر", "ثمن"],
+    searchExtra: ["prix", "tarif", "combien coute", "price", "cost", "prijs", "kosten", "preis", "prezzo", "pret", "cena", "prys", "цена", "سعر", "ثمن"],
 
     /* Visuels : dérivés de assets/originaux/vca-entreprise/ (scripts/optimize-images.py) ; film : 2 versions MP4 AVEC SON
        (scripts/encode-video.swift), chargées seulement au clic sur « lecture ». */
@@ -573,7 +577,7 @@
     if (hours == null) return null;
     return hours + (hours > 1 ? " heures" : " heure");
   }
-  /* 35000/HT -> "350 € HT" ; 24550/HT -> "245,50 € HT" ; 7000/null -> "70 €" (statut TVA non précisé) */
+  /* { amountCents, vatIncluded } -> libellé du montant ; null (tarif retiré / non confirmé) -> null : aucun prix n'est affiché */
   function formatPrice(p) {
     if (!p) return null;
     var euros = p.amountCents / 100;

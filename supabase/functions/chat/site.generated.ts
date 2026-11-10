@@ -46,7 +46,6 @@ export const SITE_FORMATIONS: SiteEntry[] = [
     "signupUrl": "inscription.html?formation=vca-base",
     "duration": "1 jour",
     "level": "Base",
-    "priceLabel": "225 €",
     "format": "Présentiel",
     "audience": [
       "ouvriers et personnel opérationnel",
@@ -56,7 +55,7 @@ export const SITE_FORMATIONS: SiteEntry[] = [
       "sous-traitants",
       "toute personne travaillant dans un environnement présentant des risques"
     ],
-    "content": "Maîtrisez les règles fondamentales de sécurité au travail et préparez votre examen VCA Base, en présentiel à Anderlecht (Bruxelles), examen inclus. Objectif : Acquérir les règles fondamentales de sécurité au travail et se préparer à l'examen VCA Base, dans un cadre professionnel. Le tarif est indiqué par personne. Le statut TVA (HT ou TTC) du tarif n'est PAS précisé : ne jamais écrire « HT », « TTC » ni « hors TVA ». L'examen est inclus dans le tarif. Examen officiel (source BeSaCC-VCA, vérifié le 2026-09-26) : 40 questions, 60 minutes, seuil de réussite 64,5 %. Un diplôme de sécurité de base est considéré comme valable s'il date de moins de 10 ans à compter de la date de l'examen. Certification VCA après réussite de l'examen. La formation se déroule au centre Wisy Safety d'Anderlecht. NON CONFIRMÉ (ne jamais l'affirmer) : agréé ; agrément ; accrédité ; reconnu internationalement ; centre d'examen reconnu ; langues FR/NL/EN ; 8 heures ; horaires de la journée ; 12 participants maximum ; taux de réussite ; financement / aides applicables à cette formation.",
+    "content": "Maîtrisez les règles fondamentales de sécurité au travail et préparez votre examen VCA Base, en présentiel à Anderlecht (Bruxelles), examen inclus. Objectif : Acquérir les règles fondamentales de sécurité au travail et se préparer à l'examen VCA Base, dans un cadre professionnel. Le tarif est EN COURS DE PRÉPARATION : aucun montant n'est affiché sur le site, ne jamais en citer ni en deviner un. L'examen est inclus dans le tarif. Examen officiel (source BeSaCC-VCA, vérifié le 2026-09-26) : 40 questions, 60 minutes, seuil de réussite 64,5 %. Un diplôme de sécurité de base est considéré comme valable s'il date de moins de 10 ans à compter de la date de l'examen. Certification VCA après réussite de l'examen. La formation se déroule au centre Wisy Safety d'Anderlecht. NON CONFIRMÉ (ne jamais l'affirmer) : agréé ; agrément ; accrédité ; reconnu internationalement ; centre d'examen reconnu ; langues FR/NL/EN ; 8 heures ; horaires de la journée ; 12 participants maximum ; taux de réussite ; financement / aides applicables à cette formation.",
     "keywords": [
       "vca",
       "vca base",
@@ -174,7 +173,6 @@ export const SITE_FORMATIONS: SiteEntry[] = [
     "signupUrl": "inscription.html?formation=nacelle",
     "duration": "1 jour",
     "level": "Spécialisée",
-    "priceLabel": "350 € HT",
     "format": "Théorie + pratique",
     "languages": [
       "Français",
@@ -196,7 +194,7 @@ export const SITE_FORMATIONS: SiteEntry[] = [
       "Nacelle verticale",
       "Nacelle automotrice"
     ],
-    "content": "Développez les compétences nécessaires pour utiliser les nacelles élévatrices de manière sûre, efficace et responsable dans un environnement professionnel. Objectif : Permettre aux participants d'utiliser les nacelles élévatrices de manière sûre et d'identifier les risques associés. AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer.",
+    "content": "Développez les compétences nécessaires pour utiliser les nacelles élévatrices de manière sûre, efficace et responsable dans un environnement professionnel. Objectif : Permettre aux participants d'utiliser les nacelles élévatrices de manière sûre et d'identifier les risques associés. Le tarif est EN COURS DE PRÉPARATION : aucun montant n'est affiché sur le site, ne jamais en citer ni en deviner un. AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer.",
     "keywords": [
       "nacelle",
       "nacelles",
@@ -279,7 +277,6 @@ export const SITE_FORMATIONS: SiteEntry[] = [
     "signupUrl": "inscription.html?formation=beps",
     "duration": "15 heures",
     "level": "Moyen",
-    "priceLabel": "70 €",
     "format": "Essentiellement pratique",
     "languages": [
       "Français",
@@ -297,7 +294,7 @@ export const SITE_FORMATIONS: SiteEntry[] = [
       "Malaises & brûlures",
       "Alerter le 112"
     ],
-    "content": "Apprendre, en 15 heures, à protéger, alerter le 112 et secourir une victime en attendant les professionnels : réanimation, défibrillation, position latérale de sécurité, hémorragies, étouffement, malaises et brûlures. Objectif : Rendre chaque participant capable d'intervenir efficacement dès les premières minutes d'une urgence, dans le bon ordre et sans se mettre en danger. Le statut TVA (HT ou TTC) du tarif n'est PAS précisé : ne jamais écrire « HT », « TTC » ni « hors TVA ». AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer.",
+    "content": "Apprendre, en 15 heures, à protéger, alerter le 112 et secourir une victime en attendant les professionnels : réanimation, défibrillation, position latérale de sécurité, hémorragies, étouffement, malaises et brûlures. Objectif : Rendre chaque participant capable d'intervenir efficacement dès les premières minutes d'une urgence, dans le bon ordre et sans se mettre en danger. Le tarif est EN COURS DE PRÉPARATION : aucun montant n'est affiché sur le site, ne jamais en citer ni en deviner un. AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer.",
     "keywords": [
       "beps",
       "premiers secours",
@@ -481,7 +478,7 @@ export const SITE_PAGES: SiteEntry[] = [
     "type": "article",
     "title": "Combien coûte une formation VCA et qui peut la financer ?",
     "url": "article-vca-cout-financement.html",
-    "content": "Article : ce qu'il faut vérifier avant de comparer le prix d'une formation VCA, et où se renseigner sur les aides possibles en Belgique (employeur, Constructiv, Actiris, Bruxelles Formation). Tarif Wisy Safety : 225 € par personne, examen inclus.",
+    "content": "Article : ce qu'il faut vérifier avant de comparer le prix d'une formation VCA, et où se renseigner sur les aides possibles en Belgique (employeur, Constructiv, Actiris, Bruxelles Formation). Tarif Wisy Safety : en cours de préparation (examen inclus).",
     "keywords": [
       "cout",
       "prix",

@@ -242,7 +242,8 @@
 .vca-cta__card { padding: clamp(1.4rem, 3vw, 2rem); border-radius: var(--radius-lg); background: var(--creme); color: var(--noir-jais); box-shadow: 0 24px 48px rgba(0, 0, 0, .3); }
 .vca-cta__name { margin: 0; font-family: var(--font-titre); font-weight: 600; font-size: .95rem; letter-spacing: .12em; text-transform: uppercase; color: var(--epinette); }
 .vca-cta__price { margin: .4rem 0 .9rem; font-family: var(--font-titre); font-weight: 600; font-size: 1.15rem; color: var(--granit); }
-.vca-cta__price b { font-size: clamp(2.6rem, 5vw, 3.6rem); line-height: 1; letter-spacing: -.02em; color: var(--noir-jais); }
+/* Tarif retiré : « En cours de préparation » (texte, plus un montant) — taille réduite pour tenir dans la carte ; remettre clamp(2.6rem, 5vw, 3.6rem) quand le prix reviendra. */
+.vca-cta__price b { font-size: clamp(1.45rem, 2.6vw, 1.9rem); line-height: 1.15; letter-spacing: -.01em; color: var(--noir-jais); }
 .vca-cta__incl { display: flex; align-items: center; gap: .55rem; margin: 0 0 1.4rem; font-weight: 600; color: var(--epinette); }
 .vca-cta__btn { width: 100%; }
 .vca-cta__note { margin: 1rem 0 0; font-size: var(--fs-small); color: var(--granit); }

@@ -19,15 +19,15 @@
      - délai de traitement de la demande d'agrément bruxelloise (seul un délai
        de 10 jours pour un dossier INCOMPLET est confirmé) ;
      - frais de participation à l'examen centralisé bruxellois lui-même
-       (le seul montant confirmé est le droit de dossier de 50 € de la
-       demande d'AGRÉMENT, distinct de l'examen) ;
+       (le seul droit confirmé est le droit de dossier de la demande
+       d'AGRÉMENT — montant non affiché sur le site —, distinct de l'examen) ;
      - dates précises de sessions d'examen 2026 (celles trouvées proviennent
        du calendrier d'un centre de formation tiers, pas d'une page SPW
        propre : jamais affichées ici comme des sessions Wisy Safety).
 
-   PRIX WISY — volontairement séparé du benchmark concurrentiel : `PRICING`
-   reste `null` tant qu'aucun tarif réel n'est fourni par Wisy Safety (jamais
-   de prix inventé). Le benchmark ne sert qu'au POSITIONNEMENT commercial.
+   PRIX WISY : `PRICING` reste `null` tant qu'aucun tarif réel n'est fourni par
+   Wisy Safety (jamais de prix inventé). Aucun montant (ni Wisy, ni concurrent,
+   ni frais officiel) n'est affiché sur le site : tous les prix ont été retirés.
 
    ⚠️ Bruxelles Environnement liste actuellement 5 centres reconnus pour la
    formation « habitations individuelles » (Environment & Economics for Total
@@ -101,11 +101,7 @@
 
     pricing: {
       wisy: null, /* PEB_PRICING.wallonia — jamais de prix inventé, voir PEB_PRICING plus bas */
-      dossierFeeCents: null,
-      benchmark: [
-        { org: "Certinergie Academy", priceLabel: "1 050 € TTC", context: "formation wallonne annoncée en 2026", officialSource: false },
-        { org: "IFAPME Dinant", priceLabel: "1 390 €", context: "formation de 56 h / 8 jours annoncée en 2026", officialSource: false }
-      ]
+      dossierFeeCents: null
     },
 
     sessions: [], /* aucune session réelle connue : la section affiche l'état vide */
@@ -145,7 +141,7 @@
       steps: [
         { no: 1, title: "Suivre une formation reconnue", text: "Formation reconnue par Bruxelles Environnement. L'attestation de formation obtenue permet de s'inscrire à 2 séances d'examen maximum." },
         { no: 2, title: "Réussir l'examen centralisé", text: "Épreuve théorique et épreuve pratique, organisées par Bruxelles Environnement via sa plateforme officielle — attestation de réussite à la clé." },
-        { no: 3, title: "Introduire la demande d'agrément", text: "Dossier déposé auprès de Bruxelles Environnement : attestation de réussite (< 6 mois), preuve du droit de dossier (50 €), diplôme ou preuve d'expérience, extrait de casier judiciaire." },
+        { no: 3, title: "Introduire la demande d'agrément", text: "Dossier déposé auprès de Bruxelles Environnement : attestation de réussite (< 6 mois), preuve du droit de dossier, diplôme ou preuve d'expérience, extrait de casier judiciaire." },
         { no: 4, title: "Recevoir l'agrément", text: "Délivré par Bruxelles Environnement : il permet d'exercer comme certificateur PEB à Bruxelles." },
         { no: 5, title: "Apparaître au registre des certificateurs agréés", text: "Inscription au registre public bruxellois, condition pour exercer." }
       ]
@@ -161,9 +157,9 @@
     approval: {
       name: "Agrément de certificateur PEB — habitations individuelles (Bruxelles)",
       deliveredBy: "Bruxelles Environnement",
-      feeCents: 5000,
-      feeLabel: "50 €",
-      feeNote: "Droit de dossier de la demande d'agrément résidentiel — PAS le prix de la formation. Montant selon les informations actuellement publiées par Bruxelles Environnement ; susceptible d'être modifié par l'autorité compétente.",
+      feeCents: null,   /* montant du droit de dossier retiré du site */
+      feeLabel: null,
+      feeNote: "Droit de dossier de la demande d'agrément résidentiel — PAS le prix de la formation. Montant fixé par Bruxelles Environnement (non affiché ici) ; susceptible d'être modifié par l'autorité compétente.",
       note: "L'agrément bruxellois permet d'exercer uniquement à Bruxelles."
     },
 
@@ -193,11 +189,7 @@
 
     pricing: {
       wisy: null, /* PEB_PRICING.brussels — jamais de prix inventé, voir PEB_PRICING plus bas */
-      dossierFeeCents: 5000,
-      benchmark: [
-        { org: "Homegrade", priceLabel: "645 €", context: "formation PEB habitations individuelles annoncée en octobre 2026", officialSource: false },
-        { org: "Certinergie Academy", priceLabel: "745 € TVAC", context: "session Bruxelles / Overijse 2026", officialSource: false }
-      ]
+      dossierFeeCents: null   /* montant du droit de dossier retiré du site */
     },
 
     sessions: [],
@@ -304,12 +296,12 @@
     {
       id: "prix-formation",
       q: "Combien coûte une formation de certificateur PEB ?",
-      answer: "Le tarif de la formation Wisy Safety est communiqué sur demande pour la prochaine session, dans la Région choisie. Des ordres de grandeur observés chez d'autres organismes sont indiqués à titre de repère dans la section Tarifs, mais ne reflètent pas le tarif Wisy Safety."
+      answer: "Le tarif de la formation Wisy Safety est communiqué sur demande pour la prochaine session, dans la Région choisie."
     },
     {
       id: "prix-agrement-bruxelles",
       q: "Combien coûte la demande d'agrément à Bruxelles ?",
-      answer: "Un droit de dossier de 50 € s'applique actuellement à la demande d'agrément résidentiel, selon les informations publiées par Bruxelles Environnement. Ce montant est fixé par l'autorité compétente et peut évoluer — ce n'est pas le prix de la formation."
+      answer: "Un droit de dossier s'applique actuellement à la demande d'agrément résidentiel, selon les informations publiées par Bruxelles Environnement. Ce montant est fixé par l'autorité compétente et peut évoluer — ce n'est pas le prix de la formation."
     },
     {
       id: "duree-parcours",

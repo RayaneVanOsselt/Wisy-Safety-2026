@@ -76,8 +76,9 @@ test("formations mises en avant = registre du site (route, titre traduit, durée
     assert.ok(dur, url + " : durée affichée");
     assert.equal(I18N.fr[dur], f.duration, url + " : durée = registre (" + f.duration + ")");
   });
-  /* VCA Base : prix et faits confirmés du registre */
-  assert.equal(I18N.fr["home.vca_price"].replace(/ /g, " "), Trainings.vcaBase.price.amountCents / 100 + " € / personne");
+  /* VCA Base : tarif retiré (« En cours de préparation », aucun montant) et faits confirmés du registre */
+  assert.equal(Trainings.vcaBase.price, null); assert.equal(Trainings.vcaBase.pricePending, true);
+  assert.equal(I18N.fr["home.vca_price"], "En cours de préparation");
   ["dd.vca_base_dur", "dd.vca_base_fmt", "dd.vca_base_exam"].forEach((k) => assert.ok(MAIN.includes('data-i18n="' + k + '"'), k));
 });
 

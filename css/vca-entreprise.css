@@ -285,7 +285,8 @@
 .vcae-order__tag { padding: .28rem .8rem; border-radius: var(--radius-pill); background: var(--brume-14); font-family: var(--font-titre); font-weight: 600; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--epinette); }
 .vcae-order__t { margin: 0 0 1rem; font-size: clamp(1.2rem, 2vw, 1.5rem); line-height: 1.25; }
 .vcae-order__price { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem .7rem; margin: 0 0 .4rem; color: var(--granit); }
-.vcae-order__price strong { font-family: var(--font-titre); font-weight: 700; font-size: clamp(2.4rem, 4vw, 3.2rem); line-height: 1; color: var(--epinette); font-variant-numeric: tabular-nums; }
+/* Tarif retiré : « En cours de préparation » (texte à la place du montant) — corps réduit ; remettre clamp(2.4rem, 4vw, 3.2rem) quand le prix reviendra. */
+.vcae-order__price strong { font-family: var(--font-titre); font-weight: 700; font-size: clamp(1.35rem, 2.4vw, 1.75rem); line-height: 1.15; color: var(--epinette); font-variant-numeric: tabular-nums; }
 .vcae-order__note { margin: 0 0 1.2rem; font-size: var(--fs-small); color: var(--granit); }
 .vcae-order__row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1rem; border-block: 1px dashed var(--granit-20); }
 .vcae-order__lbl { font-family: var(--font-titre); font-weight: 600; }
@@ -295,7 +296,8 @@
 .vcae-qty__btn:disabled { opacity: .35; cursor: not-allowed; }
 .vcae-qty__val { min-width: 2.6rem; text-align: center; font-family: var(--font-titre); font-weight: 700; font-size: 1.25rem; font-variant-numeric: tabular-nums; }
 .vcae-order__total { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin: 1.1rem 0 1.3rem; color: var(--granit); }
-.vcae-order__total strong { font-family: var(--font-titre); font-weight: 700; font-size: 1.6rem; color: var(--noir-jais); font-variant-numeric: tabular-nums; }
+/* Tarif retiré : « En cours de préparation » à la place du total — corps réduit ; remettre 1.6rem quand le prix reviendra. */
+.vcae-order__total strong { font-family: var(--font-titre); font-weight: 700; font-size: 1.05rem; text-align: right; color: var(--noir-jais); font-variant-numeric: tabular-nums; }
 .vcae-order__cta { width: 100%; padding-block: 1.05rem; font-size: 1.05rem; }
 .vcae-order__q { margin: 1rem 0 0; font-size: var(--fs-small); color: var(--granit); text-align: center; }
 .vcae-order__q a { color: var(--epinette); font-weight: 600; text-decoration: underline; text-underline-offset: .2em; }

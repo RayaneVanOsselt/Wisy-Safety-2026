@@ -346,14 +346,14 @@
       if (f) {
         intro = "Une question sur la formation « " + f.title + " » ? Je peux vous en résumer les points clés ou vous aider à vous inscrire.";
         suggestions = ["Durée de cette formation", "Comment m’inscrire ?", "Voir d’autres formations", "Contacter Wisy Safety"];
-        if (f.priceLabel && f.subtypes) {
+        if ((f.priceLabel || f.pricePending) && f.subtypes) {
           /* fiche riche (tarif + types de nacelles connus) : questions les plus utiles d'abord */
           suggestions = ["Quel est le tarif ?", "Durée de cette formation", "Quels types de nacelles ?", "Comment m’inscrire ?"];
         } else if (f.official && f.official.regulation) {
           suggestions = ["Suis-je concerné ?", "La formation est-elle obligatoire ?", "Comment m’inscrire ?", "Contacter Wisy Safety"];
         } else if (f.official && f.official.exam && !(f.exam && f.exam.included)) {
           suggestions = ["Comment se passe l’examen ?", "Combien de temps le diplôme est-il valable ?", "Comment m’inscrire ?", "Contacter Wisy Safety"];
-        } else if (f.priceLabel && f.exam && f.exam.included) {
+        } else if ((f.priceLabel || f.pricePending) && f.exam && f.exam.included) {
           /* fiche à examen inclus (VCA Base) : tarif, examen, prochaines sessions, inscription */
           suggestions = ["Quel est le tarif ?", "L’examen est-il inclus ?", "Prochaines sessions", "Comment m’inscrire ?"];
         }
@@ -547,7 +547,9 @@
       if (priceFaq) return faqResponse(priceFaq.top.item, priceFaq);
       var px = faqExtras("faq-tarifs-prix");
       return {
-        message: mentioned && /^formation-[a-z0-9-]+\.html$/.test(String(mentioned.url).split("#")[0])
+        message: mentioned && mentioned.pricePending
+          ? "Le tarif de la formation « " + mentioned.title + " » est en cours de préparation : il n’est pas encore affiché sur le site. L’équipe Wisy Safety peut vous renseigner sur demande ; je ne peux pas vous donner de montant."
+          : mentioned && /^formation-[a-z0-9-]+\.html$/.test(String(mentioned.url).split("#")[0])
           ? "Le tarif de la formation « " + mentioned.title + " » n’est pas affiché sur sa page : l’équipe Wisy Safety vous le communique sur demande, selon la formule et le nombre de participants. Je ne peux pas vous donner de montant non confirmé."
           : (mentioned ? "À propos de la formation « " + mentioned.title + " » :\n" : "") +
           faqText("faq-tarifs-prix", "Les tarifs dépendent de la formation. Contactez-nous pour recevoir un tarif adapté à votre besoin."),

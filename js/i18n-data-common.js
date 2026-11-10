@@ -868,4 +868,16 @@
   m("ro", {"dd.vca_hier_full": "Curs VCA pentru personalul de conducere (VOL-VCA)", "dd.vca_hier_summary": "Pentru șefii de echipă și cadrele de conducere: pregătire pentru examenul oficial VOL-VCA.", "dd.vca_hier_f1": "Diplomă VOL-VCA valabilă 10 ani", "dd.vca_hier_f2": "14 teme oficiale", "dd.diiso_full": "Curs diizocianați și substanțe periculoase", "dd.diiso_summary": "Necesar din 24 august 2023 pentru utilizarea industrială sau profesională a produselor cu 0,1 % sau mai mult diizocianați.", "dd.diiso_f1": "Necesar din 24 august 2023", "dd.diiso_f2": "Regulamentul (UE) 2020/1149", "dd.fibre_full": "Curs fibră optică", "dd.fibre_summary": "Racordare, sudare prin fuziune și măsurători OTDR, pe trei niveluri și șase module.", "dd.fibre_f1": "3 niveluri · 6 module", "dd.fibre_f2": "4 formate la alegere"});
   m("it", {"dd.vca_hier_full": "Corso VCA per responsabili (VOL-VCA)", "dd.vca_hier_summary": "Per capisquadra e responsabili: preparazione all'esame ufficiale VOL-VCA.", "dd.vca_hier_f1": "Diploma VOL-VCA valido 10 anni", "dd.vca_hier_f2": "14 temi ufficiali", "dd.diiso_full": "Corso diisocianati e sostanze pericolose", "dd.diiso_summary": "Richiesta dal 24 agosto 2023 per l'uso industriale o professionale di prodotti con lo 0,1 % o più di diisocianati.", "dd.diiso_f1": "Richiesta dal 24 agosto 2023", "dd.diiso_f2": "Regolamento (UE) 2020/1149", "dd.fibre_full": "Corso fibra ottica", "dd.fibre_summary": "Giunzione, fusione e misure OTDR, in tre livelli e sei moduli.", "dd.fibre_f1": "3 livelli · 6 moduli", "dd.fibre_f2": "4 formati a scelta"});
   m("sl", {"dd.vca_hier_full": "Usposabljanje VCA za vodstvo (VOL-VCA)", "dd.vca_hier_summary": "Za vodje skupin in nadzornike: priprava na uradni izpit VOL-VCA.", "dd.vca_hier_f1": "Diploma VOL-VCA, veljavna 10 let", "dd.vca_hier_f2": "14 uradnih tem", "dd.diiso_full": "Usposabljanje o diizocianatih in nevarnih snoveh", "dd.diiso_summary": "Zahtevano od 24. avgusta 2023 za industrijsko ali poklicno uporabo izdelkov z 0,1 % ali več diizocianatov.", "dd.diiso_f1": "Zahtevano od 24. avgusta 2023", "dd.diiso_f2": "Uredba (EU) 2020/1149", "dd.fibre_full": "Usposabljanje za optična vlakna", "dd.fibre_summary": "Priključevanje, fuzijsko spajanje in meritve OTDR, v treh ravneh in šestih modulih.", "dd.fibre_f1": "3 ravni · 6 modulov", "dd.fibre_f2": "4 oblike po izbiri"});
+
+  /* Tarifs retirés du site : « En cours de préparation » à la place du prix (parcours d'inscription, recherche, VCA Entreprise, BEPS…). */
+  m("fr", { "price.pending": "En cours de préparation" });
+  m("en", { "price.pending": "In preparation" });
+  m("nl", { "price.pending": "In voorbereiding" });
+  m("af", { "price.pending": "In voorbereiding" });
+  m("ar", { "price.pending": "قيد الإعداد" });
+  m("bg", { "price.pending": "В процес на подготовка" });
+  m("de", { "price.pending": "In Vorbereitung" });
+  m("ro", { "price.pending": "În curs de pregătire" });
+  m("it", { "price.pending": "In preparazione" });
+  m("sl", { "price.pending": "V pripravi" });
 })();

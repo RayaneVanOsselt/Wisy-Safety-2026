@@ -179,7 +179,7 @@
   }
 
   /* ======================================================================
-     BARRE D'ACTION MOBILE — « VCA Base — 225 € · S'inscrire », après le hero, jamais en même temps que le bloc
+     BARRE D'ACTION MOBILE — « VCA Base — En cours de préparation · S'inscrire », après le hero, jamais en même temps que le bloc
      d'inscription (déjà un gros bouton). Lève le launcher de l'assistant (body.vca-bar-active, voir le CSS).
      ====================================================================== */
   function initStickyBar() {

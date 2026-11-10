@@ -201,7 +201,7 @@ const NODES = {
     return node;
   },
   /* Service « VCA Entreprise » — faits du registre js/trainings-data.js (`vcaEntreprise`), tous affichés sur la page. Le prix est
-     celui du registre (« tarif indicatif » par participant, statut TVA non précisé : jamais de `valueAddedTaxIncluded`). Aucun
+     celui du registre quand il est publié (statut TVA non précisé : jamais de `valueAddedTaxIncluded`). Aucun
      `areaServed`, aucune note, aucun avis : rien qui ne soit établi. */
   service: (doc, meta) => {
     const S = Trainings.vcaEntreprise;
@@ -215,10 +215,11 @@ const NODES = {
       image: ORIGIN + "/" + S.images.og,
       provider: { "@id": ORG_ID },
       audience: { "@type": "BusinessAudience", audienceType: "Entreprises qui interviennent chez des donneurs d'ordre" },
-      offers: {
+      /* Offre : uniquement si un tarif est publié (`price` non nul). Tarif retiré / en cours de préparation → aucune offre. */
+      ...(S.price ? { offers: {
         "@type": "Offer", url: Site.absoluteUrl(doc.file), price: String(S.price.amountCents / 100), priceCurrency: S.price.currency,
         priceSpecification: { "@type": "UnitPriceSpecification", price: String(S.price.amountCents / 100), priceCurrency: S.price.currency, unitText: "participant" }
-      }
+      } } : {})
     };
   },
   /* WiSy Coordination — service générique décrit sur la page, aucun fait propre à Wisy Safety

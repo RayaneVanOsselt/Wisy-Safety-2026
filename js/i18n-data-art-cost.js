@@ -19,7 +19,7 @@
     "a1.h_compare": "Comparer les prix : les bonnes questions",
     "a1.h_fund": "Qui peut financer la formation ?",
     "a1.h_list": "Avant de vous inscrire",
-    "a1.tarif_p1": "La formation VCA Base de Wisy Safety coûte 225 € par personne, examen inclus. Elle se déroule en présentiel, sur une journée, dans notre centre d'Anderlecht (Bruxelles).",
+    "a1.tarif_p1": "Le tarif de la formation VCA Base de Wisy Safety, examen inclus, est en cours de préparation. Elle se déroule en présentiel, sur une journée, dans notre centre d'Anderlecht (Bruxelles).",
     "a1.tarif_p2": "Le tarif est indiqué par personne. Pour le statut TVA, consultez la rubrique « Tarifs &amp; paiement » du <a href=\"faq.html#faq-tarifs-tva\">Centre d'aide</a>.",
     "a1.cmp_intro": "Deux formations VCA à des prix différents ne se valent pas forcément. Avant de comparer, posez toujours ces questions.",
     "a1.cmp_1_t": "L'examen est-il inclus ?",
@@ -48,7 +48,7 @@
     "a1.chk_5": "Vous savez qui paie : vous, votre employeur ou un fonds.",
     "a1.chk_6": "Vous avez demandé les conditions de repassage.",
     "a1.callout": "Bon à savoir : un diplôme VCA appartient à son titulaire. L'employeur n'a pas le droit de le retenir si vous changez d'emploi, même s'il a payé la formation (BeSaCC-VCA).",
-    "a1.cta_p": "La formation VCA Base de Wisy Safety : 225 € par personne, examen inclus.",
+    "a1.cta_p": "La formation VCA Base de Wisy Safety : tarif en cours de préparation, examen inclus.",
     "a1.next_t": "Les erreurs fréquentes à l'examen VCA et comment les éviter",
     "a1.img_alt": "Équipe en gilets de sécurité réunie autour d'une table de travail, avec des documents et un panneau d'évaluation des risques"
   });
@@ -65,7 +65,7 @@
     "a1.h_compare": "Comparing prices: the right questions",
     "a1.h_fund": "Who can fund the course?",
     "a1.h_list": "Before you register",
-    "a1.tarif_p1": "Wisy Safety's VCA Basic course costs €225 per person, exam included. It takes place in person, over one day, at our centre in Anderlecht (Brussels).",
+    "a1.tarif_p1": "The price of Wisy Safety's VCA Basic course, exam included, is in preparation. It takes place in person, over one day, at our centre in Anderlecht (Brussels).",
     "a1.tarif_p2": "The price is per person. For the VAT status, see the “Fees &amp; payment” section of the <a href=\"faq.html#faq-tarifs-tva\">Help centre</a>.",
     "a1.cmp_intro": "Two VCA courses at different prices are not necessarily equivalent. Before comparing, always ask these questions.",
     "a1.cmp_1_t": "Is the exam included?",
@@ -94,7 +94,7 @@
     "a1.chk_5": "You know who pays: you, your employer or a fund.",
     "a1.chk_6": "You have asked about the conditions for retaking the exam.",
     "a1.callout": "Good to know: a VCA diploma belongs to its holder. Your employer has no right to withhold it if you change jobs, even if they paid for the course (BeSaCC-VCA).",
-    "a1.cta_p": "Wisy Safety's VCA Basic course: €225 per person, exam included.",
+    "a1.cta_p": "Wisy Safety's VCA Basic course: price in preparation, exam included.",
     "a1.next_t": "Common mistakes in the VCA exam and how to avoid them",
     "a1.img_alt": "Team in safety vests gathered around a work table, with documents and a risk assessment board"
   });
@@ -111,7 +111,7 @@
     "a1.h_compare": "Prijzen vergelijken: de juiste vragen",
     "a1.h_fund": "Wie kan de opleiding financieren?",
     "a1.h_list": "Voor u zich inschrijft",
-    "a1.tarif_p1": "De opleiding VCA Basis van Wisy Safety kost 225 € per persoon, examen inbegrepen. Ze vindt plaats op locatie, over één dag, in ons centrum in Anderlecht (Brussel).",
+    "a1.tarif_p1": "De prijs van de opleiding VCA Basis van Wisy Safety, examen inbegrepen, is in voorbereiding. Ze vindt plaats op locatie, over één dag, in ons centrum in Anderlecht (Brussel).",
     "a1.tarif_p2": "Het tarief is per persoon. Voor het btw-statuut, raadpleeg de rubriek “Tarieven &amp; betaling” van het <a href=\"faq.html#faq-tarifs-tva\">Helpcentrum</a>.",
     "a1.cmp_intro": "Twee VCA-opleidingen tegen verschillende prijzen zijn niet noodzakelijk gelijkwaardig. Stel voor u vergelijkt altijd deze vragen.",
     "a1.cmp_1_t": "Is het examen inbegrepen?",
@@ -140,7 +140,7 @@
     "a1.chk_5": "U weet wie betaalt: uzelf, uw werkgever of een fonds.",
     "a1.chk_6": "U hebt de voorwaarden voor het opnieuw afleggen van het examen opgevraagd.",
     "a1.callout": "Goed om te weten: een VCA-diploma is eigendom van de houder. De werkgever heeft niet het recht het achter te houden als u van baan verandert, zelfs als hij de opleiding heeft betaald (BeSaCC-VCA).",
-    "a1.cta_p": "De opleiding VCA Basis van Wisy Safety: 225 € per persoon, examen inbegrepen.",
+    "a1.cta_p": "De opleiding VCA Basis van Wisy Safety: prijs in voorbereiding, examen inbegrepen.",
     "a1.next_t": "Veelgemaakte fouten bij het VCA-examen en hoe u ze vermijdt",
     "a1.img_alt": "Team in veiligheidsvesten rond een werktafel, met documenten en een bord voor risicobeoordeling"
   });
@@ -157,7 +157,7 @@
     "a1.h_compare": "Pryse vergelyk: die regte vrae",
     "a1.h_fund": "Wie kan die opleiding befonds?",
     "a1.h_list": "Voordat u inskryf",
-    "a1.tarif_p1": "Wisy Safety se VCA Basis-opleiding kos 225 € per persoon, eksamen ingesluit. Dit vind in persoon plaas, oor een dag, by ons sentrum in Anderlecht (Brussel).",
+    "a1.tarif_p1": "Die prys van Wisy Safety se VCA Basis-opleiding, eksamen ingesluit, is in voorbereiding. Dit vind in persoon plaas, oor een dag, by ons sentrum in Anderlecht (Brussel).",
     "a1.tarif_p2": "Die prys is per persoon. Vir die BTW-status, raadpleeg die afdeling “Tariewe &amp; betaling” van die <a href=\"faq.html#faq-tarifs-tva\">Hulpsentrum</a>.",
     "a1.cmp_intro": "Twee VCA-opleidings teen verskillende pryse is nie noodwendig gelykwaardig nie. Stel altyd hierdie vrae voordat u vergelyk.",
     "a1.cmp_1_t": "Is die eksamen ingesluit?",
@@ -186,7 +186,7 @@
     "a1.chk_5": "U weet wie betaal: u, u werkgewer of 'n fonds.",
     "a1.chk_6": "U het na die voorwaardes vir die herskryf van die eksamen navraag gedoen.",
     "a1.callout": "Goed om te weet: 'n VCA-diploma behoort aan sy houer. Die werkgewer het nie die reg om dit terug te hou as u van werk verander nie, selfs al het hy vir die opleiding betaal (BeSaCC-VCA).",
-    "a1.cta_p": "Wisy Safety se VCA Basis-opleiding: 225 € per persoon, eksamen ingesluit.",
+    "a1.cta_p": "Wisy Safety se VCA Basis-opleiding: prys in voorbereiding, eksamen ingesluit.",
     "a1.next_t": "Algemene foute in die VCA-eksamen en hoe om dit te vermy",
     "a1.img_alt": "Span in veiligheidsvestte om 'n werktafel, met dokumente en 'n risiko-assesseringsbord"
   });
@@ -203,7 +203,7 @@
     "a1.h_compare": "مقارنة الأسعار: الأسئلة الصحيحة",
     "a1.h_fund": "من يمكنه تمويل الدورة؟",
     "a1.h_list": "قبل التسجيل",
-    "a1.tarif_p1": "تكلّف دورة VCA الأساسي لدى Wisy Safety مبلغ 225 يورو للشخص، والامتحان مشمول. وتُقام حضورياً على مدى يوم واحد في مركزنا في أندرلخت (بروكسل).",
+    "a1.tarif_p1": "سعر دورة VCA الأساسي لدى Wisy Safety، والامتحان مشمول، قيد الإعداد. وتُقام حضورياً على مدى يوم واحد في مركزنا في أندرلخت (بروكسل).",
     "a1.tarif_p2": "السعر للشخص الواحد. بخصوص وضع ضريبة القيمة المضافة، راجع قسم «الأسعار والدفع» في <a href=\"faq.html#faq-tarifs-tva\">مركز المساعدة</a>.",
     "a1.cmp_intro": "دورتا VCA بسعرين مختلفين ليستا بالضرورة متكافئتين. قبل المقارنة، اطرح دائماً هذه الأسئلة.",
     "a1.cmp_1_t": "هل الامتحان مشمول؟",
@@ -232,7 +232,7 @@
     "a1.chk_5": "أنت تعرف من يدفع: أنت أو صاحب العمل أو صندوق.",
     "a1.chk_6": "لقد استفسرت عن شروط إعادة الامتحان.",
     "a1.callout": "من المفيد أن تعلم: دبلوم VCA ملك لحامله. وليس لصاحب العمل الحق في الاحتفاظ به إذا غيّرت وظيفتك، حتى لو دفع تكاليف الدورة (BeSaCC-VCA).",
-    "a1.cta_p": "دورة VCA الأساسي لدى Wisy Safety: 225 يورو للشخص، والامتحان مشمول.",
+    "a1.cta_p": "دورة VCA الأساسي لدى Wisy Safety: السعر قيد الإعداد، والامتحان مشمول.",
     "a1.next_t": "الأخطاء الشائعة في امتحان VCA وكيفية تجنّبها",
     "a1.img_alt": "فريق يرتدي سترات السلامة مجتمع حول طاولة عمل مع مستندات ولوحة لتقييم المخاطر"
   });
@@ -249,7 +249,7 @@
     "a1.h_compare": "Сравняване на цените: правилните въпроси",
     "a1.h_fund": "Кой може да финансира обучението?",
     "a1.h_list": "Преди да се запишете",
-    "a1.tarif_p1": "Обучението VCA основи на Wisy Safety струва 225 € на човек, включително изпита. Провежда се присъствено, за един ден, в нашия център в Андерлехт (Брюксел).",
+    "a1.tarif_p1": "Цената на обучението VCA основи на Wisy Safety, включително изпита, е в процес на подготовка. Провежда се присъствено, за един ден, в нашия център в Андерлехт (Брюксел).",
     "a1.tarif_p2": "Цената е на човек. За статута по ДДС вижте рубриката „Цени и плащане“ в <a href=\"faq.html#faq-tarifs-tva\">Помощния център</a>.",
     "a1.cmp_intro": "Две обучения по VCA на различни цени не са непременно равностойни. Преди да сравнявате, винаги задавайте тези въпроси.",
     "a1.cmp_1_t": "Включен ли е изпитът?",
@@ -278,7 +278,7 @@
     "a1.chk_5": "Знаете кой плаща: вие, работодателят ви или фонд.",
     "a1.chk_6": "Попитали сте за условията за повторно полагане на изпита.",
     "a1.callout": "Добре е да знаете: дипломата VCA е собственост на титуляра си. Работодателят няма право да я задържа, ако смените работата си, дори да е платил обучението (BeSaCC-VCA).",
-    "a1.cta_p": "Обучението VCA основи на Wisy Safety: 225 € на човек, включително изпита.",
+    "a1.cta_p": "Обучението VCA основи на Wisy Safety: цената е в процес на подготовка, включително изпита.",
     "a1.next_t": "Честите грешки на изпита VCA и как да ги избегнете",
     "a1.img_alt": "Екип с предпазни жилетки около работна маса, с документи и табло за оценка на риска"
   });
@@ -295,7 +295,7 @@
     "a1.h_compare": "Preise vergleichen: die richtigen Fragen",
     "a1.h_fund": "Wer kann die Schulung finanzieren?",
     "a1.h_list": "Bevor Sie sich anmelden",
-    "a1.tarif_p1": "Die Schulung VCA Grundlagen von Wisy Safety kostet 225 € pro Person, Prüfung inklusive. Sie findet in Präsenz an einem Tag in unserem Zentrum in Anderlecht (Brüssel) statt.",
+    "a1.tarif_p1": "Der Preis der Schulung VCA Grundlagen von Wisy Safety, Prüfung inklusive, ist in Vorbereitung. Sie findet in Präsenz an einem Tag in unserem Zentrum in Anderlecht (Brüssel) statt.",
     "a1.tarif_p2": "Der Preis gilt pro Person. Zum Mehrwertsteuerstatus siehe den Bereich „Preise &amp; Zahlung“ im <a href=\"faq.html#faq-tarifs-tva\">Hilfe-Center</a>.",
     "a1.cmp_intro": "Zwei VCA-Schulungen zu unterschiedlichen Preisen sind nicht zwingend gleichwertig. Stellen Sie vor einem Vergleich immer diese Fragen.",
     "a1.cmp_1_t": "Ist die Prüfung inklusive?",
@@ -324,7 +324,7 @@
     "a1.chk_5": "Sie wissen, wer bezahlt: Sie selbst, Ihr Arbeitgeber oder ein Fonds.",
     "a1.chk_6": "Sie haben sich nach den Bedingungen für eine Wiederholung erkundigt.",
     "a1.callout": "Gut zu wissen: Ein VCA-Diplom gehört seinem Inhaber. Der Arbeitgeber darf es nicht einbehalten, wenn Sie den Job wechseln, auch wenn er die Schulung bezahlt hat (BeSaCC-VCA).",
-    "a1.cta_p": "Die Schulung VCA Grundlagen von Wisy Safety: 225 € pro Person, Prüfung inklusive.",
+    "a1.cta_p": "Die Schulung VCA Grundlagen von Wisy Safety: Preis in Vorbereitung, Prüfung inklusive.",
     "a1.next_t": "Häufige Fehler bei der VCA-Prüfung und wie Sie sie vermeiden",
     "a1.img_alt": "Team in Warnwesten um einen Arbeitstisch, mit Unterlagen und einer Tafel zur Risikobeurteilung"
   });
@@ -341,7 +341,7 @@
     "a1.h_compare": "Compararea prețurilor: întrebările potrivite",
     "a1.h_fund": "Cine poate finanța cursul?",
     "a1.h_list": "Înainte de a vă înscrie",
-    "a1.tarif_p1": "Cursul VCA de bază de la Wisy Safety costă 225 € pe persoană, examen inclus. Se desfășoară cu prezență fizică, pe parcursul unei zile, în centrul nostru din Anderlecht (Bruxelles).",
+    "a1.tarif_p1": "Prețul cursului VCA de bază de la Wisy Safety, examen inclus, este în curs de pregătire. Se desfășoară cu prezență fizică, pe parcursul unei zile, în centrul nostru din Anderlecht (Bruxelles).",
     "a1.tarif_p2": "Tariful este pe persoană. Pentru statutul TVA, consultați rubrica „Tarife și plată” din <a href=\"faq.html#faq-tarifs-tva\">Centrul de ajutor</a>.",
     "a1.cmp_intro": "Două cursuri VCA la prețuri diferite nu sunt neapărat echivalente. Înainte de a compara, puneți întotdeauna aceste întrebări.",
     "a1.cmp_1_t": "Este inclus examenul?",
@@ -370,7 +370,7 @@
     "a1.chk_5": "Știți cine plătește: dumneavoastră, angajatorul sau un fond.",
     "a1.chk_6": "Ați cerut condițiile de re-susținere a examenului.",
     "a1.callout": "Bine de știut: o diplomă VCA aparține titularului ei. Angajatorul nu are dreptul să o rețină dacă schimbați locul de muncă, chiar dacă a plătit formarea (BeSaCC-VCA).",
-    "a1.cta_p": "Cursul VCA de bază de la Wisy Safety: 225 € pe persoană, examen inclus.",
+    "a1.cta_p": "Cursul VCA de bază de la Wisy Safety: preț în curs de pregătire, examen inclus.",
     "a1.next_t": "Greșelile frecvente la examenul VCA și cum le puteți evita",
     "a1.img_alt": "Echipă în veste de protecție, adunată în jurul unei mese de lucru, cu documente și un panou de evaluare a riscurilor"
   });
@@ -387,7 +387,7 @@
     "a1.h_compare": "Confrontare i prezzi: le domande giuste",
     "a1.h_fund": "Chi può finanziare il corso?",
     "a1.h_list": "Prima di iscriverti",
-    "a1.tarif_p1": "Il corso VCA base di Wisy Safety costa 225 € a persona, esame incluso. Si svolge in presenza, in una giornata, nel nostro centro di Anderlecht (Bruxelles).",
+    "a1.tarif_p1": "Il prezzo del corso VCA base di Wisy Safety, esame incluso, è in preparazione. Si svolge in presenza, in una giornata, nel nostro centro di Anderlecht (Bruxelles).",
     "a1.tarif_p2": "La tariffa è per persona. Per lo status IVA, consulta la sezione «Tariffe e pagamento» del <a href=\"faq.html#faq-tarifs-tva\">Centro assistenza</a>.",
     "a1.cmp_intro": "Due corsi VCA a prezzi diversi non si equivalgono necessariamente. Prima di confrontare, poni sempre queste domande.",
     "a1.cmp_1_t": "L'esame è incluso?",
@@ -416,7 +416,7 @@
     "a1.chk_5": "Sai chi paga: tu, il tuo datore di lavoro o un fondo.",
     "a1.chk_6": "Hai chiesto le condizioni per ripetere l'esame.",
     "a1.callout": "Da sapere: un diploma VCA appartiene al suo titolare. Il datore di lavoro non ha il diritto di trattenerlo se cambi lavoro, anche se ha pagato il corso (BeSaCC-VCA).",
-    "a1.cta_p": "Il corso VCA base di Wisy Safety: 225 € a persona, esame incluso.",
+    "a1.cta_p": "Il corso VCA base di Wisy Safety: prezzo in preparazione, esame incluso.",
     "a1.next_t": "Gli errori frequenti all'esame VCA e come evitarli",
     "a1.img_alt": "Squadra in giubbotti di sicurezza riunita attorno a un tavolo di lavoro, con documenti e un pannello di valutazione dei rischi"
   });
@@ -433,7 +433,7 @@
     "a1.h_compare": "Primerjava cen: prava vprašanja",
     "a1.h_fund": "Kdo lahko financira usposabljanje?",
     "a1.h_list": "Preden se prijavite",
-    "a1.tarif_p1": "Usposabljanje VCA osnovni podjetja Wisy Safety stane 225 € na osebo, izpit vključen. Poteka v živo, en dan, v našem centru v Anderlechtu (Bruselj).",
+    "a1.tarif_p1": "Cena usposabljanja VCA osnovni podjetja Wisy Safety, izpit vključen, je v pripravi. Poteka v živo, en dan, v našem centru v Anderlechtu (Bruselj).",
     "a1.tarif_p2": "Cena je na osebo. Za status DDV glejte rubriko „Cene in plačilo“ v <a href=\"faq.html#faq-tarifs-tva\">Centru za pomoč</a>.",
     "a1.cmp_intro": "Dve usposabljanji VCA po različnih cenah nista nujno enakovredni. Preden primerjate, vedno postavite ta vprašanja.",
     "a1.cmp_1_t": "Je izpit vključen?",
@@ -462,7 +462,7 @@
     "a1.chk_5": "Veste, kdo plača: vi, vaš delodajalec ali sklad.",
     "a1.chk_6": "Pozanimali ste se o pogojih za ponovno opravljanje izpita.",
     "a1.callout": "Dobro je vedeti: diploma VCA pripada svojemu imetniku. Delodajalec je ne sme zadržati, če zamenjate službo, tudi če je usposabljanje plačal (BeSaCC-VCA).",
-    "a1.cta_p": "Usposabljanje VCA osnovni podjetja Wisy Safety: 225 € na osebo, izpit vključen.",
+    "a1.cta_p": "Usposabljanje VCA osnovni podjetja Wisy Safety: cena v pripravi, izpit vključen.",
     "a1.next_t": "Pogoste napake pri izpitu VCA in kako se jim izogniti",
     "a1.img_alt": "Ekipa v varnostnih brezrokavnikih ob delovni mizi z dokumenti in tablo za oceno tveganj"
   });

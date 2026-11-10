@@ -80,7 +80,7 @@
   /* Champs de fiche utiles à l'assistant (les champs d'affichage propres à la recherche — miniature,
      faits clés, mots-clés bruts — restent dans le registre). */
   var FORMATION_FIELDS = ["id", "title", "fullTitle", "titleKey", "category", "url", "signupUrl", "duration", "level",
-    "description", "descKey", "objective", "price", "priceUnit", "priceLabel", "format", "venue", "languages", "audience", "subtypes",
+    "description", "descKey", "objective", "price", "pricePending", "priceUnit", "priceLabel", "format", "venue", "languages", "audience", "subtypes",
     "exam", "certification", "official", "unconfirmed", "unconfirmedClaims", "features", "keywords"];
   var FORMATIONS = (Site ? Site.formations() : []).map(function (f) {
     var e = { type: "formation" };

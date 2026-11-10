@@ -113,7 +113,8 @@
     if (T.types && T.types.length) { e.subtypes = T.types.map(function (t) { return t.name; }); }
     if (T.unconfirmed) { e.unconfirmed = T.unconfirmed.slice(); }
     if (T.unconfirmedClaims) { e.unconfirmedClaims = T.unconfirmedClaims.slice(); }
-    if (T.price) { e.price = T.price; }                                   /* prix non confirmé (null) : champ absent, jamais affirmé */
+    if (T.price) { e.price = T.price; }                                   /* prix non confirmé / retiré (null) : champ absent, jamais affirmé */
+    if (T.pricePending === true && !T.price) { e.pricePending = true; }   /* tarif retiré en attendant sa publication : « En cours de préparation » */
     if (T.priceUnit) { e.priceUnit = T.priceUnit; }
     if (T.venue) { e.venue = T.venue; }
     if (T.exam) { e.exam = { included: T.exam.included === true }; }
@@ -147,6 +148,7 @@
       url: S.url, signupUrl: S.signupUrl, contactUrl: S.contactUrl,
       description: S.summary, objective: S.objective,
       price: S.price, priceLabel: Trainings.formatPrice(S.price), priceUnit: S.priceUnit, priceIndicative: S.priceIndicative === true,
+      pricePending: S.pricePending === true && !S.price,
       audience: S.audience.slice(), sectors: S.sectors.slice(),
       levels: S.levels.map(function (l) { return l.label; }),
       searchKeywords: S.keywords.concat(S.searchExtra || []),
@@ -203,7 +205,7 @@
     {
       id: "article-vca-cout", kind: "article", published: "2026-09-26", modified: "2026-09-26", url: "article-vca-cout-financement.html", title: "Combien coûte une formation VCA et qui peut la financer ?",
       titleKey: "search.page_art_cost_t", descKey: "search.page_art_cost_d",
-      content: "Article : ce qu'il faut vérifier avant de comparer le prix d'une formation VCA, et où se renseigner sur les aides possibles en Belgique (employeur, Constructiv, Actiris, Bruxelles Formation). Tarif Wisy Safety : 225 € par personne, examen inclus.",
+      content: "Article : ce qu'il faut vérifier avant de comparer le prix d'une formation VCA, et où se renseigner sur les aides possibles en Belgique (employeur, Constructiv, Actiris, Bruxelles Formation). Tarif Wisy Safety : en cours de préparation (examen inclus).",
       keywords: ["cout", "prix", "tarif", "combien", "financement", "financer", "aide", "aides", "subvention", "prise en charge", "employeur", "constructiv", "actiris", "bruxelles formation", "demandeur d'emploi", "vca", "article", "conseil", "kosten", "financiering", "cost", "funding"]
     },
     {

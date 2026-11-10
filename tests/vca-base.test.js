@@ -35,11 +35,10 @@ const LANGS = ["fr", "en", "nl", "af", "ar", "bg", "de", "ro", "it", "sl"];
 test("registre : la VCA Base est une formation à page dédiée, construite depuis js/trainings-data.js", () => {
   const f = Site.formation("vca-base");
   assert.equal(f.url, PAGE); assert.equal(f.dedicatedPage, true); assert.equal(f.signupUrl, "inscription.html?formation=vca-base");
-  assert.equal(V.price.amountCents, 22500); assert.equal(V.price.currency, "EUR"); assert.equal(V.priceUnit, "participant");
-  assert.equal(V.price.vatIncluded, null, "statut TVA NON confirmé : ni HT ni TTC n'est inventé");
+  assert.equal(V.price, null, "tarif retiré du site : aucun montant dans le registre"); assert.equal(V.pricePending, true); assert.equal(V.priceUnit, "participant");
   assert.equal(V.durationDays, 1); assert.equal(V.exam.included, true); assert.equal(V.formatLabel, "Présentiel"); assert.equal(V.venue, "centre");
   assert.equal(V.languages, null, "langues NON confirmées (l'ancienne page citait FR/EN/NL sans preuve)");
-  assert.equal(f.priceLabel, "225 €"); assert.equal(f.languages, undefined);
+  assert.equal(f.priceLabel, null, "aucun libellé de prix"); assert.equal(f.pricePending, true); assert.equal(f.languages, undefined);
   assert.equal(V.certification, "Certification VCA après réussite de l'examen");
   ["agréé", "agrément", "accrédité", "reconnu internationalement", "taux de réussite"].forEach((c) => assert.ok(V.unconfirmedClaims.includes(c), "affirmation non confirmée déclarée : " + c));
 });
@@ -91,20 +90,20 @@ test("images : dimensions déclarées, texte alternatif, image principale jamais
 });
 
 /* ------------------------------------------------------------------ faits affichés = registre */
-test("le prix, la durée, le format et le lieu affichés sont ceux du registre (une seule valeur, jamais recopiée à la main)", () => {
+test("le tarif (« en cours de préparation »), la durée, le format et le lieu affichés sont ceux du registre — aucun montant sur la page", () => {
   const t = TEXT[PAGE];
-  A.match(t, /225\s*€\s*\/\s*personne/); A.match(t, /Présentiel/); A.match(t, /1 jour/);
+  A.match(t, /Tarif en cours de préparation/); A.match(t, /Prix\s+En cours de préparation/); A.match(t, /Présentiel/); A.match(t, /1 jour/);
   assert.ok(t.includes(FAQ.CONTACT.street + ", " + FAQ.CONTACT.postalCode + " " + FAQ.CONTACT.city), "adresse = coordonnées de la FAQ");
   A.match(t, /Examen\s+Inclus dans le tarif/);
   const PRICE = /\b\d{1,3}(?:\.\d{3})*(?:,\d{2})?\s?€/g;
   const allPrices = [...(t.match(PRICE) || [])].map((p) => p.replace(/\s/g, ""));
-  allPrices.forEach((p) => assert.equal(p, "225€", "un seul tarif sur la page : " + p));
-  [ART1, ART2].forEach((f) => [...(TEXT[f].match(PRICE) || [])].forEach((p) => assert.equal(p.replace(/\s/g, ""), "225€", f + " : " + p)));
-  /* dictionnaire français = HTML (garde de dérive, déjà testé page par page dans i18n-static) + prix du registre */
-  assert.equal(I18N.fr["fo.f1c"], "225 € / personne");
-  assert.ok(Trainings.formatPrice(V.price) === "225 €");
+  assert.deepEqual(allPrices, [], "aucun montant en euros sur la page");
+  [ART1, ART2].forEach((f) => assert.deepEqual([...(TEXT[f].match(PRICE) || [])], [], f + " : aucun montant en euros"));
+  /* dictionnaire français = HTML (garde de dérive, déjà testé page par page dans i18n-static) + tarif retiré du registre */
+  assert.equal(I18N.fr["fo.f1c"], "Tarif en cours de préparation");
+  assert.equal(Trainings.formatPrice(V.price), null);
   const reg = read("js/registration-data.js");
-  A.match(reg, /VCA_BASE\.price\.amountCents/, "le parcours d'inscription lit le prix dans le registre");
+  A.match(reg, /priceCents:\s*registryPriceCents\("vcaBase"\)/, "le parcours d'inscription lit le tarif dans le registre");
   A.doesNotMatch(reg.replace(/\/\*[\s\S]*?\*\//g, ""), /22500/, "aucun prix figé dans registration-data.js (hors commentaire)");
 });
 
@@ -114,7 +113,7 @@ test("catalogue (formations.html) : la carte VCA Base mène à la page dédiée,
   assert.equal((card.match(/href="formation-vca-base\.html"/g) || []).length, 2, "carte entière + bouton");
   A.doesNotMatch(card, /inscription\.html\?formation=vca-base/, "plus de renvoi direct vers l'inscription depuis la carte");
   assert.ok(card.includes(V.summary), "description = résumé du registre");
-  A.match(card, /Examen inclus/); A.match(card, /Présentiel à Anderlecht/); A.match(card, /225 € \/ personne/);
+  A.match(card, /Examen inclus/); A.match(card, /Présentiel à Anderlecht/); A.match(card, /Tarif en cours de préparation/); A.doesNotMatch(card, /\d\s?€/, "aucun montant dans la carte");
   A.doesNotMatch(card, /Certification reconnue|reconnue au niveau national/, "ancienne promesse retirée");
 });
 

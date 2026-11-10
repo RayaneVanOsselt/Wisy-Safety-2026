@@ -15,10 +15,11 @@ const read = (p) => fs.readFileSync(path.join(ROOT, p), "utf8");
 const exists = (p) => fs.existsSync(path.join(ROOT, p));
 const BANNED = /CACES|R486|certifi|agr[ée]{1,2}|reconnu|obligatoire/i;
 
-test("nacelle : faits confirmés par Wisy Safety (durée, prix HT, langues, format, public)", () => {
+test("nacelle : faits confirmés par Wisy Safety (durée, langues, format, public) ; tarif retiré (« En cours de préparation »)", () => {
   assert.equal(N.durationDays, 1);
-  assert.deepEqual(N.price, { amountCents: 35000, currency: "EUR", vatIncluded: false });
-  assert.equal(Trainings.formatPrice(N.price), "350 € HT");
+  assert.equal(N.price, null, "aucun montant dans le registre");
+  assert.equal(N.pricePending, true, "tarif en cours de préparation");
+  assert.equal(Trainings.formatPrice(N.price), null);
   assert.equal(Trainings.formatDuration(N.durationDays), "1 jour");
   assert.deepEqual(N.languages, ["fr", "nl", "en"]);
   assert.deepEqual(N.languageLabels, ["Français", "Néerlandais", "Anglais"]);
@@ -51,21 +52,20 @@ test("VÉRACITÉ : aucune certification / CACES / agrément dans les faits du re
   ["CACES", "certification", "agrément", "obligatoire"].forEach((w) => assert.ok(N.unconfirmed.indexOf(w) !== -1, w));
 });
 
-test("page : les faits affichés (prix, durée, langues, format) = registre", () => {
+test("page : les faits affichés (tarif « en cours de préparation », durée, langues, format) = registre", () => {
   const html = read(N.url);
-  assert.ok(html.includes('data-i18n="nac.price_value">' + Trainings.formatPrice(N.price) + "<"), "prix");
+  assert.ok(html.includes('data-i18n="nac.price_value">En cours de préparation<'), "tarif en cours de préparation");
+  assert.doesNotMatch(html, /\d\s*(€|&euro;|&nbsp;€)/, "aucun montant en euros sur la page");
   assert.ok(html.includes('data-i18n="dd.nacelle_dur">' + Trainings.formatDuration(N.durationDays) + "<"), "durée");
   N.languageLabels.forEach((l) => assert.ok(html.includes(">" + l + "<"), "langue " + l));
   assert.ok(html.includes('data-i18n="dd.nacelle_fmt">' + N.formatLabel + "<"), "format");
 });
 
-test("page : JSON-LD exact (Course + BreadcrumbList) — prix HT, durée, langues, aucune note ni certification", () => {
+test("page : JSON-LD exact (Course + BreadcrumbList) — durée, langues, aucune offre ni prix, aucune note ni certification", () => {
   const html = read(N.url);
   const ld = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
   const course = ld["@graph"].filter((x) => x["@type"] === "Course")[0];
-  assert.equal(course.offers.price, String(N.price.amountCents / 100));
-  assert.equal(course.offers.priceCurrency, "EUR");
-  assert.equal(course.offers.priceSpecification.valueAddedTaxIncluded, false);
+  assert.ok(!("offers" in course), "aucune offre (tarif retiré)");
   assert.equal(course.timeRequired, "P" + N.durationDays + "D");
   assert.deepEqual(course.inLanguage, N.languages);
   assert.ok(!("aggregateRating" in course) && !("review" in course) && !("educationalCredentialAwarded" in course));
@@ -107,26 +107,28 @@ test("miroir serveur (Edge Function) : la nacelle du fichier généré .ts = reg
   const n = formations.find((f) => f.id === "nacelle");
   assert.ok(n, "entrée nacelle trouvée");
   assert.equal(n.title, N.title); assert.equal(n.url, N.url); assert.equal(n.signupUrl, N.signupUrl);
-  assert.equal(n.duration, Trainings.formatDuration(N.durationDays)); assert.equal(n.priceLabel, Trainings.formatPrice(N.price));
+  assert.equal(n.duration, Trainings.formatDuration(N.durationDays)); assert.ok(!("priceLabel" in n), "aucun tarif dans la copie serveur");
   assert.equal(n.format, N.formatLabel); assert.equal(n.category, N.category);
   assert.deepEqual(n.languages, N.languageLabels); assert.deepEqual(n.audience, N.audience); assert.deepEqual(n.subtypes, N.types.map((t) => t.name));
   assert.match(n.content, /AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer/, "consigne d'interdiction");
   assert.doesNotMatch(n.content.replace(/AUCUNE certification[^.]*\./i, ""), /caces|certifi/i, "aucune affirmation non confirmée");
   assert.doesNotMatch(n.keywords.join(" "), /caces|certifi/i, "mots-clés");
-  formations.filter((f) => !["nacelle", "beps", "vca-base"].includes(f.id)).forEach((f) => assert.ok(!("priceLabel" in f), "pas de prix inventé : " + f.id));
-  /* VCA Base : tarif du registre, statut TVA non précisé → la consigne interdit d'écrire « HT » / « TTC » ; agrément non affirmé */
+  formations.forEach((f) => assert.ok(!("priceLabel" in f), "aucun prix dans la copie serveur : " + f.id));
+  assert.match(n.content, /EN COURS DE PRÉPARATION : aucun montant/, "consigne : tarif en cours de préparation");
+  /* VCA Base : tarif retiré (« en cours de préparation ») ; agrément non affirmé */
   const v = formations.find((f) => f.id === "vca-base"), V = Trainings.vcaBase;
-  assert.ok(v, "entrée VCA Base trouvée"); assert.equal(v.priceLabel, Trainings.formatPrice(V.price)); assert.equal(v.url, V.url);
-  assert.match(v.content, /Le statut TVA \(HT ou TTC\) du tarif n'est PAS précisé/);
+  assert.ok(v, "entrée VCA Base trouvée"); assert.equal(v.url, V.url);
+  assert.match(v.content, /EN COURS DE PRÉPARATION : aucun montant/);
   assert.match(v.content, /L'examen est inclus/);
   assert.match(v.content, new RegExp(V.official.exam.questions + " questions, " + V.official.exam.minutes + " minutes"));
   assert.match(v.content, /NON CONFIRMÉ \(ne jamais l'affirmer\) : agréé/);
 });
 
-test("inscription : le prix de la nacelle vient du registre (plus de valeur figée)", () => {
+test("inscription : le tarif de la nacelle vient du registre (aucune valeur figée) — « En cours de préparation »", () => {
   const reg = read("js/registration-data.js");
-  assert.match(reg, /priceCents:\s*NACELLE \? NACELLE\.price\.amountCents : null/);
-  assert.doesNotMatch(reg, /24500/);
+  assert.match(reg, /priceCents:\s*registryPriceCents\("nacelles"\)/);
+  assert.match(reg, /pricePending:\s*registryPending\("nacelles"\)/);
+  assert.doesNotMatch(reg, /24500|35000/);
 });
 
 test("recherche : l'entrée nacelle est bâtie sur le registre (page dédiée, miniature, faits)", () => {

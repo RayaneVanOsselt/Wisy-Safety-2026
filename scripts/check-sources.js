@@ -56,7 +56,7 @@ function run() {
     FORBIDDEN.forEach((re) => { if (re.test(visible)) errors.push(p + " : formulation interdite de l'ancien site → " + re); });
     for (const m of html.matchAll(/href="(https?:\/\/[^"]+)"/g)) {
       const u = m[1].replace(/&amp;/g, "&");
-      if (/^https:\/\/www\.wisysafety\.be\//.test(u)) continue;      // canonical / partage (domaine du site)
+      if (/^https:\/\/(www\.)?wisysafety\.be\//.test(u)) continue;   // canonical / partage (domaine du site, avec ou sans « www »)
       if (/^https:\/\/www\.google\.com\/maps/.test(u)) continue;
       extLinks.add(u);
       if (!known.has(u)) errors.push(p + " : lien externe non tracé dans js/sources-data.js → " + u);

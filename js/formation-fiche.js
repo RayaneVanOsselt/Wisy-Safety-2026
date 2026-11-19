@@ -87,15 +87,8 @@
     const results = Array.from(form.querySelectorAll("[data-fx-result]"));
     const live = form.querySelector("[data-fx-live]");
     const value = (name) => { const c = form.querySelector('input[name="' + name + '"]:checked'); return c ? c.value : null; };
-    const outcome = () => {
-      const size = value("cp3-size"), risk = value("cp3-risk");
-      if (!size) return null;
-      if (size === "lt20") return "c";
-      if (size === "gt1000") return "a";
-      if (!risk) return null;
-      if (risk !== "no") return "risk";
-      return size === "lt200" ? "c" : "b";
-    };
+    /* La règle vit dans le registre (js/trainings-data.js : cp3Outcome), testée par tests/cp3.test.js. */
+    const outcome = () => (window.WisyTrainings && window.WisyTrainings.cp3Outcome ? window.WisyTrainings.cp3Outcome(value("cp3-size"), value("cp3-risk")) : null);
     const render = () => {
       const id = outcome();
       results.forEach((r) => { r.hidden = r.getAttribute("data-fx-result") !== id; });

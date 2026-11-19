@@ -14,7 +14,7 @@
 .fxt-hero--cp3 .fx-bc { padding-bottom: clamp(1.5rem, 4vw, 2.75rem); }
 .fxt-hero--cp3 .fxt-hero__grid { display: grid; gap: clamp(2rem, 4vw, 4rem); align-items: center; padding-bottom: clamp(2.25rem, 5vw, 4rem); }
 @media (min-width: 1024px) { .fxt-hero--cp3 .fxt-hero__grid { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); } }
-.fxt-hero--cp3 .fx-kicker { color: var(--sarcelle); }
+.fxt-hero--cp3 .fx-kicker { color: var(--epinette); }
 .fxt-hero--cp3 .fx-kicker::before { width: 12px; height: 12px; border-radius: 3px; background: var(--sarcelle); }
 .fxt-hero--cp3 .fx-h1 { font-size: clamp(2.1rem, 4.7vw, 3.75rem); line-height: 1.04; letter-spacing: -.03em; max-width: 16ch; }
 .fxt-hero--cp3 .fx-h1 .fx-mark { color: var(--epinette); }
@@ -23,7 +23,7 @@
 /* L'extrait du Code : une fiche de registre, onglet sarcelle */
 .fxt-hero--cp3 .fx-plate { border: 1px solid var(--granit-20); border-radius: var(--cp3-radius); box-shadow: var(--shadow-md); padding: 0; background: #fff; overflow: hidden; }
 .fxt-hero--cp3 .fx-plate__ref { margin: 0; padding: 1rem 1.25rem; background: var(--sarcelle); color: #fff; font-size: clamp(1.05rem, 1.6vw, 1.25rem); }
-.fxt-hero--cp3 .fx-plate__ref small { color: rgba(255, 255, 255, .85); }
+.fxt-hero--cp3 .fx-plate__ref small { color: #fff; }
 .fxt-hero--cp3 .fx-plate dl { padding: .25rem 1.25rem; }
 .fxt-hero--cp3 .fx-plate__row { grid-template-columns: 8.5rem minmax(0, 1fr); align-items: baseline; padding-block: .95rem; }
 .fxt-hero--cp3 .fx-plate dt { font-size: clamp(1.15rem, 1.8vw, 1.45rem); white-space: nowrap; color: var(--epinette); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
@@ -52,9 +52,9 @@
 /* ---------- Sections : titres numérotés, sources en marge sur grand écran ---------- */
 .fx-theme--cp3 .fx-sec { border-top: 0; padding-block: clamp(2.25rem, 5vw, 3.75rem); }
 .fx-theme--cp3 .fx-sec__head { padding-top: .9rem; border-top: 2px solid var(--cp3-rule); margin-bottom: 1.5rem; }
-.fx-theme--cp3 .fx-num { color: var(--sarcelle); font-size: .95rem; letter-spacing: .02em; }
+.fx-theme--cp3 .fx-num { color: var(--epinette); font-size: .95rem; letter-spacing: .02em; }
 .fx-theme--cp3 .fx-sec__head h2 { font-size: clamp(1.5rem, 2.7vw, 2.15rem); letter-spacing: -.02em; line-height: 1.15; }
-.fx-theme--cp3 .fx-steps > li::before { color: var(--sarcelle); }
+.fx-theme--cp3 .fx-steps > li::before { color: var(--epinette); }
 @media (min-width: 1200px) {
   .fx-theme--cp3 .fx-sec { display: grid; grid-template-columns: minmax(0, 1fr) 17rem; column-gap: clamp(2.5rem, 4vw, 4.5rem); align-items: start; }
   .fx-theme--cp3 .fx-sec > * { grid-column: 1; }
@@ -88,7 +88,7 @@
 
 /* § 05 — Parcours : la première étape (ce cours) est mise en avant */
 .fx-theme--cp3 .fx-path > li:first-child { background: var(--brume-08); border-color: var(--sarcelle); }
-.fx-theme--cp3 .fx-path__step { color: var(--sarcelle); }
+.fx-theme--cp3 .fx-path__step { color: var(--epinette); }
 
 /* § 06 — Encadré « liste du SPF » */
 .cp3-callout { max-width: var(--fx-col); padding: 1.15rem 1.35rem; border: 1px solid var(--granit-20); border-inline-start: 5px solid var(--sarcelle); border-radius: var(--cp3-radius); background: #fff; }
@@ -103,3 +103,8 @@
 /* Bandeau final : le filet des groupes revient en tête */
 .fx-theme--cp3 .fx-final { position: relative; overflow: hidden; margin-bottom: clamp(2.5rem, 5vw, 4rem); padding-top: calc(clamp(1.5rem, 4vw, 2.5rem) + 8px); }
 .fx-theme--cp3 .fx-final::before { content: ""; position: absolute; inset: 0 0 auto; height: 8px; background: linear-gradient(90deg, var(--noir-jais) 0 25%, var(--epinette) 25% 50%, var(--sarcelle) 50% 75%, var(--turquoise) 75% 100%); }
+
+/* Focus clavier (WCAG 2.2, contraste d'un indicateur ≥ 3:1) : l'anneau « brume » du socle fait ≈ 2,8:1 sur la crème → épinette (≈ 6:1) sur les
+   fonds clairs ; le turquoise du socle est conservé sur les fonds sombres (outil, bandeau final). */
+.fx-theme--cp3 :focus-visible, .fx-theme--cp3 .fx-check__opts label:has(input:focus-visible), .fx-mobile-bar :focus-visible { outline-color: var(--epinette); }
+.fx-theme--cp3 .fxt-dark :focus-visible, .fx-theme--cp3 .fxt-dark label:has(input:focus-visible), .fx-theme--cp3 .fx-final :focus-visible { outline-color: var(--turquoise); }

@@ -41,6 +41,13 @@ supprimée ; le site affiche à la place ce que dit réellement la source) · **
 | DOC-CISCO-CCNA | Professional | Cisco Systems | CCNA — exams and training | https://www.cisco.com/site/us/en/learn/training-certifications/certifications/enterprise/ccna/index.html |
 | DOC-KBO-WISY | Official | SPF Économie — Banque-Carrefour des Entreprises (BCE, KBO Public Search) | Entité enregistrée 1027.725.391 — WISY — *Situation au 30 septembre 2026 : ACTIF ; forme légale ASBL depuis le 14 septembre 2025 ; dénomination « WISY » ; siège Avenue d'Itterbeek 378 bte 1, 1070 Anderlecht.* | https://kbopub.economie.fgov.be/kbopub-m/enterprise/1027725391 |
 | DOC-WISY-LEGACY | Primary (Wisy Safety) | Wisy Safety — ancien site (wisysafety.be) | Pages fibre-optique, produit-dangereux, vca-ligne-hierarchique et bordereau /sinscrire/ (archives : content/_legacy/) — *Données internes PUBLIÉES par Wisy Safety, mais contradictoires entre elles (prix, durées) : seul le contenu pédagogique (niveaux, modules, formats, publics, conseils) est repris ; tout chiffre interne reste « à confirmer par écrit ».* | https://wisysafety.be/ |
+| DOC-SPF-CP-FORMATION | Official | SPF Emploi, Travail et Concertation sociale | Formation et recyclage des conseillers en prévention | https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-et |
+| DOC-SPF-CP-NOTIFICATION | Official | SPF Emploi, Travail et Concertation sociale | Procédure d'inscription sur la liste des établissements qui dispensent des cours de base pour conseillers en prévention (niveau III) | https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-1 |
+| DOC-SPF-CP-LISTE | Official | SPF Emploi, Travail et Concertation sociale | Notification : liste des institutions qui dispensent des cours de base pour les conseillers en prévention (niveau III) — *Liste alphabétique lue en entier le 2026-11-19 : l'entrée « Wisy asbl » — Avenue d'Itterbeek 378 bte 1, 1070 Anderlecht, info@wisysafety.be, https://wisysafety.be, langue : français — y figure (entre « Welzijn-op-School vzw » et « ZAWM Eupen »). Page sans date de mise à jour. Le SPF parle de « notification » et de « liste » pour le niveau III, jamais d'« agrément » (réservé aux niveaux I et II).* | https://emploi.belgique.be/fr/agrements/notification-liste-des-institutions-qui-dispensent-des-cours-de-base-pour-les-conseillers |
+| DOC-SPF-SIPP | Official | SPF Emploi, Travail et Concertation sociale | Service interne pour la prévention et la protection au travail | https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/service-interne-pour-la-prevention-et-la |
+| DOC-SPF-SIPP-EN | Official | FPS Employment, Labour and Social Dialogue | Internal service for prevention and protection at work (anglais) | https://werk.belgie.be/en/themes/well-being-workers/internal-service-prevention-and-protection-work |
+| DOC-CODE-II-1 | Official | SPF Emploi, Travail et Concertation sociale | Code du bien-être au travail, livre II, titre 1 — Le service interne pour la prévention et la protection au travail (PDF) | https://werk.belgie.be/sites/default/files/content/documents/Bien-%C3%AAtre%20au%20travail/R%C3%A9glementation/Code%20livre%20II%20titre%201%20SIPP.pdf |
+| DOC-CODE-II-4 | Official | SPF Emploi, Travail et Concertation sociale | Code du bien-être au travail, livre II, titre 4 — Formation et recyclage des conseillers en prévention (PDF) | https://werk.belgie.be/sites/default/files/content/documents/Bien-%C3%AAtre%20au%20travail/R%C3%A9glementation/Code%20livre%20II%20titre%204%20Formation%20et%20recyclage%20des%20conseillers%20en%20pr%C3%A9vention.pdf |
 
 ## Affirmations publiées
 
@@ -893,6 +900,196 @@ supprimée ; le site affiche à la place ce que dit réellement la source) · **
 **Passage justificatif** — Tableau : « 50/125 microns (OM3, G.651.1) … Optimized for 850 nm VCSELs » ; « 50/125 microns (OM4, G.651.1) … Optimized for 850 nm VCSELs, higher speed »
 
 **Consulté le** — 2026-10-01
+
+**Statut** — Verified
+
+### SRC-CP3-001
+
+**Affirmation publiée** — L'employeur organise un service interne pour la prévention et la protection au travail, avec au moins un conseiller en prévention ; à partir de 20 travailleurs, ce conseiller est un travailleur sous contrat de travail ; en dessous, l'employeur peut exercer lui-même la fonction.
+
+*Pages* : formation-conseiller-prevention-niveau-3.html · *langues* : 10 (traductions : docs/translations-review.md)
+
+**Source** — Service interne pour la prévention et la protection au travail — SPF Emploi, Travail et Concertation sociale — https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/service-interne-pour-la-prevention-et-la
+
+**Type** — Official
+
+**Passage justificatif** — « un employeur sans comité et occupant plus de vingt travailleurs = un service avec au minimum un conseiller en prévention. Cette personne est toujours un travailleur occupé sous contrat de travail. »
+
+**Consulté le** — 2026-10-01
+
+**Deuxième source** — Code du bien-être au travail, livre II, titre 1 — Le service interne pour la prévention et la protection au travail (PDF) — SPF Emploi, Travail et Concertation sociale — https://werk.belgie.be/sites/default/files/content/documents/Bien-%C3%AAtre%20au%20travail/R%C3%A9glementation/Code%20livre%20II%20titre%201%20SIPP.pdf — 2026-10-01 — Art. II.1-2, § 1er : « Le groupe D comprend les employeurs qui occupent moins de 20 travailleurs et où l'employeur occupe lui-même la fonction de conseiller en prévention. »
+
+**Statut** — Verified
+
+### SRC-CP3-002
+
+**Affirmation publiée** — Art. II.1-20 : connaissance suffisante de la législation sur le bien-être et connaissances techniques et scientifiques, notamment : 1° analyse des risques ; 2° coordination des activités de prévention ; 3° hygiène ; 4° premiers secours et danger grave et immédiat ; 5° missions des conseillers en prévention ; 6° rédaction des rapports.
+
+*Pages* : formation-conseiller-prevention-niveau-3.html · *langues* : 10 (traductions : docs/translations-review.md)
+
+**Source** — Code du bien-être au travail, livre II, titre 1 — Le service interne pour la prévention et la protection au travail (PDF) — SPF Emploi, Travail et Concertation sociale — https://werk.belgie.be/sites/default/files/content/documents/Bien-%C3%AAtre%20au%20travail/R%C3%A9glementation/Code%20livre%20II%20titre%201%20SIPP.pdf
+
+**Type** — Official
+
+**Passage justificatif** — « Les conseillers en prévention disposent d'une connaissance suffisante de la législation en matière de bien-être … Ces connaissances ont notamment trait : 1° aux techniques relatives à l'analyse des risques ; 2° à la coordination des activités de prévention … ; 3° aux mesures relatives à l'hygiène sur les lieux de travail ; 4° à l'organisation des premiers secours … ; 5° aux missions des conseillers en prévention … ; 6° au mode de rédaction des rapports. »
+
+**Consulté le** — 2026-10-01
+
+**Deuxième source** — Formation et recyclage des conseillers en prévention — SPF Emploi, Travail et Concertation sociale — https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-et — 2026-10-01 — « Tous les conseillers en prévention doivent au moins disposer d'une connaissance de base suffisante en matière de bien-être au travail … (art. II.1-20 du code) »
+
+**Statut** — Verified
+
+### SRC-CP3-003
+
+**Affirmation publiée** — Formation complémentaire minimale : groupe A — niveau I (direction), niveau II (autres) ; groupe B — niveau II (direction) ; groupes C et D — aucune formation complémentaire, connaissances de base.
+
+*Pages* : formation-conseiller-prevention-niveau-3.html · *langues* : 10 (traductions : docs/translations-review.md)
+
+**Source** — Formation et recyclage des conseillers en prévention — SPF Emploi, Travail et Concertation sociale — https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-et
+
+**Type** — Official
+
+**Passage justificatif** — Tableau « Formation complémentaire minimale » : A — Niveau I / Niveau II ; B — Niveau II / * ; C — * / *
+
+**Consulté le** — 2026-10-01
+
+**Statut** — Verified
+
+### SRC-CP3-004
+
+**Affirmation publiée** — Art. II.4-24 : le conseiller qui a suivi le cours de base dans un établissement figurant sur la liste publiée par le Ministre est réputé satisfaire à l'art. II.1-20.
+
+*Pages* : formation-conseiller-prevention-niveau-3.html · *langues* : 10 (traductions : docs/translations-review.md)
+
+**Source** — Code du bien-être au travail, livre II, titre 4 — Formation et recyclage des conseillers en prévention (PDF) — SPF Emploi, Travail et Concertation sociale — https://werk.belgie.be/sites/default/files/content/documents/Bien-%C3%AAtre%20au%20travail/R%C3%A9glementation/Code%20livre%20II%20titre%204%20Formation%20et%20recyclage%20des%20conseillers%20en%20pr%C3%A9vention.pdf
+
+**Type** — Official
+
+**Passage justificatif** — Art. II.4-24 : cours de base suivi dans un établissement « figurant sur une liste de cours publiée par le Ministre »
+
+**Consulté le** — 2026-10-01
+
+**Deuxième source** — Procédure d'inscription sur la liste des établissements qui dispensent des cours de base pour conseillers en prévention (niveau III) — SPF Emploi, Travail et Concertation sociale — https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-1 — 2026-10-01 — « Procédure d'inscription sur la liste des établissements qui dispensent des cours de base pour conseillers en prévention (niveau III) »
+
+**Statut** — Verified
+
+### SRC-CP3-005
+
+**Affirmation publiée** — Art. II.4-25 : contenu conforme à l'art. II.1-20, chargés de cours ayant une expérience pratique, 40 heures minimum, équipements appropriés, attestation de participation.
+
+*Pages* : formation-conseiller-prevention-niveau-3.html · *langues* : 10 (traductions : docs/translations-review.md)
+
+**Source** — Code du bien-être au travail, livre II, titre 4 — Formation et recyclage des conseillers en prévention (PDF) — SPF Emploi, Travail et Concertation sociale — https://werk.belgie.be/sites/default/files/content/documents/Bien-%C3%AAtre%20au%20travail/R%C3%A9glementation/Code%20livre%20II%20titre%204%20Formation%20et%20recyclage%20des%20conseillers%20en%20pr%C3%A9vention.pdf
+
+**Type** — Official
+
+**Passage justificatif** — Art. II.4-25, 1° à 5° : « 40 heures minimum » (3°) ; chargés de cours « ayant une expérience pratique dans les matières enseignées » (2°) ; « une attestation de participation » (5°)
+
+**Consulté le** — 2026-10-01
+
+**Statut** — Verified
+
+### SRC-CP3-006
+
+**Affirmation publiée** — L'établissement inscrit délivre une attestation de participation aux élèves du cours de base.
+
+*Pages* : formation-conseiller-prevention-niveau-3.html · *langues* : 10 (traductions : docs/translations-review.md)
+
+**Source** — Code du bien-être au travail, livre II, titre 4 — Formation et recyclage des conseillers en prévention (PDF) — SPF Emploi, Travail et Concertation sociale — https://werk.belgie.be/sites/default/files/content/documents/Bien-%C3%AAtre%20au%20travail/R%C3%A9glementation/Code%20livre%20II%20titre%204%20Formation%20et%20recyclage%20des%20conseillers%20en%20pr%C3%A9vention.pdf
+
+**Type** — Official
+
+**Passage justificatif** — Art. II.4-25, 5° : délivrer aux élèves « une attestation de participation »
+
+**Consulté le** — 2026-10-01
+
+**Deuxième source** — Procédure d'inscription sur la liste des établissements qui dispensent des cours de base pour conseillers en prévention (niveau III) — SPF Emploi, Travail et Concertation sociale — https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-1 — 2026-10-01 — Contenu de la demande : « Modèle d'attestation de participation »
+
+**Statut** — Verified
+
+### SRC-CP3-007
+
+**Affirmation publiée** — Tout conseiller en prévention a le droit et le devoir de se recycler chaque année ; la réglementation ne fixe pas le volume du recyclage, convenu avec l'employeur (3 jours recommandés pour les niveaux I et II).
+
+*Pages* : formation-conseiller-prevention-niveau-3.html · *langues* : 10 (traductions : docs/translations-review.md)
+
+**Source** — Formation et recyclage des conseillers en prévention — SPF Emploi, Travail et Concertation sociale — https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-et
+
+**Type** — Official
+
+**Passage justificatif** — Recyclage : chaque conseiller « a le droit et le devoir » de se recycler chaque année ; volume non fixé, à convenir avec l'employeur ; trois jours recommandés pour les niveaux I et II
+
+**Consulté le** — 2026-10-01
+
+**Statut** — Verified
+
+### SRC-CP3-008
+
+**Affirmation publiée** — Groupes (art. II.1-2) : A plus de 1 000 travailleurs ; B 200 à 1 000 ; C moins de 200 ; D moins de 20 avec l'employeur conseiller ; seuils abaissés pour certains secteurs (ex. 50 travailleurs dans la construction pour le groupe B).
+
+*Pages* : formation-conseiller-prevention-niveau-3.html · *langues* : 10 (traductions : docs/translations-review.md)
+
+**Source** — Code du bien-être au travail, livre II, titre 1 — Le service interne pour la prévention et la protection au travail (PDF) — SPF Emploi, Travail et Concertation sociale — https://werk.belgie.be/sites/default/files/content/documents/Bien-%C3%AAtre%20au%20travail/R%C3%A9glementation/Code%20livre%20II%20titre%201%20SIPP.pdf
+
+**Type** — Official
+
+**Passage justificatif** — Art. II.1-2, § 1er : « Le groupe B comprend les employeurs : 1° occupant entre 200 et 1.000 travailleurs … » ; « Le groupe C comprend les employeurs qui occupent moins de 200 travailleurs et qui ne figurent pas dans les groupes A et B. »
+
+**Consulté le** — 2026-10-01
+
+**Deuxième source** — Internal service for prevention and protection at work (anglais) — FPS Employment, Labour and Social Dialogue — https://werk.belgie.be/en/themes/well-being-workers/internal-service-prevention-and-protection-work — 2026-10-01 — « … 50 workers for the construction sector … Group C includes employers with fewer than 200 workers who do not have specific risks »
+
+**Statut** — Verified
+
+### SRC-CP3-009
+
+**Affirmation publiée** — Art. II.4-4, § 4 : les candidats qui ont suivi le cours de base et justifient d'au moins cinq ans d'expérience pratique utile dans un service interne ou externe peuvent être admis à la formation de niveau II.
+
+*Pages* : formation-conseiller-prevention-niveau-3.html · *langues* : 10 (traductions : docs/translations-review.md)
+
+**Source** — Code du bien-être au travail, livre II, titre 4 — Formation et recyclage des conseillers en prévention (PDF) — SPF Emploi, Travail et Concertation sociale — https://werk.belgie.be/sites/default/files/content/documents/Bien-%C3%AAtre%20au%20travail/R%C3%A9glementation/Code%20livre%20II%20titre%204%20Formation%20et%20recyclage%20des%20conseillers%20en%20pr%C3%A9vention.pdf
+
+**Type** — Official
+
+**Passage justificatif** — Art. II.4-4, § 4 : candidats « qui ont suivi le cours de base visé à l'article II.4-24 et qui font preuve d'une expérience pratique utile d'au moins cinq ans dans un service interne ou externe »
+
+**Consulté le** — 2026-10-01
+
+**Statut** — Verified
+
+### SRC-CP3-010
+
+**Affirmation publiée** — Wisy Safety figure, sous le nom « Wisy asbl » (Avenue d'Itterbeek 378, Anderlecht), sur la liste publiée par le SPF Emploi des établissements qui dispensent le cours de base de conseiller en prévention (niveau III) — constat du 19/11/2026.
+
+*Pages* : formation-conseiller-prevention-niveau-3.html · *langues* : 10 (traductions : docs/translations-review.md)
+
+**Source** — Notification : liste des institutions qui dispensent des cours de base pour les conseillers en prévention (niveau III) — SPF Emploi, Travail et Concertation sociale — https://emploi.belgique.be/fr/agrements/notification-liste-des-institutions-qui-dispensent-des-cours-de-base-pour-les-conseillers
+
+**Type** — Official
+
+**Passage justificatif** — Entrée de la liste : « Wisy asbl — Avenue d'Itterbeek 378 Boîte 1, 1070 Anderlecht — info@wisysafety.be — https://wisysafety.be — français »
+
+**Consulté le** — 2026-10-01
+
+**Deuxième source** — Entité enregistrée 1027.725.391 — WISY — SPF Économie — Banque-Carrefour des Entreprises (BCE, KBO Public Search) — https://kbopub.economie.fgov.be/kbopub-m/enterprise/1027725391 — 2026-10-01 — BCE 1027.725.391 : dénomination « WISY », ASBL, siège Avenue d'Itterbeek 378 bte 1, 1070 Anderlecht (même adresse que l'entrée de la liste)
+
+**Statut** — Verified
+
+### SRC-CP3-011
+
+**Affirmation publiée** — Art. II.4-26 et II.4-27 : la demande d'inscription sur la liste vaut engagement de respecter les conditions de l'art. II.4-25 ; l'établissement qui ne les respecte plus après contrôle est rayé de la liste.
+
+*Pages* : formation-conseiller-prevention-niveau-3.html · *langues* : 10 (traductions : docs/translations-review.md)
+
+**Source** — Code du bien-être au travail, livre II, titre 4 — Formation et recyclage des conseillers en prévention (PDF) — SPF Emploi, Travail et Concertation sociale — https://werk.belgie.be/sites/default/files/content/documents/Bien-%C3%AAtre%20au%20travail/R%C3%A9glementation/Code%20livre%20II%20titre%204%20Formation%20et%20recyclage%20des%20conseillers%20en%20pr%C3%A9vention.pdf
+
+**Type** — Official
+
+**Passage justificatif** — Art. II.4-26 : « Par l'introduction de la demande, l'institution s'engage à respecter les conditions visées à l'article II.4-25. » ; art. II.4-27 : l'établissement qui ne satisfait plus aux conditions « est rayé de la liste »
+
+**Consulté le** — 2026-10-01
+
+**Deuxième source** — Procédure d'inscription sur la liste des établissements qui dispensent des cours de base pour conseillers en prévention (niveau III) — SPF Emploi, Travail et Concertation sociale — https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-1 — 2026-10-01 — « La demande de notification est envoyée de préférence par e-mail » ; « Si la demande est complète et correcte sur le fond, l'établissement sera inscrit sur la liste »
 
 **Statut** — Verified
 

@@ -86,3 +86,20 @@ Chaque décision donne : le choix, la raison, et ce qu'il faudrait faire pour la
     Entreprise : le guide `docs/README-VCA-ENTREPRISE.md` est absent, et deux contrôles de `site-content.test.js`
     attendent l'entrée `vca-entreprise` dans des listes dérivées du registre. Non corrigés : hors périmètre. Aucun test existant
     n'a été affaibli : les attentes modifiées remplacent des durées non confirmées par des faits sourcés.
+
+# Décisions — formation « Conseiller en prévention niveau III » (CP3, 19/11/2026)
+
+21. **Une fiche « thème registre »** (`css/fiche-cp3.css`) sur le socle `fx-`, comme les trois fiches du 01/10 : la plaque du Code tient lieu
+    d'image, outil « Quel niveau pour mon entreprise ? » (groupes A–D, art. II.1-2) dont la règle vit dans le registre
+    (`cp3Outcome`, testée), pas dans le script de la page.
+22. **Wisy Safety figure sur la liste du SPF Emploi** (entrée « Wisy asbl », constat du 19/11/2026, `SRC-CP3-010`). La première version de la
+    page disait le contraire : la liste, longue, avait été lue en partie. Conséquence : la page l'affirme, avec date, lien et nature
+    exacte de l'inscription (notification, retirable après contrôle). Le drapeau `official.spfListed` du registre la pilote ; un test échoue
+    si la page affirme ce que le registre ne confirme pas.
+23. **Mots interdits, même une fois inscrite** : « agréé / agrément » (le SPF les réserve aux niveaux I et II), « reconnu par le SPF »
+    (le Code dit « jugé avoir satisfait », art. II.4-24), « certificat officiel » (le Code prévoit une attestation de participation,
+    art. II.4-25). Tests : `tests/cp3.test.js`.
+24. **Prix, durée de session, langue(s), dates : « sur demande »** (« Sur devis » à l'inscription). « 40 heures » n'est affiché que comme
+    minimum légal (art. II.4-25, 3°). La liste du SPF indique « français » pour Wisy asbl : non repris tant que non confirmé session par session.
+25. **Contrôle des sources** : `scripts/check-sources.js` ignore aussi `https://wisysafety.be/` (canonical sans « www » depuis le 23/10) ; il
+    échouait sur les 5 fiches existantes. Focus clavier de la page : anneau épinette (5,7:1) au lieu de l'anneau « brume » du socle (2,8:1).

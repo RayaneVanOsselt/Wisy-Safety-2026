@@ -104,7 +104,7 @@
     { id: "DOC-SPF-CP-LISTE", type: "Official", org: "SPF Emploi, Travail et Concertation sociale",
       title: "Notification : liste des institutions qui dispensent des cours de base pour les conseillers en prévention (niveau III)", checked: "2026-11-19",
       url: "https://emploi.belgique.be/fr/agrements/notification-liste-des-institutions-qui-dispensent-des-cours-de-base-pour-les-conseillers",
-      note: "Wisy Safety n'y figure pas à la date de vérification : la page ne l'affirme donc pas." },
+      note: "Liste alphabétique lue en entier le 2026-11-19 : l'entrée « Wisy asbl » — Avenue d'Itterbeek 378 bte 1, 1070 Anderlecht, info@wisysafety.be, https://wisysafety.be, langue : français — y figure (entre « Welzijn-op-School vzw » et « ZAWM Eupen »). Page sans date de mise à jour. Le SPF parle de « notification » et de « liste » pour le niveau III, jamais d'« agrément » (réservé aux niveaux I et II)." },
     { id: "DOC-SPF-SIPP", type: "Official", org: "SPF Emploi, Travail et Concertation sociale",
       title: "Service interne pour la prévention et la protection au travail", checked: "2026-11-19",
       url: "https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/service-interne-pour-la-prevention-et-la" },
@@ -340,7 +340,15 @@
       second: { doc: "DOC-SPF-SIPP-EN", passage: "« … 50 workers for the construction sector … Group C includes employers with fewer than 200 workers who do not have specific risks »" } },
     { id: "SRC-CP3-009", pages: P_CP3, doc: "DOC-CODE-II-4", status: "Verified",
       text: "Art. II.4-4, § 4 : les candidats qui ont suivi le cours de base et justifient d'au moins cinq ans d'expérience pratique utile dans un service interne ou externe peuvent être admis à la formation de niveau II.",
-      passage: "Art. II.4-4, § 4 : candidats « qui ont suivi le cours de base visé à l'article II.4-24 et qui font preuve d'une expérience pratique utile d'au moins cinq ans dans un service interne ou externe »" }
+      passage: "Art. II.4-4, § 4 : candidats « qui ont suivi le cours de base visé à l'article II.4-24 et qui font preuve d'une expérience pratique utile d'au moins cinq ans dans un service interne ou externe »" },
+    { id: "SRC-CP3-010", pages: P_CP3, doc: "DOC-SPF-CP-LISTE", status: "Verified",
+      text: "Wisy Safety figure, sous le nom « Wisy asbl » (Avenue d'Itterbeek 378, Anderlecht), sur la liste publiée par le SPF Emploi des établissements qui dispensent le cours de base de conseiller en prévention (niveau III) — constat du 19/11/2026.",
+      passage: "Entrée de la liste : « Wisy asbl — Avenue d'Itterbeek 378 Boîte 1, 1070 Anderlecht — info@wisysafety.be — https://wisysafety.be — français »",
+      second: { doc: "DOC-KBO-WISY", passage: "BCE 1027.725.391 : dénomination « WISY », ASBL, siège Avenue d'Itterbeek 378 bte 1, 1070 Anderlecht (même adresse que l'entrée de la liste)" } },
+    { id: "SRC-CP3-011", pages: P_CP3, doc: "DOC-CODE-II-4", status: "Verified",
+      text: "Art. II.4-26 et II.4-27 : la demande d'inscription sur la liste vaut engagement de respecter les conditions de l'art. II.4-25 ; l'établissement qui ne les respecte plus après contrôle est rayé de la liste.",
+      passage: "Art. II.4-26 : « Par l'introduction de la demande, l'institution s'engage à respecter les conditions visées à l'article II.4-25. » ; art. II.4-27 : l'établissement qui ne satisfait plus aux conditions « est rayé de la liste »",
+      second: { doc: "DOC-SPF-CP-NOTIFICATION", passage: "« La demande de notification est envoyée de préférence par e-mail » ; « Si la demande est complète et correcte sur le fond, l'établissement sera inscrit sur la liste »" } }
   ];
 
   /* Sources citées par chaque article (propriété JSON-LD `citation`) — clé = id de la page dans js/site-content.js. */

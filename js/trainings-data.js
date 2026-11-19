@@ -521,8 +521,9 @@
 
   /* Conseiller en prévention niveau III (« CP3 ») — cours de base, page formation-conseiller-prevention-niveau-3.html (2026-11-19).
      Faits OFFICIELS : Code du bien-être au travail, livre II (art. II.1-2, II.1-20, II.4-4 § 4, II.4-23 à II.4-27) et pages du
-     SPF Emploi, relus le 2026-11-19. Wisy Safety N'EST PAS (encore) confirmé sur la liste du SPF (art. II.4-24) : la page ne
-     l'affirme pas et renvoie vers la liste officielle — voir unconfirmed / unconfirmedClaims et docs/README-CP3.md. */
+     SPF Emploi, relus le 2026-11-19. Wisy Safety FIGURE sur la liste du SPF (art. II.4-24) sous le nom « Wisy asbl » : liste lue en
+     entier le 2026-11-19 (`official.spfListed`, source SRC-CP3-010). Pour le niveau III le SPF parle de « notification » et de « liste »,
+     jamais d'agrément : « agréé » / « agrément » restent interdits (voir unconfirmed et docs/README-CP3.md). */
   var CP3 = {
     id: "conseiller-prevention",
     registrationId: "conseiller-prevention",
@@ -539,7 +540,7 @@
     factKeys: ["dd.cp3_f1", "dd.cp3_f2"],
     durationDays: null, price: null, level: "Base",
     audience: ["conseillers en prévention des entreprises des groupes C et D", "employeurs de moins de 20 travailleurs qui exercent eux-mêmes la fonction",
-      "conseillers en prévention adjoints", "futurs conseillers en prévention"],
+      "conseillers en prévention du groupe B qui ne dirigent pas le service interne", "futurs conseillers en prévention"],
     features: ["Code du bien-être au travail, art. II.1-20", "40 heures minimum", "Groupes C et D"],
     official: {
       verifiedAt: "2026-11-19",
@@ -550,7 +551,9 @@
         B: "200 à 1 000 travailleurs (ou moins selon le secteur) — niveau II (direction)", C: "moins de 200 travailleurs — connaissances de base",
         D: "moins de 20 travailleurs, l'employeur exerce lui-même la fonction — connaissances de base" },
       levelIIAccessYears: 5,
-      spfListed: null,   /* null = non confirmé. Passer à true UNIQUEMENT quand Wisy Safety figure sur la liste du SPF Emploi. */
+      /* true = « Wisy asbl » (BCE 1027.725.391, Avenue d'Itterbeek 378 bte 1) figure sur la liste du SPF Emploi des établissements qui
+         dispensent le cours de base (niveau III) — constat du 2026-11-19. Repasser à null si l'entrée disparaît de la liste (art. II.4-27). */
+      spfListed: true, spfListedAs: "Wisy asbl", spfListVerifiedAt: "2026-11-19",
       sources: {
         training: "https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-et",
         notification: "https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-1",
@@ -565,8 +568,9 @@
     images: { hero: "assets/images/formations/conseiller-prevention.webp", card: "assets/images/formations/conseiller-prevention.webp",
       thumb: "assets/images/conseiller-prevention/cp3-thumb-192.webp", og: "assets/images/partage/formation-conseiller-prevention-1200x630.jpg" },
     imageAlt: "Illustration : un encadrant casqué s'adresse à une équipe en gilets de sécurité dans un entrepôt, devant des affiches de sécurité",
-    unconfirmed: ["agréé", "agrément", "reconnu par le spf", "inscrit sur la liste du spf", "certificat officiel", "examen officiel"],
-    unconfirmedClaims: ["inscription de Wisy Safety sur la liste du SPF Emploi (art. II.4-24)", "durée exacte et calendrier des sessions", "tarif",
+    /* Même inscrit sur la liste (notification, sans agrément ni contrôle préalable), Wisy Safety n'est ni « agréé » ni « reconnu par le SPF ». */
+    unconfirmed: ["agréé", "agrément", "reconnu par le spf", "certificat officiel", "examen officiel"],
+    unconfirmedClaims: ["durée exacte et calendrier des sessions", "tarif",
       "langue(s) des sessions", "format intra-entreprise", "mode d'évaluation finale", "formateur(s) et leur expérience pratique (art. II.4-25, 2°)"]
   };
 
@@ -611,6 +615,20 @@
     var s = situation || {};
     if (s.petrochemical === true) return "petro";
     return s.subcontractors === true ? "star2" : "star1";
+  }
+
+  /* Groupe du Code du bien-être au travail (art. II.1-2) indiqué par l'outil « Quel niveau pour mon entreprise ? » de la page
+     Conseiller en prévention — une INDICATION : l'effectif se calcule sur quatre trimestres et le secteur (code NACE) abaisse les
+     seuils (groupe A dès 50, 200 ou 500 travailleurs selon le secteur ; groupe B dès 20, 50 ou 100).
+     size : "lt20" | "lt200" (20–199) | "lt1000" (200–1 000) | "gt1000" ; risk : "no" | "yes" | "unknown" | null.
+     → "c" (C, ou D si l'employeur exerce lui-même la fonction) · "b" · "a" · "risk" (secteur à vérifier : B, voire A) · null (incomplet). */
+  function cp3Outcome(size, risk) {
+    if (size === "lt20") return "c";
+    if (size === "gt1000") return "a";
+    if (size !== "lt200" && size !== "lt1000") return null;
+    if (risk !== "no" && risk !== "yes" && risk !== "unknown") return null;
+    if (risk !== "no") return "risk";
+    return size === "lt200" ? "c" : "b";
   }
 
   /* Toutes les formations à page dédiée (extensible : ajouter une entrée). */
@@ -660,6 +678,7 @@
     conseillerPrevention: CP3,
     fibreOptique: FIBRE,
     vcaEntreprise: VCA_ENTREPRISE,
-    vcaLevelFor: vcaLevelFor
+    vcaLevelFor: vcaLevelFor,
+    cp3Outcome: cp3Outcome
   };
 });

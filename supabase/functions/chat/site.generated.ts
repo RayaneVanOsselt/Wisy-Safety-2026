@@ -176,10 +176,10 @@ export const SITE_FORMATIONS: SiteEntry[] = [
     "audience": [
       "conseillers en prévention des entreprises des groupes C et D",
       "employeurs de moins de 20 travailleurs qui exercent eux-mêmes la fonction",
-      "conseillers en prévention adjoints",
+      "conseillers en prévention du groupe B qui ne dirigent pas le service interne",
       "futurs conseillers en prévention"
     ],
-    "content": "Le cours de base qui donne au conseiller en prévention les connaissances exigées par l'article II.1-20 du Code du bien-être au travail : analyse des risques, coordination de la prévention, premiers secours, rapports. 40 heures minimum. Objectif : Acquérir la connaissance de base du bien-être au travail exigée de tout conseiller en prévention (art. II.1-20), suffisante dans les entreprises des groupes C et D. AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer. NON CONFIRMÉ (ne jamais l'affirmer) : inscription de Wisy Safety sur la liste du SPF Emploi (art. II.4-24) ; durée exacte et calendrier des sessions ; tarif ; langue(s) des sessions ; format intra-entreprise ; mode d'évaluation finale ; formateur(s) et leur expérience pratique (art. II.4-25, 2°).",
+    "content": "Le cours de base qui donne au conseiller en prévention les connaissances exigées par l'article II.1-20 du Code du bien-être au travail : analyse des risques, coordination de la prévention, premiers secours, rapports. 40 heures minimum. Objectif : Acquérir la connaissance de base du bien-être au travail exigée de tout conseiller en prévention (art. II.1-20), suffisante dans les entreprises des groupes C et D. AUCUNE certification, CACES, agrément ou reconnaissance officielle n'est confirmé : ne jamais l'affirmer. NON CONFIRMÉ (ne jamais l'affirmer) : durée exacte et calendrier des sessions ; tarif ; langue(s) des sessions ; format intra-entreprise ; mode d'évaluation finale ; formateur(s) et leur expérience pratique (art. II.4-25, 2°).",
     "keywords": [
       "conseiller en prevention",
       "conseiller prevention",

@@ -74,6 +74,7 @@ var FORMATIONS = [
   ["vca-base", "VCA Base", "Formation", "En cours de préparation", "1 jour", "formation-vca-base.html"],
   ["vca-hierarchique", "VCA Ligne hiérarchique", "Formation", "Sur devis", "", "formation-vca-ligne-hierarchique.html"],
   ["diisocyanates", "Diisocyanates & substances dangereuses", "Formation", "Sur devis", "", "formation-diisocyanates.html"],
+  ["conseiller-prevention", "Conseiller en prévention niveau III", "Formation", "Sur devis", "", "formation-conseiller-prevention-niveau-3.html"],
   ["nacelle", "Nacelles élévatrices", "Formation", "En cours de préparation", "1 jour", "formation-nacelles-elevatrices.html"],
   ["fibre-optique", "Fibre optique", "Formation", "Sur devis", "", "formation-fibre-optique.html"],
   ["beps", "BEPS — Premier secours", "Formation", "En cours de préparation", "15 heures", "formation-beps-premiers-secours.html"],

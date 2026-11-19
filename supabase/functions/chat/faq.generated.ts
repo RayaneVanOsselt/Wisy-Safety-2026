@@ -53,19 +53,22 @@ export const FAQ_ITEMS: FaqItem[] = [
     "id": "faq-choisir-catalogue",
     "category": "choisir",
     "question": "Quelles formations proposez-vous ?",
-    "answer": "Nous proposons aujourd'hui six formations :\n- VCA Base\n- VCA Ligne hiérarchique\n- Nacelles élévatrices\n- Fibre optique\n- BEPS – Premier secours\n- Diisocyanates & substances dangereuses\n\nLe détail de chaque programme est présenté sur la page Formations.",
+    "answer": "Nous proposons aujourd'hui sept formations :\n- VCA Base\n- VCA Ligne hiérarchique\n- Nacelles élévatrices\n- Fibre optique\n- BEPS – Premier secours\n- Diisocyanates & substances dangereuses\n- Conseiller en prévention niveau III\n\nLe détail de chaque programme est présenté sur la page Formations.",
     "keywords": [
       "formations",
       "catalogue",
       "liste",
       "offre",
       "programme",
+      "sept formations",
       "six formations",
       "vca",
       "nacelle",
       "fibre",
       "beps",
-      "diisocyanates"
+      "diisocyanates",
+      "conseiller en prevention",
+      "cp3"
     ],
     "synonyms": [
       "cours",

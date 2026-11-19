@@ -20,7 +20,7 @@ const ROOT = path.join(__dirname, "..");
 const Sources = require("../js/sources-data.js");
 const Trainings = require("../js/trainings-data.js");
 
-const PAGES = ["formation-vca-ligne-hierarchique.html", "formation-diisocyanates.html", "formation-fibre-optique.html",
+const PAGES = ["formation-vca-ligne-hierarchique.html", "formation-diisocyanates.html", "formation-conseiller-prevention-niveau-3.html", "formation-fibre-optique.html",
   "article-fibre-parcours-professionnels.html", "article-fibre-devenir-expert.html"];
 /* Formulations de l'ancien site qui ne doivent JAMAIS revenir (vérifiées fausses, non sourcées ou marketing). */
 const FORBIDDEN = [/250\s?€\s*par jour/i, /70\s?% de la consommation/i, /certification valide partout/i, /reconnaissance légale européenne/i,

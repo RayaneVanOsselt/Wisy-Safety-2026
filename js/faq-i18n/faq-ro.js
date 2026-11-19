@@ -105,7 +105,7 @@ WisyFAQ.register("ro", {
   },
   "faq-choisir-catalogue": {
    "question": "Ce formări oferiți?",
-   "answer": "În prezent oferim șase formări:\n- VCA de bază\n- VCA pentru personalul de conducere\n- Nacelă elevatoare\n- Fibră optică\n- BEPS — Prim ajutor\n- Diizocianați & substanțe periculoase\n\nDetaliile fiecărui program sunt prezentate în pagina Cursuri.",
+   "answer": "În prezent oferim șapte formări:\n- VCA de bază\n- VCA pentru personalul de conducere\n- Nacelă elevatoare\n- Fibră optică\n- BEPS — Prim ajutor\n- Diizocianați & substanțe periculoase\n- Consilier în prevenire nivel III\n\nDetaliile fiecărui program sunt prezentate în pagina Cursuri.",
    "keywords": [
     "formări",
     "catalog",

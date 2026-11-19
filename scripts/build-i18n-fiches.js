@@ -3,7 +3,7 @@
 /* =========================================================================
    WISY SAFETY — Dictionnaires des pages « fiche formation » et de leurs articles (aucune dépendance)
 
-       node scripts/build-i18n-fiches.js           → (ré)écrit js/i18n-data-{fiche,vlh,diiso,fibre,fibre-art,art-fib1,art-fib2}.js
+       node scripts/build-i18n-fiches.js           → (ré)écrit js/i18n-data-{fiche,vlh,diiso,fibre,cp3,fibre-art,art-fib1,art-fib2}.js
        node scripts/build-i18n-fiches.js --check   → échoue si un dictionnaire n'est plus à jour ou si une traduction manque
        node scripts/build-i18n-fiches.js --missing → écrit content/i18n/_missing/<dict>.<langue>.json (clés à traduire, texte FR)
 
@@ -21,7 +21,7 @@ const path = require("node:path");
 
 const ROOT = path.join(__dirname, "..");
 const LANGS = ["fr", "en", "nl", "af", "ar", "bg", "de", "ro", "it", "sl"];
-const PAGES = ["formation-vca-ligne-hierarchique.html", "formation-diisocyanates.html", "formation-fibre-optique.html",
+const PAGES = ["formation-vca-ligne-hierarchique.html", "formation-diisocyanates.html", "formation-fibre-optique.html", "formation-conseiller-prevention-niveau-3.html",
   "article-fibre-parcours-professionnels.html", "article-fibre-devenir-expert.html"];
 /* dictionnaire → préfixes de clés qu'il porte ; `meta` : page dont le <title> devient sa clé meta.title */
 const DICTS = {
@@ -29,6 +29,9 @@ const DICTS = {
   "vlh":       { prefixes: ["vlh."], meta: "formation-vca-ligne-hierarchique.html", label: "page Formation VCA Ligne hiérarchique et ses 3 dossiers" },
   "diiso":     { prefixes: ["dii."], meta: "formation-diisocyanates.html", label: "page Formation Diisocyanates et ses 3 articles" },
   "fibre":     { prefixes: ["fib."], meta: "formation-fibre-optique.html", label: "page Formation Fibre optique" },
+  /* `langs` : langues dont la traduction est EXIGÉE. Les autres retombent sur le français (repli de js/i18n.js) tant que
+     content/i18n/cp3/<langue>.json n'existe pas — ajouter le fichier suffit, il devient alors contrôlé comme les autres. */
+  "cp3":       { prefixes: ["cp3."], meta: "formation-conseiller-prevention-niveau-3.html", langs: ["en", "nl"], label: "page Formation Conseiller en prévention niveau III" },
   "fibre-art": { prefixes: ["fiba."], label: "les 2 articles fibre optique (modale de la page fibre + pages d'articles)" },
   "art-fib1":  { prefixes: [], meta: "article-fibre-parcours-professionnels.html", label: "titre d'onglet de la page article-fibre-parcours-professionnels.html" },
   "art-fib2":  { prefixes: [], meta: "article-fibre-devenir-expert.html", label: "titre d'onglet de la page article-fibre-devenir-expert.html" }
@@ -111,7 +114,8 @@ function build() {
     LANGS.slice(1).forEach((l) => {
       const f = path.join(ROOT, "content/i18n", d, l + ".json");
       const tr = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, "utf8")) : {};
-      const missing = keys.filter((k) => !(k in tr) || !String(tr[k]).trim());
+      const required = !DICTS[d].langs || DICTS[d].langs.includes(l) || fs.existsSync(f);
+      const missing = required ? keys.filter((k) => !(k in tr) || !String(tr[k]).trim()) : [];
       const extra = Object.keys(tr).filter((k) => !(k in fr[d]));
       if (missing.length) problems.push({ dict: d, lang: l, missing });
       if (extra.length) problems.push({ dict: d, lang: l, extra });

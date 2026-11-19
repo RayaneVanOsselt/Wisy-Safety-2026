@@ -93,11 +93,34 @@
       note: "Situation au 30 septembre 2026 : ACTIF ; forme légale ASBL depuis le 14 septembre 2025 ; dénomination « WISY » ; siège Avenue d'Itterbeek 378 bte 1, 1070 Anderlecht." },
     { id: "DOC-WISY-LEGACY", type: "Primary (Wisy Safety)", org: "Wisy Safety — ancien site (wisysafety.be)",
       title: "Pages fibre-optique, produit-dangereux, vca-ligne-hierarchique et bordereau /sinscrire/ (archives : content/_legacy/)", url: "https://wisysafety.be/",
-      note: "Données internes PUBLIÉES par Wisy Safety, mais contradictoires entre elles (prix, durées) : seul le contenu pédagogique (niveaux, modules, formats, publics, conseils) est repris ; tout chiffre interne reste « à confirmer par écrit »." }
+      note: "Données internes PUBLIÉES par Wisy Safety, mais contradictoires entre elles (prix, durées) : seul le contenu pédagogique (niveaux, modules, formats, publics, conseils) est repris ; tout chiffre interne reste « à confirmer par écrit »." },
+    /* ---- Conseiller en prévention niveau III (2026-11-19) ---- */
+    { id: "DOC-SPF-CP-FORMATION", type: "Official", org: "SPF Emploi, Travail et Concertation sociale",
+      title: "Formation et recyclage des conseillers en prévention", checked: "2026-11-19",
+      url: "https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-et" },
+    { id: "DOC-SPF-CP-NOTIFICATION", type: "Official", org: "SPF Emploi, Travail et Concertation sociale",
+      title: "Procédure d'inscription sur la liste des établissements qui dispensent des cours de base pour conseillers en prévention (niveau III)", checked: "2026-11-19",
+      url: "https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-1" },
+    { id: "DOC-SPF-CP-LISTE", type: "Official", org: "SPF Emploi, Travail et Concertation sociale",
+      title: "Notification : liste des institutions qui dispensent des cours de base pour les conseillers en prévention (niveau III)", checked: "2026-11-19",
+      url: "https://emploi.belgique.be/fr/agrements/notification-liste-des-institutions-qui-dispensent-des-cours-de-base-pour-les-conseillers",
+      note: "Wisy Safety n'y figure pas à la date de vérification : la page ne l'affirme donc pas." },
+    { id: "DOC-SPF-SIPP", type: "Official", org: "SPF Emploi, Travail et Concertation sociale",
+      title: "Service interne pour la prévention et la protection au travail", checked: "2026-11-19",
+      url: "https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/service-interne-pour-la-prevention-et-la" },
+    { id: "DOC-SPF-SIPP-EN", type: "Official", org: "FPS Employment, Labour and Social Dialogue",
+      title: "Internal service for prevention and protection at work (anglais)", checked: "2026-11-19",
+      url: "https://werk.belgie.be/en/themes/well-being-workers/internal-service-prevention-and-protection-work" },
+    { id: "DOC-CODE-II-1", type: "Official", org: "SPF Emploi, Travail et Concertation sociale",
+      title: "Code du bien-être au travail, livre II, titre 1 — Le service interne pour la prévention et la protection au travail (PDF)", checked: "2026-11-19",
+      url: "https://werk.belgie.be/sites/default/files/content/documents/Bien-%C3%AAtre%20au%20travail/R%C3%A9glementation/Code%20livre%20II%20titre%201%20SIPP.pdf" },
+    { id: "DOC-CODE-II-4", type: "Official", org: "SPF Emploi, Travail et Concertation sociale",
+      title: "Code du bien-être au travail, livre II, titre 4 — Formation et recyclage des conseillers en prévention (PDF)", checked: "2026-11-19",
+      url: "https://werk.belgie.be/sites/default/files/content/documents/Bien-%C3%AAtre%20au%20travail/R%C3%A9glementation/Code%20livre%20II%20titre%204%20Formation%20et%20recyclage%20des%20conseillers%20en%20pr%C3%A9vention.pdf" }
   ];
 
   /* ------------------------------------------------------------------ affirmations publiées */
-  var P_VLH = ["formation-vca-ligne-hierarchique.html"], P_DII = ["formation-diisocyanates.html"], P_FIB = ["formation-fibre-optique.html", "article-fibre-devenir-expert.html"];
+  var P_VLH = ["formation-vca-ligne-hierarchique.html"], P_DII = ["formation-diisocyanates.html"], P_FIB = ["formation-fibre-optique.html", "article-fibre-devenir-expert.html"], P_CP3 = ["formation-conseiller-prevention-niveau-3.html"];
   var CLAIMS = [
     /* ---- VCA Ligne hiérarchique ---- */
     { id: "SRC-VLH-001", pages: P_VLH, doc: "DOC-BESACC-VOL", status: "Verified",
@@ -284,7 +307,40 @@
       notes: "Ancien site : « Indispensable pour progresser vers ingénieur réseau » — reformulé en conseil (« utile pour évoluer »)." },
     { id: "SRC-FIB-008", pages: P_FIB, doc: "DOC-FOA-FIBER", status: "Verified",
       text: "Les fibres multimodes OM3 et OM4 (50/125 µm) sont optimisées pour les sources laser VCSEL à 850 nm.",
-      passage: "Tableau : « 50/125 microns (OM3, G.651.1) … Optimized for 850 nm VCSELs » ; « 50/125 microns (OM4, G.651.1) … Optimized for 850 nm VCSELs, higher speed »" }
+      passage: "Tableau : « 50/125 microns (OM3, G.651.1) … Optimized for 850 nm VCSELs » ; « 50/125 microns (OM4, G.651.1) … Optimized for 850 nm VCSELs, higher speed »" },
+    /* ---- Conseiller en prévention niveau III (2026-11-19) ---- */
+    { id: "SRC-CP3-001", pages: P_CP3, doc: "DOC-SPF-SIPP", status: "Verified",
+      text: "L'employeur organise un service interne pour la prévention et la protection au travail, avec au moins un conseiller en prévention ; à partir de 20 travailleurs, ce conseiller est un travailleur sous contrat de travail ; en dessous, l'employeur peut exercer lui-même la fonction.",
+      passage: "« un employeur sans comité et occupant plus de vingt travailleurs = un service avec au minimum un conseiller en prévention. Cette personne est toujours un travailleur occupé sous contrat de travail. »",
+      second: { doc: "DOC-CODE-II-1", passage: "Art. II.1-2, § 1er : « Le groupe D comprend les employeurs qui occupent moins de 20 travailleurs et où l'employeur occupe lui-même la fonction de conseiller en prévention. »" } },
+    { id: "SRC-CP3-002", pages: P_CP3, doc: "DOC-CODE-II-1", status: "Verified",
+      text: "Art. II.1-20 : connaissance suffisante de la législation sur le bien-être et connaissances techniques et scientifiques, notamment : 1° analyse des risques ; 2° coordination des activités de prévention ; 3° hygiène ; 4° premiers secours et danger grave et immédiat ; 5° missions des conseillers en prévention ; 6° rédaction des rapports.",
+      passage: "« Les conseillers en prévention disposent d'une connaissance suffisante de la législation en matière de bien-être … Ces connaissances ont notamment trait : 1° aux techniques relatives à l'analyse des risques ; 2° à la coordination des activités de prévention … ; 3° aux mesures relatives à l'hygiène sur les lieux de travail ; 4° à l'organisation des premiers secours … ; 5° aux missions des conseillers en prévention … ; 6° au mode de rédaction des rapports. »",
+      second: { doc: "DOC-SPF-CP-FORMATION", passage: "« Tous les conseillers en prévention doivent au moins disposer d'une connaissance de base suffisante en matière de bien-être au travail … (art. II.1-20 du code) »" } },
+    { id: "SRC-CP3-003", pages: P_CP3, doc: "DOC-SPF-CP-FORMATION", status: "Verified",
+      text: "Formation complémentaire minimale : groupe A — niveau I (direction), niveau II (autres) ; groupe B — niveau II (direction) ; groupes C et D — aucune formation complémentaire, connaissances de base.",
+      passage: "Tableau « Formation complémentaire minimale » : A — Niveau I / Niveau II ; B — Niveau II / * ; C — * / *" },
+    { id: "SRC-CP3-004", pages: P_CP3, doc: "DOC-CODE-II-4", status: "Verified",
+      text: "Art. II.4-24 : le conseiller qui a suivi le cours de base dans un établissement figurant sur la liste publiée par le Ministre est réputé satisfaire à l'art. II.1-20.",
+      passage: "Art. II.4-24 : cours de base suivi dans un établissement « figurant sur une liste de cours publiée par le Ministre »",
+      second: { doc: "DOC-SPF-CP-NOTIFICATION", passage: "« Procédure d'inscription sur la liste des établissements qui dispensent des cours de base pour conseillers en prévention (niveau III) »" } },
+    { id: "SRC-CP3-005", pages: P_CP3, doc: "DOC-CODE-II-4", status: "Verified",
+      text: "Art. II.4-25 : contenu conforme à l'art. II.1-20, chargés de cours ayant une expérience pratique, 40 heures minimum, équipements appropriés, attestation de participation.",
+      passage: "Art. II.4-25, 1° à 5° : « 40 heures minimum » (3°) ; chargés de cours « ayant une expérience pratique dans les matières enseignées » (2°) ; « une attestation de participation » (5°)" },
+    { id: "SRC-CP3-006", pages: P_CP3, doc: "DOC-CODE-II-4", status: "Verified",
+      text: "L'établissement inscrit délivre une attestation de participation aux élèves du cours de base.",
+      passage: "Art. II.4-25, 5° : délivrer aux élèves « une attestation de participation »",
+      second: { doc: "DOC-SPF-CP-NOTIFICATION", passage: "Contenu de la demande : « Modèle d'attestation de participation »" } },
+    { id: "SRC-CP3-007", pages: P_CP3, doc: "DOC-SPF-CP-FORMATION", status: "Verified",
+      text: "Tout conseiller en prévention a le droit et le devoir de se recycler chaque année ; la réglementation ne fixe pas le volume du recyclage, convenu avec l'employeur (3 jours recommandés pour les niveaux I et II).",
+      passage: "Recyclage : chaque conseiller « a le droit et le devoir » de se recycler chaque année ; volume non fixé, à convenir avec l'employeur ; trois jours recommandés pour les niveaux I et II" },
+    { id: "SRC-CP3-008", pages: P_CP3, doc: "DOC-CODE-II-1", status: "Verified",
+      text: "Groupes (art. II.1-2) : A plus de 1 000 travailleurs ; B 200 à 1 000 ; C moins de 200 ; D moins de 20 avec l'employeur conseiller ; seuils abaissés pour certains secteurs (ex. 50 travailleurs dans la construction pour le groupe B).",
+      passage: "Art. II.1-2, § 1er : « Le groupe B comprend les employeurs : 1° occupant entre 200 et 1.000 travailleurs … » ; « Le groupe C comprend les employeurs qui occupent moins de 200 travailleurs et qui ne figurent pas dans les groupes A et B. »",
+      second: { doc: "DOC-SPF-SIPP-EN", passage: "« … 50 workers for the construction sector … Group C includes employers with fewer than 200 workers who do not have specific risks »" } },
+    { id: "SRC-CP3-009", pages: P_CP3, doc: "DOC-CODE-II-4", status: "Verified",
+      text: "Art. II.4-4, § 4 : les candidats qui ont suivi le cours de base et justifient d'au moins cinq ans d'expérience pratique utile dans un service interne ou externe peuvent être admis à la formation de niveau II.",
+      passage: "Art. II.4-4, § 4 : candidats « qui ont suivi le cours de base visé à l'article II.4-24 et qui font preuve d'une expérience pratique utile d'au moins cinq ans dans un service interne ou externe »" }
   ];
 
   /* Sources citées par chaque article (propriété JSON-LD `citation`) — clé = id de la page dans js/site-content.js. */

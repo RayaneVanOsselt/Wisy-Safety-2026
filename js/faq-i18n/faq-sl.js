@@ -106,7 +106,7 @@ WisyFAQ.register("sl", {
   },
   "faq-choisir-catalogue": {
    "question": "Katera usposabljanja ponujate?",
-   "answer": "Trenutno ponujamo šest usposabljanj:\n- VCA osnovni\n- VCA za vodstvo\n- Dvižna ploščad\n- Optična vlakna\n- BEPS — Prva pomoč\n- Diizocianati in nevarne snovi\n\nPodrobnosti o posameznem programu so predstavljene na strani Usposabljanja.",
+   "answer": "Trenutno ponujamo sedem usposabljanj:\n- VCA osnovni\n- VCA za vodstvo\n- Dvižna ploščad\n- Optična vlakna\n- BEPS — Prva pomoč\n- Diizocianati in nevarne snovi\n- Svetovalec za preventivo, raven III\n\nPodrobnosti o posameznem programu so predstavljene na strani Usposabljanja.",
    "keywords": [
     "usposabljanja",
     "katalog",

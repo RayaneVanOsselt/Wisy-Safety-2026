@@ -60,6 +60,8 @@ const LH = Trainings.vcaLigneHierarchique, DI = Trainings.diisocyanates, FI = Tr
 const OG_VLH = { file: LH.images.og, width: 1200, height: 630, alt: LH.imageAlt };
 const OG_DII = { file: DI.images.og, width: 1200, height: 630, alt: DI.imageAlt };
 const OG_FIB = { file: FI.images.og, width: 1200, height: 630, alt: FI.imageAlt };
+const CP = Trainings.conseillerPrevention;
+const OG_CP3 = { file: CP.images.og, width: 1200, height: 630, alt: CP.imageAlt };
 const OG_ART_FIB1 = { file: "assets/images/partage/article-fibre-parcours-1200x630.jpg", width: 1200, height: 630, alt: "Illustration : un technicien casqué en veste orange, devant un décor de câbles lumineux" };
 const OG_ART_FIB2 = { file: "assets/images/partage/article-fibre-expert-1200x630.jpg", width: 1200, height: 630, alt: "Illustration : une technicienne casquée en gilet haute visibilité travaille sur un coffret de câbles en extérieur" };
 /* Coordination : pas de carte de partage dédiée (aucun visuel de chantier fourni pour l'instant) —
@@ -80,6 +82,9 @@ const DOCS = [
     breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["VCA ligne hiérarchique", "formation-vca-ligne-hierarchique.html"]] },
   { file: "formation-diisocyanates.html", graph: ["organization", "breadcrumb", "course", "articles"], image: OG_DII, lastmod: "2026-10-01",
     breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["Diisocyanates & substances dangereuses", "formation-diisocyanates.html"]] },
+  /* Conseiller en prévention niveau III (2026-11-19) : `course` sans prix ni durée exacte (non confirmés). */
+  { file: "formation-conseiller-prevention-niveau-3.html", graph: ["organization", "breadcrumb", "course"], image: OG_CP3, lastmod: "2026-11-19",
+    breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["Conseiller en prévention niveau III", "formation-conseiller-prevention-niveau-3.html"]] },
   { file: "formation-fibre-optique.html", graph: ["organization", "breadcrumb", "course"], image: OG_FIB, lastmod: "2026-10-01",
     breadcrumb: [["Accueil", "index.html"], ["Formations", "formations.html"], ["Fibre optique", "formation-fibre-optique.html"]] },
   { file: "formation-nacelles-elevatrices.html", graph: ["organization", "breadcrumb", "course"], image: OG_NACELLES,

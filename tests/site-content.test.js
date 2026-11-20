@@ -31,9 +31,9 @@ const Reg = (() => {
   return win.WisyRegistrationData;
 })();
 
-test("registre : 6 formations, ids uniques, catégories déclarées, comptes cohérents", () => {
+test("registre : 7 formations, ids uniques, catégories déclarées, comptes cohérents", () => {
   const f = Site.formations(), cats = Site.categories().map((c) => c.id);
-  assert.equal(f.length, 6);
+  assert.equal(f.length, 7);   /* + conseiller en prévention niveau III (2026-11-19) */
   assert.equal(new Set(f.map((x) => x.id)).size, f.length, "ids uniques");
   f.forEach((x) => assert.ok(cats.includes(x.category), "catégorie inconnue : " + x.category));
   cats.forEach((c) => assert.ok(f.some((x) => x.category === c), "catégorie vide : " + c));

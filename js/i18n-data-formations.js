@@ -459,4 +459,16 @@
     "fo.f6_alt": "Usposabljanje BEPS — evropsko potrdilo o prvi pomoči, ukrepi, ki rešujejo življenja",
     "fo.f6_aria": "Odkrijte usposabljanje BEPS — Prva pomoč"
   });
+
+  /* Carte « Conseiller en prévention niveau III » (2026-11-19) */
+  m("fr", {"fo.cp3_alt": "Formation conseiller en prévention niveau III — un encadrant s'adresse à une équipe en gilets de sécurité", "fo.cp3_aria": "Découvrir la formation Conseiller en prévention niveau III", "fo.cp3a": "Art. II.1-20 du Code", "fo.cp3b": "40 heures minimum", "fo.cp3c": "Groupes C et D"});
+  m("en", {"fo.cp3_alt": "Prevention adviser level III course — a supervisor addresses a team in safety vests", "fo.cp3_aria": "Discover the Prevention adviser level III course", "fo.cp3a": "Art. II.1-20 of the Code", "fo.cp3b": "At least 40 hours", "fo.cp3c": "Groups C and D"});
+  m("nl", {"fo.cp3_alt": "Opleiding preventieadviseur niveau III — een leidinggevende spreekt een ploeg in veiligheidshesjes toe", "fo.cp3_aria": "Ontdek de opleiding Preventieadviseur niveau III", "fo.cp3a": "Art. II.1-20 van de Codex", "fo.cp3b": "Minstens 40 uur", "fo.cp3c": "Groepen C en D"});
+  m("af", {"fo.cp3_alt": "Opleiding voorkomingsadviseur vlak III — 'n toesighouer spreek 'n span in veiligheidsbaadjies toe", "fo.cp3_aria": "Ontdek die opleiding Voorkomingsadviseur vlak III", "fo.cp3a": "Art. II.1-20 van die Kode", "fo.cp3b": "Minstens 40 uur", "fo.cp3c": "Groepe C en D"});
+  m("ar", {"fo.cp3_alt": "دورة مستشار الوقاية المستوى III — مشرف يخاطب فريقًا يرتدي سترات السلامة", "fo.cp3_aria": "اكتشف دورة مستشار الوقاية المستوى III", "fo.cp3a": "المادة II.1-20 من القانون", "fo.cp3b": "40 ساعة على الأقل", "fo.cp3c": "المجموعتان C و D"});
+  m("bg", {"fo.cp3_alt": "Обучение за консултант по превенция ниво III — ръководител говори на екип с предпазни жилетки", "fo.cp3_aria": "Открийте обучението Консултант по превенция ниво III", "fo.cp3a": "Чл. II.1-20 от Кодекса", "fo.cp3b": "Минимум 40 часа", "fo.cp3c": "Групи C и D"});
+  m("de", {"fo.cp3_alt": "Ausbildung Gefahrenverhütungsberater Stufe III — ein Vorgesetzter spricht zu einem Team in Warnwesten", "fo.cp3_aria": "Die Ausbildung Gefahrenverhütungsberater Stufe III entdecken", "fo.cp3a": "Art. II.1-20 des Gesetzbuchs", "fo.cp3b": "Mindestens 40 Stunden", "fo.cp3c": "Gruppen C und D"});
+  m("ro", {"fo.cp3_alt": "Curs consilier în prevenire nivel III — un responsabil se adresează unei echipe în veste de siguranță", "fo.cp3_aria": "Descoperiți cursul Consilier în prevenire nivel III", "fo.cp3a": "Art. II.1-20 din Cod", "fo.cp3b": "Minimum 40 de ore", "fo.cp3c": "Grupele C și D"});
+  m("it", {"fo.cp3_alt": "Corso consulente in prevenzione livello III — un responsabile parla a una squadra in gilet di sicurezza", "fo.cp3_aria": "Scopri il corso Consulente in prevenzione livello III", "fo.cp3a": "Art. II.1-20 del Codice", "fo.cp3b": "Almeno 40 ore", "fo.cp3c": "Gruppi C e D"});
+  m("sl", {"fo.cp3_alt": "Usposabljanje svetovalec za preventivo, raven III — vodja nagovarja ekipo v varnostnih jopičih", "fo.cp3_aria": "Odkrijte usposabljanje Svetovalec za preventivo, raven III", "fo.cp3a": "Čl. II.1-20 zakonika", "fo.cp3b": "Najmanj 40 ur", "fo.cp3c": "Skupini C in D"});
 })();

@@ -1,0 +1,110 @@
+/* =========================================================================
+   CONSEILLER EN PRÉVENTION NIVEAU III — « Le registre du conseiller »
+   Même ossature que les autres fiches (css/formation-fiche.css) ; identité propre : en-tête clair où l'extrait
+   du Code tient lieu d'image, filet en quatre segments (les groupes A · B · C · D, du plus exigeant au plus
+   simple), fiche signalétique, outil « Quel niveau ? » sur panneau sombre, encadré « liste du SPF ».
+   Coins légèrement arrondis (registre, pas signalisation) : la fiche diisocyanates garde les angles droits.
+   Propriétés logiques uniquement (arabe RTL).
+   ========================================================================= */
+
+.fx-theme--cp3 { --cp3-rule: var(--sarcelle); --cp3-radius: 6px; }
+
+/* ---------- En-tête : texte + extrait du Code ---------- */
+.fxt-hero--cp3 { padding-top: clamp(1rem, 2.5vw, 1.75rem); background: linear-gradient(180deg, var(--creme) 0%, #fff 100%); }
+.fxt-hero--cp3 .fx-bc { padding-bottom: clamp(1.5rem, 4vw, 2.75rem); }
+.fxt-hero--cp3 .fxt-hero__grid { display: grid; gap: clamp(2rem, 4vw, 4rem); align-items: center; padding-bottom: clamp(2.25rem, 5vw, 4rem); }
+@media (min-width: 1024px) { .fxt-hero--cp3 .fxt-hero__grid { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); } }
+.fxt-hero--cp3 .fx-kicker { color: var(--epinette); }
+.fxt-hero--cp3 .fx-kicker::before { width: 12px; height: 12px; border-radius: 3px; background: var(--sarcelle); }
+.fxt-hero--cp3 .fx-h1 { font-size: clamp(2.1rem, 4.7vw, 3.75rem); line-height: 1.04; letter-spacing: -.03em; max-width: 16ch; }
+.fxt-hero--cp3 .fx-h1 .fx-mark { color: var(--epinette); }
+.fxt-hero--cp3 .fx-lead { color: var(--noir-jais); max-width: 56ch; }
+
+/* L'extrait du Code : une fiche de registre, onglet sarcelle */
+.fxt-hero--cp3 .fx-plate { border: 1px solid var(--granit-20); border-radius: var(--cp3-radius); box-shadow: var(--shadow-md); padding: 0; background: #fff; overflow: hidden; }
+.fxt-hero--cp3 .fx-plate__ref { margin: 0; padding: 1rem 1.25rem; background: var(--sarcelle); color: #fff; font-size: clamp(1.05rem, 1.6vw, 1.25rem); }
+.fxt-hero--cp3 .fx-plate__ref small { color: #fff; }
+.fxt-hero--cp3 .fx-plate dl { padding: .25rem 1.25rem; }
+.fxt-hero--cp3 .fx-plate__row { grid-template-columns: 8.5rem minmax(0, 1fr); align-items: baseline; padding-block: .95rem; }
+.fxt-hero--cp3 .fx-plate dt { font-size: clamp(1.15rem, 1.8vw, 1.45rem); white-space: nowrap; color: var(--epinette); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.fxt-hero--cp3 .fx-plate__src { margin: 0; padding: .8rem 1.25rem; border-top: 1px solid var(--fx-rule); background: var(--creme); }
+.fxt-hero--cp3 .fx-plate__src a { color: var(--epinette); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 479px) { .fxt-hero--cp3 .fx-plate__row { grid-template-columns: 1fr; gap: .2rem; } }
+
+/* Filet des groupes A → D : quatre segments, du plus foncé (A) au plus clair (D) */
+.cp3-rule { height: 8px; background: linear-gradient(90deg, var(--noir-jais) 0 25%, var(--epinette) 25% 50%, var(--sarcelle) 50% 75%, var(--turquoise) 75% 100%); }
+[dir="rtl"] .cp3-rule { background: linear-gradient(-90deg, var(--noir-jais) 0 25%, var(--epinette) 25% 50%, var(--sarcelle) 50% 75%, var(--turquoise) 75% 100%); }
+
+/* ---------- Fiche signalétique ---------- */
+.cp3-sheet { background: #fff; border-bottom: 1px solid var(--fx-rule); padding-block: clamp(1.75rem, 4vw, 3rem) clamp(1.25rem, 3vw, 2rem); }
+.cp3-sheet__title { margin: 0 0 1.25rem; font-size: var(--fs-micro); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--noir-jais); }
+.cp3-sheet__grid { display: grid; gap: 0 clamp(1.25rem, 3vw, 2.5rem); margin: 0; }
+@media (min-width: 720px) { .cp3-sheet__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .cp3-sheet__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.cp3-sheet__item { padding: .85rem 0 1.25rem; border-top: 3px solid var(--sarcelle); }
+.cp3-sheet__item dt { margin-bottom: .45rem; font-family: var(--font-titre); font-weight: 600; font-size: var(--fs-micro); letter-spacing: .12em; text-transform: uppercase; color: var(--granit); }
+.cp3-sheet__item dd { margin: 0; font-size: 1rem; line-height: 1.5; color: var(--noir-jais); }
+.cp3-sheet__item:nth-child(2) dd { font-family: var(--font-titre); font-weight: 600; font-size: 1.12rem; line-height: 1.35; }
+.cp3-sheet__foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 2rem; padding-top: 1rem; border-top: 1px solid var(--fx-rule); font-size: var(--fs-small); color: var(--granit); }
+.cp3-sheet__foot .fxt-practical a { color: var(--epinette); }
+.cp3-sheet__foot .fx-card__note { margin: 0; max-width: 70ch; }
+
+/* ---------- Sections : titres numérotés, sources en marge sur grand écran ---------- */
+.fx-theme--cp3 .fx-sec { border-top: 0; padding-block: clamp(2.25rem, 5vw, 3.75rem); }
+.fx-theme--cp3 .fx-sec__head { padding-top: .9rem; border-top: 2px solid var(--cp3-rule); margin-bottom: 1.5rem; }
+.fx-theme--cp3 .fx-num { color: var(--epinette); font-size: .95rem; letter-spacing: .02em; }
+.fx-theme--cp3 .fx-sec__head h2 { font-size: clamp(1.5rem, 2.7vw, 2.15rem); letter-spacing: -.02em; line-height: 1.15; }
+.fx-theme--cp3 .fx-steps > li::before { color: var(--epinette); }
+@media (min-width: 1200px) {
+  .fx-theme--cp3 .fx-sec { display: grid; grid-template-columns: minmax(0, 1fr) 17rem; column-gap: clamp(2.5rem, 4vw, 4.5rem); align-items: start; }
+  .fx-theme--cp3 .fx-sec > * { grid-column: 1; }
+  .fx-theme--cp3 .fx-sec > .fx-sec__head { grid-column: 1 / -1; }
+  .fx-theme--cp3 .fx-sec > .fx-src { grid-column: 2; grid-row: 2 / span 12; position: sticky; top: calc(var(--header-offset, 96px) + 1rem); margin-top: 0; padding-top: .75rem; border-top: 2px solid var(--sarcelle); }
+  .fx-theme--cp3 .fx-sec__head p { max-width: 70ch; }
+}
+
+/* § 02 — Quel niveau ? : panneau sombre pleine largeur */
+.fx-theme--cp3 #niveau { --fxt-bleed: var(--noir-jais); }
+.fx-theme--cp3 #niveau .fx-sec__head { border-top-color: rgba(244, 250, 249, .55); }
+.fx-theme--cp3 #niveau .fx-num { color: var(--turquoise); }
+.fx-theme--cp3 #niveau .fx-check { max-width: 56rem; padding: 0; border: 0; border-radius: 0; background: transparent; }
+.fx-theme--cp3 #niveau fieldset { border-bottom-color: rgba(244, 250, 249, .18); padding-bottom: 1.25rem; margin-bottom: 1.25rem; }
+.fx-theme--cp3 #niveau legend { font-size: clamp(1rem, 1.6vw, 1.12rem); line-height: 1.4; }
+.fx-theme--cp3 #niveau legend .fx-num { color: rgba(244, 250, 249, .7); }
+.fx-theme--cp3 #niveau .fx-check__hint { color: rgba(244, 250, 249, .78); }
+.fx-theme--cp3 #niveau .fx-check__opts label { border-radius: var(--cp3-radius); border-color: rgba(244, 250, 249, .4); color: var(--creme); }
+.fx-theme--cp3 #niveau .fx-check__opts label:hover { border-color: var(--creme); }
+.fx-theme--cp3 #niveau .fx-check__opts input { accent-color: var(--turquoise); }
+.fx-theme--cp3 #niveau .fx-check__opts label:has(input:checked) { background: var(--creme); border-color: var(--creme); color: var(--noir-jais); }
+.fx-theme--cp3 #niveau .fx-check__opts input:checked { accent-color: var(--epinette); }
+.fx-theme--cp3 #niveau .fx-check__result { border-radius: var(--cp3-radius); background: rgba(244, 250, 249, .08); border-inline-start-color: var(--turquoise); color: var(--creme); }
+.fx-theme--cp3 #niveau .fx-check__result--yes { background: rgba(72, 214, 194, .14); }
+.fx-theme--cp3 #niveau .fx-check__reset { color: var(--creme); }
+.fx-theme--cp3 #niveau .fx-check__disclaimer { color: rgba(244, 250, 249, .75); }
+.fx-theme--cp3 #niveau + .fx-sec .fx-sec__head { border-top-color: transparent; }
+
+/* § 03 — Programme : six domaines en deux colonnes */
+.fx-theme--cp3 #programme .fx-steps b { margin-bottom: .15rem; }
+
+/* § 05 — Parcours : la première étape (ce cours) est mise en avant */
+.fx-theme--cp3 .fx-path > li:first-child { background: var(--brume-08); border-color: var(--sarcelle); }
+.fx-theme--cp3 .fx-path__step { color: var(--epinette); }
+
+/* § 06 — Encadré « liste du SPF » */
+.cp3-callout { max-width: var(--fx-col); padding: 1.15rem 1.35rem; border: 1px solid var(--granit-20); border-inline-start: 5px solid var(--sarcelle); border-radius: var(--cp3-radius); background: #fff; }
+.cp3-callout p:last-child { margin-bottom: 0; }
+.cp3-callout a { color: var(--epinette); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+
+/* Liens croisés, FAQ, sources */
+.fx-theme--cp3 .fx-related a { border-radius: var(--cp3-radius); }
+.fx-theme--cp3 .fx-faq { border-top: 2px solid var(--sarcelle); }
+.fx-theme--cp3 .fx-sources-all { border-radius: var(--cp3-radius); }
+
+/* Bandeau final : le filet des groupes revient en tête */
+.fx-theme--cp3 .fx-final { position: relative; overflow: hidden; margin-bottom: clamp(2.5rem, 5vw, 4rem); padding-top: calc(clamp(1.5rem, 4vw, 2.5rem) + 8px); }
+.fx-theme--cp3 .fx-final::before { content: ""; position: absolute; inset: 0 0 auto; height: 8px; background: linear-gradient(90deg, var(--noir-jais) 0 25%, var(--epinette) 25% 50%, var(--sarcelle) 50% 75%, var(--turquoise) 75% 100%); }
+
+/* Focus clavier (WCAG 2.2, contraste d'un indicateur ≥ 3:1) : l'anneau « brume » du socle fait ≈ 2,8:1 sur la crème → épinette (≈ 6:1) sur les
+   fonds clairs ; le turquoise du socle est conservé sur les fonds sombres (outil, bandeau final). */
+.fx-theme--cp3 :focus-visible, .fx-theme--cp3 .fx-check__opts label:has(input:focus-visible), .fx-mobile-bar :focus-visible { outline-color: var(--epinette); }
+.fx-theme--cp3 .fxt-dark :focus-visible, .fx-theme--cp3 .fxt-dark label:has(input:focus-visible), .fx-theme--cp3 .fx-final :focus-visible { outline-color: var(--turquoise); }

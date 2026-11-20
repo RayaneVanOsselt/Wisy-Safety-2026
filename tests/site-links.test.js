@@ -11,7 +11,7 @@ const Site = require("../js/site-content.js");
 const FAQ = require("../js/faq-data.js");
 
 const ROOT = path.join(__dirname, "..");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "vca-entreprise", "coordination", "mentions-legales", "politique-de-confidentialite", "conditions-generales-utilisation", "article-vca-cout-financement", "article-vca-erreurs-examen", "inscription", "contact", "avis", "faq", "agenda", "formation-vca-ligne-hierarchique", "formation-diisocyanates", "formation-fibre-optique", "article-fibre-parcours-professionnels", "article-fibre-devenir-expert", "certificats"].map((n) => n + ".html");
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "formation-beps-premiers-secours", "peb-wallonie-bruxelles", "formation-vca-base", "vca-entreprise", "coordination", "mentions-legales", "politique-de-confidentialite", "conditions-generales-utilisation", "article-vca-cout-financement", "article-vca-erreurs-examen", "inscription", "contact", "avis", "faq", "agenda", "formation-vca-ligne-hierarchique", "formation-diisocyanates", "formation-conseiller-prevention-niveau-3", "formation-fibre-optique", "article-fibre-parcours-professionnels", "article-fibre-devenir-expert", "certificats"].map((n) => n + ".html");
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 
 /* Existence sensible à la casse. Renvoie true, false, ou le vrai nom si seule la casse diffère. */
@@ -149,7 +149,7 @@ test("target=_blank : toujours rel=noopener ; liens sortants limités aux domain
        BeSaCC-VCA (organisme belge du VCA) et son registre central des diplômes, SPF Emploi, Constructiv,
        services publics de l'emploi et de la formation (Actiris, Bruxelles Formation, Forem, VDAB),
        matrice d'évaluation officielle et examen blanc. */
-    "www.besacc-vca.be", "csm-examen.be", "vcabesacc.wordpress.com", "www.ssvv.nl", "emploi.belgique.be", "constructiv.be",
+    "www.besacc-vca.be", "csm-examen.be", "vcabesacc.wordpress.com", "www.ssvv.nl", "emploi.belgique.be", "werk.belgie.be", "constructiv.be",
     "www.actiris.brussels", "www.bruxellesformation.brussels", "www.leforem.be", "www.vdab.be",
     /* Sources officielles citées par vca-entreprise.html (voir docs/README-VCA-ENTREPRISE.md) : SSVV (propriétaire du schéma VCA),
        BeSaCC-VCA (déjà ci-dessus) et Prévention et Intérim (organisme sectoriel belge). */

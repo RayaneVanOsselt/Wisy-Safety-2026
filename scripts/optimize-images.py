@@ -481,6 +481,29 @@ def og(font_dir):
     report("carte Open Graph", None, os.path.getsize(dst), f"{W}×{H}")
 
 
+# --------------------------------------------------------------------------- Conseiller en prévention niveau III (CP3)
+# Pas de photo dédiée fournie : la fiche réutilise l'original « briefing d'équipe » de la VCA ligne hiérarchique
+# (un encadrant s'adresse à une équipe devant des affiches de sécurité — illustration, voir docs/image-sources.md).
+# Dérivés : carte du catalogue 500 × 333 (recadrage 3:2), miniature de recherche 192 px, carte de partage 1200 × 630.
+CP3_SRC = "assets/originaux/vca-ligne-hierarchique/vca-lh-briefing-equipe.webp"
+
+
+def cp3():
+    if not os.path.exists(CP3_SRC):
+        return
+    dst = "assets/images/formations/conseiller-prevention.webp"
+    if need(dst, CP3_SRC):
+        im = ImageOps.fit(to_rgb(Image.open(CP3_SRC)).convert("RGB"), (500, 333), Image.LANCZOS, centering=(0.5, 0.4))
+        size = save_webp(im, dst, quality=74)
+        report("cp3 carte", CP3_SRC, size, f"{im.width}×{im.height}")
+    dst = "assets/images/conseiller-prevention/cp3-thumb-192.webp"
+    if need(dst, CP3_SRC):
+        im = fit_width(to_rgb(Image.open(CP3_SRC)), 192)
+        size = save_webp(im, dst, quality=78)
+        report("cp3 thumb", CP3_SRC, size, f"{im.width}×{im.height}")
+    photo_card(CP3_SRC, "assets/images/partage/formation-conseiller-prevention-1200x630.jpg", focus=(0.5, 0.4))
+
+
 if __name__ == "__main__":
     print("Optimisation des images (Pillow", Image.__version__ + ")")
     logo()
@@ -494,6 +517,7 @@ if __name__ == "__main__":
     vca()
     vca_entreprise()
     fiches()
+    cp3()
     if "--og" in sys.argv:
         og(sys.argv[sys.argv.index("--og") + 1])
     print("Terminé.")

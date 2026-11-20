@@ -20,7 +20,7 @@ const ROOT = path.join(__dirname, "..");
 const Sources = require("../js/sources-data.js");
 const Trainings = require("../js/trainings-data.js");
 
-const PAGES = ["formation-vca-ligne-hierarchique.html", "formation-diisocyanates.html", "formation-fibre-optique.html",
+const PAGES = ["formation-vca-ligne-hierarchique.html", "formation-diisocyanates.html", "formation-conseiller-prevention-niveau-3.html", "formation-fibre-optique.html",
   "article-fibre-parcours-professionnels.html", "article-fibre-devenir-expert.html"];
 /* Formulations de l'ancien site qui ne doivent JAMAIS revenir (vérifiées fausses, non sourcées ou marketing). */
 const FORBIDDEN = [/250\s?€\s*par jour/i, /70\s?% de la consommation/i, /certification valide partout/i, /reconnaissance légale européenne/i,
@@ -56,7 +56,7 @@ function run() {
     FORBIDDEN.forEach((re) => { if (re.test(visible)) errors.push(p + " : formulation interdite de l'ancien site → " + re); });
     for (const m of html.matchAll(/href="(https?:\/\/[^"]+)"/g)) {
       const u = m[1].replace(/&amp;/g, "&");
-      if (/^https:\/\/www\.wisysafety\.be\//.test(u)) continue;      // canonical / partage (domaine du site)
+      if (/^https:\/\/(www\.)?wisysafety\.be\//.test(u)) continue;   // canonical / partage (domaine du site, avec ou sans « www »)
       if (/^https:\/\/www\.google\.com\/maps/.test(u)) continue;
       extLinks.add(u);
       if (!known.has(u)) errors.push(p + " : lien externe non tracé dans js/sources-data.js → " + u);

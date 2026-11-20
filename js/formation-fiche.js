@@ -8,6 +8,7 @@
      [data-fx-check]    outil « Suis-je concerné ? » (diisocyanates) : 3 questions → une orientation.
                         Tous les textes sont DANS le HTML (traduits par js/i18n.js) : le script ne fait qu'afficher
                         le bloc de résultat correspondant. Aucune donnée n'est envoyée ni conservée.
+     [data-fx-level]    outil « Quel niveau pour mon entreprise ? » (conseiller en prévention) : taille + secteur → groupe.
      [data-fx-bar]      barre d'action mobile, visible une fois l'en-tête de la fiche dépassé
 
    Événements d'audience (bus `wisy:analytics`, relayé seulement avec consentement) : fx_view, fx_signup_click,
@@ -65,6 +66,29 @@
       if (q1 === "unknown" || q2 === "unknown") return "unknown";
       return "yes";
     };
+    const render = () => {
+      const id = outcome();
+      results.forEach((r) => { r.hidden = r.getAttribute("data-fx-result") !== id; });
+      const shown = results.find((r) => !r.hidden);
+      if (live) live.textContent = shown ? shown.textContent.replace(/\s+/g, " ").trim() : "";
+      if (id) track("fx_check_result", { result: id });
+    };
+    form.addEventListener("change", render);
+    form.addEventListener("reset", () => setTimeout(render, 0));
+    form.addEventListener("submit", (e) => e.preventDefault());
+    render();
+  });
+
+  /* ---------- « Quel niveau pour mon entreprise ? » (conseiller en prévention) ----------
+     Groupes du Code du bien-être au travail, art. II.1-2 : < 20 → C ou D ; 20–199 → C ; 200–1 000 → B ; > 1 000 → A.
+     Les secteurs à risques accrus abaissent les seuils dès 20 travailleurs (B) : sous 20, la réponse reste C/D ;
+     au-delà, si le secteur est à risques ou inconnu, on renvoie vers le code NACE (« risk ») plutôt que de deviner. */
+  document.querySelectorAll("[data-fx-level]").forEach((form) => {
+    const results = Array.from(form.querySelectorAll("[data-fx-result]"));
+    const live = form.querySelector("[data-fx-live]");
+    const value = (name) => { const c = form.querySelector('input[name="' + name + '"]:checked'); return c ? c.value : null; };
+    /* La règle vit dans le registre (js/trainings-data.js : cp3Outcome), testée par tests/cp3.test.js. */
+    const outcome = () => (window.WisyTrainings && window.WisyTrainings.cp3Outcome ? window.WisyTrainings.cp3Outcome(value("cp3-size"), value("cp3-risk")) : null);
     const render = () => {
       const id = outcome();
       results.forEach((r) => { r.hidden = r.getAttribute("data-fx-result") !== id; });

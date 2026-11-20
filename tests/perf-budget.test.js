@@ -9,7 +9,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const ROOT = path.join(__dirname, "..");
-const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda", "peb-wallonie-bruxelles", "formation-beps-premiers-secours", "formation-vca-base", "vca-entreprise", "article-vca-cout-financement", "article-vca-erreurs-examen", "coordination", "mentions-legales", "politique-de-confidentialite", "conditions-generales-utilisation", "formation-vca-ligne-hierarchique", "formation-diisocyanates", "formation-fibre-optique", "article-fibre-parcours-professionnels", "article-fibre-devenir-expert", "certificats"].map((n) => n + ".html");
+const PAGES = ["index", "formations", "formation-nacelles-elevatrices", "inscription", "contact", "avis", "faq", "agenda", "peb-wallonie-bruxelles", "formation-beps-premiers-secours", "formation-vca-base", "vca-entreprise", "article-vca-cout-financement", "article-vca-erreurs-examen", "coordination", "mentions-legales", "politique-de-confidentialite", "conditions-generales-utilisation", "formation-vca-ligne-hierarchique", "formation-diisocyanates", "formation-conseiller-prevention-niveau-3", "formation-fibre-optique", "article-fibre-parcours-professionnels", "article-fibre-devenir-expert", "certificats"].map((n) => n + ".html");
 const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
 const size = (f) => fs.statSync(path.join(ROOT, f)).size;
 const noScripts = (html) => html.replace(/<!--[\s\S]*?-->/g, "").replace(/<script\b[\s\S]*?<\/script>/gi, "").replace(/<style\b[\s\S]*?<\/style>/gi, "");
@@ -130,8 +130,10 @@ test("JS et CSS partagés : budgets non minifiés (chemin critique de chaque pag
   /* Fiches formation du 2026-10-01 (VCA Ligne hiérarchique, Diisocyanates, Fibre optique) : trainings-data 28 → 40 Ko (3 formations à page
      dédiée : faits OFFICIELS sourcés, mots-clés, affirmations interdites) ; site-content 26 → 31 Ko (8 articles indexés par la recherche et
      l'assistant). Non minifié ; ~3 Ko de plus une fois compressé, et ces fichiers sont mis en cache d'une page à l'autre.
-     Tarifs retirés du site (« En cours de préparation », champ `pricePending`) : site-content 31 → 32 Ko. */
-  const budget = { "js/site-content.js": 32, "js/search.js": 62, "js/i18n.js": 8, "js/trainings-data.js": 40, "js/assistant/launcher.js": 30, "css/search.css": 29, "css/site-header.css": 12, "css/assistant.css": 18, "css/fonts.css": 6 };
+     Tarifs retirés du site (« En cours de préparation », champ `pricePending`) : site-content 31 → 32 Ko.
+     Fiche Conseiller en prévention niveau III (2026-11-19) : trainings-data 40 → 46 Ko (7e formation à page dédiée : groupes A–D,
+     base légale, sources SPF, mots-clés FR/NL/EN, affirmations interdites tant que l'inscription sur la liste du SPF n'est pas confirmée). */
+  const budget = { "js/site-content.js": 32, "js/search.js": 62, "js/i18n.js": 8, "js/trainings-data.js": 46, "js/assistant/launcher.js": 30, "css/search.css": 29, "css/site-header.css": 12, "css/assistant.css": 18, "css/fonts.css": 6 };
   Object.keys(budget).forEach((f) => assert.ok(size(f) <= budget[f] * KB, f + " : " + Math.round(size(f) / KB) + " Ko > " + budget[f] + " Ko"));
   /* le FAQ (37 Ko) n'est JAMAIS sur le chemin critique : il ne se charge qu'à la première utilisation de la recherche */
   PAGES.filter((f) => f !== "faq.html").forEach((f) => assert.doesNotMatch(read(f), /<script[^>]+js\/faq-data\.js/, f + " : faq-data.js chargé d'emblée"));

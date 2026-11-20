@@ -106,7 +106,7 @@ WisyFAQ.register("it", {
   },
   "faq-choisir-catalogue": {
    "question": "Quali corsi offrite?",
-   "answer": "Attualmente offriamo sei corsi:\n- VCA base\n- VCA per responsabili\n- Piattaforma elevatrice\n- Fibra ottica\n- BEPS — Primo soccorso\n- Diisocianati & sostanze pericolose\n\nI dettagli di ogni programma sono presentati nella pagina Corsi.",
+   "answer": "Attualmente offriamo sette corsi:\n- VCA base\n- VCA per responsabili\n- Piattaforma elevatrice\n- Fibra ottica\n- BEPS — Primo soccorso\n- Diisocianati & sostanze pericolose\n- Consulente in prevenzione livello III\n\nI dettagli di ogni programma sono presentati nella pagina Corsi.",
    "keywords": [
     "corsi",
     "catalogo",

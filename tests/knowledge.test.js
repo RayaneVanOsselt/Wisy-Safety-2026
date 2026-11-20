@@ -4,9 +4,9 @@ const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const Knowledge = require("../js/assistant/knowledge.js");
 
-test("6 formations réelles, ids attendus", () => {
+test("7 formations réelles, ids attendus", () => {
   const ids = Knowledge.formations().map((f) => f.id).sort();
-  assert.deepEqual(ids, ["beps", "diisocyanates", "fibre-optique", "nacelle", "vca-base", "vca-hierarchique"]);
+  assert.deepEqual(ids, ["beps", "conseiller-prevention", "diisocyanates", "fibre-optique", "nacelle", "vca-base", "vca-hierarchique"]);
 });
 
 test("chaque entrée respecte le schéma { id, title, url, type, updatedAt }", () => {
@@ -39,7 +39,7 @@ test("byId + formationsByCategory", () => {
   assert.equal(Knowledge.byId("beps").title, "BEPS — Premier secours");
   assert.equal(Knowledge.byId("inconnu"), null);
   const secu = Knowledge.formationsByCategory("securite").map((f) => f.id).sort();
-  assert.deepEqual(secu, ["diisocyanates", "vca-base"]);
+  assert.deepEqual(secu, ["conseiller-prevention", "diisocyanates", "vca-base"]);
 });
 
 test("HONNÊTETÉ : aucun prix n'est affiché ; les tarifs retirés sont « en cours de préparation » (registre central)", () => {

@@ -74,6 +74,8 @@
        js/trainings-data.js — prix, durée et format NON confirmés : absents (jamais affichés ni affirmés). */
     { id: "vca-hierarchique", fromTrainings: true },
     { id: "diisocyanates", fromTrainings: true },
+    /* Conseiller en prévention niveau III (CP3) : page dédiée (2026-11-19), faits du registre — prix, durée exacte non confirmés. */
+    { id: "conseiller-prevention", fromTrainings: true },
     /* Nacelles élévatrices : construite depuis le registre js/trainings-data.js (voir plus bas). */
     { id: "nacelle", fromTrainings: true },
     { id: "fibre-optique", fromTrainings: true },

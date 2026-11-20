@@ -106,7 +106,7 @@ WisyFAQ.register("en", {
   },
   "faq-choisir-catalogue": {
    "question": "Which courses do you offer?",
-   "answer": "We currently offer six courses:\n- VCA Basic\n- VCA for Supervisors\n- Aerial work platform\n- Optical fibre\n- BEPS — First aid\n- Diisocyanates & hazardous substances\n\nThe details of each programme are presented on the Training page.",
+   "answer": "We currently offer seven courses:\n- VCA Basic\n- VCA for Supervisors\n- Aerial work platform\n- Optical fibre\n- BEPS — First aid\n- Diisocyanates & hazardous substances\n- Prevention adviser level III\n\nThe details of each programme are presented on the Training page.",
    "keywords": [
     "courses",
     "training",

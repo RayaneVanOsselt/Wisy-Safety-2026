@@ -519,6 +519,61 @@
       "« +2 500 professionnels »", "« 98 % de satisfaction »", "« 4,9/5 »", "amende de 250 € par jour et par salarié", "« protection santé garantie »"]
   };
 
+  /* Conseiller en prévention niveau III (« CP3 ») — cours de base, page formation-conseiller-prevention-niveau-3.html (2026-11-19).
+     Faits OFFICIELS : Code du bien-être au travail, livre II (art. II.1-2, II.1-20, II.4-4 § 4, II.4-23 à II.4-27) et pages du
+     SPF Emploi, relus le 2026-11-19. Wisy Safety FIGURE sur la liste du SPF (art. II.4-24) sous le nom « Wisy asbl » : liste lue en
+     entier le 2026-11-19 (`official.spfListed`, source SRC-CP3-010). Pour le niveau III le SPF parle de « notification » et de « liste »,
+     jamais d'agrément : « agréé » / « agrément » restent interdits (voir unconfirmed et docs/README-CP3.md). */
+  var CP3 = {
+    id: "conseiller-prevention",
+    registrationId: "conseiller-prevention",
+    slug: "conseiller-prevention",
+    category: "securite",
+    url: "formation-conseiller-prevention-niveau-3.html",
+    signupUrl: "inscription.html?formation=conseiller-prevention",
+    catalogueUrl: "formations.html#conseiller-prevention",
+    title: "Conseiller en prévention niveau III",
+    fullTitle: "Formation conseiller en prévention niveau III (cours de base)",
+    summary: "Le cours de base qui donne au conseiller en prévention les connaissances exigées par l'article II.1-20 du Code du bien-être au travail : analyse des risques, coordination de la prévention, premiers secours, rapports. 40 heures minimum.",
+    objective: "Acquérir la connaissance de base du bien-être au travail exigée de tout conseiller en prévention (art. II.1-20), suffisante dans les entreprises des groupes C et D.",
+    titleKey: "dd.cp3", fullTitleKey: "dd.cp3_full", summaryKey: "dd.cp3_summary", taglineKey: "dd.cp3_desc",
+    factKeys: ["dd.cp3_f1", "dd.cp3_f2"],
+    durationDays: null, price: null, level: "Base",
+    audience: ["conseillers en prévention des entreprises des groupes C et D", "employeurs de moins de 20 travailleurs qui exercent eux-mêmes la fonction",
+      "conseillers en prévention du groupe B qui ne dirigent pas le service interne", "futurs conseillers en prévention"],
+    features: ["Code du bien-être au travail, art. II.1-20", "40 heures minimum", "Groupes C et D"],
+    official: {
+      verifiedAt: "2026-11-19",
+      legalBasis: "Code du bien-être au travail, livre II, titre 1 (art. II.1-2, II.1-20) et titre 4 (art. II.4-4 § 4, II.4-23 à II.4-27)",
+      minHours: 40,
+      certificate: "attestation de participation (art. II.4-25, 5°)",
+      groups: { A: "plus de 1 000 travailleurs (ou moins selon le secteur) — niveau I (direction), niveau II (autres)",
+        B: "200 à 1 000 travailleurs (ou moins selon le secteur) — niveau II (direction)", C: "moins de 200 travailleurs — connaissances de base",
+        D: "moins de 20 travailleurs, l'employeur exerce lui-même la fonction — connaissances de base" },
+      levelIIAccessYears: 5,
+      /* true = « Wisy asbl » (BCE 1027.725.391, Avenue d'Itterbeek 378 bte 1) figure sur la liste du SPF Emploi des établissements qui
+         dispensent le cours de base (niveau III) — constat du 2026-11-19. Repasser à null si l'entrée disparaît de la liste (art. II.4-27). */
+      spfListed: true, spfListedAs: "Wisy asbl", spfListVerifiedAt: "2026-11-19",
+      sources: {
+        training: "https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-et",
+        notification: "https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/le-conseiller-en-prevention/formation-1",
+        list: "https://emploi.belgique.be/fr/agrements/notification-liste-des-institutions-qui-dispensent-des-cours-de-base-pour-les-conseillers",
+        sipp: "https://emploi.belgique.be/fr/themes/bien-etre-au-travail/structures-organisationnelles/service-interne-pour-la-prevention-et-la"
+      }
+    },
+    keywords: ["conseiller en prevention", "conseiller prevention", "conseillers en prevention", "cp3", "cp 3", "cpi", "niveau 3", "niveau iii",
+      "cours de base", "connaissances de base", "bien-etre au travail", "bien etre au travail", "code du bien-etre", "sipp", "service interne",
+      "prevention", "preventieadviseur", "preventieadviseur niveau 3", "basiskennis", "prevention advisor", "prevention adviser"],
+    searchExtra: ["formation conseiller en prevention", "formation cp3", "conseiller en prevention niveau 3", "groupe c", "groupe d", "prix", "tarif", "price", "prijs"],
+    images: { hero: "assets/images/formations/conseiller-prevention.webp", card: "assets/images/formations/conseiller-prevention.webp",
+      thumb: "assets/images/conseiller-prevention/cp3-thumb-192.webp", og: "assets/images/partage/formation-conseiller-prevention-1200x630.jpg" },
+    imageAlt: "Illustration : un encadrant casqué s'adresse à une équipe en gilets de sécurité dans un entrepôt, devant des affiches de sécurité",
+    /* Même inscrit sur la liste (notification, sans agrément ni contrôle préalable), Wisy Safety n'est ni « agréé » ni « reconnu par le SPF ». */
+    unconfirmed: ["agréé", "agrément", "reconnu par le spf", "certificat officiel", "examen officiel"],
+    unconfirmedClaims: ["durée exacte et calendrier des sessions", "tarif",
+      "langue(s) des sessions", "format intra-entreprise", "mode d'évaluation finale", "formateur(s) et leur expérience pratique (art. II.4-25, 2°)"]
+  };
+
   var FIBRE = {
     id: "fibre-optique",
     registrationId: "fibre-optique",
@@ -562,8 +617,22 @@
     return s.subcontractors === true ? "star2" : "star1";
   }
 
+  /* Groupe du Code du bien-être au travail (art. II.1-2) indiqué par l'outil « Quel niveau pour mon entreprise ? » de la page
+     Conseiller en prévention — une INDICATION : l'effectif se calcule sur quatre trimestres et le secteur (code NACE) abaisse les
+     seuils (groupe A dès 50, 200 ou 500 travailleurs selon le secteur ; groupe B dès 20, 50 ou 100).
+     size : "lt20" | "lt200" (20–199) | "lt1000" (200–1 000) | "gt1000" ; risk : "no" | "yes" | "unknown" | null.
+     → "c" (C, ou D si l'employeur exerce lui-même la fonction) · "b" · "a" · "risk" (secteur à vérifier : B, voire A) · null (incomplet). */
+  function cp3Outcome(size, risk) {
+    if (size === "lt20") return "c";
+    if (size === "gt1000") return "a";
+    if (size !== "lt200" && size !== "lt1000") return null;
+    if (risk !== "no" && risk !== "yes" && risk !== "unknown") return null;
+    if (risk !== "no") return "risk";
+    return size === "lt200" ? "c" : "b";
+  }
+
   /* Toutes les formations à page dédiée (extensible : ajouter une entrée). */
-  var TRAININGS = { "vca-base": VCA_BASE, "vca-hierarchique": VCA_LH, diisocyanates: DIISO, nacelle: NACELLES, "fibre-optique": FIBRE, beps: BEPS };
+  var TRAININGS = { "vca-base": VCA_BASE, "vca-hierarchique": VCA_LH, diisocyanates: DIISO, "conseiller-prevention": CP3, nacelle: NACELLES, "fibre-optique": FIBRE, beps: BEPS };
 
   /* ---------------------------------------------------------------------
      Formatage (FR) — l'i18n de l'interface passe par les clés `dd.*`.
@@ -606,8 +675,10 @@
     vcaBase: VCA_BASE,
     vcaLigneHierarchique: VCA_LH,
     diisocyanates: DIISO,
+    conseillerPrevention: CP3,
     fibreOptique: FIBRE,
     vcaEntreprise: VCA_ENTREPRISE,
-    vcaLevelFor: vcaLevelFor
+    vcaLevelFor: vcaLevelFor,
+    cp3Outcome: cp3Outcome
   };
 });

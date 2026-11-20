@@ -165,15 +165,16 @@
       id: "faq-choisir-catalogue",
       category: "choisir",
       question: "Quelles formations proposez-vous ?",
-      answer: "Nous proposons aujourd'hui six formations :\n" +
+      answer: "Nous proposons aujourd'hui sept formations :\n" +
         "- VCA Base\n" +
         "- VCA Ligne hiérarchique\n" +
         "- Nacelles élévatrices\n" +
         "- Fibre optique\n" +
         "- BEPS – Premier secours\n" +
-        "- Diisocyanates & substances dangereuses\n\n" +
+        "- Diisocyanates & substances dangereuses\n" +
+        "- Conseiller en prévention niveau III\n\n" +
         "Le détail de chaque programme est présenté sur la page Formations.",
-      keywords: ["formations", "catalogue", "liste", "offre", "programme", "six formations", "vca", "nacelle", "fibre", "beps", "diisocyanates"],
+      keywords: ["formations", "catalogue", "liste", "offre", "programme", "sept formations", "six formations", "vca", "nacelle", "fibre", "beps", "diisocyanates", "conseiller en prevention", "cp3"],
       synonyms: ["cours", "que proposez-vous", "quelles formations", "domaines", "thèmes", "sujets", "toutes les formations"],
       relatedQuestions: ["faq-choisir-adaptee", "faq-deroulement-duree", "faq-inscription-comment"],
       action: "formations"

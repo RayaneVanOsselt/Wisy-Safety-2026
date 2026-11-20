@@ -106,7 +106,7 @@ WisyFAQ.register("nl", {
   },
   "faq-choisir-catalogue": {
    "question": "Welke opleidingen bieden jullie aan?",
-   "answer": "Vandaag bieden wij zes opleidingen aan:\n- VCA Basis\n- VCA voor Leidinggevenden\n- Hoogwerker\n- Glasvezel\n- BEPS — Eerste hulp\n- Di-isocyanaten & gevaarlijke stoffen\n\nDe details van elk programma vindt u op de pagina Opleidingen.",
+   "answer": "Vandaag bieden wij zeven opleidingen aan:\n- VCA Basis\n- VCA voor Leidinggevenden\n- Hoogwerker\n- Glasvezel\n- BEPS — Eerste hulp\n- Di-isocyanaten & gevaarlijke stoffen\n- Preventieadviseur niveau III\n\nDe details van elk programma vindt u op de pagina Opleidingen.",
    "keywords": [
     "opleidingen",
     "aanbod",

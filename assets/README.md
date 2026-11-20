@@ -24,6 +24,7 @@ assets/
 │   ├── partenaires/  Logos des partenaires (bandeau de l'accueil)
 │   ├── vca-base/     Photos des deux articles VCA Base + miniature de recherche
 │   ├── vca-entreprise/  Page VCA Entreprise : affiche du film (3 tailles × AVIF/WebP) + mascotte détourée (2 tailles × AVIF/WebP)
+│   ├── conseiller-prevention/   Miniature de recherche de la page Conseiller en prévention niveau III
 │   └── vca-ligne-hierarchique/  Visuels des 3 dossiers de la page VCA Ligne hiérarchique + miniature de recherche
 ├── videos/
 │   ├── accueil/      Vidéo de l'accueil : animation du logo (2 versions + 2 affiches) ; poster.webp (affiche de l'ancienne vidéo)
@@ -68,6 +69,7 @@ s'ils échouent, ils indiquent le fichier en cause.
 | `images/coordination/` | `coordination.html` |
 | `images/partage/` | aperçu des liens partagés (balises générées par `scripts/build-seo.js`) |
 | `images/logo/`, `icons/` | en-tête, pied de page, onglet du navigateur, données envoyées à Google |
+| `images/conseiller-prevention/`, `images/formations/conseiller-prevention.webp` | page `formation-conseiller-prevention-niveau-3.html` (catalogue, recherche) — dérivés de l'illustration IA `originaux/vca-ligne-hierarchique/vca-lh-briefing-equipe.webp` (`scripts/optimize-images.py`, `cp3()`) : à remplacer par une vraie photo de session |
 | `images/vca-ligne-hierarchique/`, `images/diisocyanates/`, `images/fibre-optique/` | pages `formation-vca-ligne-hierarchique.html`, `formation-diisocyanates.html`, `formation-fibre-optique.html` (cartes et modale des articles), pages `article-fibre-*.html`, aperçu dans la recherche — visuels générés par IA, à remplacer : voir [docs/images-manifest.md](../docs/images-manifest.md) |
 | `videos/accueil/` | `index.html` : animation du logo (hero + intro) — voir [docs/README-ACCUEIL.md](../docs/README-ACCUEIL.md) |
 | `videos/vca-entreprise/`, `images/vca-entreprise/` | `vca-entreprise.html` : film (avec son), affiche et mascotte — voir [docs/README-VCA-ENTREPRISE.md](../docs/README-VCA-ENTREPRISE.md) |

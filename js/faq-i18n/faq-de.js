@@ -106,7 +106,7 @@ WisyFAQ.register("de", {
   },
   "faq-choisir-catalogue": {
    "question": "Welche Schulungen bieten Sie an?",
-   "answer": "Wir bieten derzeit sechs Schulungen an:\n- VCA Grundlagen\n- VCA für Führungskräfte\n- Hubarbeitsbühne\n- Glasfaser\n- BEPS — Erste Hilfe\n- Diisocyanate & Gefahrstoffe\n\nDie Details zu jedem Programm finden Sie auf der Seite „Schulungen“.",
+   "answer": "Wir bieten derzeit sieben Schulungen an:\n- VCA Grundlagen\n- VCA für Führungskräfte\n- Hubarbeitsbühne\n- Glasfaser\n- BEPS — Erste Hilfe\n- Diisocyanate & Gefahrstoffe\n- Gefahrenverhütungsberater Stufe III\n\nDie Details zu jedem Programm finden Sie auf der Seite „Schulungen“.",
    "keywords": [
     "schulungen",
     "katalog",

@@ -273,6 +273,40 @@
         it: "Regolamento (UE) 2020/1149 — REACH",
         sl: "Uredba (EU) 2020/1149 — REACH"
       }
+    },
+    {
+      id: "conseiller-prevention",
+      code: "CP3",
+      priceCents: registryPriceCents("conseillerPrevention"),   /* tarif non confirmé → « Sur devis » */
+      onQuote: !registryPriceCents("conseillerPrevention"),
+      unit: "participant",
+      category: "securite",
+      icon: "shield",
+      image: "assets/images/formations/conseiller-prevention.webp",
+      name: {
+        fr: "Conseiller en prévention niveau III",
+        en: "Prevention adviser level III",
+        nl: "Preventieadviseur niveau III",
+        af: "Voorkomingsadviseur vlak III",
+        ar: "مستشار الوقاية المستوى III",
+        bg: "Консултант по превенция ниво III",
+        de: "Gefahrenverhütungsberater Stufe III",
+        ro: "Consilier în prevenire nivel III",
+        it: "Consulente in prevenzione livello III",
+        sl: "Svetovalec za preventivo, raven III"
+      },
+      description: {
+        fr: "Cours de base — Code du bien-être au travail",
+        en: "Basic course — Code on well-being at work",
+        nl: "Basiscursus — Codex over het welzijn op het werk",
+        af: "Basiese kursus — Kode oor welstand by die werk",
+        ar: "الدورة الأساسية — قانون الرفاه في العمل",
+        bg: "Основен курс — Кодекс за благосъстоянието при работа",
+        de: "Grundkurs — Gesetzbuch über das Wohlbefinden bei der Arbeit",
+        ro: "Curs de bază — Codul privind bunăstarea la locul de muncă",
+        it: "Corso di base — Codice del benessere al lavoro",
+        sl: "Osnovni tečaj — Zakonik o dobrem počutju pri delu"
+      }
     }
   ];
 

@@ -106,7 +106,7 @@ WisyFAQ.register("af", {
   },
   "faq-choisir-catalogue": {
    "question": "Watter opleidings bied julle aan?",
-   "answer": "Ons bied tans ses opleidings aan:\n- VCA Basis\n- VCA vir Toesighouers\n- Hoogwerker\n- Optiese vesel\n- BEPS — Noodhulp\n- Di-isosianate & gevaarlike stowwe\n\nDie besonderhede van elke program word op die opleidingsbladsy aangebied.",
+   "answer": "Ons bied tans sewe opleidings aan:\n- VCA Basis\n- VCA vir Toesighouers\n- Hoogwerker\n- Optiese vesel\n- BEPS — Noodhulp\n- Di-isosianate & gevaarlike stowwe\n- Voorkomingsadviseur vlak III\n\nDie besonderhede van elke program word op die opleidingsbladsy aangebied.",
    "keywords": [
     "opleidings",
     "katalogus",

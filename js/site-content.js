@@ -307,10 +307,18 @@
   var FORMATIONS = buildFormations();
   var SERVICES = (Trainings && Trainings.vcaEntreprise ? [Trainings.vcaEntreprise] : []).map(fromService);
 
+  /* Formations ouvertes à l'inscription SANS page (BA4, 27/11/2026) : hors formations() / recherche / sitemap ;
+     formation(id) les trouve pour nommer leurs sessions. Aucun fait affirmé. Page créée → déplacer dans CATALOGUE. */
+  var INSCRIPTION_ONLY = [
+    { id: "ba4", registrationId: "ba4", title: "BA4 — Personne avertie", fullTitle: "Formation BA4 — personne avertie (risque électrique)",
+      titleKey: "dd.ba4", fullTitleKey: "dd.ba4_full", signupUrl: "inscription.html?formation=ba4", inscriptionOnly: true }
+  ];
+
   function categories() { return CATEGORIES.map(clone); }
   function category(id) { return CATEGORIES.filter(function (c) { return c.id === id; }).map(clone)[0] || null; }
   function formations() { return FORMATIONS.map(clone); }
-  function formation(id) { return FORMATIONS.filter(function (f) { return f.id === id; }).map(clone)[0] || null; }
+  function formation(id) { return FORMATIONS.concat(INSCRIPTION_ONLY).filter(function (f) { return f.id === id; }).map(clone)[0] || null; }
+  function inscriptionOnly() { return INSCRIPTION_ONLY.map(clone); }
   function formationsByCategory(cat) { return FORMATIONS.filter(function (f) { return f.category === cat; }).map(clone); }
   function services() { return SERVICES.map(clone); }
   function service(id) { return SERVICES.filter(function (x) { return x.id === id; }).map(clone)[0] || null; }
@@ -345,6 +353,7 @@
     category: category,
     formations: formations,
     formation: formation,
+    inscriptionOnly: inscriptionOnly,
     formationsByCategory: formationsByCategory,
     services: services,
     service: service,

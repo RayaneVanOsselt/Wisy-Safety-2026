@@ -148,12 +148,12 @@ test("menus : le lien est dans l'en-tête et le menu mobile des pages du site", 
   });
 });
 
-test("inscription : « Sur devis », aucun prix, parcours et feuille Réservations alignés", () => {
+test("inscription : aucun prix inventé, paiement le jour de la formation, parcours et feuille Réservations alignés", () => {
   const reg = fs.readFileSync(path.join(ROOT, "js/registration-data.js"), "utf8");
   const block = reg.slice(reg.indexOf('id: "conseiller-prevention"'), reg.indexOf('id: "conseiller-prevention"') + 2500);
   assert.match(block, /onQuote: !registryPriceCents\("conseillerPrevention"\)/, "sur devis tant que le registre n'a pas de prix");
   assert.match(block, /priceCents: registryPriceCents\("conseillerPrevention"\)/);
-  assert.match(fs.readFileSync(path.join(ROOT, "google-sheets/reservations.gs"), "utf8"), /\["conseiller-prevention", "[^"]+", "Formation", "Sur devis"/);
+  assert.match(fs.readFileSync(path.join(ROOT, "google-sheets/reservations.gs"), "utf8"), /\["conseiller-prevention", "[^"]+", "Formation", PAY_ON_SITE/);
 });
 
 test("documentation : docs/README-CP3.md reflète l'état réel de l'inscription sur la liste", () => {

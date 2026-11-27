@@ -115,7 +115,7 @@
   function detailHtml(S, s, now, opts) {
     var fmt = S.format(s, lang()), lv = level(S, s, now), bookable = S.isBookable(s, now);
     var meta = [
-      ['<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>', fmt.time || t("sess.all_day", "Journée entière")],
+      ['<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>', fmt.time || t("sess.time_tbc", "Horaire à confirmer")],
       [fmt.language ? '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>' : "", fmt.language],
       [placeOf(s) ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.8"/></svg>' : "", placeOf(s)]
     ].filter(function (m) { return m[1]; });
@@ -132,7 +132,7 @@
         ? '<a class="btn btn--cta wss-card__cta" href="' + esc(signupHref(S, s)) + '">' + esc(s.live ? t("sess.book_session", "Réserver cette session") : t("sess.signup", "S'inscrire à cette session")) + ' <span class="btn__arrow" aria-hidden="true">→</span></a>' +
           (s.live ? '<p class="wss-card__note">' + esc(t("sess.indicative", "Disponibilité indicative : votre place est réservée au moment où vous confirmez.")) + "</p>" : "")
         : '<a class="btn btn--outline wss-card__cta" href="contact.html">' + esc(t("sess.contact", "Nous contacter")) + "</a>") +
-      (f && !(opts && opts.noTitle) ? '<a class="wss-card__more" href="' + esc(f.url) + '">' + esc(t("sess.view", "Voir la formation")) + ' <span aria-hidden="true">→</span></a>' : "") +
+      (f && f.url && !(opts && opts.noTitle) ? '<a class="wss-card__more" href="' + esc(f.url) + '">' + esc(t("sess.view", "Voir la formation")) + ' <span aria-hidden="true">→</span></a>' : "") +
     "</article>";
   }
 

@@ -16,6 +16,9 @@ de serveur à louer, pas de mot de passe supplémentaire.
 
 > 📄 **Guide imprimable des onglets** (à quoi sert chaque onglet, menu, « je veux… je fais… ») :
 > [guide-feuille-reservations.pdf](guide-feuille-reservations.pdf) — 6 pages.
+>
+> 📅 **Planning des sessions, inscription sans paiement en ligne, e-mails vers info@ (27/11/2026, version 1.2.0)** :
+> [GUIDE-SESSIONS-INSCRIPTIONS.md](GUIDE-SESSIONS-INSCRIPTIONS.md).
 
 ## 1. Ce qui est garanti
 
@@ -67,6 +70,7 @@ par e-mail, comme avant.
 | Je veux… | Je fais… |
 |---|---|
 | **Créer une session** | *➕ Nouvelle session* (ou une nouvelle ligne dans *Sessions*) : formation (liste), date, début, fin, places. L'identifiant se remplit tout seul. Cochez **Publiée sur le site** quand tout est prêt. |
+| **Ouvrir tout un planning** | *📅 Ouvrir les sessions du planning…* : une session par formation et par jour du planning (bloc `PLANNING` du script : lundi Nacelles + CP3, mardi/jeudi BA4, mercredi/dimanche VCA Base, vendredi Diisocyanates + CP3, samedi Nacelles), 5 places, sans horaire, publiées. OK = 28/11/2026 → 31/03/2027 ; ou tapez une autre période (`01/04/2027 30/06/2027`). Jamais de doublon ; une session annulée n'est jamais recréée. |
 | Modifier la date ou l'horaire | Changez la cellule. Les réservations restent attachées à la session. Puis *📣 Prévenir les inscrits d'un changement d'horaire* (e-mail à chaque client). |
 | Changer la capacité | Changez *Places (total)*. *Restantes* est recalculé. Si vous descendez sous le nombre déjà réservé, *Vérifier la cohérence* vous le signale. |
 | **Fermer les inscriptions** | Sélectionnez la session › *🔒 Fermer les inscriptions* (la session reste visible, sans bouton Réserver). |
@@ -128,6 +132,11 @@ par jour avec Gmail, 1 500 avec Google Workspace) et rien n'est envoyé à Outlo
 
 ## 5. Mettre à jour le script
 
+> **Version 1.2.0 (27/11/2026)** : menu *📅 Ouvrir les sessions du planning…* (bloc `PLANNING`), formation **BA4**,
+> e-mails « Paiement : sur place, le jour de la formation » et « horaire à confirmer », nouvelles sessions écrites sous
+> la dernière session (et non sous les cases à cocher vides), liste publique jusqu'à 400 sessions. Après l'avoir collée :
+> Nouvelle version du déploiement, *🛠 Installer / réparer la feuille*, puis *📅 Ouvrir les sessions du planning…*.
+>
 > **Version 1.1.0 (23/10/2026)** : le même script reçoit aussi les **formulaires du site** (contact / devis,
 > coordination, test PEB → onglet « Demandes », voir [README-FORMULAIRES.md](README-FORMULAIRES.md)) ; les e-mails à
 > l'équipe ont « Répondre à » = le client ; liens vers https://wisysafety.be ; menu « ✉ Envoyer un e-mail de test ».
@@ -156,8 +165,8 @@ Relancez *🛠 Installer / réparer la feuille* si la nouvelle version ajoute de
   utilisez le menu. *Vérifier la cohérence* détecte une surréservation éventuelle.
 - Outlook est mis à jour avec jusqu'à 10 minutes de décalage (pas de notification instantanée de Microsoft vers Google).
 - Les e-mails aux clients sont en français.
-- Pas de paiement en ligne : la facture est envoyée par l'équipe. Un paiement (Mollie / Stripe, Bancontact) est
-  possible plus tard, en vérifiant le statut du paiement depuis la feuille.
+- **Pas de paiement en ligne** (décision du 27/11/2026) : le participant paie **sur place, le jour de la formation** ;
+  le site et les e-mails le disent. Les moyens de paiement (Stripe / Mollie / PayPal) ont été retirés de l'inscription.
 - GitHub Pages n'est pas prévu pour le commerce en ligne : avant un paiement en ligne, déplacer l'hébergement (ex.
   Cloudflare Pages, gratuit, même dépôt).
 - **Politique de confidentialité** : à compléter par Wisy Safety (traitement « réservations » : données, finalité,

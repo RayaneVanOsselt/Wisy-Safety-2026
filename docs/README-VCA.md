@@ -111,7 +111,7 @@ jamais placée.
 | `vca_phone_click` · `vca_email_click` | clic sur le téléphone / l'e-mail |
 | `vca_article_click` | clic vers un article |
 | `vca_registration_start` | arrivée dans le parcours d'inscription avec la VCA Base |
-| `vca_registration_complete` | commande initialisée avec un prestataire de paiement réel — **pas encore actif** : le paiement en ligne n'est qu'un emplacement, l'inscription n'est donc jamais comptée « terminée » aujourd'hui |
+| `vca_registration_complete` | réservation (ou demande par e-mail) **bien transmise** avec la VCA Base — depuis le 27/11/2026 : il n'y a plus de paiement en ligne (règlement sur place, le jour de la formation) |
 
 ## Recherche, assistant, langues
 

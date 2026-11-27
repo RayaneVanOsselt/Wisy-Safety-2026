@@ -42,8 +42,19 @@ test("registre : 7 formations, ids uniques, catégories déclarées, comptes coh
 
 test("registre ⇄ catalogue d'inscription : chaque formation a son registrationId, et inversement", () => {
   const catalogue = Array.from(Reg.getCatalogue(), (c) => c.id).sort();    // Array.from : sort de l'autre contexte vm
-  /* Formations ET services réservables (VCA Entreprise est un service d'accompagnement, présent au catalogue d'inscription). */
-  assert.deepEqual(Site.formations().concat(Site.services()).map((f) => f.registrationId).filter(Boolean).sort(), catalogue);
+  /* Formations ET services réservables (VCA Entreprise est un service d'accompagnement, présent au catalogue d'inscription),
+     plus les formations ouvertes à l'inscription SANS page dédiée (BA4, 27/11/2026). */
+  assert.deepEqual(Site.formations().concat(Site.services(), Site.inscriptionOnly()).map((f) => f.registrationId).filter(Boolean).sort(), catalogue);
+});
+
+test("formation ouverte à l'inscription sans page (BA4) : nommée pour ses sessions, absente du catalogue, de la recherche et du sitemap", () => {
+  const ba4 = Site.formation("ba4");
+  assert.ok(ba4 && ba4.inscriptionOnly, "formation(\"ba4\") la trouve");
+  assert.equal(ba4.title, "BA4 — Personne avertie");
+  assert.equal(ba4.url, undefined, "aucune page inventée");
+  assert.ok(!Site.formations().some((f) => f.id === "ba4"), "pas dans le catalogue public (pas de page)");
+  assert.ok(!Site.publicPaths().some((p) => /ba4/.test(p)), "pas dans le sitemap");
+  assert.equal(Reg.resolveTrainingId("ba4"), "ba4", "?formation=ba4 présélectionne la formation");
 });
 
 test("lien profond ?formation= : identifiants du site OU du catalogue ; inconnu → null", () => {

@@ -144,12 +144,13 @@
     if (!W) return;
     var lg = lang();
     W.upcoming(W.peek()).slice(0, 30).forEach(function (s) {
-      var f = FORMATIONS.filter(function (x) { return x.id === s.training; })[0];
+      /* Site.formation : trouve aussi une formation ouverte à l'inscription sans page dédiée (ex. BA4), pour nommer sa session. */
+      var f = FORMATIONS.filter(function (x) { return x.id === s.training; })[0] || Site.formation(s.training);
       var fmt = W.format(s, lg), full = s.status === "full" || s.seatsLeft === 0;
       var seats = full ? t("search.session_full") : (s.seatsLeft != null ? t("search.session_seats").replace("{n}", s.seatsLeft) : "");
       SESSIONS.push({
         id: "sess-" + s.id, session: s, full: full,
-        title: (f ? t(f.titleKey) : s.training) + " — " + fmt.dateLong,
+        title: (f ? (t(f.titleKey) === f.titleKey && f.title ? f.title : t(f.titleKey)) : s.training) + " — " + fmt.dateLong,
         sub: [fmt.time, fmt.language, seats].filter(Boolean).join(" · "),
         /* inscription directe (formation + session) ; session complète → agenda */
         url: full ? "agenda.html" : W.signupUrl(s, s.training),

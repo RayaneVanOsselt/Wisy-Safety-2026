@@ -17,7 +17,7 @@
    l'étape 4 RÉSERVE les places — la feuille les vérifie sous verrou, sa réponse seule fait foi ; sinon, la demande
    part par e-mail (EmailJS) comme avant. Aucun paiement en ligne.
    Événements d'analyse (bus `wisy:analytics`, consentement géré par js/cookie-consent.js) :
-   vca_registration_start (arrivée avec la VCA Base) · vca_registration_complete (commande initialisée).
+   vca_registration_start (arrivée avec la VCA Base) · vca_registration_complete (réservation ou demande bien transmise).
    ========================================================================= */
 (function () {
   "use strict";
@@ -189,6 +189,7 @@
     draft: '<path d="M12 3v18M3 12h18" opacity=".35"/><path d="M6 6l4 4-4 4M18 6l-4 4 4 4"/>',
     signal: '<path d="M4 16a10 10 0 0 1 16 0M7 16a6 6 0 0 1 10 0"/><circle cx="12" cy="16" r="2"/>',
     aid: '<path d="M12 21c-4-2.5-7-6-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 4-3 7.5-7 10z"/><path d="M12 9.3v4M10 11.3h4"/>',
+    bolt: '<path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2z"/>',
     /* interface */
     plus: '<path d="M12 5v14M5 12h14"/>',
     minus: '<path d="M5 12h14"/>',
@@ -356,21 +357,17 @@
     }
     return { subtotalCents: subtotal, vatCents: vat, totalCents: total, hasQuote: hasQuoteItems() };
   }
-  /* Tarif retiré du site en attendant sa publication : « En cours de préparation » (et non « Sur devis ») */
-  function isPending(item) { return !!item && !isPriced(item) && item.pricePending === true; }
-  function pendingLabel() { return t("price.pending", "En cours de préparation"); }
-  function quoteLabel(item) { return isPending(item) ? pendingLabel() : t("reg.on_quote", "Sur devis"); }
-  /* Libellé de prix unitaire (ou « En cours de préparation » / « Sur devis ») */
-  function priceLabel(item) { return isPriced(item) ? money(item.priceCents) : quoteLabel(item); }
-  /* Libellé du total général : montant, « En cours de préparation » si toutes les formations choisies ont leur tarif
-     retiré, « Sur devis » si aucun item tarifé */
+  /* PAIEMENT SUR PLACE (décision de Wisy Safety du 27/11/2026) : aucun paiement en ligne ; le participant règle sa
+     formation le jour de la formation. Une formation sans tarif publié affiche « Paiement le jour de la formation »
+     (jamais « Sur devis » ni « En cours de préparation » dans le parcours d'inscription). */
+  function onSiteLabel() { return t("reg.pay_onsite", "Paiement le jour de la formation"); }
+  function onSiteTotalLabel() { return t("reg.pay_onsite_total", "Sur place, le jour de la formation"); }
+  /* Libellé de prix unitaire : le tarif s'il est publié, sinon « Paiement le jour de la formation » */
+  function priceLabel(item) { return isPriced(item) ? money(item.priceCents) : onSiteLabel(); }
+  /* Libellé du total général : montant indicatif s'il existe des tarifs publiés, sinon « Sur place, le jour de la formation » */
   function grandTotalLabel(totals) {
     if (totals.subtotalCents > 0) return money(totals.totalCents);
-    if (totals.hasQuote) {
-      var ids = selectedIds();
-      return ids.length && ids.every(function (id) { return isPending(DATA.getTraining(id)); }) ? pendingLabel() : t("reg.on_quote", "Sur devis");
-    }
-    return money(0);
+    return onSiteTotalLabel();
   }
   function clearRegistration() {
     state = emptyState();
@@ -646,8 +643,8 @@
         (!picker && sessionOf(id) ? '<span class="reg-line__session">' + icon("calendar") + '<span><b>' + t("reg.session_label", "Session") + "</b> · " + escapeHtml(sessionText(sessionOf(id))) + "</span></span>" : "") +
         (lim != null && qty > lim ? '<span class="reg-line__warn" role="alert">' + icon("info") + escapeHtml(t("sess.qty_over", "Il ne reste que {n} place(s) pour cette session : réduisez le nombre de participants ou choisissez une autre date.").replace("{n}", String(lim))) + "</span>" : "") +
         '<span class="reg-line__meta">' +
-          '<span class="reg-line__calc">' + (priced ? money(tr.priceCents) + " × " + qty : qty + " × " + quoteLabel(tr)) + "</span>" +
-          '<span class="reg-line__total">' + (priced ? money(lineTotalCents(id)) : quoteLabel(tr)) + "</span>" +
+          '<span class="reg-line__calc">' + (priced ? money(tr.priceCents) + " × " + qty : qty + " " + participantsWord(qty)) + "</span>" +
+          '<span class="reg-line__total' + (priced ? "" : " is-text") + '">' + (priced ? money(lineTotalCents(id)) : onSiteLabel()) + "</span>" +
         "</span>" +
         '<span class="reg-line__actions">' +
           '<span class="reg-line__qty">' +
@@ -661,24 +658,19 @@
       "</div>";
     }).join("");
 
-    var totals = computeTotals();
-    var chosen = selectedIds().map(function (cid) { return DATA.getTraining(cid); });
-    var anyPending = chosen.some(isPending);
-    var anyQuote = chosen.some(function (x) { return !isPriced(x) && !isPending(x); });
-    var allPending = chosen.length > 0 && chosen.every(isPending);
-    var quoteNote = totals.hasQuote ? (anyQuote ? '<p class="reg-quote-note">' + icon("info") + t("reg.quote_note", "Formation « sur devis » : le tarif vous sera communiqué séparément.") + "</p>" : "") +
-      (anyPending ? '<p class="reg-quote-note">' + icon("info") + t("reg.pending_note", "Tarif en cours de préparation : il vous sera communiqué séparément.") + "</p>" : "") : "";
+    /* Cartouche : participants + règlement sur place (aucun sous-total « 0,00 € », aucune TVA « à déterminer »). */
+    var totals = computeTotals(), pcount = participantsCount();
     var cartouche = '<dl class="reg-cartouche">' +
-      '<div class="reg-cartouche__row"><dt>' + t("reg.subtotal", "Sous-total formations") + '</dt><dd>' + (allPending ? pendingLabel() : money(totals.subtotalCents)) + "</dd></div>" +
-      '<div class="reg-cartouche__row reg-cartouche__row--vat"><dt>' + t("reg.vat", "TVA") + "</dt><dd>" +
-        (totals.vatCents == null || allPending ? t("reg.vat_tbd", "À déterminer") : money(totals.vatCents)) + "</dd></div>" +
-      '<div class="reg-cartouche__row reg-cartouche__row--total"><dt>' + t("reg.total", "Total") + '</dt><dd data-grandtotal>' + grandTotalLabel(totals) + "</dd></div>" +
-    "</dl>" + quoteNote;
+      '<div class="reg-cartouche__row"><dt>' + t("reg.journey_2", "Participants") + "</dt><dd>" + pcount + "</dd></div>" +
+      (totals.subtotalCents > 0 ? '<div class="reg-cartouche__row"><dt>' + t("reg.total", "Total") + "</dt><dd>" + money(totals.totalCents) + "</dd></div>" : "") +
+      '<div class="reg-cartouche__row reg-cartouche__row--total"><dt>' + t("reg.settlement", "Règlement") + '</dt><dd class="is-text" data-grandtotal>' + onSiteTotalLabel() + "</dd></div>" +
+    "</dl>" +
+    '<p class="reg-quote-note">' + icon("info") + t("reg.pay_onsite_note", "Aucun paiement en ligne : vous réglez votre formation sur place, le jour de la formation.") + "</p>";
 
     var cta = compact ? "" : (
       '<div class="reg-summary__cta">' +
         '<button type="button" class="reg-cta" data-advance>' + ctaLabel() + icon("arrow-right") + "</button>" +
-        '<p class="reg-secure">' + icon("lock") + t("reg.secure_note", "Paiement sécurisé à l'étape finale") + "</p>" +
+        '<p class="reg-secure">' + icon("check") + t("reg.secure_note", "Aucun paiement en ligne · règlement le jour de la formation") + "</p>" +
       "</div>"
     );
 
@@ -705,7 +697,7 @@
   function ctaLabel() {
     if (state.step === 1) return t("reg.cta_continue", "Continuer l'inscription");
     if (state.step === 2) return t("reg.cta_next", "Continuer");
-    if (state.step === 3) return t("reg.cta_pay", "Aller au paiement");
+    if (state.step === 3) return t("reg.cta_review", "Vérifier et réserver");
     return t("reg.cta_finalize", "Finaliser");
   }
 
@@ -731,7 +723,8 @@
       bar.querySelector("[data-bar-count]").textContent = count + " " + formationsWord(count) +
         " · " + pcount + " " + participantsWord(pcount);
       bar.querySelector("[data-bar-total]").textContent = grandTotalLabel(totals);
-      bar.querySelector("[data-bar-cta-label]").textContent = state.step === 3 ? t("reg.cta_pay", "Aller au paiement") : t("reg.cta_next_short", "Continuer");
+      bar.querySelector("[data-bar-total]").classList.toggle("is-text", !(totals.subtotalCents > 0));
+      bar.querySelector("[data-bar-cta-label]").textContent = state.step === 3 ? t("reg.cta_review", "Vérifier et réserver") : t("reg.cta_next_short", "Continuer");
       bar.classList.toggle("is-shown", showBar);
     }
     document.body.classList.toggle("reg-bar-active", showBar);
@@ -822,70 +815,54 @@
   function setVal(id, v) { var el = document.getElementById(id); if (el) el.value = v || ""; }
 
   /* ======================================================================
-     12. Récap final (étape 4) + emplacement paiement
+     12. Récap final (étape 4) — réservation (aucun paiement en ligne)
      ====================================================================== */
   function renderFinalSummary() {
     var host = document.getElementById("reg-final-summary");
     if (host) host.innerHTML = summaryInnerHtml(true);
     var totals = computeTotals();
     var tv = document.getElementById("reg-final-total");
-    if (tv) tv.innerHTML = grandTotalLabel(totals) + (totals.vatCents == null ? ' <small>' + t("reg.vat_excluded", "hors TVA à déterminer") + "</small>" : "");
-    /* État du prestataire de paiement */
-    var ready = PaymentProvider.isReady(), booking = !ready && bookingMode();
-    applyStep4Mode(ready ? "payment" : booking ? "booking" : "request");
+    if (tv) { tv.textContent = grandTotalLabel(totals); tv.classList.toggle("is-text", !(totals.subtotalCents > 0)); }
+    var booking = bookingMode();
+    applyStep4Mode(booking ? "booking" : "request");
     var st = document.getElementById("reg-pay-status");
     if (st) {
-      st.innerHTML = icon(ready || booking ? "check" : "info") + (ready
-        ? t("reg.pay_ready", "Paiement en ligne disponible")
-        : booking ? escapeHtml(t("sess.book_status", "Places vérifiées en direct au moment de l'envoi"))
+      st.innerHTML = icon(booking ? "check" : "info") + (booking
+        ? escapeHtml(t("sess.book_status", "Places vérifiées en direct au moment de l'envoi"))
         : t("reg.req_status", "Réponse de l'équipe par e-mail"));
     }
     var btn = document.getElementById("reg-pay-btn");
     if (btn && !requestSent && !bookingSent) btn.disabled = selectedIds().length === 0;
   }
 
-  /* Sans prestataire de paiement, l'étape 4 ENVOIE la demande à Wisy Safety (au lieu d'un bouton « payer » sans effet) :
-     on remplace les clés de traduction des libellés « Paiement » par celles de l'envoi — le moteur i18n les retraduit
-     ensuite à chaque changement de langue. */
-  var REQUEST_KEYS = { "reg.step_payment": "reg.step_request", "reg.s4_sub": "reg.req_sub", "reg.pay_title": "reg.req_title",
-    "reg.pay_desc": "reg.req_desc", "reg.pay_action": "reg.req_action", "reg.journey_4": "reg.step_request", "reg.journey_4s": "reg.req_journey_s" };
-  /* Feuille de réservation branchée : l'étape 4 RÉSERVE les places (libellés « Réservation »). */
-  var BOOKING_KEYS = { "reg.step_payment": "sess.step_booking", "reg.s4_sub": "sess.s4_sub", "reg.pay_title": "sess.book_title",
-    "reg.pay_desc": "sess.book_desc", "reg.pay_action": "sess.book_action", "reg.journey_4": "sess.step_booking", "reg.journey_4s": "sess.journey_s" };
-  var STEP4_MODES = { payment: {}, request: REQUEST_KEYS, booking: BOOKING_KEYS };
+  /* Étape 4 : feuille de réservation branchée → elle RÉSERVE les places (libellés « Réservation ») ; sinon elle ENVOIE
+     la demande à l'équipe par e-mail (libellés « Envoi »). Chaque libellé de l'étape porte `data-step4="<rôle>"` ; on lui
+     donne la clé de traduction du mode — le moteur i18n la retraduit ensuite à chaque changement de langue. */
+  var STEP4_MODES = {
+    request: { label: "reg.step_request", sub: "reg.req_sub", title: "reg.req_title", desc: "reg.req_desc", action: "reg.req_action", journeySub: "reg.req_journey_s" },
+    booking: { label: "sess.step_booking", sub: "sess.s4_sub", title: "sess.book_title", desc: "sess.book_desc", action: "sess.book_action", journeySub: "sess.journey_s" }
+  };
   function applyStep4Mode(mode) {
-    var map = STEP4_MODES[mode] || {};
-    Object.keys(REQUEST_KEYS).forEach(function (payKey) {
-      var keys = [payKey, REQUEST_KEYS[payKey], BOOKING_KEYS[payKey]], to = map[payKey] || payKey;
-      keys.forEach(function (from) {
-        if (from === to) return;
-        document.querySelectorAll('[data-i18n="' + from + '"]').forEach(function (el) {
-          el.setAttribute("data-i18n", to);
-          el.textContent = t(to, el.textContent);
-        });
-      });
+    var map = STEP4_MODES[mode] || STEP4_MODES.request;
+    document.querySelectorAll("[data-step4]").forEach(function (el) {
+      var to = map[el.getAttribute("data-step4")];
+      if (!to || el.getAttribute("data-i18n") === to) return;
+      el.setAttribute("data-i18n", to);
+      el.textContent = t(to, el.textContent);
     });
-    var providers = document.querySelector(".reg-payment__providers");
-    if (providers) providers.hidden = mode !== "payment";
   }
-  function applyRequestMode(on) { applyStep4Mode(on ? (bookingMode() ? "booking" : "request") : "payment"); }
 
   /* ======================================================================
-     13. ABSTRACTION PAIEMENT (aucun service réel connecté)
+     13. Commande transmise (paiement en ligne SUPPRIMÉ le 27/11/2026)
      ====================================================================== */
+  /* Aucun prestataire de paiement : isReady() est toujours faux, l'étape 4 réserve ou envoie la demande. */
   var PaymentProvider = {
-    get id() { return CONFIG.payment.provider; },
-    isReady: function () { return !!(CONFIG.payment.provider && CONFIG.payment.ready); },
-    /* À implémenter par prestataire (Stripe/Mollie/PayPal) LORS du branchement.
-       Ne DOIT PAS être appelé tant qu'aucun prestataire n'est configuré. */
-    createSession: function () {
-      throw new Error("Wisy: aucun prestataire de paiement configuré.");
-    }
+    get id() { return null; },
+    isReady: function () { return false; }
   };
 
-  /* Construit un ordre normalisé. N'appelle AUCUN service externe.
-     Le total transmis est indicatif : le SERVEUR devra recalculer à partir
-     des identifiants (items[].id) et ne jamais faire confiance au navigateur. */
+  /* Construit la commande normalisée (formations, quantités, sessions, coordonnées). N'appelle AUCUN service externe.
+     Aucun montant n'est encaissé : le règlement se fait sur place, le jour de la formation. */
   function initializePayment(order) {
     var src = order || state;
     var items = selectedIds().map(function (id) {
@@ -906,12 +883,12 @@
       },
       customer: src.customer,
       billing: src.billing,
-      _note: "Client-side amounts are indicative. Server MUST recompute from item ids."
+      settlement: "on_site",       /* règlement sur place, le jour de la formation */
+      _note: "No online payment. Amounts are indicative only."
     };
     return {
       status: PaymentProvider.isReady() ? "ready" : "unavailable",
       provider: PaymentProvider.id,
-      endpoint: CONFIG.payment.checkoutEndpoint,
       order: payload
     };
   }
@@ -947,12 +924,12 @@
     selectedIds().forEach(function (id) {
       var tr = DATA.getTraining(id), q = state.trainings[id], s = sessionOf(id);
       lines.push("- " + (tr.name && tr.name.fr || id) + " (" + (tr.code || id) + ") × " + q + " — " +
-        (isPriced(tr) ? moneyFr(tr.priceCents) + " par participant" : isPending(tr) ? "tarif en cours de préparation" : "sur devis") +
+        (isPriced(tr) ? moneyFr(tr.priceCents) + " par participant" : "paiement sur place le jour de la formation") +
         (s ? " — session : " + Sessions.format(s, "fr").dateLong + (s.location ? ", " + s.location : "") : " — session : à convenir"));
     });
     var totals = computeTotals();
-    lines.push("Total indicatif : " + (totals.subtotalCents ? moneyFr(totals.subtotalCents) : "—") + (totals.hasQuote ? (selectedIds().some(function (id) { var x = DATA.getTraining(id); return !isPriced(x) && !isPending(x); }) ? " + formation(s) sur devis" : "") +
-      (selectedIds().some(function (id) { return isPending(DATA.getTraining(id)); }) ? " + formation(s) au tarif en cours de préparation" : "") : "") + " (TVA à déterminer)");
+    if (totals.subtotalCents) lines.push("Total indicatif : " + moneyFr(totals.subtotalCents));
+    lines.push("RÈGLEMENT : sur place, le jour de la formation (aucun paiement en ligne).");
     lines.push("", "PARTICIPANTS");
     selectedIds().forEach(function (id) {
       var tr = DATA.getTraining(id);
@@ -966,7 +943,7 @@
     lines.push("", "DEMANDEUR", [c.firstName, c.lastName].join(" ").trim() + " — " + c.email + " — " + c.phone);
     lines.push("", "FACTURATION", [b.company, b.vat ? "TVA " + b.vat : ""].filter(Boolean).join(" — ") || "Particulier",
       b.address + ", " + b.zip + " " + b.city + " (" + b.country + ")");
-    lines.push("", "Langue du site : " + lang() + " · Aucun paiement n'a été demandé ni effectué.");
+    lines.push("", "Langue du site : " + lang() + " · Aucun paiement en ligne : règlement sur place, le jour de la formation.");
     return lines.join("\n");
   }
   function requestBox() { return document.getElementById("reg-pay-message"); }
@@ -1021,6 +998,7 @@
       showRequestResult(true, order.reference, body);
       clearStorage();   /* les données personnelles ne restent pas dans le navigateur une fois transmises */
       track("registration_request_sent", { items: order.items.length });
+      trackComplete(order);
     }, function () {
       if (btn) { btn.disabled = false; btn.removeAttribute("aria-busy"); }
       if (label) label.textContent = t("reg.req_action", "Envoyer ma demande");
@@ -1080,6 +1058,7 @@
       if (res.kind === "ok") {
         bookingSent = true;
         transmitted = true;
+        trackComplete(order);
         if (btn) btn.removeAttribute("aria-busy");
         /* Aucune date choisie (toutes les lignes « date à convenir ») : c'est une DEMANDE, pas une réservation. */
         var onlyRequests = res.items.length > 0 && res.items.every(function (it) { return it.status === "request"; });
@@ -1128,6 +1107,13 @@
     });
   }
 
+  /* Conversion comptée quand la réservation (ou la demande) est BIEN transmise — il n'y a plus d'étape de paiement. */
+  function trackComplete(order) {
+    Object.keys(COMPLETE_EVENT).forEach(function (pid) {
+      if (order.items.some(function (it) { return it.id === pid; })) track(COMPLETE_EVENT[pid], { session: order.items.some(function (it) { return it.id === pid && it.sessionId; }) });
+    });
+  }
+
   function handlePayClick() {
     var res = initializePayment();
     if (res.status !== "ready") {
@@ -1135,12 +1121,7 @@
       if (bookingMode()) submitBooking(res.order); else submitRequest(res.order);
       return;
     }
-    /* Commande initialisée avec un prestataire réel : la conversion VCA Base est comptée ici (jamais avant :
-       tant que le paiement est un emplacement, l'inscription n'est pas « terminée »). */
-    Object.keys(COMPLETE_EVENT).forEach(function (pid) {
-      if (res.order.items.some(function (it) { return it.id === pid; })) track(COMPLETE_EVENT[pid], { session: res.order.items.some(function (it) { return it.id === pid && it.sessionId; }) });
-    });
-    /* (Futur) : PaymentProvider.createSession(res.order) puis redirection. */
+    /* Inaccessible : le paiement en ligne est supprimé (PaymentProvider.isReady() est toujours faux). */
   }
 
   /* ======================================================================
@@ -1401,7 +1382,7 @@
       announce(t("reg.a11y_restored", "Votre inscription précédente a été restaurée."));
     }
     renderAll();
-    applyRequestMode(!PaymentProvider.isReady());
+    applyStep4Mode(bookingMode() ? "booking" : "request");
     goToStep(state.step, { noFocus: true, noScroll: true });
     setupTilt();
 

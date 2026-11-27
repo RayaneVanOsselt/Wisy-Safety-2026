@@ -214,7 +214,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     "id": "faq-inscription-informations",
     "category": "inscription",
     "question": "Quelles informations dois-je fournir pour m'inscrire ?",
-    "answer": "L'inscription en ligne vous demande :\n- les formations souhaitées et le nombre de participants ;\n- les coordonnées de la personne responsable de l'inscription ;\n- les informations de facturation : entreprise, numéro de TVA et adresse.\n\nCes informations figurent sur votre confirmation et votre facture.",
+    "answer": "L'inscription en ligne vous demande :\n- les formations souhaitées et le nombre de participants ;\n- les coordonnées de la personne responsable de l'inscription (nom, prénom, e-mail, téléphone).\n\nAucune adresse de facturation n'est demandée : le règlement se fait sur place, le jour de la formation. Ces informations figurent sur votre confirmation de réservation.",
     "keywords": [
       "informations",
       "données",

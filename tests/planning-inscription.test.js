@@ -8,6 +8,8 @@
    • BA4 : formation réservable (5 places, la 6e est refusée).
    • Inscription : plus aucun moyen de paiement (Stripe / Mollie / PayPal), plus de « Sur devis » : « Paiement le jour
      de la formation », dans les 10 langues. E-mails : paiement sur place, horaire à confirmer.
+   • Plus d'adresse de facturation à l'étape 3 (décision du 27/11/2026) : le script 1.2.1 l'accepte absente, et
+     encore présente (anciennes versions du site).
    `node --test tests/*.test.js` — aucune dépendance. */
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
@@ -116,7 +118,7 @@ test("feuille déjà utilisée : les sessions s'écrivent juste sous la dernièr
   assert.equal(grid[2][t.col.id], "2026-11-28-nacelle", "1re session du planning en ligne 3");
   assert.equal(grid[1][t.col.id], "2026-10-18-nacelle", "la session existante est intacte");
   const h = plain(G.get({ action: "health" }));
-  assert.equal(h.version, "1.2.0"); assert.ok(h.features.includes("planning"));
+  assert.equal(h.version, "1.2.1"); assert.ok(h.features.includes("planning"));
   assert.deepEqual(h.sessions.problems, {}, "les lignes de cases vides ne sont plus signalées comme sessions incomplètes");
 });
 
@@ -189,4 +191,52 @@ test("catalogue d'inscription : BA4 ajoutée (sans photo ni prix inventés), 9 e
   assert.equal(ba4.priceCents, null); assert.equal(ba4.image, null); assert.equal(ba4.code, "BA4");
   ["fr", "en", "nl", "af", "ar", "bg", "de", "ro", "it", "sl"].forEach((l) => { assert.ok(ba4.name[l], l); assert.ok(ba4.description[l], l); });
   assert.equal(Reg.getCatalogue().length, 9);
+});
+
+/* ------------------------------------------------------------------ étape 3 : plus d'adresse de facturation */
+test("feuille 1.2.1 : une réservation SANS adresse de facturation est acceptée ; avec adresse (ancien site), toujours acceptée", () => {
+  const G = sheetGas();
+  G.ctx.openPlanning_("2026-11-30", "2026-11-30", 5);
+  const order = (n, billing) => Object.assign({
+    action: "book", requestId: "bill-request-" + String(n).padStart(6, "0"), lang: "fr",
+    customer: { firstName: "Marie", lastName: "Dupont", email: "client" + n + "@exemple.be", phone: "0470 00 00 00" },
+    items: [{ training: "nacelle", sessionId: "2026-11-30-nacelle", quantity: 1, participants: null }]
+  }, billing ? { billing } : {});
+  let r = G.post(order(1));
+  assert.equal(r.status, "ok", JSON.stringify(r));
+  const team = G.mails.filter((m) => m.to === "info@wisysafety.be").pop();
+  assert.doesNotMatch(team.htmlBody, /Particulier|, ,/, "aucune ligne de facturation vide dans l'avis à l'équipe");
+  r = G.post(order(2, { company: "Chantiers Dupont", vat: "", address: "Rue de l'Exemple 1", zip: "1070", city: "Anderlecht", country: "BE" }));
+  assert.equal(r.status, "ok", JSON.stringify(r));
+  assert.match(G.mails.filter((m) => m.to === "info@wisysafety.be").pop().htmlBody, /Chantiers Dupont<br>Rue de l&#39;Exemple 1, 1070 Anderlecht, BE|Chantiers Dupont<br>Rue de l'Exemple 1, 1070 Anderlecht, BE/);
+  const rows = G.sheet("Réservations").records();
+  assert.equal(rows.length, 2);
+  assert.equal(rows[0]["Adresse de facturation"], "", "rien d'inventé quand le client n'a rien donné");
+  assert.equal(rows[1]["Adresse de facturation"], "Rue de l'Exemple 1, 1070 Anderlecht, BE");
+});
+
+test("inscription : l'étape 3 ne demande plus d'adresse de facturation (page, moteur, 10 langues, FAQ, confidentialité)", () => {
+  const html = read("inscription.html"), js = read("js/registration.js");
+  assert.doesNotMatch(html, /reg-bill-|reg\.bill_|reg\.f_(company|vat|address|zip|city|country)|reg\.country_/);
+  assert.doesNotMatch(js, /reg-bill-|state\.billing|billing:/, "le site n'envoie plus d'adresse de facturation");
+  const step3 = html.slice(html.indexOf('data-step="3"'), html.indexOf('data-step="4"'));
+  ["reg-cust-firstname", "reg-cust-lastname", "reg-cust-email", "reg-cust-phone", 'id="reg-consent"'].forEach((id) => assert.ok(step3.includes(id), id));
+  globalThis.window = {};
+  ["../js/i18n-data-inscription.js", "../js/i18n-data-home.js", "../js/i18n-data-privacy.js"].forEach((f) => {
+    delete require.cache[require.resolve(f)];   // déjà chargé par un test précédent avec un autre « window »
+    require(f);
+  });
+  const I = globalThis.window.I18N;
+  delete globalThis.window;
+  const INVOICE = /factur|invoice|billing|Rechnung|faktuur|faktur|fattur|фактур|فاتور|račun/i;
+  ["fr", "en", "nl", "af", "ar", "bg", "de", "ro", "it", "sl"].forEach((l) => {
+    ["reg.s3_title", "reg.s3_sub", "reg.consent", "home.step3_d", "pp.insc_data", "pp.k_reg"].forEach((k) => {
+      assert.ok(I[l][k], l + " · " + k);
+      assert.doesNotMatch(I[l][k], INVOICE, l + " · " + k + " : plus de facturation annoncée");
+    });
+    ["reg.bill_title", "reg.bill_sub", "reg.f_company", "reg.f_vat", "reg.f_address", "reg.f_zip", "reg.f_city", "reg.f_country", "reg.country_be"]
+      .forEach((k) => assert.equal(I[l][k], undefined, l + " · " + k + " retiré"));
+  });
+  assert.equal(I.fr["reg.s3_title"], "Vos coordonnées");
+  assert.doesNotMatch(read("js/faq-data.js"), /numéro de TVA et adresse/);
 });

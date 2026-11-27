@@ -132,6 +132,10 @@ par jour avec Gmail, 1 500 avec Google Workspace) et rien n'est envoyé à Outlo
 
 ## 5. Mettre à jour le script
 
+> **Version 1.2.1 (27/11/2026)** : l'adresse de facturation (`billing`) devient **facultative** — le site ne la demande
+> plus (paiement sur place). Les anciennes versions du site qui l'envoient restent acceptées ; l'avis à l'équipe ne
+> l'affiche que si elle est remplie. À déployer AVANT de publier le site sans bloc de facturation.
+>
 > **Version 1.2.0 (27/11/2026)** : menu *📅 Ouvrir les sessions du planning…* (bloc `PLANNING`), formation **BA4**,
 > e-mails « Paiement : sur place, le jour de la formation » et « horaire à confirmer », nouvelles sessions écrites sous
 > la dernière session (et non sous les cases à cocher vides), liste publique jusqu'à 400 sessions. Après l'avoir collée :

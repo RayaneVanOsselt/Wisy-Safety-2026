@@ -446,7 +446,6 @@
 
 .reg-fields { display: grid; gap: 1.1rem; }
 .reg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
-.reg-row--3 { grid-template-columns: 1fr 1fr 1fr; }
 .reg-field { display: flex; flex-direction: column; gap: .4rem; min-width: 0; }
 .reg-field--wide { grid-column: 1 / -1; }
 .reg-label { font-family: var(--font-titre); font-weight: 600; font-size: .88rem; color: var(--noir-jais); }
@@ -582,7 +581,7 @@ select.reg-input { appearance: none; -webkit-appearance: none; background-image:
 
 @media (max-width: 640px) {
   .reg-catalogue { grid-template-columns: 1fr; }
-  .reg-row, .reg-row--3 { grid-template-columns: 1fr; }
+  .reg-row { grid-template-columns: 1fr; }
   .reg-toolbar { gap: .75rem; }
   .reg-filters { width: 100%; overflow-x: auto; flex-wrap: nowrap; padding-bottom: .3rem; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .reg-filters::-webkit-scrollbar { display: none; }

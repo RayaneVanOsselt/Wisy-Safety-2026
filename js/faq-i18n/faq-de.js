@@ -224,7 +224,7 @@ WisyFAQ.register("de", {
   },
   "faq-inscription-informations": {
    "question": "Welche Angaben muss ich für die Anmeldung machen?",
-   "answer": "Die Online-Anmeldung verlangt:\n- die gewünschten Schulungen und die Teilnehmerzahl;\n- die Kontaktdaten der für die Anmeldung verantwortlichen Person;\n- die Rechnungsdaten: Unternehmen, MwSt.-Nummer und Adresse.\n\nDiese Angaben erscheinen auf Ihrer Bestätigung und Ihrer Rechnung.",
+   "answer": "Die Online-Anmeldung verlangt:\n- die gewünschten Schulungen und die Teilnehmerzahl;\n- die Kontaktdaten der für die Anmeldung verantwortlichen Person (Name, Vorname, E-Mail, Telefon).\n\nEine Rechnungsadresse wird nicht verlangt: Die Bezahlung erfolgt vor Ort, am Tag der Schulung. Diese Angaben erscheinen auf Ihrer Buchungsbestätigung.",
    "keywords": [
     "angaben",
     "informationen",

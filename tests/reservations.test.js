@@ -592,7 +592,7 @@ test("heure gardée avec son apostrophe par Google (« '10:00 ») : la session r
 test("diagnostic à distance (?action=health) : onglets, tâche automatique, nombre de sessions et raisons — sans aucune donnée personnelle", () => {
   const fresh = loadGas("google-sheets/reservations.gs", { now: NOW });
   let h = fresh.get({ action: "health" });
-  assert.equal(h.version, "1.2.0"); assert.equal(h.tabs.Sessions, false, "feuille pas encore installée");
+  assert.equal(h.version, "1.2.1"); assert.equal(h.tabs.Sessions, false, "feuille pas encore installée");
   assert.deepEqual(plain(h.features), ["sessions", "book", "contact", "planning"], "le site peut vérifier que le script sait recevoir les formulaires (et ouvrir le planning)");
   assert.equal(h.sessions.rows, 0); assert.equal(h.automaticTask, false);
   const G = sheetGas();

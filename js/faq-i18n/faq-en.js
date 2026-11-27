@@ -225,7 +225,7 @@ WisyFAQ.register("en", {
   },
   "faq-inscription-informations": {
    "question": "What information do I need to provide to register?",
-   "answer": "Online registration asks for:\n- the courses you want and the number of participants;\n- the contact details of the person in charge of the registration;\n- billing information: company, VAT number and address.\n\nThis information appears on your confirmation and your invoice.",
+   "answer": "Online registration asks for:\n- the courses you want and the number of participants;\n- the contact details of the person in charge of the registration (last name, first name, email, phone).\n\nNo billing address is required: payment is made on site, on the day of the course. This information appears on your booking confirmation.",
    "keywords": [
     "information",
     "data",

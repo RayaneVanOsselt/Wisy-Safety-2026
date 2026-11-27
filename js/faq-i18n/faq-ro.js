@@ -223,7 +223,7 @@ WisyFAQ.register("ro", {
   },
   "faq-inscription-informations": {
    "question": "Ce informații trebuie să furnizez pentru a mă înscrie?",
-   "answer": "Înscrierea online vă solicită:\n- formările dorite și numărul de participanți;\n- datele de contact ale persoanei responsabile de înscriere;\n- informațiile de facturare: companie, număr de TVA și adresă.\n\nAceste informații apar pe confirmarea și pe factura dumneavoastră.",
+   "answer": "Înscrierea online vă solicită:\n- formările dorite și numărul de participanți;\n- datele de contact ale persoanei responsabile de înscriere (nume, prenume, e-mail, telefon).\n\nNu se solicită nicio adresă de facturare: plata se face la fața locului, în ziua formării. Aceste informații apar pe confirmarea rezervării dumneavoastră.",
    "keywords": [
     "informații",
     "date",

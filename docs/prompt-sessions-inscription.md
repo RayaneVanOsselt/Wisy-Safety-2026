@@ -112,5 +112,5 @@ node scripts/build-seo.js && node scripts/sync-edge.js && node scripts/check-i18
 ```
 
 Puis, après la mise en service par le propriétaire : `https://script.google.com/macros/s/…/exec?action=health` doit
-afficher `"version":"1.2.0"` et `"planning"` dans `features`, et la page Agenda doit montrer les sessions à
+afficher `"version":"1.2.1"` (1.2.0 au minimum) et `"planning"` dans `features`, et la page Agenda doit montrer les sessions à
 « 5 places disponibles sur 5 ».

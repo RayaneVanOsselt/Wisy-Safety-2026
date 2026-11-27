@@ -435,11 +435,11 @@ a.f-c-value:hover{color:var(--turquoise)}
           <button type="button" class="reg-back" data-back><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-i18n="reg.back">Retour</span></button>
           <div class="reg-step__head">
             <p class="reg-step__eyebrow" data-i18n="reg.step_contact">Coordonnées</p>
-            <h2 class="reg-step__title" data-i18n="reg.s3_title">Coordonnées de facturation</h2>
-            <p class="reg-step__sub" data-i18n="reg.s3_sub">Ces informations figureront sur votre confirmation et votre facture.</p>
+            <h2 class="reg-step__title" data-i18n="reg.s3_title">Vos coordonnées</h2>
+            <p class="reg-step__sub" data-i18n="reg.s3_sub">Ces informations figureront sur votre confirmation de réservation.</p>
           </div>
 
-          <!-- Bloc responsable -->
+          <!-- Bloc responsable (bloc « Adresse de facturation » retiré le 27/11/2026 : paiement sur place, le jour de la formation) -->
           <div class="reg-block">
             <div class="reg-block__head">
               <span class="reg-block__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg></span>
@@ -472,58 +472,9 @@ a.f-c-value:hover{color:var(--turquoise)}
                 </div>
               </div>
             </div>
-          </div>
-
-          <!-- Bloc facturation -->
-          <div class="reg-block">
-            <div class="reg-block__head">
-              <span class="reg-block__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v18l2.5-1.5L10 21l2-1.5L14 21l2.5-1.5L19 21V3l-2.5 1.5L14 3l-2 1.5L10 3 7.5 4.5 5 3z"/><path d="M9 8h6M9 12h6"/></svg></span>
-              <div><h3 class="reg-block__title" data-i18n="reg.bill_title">Adresse de facturation</h3><p class="reg-block__sub" data-i18n="reg.bill_sub">Entreprise et adresse pour l'établissement de la facture.</p></div>
-              <span class="reg-block__ref">FACT</span>
-            </div>
-            <div class="reg-fields">
-              <div class="reg-row">
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-bill-company"><span data-i18n="reg.f_company">Entreprise</span> <span class="reg-optlabel" data-i18n="reg.optional">facultatif</span></label>
-                  <input class="reg-input" id="reg-bill-company" type="text" autocomplete="organization">
-                </div>
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-bill-vat"><span data-i18n="reg.f_vat">N° TVA</span> <span class="reg-optlabel" data-i18n="reg.optional">facultatif</span></label>
-                  <input class="reg-input" id="reg-bill-vat" type="text" placeholder="BE0123.456.789">
-                </div>
-              </div>
-              <div class="reg-field reg-field--wide">
-                <label class="reg-label" for="reg-bill-address" data-i18n="reg.f_address">Adresse</label>
-                <input class="reg-input" id="reg-bill-address" type="text" autocomplete="street-address" aria-describedby="reg-bill-address-err">
-                <p class="reg-error" id="reg-bill-address-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span data-i18n="reg.err_required">Ce champ est requis.</span></p>
-              </div>
-              <div class="reg-row--3 reg-row">
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-bill-zip" data-i18n="reg.f_zip">Code postal</label>
-                  <input class="reg-input" id="reg-bill-zip" type="text" autocomplete="postal-code" aria-describedby="reg-bill-zip-err">
-                  <p class="reg-error" id="reg-bill-zip-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span data-i18n="reg.err_required">Ce champ est requis.</span></p>
-                </div>
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-bill-city" data-i18n="reg.f_city">Ville</label>
-                  <input class="reg-input" id="reg-bill-city" type="text" autocomplete="address-level2" aria-describedby="reg-bill-city-err">
-                  <p class="reg-error" id="reg-bill-city-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span data-i18n="reg.err_required">Ce champ est requis.</span></p>
-                </div>
-                <div class="reg-field">
-                  <label class="reg-label" for="reg-bill-country" data-i18n="reg.f_country">Pays</label>
-                  <select class="reg-input" id="reg-bill-country" autocomplete="country">
-                    <option value="BE" data-i18n="reg.country_be">Belgique</option>
-                    <option value="FR" data-i18n="reg.country_fr">France</option>
-                    <option value="LU" data-i18n="reg.country_lu">Luxembourg</option>
-                    <option value="NL" data-i18n="reg.country_nl">Pays-Bas</option>
-                    <option value="DE" data-i18n="reg.country_de">Allemagne</option>
-                    <option value="other" data-i18n="reg.country_other">Autre</option>
-                  </select>
-                </div>
-              </div>
-            </div>
             <label class="reg-consent" for="reg-consent">
               <input type="checkbox" id="reg-consent">
-              <span data-i18n="reg.consent">J'accepte que ces informations soient utilisées pour traiter mon inscription et établir ma facture.</span>
+              <span data-i18n="reg.consent">J'accepte que ces informations soient utilisées pour traiter mon inscription.</span>
             </label>
           </div>
         </div>

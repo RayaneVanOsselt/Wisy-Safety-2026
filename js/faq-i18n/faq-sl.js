@@ -224,7 +224,7 @@ WisyFAQ.register("sl", {
   },
   "faq-inscription-informations": {
    "question": "Katere podatke moram navesti za prijavo?",
-   "answer": "Spletna prijava zahteva:\n- želena usposabljanja in število udeležencev;\n- kontaktne podatke osebe, odgovorne za prijavo;\n- podatke za izdajo računa: podjetje, davčno številko za DDV in naslov.\n\nTe podatke najdete na potrditvi in na računu.",
+   "answer": "Spletna prijava zahteva:\n- želena usposabljanja in število udeležencev;\n- kontaktne podatke osebe, odgovorne za prijavo (priimek, ime, e-pošta, telefon).\n\nNaslov za račun ni potreben: plačilo poteka na kraju samem, na dan usposabljanja. Te podatke najdete na potrditvi rezervacije.",
    "keywords": [
     "podatki",
     "informacije",

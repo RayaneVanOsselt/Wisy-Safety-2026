@@ -224,7 +224,7 @@ WisyFAQ.register("nl", {
   },
   "faq-inscription-informations": {
    "question": "Welke gegevens moet ik opgeven om me in te schrijven?",
-   "answer": "De online inschrijving vraagt:\n- de gewenste opleidingen en het aantal deelnemers;\n- de contactgegevens van de verantwoordelijke voor de inschrijving;\n- de facturatiegegevens: bedrijf, btw-nummer en adres.\n\nDeze gegevens staan op uw bevestiging en uw factuur.",
+   "answer": "De online inschrijving vraagt:\n- de gewenste opleidingen en het aantal deelnemers;\n- de contactgegevens van de verantwoordelijke voor de inschrijving (naam, voornaam, e-mail, telefoon).\n\nEr wordt geen facturatieadres gevraagd: u betaalt ter plaatse, op de dag van de opleiding. Deze gegevens staan op uw reservatiebevestiging.",
    "keywords": [
     "gegevens",
     "informatie",

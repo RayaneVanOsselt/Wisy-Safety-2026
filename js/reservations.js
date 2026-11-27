@@ -84,7 +84,7 @@
    * Envoie une demande de réservation. Jamais d'exception :
    *   ok (reference, items[], duplicate) | seats (problems[]) | invalid (fields) | rate_limited | busy | not_configured | unavailable
    * @param {{config:object, fetch:Function, order:object, timeout?:number}} opts
-   *   order = { requestId, lang, customer{firstName,lastName,email,phone}, billing{…}, items[{training, sessionId, quantity, participants|null}], website }
+   *   order = { requestId, lang, customer{firstName,lastName,email,phone}, billing{…} (facultatif, plus envoyé par le site depuis le 27/11/2026), items[{training, sessionId, quantity, participants|null}], website }
    */
   function book(opts) {
     var url = endpoint(opts && opts.config);

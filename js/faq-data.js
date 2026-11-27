@@ -232,9 +232,9 @@
       question: "Quelles informations dois-je fournir pour m'inscrire ?",
       answer: "L'inscription en ligne vous demande :\n" +
         "- les formations souhaitées et le nombre de participants ;\n" +
-        "- les coordonnées de la personne responsable de l'inscription ;\n" +
-        "- les informations de facturation : entreprise, numéro de TVA et adresse.\n\n" +
-        "Ces informations figurent sur votre confirmation et votre facture.",
+        "- les coordonnées de la personne responsable de l'inscription (nom, prénom, e-mail, téléphone).\n\n" +
+        "Aucune adresse de facturation n'est demandée : le règlement se fait sur place, le jour de la formation. " +
+        "Ces informations figurent sur votre confirmation de réservation.",
       keywords: ["informations", "données", "coordonnées", "facturation", "tva", "documents", "renseignements"],
       synonyms: ["documents à fournir", "ce qu'il faut fournir", "papiers", "numéro de tva", "adresse de facturation", "champs du formulaire", "dossier", "pièces"],
       relatedQuestions: ["faq-inscription-comment", "faq-inscription-participants", "faq-tarifs-tva"],

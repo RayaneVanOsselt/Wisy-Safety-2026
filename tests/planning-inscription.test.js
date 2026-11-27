@@ -3,8 +3,11 @@
 
    • Feuille Google (google-sheets/reservations.gs, exécuté sur une FAUSSE feuille — tests/helpers/gas-fake.js) :
      menu « 📅 Ouvrir les sessions du planning… » → une session par formation et par jour du planning
-     (lundi : Nacelles + CP3 · mardi, jeudi : BA4 · mercredi, dimanche : VCA Base · vendredi : Diisocyanates + CP3 ·
-     samedi : Nacelles), du 28/11/2026 au 31/03/2027, 5 places, sans horaire, publiées ; jamais de doublon.
+     (lundi : Nacelles · mardi, jeudi : BA4 · mercredi, dimanche : VCA Base · vendredi : Diisocyanates · samedi : Nacelles),
+     du 28/11/2026 au 31/03/2027, 5 places, sans horaire, publiées ; jamais de doublon.
+   • CP3 (décision du 27/11/2026, soir) : UN cycle de 7 jours par mois (lundis + vendredis, 1er lundi du mois) = UNE session
+     de 5 places sur plusieurs jours (colonne « Jours de la formation ») ; menu « 🔁 Regrouper le CP3 en cycles » pour passer
+     de l'ancien découpage (une session CP3 par lundi et par vendredi) aux 4 cycles.
    • BA4 : formation réservable (5 places, la 6e est refusée).
    • Inscription : plus aucun moyen de paiement (Stripe / Mollie / PayPal), plus de « Sur devis » : « Paiement le jour
      de la formation », dans les 10 langues. E-mails : paiement sur place, horaire à confirmer.
@@ -36,11 +39,11 @@ test("planning : le bon jour pour chaque formation (lundi → dimanche)", () => 
   const G = sheetGas();
   const week = (from, to) => plain(G.ctx.planDates_(from, to, G.ctx.PLANNING.WEEK)).map((p) => p.date + " " + p.training);
   assert.deepEqual(week("2026-11-30", "2026-12-06"), [
-    "2026-11-30 nacelle", "2026-11-30 conseiller-prevention",            // lundi
+    "2026-11-30 nacelle",                                                // lundi (CP3 : cycles)
     "2026-12-01 ba4",                                                    // mardi
     "2026-12-02 vca-base",                                               // mercredi
     "2026-12-03 ba4",                                                    // jeudi
-    "2026-12-04 diisocyanates", "2026-12-04 conseiller-prevention",      // vendredi
+    "2026-12-04 diisocyanates",                                          // vendredi (CP3 : cycles)
     "2026-12-05 nacelle",                                                // samedi
     "2026-12-06 vca-base"                                                // dimanche
   ]);
@@ -48,19 +51,37 @@ test("planning : le bon jour pour chaque formation (lundi → dimanche)", () => 
   assert.equal(G.ctx.PLANNING.TO, "2027-03-31");
   assert.equal(G.ctx.PLANNING.CAPACITY, 5, "5 personnes maximum par session");
   assert.deepEqual(week("2027-03-28", "2027-03-28"), ["2027-03-28 vca-base"], "passage à l'heure d'été (28/03/2027) : bon jour");
+  /* CP3 : 4 cycles de 7 jours, lundis et vendredis en alternance, aucun jour férié, un par mois. */
+  const cycles = plain(G.ctx.PLANNING.CYCLES);
+  assert.deepEqual(cycles.map((c) => c.days[0]), ["2026-11-30", "2027-01-04", "2027-02-01", "2027-03-01"]);
+  const HOLIDAYS = ["2026-12-25", "2027-01-01", "2027-03-28", "2027-03-29"];
+  cycles.forEach((c) => {
+    assert.equal(c.training, "conseiller-prevention");
+    assert.equal(c.days.length, 7);
+    c.days.forEach((d, i) => {
+      assert.equal(new Date(d + "T12:00:00Z").getUTCDay(), i % 2 ? 5 : 1, d + " : lundi puis vendredi en alternance");
+      assert.ok(!HOLIDAYS.includes(d), d + " n'est pas un jour férié");
+      if (i) assert.ok(d > c.days[i - 1]);
+    });
+  });
 });
 
-test("menu « Ouvrir les sessions du planning » : 159 sessions du 28/11/2026 au 31/03/2027, 5 places, sans horaire, publiées", () => {
+test("menu « Ouvrir les sessions du planning » : 124 sessions d'un jour + 4 cycles CP3 de 7 jours, 5 places, sans horaire, publiées", () => {
   const G = sheetGas();
   const res = plain(G.ctx.ouvrirLePlanning());
-  assert.equal(res.created, 159);
+  assert.equal(res.created, 128); assert.equal(res.cycles, 4); assert.equal(res.converted, 0);
   assert.equal(res.first, "2026-11-28"); assert.equal(res.last, "2027-03-31");
   const rows = sessions(G);
-  assert.equal(rows.length, 159);
+  assert.equal(rows.length, 128);
   assert.deepEqual(byTraining(rows), {
-    "Nacelles élévatrices": 36, "VCA Base": 36, "Conseiller en prévention niveau III": 35,
+    "Nacelles élévatrices": 36, "VCA Base": 36, "Conseiller en prévention niveau III": 4,
     "BA4 — Personne avertie": 35, "Diisocyanates & substances dangereuses": 17
   });
+  const cp3 = rows.filter((r) => r["Formation"] === "Conseiller en prévention niveau III");
+  assert.deepEqual(cp3.map((r) => r["Identifiant"]), ["2026-11-30-conseiller-prevention", "2027-01-04-conseiller-prevention",
+    "2027-02-01-conseiller-prevention", "2027-03-01-conseiller-prevention"]);
+  assert.equal(cp3[0]["Jours de la formation"], "30/11/2026, 04/12/2026, 07/12/2026, 11/12/2026, 14/12/2026, 18/12/2026, 21/12/2026");
+  rows.filter((r) => r["Formation"] !== "Conseiller en prévention niveau III").forEach((r) => assert.equal(r["Jours de la formation"], ""));
   rows.forEach((r) => {
     assert.equal(r["Places (total)"], 5); assert.equal(r["Restantes"], 5); assert.equal(r["Réservées"], 0);
     assert.equal(r["Début"], ""); assert.equal(r["Fin"], "");
@@ -68,10 +89,14 @@ test("menu « Ouvrir les sessions du planning » : 159 sessions du 28/11/2026 au
     assert.match(r["Identifiant"], /^\d{4}-\d{2}-\d{2}-[a-z0-9-]+$/);
   });
   assert.equal(rows[0]["Identifiant"], "2026-11-28-nacelle", "samedi 28/11 : Nacelles");
-  assert.match(G.alerts[G.alerts.length - 1], /159 session\(s\) créée\(s\)/);
-  /* Ce que le site reçoit : les 159 sessions, sans horaire, 5 places chacune. */
+  assert.match(G.alerts[G.alerts.length - 1], /128 session\(s\) créée\(s\)/);
+  /* Ce que le site reçoit : les 128 sessions, sans horaire, 5 places chacune ; un cycle porte ses 7 jours. */
   const pub = plain(G.get());
-  assert.equal(pub.sessions.length, 159, "toutes publiées (limite de la liste publique relevée à 400)");
+  assert.equal(pub.sessions.length, 128, "toutes publiées (limite de la liste publique relevée à 400)");
+  const c1 = pub.sessions.find((s) => s.id === "2026-11-30-conseiller-prevention");
+  assert.deepEqual(c1.days, ["2026-11-30", "2026-12-04", "2026-12-07", "2026-12-11", "2026-12-14", "2026-12-18", "2026-12-21"]);
+  assert.equal(c1.date, "2026-11-30"); assert.equal(c1.capacity, 5);
+  assert.equal(pub.sessions.find((s) => s.id === "2026-12-01-ba4").days, null);
   assert.ok(pub.sessions.every((s) => s.capacity === 5 && s.seatsLeft === 5 && s.startTime === null));
   assert.equal(pub.sessions.find((s) => s.id === "2026-12-01-ba4").status, "open");
   assert.equal(pub.sessions.find((s) => s.id === "2026-11-28-nacelle").status, "closed", "règle des 48 h : le 28/11 n'est plus réservable le 27 au soir");
@@ -84,11 +109,11 @@ test("planning relancé : aucun doublon ; une session annulée n'est jamais recr
   const line = sessions(G).findIndex((r) => r["Identifiant"] === "2026-12-01-ba4") + 2;
   G.ctx.setCell_(t, line, "status", "Annulée");
   const again = plain(G.ctx.openPlanning_("2026-11-28", "2027-03-31", 5));
-  assert.equal(again.created, 0); assert.equal(again.existing, 159);
-  assert.equal(sessions(G).length, 159);
+  assert.equal(again.created, 0); assert.equal(again.existing, 128); assert.equal(again.converted, 0);
+  assert.equal(sessions(G).length, 128);
   const later = sheetGas({ now: "2027-03-20T10:00:00Z" });
   const r = plain(later.ctx.openPlanning_("2026-11-28", "2027-03-31", 5));
-  assert.ok(r.past > 140, "les dates passées ne sont pas créées");
+  assert.ok(r.past > 110, "les dates passées ne sont pas créées");
   assert.equal(r.first, "2027-03-20");
 });
 
@@ -98,7 +123,7 @@ test("planning : une autre période se tape dans la fenêtre (« 01/04/2027 30/0
   answers.push("du 01/04/2027 au 30/04/2027");
   const res = plain(G.ctx.ouvrirLePlanning());
   assert.equal(res.first, "2027-04-01"); assert.equal(res.last, "2027-04-30");
-  assert.ok(res.created > 30 && res.created < 45, String(res.created));
+  assert.equal(res.created, 30, "avril 2027 : une session par jour, aucun cycle CP3 prévu (à ajouter dans PLANNING.CYCLES)");
   const answers2 = [];
   const H = sheetGas({ answers: answers2 });
   answers2.push("31/02/2027 30/06/2027");
@@ -118,7 +143,7 @@ test("feuille déjà utilisée : les sessions s'écrivent juste sous la dernièr
   assert.equal(grid[2][t.col.id], "2026-11-28-nacelle", "1re session du planning en ligne 3");
   assert.equal(grid[1][t.col.id], "2026-10-18-nacelle", "la session existante est intacte");
   const h = plain(G.get({ action: "health" }));
-  assert.equal(h.version, "1.2.1"); assert.ok(h.features.includes("planning"));
+  assert.equal(h.version, "1.3.0"); assert.ok(h.features.includes("planning")); assert.ok(h.features.includes("cycles"));
   assert.deepEqual(h.sessions.problems, {}, "les lignes de cases vides ne sont plus signalées comme sessions incomplètes");
 });
 
@@ -239,4 +264,137 @@ test("inscription : l'étape 3 ne demande plus d'adresse de facturation (page, m
   });
   assert.equal(I.fr["reg.s3_title"], "Vos coordonnées");
   assert.doesNotMatch(read("js/faq-data.js"), /numéro de TVA et adresse/);
+});
+
+/* ------------------------------------------------------------------ CP3 : cycles de 7 jours (décision du 27/11/2026, soir) */
+/* Feuille dans l'état du 27/11 après-midi : ancien planning (une session CP3 par lundi et par vendredi), 3 sessions CP3
+   fériées déjà annulées, une réservation sur le CP3 du 04/12. */
+function oldPlanningSheet() {
+  const G = sheetGas();
+  const P = G.ctx.PLANNING, week = P.WEEK, cycles = P.CYCLES;
+  P.WEEK = Object.assign({}, week, { 1: ["nacelle", "conseiller-prevention"], 5: ["diisocyanates", "conseiller-prevention"] });
+  P.CYCLES = [];
+  assert.equal(plain(G.ctx.openPlanning_("2026-11-28", "2027-03-31", 5)).created, 159);
+  P.WEEK = week; P.CYCLES = cycles;
+  const t = G.ctx.table_("Sessions");
+  ["2026-12-25-conseiller-prevention", "2027-01-01-conseiller-prevention", "2027-03-29-conseiller-prevention"].forEach((id) => {
+    G.ctx.setCell_(t, sessions(G).findIndex((r) => r["Identifiant"] === id) + 2, "status", "Annulée");
+  });
+  const r = G.post({ action: "book", requestId: "cycle-request-000001", lang: "fr",
+    customer: { firstName: "Marie", lastName: "Dupont", email: "deja@exemple.be", phone: "0470 00 00 00" },
+    items: [{ training: "conseiller-prevention", sessionId: "2026-12-04-conseiller-prevention", quantity: 1, participants: null }] });
+  assert.equal(r.status, "ok", JSON.stringify(r));
+  return G;
+}
+
+test("menu « Regrouper le CP3 en cycles » : 27 sessions d'un jour annulées, 4 cycles (1er jour converti), la session réservée est gardée", () => {
+  const G = oldPlanningSheet();
+  const dry = plain(G.ctx.regroupCycles_(false));
+  assert.equal(dry.cancel.length, 27, "35 CP3 − 4 premiers jours − 3 déjà annulées − 1 réservée");
+  assert.equal(dry.keep.length, 1);
+  assert.equal(sessions(G).filter((r) => r["Statut"] === "Annulée").length, 3, "le décompte ne modifie rien");
+  const res = plain(G.ctx.regroupCycles_(true));
+  assert.equal(res.planning.converted, 4); assert.equal(res.planning.cycles, 4); assert.equal(res.planning.created, 0);
+  const rows = sessions(G), cp3 = rows.filter((r) => r["Formation"] === "Conseiller en prévention niveau III");
+  assert.equal(cp3.filter((r) => r["Statut"] === "Annulée").length, 30);
+  const open = cp3.filter((r) => r["Statut"] !== "Annulée");
+  assert.deepEqual(open.map((r) => r["Identifiant"]), ["2026-11-30-conseiller-prevention", "2026-12-04-conseiller-prevention",
+    "2027-01-04-conseiller-prevention", "2027-02-01-conseiller-prevention", "2027-03-01-conseiller-prevention"]);
+  assert.equal(open[1]["Jours de la formation"], "", "la session déjà réservée reste une session d'un jour");
+  assert.equal(open[2]["Jours de la formation"], "04/01/2027, 08/01/2027, 11/01/2027, 15/01/2027, 18/01/2027, 22/01/2027, 25/01/2027");
+  /* Les autres formations ne bougent pas. */
+  assert.equal(rows.filter((r) => r["Formation"] !== "Conseiller en prévention niveau III" && r["Statut"] === "Annulée").length, 0);
+  /* Site : 4 cycles + la session réservée ; relancer ne change plus rien. */
+  const pub = plain(G.get()).sessions.filter((s) => s.training === "conseiller-prevention");
+  assert.deepEqual(pub.map((s) => (s.days ? s.days.length : 1)), [7, 1, 7, 7, 7]);
+  const again = plain(G.ctx.regroupCycles_(false));
+  assert.equal(again.cancel.length, 0, "relancer : plus rien à annuler");
+  assert.equal(again.keep.length, 1, "la session réservée reste signalée");
+  const h = plain(G.get({ action: "health" }));
+  assert.deepEqual(h.sessions.problems, {});
+  /* Menu : la fenêtre de confirmation liste les cycles ; « Non » ne fait rien. */
+  const H = oldPlanningSheet();
+  assert.equal(H.ctx.regrouperLesCycles(), null, "« Non » (pas de réponse OUI) : rien n'est fait");
+  assert.match(H.alerts[H.alerts.length - 1], /30\/11\/2026 → 21\/12\/2026 : 30\/11, 04\/12, 07\/12, 11\/12, 14\/12, 18\/12, 21\/12/);
+  assert.match(H.alerts[H.alerts.length - 1], /27 session\(s\) CP3 d'un seul jour seront ANNULÉES/);
+  assert.equal(sessions(H).filter((r) => r["Statut"] === "Annulée").length, 3);
+});
+
+test("cycle CP3 : une inscription = les 7 jours ; 5 places ; e-mail avec toutes les dates ; visible jusqu'au dernier jour", () => {
+  const G = sheetGas();
+  G.ctx.openPlanning_("2026-11-28", "2027-03-31", 5);
+  const book = (n, quantity) => G.post({ action: "book", requestId: "cycle-book-" + String(n).padStart(8, "0"), lang: "fr",
+    customer: { firstName: "Marie", lastName: "Dupont", email: "cp3-" + n + "@exemple.be", phone: "0470 00 00 00" },
+    items: [{ training: "conseiller-prevention", sessionId: "2027-01-04-conseiller-prevention", quantity, participants: null }] });
+  assert.equal(book(1, 4).status, "ok");
+  const mail = G.mails.find((m) => m.to === "cp3-1@exemple.be");
+  assert.match(mail.htmlBody, /7 jours, du lundi 4 janvier 2027 au lundi 25 janvier 2027 \(04\/01, 08\/01, 11\/01, 15\/01, 18\/01, 22\/01, 25\/01\), horaire à confirmer/);
+  assert.equal(book(2, 2).status, "unavailable", "5 places pour tout le cycle");
+  assert.equal(plain(G.get()).sessions.find((s) => s.id === "2027-01-04-conseiller-prevention").seatsLeft, 1);
+  /* Le 10/01 (cycle commencé) : toujours affiché jusqu'au 25/01, mais plus réservable ; disparu le 26/01. */
+  const mid = sheetGas({ now: "2027-01-10T10:00:00Z" });
+  mid.ctx.openPlanning_("2026-11-28", "2027-03-31", 5);
+  /* (les cycles dont le 1er jour est passé ne sont pas créés : on simule un cycle déjà en cours) */
+  const t = mid.ctx.table_("Sessions");
+  mid.ctx.writeRowsAtFree_(t, [mid.ctx.rowFor_(t, { id: "2027-01-04-cp3-test", training: "Conseiller en prévention niveau III",
+    date: mid.ctx.at_("2027-01-04", "12:00"), days: "04/01/2027, 08/01/2027, 11/01/2027, 15/01/2027, 18/01/2027, 22/01/2027, 25/01/2027",
+    start: "", end: "", capacity: 5, status: "Ouverte", published: true })]);
+  const s = plain(mid.get()).sessions.find((x) => x.id === "2027-01-04-cp3-test");
+  assert.ok(s, "cycle en cours : encore affiché"); assert.equal(s.status, "closed");
+  const after = plain(mid.ctx.sessionDays_("04/01/2027, 25/01/2027", "2027-01-04"));
+  assert.deepEqual(after.days, ["2027-01-04", "2027-01-25"]);
+});
+
+test("colonne « Jours de la formation » : lecture tolérante, erreurs claires", () => {
+  const G = sheetGas();
+  const d = (v, first) => plain(G.ctx.sessionDays_(v, first));
+  assert.deepEqual(d("", "2027-01-04"), { days: [], problem: null }, "vide = un seul jour");
+  assert.deepEqual(d("08/01/2027; 04/01/2027\n11/01/2027", "2027-01-04").days, ["2027-01-04", "2027-01-08", "2027-01-11"], "triés, séparateurs variés");
+  assert.deepEqual(d("11/01/2027", "2027-01-04").days, ["2027-01-04", "2027-01-11"], "la colonne Date est ajoutée si elle manque");
+  assert.deepEqual(d("04/01/2027", "2027-01-04").days, [], "un seul jour");
+  assert.match(d("04/01/2027, 31/02/2027", "2027-01-04").problem, /illisibles/);
+  assert.match(d("lundi et vendredi", "2027-01-04").problem, /illisibles/);
+  assert.match(d("01/01/2027, 08/01/2027", "2027-01-04").problem, /1er jour/);
+});
+
+test("durées : BA4 = 1 jour, CP3 = 7 jours dans l'onglet Formations (une durée saisie à la main n'est jamais écrasée)", () => {
+  const G = sheetGas();
+  const dur = (id) => G.sheet("Formations").records().find((r) => r["Identifiant"] === id)["Durée"];
+  assert.equal(dur("ba4"), "1 jour");
+  assert.equal(dur("conseiller-prevention"), "7 jours");
+  const t = G.ctx.table_("Formations");
+  G.ctx.setCell_(t, G.sheet("Formations").records().findIndex((r) => r["Identifiant"] === "ba4") + 2, "duration", "8 heures");
+  G.ctx.ensureFormations_();
+  assert.equal(dur("ba4"), "8 heures");
+});
+
+test("site : un cycle CP3 (7 jours) = UNE session, affichée « du … au … » avec chaque jour, à venir jusqu'à son dernier jour", () => {
+  const S = require("../js/sessions.js");
+  const UI = require("../js/sessions-ui.js");
+  const days = ["2026-11-30", "2026-12-04", "2026-12-07", "2026-12-11", "2026-12-14", "2026-12-18", "2026-12-21"];
+  const raw = { id: "2026-11-30-conseiller-prevention", training: "conseiller-prevention", date: "2026-11-30", days, capacity: 5, seatsLeft: 5,
+    status: "open", closesAt: "2026-11-29T18:00", live: true };
+  assert.deepEqual(S.validate(raw), []);
+  assert.ok(S.validate(Object.assign({}, raw, { days: ["2026-12-04", "2026-11-30"] })).length, "jours non triés : refusé");
+  assert.ok(S.validate(Object.assign({}, raw, { days: ["2026-12-01", "2026-12-04"] })).length, "le 1er jour doit être la date");
+  const s = S.normalize(raw);
+  assert.equal(s.lastDate, "2026-12-21");
+  assert.ok(S.isUpcoming(s, new Date("2026-12-10T10:00:00Z")), "cycle commencé : encore « à venir »");
+  assert.ok(!S.isBookable(s, new Date("2026-12-10T10:00:00Z")), "mais plus réservable");
+  assert.ok(!S.isUpcoming(s, new Date("2026-12-22T10:00:00Z")), "fini après le dernier jour");
+  const f = S.format(s, "fr");
+  assert.equal(f.dayCount, 7);
+  assert.match(f.dateLong, /^Lundi 30 novembre.*21 décembre 2026$/);
+  assert.equal(f.days.length, 7); assert.match(f.days[1], /4 déc/);
+  const one = S.normalize({ id: "2026-12-01-ba4", training: "ba4", date: "2026-12-01", capacity: 5, seatsLeft: 5 });
+  assert.equal(S.format(one, "fr").dayCount, 1);
+  assert.equal(UI.daysText.length, 1);
+  /* Libellé « 7 jours : lun. 30 nov., … » dans les 10 langues. */
+  globalThis.window = {};
+  delete require.cache[require.resolve("../js/i18n-data-sessions.js")];
+  require("../js/i18n-data-sessions.js");
+  const I = globalThis.window.I18N;
+  delete globalThis.window;
+  ["fr", "en", "nl", "af", "ar", "bg", "de", "ro", "it", "sl"].forEach((l) => assert.match(I[l]["sess.days_n"], /\{n\}/, l));
+  assert.equal(I.fr["sess.days_n"], "{n} jours");
 });

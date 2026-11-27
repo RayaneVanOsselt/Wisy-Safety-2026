@@ -308,10 +308,11 @@
   var SERVICES = (Trainings && Trainings.vcaEntreprise ? [Trainings.vcaEntreprise] : []).map(fromService);
 
   /* Formations ouvertes à l'inscription SANS page (BA4, 27/11/2026) : hors formations() / recherche / sitemap ;
-     formation(id) les trouve pour nommer leurs sessions. Aucun fait affirmé. Page créée → déplacer dans CATALOGUE. */
+     formation(id) les trouve pour nommer leurs sessions. Durée : Wisy Safety. Page créée → CATALOGUE. */
   var INSCRIPTION_ONLY = [
     { id: "ba4", registrationId: "ba4", title: "BA4 — Personne avertie", fullTitle: "Formation BA4 — personne avertie (risque électrique)",
-      titleKey: "dd.ba4", fullTitleKey: "dd.ba4_full", signupUrl: "inscription.html?formation=ba4", inscriptionOnly: true }
+      titleKey: "dd.ba4", fullTitleKey: "dd.ba4_full", signupUrl: "inscription.html?formation=ba4", inscriptionOnly: true,
+      duration: "1 jour" }
   ];
 
   function categories() { return CATEGORIES.map(clone); }

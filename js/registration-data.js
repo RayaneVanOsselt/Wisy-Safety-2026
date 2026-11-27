@@ -311,8 +311,8 @@
       }
     },
     /* BA4 — personne avertie (risque électrique, RGIE) : ajoutée le 27/11/2026 pour les sessions des mardis et jeudis.
-       PAS de page dédiée (js/site-content.js INSCRIPTION_ONLY) ni de photo : la carte affiche une icône. Aucun fait
-       inventé : ni durée, ni prix, ni programme — seulement le nom et le cadre (RGIE). */
+       PAS de page dédiée (js/site-content.js INSCRIPTION_ONLY) ni de photo : la carte affiche une icône. Durée : 1 jour
+       (confirmée par Wisy Safety le 27/11/2026). Rien d'inventé : ni prix, ni programme — le nom, le cadre (RGIE), la durée. */
     {
       id: "ba4",
       code: "BA4",
@@ -328,16 +328,16 @@
         de: "BA4 — Unterwiesene Person", ro: "BA4 — Persoană instruită", it: "BA4 — Persona avvertita", sl: "BA4 — Poučena oseba"
       },
       description: {
-        fr: "Risque électrique — qualification BA4 (RGIE)",
-        en: "Electrical risk — BA4 qualification (RGIE)",
-        nl: "Elektrisch risico — BA4-bevoegdheid (AREI)",
-        af: "Elektriese risiko — BA4-kwalifikasie (RGIE)",
-        ar: "المخاطر الكهربائية — تأهيل BA4 (RGIE)",
-        bg: "Електрически риск — квалификация BA4 (RGIE)",
-        de: "Elektrische Gefährdung — Qualifikation BA4 (RGIE)",
-        ro: "Risc electric — calificare BA4 (RGIE)",
-        it: "Rischio elettrico — qualifica BA4 (RGIE)",
-        sl: "Električno tveganje — usposobljenost BA4 (RGIE)"
+        fr: "Risque électrique — qualification BA4 (RGIE) · 1 jour",
+        en: "Electrical risk — BA4 qualification (RGIE) · 1 day",
+        nl: "Elektrisch risico — BA4-bevoegdheid (AREI) · 1 dag",
+        af: "Elektriese risiko — BA4-kwalifikasie (RGIE) · 1 dag",
+        ar: "المخاطر الكهربائية — تأهيل BA4 (RGIE) · يوم واحد",
+        bg: "Електрически риск — квалификация BA4 (RGIE) · 1 ден",
+        de: "Elektrische Gefährdung — Qualifikation BA4 (RGIE) · 1 Tag",
+        ro: "Risc electric — calificare BA4 (RGIE) · 1 zi",
+        it: "Rischio elettrico — qualifica BA4 (RGIE) · 1 giorno",
+        sl: "Električno tveganje — usposobljenost BA4 (RGIE) · 1 dan"
       }
     }
   ];

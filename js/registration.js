@@ -114,7 +114,8 @@
   function bookingMode() { return !!(Booking && Booking.isConfigured(window.WISY_CONFIG || {})); }
   /* « Jeudi 5 novembre 2026 · 09:00 – 16:30 · Français » (Intl, langue du site) */
   function sessionText(s) {
-    var f = Sessions.format(s, lang()), parts = [f.dateLong];
+    var f = Sessions.format(s, lang()), UI = window.WisySessionsUI;
+    var parts = [f.dateLong + (f.dayCount > 1 && UI && UI.daysText ? " (" + UI.daysText(f) + ")" : "")];   // cycle : chaque jour
     if (f.time) parts.push(f.time);
     if (f.language) parts.push(f.language);
     if (s.location) parts.push(s.location);

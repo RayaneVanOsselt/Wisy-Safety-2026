@@ -79,6 +79,15 @@
     if (raw.closesAt != null && raw.closesAt !== "" && !(typeof raw.closesAt === "string" && CLOSES_RE.test(raw.closesAt))) why.push("closesAt : AAAA-MM-JJTHH:MM");
     if (raw.priceCents != null && !isInt(raw.priceCents, 0, 10000000)) why.push("priceCents : entier en centimes");
     if (raw.signupUrl != null && raw.signupUrl !== "" && !SIGNUP_RE.test(String(raw.signupUrl))) why.push("signupUrl : uniquement une adresse « inscription.html?… » du site");
+    /* Formation sur plusieurs jours (ex. CP3, cycle de 7 jours) : TOUS les jours, triés, le 1er = date. Une seule session
+       (une inscription couvre tous les jours, les places valent pour le cycle entier). */
+    if (raw.days != null) {
+      var okDays = Array.isArray(raw.days) && raw.days.length >= 2 && raw.days.length <= 60 && raw.days.every(function (d, i) {
+        var dm = typeof d === "string" ? DATE_RE.exec(d) : null;
+        return !!dm && isRealDate(+dm[1], +dm[2], +dm[3]) && (i === 0 ? d === raw.date : d > raw.days[i - 1]);
+      });
+      if (!okDays) why.push("days : 2 à 60 dates AAAA-MM-JJ triées, la première = date");
+    }
     return why;
   }
 
@@ -91,6 +100,8 @@
     if (status === "open" && seatsLeft === 0) status = "full";      // plus de place : la session est complète
     return {
       id: raw.id, training: raw.training, date: raw.date,
+      days: raw.days ? raw.days.slice() : null,                       // formation sur plusieurs jours (null = un seul jour)
+      lastDate: raw.days ? raw.days[raw.days.length - 1] : raw.date,
       startTime: st, endTime: et,
       language: raw.language ? String(raw.language) : null,
       location: raw.location ? String(raw.location).trim() : null,
@@ -128,11 +139,12 @@
   }
   function todayISO(now) { return partsIn(now).date; }
 
-  /* À venir = aujourd'hui (tant que la session n'est pas finie) ou plus tard. Une session annulée n'est jamais « à venir ». */
+  /* À venir = aujourd'hui (tant que la session n'est pas finie) ou plus tard. Une session annulée n'est jamais « à venir ».
+     Formation sur plusieurs jours : à venir jusqu'à la fin de son DERNIER jour (les inscriptions, elles, ferment avant le 1er). */
   function isUpcoming(s, now) {
-    var n = partsIn(now);
-    if (s.date > n.date) return true;
-    if (s.date < n.date) return false;
+    var n = partsIn(now), last = s.lastDate || s.date;
+    if (last > n.date) return true;
+    if (last < n.date) return false;
     return s.endTime ? n.time < s.endTime : true;
   }
   /* Inscriptions fermées : statut « closed » ou date de fin des inscriptions passée (heure de Bruxelles). */
@@ -180,21 +192,34 @@
     } catch (e) { /* Intl.DisplayNames indisponible */ }
     return String(code).toUpperCase();
   }
-  /* { weekday, day, month, year, dateLong, dateShort, time, language } — dates formatées en UTC à midi :
-     aucun décalage de fuseau possible sur un jour civil. */
+  /* { weekday, day, month, year, dateLong, dateShort, time, language, dayCount, days, daysList } — dates formatées en UTC à
+     midi : aucun décalage de fuseau possible sur un jour civil. Formation sur plusieurs jours : dateLong / dateShort =
+     période (« lundi 30 novembre – lundi 21 décembre 2026 »), days = chaque jour (« lun. 30 nov. »…). */
+  function noon(day) { var m = DATE_RE.exec(day); return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 12)); }
   function format(s, lang) {
-    var m = DATE_RE.exec(s.date), d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 12));
-    var loc = localeOf(lang);
-    function f(opts) { opts.timeZone = "UTC"; return new Intl.DateTimeFormat(loc, opts).format(d); }
+    var d = noon(s.date), loc = localeOf(lang);
+    var multi = !!(s.days && s.days.length > 1), d2 = multi ? noon(s.days[s.days.length - 1]) : null;
+    function f(opts, at) { opts.timeZone = "UTC"; return new Intl.DateTimeFormat(loc, opts).format(at || d); }
+    function range(opts) {
+      opts.timeZone = "UTC";
+      var fmt = new Intl.DateTimeFormat(loc, opts);
+      try { if (fmt.formatRange) return fmt.formatRange(d, d2); } catch (e) { /* formatRange indisponible */ }
+      return fmt.format(d) + " – " + fmt.format(d2);
+    }
+    var LONG = { weekday: "long", day: "numeric", month: "long", year: "numeric" }, SHORT = { day: "numeric", month: "short", year: "numeric" };
+    var days = multi ? s.days.map(function (day) { return f({ weekday: "short", day: "numeric", month: "short" }, noon(day)); }) : [];
     return {
       weekday: cap(f({ weekday: "long" }), lang),
       day: f({ day: "numeric" }),
       month: f({ month: "short" }),
       year: f({ year: "numeric" }),
-      dateLong: cap(f({ weekday: "long", day: "numeric", month: "long", year: "numeric" }), lang),
-      dateShort: f({ day: "numeric", month: "short", year: "numeric" }),
+      dateLong: cap(multi ? range(LONG) : f(LONG), lang),
+      dateShort: multi ? range(SHORT) : f(SHORT),
       time: s.startTime ? (s.endTime ? s.startTime + " – " + s.endTime : s.startTime) : "",
-      language: s.language ? langName(s.language, lang) : ""
+      language: s.language ? langName(s.language, lang) : "",
+      dayCount: multi ? s.days.length : 1,
+      days: days,
+      daysList: days.join(", ")
     };
   }
 
@@ -210,7 +235,7 @@
   function fromSheet(r) {
     r = r && typeof r === "object" ? r : {};
     return {
-      id: r.id, training: r.training, date: r.date, startTime: r.startTime, endTime: r.endTime, language: r.language,
+      id: r.id, training: r.training, date: r.date, days: Array.isArray(r.days) ? r.days : null, startTime: r.startTime, endTime: r.endTime, language: r.language,
       location: r.location, capacity: r.capacity, seatsLeft: r.seatsLeft, status: r.status, closesAt: r.closesAt, live: true
     };
   }

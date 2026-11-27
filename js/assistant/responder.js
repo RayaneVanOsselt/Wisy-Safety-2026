@@ -288,9 +288,15 @@
     var list = (opts && Array.isArray(opts.sessions)) ? opts.sessions : [];
     return list.filter(function (s) { return !formation || s.training === formation.id; });
   }
+  function frDay(day) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(day), d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 12));
+    return new Intl.DateTimeFormat("fr-BE", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(d);
+  }
+  /* Formation sur plusieurs jours (ex. CP3) : « Du lundi 30 novembre 2026 au lundi 21 décembre 2026 (7 jours) ». */
   function frDate(s) {
-    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s.date), d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 12));
-    var out = new Intl.DateTimeFormat("fr-BE", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(d);
+    var out = s.days && s.days.length > 1
+      ? "du " + frDay(s.days[0]) + " au " + frDay(s.days[s.days.length - 1]) + " (" + s.days.length + " jours)"
+      : frDay(s.date);
     return out.charAt(0).toUpperCase() + out.slice(1);
   }
   function sessionLine(s) {

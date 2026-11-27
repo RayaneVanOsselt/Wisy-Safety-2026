@@ -132,6 +132,12 @@ par jour avec Gmail, 1 500 avec Google Workspace) et rien n'est envoyé à Outlo
 
 ## 5. Mettre à jour le script
 
+> **Version 1.3.0 (27/11/2026, soir)** : formations sur **plusieurs jours** — colonne *Jours de la formation* (toutes les
+> dates, la colonne Date = le 1er jour ; une session = une inscription pour tous les jours) ; liste publique : champ `days`
+> (null = un jour) ; une session reste « à venir » jusqu'à son dernier jour ; e-mails avec toutes les dates ;
+> `PLANNING.CYCLES` (CP3 : 4 cycles de 7 jours, lundis + vendredis) ; menu *🔁 Regrouper le CP3 en cycles de 7 jours…* ;
+> durées BA4 « 1 jour » et CP3 « 7 jours » (onglet Formations, seulement si la case est vide) ; `features` : `cycles`.
+>
 > **Version 1.2.1 (27/11/2026)** : l'adresse de facturation (`billing`) devient **facultative** — le site ne la demande
 > plus (paiement sur place). Les anciennes versions du site qui l'envoient restent acceptées ; l'avis à l'équipe ne
 > l'affiche que si elle est remplie. À déployer AVANT de publier le site sans bloc de facturation.

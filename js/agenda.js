@@ -85,6 +85,7 @@
         var place = s.location || (f && f.venue === "centre" ? t("ag.sess_place_default", "Wisy Safety, Anderlecht") : "");
         var meta = [fmt.time, fmt.language, place].filter(Boolean);
         var UI = window.WisySessionsUI;
+        var days = UI && UI.daysText ? UI.daysText(fmt) : "";   // formation sur plusieurs jours (ex. CP3) : chaque jour
         var seats = UI ? UI.seatsText(Sessions, s, t) : (full ? t("search.session_full", "Complet") : (s.seatsLeft != null ? t("search.session_seats", "Places disponibles : {n}").replace("{n}", s.seatsLeft) : ""));
         var action = full
           ? '<a class="ag-link" href="contact.html">' + esc(t("ag.enda_a2", "Nous contacter")) + "</a>"
@@ -94,6 +95,7 @@
           '<div class="ag-sess-card__body">' +
             '<h3 class="ag-sess-card__title">' + esc(titleOf(s.training)) + "</h3>" +
             '<p class="ag-sess-card__when"><time datetime="' + esc(s.date) + '">' + esc(fmt.dateLong) + "</time></p>" +
+            (days ? '<p class="ag-sess-card__meta">' + esc(days) + "</p>" : "") +
             (meta.length ? '<p class="ag-sess-card__meta">' + meta.map(esc).join(" · ") + "</p>" : "") +
             (seats ? '<p class="ag-sess-card__seats' + (full ? " is-full" : "") + '">' + esc(seats) + "</p>" : "") +
           "</div>" +

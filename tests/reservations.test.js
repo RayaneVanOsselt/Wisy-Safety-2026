@@ -85,7 +85,7 @@ test("liste publique : « 10 places disponibles sur 10 », fin des inscriptions 
   const G = sheetGas();
   const out = G.get();
   assert.equal(out.status, "ok");
-  assert.deepEqual(out.sessions, [{ id: SESSION, training: "nacelle", date: "2026-10-18", startTime: "10:00", endTime: "18:00", language: null, location: null,
+  assert.deepEqual(out.sessions, [{ id: SESSION, training: "nacelle", date: "2026-10-18", days: null, startTime: "10:00", endTime: "18:00", language: null, location: null,
     capacity: 10, seatsLeft: 10, status: "open", closesAt: "2026-10-16T10:00" }]);
   G.post(order(2));
   const text = JSON.stringify(G.get({ action: "sessions" }));
@@ -592,8 +592,8 @@ test("heure gardée avec son apostrophe par Google (« '10:00 ») : la session r
 test("diagnostic à distance (?action=health) : onglets, tâche automatique, nombre de sessions et raisons — sans aucune donnée personnelle", () => {
   const fresh = loadGas("google-sheets/reservations.gs", { now: NOW });
   let h = fresh.get({ action: "health" });
-  assert.equal(h.version, "1.2.1"); assert.equal(h.tabs.Sessions, false, "feuille pas encore installée");
-  assert.deepEqual(plain(h.features), ["sessions", "book", "contact", "planning"], "le site peut vérifier que le script sait recevoir les formulaires (et ouvrir le planning)");
+  assert.equal(h.version, "1.3.0"); assert.equal(h.tabs.Sessions, false, "feuille pas encore installée");
+  assert.deepEqual(plain(h.features), ["sessions", "book", "contact", "planning", "cycles"], "le site peut vérifier que le script sait recevoir les formulaires (et ouvrir le planning, avec les cycles)");
   assert.equal(h.sessions.rows, 0); assert.equal(h.automaticTask, false);
   const G = sheetGas();
   G.post(order(2));

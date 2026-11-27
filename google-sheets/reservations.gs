@@ -32,7 +32,7 @@
  * =========================================================================
  */
 
-var VERSION = "1.2.1";
+var VERSION = "1.3.0";
 
 var CONFIG = {
   FILE_NAME: "Réservations - Wisy Safety",
@@ -81,12 +81,12 @@ var FORMATIONS = [
   ["vca-base", "VCA Base", "Formation", PAY_ON_SITE, "1 jour", "formation-vca-base.html"],
   ["vca-hierarchique", "VCA Ligne hiérarchique", "Formation", PAY_ON_SITE, "", "formation-vca-ligne-hierarchique.html"],
   ["diisocyanates", "Diisocyanates & substances dangereuses", "Formation", PAY_ON_SITE, "", "formation-diisocyanates.html"],
-  ["conseiller-prevention", "Conseiller en prévention niveau III", "Formation", PAY_ON_SITE, "", "formation-conseiller-prevention-niveau-3.html"],
+  ["conseiller-prevention", "Conseiller en prévention niveau III", "Formation", PAY_ON_SITE, "7 jours", "formation-conseiller-prevention-niveau-3.html"],
   ["nacelle", "Nacelles élévatrices", "Formation", PAY_ON_SITE, "1 jour", "formation-nacelles-elevatrices.html"],
   ["fibre-optique", "Fibre optique", "Formation", PAY_ON_SITE, "", "formation-fibre-optique.html"],
   ["beps", "BEPS — Premier secours", "Formation", PAY_ON_SITE, "15 heures", "formation-beps-premiers-secours.html"],
   ["vca-entreprise", "VCA Entreprise", "Accompagnement", PAY_ON_SITE, "", "vca-entreprise.html"],
-  ["ba4", "BA4 — Personne avertie", "Formation", PAY_ON_SITE, "", "inscription.html?formation=ba4"]
+  ["ba4", "BA4 — Personne avertie", "Formation", PAY_ON_SITE, "1 jour", "inscription.html?formation=ba4"]
 ];
 
 /* PLANNING DES SESSIONS (demandé par Wisy Safety le 27/11/2026) — menu « 📅 Ouvrir les sessions du planning… ».
@@ -94,20 +94,30 @@ var FORMATIONS = [
    confirmer » sur le site ; à compléter dans les colonnes Début / Fin quand il est connu), publiée et ouverte.
    Relancer le menu ne crée JAMAIS de doublon : une formation qui a déjà une session ce jour-là (même annulée) est
    laissée telle quelle. Pour prolonger le planning : relancez le menu en tapant une autre période.
-   Jours : 0 = dimanche, 1 = lundi, 2 = mardi, 3 = mercredi, 4 = jeudi, 5 = vendredi, 6 = samedi. */
+   Jours : 0 = dimanche, 1 = lundi, 2 = mardi, 3 = mercredi, 4 = jeudi, 5 = vendredi, 6 = samedi.
+   CYCLES = formations sur PLUSIEURS jours : UNE session par cycle (une inscription couvre tous les jours du cycle,
+   CAPACITY places par cycle). Ses dates vont dans la colonne « Jours de la formation » ; la colonne Date = le 1er jour.
+   CP3 (décision de Wisy Safety du 27/11/2026) : un cycle de 7 jours par mois, les lundis et vendredis, à partir du
+   1er lundi du mois (le 30/11 pour décembre), sans jour férié. Pour une autre période : ajoutez les cycles ici. */
 var PLANNING = {
   FROM: "2026-11-28",
   TO: "2027-03-31",
   CAPACITY: 5,
   WEEK: {
-    1: ["nacelle", "conseiller-prevention"],          // lundi : Nacelles élévatrices + CP3
+    1: ["nacelle"],                                   // lundi : Nacelles élévatrices (CP3 : voir CYCLES)
     2: ["ba4"],                                       // mardi : BA4
     3: ["vca-base"],                                  // mercredi : VCA
     4: ["ba4"],                                       // jeudi : BA4
-    5: ["diisocyanates", "conseiller-prevention"],    // vendredi : risque chimique & diisocyanates + CP3
+    5: ["diisocyanates"],                             // vendredi : risque chimique & diisocyanates (CP3 : voir CYCLES)
     6: ["nacelle"],                                   // samedi : Nacelles élévatrices
     0: ["vca-base"]                                   // dimanche : VCA
-  }
+  },
+  CYCLES: [
+    { training: "conseiller-prevention", days: ["2026-11-30", "2026-12-04", "2026-12-07", "2026-12-11", "2026-12-14", "2026-12-18", "2026-12-21"] },
+    { training: "conseiller-prevention", days: ["2027-01-04", "2027-01-08", "2027-01-11", "2027-01-15", "2027-01-18", "2027-01-22", "2027-01-25"] },
+    { training: "conseiller-prevention", days: ["2027-02-01", "2027-02-05", "2027-02-08", "2027-02-12", "2027-02-15", "2027-02-19", "2027-02-22"] },
+    { training: "conseiller-prevention", days: ["2027-03-01", "2027-03-05", "2027-03-08", "2027-03-12", "2027-03-15", "2027-03-19", "2027-03-22"] }
+  ]
 };
 
 /* Première session, demandée par Wisy Safety le 15/10/2026. Ajoutée par « Installer » seulement si l'onglet Sessions est
@@ -153,6 +163,7 @@ COLS[TAB.SESSIONS] = [
   ["closes", "Fin des inscriptions", "Facultatif (JJ/MM/AAAA HH:MM). Vide = 48 h avant le début.", 150, false],
   ["language", "Langue", "Facultatif.", 110, false],
   ["location", "Lieu", "Facultatif. Vide = rien n'est affiché.", 190, false],
+  ["days", "Jours de la formation", "Formation sur plusieurs jours (ex. CP3) : TOUTES les dates, séparées par des virgules (JJ/MM/AAAA, JJ/MM/AAAA…). La colonne Date = le 1er jour. Vide = un seul jour.", 300, false],
   ["published", "Publiée sur le site", "Cochée = visible sur le site.", 95, false],
   ["outlook", "Outlook", "État de la synchronisation avec le calendrier Outlook. Rempli automatiquement.", 210, false],
   ["outlook_id", "ID Outlook (technique)", "", 120, true],
@@ -446,6 +457,7 @@ function readSessions_(formations) {
       closes: cellDateTime_(get_(t, row, "closes")),
       language: langCode_(get_(t, row, "language")),
       location: clean_(get_(t, row, "location"), 160),
+      daysRaw: get_(t, row, "days"),
       published: boolCell_(get_(t, row, "published")),
       outlookId: clean_(get_(t, row, "outlook_id"), 400),
       outlookSent: String(get_(t, row, "outlook_sent") || ""),
@@ -471,6 +483,10 @@ function readSessions_(formations) {
     if (s.status === null) s.problems.push("statut incompris (Ouverte, Fermée ou Annulée)");
     if (s.closes === false) s.problems.push("fin des inscriptions illisible (JJ/MM/AAAA HH:MM)");
     if (s.language === undefined) s.problems.push("langue inconnue");
+    var dd = sessionDays_(s.daysRaw, s.date);
+    s.days = dd.days;
+    s.lastDate = dd.days.length ? dd.days[dd.days.length - 1] : s.date;
+    if (dd.problem) s.problems.push(dd.problem);
     s.valid = !s.problems.length;
     list.push(s);
     if (s.id && !byId[s.id]) byId[s.id] = s;
@@ -479,9 +495,37 @@ function readSessions_(formations) {
 }
 
 function startOf_(s) { return at_(s.date, s.start || "00:00"); }
-function endOf_(s) { return s.end ? at_(s.date, s.end) : at_(nextDay_(s.date), "00:00"); }
+/* Fin = fin du DERNIER jour (formation sur plusieurs jours : la session reste « à venir » jusqu'à son dernier jour). */
+function endOf_(s) { var last = s.lastDate || s.date; return s.end ? at_(last, s.end) : at_(nextDay_(last), "00:00"); }
 function closesOf_(s) { return s.closes ? s.closes : new Date(startOf_(s).getTime() - CONFIG.CLOSE_HOURS_BEFORE * 3600000); }
-function whenText_(s) { return frDate_(s.date) + (s.start ? " · " + s.start + (s.end ? "–" + s.end : "") : ""); }
+function isMultiDay_(s) { return !!(s.days && s.days.length > 1); }
+function whenText_(s) {
+  var time = s.start ? " · " + s.start + (s.end ? "–" + s.end : "") : "";
+  return isMultiDay_(s) ? frDate_(s.date) + " → " + frDate_(s.lastDate) + " (" + s.days.length + " jours)" + time : frDate_(s.date) + time;
+}
+/** Date(s) en toutes lettres, pour les e-mails : « lundi 30 novembre 2026 » ou, pour un cycle,
+    « 7 jours, du lundi 30 novembre 2026 au lundi 21 décembre 2026 (30/11, 04/12, …) ». */
+function longWhen_(s) {
+  if (!isMultiDay_(s)) return frLongDate_(s.date);
+  return s.days.length + " jours, du " + frLongDate_(s.date) + " au " + frLongDate_(s.lastDate) + " (" +
+    s.days.map(function (d) { return frDate_(d).slice(0, 5); }).join(", ") + ")";
+}
+/** Liste de jours → texte de la colonne « Jours de la formation » (JJ/MM/AAAA, JJ/MM/AAAA…). */
+function daysText_(days) { return days.map(frDate_).join(", "); }
+/** Colonne « Jours de la formation » → { days: [] (un seul jour) ou toutes les dates triées (≥ 2), problem }.
+    Accepte une cellule date ou un texte « JJ/MM/AAAA, JJ/MM/AAAA… » (virgules, points-virgules, espaces ou retours à la ligne). */
+function sessionDays_(v, first) {
+  if (v === "" || v == null) return { days: [], problem: null };
+  var tokens = isDate_(v) ? [v] : String(v).replace(/^'/, "").split(/[\s,;]+/).filter(function (x) { return x !== ""; });
+  var seen = {}, days = [], bad = false;
+  tokens.forEach(function (tk) { var d = cellDate_(tk); if (!d) { bad = true; return; } if (!seen[d]) { seen[d] = true; days.push(d); } });
+  if (bad || !days.length) return { days: [], problem: "jours de la formation illisibles (JJ/MM/AAAA, séparés par des virgules)" };
+  if (first && !seen[first]) { days.push(first); seen[first] = true; }
+  days.sort();
+  if (days.length > 60) return { days: [], problem: "jours de la formation : 60 jours au maximum" };
+  if (first && days[0] !== first) return { days: [], problem: "la colonne Date doit être le 1er jour de la formation" };
+  return { days: days.length > 1 ? days : [], problem: null };
+}
 
 /** Statut d'une ligne de réservation → confirmed | pending | cancelled | request | expired | null. */
 function bookingStatus_(v) {
@@ -585,6 +629,7 @@ function publicSessions_() {
     var remaining = Math.max(0, s.capacity - (taken[s.id] || 0));
     return {
       id: s.id, training: s.training, date: s.date,
+      days: isMultiDay_(s) ? s.days : null,
       startTime: s.start || null, endTime: s.end || null,
       language: s.language || null, location: s.location || null,
       capacity: s.capacity, seatsLeft: remaining,
@@ -625,7 +670,7 @@ function health_() {
   var quotaLow = false;
   try { quotaLow = !msConfig_() && MailApp.getRemainingDailyQuota() < CONFIG.CONTACT_ACK_MIN_QUOTA; } catch (e) { quotaLow = null; }
   return {
-    status: "ok", version: VERSION, features: ["sessions", "book", "contact", "planning"], outlook: !!msConfig_(), timezone: CONFIG.TIMEZONE,
+    status: "ok", version: VERSION, features: ["sessions", "book", "contact", "planning", "cycles"], outlook: !!msConfig_(), timezone: CONFIG.TIMEZONE,
     tabs: tabs, automaticTask: hasTrigger,
     mail: { sender: msConfig_() ? "microsoft365" : "google", notify: !!CONFIG.NOTIFY_EMAIL, quotaLow: quotaLow, outbox: outbox },
     requests: requests,
@@ -1121,7 +1166,7 @@ function itemsHtml_(w) {
     var s = it.sessionId ? w.sessions.byId[it.sessionId] : null;
     var status = w.items[i].status === "confirmed" ? "places réservées" : w.items[i].status === "pending" ? "en attente de confirmation" : "date à convenir avec l'équipe";
     return "<li><b>" + esc_(it.trainingName) + "</b> — " + it.quantity + (it.quantity > 1 ? " participants" : " participant") +
-      (s ? " — " + esc_(frLongDate_(s.date)) + (s.start ? ", " + esc_(s.start) + (s.end ? "–" + esc_(s.end) : "") : ", horaire à confirmer") + (s.location ? ", " + esc_(s.location) : "") : "") +
+      (s ? " — " + esc_(longWhen_(s)) + (s.start ? ", " + esc_(s.start) + (s.end ? "–" + esc_(s.end) : "") : ", horaire à confirmer") + (s.location ? ", " + esc_(s.location) : "") : "") +
       " <i>(" + status + ")</i></li>";
   }).join("") + "</ul>";
 }
@@ -1273,9 +1318,11 @@ function graph_(ms, method, path, body) {
 function addHour_(time) { var h = +time.slice(0, 2) + 1; return h > 23 ? "23:59" : pad_(h) + time.slice(2); }
 
 /** Dates de l'événement Outlook d'une session : "AAAA-MM-JJTHH:MM|AAAA-MM-JJTHH:MM". */
+/* Formation sur plusieurs jours : UN événement Outlook du 1er au dernier jour (les jours exacts sont dans la feuille). */
 function eventDates_(s) {
-  if (!s.start) return s.date + "T00:00|" + nextDay_(s.date) + "T00:00";
-  return s.date + "T" + s.start + "|" + s.date + "T" + (s.end || addHour_(s.start));
+  var last = s.lastDate || s.date;
+  if (!s.start) return s.date + "T00:00|" + nextDay_(last) + "T00:00";
+  return s.date + "T" + s.start + "|" + last + "T" + (s.end || addHour_(s.start));
 }
 
 function eventPayload_(s, taken, withDates) {
@@ -1435,6 +1482,7 @@ function onOpen() {
   SpreadsheetApp.getUi().createMenu("Wisy Safety")
     .addItem("➕ Nouvelle session", "nouvelleSession")
     .addItem("📅 Ouvrir les sessions du planning…", "ouvrirLePlanning")
+    .addItem("🔁 Regrouper le CP3 en cycles de 7 jours…", "regrouperLesCycles")
     .addItem("🔒 Fermer les inscriptions (session sélectionnée)", "fermerLesInscriptions")
     .addItem("🔓 Rouvrir les inscriptions (session sélectionnée)", "rouvrirLesInscriptions")
     .addItem("⛔ Annuler la session sélectionnée…", "annulerLaSession")
@@ -1544,6 +1592,8 @@ function ensureFormations_() {
     known[id] = true;
     var f = FORMATIONS.filter(function (x) { return x[0] === id; })[0];
     if (f && ft.col.price !== undefined && get_(ft, ft.values[r], "price") !== f[3]) setCell_(ft, r + 1, "price", f[3]);
+    /* Durée (information) : complétée seulement si la case est vide — une durée saisie à la main n'est jamais écrasée. */
+    if (f && f[4] && ft.col.duration !== undefined && String(get_(ft, ft.values[r], "duration")).trim() === "") setCell_(ft, r + 1, "duration", f[4]);
   }
   var missing = FORMATIONS.filter(function (f) { return !known[f[0]]; });
   appendRows_(ft, missing.map(function (f) {
@@ -1572,36 +1622,127 @@ function trainingValidation_() {
 function openPlanning_(from, to, capacity) {
   ensureFormations_();
   trainingValidation_();
+  ensureDaysColumn_();
   var formations = readFormations_(), sessions = readSessions_(formations), t = sessions.t;
-  var today = fmt_(now_(), "yyyy-MM-dd"), have = {}, used = {};
+  var today = fmt_(now_(), "yyyy-MM-dd"), have = {}, used = {}, slot = {};
   sessions.list.forEach(function (s) {
     if (s.id) used[s.id] = true;
-    if (s.training && s.date) have[s.training + "|" + s.date] = true;
+    if (s.training && s.date) {
+      var k = s.training + "|" + s.date;
+      have[k] = true;
+      if (!slot[k] || slot[k].status === "cancelled") slot[k] = s;
+    }
   });
-  var res = { created: 0, existing: 0, past: 0, unknown: [], byTraining: {}, first: null, last: null }, rows = [];
+  var res = { created: 0, existing: 0, past: 0, converted: 0, cycles: 0, unknown: [], byTraining: {}, first: null, last: null }, rows = [];
+  function add(date, f, days) {
+    var id = date + "-" + f.id, n = 2;
+    while (used[id]) id = date + "-" + f.id + "-" + n++;
+    used[id] = true;
+    have[f.id + "|" + date] = true;
+    rows.push(rowFor_(t, { id: id, training: f.name, date: at_(date, "12:00"), days: days ? daysText_(days) : "", start: "", end: "",
+      capacity: capacity, status: S_OPEN, published: true }));
+    res.created++;
+    var label = days ? f.name + " (cycles de " + days.length + " jours)" : f.name;
+    res.byTraining[label] = (res.byTraining[label] || 0) + 1;
+    if (!res.first || date < res.first) res.first = date;
+    if (!res.last || date > res.last) res.last = date;
+  }
   planDates_(from, to, PLANNING.WEEK).forEach(function (p) {
     var f = formations.byId[p.training];
     if (!f) { if (res.unknown.indexOf(p.training) < 0) res.unknown.push(p.training); return; }
     if (p.date < today) { res.past++; return; }
     if (have[p.training + "|" + p.date]) { res.existing++; return; }
-    var id = p.date + "-" + p.training, n = 2;
-    while (used[id]) id = p.date + "-" + p.training + "-" + n++;
-    used[id] = true;
-    have[p.training + "|" + p.date] = true;
-    rows.push(rowFor_(t, { id: id, training: f.name, date: at_(p.date, "12:00"), start: "", end: "", capacity: capacity,
-      status: S_OPEN, published: true }));
-    res.created++;
-    res.byTraining[f.name] = (res.byTraining[f.name] || 0) + 1;
-    if (!res.first) res.first = p.date;
-    res.last = p.date;
+    add(p.date, f, null);
+  });
+  /* Cycles (formations sur plusieurs jours) dont le 1er jour tombe dans la période. */
+  (PLANNING.CYCLES || []).forEach(function (c) {
+    var first = c.days[0], f = formations.byId[c.training];
+    if (first < from || first > to) return;
+    if (!f) { if (res.unknown.indexOf(c.training) < 0) res.unknown.push(c.training); return; }
+    if (first < today) { res.past++; return; }
+    var s = slot[c.training + "|" + first];
+    if (s) {
+      /* Session d'UN jour déjà ouverte le 1er jour du cycle (ancien planning) : elle DEVIENT le cycle (même identifiant,
+         mêmes réservations). Une session annulée ou déjà sur plusieurs jours est laissée telle quelle. */
+      if (s.status !== "cancelled" && !isMultiDay_(s) && t.col.days !== undefined) {
+        setCell_(t, s.line, "days", daysText_(c.days));
+        res.converted++; res.cycles++;
+      } else res.existing++;
+      return;
+    }
+    add(first, f, c.days);
+    res.cycles++;
   });
   writeRowsAtFree_(t, rows);
-  if (rows.length) {
+  if (rows.length || res.converted) {
     refreshAll_();
     clearCache_();
-    log_("Planning", from + " → " + to, "Info", res.created + " session(s) créée(s), " + capacity + " places, sans horaire");
+    log_("Planning", from + " → " + to, "Info", res.created + " session(s) créée(s), " + res.converted + " session(s) devenue(s) un cycle, " +
+      capacity + " places, sans horaire");
   }
   return res;
+}
+
+/** Ajoute la colonne « Jours de la formation » si la feuille a été installée avec une version précédente (texte brut :
+    Google Sheets ne doit pas transformer « 30/11/2026, 04/12/2026 » en autre chose). */
+function ensureDaysColumn_() {
+  var t = table_(TAB.SESSIONS);
+  if (!t) return;
+  if (t.col.days === undefined) { setupTab_(SpreadsheetApp.getActiveSpreadsheet(), TAB.SESSIONS); t = table_(TAB.SESSIONS); }
+  if (t.col.days !== undefined) t.sheet.getRange(2, t.col.days + 1, Math.max(1, t.sheet.getMaxRows() - 1), 1).setNumberFormat("@");
+}
+
+/** Passage aux cycles (PLANNING.CYCLES, ex. CP3 sur 7 jours) : les sessions d'UN jour de ces formations, à venir, dans la
+    période du planning et qui ne sont pas le 1er jour d'un cycle, sont ANNULÉES — sauf si quelqu'un y a réservé (laissées
+    telles quelles et signalées). Puis les cycles sont ouverts (openPlanning_ : le 1er jour existant devient le cycle).
+    `apply` = false : simple décompte, rien n'est modifié. Relançable : la 2e fois, il n'y a plus rien à faire. */
+function regroupCycles_(apply) {
+  ensureDaysColumn_();
+  var formations = readFormations_(), sessions = readSessions_(formations), t = sessions.t;
+  var now = now_(), today = fmt_(now, "yyyy-MM-dd"), b = readBookings_();
+  var inCycles = {}, firsts = {};
+  (PLANNING.CYCLES || []).forEach(function (c) { inCycles[c.training] = true; firsts[c.training + "|" + c.days[0]] = true; });
+  var res = { cancel: [], keep: [], planning: null };
+  sessions.list.forEach(function (s) {
+    if (!s.training || !inCycles[s.training] || !s.date || s.status === "cancelled" || isMultiDay_(s)) return;
+    if (s.date < today || s.date < PLANNING.FROM || s.date > PLANNING.TO || firsts[s.training + "|" + s.date]) return;
+    (s.id && activeBookingsOf_(s.id, b.rows, now).length ? res.keep : res.cancel).push(s);
+  });
+  if (apply) {
+    res.cancel.forEach(function (s) { setCell_(t, s.line, "status", S_CANCELLED); });
+    if (res.cancel.length) log_("Planning", "cycles", "Info", res.cancel.length + " session(s) d'un jour annulée(s) : remplacées par les cycles");
+    res.planning = openPlanning_(PLANNING.FROM, PLANNING.TO, PLANNING.CAPACITY);
+    refreshAll_();
+    clearCache_();
+  }
+  return res;
+}
+
+/** Menu : passer le CP3 en cycles de 7 jours (une fois). Montre ce qui va changer et demande confirmation. */
+function regrouperLesCycles() {
+  var ui = ui_();
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(20000)) { ui.alert("La feuille est occupée (une réservation est en cours). Réessayez dans quelques secondes."); return null; }
+  try {
+    var dry = regroupCycles_(false);
+    var cycles = (PLANNING.CYCLES || []).map(function (c) {
+      return "• " + frDate_(c.days[0]) + " → " + frDate_(c.days[c.days.length - 1]) + " : " + c.days.map(function (d) { return frDate_(d).slice(0, 5); }).join(", ");
+    }).join("\n");
+    var answer = ui.alert("🔁 CP3 : cycles de 7 jours",
+      "Cycles prévus (" + PLANNING.CAPACITY + " places par cycle ; une inscription = tout le cycle) :\n" + cycles + "\n\n" +
+      dry.cancel.length + " session(s) CP3 d'un seul jour seront ANNULÉES et retirées du site (aucune réservation).\n" +
+      (dry.keep.length ? "⚠ " + dry.keep.length + " session(s) ont déjà des réservations : laissées telles quelles (" + dry.keep.map(whenText_).join(", ") + ").\n" : "") +
+      "La session du 1er jour de chaque cycle devient le cycle (même identifiant, mêmes réglages).\n\nContinuer ?", ui.ButtonSet.YES_NO);
+    if (answer !== ui.Button.YES) return null;
+    var res = regroupCycles_(true), p = res.planning;
+    ui.alert("Cycles en place ✔\n\n" + res.cancel.length + " session(s) d'un jour annulée(s).\n" +
+      p.converted + " session(s) devenue(s) un cycle, " + (p.cycles - p.converted) + " cycle(s) créé(s).\n" +
+      (res.keep.length ? "⚠ Laissées telles quelles (réservations) : " + res.keep.map(whenText_).join(", ") + ".\n" : "") +
+      "\nLes jours de chaque cycle sont dans la colonne « Jours de la formation » de l'onglet Sessions.");
+    return res;
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 /** Menu : ouvre les sessions du planning (période par défaut : PLANNING.FROM → PLANNING.TO). */
@@ -1609,8 +1750,9 @@ function ouvrirLePlanning() {
   var ui = ui_();
   var resp = ui.prompt("📅 Ouvrir les sessions du planning",
     "Période proposée : du " + frDate_(PLANNING.FROM) + " au " + frDate_(PLANNING.TO) + ", " + PLANNING.CAPACITY + " places par session, sans horaire.\n\n" +
-    "• Lundi : Nacelles élévatrices + CP3\n• Mardi et jeudi : BA4\n• Mercredi et dimanche : VCA Base\n" +
-    "• Vendredi : Diisocyanates (risque chimique) + CP3\n• Samedi : Nacelles élévatrices\n\n" +
+    "• Lundi : Nacelles élévatrices\n• Mardi et jeudi : BA4\n• Mercredi et dimanche : VCA Base\n" +
+    "• Vendredi : Diisocyanates (risque chimique)\n• Samedi : Nacelles élévatrices\n" +
+    "• CP3 : un cycle de 7 jours par mois (lundis et vendredis), à partir du " + (PLANNING.CYCLES || []).map(function (c) { return frDate_(c.days[0]).slice(0, 5); }).join(", ") + "\n\n" +
     "Cliquez OK pour cette période, ou tapez une autre période sous la forme « 01/04/2027 30/06/2027 ».\n" +
     "Les sessions déjà présentes ne sont jamais recréées.", ui.ButtonSet.OK_CANCEL);
   if (resp.getSelectedButton() !== ui.Button.OK) return null;
@@ -1627,6 +1769,7 @@ function ouvrirLePlanning() {
   var detail = Object.keys(res.byTraining).map(function (k) { return "• " + k + " : " + res.byTraining[k]; }).join("\n");
   ui.alert("Planning du " + frDate_(from) + " au " + frDate_(to) + "\n\n" +
     res.created + " session(s) créée(s)" + (res.created ? " (" + PLANNING.CAPACITY + " places chacune, publiées sur le site)" : "") + ".\n" +
+    (res.converted ? res.converted + " session(s) devenue(s) un cycle de plusieurs jours.\n" : "") +
     (detail ? detail + "\n" : "") +
     (res.existing ? res.existing + " déjà présente(s) : laissée(s) telle(s) quelle(s).\n" : "") +
     (res.past ? res.past + " date(s) passée(s) ignorée(s).\n" : "") +
@@ -1675,7 +1818,7 @@ function annulerLaSession() {
     });
     active.forEach(function (r) {
       queue_("Session annulée", r.email, "Wisy Safety — session annulée (" + r.ref + ")", emailFrame_("Session annulée",
-        "<p>Bonjour,</p><p>Nous sommes désolés : la session <b>" + esc_(s.trainingName) + "</b> du <b>" + esc_(frLongDate_(s.date)) + "</b> est annulée.</p>" +
+        "<p>Bonjour,</p><p>Nous sommes désolés : la session <b>" + esc_(s.trainingName) + "</b> (" + esc_(longWhen_(s)) + ") est annulée.</p>" +
         "<p>Votre réservation " + esc_(r.ref) + " est annulée. L'équipe Wisy Safety vous contacte pour vous proposer une autre date.</p>"), r.ref);
       notified++;
     });
@@ -1695,11 +1838,11 @@ function prevenirLesInscrits() {
   if (!sel) return;
   var ui = ui_(), s = sel.s, active = activeBookingsOf_(s.id, readBookings_().rows, now_());
   if (!active.length) { ui.alert("Aucune réservation active pour cette session."); return; }
-  var answer = ui.alert("Prévenir " + active.length + " client(s) ?", "Un e-mail annonce l'horaire actuel de la feuille : " + frLongDate_(s.date) + (s.start ? ", " + s.start + (s.end ? "–" + s.end : "") : "") + ". Continuer ?", ui.ButtonSet.YES_NO);
+  var answer = ui.alert("Prévenir " + active.length + " client(s) ?", "Un e-mail annonce l'horaire actuel de la feuille : " + longWhen_(s) + (s.start ? ", " + s.start + (s.end ? "–" + s.end : "") : "") + ". Continuer ?", ui.ButtonSet.YES_NO);
   if (answer !== ui.Button.YES) return;
   active.forEach(function (r) {
     queue_("Changement d'horaire", r.email, "Wisy Safety — changement d'horaire (" + r.ref + ")", emailFrame_("Changement d'horaire",
-      "<p>Bonjour,</p><p>L'horaire de votre session <b>" + esc_(s.trainingName) + "</b> a changé. Nouvel horaire : <b>" + esc_(frLongDate_(s.date)) +
+      "<p>Bonjour,</p><p>L'horaire de votre session <b>" + esc_(s.trainingName) + "</b> a changé. Nouvel horaire : <b>" + esc_(longWhen_(s)) +
       (s.start ? ", " + esc_(s.start) + (s.end ? "–" + esc_(s.end) : "") : "") + "</b>" + (s.location ? ", " + esc_(s.location) : "") + ".</p>" +
       "<p>Votre réservation " + esc_(r.ref) + " est conservée. Si ce nouvel horaire ne vous convient pas, répondez à cet e-mail.</p>"), r.ref);
   });
@@ -1716,7 +1859,7 @@ function listeDesParticipants() {
   var old = ss.getSheetByName(name);
   if (old) ss.deleteSheet(old);
   var sh = ss.insertSheet(name);
-  var rows = [[s.trainingName + " — " + frLongDate_(s.date) + (s.start ? ", " + s.start + (s.end ? "–" + s.end : "") : ""), "", "", "", "", "", ""],
+  var rows = [[s.trainingName + " — " + longWhen_(s) + (s.start ? ", " + s.start + (s.end ? "–" + s.end : "") : ""), "", "", "", "", "", ""],
     ["Places réservées : " + (taken_(b.rows, now)[s.id] || 0) + " / " + s.capacity + " · liste créée le " + fmt_(now, "dd/MM/yyyy HH:mm"), "", "", "", "", "", ""],
     ["", "", "", "", "", "", ""],
     ["Référence", "Statut", "Demandeur", "Entreprise", "E-mail", "Téléphone", "Places / participants"]];
@@ -1904,7 +2047,7 @@ function voirLeSite() {
   var out = publicSessions_();
   var LABEL = { open: "réservable", full: "COMPLÈTE", closed: "inscriptions fermées" };
   ui_().alert("Ce que le site affiche", out.sessions.length ? out.sessions.map(function (s) {
-    return frDate_(s.date) + (s.startTime ? " " + s.startTime : "") + " — " + ((readFormations_().byId[s.training] || {}).name || s.training) + " — " + s.seatsLeft + " place(s) disponible(s) sur " + s.capacity + " — " + LABEL[s.status];
+    return frDate_(s.date) + (s.days ? " → " + frDate_(s.days[s.days.length - 1]) + " (" + s.days.length + " jours)" : "") + (s.startTime ? " " + s.startTime : "") + " — " + ((readFormations_().byId[s.training] || {}).name || s.training) + " — " + s.seatsLeft + " place(s) disponible(s) sur " + s.capacity + " — " + LABEL[s.status];
   }).join("\n") : "Aucune session publiée à venir.", ui_().ButtonSet.OK);
 }
 
@@ -2001,6 +2144,7 @@ function installer() {
   var c = st.col, range = function (f) { return sh.getRange(2, c[f] + 1, rows, 1); };
   range("start").setNumberFormat("@");   // « 10:00 » reste un texte (jamais converti en heure par Google Sheets)
   range("end").setNumberFormat("@");
+  if (c.days !== undefined) range("days").setNumberFormat("@");   // « 30/11/2026, 04/12/2026… » reste un texte
   if (st.values.length < 2 || st.values.slice(1).every(emptyRow_)) {
     var today = fmt_(now_(), "yyyy-MM-dd");
     appendRows_(st, SEED_SESSIONS.filter(function (s) { return s.date >= today; }).map(function (s) {

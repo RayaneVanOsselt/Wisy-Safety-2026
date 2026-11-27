@@ -106,6 +106,10 @@
     return '<span class="wss-gauge wss-gauge--bar" aria-hidden="true"><i style="width:' + Math.round(taken / s.capacity * 100) + '%"></i></span>';
   }
   function signupHref(S, s) { return S.signupUrl(s, s.training); }
+  /* Formation sur plusieurs jours : « 7 jours : lun. 30 nov., ven. 4 déc., … » (vide pour une session d'un jour). */
+  function daysText(fmt) {
+    return fmt.dayCount > 1 ? t("sess.days_n", "{n} jours").replace("{n}", String(fmt.dayCount)) + " : " + fmt.daysList : "";
+  }
   function placeOf(s) {
     var f = formation(s.training);
     return s.location || (f && f.venue === "centre" ? t("ag.sess_place_default", "Wisy Safety, Anderlecht") : "");
@@ -115,6 +119,7 @@
   function detailHtml(S, s, now, opts) {
     var fmt = S.format(s, lang()), lv = level(S, s, now), bookable = S.isBookable(s, now);
     var meta = [
+      [fmt.dayCount > 1 ? '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>' : "", daysText(fmt)],
       ['<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>', fmt.time || t("sess.time_tbc", "Horaire à confirmer")],
       [fmt.language ? '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>' : "", fmt.language],
       [placeOf(s) ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.8"/></svg>' : "", placeOf(s)]
@@ -167,7 +172,8 @@
       if (live) live.hidden = S.source() !== "sheets";
 
       var byDay = {};
-      list.forEach(function (s) { (byDay[s.date] = byDay[s.date] || []).push(s); });
+      /* Une formation sur plusieurs jours apparaît à CHACUN de ses jours (une seule session : même fiche, mêmes places). */
+      list.forEach(function (s) { (s.days && s.days.length > 1 ? s.days : [s.date]).forEach(function (d) { (byDay[d] = byDay[d] || []).push(s); }); });
       var wd = weekdays();
       var html = '<div class="wsc-head" aria-hidden="true">' + wd.map(function (d) { return "<span>" + esc(d.short.replace(/\.$/, "")) + "</span>"; }).join("") + "</div>";
       var inMonth = 0;
@@ -236,5 +242,5 @@
   if (doc) { if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", init); else init(); }
 
   return { monthKey: monthKey, addMonths: addMonths, monthGrid: monthGrid, level: level, seatsText: seatsText, LOW_SEATS: LOW_SEATS,
-    detailHtml: detailHtml, gaugeHtml: gaugeHtml };
+    detailHtml: detailHtml, gaugeHtml: gaugeHtml, daysText: daysText };
 });

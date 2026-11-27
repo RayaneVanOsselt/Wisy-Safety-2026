@@ -13,15 +13,27 @@ Le prompt qui décrit ce travail est dans [prompt-sessions-inscription.md](promp
 | Récapitulatif « Sous-total 0,00 € · TVA à déterminer » | **Participants** + **Règlement : sur place, le jour de la formation** |
 | Étape 4 « Paiement », logos Stripe / Mollie / PayPal | Étape 4 **« Réservation »**, bouton **« Confirmer ma réservation »**, aucun moyen de paiement |
 | « Journée entière » quand l'heure manque | **« Horaire à confirmer »** |
-| Pas de BA4 | **BA4 — Personne avertie** dans l'inscription, l'agenda et la feuille (sans page dédiée pour l'instant) |
+| Pas de BA4 | **BA4 — Personne avertie** (formation d'**1 jour**) dans l'inscription, l'agenda et la feuille (sans page dédiée pour l'instant) |
+| Une session = un seul jour | Une session peut durer **plusieurs jours** (colonne *Jours de la formation*) : c'est le cas du **CP3** (cycles de 7 jours) |
 
 Planning (une session par formation et par jour) :
 
 | Lundi | Mardi | Mercredi | Jeudi | Vendredi | Samedi | Dimanche |
 |---|---|---|---|---|---|---|
-| Nacelles + CP3 | BA4 | VCA Base | BA4 | Diisocyanates (risque chimique) + CP3 | Nacelles | VCA Base |
+| Nacelles | BA4 | VCA Base | BA4 | Diisocyanates (risque chimique) | Nacelles | VCA Base |
 
-Soit : Nacelles 36 sessions · VCA Base 36 · CP3 35 · BA4 35 · Diisocyanates 17.
+**CP3 (décision du 27/11/2026, soir)** : **un cycle de 7 jours par mois**, les lundis et vendredis, à partir du 1er lundi
+du mois, **5 places par cycle** ; une inscription couvre les 7 jours :
+
+| Cycle | Jours |
+|---|---|
+| Décembre | 30/11, 04/12, 07/12, 11/12, 14/12, 18/12, 21/12/2026 |
+| Janvier | 04/01, 08/01, 11/01, 15/01, 18/01, 22/01, 25/01/2027 |
+| Février | 01/02, 05/02, 08/02, 12/02, 15/02, 19/02, 22/02/2027 |
+| Mars | 01/03, 05/03, 08/03, 12/03, 15/03, 19/03, 22/03/2027 |
+
+Aucun cycle ne touche un jour férié. Sur le site, un cycle s'affiche « Lundi 30 novembre – lundi 21 décembre 2026 » avec
+« 7 jours : lun. 30 nov., ven. 4 déc., … », et apparaît à chacun de ses jours dans le calendrier.
 
 L'e-mail de confirmation envoyé au client dit désormais : « **Paiement : sur place, le jour de la formation. Aucun
 paiement en ligne n'est demandé.** » et, tant que l'heure n'est pas fixée, « L'horaire de la session vous sera
@@ -75,6 +87,8 @@ confirmé par e-mail avant la formation. »
 | Annuler la réservation d'un client | Onglet *Réservations*, sélectionnez la ligne › *✖ Annuler la réservation sélectionnée…* (la place est libérée tout de suite). |
 | **Prolonger le planning** (avril → juin…) | *📅 Ouvrir les sessions du planning…* et tapez la période, par ex. `01/04/2027 30/06/2027`. Les sessions existantes ne sont jamais recréées. |
 | Changer le planning lui-même (jours, formations, 5 places) | C'est le bloc `PLANNING` en haut du script (`google-sheets/reservations.gs`) — demandez-moi, ou modifiez-le puis publiez une *Nouvelle version* (étape 3). |
+| **Créer une formation sur plusieurs jours** (ex. un nouveau cycle CP3) | *➕ Nouvelle session* (ou une ligne vide), colonne **Date** = le 1er jour, colonne **Jours de la formation** = toutes les dates séparées par des virgules, ex. `05/04/2027, 09/04/2027, 12/04/2027`. Une seule ligne = une seule inscription pour tous les jours. Pour les cycles suivants du planning, ils peuvent aussi être ajoutés dans `PLANNING.CYCLES`. |
+| Passer de l'ancien découpage CP3 aux cycles | *🔁 Regrouper le CP3 en cycles de 7 jours…* (une seule fois) : annule les sessions CP3 d'un jour sans réservation, transforme la session du 1er jour de chaque cycle en cycle. Une fenêtre montre ce qui va changer avant de le faire. |
 | Permettre de réserver plus tard | Les inscriptions en ligne se ferment **48 h avant** le début (sans horaire : 2 jours avant, à minuit). Pour une session : colonne *Fin des inscriptions* (ex. `30/11/2026 18:00`). |
 | Vérifier que tout va bien | *🔎 Vérifier la cohérence* ; onglet *Journal* (niveau « Erreur ») ; onglet *File d'envoi* (statut « Échec »). |
 
@@ -109,9 +123,12 @@ Jours à regarder tout de suite (le planning ne connaît pas les jours fériés)
 
 - « **VCA** » = **VCA Base** (pas la VCA Ligne hiérarchique) — confirmé par Wisy Safety le 27/11/2026.
 - « **Risque chimique et diisocyanates** » = la formation existante *Diisocyanates & substances dangereuses* — confirmé le 27/11/2026.
-- **BA4** ajoutée sous le nom « BA4 — Personne avertie » (risque électrique, RGIE), **sans page** et sans durée ni prix :
-  seulement dans l'inscription, l'agenda et la feuille. Une page BA4 complète est une étape suivante.
-- **CP3** (40 h minimum) : chaque lundi et chaque vendredi est une session distincte de 5 places — confirmé le 27/11/2026.
+- **BA4** ajoutée sous le nom « BA4 — Personne avertie » (risque électrique, RGIE), **sans page** et sans prix ; **durée :
+  1 jour** (confirmée le 27/11/2026, soir) : seulement dans l'inscription, l'agenda et la feuille. Une page BA4 complète
+  est une étape suivante.
+- **CP3** : **cycles de 7 jours** (lundis et vendredis), un par mois, 5 places par cycle — décision du 27/11/2026 (soir),
+  qui remplace « une session distincte chaque lundi et chaque vendredi ». La page CP3 du site dit toujours « Durée, tarif
+  et dates communiqués sur demande » (le Code impose 40 h minimum) : à mettre à jour si vous le souhaitez.
 - **Plus d'adresse de facturation** (décision du 27/11/2026) : l'étape 3 « Vos coordonnées » ne demande plus que nom,
   prénom, e-mail et téléphone. Les colonnes *Entreprise*, *N° de TVA* et *Adresse de facturation* de l'onglet
   Réservations restent vides pour les nouvelles réservations (le script 1.2.1 les accepte vides).
@@ -128,7 +145,8 @@ Jours à regarder tout de suite (le planning ne connaît pas les jours fériés)
 ## 6. Fichiers modifiés
 
 `google-sheets/reservations.gs` (version 1.2.0 : planning, BA4, e-mails « paiement sur place » ; 1.2.1 : facturation
-facultative) · `index.html`, `politique-de-confidentialite.html`, `js/i18n-data-home.js`, `js/i18n-data-privacy.js`,
+facultative ; 1.3.0 : formations sur plusieurs jours, cycles CP3, durées BA4 1 jour / CP3 7 jours) · `js/sessions.js`,
+`js/agenda.js`, `js/assistant/responder.js` (affichage des cycles) · `index.html`, `politique-de-confidentialite.html`, `js/i18n-data-home.js`, `js/i18n-data-privacy.js`,
 `js/faq-data.js`, `js/faq-i18n/*` (textes « facturation » retirés, 10 langues) ·
 `inscription.html` · `js/registration.js` · `js/registration-data.js` · `css/registration.css` ·
 `js/i18n-data-inscription.js` · `js/i18n-data-sessions.js` · `js/i18n-data-common.js` · `js/site-content.js` ·

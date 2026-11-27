@@ -892,4 +892,17 @@
   m("ro", { "price.pending": "În curs de pregătire" });
   m("it", { "price.pending": "In preparazione" });
   m("sl", { "price.pending": "V pripravi" });
+
+  /* BA4 : formation ouverte à l'inscription sans page dédiée (27/11/2026, js/site-content.js INSCRIPTION_ONLY) — nom de ses sessions
+     (agenda, calendrier, recherche). BA4 = « personne avertie » au sens du RGIE (AREI en néerlandais). */
+  m("fr", { "dd.ba4": "BA4 — Personne avertie", "dd.ba4_full": "Formation BA4 — personne avertie (risque électrique)" });
+  m("en", { "dd.ba4": "BA4 — Instructed person", "dd.ba4_full": "BA4 training — instructed person (electrical risk)" });
+  m("nl", { "dd.ba4": "BA4 — Gewaarschuwde persoon", "dd.ba4_full": "Opleiding BA4 — gewaarschuwde persoon (elektrisch risico)" });
+  m("af", { "dd.ba4": "BA4 — Gewaarskude persoon", "dd.ba4_full": "BA4-opleiding — gewaarskude persoon (elektriese risiko)" });
+  m("ar", { "dd.ba4": "BA4 — شخص مُطَّلِع", "dd.ba4_full": "تدريب BA4 — شخص مُطَّلِع (المخاطر الكهربائية)" });
+  m("bg", { "dd.ba4": "BA4 — Инструктирано лице", "dd.ba4_full": "Обучение BA4 — инструктирано лице (електрически риск)" });
+  m("de", { "dd.ba4": "BA4 — Unterwiesene Person", "dd.ba4_full": "Schulung BA4 — unterwiesene Person (elektrische Gefährdung)" });
+  m("ro", { "dd.ba4": "BA4 — Persoană instruită", "dd.ba4_full": "Formare BA4 — persoană instruită (risc electric)" });
+  m("it", { "dd.ba4": "BA4 — Persona avvertita", "dd.ba4_full": "Formazione BA4 — persona avvertita (rischio elettrico)" });
+  m("sl", { "dd.ba4": "BA4 — Poučena oseba", "dd.ba4_full": "Usposabljanje BA4 — poučena oseba (električno tveganje)" });
 })();

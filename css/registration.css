@@ -288,7 +288,8 @@
 .reg-module__ref .sep { color: var(--granit-clair); }
 .reg-module__price { display: inline-flex; align-items: baseline; gap: .3rem; }
 .reg-module__amount { font-family: var(--reg-mono); font-weight: 700; font-size: 1.22rem; color: var(--epinette); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
-.reg-module__amount.is-quote { font-size: .92rem; color: var(--epinette); text-transform: uppercase; letter-spacing: .05em; }
+.reg-module__amount.is-quote { display: block; font-size: .7rem; line-height: 1.3; color: var(--epinette); text-transform: uppercase; letter-spacing: .04em; text-align: right; }   /* « Paiement le jour de la formation » */
+.reg-module__price:has(.is-quote) { min-width: 0; max-width: 62%; }
 .reg-module__unit { font-family: var(--reg-mono); font-size: .72rem; color: var(--granit); }
 .reg-module__name { font-family: var(--font-titre); font-weight: 600; font-size: 1.14rem; color: var(--noir-jais); line-height: 1.2; margin: 0; }
 .reg-module__desc { font-size: var(--fs-small); color: var(--granit); margin: 0; flex: 1; }
@@ -372,6 +373,7 @@
 .reg-line__meta { grid-column: 2; display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; margin-top: .2rem; }
 .reg-line__calc { font-family: var(--reg-mono); font-size: .74rem; color: var(--granit); font-variant-numeric: tabular-nums; }
 .reg-line__total { font-family: var(--reg-mono); font-weight: 700; font-size: .96rem; color: var(--noir-jais); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.reg-line__total.is-text { font-size: .72rem; font-weight: 600; color: var(--epinette); white-space: normal; text-align: right; line-height: 1.3; }
 .reg-line__actions { grid-column: 2; display: flex; align-items: center; gap: .5rem; margin-top: .6rem; }
 .reg-line__mini { display: inline-flex; align-items: center; gap: .3rem; font-family: var(--reg-mono); font-weight: 600; font-size: .72rem; letter-spacing: .04em; text-transform: uppercase; color: var(--granit); padding: .35rem .5rem; border-radius: 6px; min-height: 34px; transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease); }
 .reg-line__mini:hover { color: var(--epinette); background: var(--brume-08); }
@@ -394,6 +396,7 @@
 .reg-cartouche__row--total { background: var(--epinette); }
 .reg-cartouche__row--total dt { color: rgba(244,250,249,.85); }
 .reg-cartouche__row--total dd { color: var(--creme); font-size: 1.3rem; font-weight: 700; }
+.reg-cartouche__row--total dd.is-text { font-size: .9rem; line-height: 1.3; text-align: right; }   /* « Sur place, le jour de la formation » */
 .reg-total-flash { animation: regFlash .5s var(--ease); }
 @keyframes regFlash { 0% { color: var(--turquoise); } 100% {} }
 
@@ -483,6 +486,7 @@ select.reg-input { appearance: none; -webkit-appearance: none; background-image:
 }
 .reg-finalize-total__k { font-family: var(--reg-mono); font-weight: 600; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; color: rgba(244,250,249,.9); }
 .reg-finalize-total__v { font-family: var(--reg-mono); font-weight: 700; font-size: 1.7rem; font-variant-numeric: tabular-nums; }
+.reg-finalize-total__v.is-text { font-size: clamp(1.02rem, 2.6vw, 1.3rem); line-height: 1.3; text-align: right; }   /* « Sur place, le jour de la formation » */
 .reg-finalize-total__v small { font-family: var(--reg-mono); font-size: .74rem; font-weight: 500; color: rgba(244,250,249,.8); }
 
 .reg-payment { border: 1.5px dashed var(--brume); border-radius: var(--reg-radius); background: var(--reg-paper); padding: clamp(1.25rem, 3vw, 1.9rem); text-align: center; }
@@ -490,10 +494,7 @@ select.reg-input { appearance: none; -webkit-appearance: none; background-image:
 .reg-payment__ic svg { width: 26px; height: 26px; }
 .reg-payment__title { font-family: var(--font-titre); font-weight: 700; font-size: 1.12rem; color: var(--noir-jais); margin: 0 0 .4rem; }
 .reg-payment__text { font-size: var(--fs-small); color: var(--granit); max-width: 46ch; margin: 0 auto 1.15rem; }
-.reg-payment__providers { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-bottom: 1.2rem; }
-.reg-payment__providers[hidden] { display: none; }   /* sans paiement en ligne : jamais de logos Stripe / Mollie / PayPal */
-.reg-provider-tag { display: inline-flex; align-items: center; gap: .4rem; font-family: var(--reg-mono); font-weight: 600; font-size: .74rem; color: var(--granit); background: var(--reg-surface); border: 1px solid var(--reg-hair); border-radius: 6px; padding: .4rem .8rem; }
-.reg-provider-tag .dot { width: 7px; height: 7px; border-radius: 2px; background: var(--granit-clair); }
+/* Moyens de paiement en ligne (Stripe / Mollie / PayPal) SUPPRIMÉS le 27/11/2026 : règlement sur place, le jour de la formation. */
 .reg-payment__status { display: inline-flex; align-items: center; gap: .55rem; font-family: var(--reg-mono); font-size: .76rem; color: var(--epinette); background: var(--reg-surface); border: 1px solid var(--brume-14); border-radius: 6px; padding: .5rem 1rem; margin-top: .3rem; }
 .reg-payment__status svg { width: 16px; height: 16px; }
 .reg-pay-btn { margin: 0 auto; max-width: 340px; }
@@ -548,6 +549,7 @@ select.reg-input { appearance: none; -webkit-appearance: none; background-image:
   .reg-mobilebar__info { flex: 1; min-width: 0; text-align: left; }
   .reg-mobilebar__count { display: block; font-family: var(--reg-mono); font-weight: 600; font-size: .72rem; letter-spacing: .03em; text-transform: uppercase; color: var(--granit); }
   .reg-mobilebar__total { display: block; font-family: var(--reg-mono); font-weight: 700; font-size: 1.3rem; color: var(--epinette); font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .reg-mobilebar__total.is-text { font-size: .82rem; line-height: 1.25; }
   .reg-mobilebar__detail { display: inline-flex; align-items: center; gap: .3rem; font-family: var(--reg-mono); font-size: .68rem; color: var(--brume); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
   .reg-mobilebar__detail svg { width: 13px; height: 13px; }
   .reg-mobilebar__cta { flex-shrink: 0; min-height: var(--reg-tap); width: auto; }

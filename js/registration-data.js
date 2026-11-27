@@ -5,11 +5,13 @@
    catalogue des formations, prix, catégories et configuration.
    Aucun prix ne doit être écrit en dur ailleurs dans le code.
 
+   ► PAIEMENT (décision de Wisy Safety du 27/11/2026) : AUCUN paiement en ligne. Le participant règle sa formation
+     SUR PLACE, LE JOUR DE LA FORMATION. Dans le parcours d'inscription, une formation sans tarif publié
+     (priceCents:null) affiche donc « Paiement le jour de la formation » — jamais « Sur devis » ni « En cours de
+     préparation ». Les drapeaux onQuote / pricePending restent ci-dessous pour les AUTRES pages (fiches, recherche).
    ► Prix stockés en CENTIMES (entiers) pour éviter toute erreur de virgule
-     flottante (ex. : un tarif de 100,00 € s'écrirait 10000). priceCents:null + onQuote:true => « Sur devis »
-     (formation non tarifée : exclue du sous-total, tarif communiqué séparément).
-   ► pricePending:true (avec priceCents:null) => « En cours de préparation » à la place du prix : le tarif
-     a été retiré du site en attendant sa publication. Il se saisit dans js/trainings-data.js (registre central).
+     flottante (ex. : un tarif de 100,00 € s'écrirait 10000). Un tarif publié s'affiche « 100,00 € / participant »,
+     toujours réglé le jour de la formation. Il se saisit dans js/trainings-data.js (registre central).
    ► Structure prête pour un remplacement par une API / un CMS : il suffira
      de fournir le même objet (mêmes clés) depuis le réseau, puis d'appeler
      window.WisyRegistration.setCatalogue(list).
@@ -17,10 +19,8 @@
      ro, it, sl ; contrôle : scripts/check-i18n.js) ; repli sur le français si une langue manquait.
    ► image : visuel de la formation (fiche). alt = nom de la formation.
 
-   SÉCURITÉ (future intégration paiement) : ces données sont côté client à des
-   fins d'AFFICHAGE et de CALCUL PROVISOIRE uniquement. Le serveur devra
-   TOUJOURS recalculer les montants à partir des identifiants de formation
-   (id), sans jamais faire confiance au total transmis par le navigateur.
+   SÉCURITÉ : ces données sont côté client à des fins d'AFFICHAGE uniquement. La feuille de réservation
+   (google-sheets/reservations.gs) ne reçoit que des identifiants de formation et des nombres de places.
    ========================================================================= */
 (function () {
   "use strict";
@@ -35,10 +35,12 @@
     vatRate: null,
     minQuantity: 1,
     maxQuantity: 99,
+    /* Paiement en ligne SUPPRIMÉ (27/11/2026) : aucun prestataire, aucun bouton « payer ». Règlement sur place, le jour
+       de la formation. L'étape 4 RÉSERVE les places (feuille Google) ou, à défaut, ENVOIE la demande par e-mail. */
     payment: {
-      provider: null,          /* "stripe" | "mollie" | "paypal" */
+      provider: null,
       ready: false,
-      checkoutEndpoint: "/api/checkout"  /* le serveur RECALCULE d'après items[].id */
+      onSite: true
     }
   };
 
@@ -71,7 +73,7 @@
   ];
 
   /* ----------------------------------------------------------------------
-     Catalogue — 6 formations + 1 service d'accompagnement d'entreprise (source unique)
+     Catalogue — 8 formations + 1 service d'accompagnement d'entreprise (source unique)
      ---------------------------------------------------------------------- */
   var CATALOGUE = [
     {
@@ -306,6 +308,36 @@
         ro: "Curs de bază — Codul privind bunăstarea la locul de muncă",
         it: "Corso di base — Codice del benessere al lavoro",
         sl: "Osnovni tečaj — Zakonik o dobrem počutju pri delu"
+      }
+    },
+    /* BA4 — personne avertie (risque électrique, RGIE) : ajoutée le 27/11/2026 pour les sessions des mardis et jeudis.
+       PAS de page dédiée (js/site-content.js INSCRIPTION_ONLY) ni de photo : la carte affiche une icône. Aucun fait
+       inventé : ni durée, ni prix, ni programme — seulement le nom et le cadre (RGIE). */
+    {
+      id: "ba4",
+      code: "BA4",
+      priceCents: null,
+      onQuote: true,
+      unit: "participant",
+      category: "securite",
+      icon: "bolt",
+      image: null,
+      name: {
+        fr: "BA4 — Personne avertie", en: "BA4 — Instructed person", nl: "BA4 — Gewaarschuwde persoon",
+        af: "BA4 — Gewaarskude persoon", ar: "BA4 — شخص مُطَّلِع", bg: "BA4 — Инструктирано лице",
+        de: "BA4 — Unterwiesene Person", ro: "BA4 — Persoană instruită", it: "BA4 — Persona avvertita", sl: "BA4 — Poučena oseba"
+      },
+      description: {
+        fr: "Risque électrique — qualification BA4 (RGIE)",
+        en: "Electrical risk — BA4 qualification (RGIE)",
+        nl: "Elektrisch risico — BA4-bevoegdheid (AREI)",
+        af: "Elektriese risiko — BA4-kwalifikasie (RGIE)",
+        ar: "المخاطر الكهربائية — تأهيل BA4 (RGIE)",
+        bg: "Електрически риск — квалификация BA4 (RGIE)",
+        de: "Elektrische Gefährdung — Qualifikation BA4 (RGIE)",
+        ro: "Risc electric — calificare BA4 (RGIE)",
+        it: "Rischio elettrico — qualifica BA4 (RGIE)",
+        sl: "Električno tveganje — usposobljenost BA4 (RGIE)"
       }
     }
   ];

@@ -52,15 +52,14 @@ test("installer : 8 onglets (dont « Demandes » des formulaires), TOUTES les fo
   assert.deepEqual(G.sheets.map((s) => s.getName()), ["Formations", "Sessions", "Réservations", "Participants", "Écarts Outlook", "File d'envoi", "Journal", "Demandes"]);
   const ctx = { window: {} }; ctx.self = ctx.window;
   vm.runInNewContext(read("js/trainings-data.js"), ctx); vm.runInNewContext(read("js/site-content.js"), ctx);
-  const site = ctx.window.WisySite.formations().concat(ctx.window.WisySite.services());
+  const site = ctx.window.WisySite.formations().concat(ctx.window.WisySite.services(), ctx.window.WisySite.inscriptionOnly());
   const rows = G.sheet("Formations").records();
-  assert.deepEqual(plain(rows.map((r) => r["Identifiant"])), plain(site.map((f) => f.id)), "mêmes formations, même ordre que le registre du site");
+  assert.deepEqual(plain(rows.map((r) => r["Identifiant"])), plain(site.map((f) => f.id)), "mêmes formations, même ordre que le registre du site (+ BA4, sans page)");
   rows.forEach((r, i) => {
     assert.equal(r["Formation"], site[i].title, "nom = titre du site : " + r["Identifiant"]);
-    assert.equal(r["Page du site"], "https://wisysafety.be/" + site[i].url, "domaine officiel (plus l'adresse github.io)");
+    assert.equal(r["Page du site"], "https://wisysafety.be/" + (site[i].url || site[i].signupUrl), "domaine officiel (plus l'adresse github.io)");
     if (site[i].priceLabel) assert.ok(r["Tarif"].startsWith(site[i].priceLabel), "tarif du site : " + r["Tarif"]);
-    else if (site[i].pricePending) assert.equal(r["Tarif"], "En cours de préparation", "tarif retiré du site : " + r["Identifiant"]);
-    else assert.equal(r["Tarif"], "Sur devis", "aucun tarif inventé : " + r["Identifiant"]);
+    else assert.equal(r["Tarif"], "Paiement le jour de la formation", "aucun tarif inventé, paiement sur place : " + r["Identifiant"]);
   });
   const s = G.sheet("Sessions").records();
   assert.equal(s.length, 1);
@@ -593,8 +592,8 @@ test("heure gardée avec son apostrophe par Google (« '10:00 ») : la session r
 test("diagnostic à distance (?action=health) : onglets, tâche automatique, nombre de sessions et raisons — sans aucune donnée personnelle", () => {
   const fresh = loadGas("google-sheets/reservations.gs", { now: NOW });
   let h = fresh.get({ action: "health" });
-  assert.equal(h.version, "1.1.0"); assert.equal(h.tabs.Sessions, false, "feuille pas encore installée");
-  assert.deepEqual(plain(h.features), ["sessions", "book", "contact"], "le site peut vérifier que le script sait recevoir les formulaires");
+  assert.equal(h.version, "1.2.0"); assert.equal(h.tabs.Sessions, false, "feuille pas encore installée");
+  assert.deepEqual(plain(h.features), ["sessions", "book", "contact", "planning"], "le site peut vérifier que le script sait recevoir les formulaires (et ouvrir le planning)");
   assert.equal(h.sessions.rows, 0); assert.equal(h.automaticTask, false);
   const G = sheetGas();
   G.post(order(2));

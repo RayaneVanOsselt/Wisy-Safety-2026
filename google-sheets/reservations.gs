@@ -16,8 +16,12 @@
  *              de la capacité ; un double envoi renvoie la même référence ;
  *   - il envoie les e-mails (confirmation au client, avis à Wisy Safety) et les réessaie en cas d'échec ;
  *   - il synchronise un calendrier Outlook DÉDIÉ (Microsoft Graph), si Microsoft 365 est configuré (menu) ;
- *   - il ajoute un menu « Wisy Safety » : nouvelle session, fermer / annuler, annuler une réservation, liste des
+ *   - il ajoute un menu « Wisy Safety » : nouvelle session, OUVRIR LES SESSIONS DU PLANNING (toutes les dates d'une
+ *     période selon le jour de la semaine, voir PLANNING), fermer / annuler, annuler une réservation, liste des
  *     participants, vérifications, Outlook.
+ *
+ * Paiement : AUCUN paiement en ligne. Le participant règle sa formation sur place, le jour de la formation (décision de
+ * Wisy Safety du 27/11/2026) — c'est ce que disent le site et les e-mails de confirmation.
  *
  * Règle d'or : les places restantes ne sont JAMAIS saisies à la main. Elles sont recalculées à chaque demande à partir
  * des lignes de l'onglet « Réservations » (statut Confirmée, ou En attente non expirée).
@@ -28,7 +32,7 @@
  * =========================================================================
  */
 
-var VERSION = "1.1.0";
+var VERSION = "1.2.0";
 
 var CONFIG = {
   FILE_NAME: "Réservations - Wisy Safety",
@@ -69,17 +73,42 @@ var TAB = {
 };
 
 /* Formations du site (registre js/site-content.js — tests/reservations.test.js vérifie que la liste est identique).
-   [identifiant du site, nom, type, tarif affiché, durée, page du site]. Aucun tarif inventé : « Sur devis » = non publié ; « En cours de préparation » = tarif retiré du site. */
+   [identifiant du site, nom, type, tarif affiché, durée, page du site]. Aucun tarif inventé : aucun montant n'est publié ;
+   le règlement se fait sur place, le jour de la formation (aucun paiement en ligne).
+   BA4 (ajoutée le 27/11/2026) n'a pas encore de page : son lien mène au parcours d'inscription. */
+var PAY_ON_SITE = "Paiement le jour de la formation";
 var FORMATIONS = [
-  ["vca-base", "VCA Base", "Formation", "En cours de préparation", "1 jour", "formation-vca-base.html"],
-  ["vca-hierarchique", "VCA Ligne hiérarchique", "Formation", "Sur devis", "", "formation-vca-ligne-hierarchique.html"],
-  ["diisocyanates", "Diisocyanates & substances dangereuses", "Formation", "Sur devis", "", "formation-diisocyanates.html"],
-  ["conseiller-prevention", "Conseiller en prévention niveau III", "Formation", "Sur devis", "", "formation-conseiller-prevention-niveau-3.html"],
-  ["nacelle", "Nacelles élévatrices", "Formation", "En cours de préparation", "1 jour", "formation-nacelles-elevatrices.html"],
-  ["fibre-optique", "Fibre optique", "Formation", "Sur devis", "", "formation-fibre-optique.html"],
-  ["beps", "BEPS — Premier secours", "Formation", "En cours de préparation", "15 heures", "formation-beps-premiers-secours.html"],
-  ["vca-entreprise", "VCA Entreprise", "Accompagnement", "En cours de préparation", "", "vca-entreprise.html"]
+  ["vca-base", "VCA Base", "Formation", PAY_ON_SITE, "1 jour", "formation-vca-base.html"],
+  ["vca-hierarchique", "VCA Ligne hiérarchique", "Formation", PAY_ON_SITE, "", "formation-vca-ligne-hierarchique.html"],
+  ["diisocyanates", "Diisocyanates & substances dangereuses", "Formation", PAY_ON_SITE, "", "formation-diisocyanates.html"],
+  ["conseiller-prevention", "Conseiller en prévention niveau III", "Formation", PAY_ON_SITE, "", "formation-conseiller-prevention-niveau-3.html"],
+  ["nacelle", "Nacelles élévatrices", "Formation", PAY_ON_SITE, "1 jour", "formation-nacelles-elevatrices.html"],
+  ["fibre-optique", "Fibre optique", "Formation", PAY_ON_SITE, "", "formation-fibre-optique.html"],
+  ["beps", "BEPS — Premier secours", "Formation", PAY_ON_SITE, "15 heures", "formation-beps-premiers-secours.html"],
+  ["vca-entreprise", "VCA Entreprise", "Accompagnement", PAY_ON_SITE, "", "vca-entreprise.html"],
+  ["ba4", "BA4 — Personne avertie", "Formation", PAY_ON_SITE, "", "inscription.html?formation=ba4"]
 ];
+
+/* PLANNING DES SESSIONS (demandé par Wisy Safety le 27/11/2026) — menu « 📅 Ouvrir les sessions du planning… ».
+   Une session par formation et par jour indiqué, du FROM au TO inclus, CAPACITY places, SANS horaire (« Horaire à
+   confirmer » sur le site ; à compléter dans les colonnes Début / Fin quand il est connu), publiée et ouverte.
+   Relancer le menu ne crée JAMAIS de doublon : une formation qui a déjà une session ce jour-là (même annulée) est
+   laissée telle quelle. Pour prolonger le planning : relancez le menu en tapant une autre période.
+   Jours : 0 = dimanche, 1 = lundi, 2 = mardi, 3 = mercredi, 4 = jeudi, 5 = vendredi, 6 = samedi. */
+var PLANNING = {
+  FROM: "2026-11-28",
+  TO: "2027-03-31",
+  CAPACITY: 5,
+  WEEK: {
+    1: ["nacelle", "conseiller-prevention"],          // lundi : Nacelles élévatrices + CP3
+    2: ["ba4"],                                       // mardi : BA4
+    3: ["vca-base"],                                  // mercredi : VCA
+    4: ["ba4"],                                       // jeudi : BA4
+    5: ["diisocyanates", "conseiller-prevention"],    // vendredi : risque chimique & diisocyanates + CP3
+    6: ["nacelle"],                                   // samedi : Nacelles élévatrices
+    0: ["vca-base"]                                   // dimanche : VCA
+  }
+};
 
 /* Première session, demandée par Wisy Safety le 15/10/2026. Ajoutée par « Installer » seulement si l'onglet Sessions est
    vide et si la date n'est pas passée. */
@@ -115,7 +144,7 @@ COLS[TAB.SESSIONS] = [
   ["id", "Identifiant", "Rempli automatiquement (date + formation). Ne pas modifier : les réservations y sont rattachées.", 175, false],
   ["training", "Formation", "Choisissez dans la liste (onglet « Formations »).", 250, false],
   ["date", "Date", "JJ/MM/AAAA.", 105, false],
-  ["start", "Début", "HH:MM (ex. 09:00). Vide = journée entière.", 70, false],
+  ["start", "Début", "HH:MM (ex. 09:00). Vide = « Horaire à confirmer » sur le site.", 70, false],
   ["end", "Fin", "HH:MM (ex. 17:00).", 70, false],
   ["capacity", "Places (total)", "Nombre maximal de participants.", 90, false],
   ["booked", "Réservées", "CALCULÉ automatiquement à partir de l'onglet « Réservations ». Ne pas modifier.", 90, false],
@@ -351,6 +380,24 @@ function appendRows_(t, rows) {
   rows.forEach(function (r) { t.values.push(r); });
 }
 
+/** Première ligne VRAIMENT libre d'un onglet (1 = en-tête). Les cases à cocher décochées comptent comme « remplies » pour
+    Google (getLastRow) : sans ceci, une nouvelle session atterrirait sous les 1 000 lignes préparées. */
+function firstFreeLine_(t) {
+  for (var r = t.values.length - 1; r >= 1; r--) if (!emptyRow_(t.values[r])) return r + 2;
+  return 2;
+}
+
+/** Écrit des lignes à partir de la première ligne libre (et ajoute des lignes à la feuille si nécessaire). */
+function writeRowsAtFree_(t, rows) {
+  if (!rows.length) return 0;
+  var first = firstFreeLine_(t);
+  var missing = first + rows.length - 1 - t.sheet.getMaxRows();
+  if (missing > 0) t.sheet.insertRowsAfter(t.sheet.getMaxRows(), missing + 200);
+  t.sheet.getRange(first, 1, rows.length, t.width).setValues(rows);
+  rows.forEach(function (row, i) { t.values[first - 1 + i] = row; });
+  return first;
+}
+
 function setCell_(t, line, f, value) {
   if (t.col[f] === undefined) return;
   t.sheet.getRange(line, t.col[f] + 1).setValue(value);
@@ -548,7 +595,7 @@ function publicSessions_() {
     var ka = a.date + (a.startTime || ""), kb = b.date + (b.startTime || "");
     return ka < kb ? -1 : ka > kb ? 1 : (a.id < b.id ? -1 : 1);
   });
-  return { status: "ok", version: VERSION, generatedAt: fmt_(now, "yyyy-MM-dd'T'HH:mm"), sessions: out.slice(0, 200) };
+  return { status: "ok", version: VERSION, generatedAt: fmt_(now, "yyyy-MM-dd'T'HH:mm"), sessions: out.slice(0, 400) };
 }
 
 /** État de la feuille, SANS aucune donnée personnelle ni session non publiée (nombres et raisons génériques) :
@@ -578,7 +625,7 @@ function health_() {
   var quotaLow = false;
   try { quotaLow = !msConfig_() && MailApp.getRemainingDailyQuota() < CONFIG.CONTACT_ACK_MIN_QUOTA; } catch (e) { quotaLow = null; }
   return {
-    status: "ok", version: VERSION, features: ["sessions", "book", "contact"], outlook: !!msConfig_(), timezone: CONFIG.TIMEZONE,
+    status: "ok", version: VERSION, features: ["sessions", "book", "contact", "planning"], outlook: !!msConfig_(), timezone: CONFIG.TIMEZONE,
     tabs: tabs, automaticTask: hasTrigger,
     mail: { sender: msConfig_() ? "microsoft365" : "google", notify: !!CONFIG.NOTIFY_EMAIL, quotaLow: quotaLow, outbox: outbox },
     requests: requests,
@@ -1073,7 +1120,7 @@ function itemsHtml_(w) {
     var s = it.sessionId ? w.sessions.byId[it.sessionId] : null;
     var status = w.items[i].status === "confirmed" ? "places réservées" : w.items[i].status === "pending" ? "en attente de confirmation" : "date à convenir avec l'équipe";
     return "<li><b>" + esc_(it.trainingName) + "</b> — " + it.quantity + (it.quantity > 1 ? " participants" : " participant") +
-      (s ? " — " + esc_(frLongDate_(s.date)) + (s.start ? ", " + esc_(s.start) + (s.end ? "–" + esc_(s.end) : "") : "") + (s.location ? ", " + esc_(s.location) : "") : "") +
+      (s ? " — " + esc_(frLongDate_(s.date)) + (s.start ? ", " + esc_(s.start) + (s.end ? "–" + esc_(s.end) : "") : ", horaire à confirmer") + (s.location ? ", " + esc_(s.location) : "") : "") +
       " <i>(" + status + ")</i></li>";
   }).join("") + "</ul>";
 }
@@ -1087,7 +1134,9 @@ function queueBookingEmails_(w) {
     "<p>Bonjour " + esc_(c.firstName) + ",</p>" +
     "<p>" + (anyConfirmed ? "Vos places sont réservées." : "Nous avons bien reçu votre demande.") + " Votre référence : <b>" + esc_(w.ref) + "</b>.</p>" +
     itemsHtml_(w) +
-    "<p>Aucun paiement n'a été demandé en ligne : l'équipe Wisy Safety vous envoie la facture et les informations pratiques.</p>" +
+    "<p><b>Paiement :</b> sur place, le jour de la formation. Aucun paiement en ligne n'est demandé.</p>" +
+    (w.order.items.some(function (it) { var s = it.sessionId ? w.sessions.byId[it.sessionId] : null; return s && !s.start; })
+      ? "<p>L'horaire de la session vous sera confirmé par e-mail avant la formation.</p>" : "") +
     "<p>Pour modifier ou annuler, répondez à cet e-mail en indiquant votre référence.</p>");
   queue_("Confirmation client", c.email, "Wisy Safety — " + (anyConfirmed ? "réservation confirmée " : "demande reçue ") + w.ref, client, w.ref);
   if (CONFIG.NOTIFY_EMAIL) {
@@ -1377,6 +1426,7 @@ function tick() {
 function onOpen() {
   SpreadsheetApp.getUi().createMenu("Wisy Safety")
     .addItem("➕ Nouvelle session", "nouvelleSession")
+    .addItem("📅 Ouvrir les sessions du planning…", "ouvrirLePlanning")
     .addItem("🔒 Fermer les inscriptions (session sélectionnée)", "fermerLesInscriptions")
     .addItem("🔓 Rouvrir les inscriptions (session sélectionnée)", "rouvrirLesInscriptions")
     .addItem("⛔ Annuler la session sélectionnée…", "annulerLaSession")
@@ -1443,13 +1493,138 @@ function selectedSession_() {
 function nouvelleSession() {
   var ss = SpreadsheetApp.getActiveSpreadsheet(), t = table_(TAB.SESSIONS);
   if (!t) { installer(); t = table_(TAB.SESSIONS); }
-  var line = t.sheet.getLastRow() + 1;
+  var line = firstFreeLine_(t);
   if (line > t.sheet.getMaxRows()) t.sheet.insertRowsAfter(t.sheet.getMaxRows(), 50);
   setCell_(t, line, "status", S_OPEN);
   setCell_(t, line, "published", false);
   ss.setActiveSheet(t.sheet);
   t.sheet.getRange(line, (t.col.training || 0) + 1).activate();
   ss.toast("Choisissez la formation, puis la date, les heures et le nombre de places. Cochez « Publiée sur le site » quand tout est prêt.", "Nouvelle session", 12);
+}
+
+/* ----------------------------------------------------------------------- planning des sessions */
+
+/** Jour de la semaine d'une date AAAA-MM-JJ (0 = dimanche … 6 = samedi), sans dépendre du fuseau horaire. */
+function weekday_(day) { var p = day.split("-"); return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2], 12)).getUTCDay(); }
+
+/** Sessions prévues par le planning entre deux dates incluses : [{ date, training }] (ordre chronologique). */
+function planDates_(from, to, week) {
+  var out = [], day = from, guard = 0;
+  while (day <= to && guard++ < 800) {
+    (week[weekday_(day)] || []).forEach(function (training) { out.push({ date: day, training: training }); });
+    day = nextDay_(day);
+  }
+  return out;
+}
+
+/** JJ/MM/AAAA → AAAA-MM-JJ (ou null si la date n'existe pas). */
+function parseFrDay_(text) {
+  var m = /^\s*(\d{1,2})\/(\d{1,2})\/(\d{4})\s*$/.exec(String(text || ""));
+  if (!m) return null;
+  var day = m[3] + "-" + pad_(+m[2]) + "-" + pad_(+m[1]);
+  var d = new Date(Date.UTC(+m[3], +m[2] - 1, +m[1]));
+  return d.getUTCFullYear() === +m[3] && d.getUTCMonth() === +m[2] - 1 && d.getUTCDate() === +m[1] ? day : null;
+}
+
+/** Formations du site absentes de l'onglet « Formations » : ajoutées (les lignes existantes sont gardées). Le tarif
+    affiché (information) est remis à jour pour les formations du site. Renvoie le nombre de formations ajoutées. */
+function ensureFormations_() {
+  var ft = table_(TAB.FORMATIONS), known = {};
+  for (var r = 1; r < ft.values.length; r++) {
+    var id = clean_(get_(ft, ft.values[r], "id")).toLowerCase();
+    if (!id) continue;
+    known[id] = true;
+    var f = FORMATIONS.filter(function (x) { return x[0] === id; })[0];
+    if (f && ft.col.price !== undefined && get_(ft, ft.values[r], "price") !== f[3]) setCell_(ft, r + 1, "price", f[3]);
+  }
+  var missing = FORMATIONS.filter(function (f) { return !known[f[0]]; });
+  appendRows_(ft, missing.map(function (f) {
+    return rowFor_(ft, { id: f[0], name: f[1], kind: f[2], price: f[3], duration: f[4], page: CONFIG.SITE_URL + f[5], bookable: true });
+  }));
+  var fRows = Math.max(ft.sheet.getLastRow() - 1, 1);
+  if (ft.col.bookable !== undefined) ft.sheet.getRange(2, ft.col.bookable + 1, fRows, 1).insertCheckboxes();
+  if (ft.col.id !== undefined) ft.sheet.getRange(2, ft.col.id + 1, fRows, 1).setFontColor("#5E6D6A");
+  return missing.length;
+}
+
+/** Liste déroulante « Formation » de l'onglet Sessions = noms de l'onglet « Formations ». */
+function trainingValidation_() {
+  var st = table_(TAB.SESSIONS), rows = Math.max(1, st.sheet.getMaxRows() - 1);
+  if (st.col.training === undefined) return;
+  var names = readFormations_().list.map(function (f) { return f.name; });
+  st.sheet.getRange(2, st.col.training + 1, rows, 1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(names, true)
+    .setAllowInvalid(false).setHelpText("Choisissez une formation de l'onglet « Formations ».").build());
+}
+
+/**
+ * Crée les sessions du planning entre `from` et `to` (AAAA-MM-JJ, inclus) : publiées, ouvertes, `capacity` places,
+ * sans horaire. Jamais de doublon (formation + date déjà présente, même annulée) ni de date passée.
+ * Renvoie { created, existing, past, unknown, byTraining, first, last }.
+ */
+function openPlanning_(from, to, capacity) {
+  ensureFormations_();
+  trainingValidation_();
+  var formations = readFormations_(), sessions = readSessions_(formations), t = sessions.t;
+  var today = fmt_(now_(), "yyyy-MM-dd"), have = {}, used = {};
+  sessions.list.forEach(function (s) {
+    if (s.id) used[s.id] = true;
+    if (s.training && s.date) have[s.training + "|" + s.date] = true;
+  });
+  var res = { created: 0, existing: 0, past: 0, unknown: [], byTraining: {}, first: null, last: null }, rows = [];
+  planDates_(from, to, PLANNING.WEEK).forEach(function (p) {
+    var f = formations.byId[p.training];
+    if (!f) { if (res.unknown.indexOf(p.training) < 0) res.unknown.push(p.training); return; }
+    if (p.date < today) { res.past++; return; }
+    if (have[p.training + "|" + p.date]) { res.existing++; return; }
+    var id = p.date + "-" + p.training, n = 2;
+    while (used[id]) id = p.date + "-" + p.training + "-" + n++;
+    used[id] = true;
+    have[p.training + "|" + p.date] = true;
+    rows.push(rowFor_(t, { id: id, training: f.name, date: at_(p.date, "12:00"), start: "", end: "", capacity: capacity,
+      status: S_OPEN, published: true }));
+    res.created++;
+    res.byTraining[f.name] = (res.byTraining[f.name] || 0) + 1;
+    if (!res.first) res.first = p.date;
+    res.last = p.date;
+  });
+  writeRowsAtFree_(t, rows);
+  if (rows.length) {
+    refreshAll_();
+    clearCache_();
+    log_("Planning", from + " → " + to, "Info", res.created + " session(s) créée(s), " + capacity + " places, sans horaire");
+  }
+  return res;
+}
+
+/** Menu : ouvre les sessions du planning (période par défaut : PLANNING.FROM → PLANNING.TO). */
+function ouvrirLePlanning() {
+  var ui = ui_();
+  var resp = ui.prompt("📅 Ouvrir les sessions du planning",
+    "Période proposée : du " + frDate_(PLANNING.FROM) + " au " + frDate_(PLANNING.TO) + ", " + PLANNING.CAPACITY + " places par session, sans horaire.\n\n" +
+    "• Lundi : Nacelles élévatrices + CP3\n• Mardi et jeudi : BA4\n• Mercredi et dimanche : VCA Base\n" +
+    "• Vendredi : Diisocyanates (risque chimique) + CP3\n• Samedi : Nacelles élévatrices\n\n" +
+    "Cliquez OK pour cette période, ou tapez une autre période sous la forme « 01/04/2027 30/06/2027 ».\n" +
+    "Les sessions déjà présentes ne sont jamais recréées.", ui.ButtonSet.OK_CANCEL);
+  if (resp.getSelectedButton() !== ui.Button.OK) return null;
+  var text = String(resp.getResponseText() || "").trim(), from = PLANNING.FROM, to = PLANNING.TO;
+  if (text) {
+    var parts = text.match(/\d{1,2}\/\d{1,2}\/\d{4}/g) || [];   // « 01/04/2027 30/06/2027 », « du 01/04/2027 au 30/06/2027 »…
+    from = parseFrDay_(parts[0]); to = parseFrDay_(parts[1]);
+    if (!from || !to || to < from) { ui.alert("Période illisible. Exemple : 01/04/2027 30/06/2027 (date de début, puis date de fin)."); return null; }
+  }
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(20000)) { ui.alert("La feuille est occupée (une réservation est en cours). Réessayez dans quelques secondes."); return null; }
+  var res;
+  try { res = openPlanning_(from, to, PLANNING.CAPACITY); } finally { lock.releaseLock(); }
+  var detail = Object.keys(res.byTraining).map(function (k) { return "• " + k + " : " + res.byTraining[k]; }).join("\n");
+  ui.alert("Planning du " + frDate_(from) + " au " + frDate_(to) + "\n\n" +
+    res.created + " session(s) créée(s)" + (res.created ? " (" + PLANNING.CAPACITY + " places chacune, publiées sur le site)" : "") + ".\n" +
+    (detail ? detail + "\n" : "") +
+    (res.existing ? res.existing + " déjà présente(s) : laissée(s) telle(s) quelle(s).\n" : "") +
+    (res.past ? res.past + " date(s) passée(s) ignorée(s).\n" : "") +
+    (res.unknown.length ? "⚠ Formation(s) absente(s) de l'onglet Formations : " + res.unknown.join(", ") + ".\n" : "") +
+    "\nHoraires : complétez les colonnes « Début » et « Fin » quand vous les connaissez (le site affiche « Horaire à confirmer » d'ici là).");
+  return res;
 }
 
 function setSessionStatus_(status, message) {
@@ -1811,14 +1986,7 @@ function installer() {
   setupTabs_();
 
   /* Formations : toutes celles du site (les lignes existantes sont gardées, les manquantes ajoutées). */
-  var ft = table_(TAB.FORMATIONS), known = {};
-  for (var r = 1; r < ft.values.length; r++) known[clean_(get_(ft, ft.values[r], "id")).toLowerCase()] = true;
-  appendRows_(ft, FORMATIONS.filter(function (f) { return !known[f[0]]; }).map(function (f) {
-    return rowFor_(ft, { id: f[0], name: f[1], kind: f[2], price: f[3], duration: f[4], page: CONFIG.SITE_URL + f[5], bookable: true });
-  }));
-  var fRows = Math.max(ft.sheet.getLastRow() - 1, 1);
-  if (ft.col.bookable !== undefined) ft.sheet.getRange(2, ft.col.bookable + 1, fRows, 1).insertCheckboxes();
-  if (ft.col.id !== undefined) ft.sheet.getRange(2, ft.col.id + 1, fRows, 1).setFontColor("#5E6D6A");
+  ensureFormations_();
 
   /* Sessions : mise en forme, puis première session (seulement si l'onglet est vide et la date à venir). */
   var st = table_(TAB.SESSIONS), sh = st.sheet, rows = Math.max(1, sh.getMaxRows() - 1);
@@ -1832,8 +2000,7 @@ function installer() {
         date: at_(s.date, "12:00"), start: s.start, end: s.end, capacity: s.capacity, status: S_OPEN, published: true });   // colonnes déjà en texte
     }));
   }
-  var names = readFormations_().list.map(function (f) { return f.name; });
-  range("training").setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(names, true).setAllowInvalid(false).setHelpText("Choisissez une formation de l'onglet « Formations ».").build());
+  trainingValidation_();
   range("date").setNumberFormat("dd/mm/yyyy").setDataValidation(SpreadsheetApp.newDataValidation().requireDate().setAllowInvalid(false).setHelpText("Date de la session, JJ/MM/AAAA.").build());
   range("start").setNumberFormat("@").setHorizontalAlignment("center");
   range("end").setNumberFormat("@").setHorizontalAlignment("center");
@@ -1887,7 +2054,8 @@ function installer() {
   completeSessionIds_();
   refreshAll_();
   clearCache_();
-  var done = "Feuille prête ✔\n\n• Formations : " + readFormations_().list.length + " formations du site.\n• Sessions : la liste des sessions (une ligne = une date).\n" +
-    "• Les places restantes sont calculées automatiquement.\n\nÉtape suivante : Déployer › Nouveau déploiement › Application Web (voir docs/README-RESERVATIONS.md).";
+  var done = "Feuille prête ✔ (version " + VERSION + ")\n\n• Formations : " + readFormations_().list.length + " formations du site.\n• Sessions : la liste des sessions (une ligne = une date).\n" +
+    "• Les places restantes sont calculées automatiquement.\n\nPour créer les sessions du planning : menu Wisy Safety › 📅 Ouvrir les sessions du planning…\n" +
+    "Après une mise à jour du script : Déployer › Gérer les déploiements › ✏ › Nouvelle version (voir docs/README-RESERVATIONS.md).";
   try { ui_().alert(done); } catch (e) { try { ss.toast("Feuille prête ✔ — voir docs/README-RESERVATIONS.md", "Wisy Safety", 10); } catch (e2) { /* lancé depuis l'éditeur */ } }
 }

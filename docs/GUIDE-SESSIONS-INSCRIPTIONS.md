@@ -29,14 +29,22 @@ confirmé par e-mail avant la formation. »
 
 ## 2. Mise en service — à faire une seule fois, dans cet ordre
 
-> ⚠ Aujourd'hui, votre feuille tourne encore sur une **ancienne version du script (1.0.1)** — vérifié le 27/11/2026 à
-> l'adresse `…/exec?action=health`. Tant qu'elle n'est pas remplacée, le site n'affiche aucune session et la BA4 ne
-> peut pas être réservée.
+> ✅ **Fait le 27/11/2026** : script 1.2.0 collé et déployé, *Installer / réparer* lancé, **159 sessions** ouvertes,
+> e-mail de test reçu dans info@wisysafety.be, site fusionné dans `main` (PR n° 85) ; la page Agenda affiche
+> « 5 places disponibles sur 5 ».
+>
+> ✅ **Version 1.2.1 déployée le 27/11/2026 à 17:51** (version 5 du déploiement, même adresse `/exec`) : l'adresse de
+> facturation est **facultative** dans la feuille. Vérifié en ligne : `"version":"1.2.1"`, et une réservation sans
+> adresse n'est plus refusée. Le site sans bloc de facturation peut donc être mis en ligne.
+>
+> 💡 Pour copier le script sans abîmer les accents : sur GitHub, ouvrez `google-sheets/reservations.gs` et cliquez sur
+> l'icône **Copier le fichier brut** (« Copy raw file »). Vérifiez ensuite dans l'éditeur Apps Script que le mot
+> « Réservations » s'affiche avec un vrai « é » (et pas « √© »).
 
 1. Ouvrez la feuille **« Réservations - Wisy Safety »** › menu **Extensions › Apps Script**.
 2. Dans l'éditeur : cliquez dans le code, **Cmd + A** (tout sélectionner), **Supprimer**, puis collez **tout** le
    fichier `google-sheets/reservations.gs` du dépôt (il commence par `@OnlyCurrentDoc` et contient
-   `var VERSION = "1.2.0";`). Cliquez sur 💾 **Enregistrer**.
+   `var VERSION = "1.2.1";`). Cliquez sur 💾 **Enregistrer**.
 3. **Déployer › Gérer les déploiements** › crayon ✏ **Modifier** › *Version* : **Nouvelle version** › **Déployer**.
    L'adresse `/exec` **ne change pas** : rien à modifier sur le site.
 4. Revenez dans l'onglet de la feuille et **rechargez la page** (le menu « Wisy Safety » se met à jour).
@@ -48,7 +56,8 @@ confirmé par e-mail avant la formation. »
    (regardez aussi le dossier *Courrier indésirable*).
 8. Contrôle à distance : ouvrez
    `https://script.google.com/macros/s/AKfycbw4fV7ZDyLcEk0J41INJjwQ_41ASkyCSGx7_ZuVxU1U_wmWdYDvLWwxgF-ga_QFxrvnPQ/exec?action=health`
-   — vous devez lire `"version":"1.2.0"` et `"planning"` dans `features`.
+   — vous devez lire `"version":"1.2.1"` et `"planning"` dans `features`. Google peut mettre une minute à servir
+   la nouvelle version : si l'ancienne s'affiche encore, réessayez un peu plus tard.
 9. **Mettez le site en ligne** : commit + fusion dans `main` (GitHub Pages se met à jour en 1 à 2 minutes). Faites-le
    juste après l'étape 6, pour que le site et la feuille soient alignés.
 10. Vérifiez la page **Agenda** : les sessions s'affichent avec « 5 places disponibles sur 5 ».
@@ -98,21 +107,29 @@ Jours à regarder tout de suite (le planning ne connaît pas les jours fériés)
 
 ## 5. Choix faits à votre place (à confirmer)
 
-- « **VCA** » = **VCA Base** (pas la VCA Ligne hiérarchique).
-- « **Risque chimique et diisocyanates** » = la formation existante *Diisocyanates & substances dangereuses*.
+- « **VCA** » = **VCA Base** (pas la VCA Ligne hiérarchique) — confirmé par Wisy Safety le 27/11/2026.
+- « **Risque chimique et diisocyanates** » = la formation existante *Diisocyanates & substances dangereuses* — confirmé le 27/11/2026.
 - **BA4** ajoutée sous le nom « BA4 — Personne avertie » (risque électrique, RGIE), **sans page** et sans durée ni prix :
   seulement dans l'inscription, l'agenda et la feuille. Une page BA4 complète est une étape suivante.
-- **CP3** (40 h minimum) : chaque lundi et chaque vendredi est une session distincte de 5 places. Si le CP3 est un
-  cycle de plusieurs jours, dites-le : le planning s'adapte.
-- **Coordonnées de facturation** (entreprise, n° TVA, adresse) toujours demandées à l'étape 3 : utiles pour une
-  facture ou une attestation. Elles peuvent être simplifiées si vous n'en avez pas besoin.
+- **CP3** (40 h minimum) : chaque lundi et chaque vendredi est une session distincte de 5 places — confirmé le 27/11/2026.
+- **Plus d'adresse de facturation** (décision du 27/11/2026) : l'étape 3 « Vos coordonnées » ne demande plus que nom,
+  prénom, e-mail et téléphone. Les colonnes *Entreprise*, *N° de TVA* et *Adresse de facturation* de l'onglet
+  Réservations restent vides pour les nouvelles réservations (le script 1.2.1 les accepte vides).
+- **Jours fériés** : les 7 sessions des 25/12/2026, 01/01/2027, 28/03/2027 (Pâques) et 29/03/2027 (lundi de Pâques)
+  ont été **annulées le 27/11/2026** (menu *⛔ Annuler la session sélectionnée…*, 0 réservation, aucun e-mail) : le
+  site affiche 152 sessions. Elles restent dans la feuille au statut « Annulée » (rouvrables).
+- **Sessions sans horaire et règle des 48 h** : sans heure de début, le calcul part de **minuit** le jour de la
+  session (ex. une session du lundi ferme le samedi à 00:00). Pour une autre limite, remplissez la colonne
+  *Fin des inscriptions* (JJ/MM/AAAA HH:MM) — fait le 27/11/2026 pour les 28/11, 29/11 et 30/11 : la veille à 18:00.
 - Les **autres pages** (accueil, pages VCA Base, Nacelles, BEPS, VCA Entreprise, recherche du site) affichent toujours
   « En cours de préparation » à la place du tarif : seule l'inscription a été modifiée, comme demandé. Elles peuvent
   passer à « Paiement le jour de la formation » sur simple demande.
 
 ## 6. Fichiers modifiés
 
-`google-sheets/reservations.gs` (version 1.2.0 : planning, BA4, e-mails « paiement sur place ») ·
+`google-sheets/reservations.gs` (version 1.2.0 : planning, BA4, e-mails « paiement sur place » ; 1.2.1 : facturation
+facultative) · `index.html`, `politique-de-confidentialite.html`, `js/i18n-data-home.js`, `js/i18n-data-privacy.js`,
+`js/faq-data.js`, `js/faq-i18n/*` (textes « facturation » retirés, 10 langues) ·
 `inscription.html` · `js/registration.js` · `js/registration-data.js` · `css/registration.css` ·
 `js/i18n-data-inscription.js` · `js/i18n-data-sessions.js` · `js/i18n-data-common.js` · `js/site-content.js` ·
 `js/sessions-ui.js` · `js/search.js` · tests (`tests/planning-inscription.test.js` et mises à jour) · ce guide et le prompt.

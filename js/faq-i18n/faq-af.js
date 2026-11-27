@@ -224,7 +224,7 @@ WisyFAQ.register("af", {
   },
   "faq-inscription-informations": {
    "question": "Watter inligting moet ek verskaf om in te skryf?",
-   "answer": "Die aanlyn inskrywing vra vir:\n- die opleidings wat u verlang en die aantal deelnemers;\n- die kontakbesonderhede van die persoon verantwoordelik vir die inskrywing;\n- die faktureringsinligting: maatskappy, BTW-nommer en adres.\n\nHierdie inligting verskyn op u bevestiging en u faktuur.",
+   "answer": "Die aanlyn inskrywing vra vir:\n- die opleidings wat u verlang en die aantal deelnemers;\n- die kontakbesonderhede van die persoon verantwoordelik vir die inskrywing (van, voornaam, e-pos, telefoon).\n\nGeen faktureringsadres word gevra nie: u betaal ter plaatse, op die dag van die opleiding. Hierdie inligting verskyn op u besprekingsbevestiging.",
    "keywords": [
     "inligting",
     "data",

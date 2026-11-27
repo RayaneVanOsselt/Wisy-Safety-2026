@@ -224,7 +224,7 @@ WisyFAQ.register("it", {
   },
   "faq-inscription-informations": {
    "question": "Quali informazioni devo fornire per iscrivermi?",
-   "answer": "L'iscrizione online richiede:\n- i corsi desiderati e il numero di partecipanti;\n- i recapiti della persona responsabile dell'iscrizione;\n- i dati di fatturazione: azienda, numero di partita IVA e indirizzo.\n\nQueste informazioni compaiono sulla tua conferma e sulla tua fattura.",
+   "answer": "L'iscrizione online richiede:\n- i corsi desiderati e il numero di partecipanti;\n- i recapiti della persona responsabile dell'iscrizione (cognome, nome, e-mail, telefono).\n\nNon è richiesto alcun indirizzo di fatturazione: il pagamento avviene sul posto, il giorno del corso. Queste informazioni compaiono sulla tua conferma di prenotazione.",
    "keywords": [
     "informazioni",
     "dati",

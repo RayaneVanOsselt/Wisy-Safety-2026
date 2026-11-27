@@ -231,7 +231,7 @@
       participants: {},       /* { id: [ {firstName,lastName,email}, … ] } */
       participantsLater: {},  /* { id: bool } */
       customer: { firstName: "", lastName: "", email: "", phone: "" },
-      billing: { company: "", vat: "", address: "", zip: "", city: "", country: "BE" },
+      /* Plus d'adresse de facturation (retirée le 27/11/2026 : paiement sur place, le jour de la formation). */
       consent: false,
       sessions: {}            /* { id formation: id session } — la session choisie (lien ?session=…) */
     };
@@ -277,7 +277,7 @@
     if (parsed.participants && typeof parsed.participants === "object") fresh.participants = parsed.participants;
     if (parsed.participantsLater && typeof parsed.participantsLater === "object") fresh.participantsLater = parsed.participantsLater;
     if (parsed.customer) fresh.customer = Object.assign(fresh.customer, parsed.customer);
-    if (parsed.billing) fresh.billing = Object.assign(fresh.billing, parsed.billing);
+    /* parsed.billing (anciennes versions) est volontairement ignoré : il disparaît à la prochaine sauvegarde. */
     fresh.consent = !!parsed.consent;
     if (parsed.sessions && typeof parsed.sessions === "object") {
       Object.keys(parsed.sessions).forEach(function (id) {
@@ -406,11 +406,7 @@
     { id: "reg-cust-firstname", path: ["customer", "firstName"], type: "text" },
     { id: "reg-cust-lastname", path: ["customer", "lastName"], type: "text" },
     { id: "reg-cust-email", path: ["customer", "email"], type: "email" },
-    { id: "reg-cust-phone", path: ["customer", "phone"], type: "text" },
-    { id: "reg-bill-address", path: ["billing", "address"], type: "text" },
-    { id: "reg-bill-zip", path: ["billing", "zip"], type: "text" },
-    { id: "reg-bill-city", path: ["billing", "city"], type: "text" },
-    { id: "reg-bill-country", path: ["billing", "country"], type: "text" }
+    { id: "reg-cust-phone", path: ["customer", "phone"], type: "text" }
   ];
   function fieldValue(path) { return (state[path[0]] || {})[path[1]] || ""; }
   function validateBilling(focus) {
@@ -798,19 +794,13 @@
   }
 
   /* ======================================================================
-     11. Facturation (étape 3) — liaison des valeurs
+     11. Coordonnées (étape 3) — liaison des valeurs
      ====================================================================== */
   function fillBillingInputs() {
     setVal("reg-cust-firstname", state.customer.firstName);
     setVal("reg-cust-lastname", state.customer.lastName);
     setVal("reg-cust-email", state.customer.email);
     setVal("reg-cust-phone", state.customer.phone);
-    setVal("reg-bill-company", state.billing.company);
-    setVal("reg-bill-vat", state.billing.vat);
-    setVal("reg-bill-address", state.billing.address);
-    setVal("reg-bill-zip", state.billing.zip);
-    setVal("reg-bill-city", state.billing.city);
-    setVal("reg-bill-country", state.billing.country);
   }
   function setVal(id, v) { var el = document.getElementById(id); if (el) el.value = v || ""; }
 
@@ -882,7 +872,6 @@
         totalCents: totals.totalCents
       },
       customer: src.customer,
-      billing: src.billing,
       settlement: "on_site",       /* règlement sur place, le jour de la formation */
       _note: "No online payment. Amounts are indicative only."
     };
@@ -939,10 +928,8 @@
         lines.push("- " + (tr.name && tr.name.fr || id) + " #" + (i + 1) + " : " + (who || "—") + (p.email ? " <" + p.email + ">" : ""));
       });
     });
-    var c = state.customer, b = state.billing;
+    var c = state.customer;
     lines.push("", "DEMANDEUR", [c.firstName, c.lastName].join(" ").trim() + " — " + c.email + " — " + c.phone);
-    lines.push("", "FACTURATION", [b.company, b.vat ? "TVA " + b.vat : ""].filter(Boolean).join(" — ") || "Particulier",
-      b.address + ", " + b.zip + " " + b.city + " (" + b.country + ")");
     lines.push("", "Langue du site : " + lang() + " · Aucun paiement en ligne : règlement sur place, le jour de la formation.");
     return lines.join("\n");
   }
@@ -1053,7 +1040,7 @@
     };
     Booking.book({
       config: window.WISY_CONFIG || {}, fetch: window.fetch ? window.fetch.bind(window) : null,
-      order: { requestId: bookingRequestId, lang: lang(), customer: state.customer, billing: state.billing, items: bookingItems() }
+      order: { requestId: bookingRequestId, lang: lang(), customer: state.customer, items: bookingItems() }
     }).then(function (res) {
       if (res.kind === "ok") {
         bookingSent = true;
@@ -1249,10 +1236,7 @@
     /* Facturation / responsable */
     var map = {
       "reg-cust-firstname": ["customer", "firstName"], "reg-cust-lastname": ["customer", "lastName"],
-      "reg-cust-email": ["customer", "email"], "reg-cust-phone": ["customer", "phone"],
-      "reg-bill-company": ["billing", "company"], "reg-bill-vat": ["billing", "vat"],
-      "reg-bill-address": ["billing", "address"], "reg-bill-zip": ["billing", "zip"],
-      "reg-bill-city": ["billing", "city"], "reg-bill-country": ["billing", "country"]
+      "reg-cust-email": ["customer", "email"], "reg-cust-phone": ["customer", "phone"]
     };
     if (map[el.id]) {
       var pth = map[el.id];

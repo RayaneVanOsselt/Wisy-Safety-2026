@@ -32,7 +32,7 @@
  * =========================================================================
  */
 
-var VERSION = "1.2.0";
+var VERSION = "1.2.1";
 
 var CONFIG = {
   FILE_NAME: "Réservations - Wisy Safety",
@@ -685,7 +685,8 @@ function validateOrder_(body, formations) {
   if (!EMAIL_RE.test(order.customer.email)) fields.email = "invalid";
   Object.keys(LIM).forEach(function (k) { if (order.customer[k].length > LIM[k]) fields[k] = "too_long"; });
   var BLIM = { company: 120, vat: 40, address: 200, zip: 20, city: 80, country: 40 };
-  ["address", "zip", "city", "country"].forEach(function (k) { if (!order.billing[k]) fields[k] = "required"; });
+  /* Facturation : FACULTATIVE depuis la 1.2.1 (27/11/2026 — paiement sur place, le site ne demande plus d'adresse).
+     Les anciennes versions du site qui l'envoient encore restent acceptées. */
   Object.keys(BLIM).forEach(function (k) { if (order.billing[k].length > BLIM[k]) fields[k] = "too_long"; });
 
   var items = Array.isArray(body.items) ? body.items : [];
@@ -807,7 +808,7 @@ function submitBooking_(body) {
     var people = table_(TAB.PEOPLE);
     var manual = CONFIG.CONFIRMATION === "manual";
     var c = order.customer, bi = order.billing;
-    var address = [bi.address, [bi.zip, bi.city].join(" ").trim(), bi.country].filter(Boolean).join(", ");
+    var address = [bi.address, [bi.zip, bi.city].join(" ").trim(), bi.address || bi.zip || bi.city ? bi.country : ""].filter(Boolean).join(", ");
     var bookingRows = [], peopleRows = [], items = [];
     order.items.forEach(function (it) {
       var s = it.sessionId ? sessions.byId[it.sessionId] : null;
@@ -1125,6 +1126,13 @@ function itemsHtml_(w) {
   }).join("") + "</ul>";
 }
 
+/** Facturation dans l'avis à l'équipe : seulement si le client en a donné une (facultative depuis la 1.2.1). */
+function billingHtml_(b) {
+  var who = [b.company, b.vat ? "TVA " + b.vat : ""].filter(Boolean).join(" — ");
+  var where = [b.address, [b.zip, b.city].join(" ").trim(), b.address || b.zip || b.city ? b.country : ""].filter(Boolean).join(", ");
+  return who || where ? "<p>" + esc_(who || "Particulier") + (where ? "<br>" + esc_(where) : "") + "</p>" : "";
+}
+
 function queueBookingEmails_(w) {
   if (!w) return;
   var c = w.order.customer, b = w.order.billing;
@@ -1148,7 +1156,7 @@ function queueBookingEmails_(w) {
     }).join("");
     var team = emailFrame_("Nouvelle réservation " + w.ref,
       "<p><b>" + esc_([c.firstName, c.lastName].join(" ")) + "</b> — " + esc_(c.email) + " — " + esc_(c.phone) + "</p>" +
-      "<p>" + esc_([b.company, b.vat ? "TVA " + b.vat : ""].filter(Boolean).join(" — ") || "Particulier") + "<br>" + esc_([b.address, b.zip + " " + b.city, b.country].join(", ")) + "</p>" +
+      billingHtml_(b) +
       itemsHtml_(w) + (lines ? "<p>Places après cette réservation :</p><ul>" + lines + "</ul>" : "") +
       "<p>Détail dans la feuille « " + esc_(CONFIG.FILE_NAME) + " », onglet Réservations.</p>");
     var subjectSessions = w.order.items.map(function (it) { return it.trainingName + " ×" + it.quantity; }).join(", ");
